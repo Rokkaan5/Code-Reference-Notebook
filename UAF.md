@@ -5,10 +5,11 @@ permalink: /UAF-classes
 ---
 # Intro to Computational Physics
 
-## Wilberforce Pendulum Project
+## [Wilberforce Pendulum Project](UAF-CompPhys/WilberforceProject.md)
 Check GitHub repo for python code files for my Wilberforce pendulum animation project
 
 Includes example uses of RK4 and matplotlib.animation
+
 
 # Intro to Machine Learning
 
