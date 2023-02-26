@@ -8,5 +8,8 @@ permalink: /CUB-ML
 
 ## Association Rule Mining
 
-[Prof's R-code](CUB-ML/GatesARMcode.md)
+All of the below is code from Professor Ami Gates made public through her own [website](https://gatesboltonanalytics.com/)
 
+[ARM raw R-code](CUB-ML/GatesARMcode.md)
+
+[Markdown doc of ARM code(R)](CUB-ML/ARMmrkdwn.html)
