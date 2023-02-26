@@ -1,3 +1,3 @@
 # References
 
-[UAF classes](UAF-ML-module/UAF.md)
+[UAF classes](UAF.md)
