@@ -7,7 +7,7 @@ permalink: /UAF-classes
 # Intro to Machine Learning
 
 ## Basic Packages
-[Numpy Workbook](UAF-ML-module/Numpy%20Workbook.html)
+[Numpy Workbook](UAF-ML-module/NumPy%20Workbook.html)
 
 [Matplotlib Workbook](UAF-ML-module/Matplotlib%20Workbook.html)
 
