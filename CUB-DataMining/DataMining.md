@@ -17,3 +17,4 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
 [Recreating John Snow's Ghost Map](CUB-DataMining/Mini-Projects/Map/GhostMap.html)
 
 [Analyze Your Runkeeper Fitness Data](CUB-DataMining/Mini-Projects/Fitness/FitnessData.html)
+
