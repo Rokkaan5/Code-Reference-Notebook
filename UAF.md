@@ -1,8 +1,14 @@
 ---
 layout: page
-title: "Useful stuff from UAF classes"
+title: "UAF Class Resources"
 permalink: /UAF-classes
 ---
+# Intro to Computational Physics
+
+## Wilberforce Pendulum Project
+Check GitHub repo for python code files for my Wilberforce pendulum animation project
+
+Includes example uses of RK4 and matplotlib.animation
 
 # Intro to Machine Learning
 
