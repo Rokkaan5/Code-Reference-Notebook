@@ -6,4 +6,4 @@ permalink: /UAF-classes
 
 # Intro to Machine Learning
 
-[Matplotlib Workbook](Matplotlib%20Workbook.html)
+[Matplotlib Workbook](UAF-ML-module/Matplotlib%20Workbook.html)
