@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Useful stuff from UAF classes"
-permalink: /Matplotlib-Workbook
+permalink: /UAF-classes
 ---
 
 # Intro to Machine Learning
