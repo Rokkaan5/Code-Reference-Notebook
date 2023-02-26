@@ -5,4 +5,5 @@ Past lecture notes, tutorials, and projects to use as coding reference
 - Intro to Machine Learning
 
 [CU Boulder classes](CUB.md)
-- Data Mining
+- [Data Mining](CUB-DataMining/DataMining.md)
+- [Machine Learning](CUB-ML/CUB-ML.md)
