@@ -14,7 +14,7 @@ permalink: /CUB-ML
 
 **Clustering-ex1.R**: Comprehensive Clustering Tutorial
 
-- [Example1 qmd markdown file](CUB-ML/clust-ex1-mkdn.html)
+- [Markdown html of Clustering-ex1](CUB-ML/clust-ex1-mkdn.html)
 
 - Partitional and hierarchical clustering using csv and corpus txt file data.
 
@@ -35,4 +35,4 @@ Prof Gate's ARM code in R provides examples of ARM applications, apriori algorit
 
 [ARM raw R-code](CUB-ML/GatesARMcode.md)
 
-[Markdown doc of ARM code(R)](CUB-ML/ARMmrkdwn.html)
+[Markdown html of ARM code](CUB-ML/ARMmrkdwn.html)
