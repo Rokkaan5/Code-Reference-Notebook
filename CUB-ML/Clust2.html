@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Clustering Record and Text Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="Clust2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Clust2_files/libs/quarto-html/quarto.js"></script>
+<script src="Clust2_files/libs/quarto-html/popper.min.js"></script>
+<script src="Clust2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Clust2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Clust2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Clust2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Clust2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Clust2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Clust2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Clustering Record and Text Data</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="clustering" class="level1">
+<h1>CLUSTERING</h1>
+<p>Note to Ami: ClusteringRecordandTextData.py – …Scripts_7</p>
+<section id="clustering-record-and-text-data" class="level2">
+<h2 class="anchored" data-anchor-id="clustering-record-and-text-data">Clustering Record and Text Data</h2>
+<p>Gates</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> TfidfVectorizer</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> word_tokenize</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.probability <span class="im">import</span> FreqDist</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">## For Stemming</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.stem <span class="im">import</span> PorterStemmer</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> sent_tokenize, word_tokenize</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re   <span class="co">## for regular expressions</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d <span class="im">import</span> Axes3D</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#from nltk.stem.porter import PorterStemmer</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="clustering-text-data-from-a-corpus" class="level2">
+<h2 class="anchored" data-anchor-id="clustering-text-data-from-a-corpus">Clustering Text Data from a Corpus</h2>
+<p>DATA LINK: [https://drive.google.com/drive/folders/1VSofcdX6g86hjnofMDQJwYVveT544Oy4?usp=sharing]</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>path<span class="op">=</span>os.path.join(<span class="st">'ClusterCorpus'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Get the text data first</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"calling os..."</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>FileNameList<span class="op">=</span>os.listdir(path)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">## check the TYPE</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(FileNameList))</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(FileNameList)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>calling os...
+&lt;class 'list'&gt;
+['Choc1.txt', 'Choc2.txt', 'Choc3.txt', 'Choc4.txt', 'Choc5.txt', 'Choc6.txt', 'Hike1.txt', 'Hike2.txt', 'Hike3.txt', 'Hike4.txt', 'Hike5.txt', 'Hike6.txt']</code></pre>
+</div>
+</div>
+<p>I need an empty list to start with to build a list of complete paths to files.</p>
+<p>Notice that I defined path above. I also need a list of file names.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ListOfCompleteFilePaths<span class="op">=</span>[]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ListOfJustFileNames<span class="op">=</span>[]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> os.listdir(path):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">## BUILD the names dynamically....</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span>name.lower()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(path<span class="op">+</span> <span class="st">"/"</span> <span class="op">+</span> name)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">next</span><span class="op">=</span>path<span class="op">+</span> <span class="st">"/"</span> <span class="op">+</span> name</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    nextnameL<span class="op">=</span>[re.findall(<span class="vs">r'[a-z]+'</span>, name)[<span class="dv">0</span>]]  </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    nextname<span class="op">=</span>nextnameL[<span class="dv">0</span>]   <span class="co">## Keep just the name</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(nextname)  <span class="co">## ALWAYS check yourself</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    ListOfCompleteFilePaths.append(<span class="bu">next</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    ListOfJustFileNames.append(nextname)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#print("DONE...")</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"full list..."</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ListOfCompleteFilePaths)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ListOfJustFileNames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ClusterCorpus/choc1.txt
+choc
+ClusterCorpus/choc2.txt
+choc
+ClusterCorpus/choc3.txt
+choc
+ClusterCorpus/choc4.txt
+choc
+ClusterCorpus/choc5.txt
+choc
+ClusterCorpus/choc6.txt
+choc
+ClusterCorpus/hike1.txt
+hike
+ClusterCorpus/hike2.txt
+hike
+ClusterCorpus/hike3.txt
+hike
+ClusterCorpus/hike4.txt
+hike
+ClusterCorpus/hike5.txt
+hike
+ClusterCorpus/hike6.txt
+hike
+full list...
+['ClusterCorpus/choc1.txt', 'ClusterCorpus/choc2.txt', 'ClusterCorpus/choc3.txt', 'ClusterCorpus/choc4.txt', 'ClusterCorpus/choc5.txt', 'ClusterCorpus/choc6.txt', 'ClusterCorpus/hike1.txt', 'ClusterCorpus/hike2.txt', 'ClusterCorpus/hike3.txt', 'ClusterCorpus/hike4.txt', 'ClusterCorpus/hike5.txt', 'ClusterCorpus/hike6.txt']
+['choc', 'choc', 'choc', 'choc', 'choc', 'choc', 'hike', 'hike', 'hike', 'hike', 'hike', 'hike']</code></pre>
+</div>
+</div>
+<section id="create-the-stemmer-function" class="level3">
+<h3 class="anchored" data-anchor-id="create-the-stemmer-function">Create the Stemmer Function</h3>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">####################################################</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">##  Create the Stemmer Function.........</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">######################################################</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">## Instantiate it</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>A_STEMMER<span class="op">=</span>PorterStemmer()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">## test it</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(A_STEMMER.stem(<span class="st">"fishers"</span>))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Use NLTK's PorterStemmer in a function - DEFINE THE FUNCTION</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#-------------------------------------------------------</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> MY_STEMMER(str_input):</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">## Only use letters, no punct, no nums, make lowercase...</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    words <span class="op">=</span> re.sub(<span class="vs">r"[^A-Za-z\-]"</span>, <span class="st">" "</span>, str_input).lower().split()</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    words <span class="op">=</span> [A_STEMMER.stem(word) <span class="cf">for</span> word <span class="kw">in</span> words] <span class="co">## Use the Stemmer...</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> words</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>fisher</code></pre>
+</div>
+</div>
+<p>CountVectorizers be set as ‘content’, ‘file’, or ‘filename’ If set as ‘filename’, the <strong>sequence passed as an argument to fit</strong> is expected to be a list of filenames [https://scikit-learn.org/stable/modules/generated/]</p>
+<p>sklearn.feature_extraction.text.CountVectorizer.html# examples-using-sklearn-feature-extraction-text-countvectorizer</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">##################################################################</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Tokenize and Vectorize the text data from the corpus...</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">##############################################################</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Instantiate three Vectorizers.....</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">## Normal CV</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>MyVectCount<span class="op">=</span>CountVectorizer(<span class="bu">input</span><span class="op">=</span><span class="st">'filename'</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                        stop_words<span class="op">=</span><span class="st">'english'</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                        max_features<span class="op">=</span><span class="dv">100</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">## Tf-idf vectorizer</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>MyVectTFIdf<span class="op">=</span>TfidfVectorizer(<span class="bu">input</span><span class="op">=</span><span class="st">'filename'</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                        stop_words<span class="op">=</span><span class="st">'english'</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                        max_features<span class="op">=</span><span class="dv">100</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">## Create a CountVectorizer object that you can use with the Stemmer</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>MyCV_Stem <span class="op">=</span> CountVectorizer(<span class="bu">input</span><span class="op">=</span><span class="st">"filename"</span>, </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                        stop_words<span class="op">=</span><span class="st">'english'</span>, </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>                        tokenizer<span class="op">=</span>MY_STEMMER,</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>                        lowercase<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co">## NOw I can vectorize using my list of complete paths to my files</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>DTM_Count<span class="op">=</span>MyVectCount.fit_transform(ListOfCompleteFilePaths)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>DTM_TF<span class="op">=</span>MyVectTFIdf.fit_transform(ListOfCompleteFilePaths)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>DTM_stem<span class="op">=</span>MyCV_Stem.fit_transform(ListOfCompleteFilePaths)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co">#####################</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co">## Get the complete vocab - the column names</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">## !!!!!!!!! FOr TF and CV - but NOT for stemmed...!!!</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">##################</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>ColumnNames<span class="op">=</span>MyVectCount.get_feature_names_out()</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The vocab is: "</span>, ColumnNames, <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>ColNamesStem<span class="op">=</span>MyCV_Stem.get_feature_names_out()</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The stemmed vocab is</span><span class="ch">\n</span><span class="st">"</span>, ColNamesStem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The vocab is:  ['bring' 'chocolate' 'coffee' 'day' 'delicious' 'dog' 'drink' 'eat'
+ 'exercise' 'feed' 'gear' 'good' 'great' 'healthy' 'hike' 'like'
+ 'mountain' 'needed' 'taking'] 
+
+
+The stemmed vocab is
+ ['bring' 'chocol' 'coffe' 'day' 'delici' 'dog' 'drink' 'eat' 'exercis'
+ 'feed' 'gear' 'good' 'great' 'healthi' 'hike' 'like' 'mountain' 'need'
+ 'togeth']</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Use pandas to create data frames</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>DF_Count<span class="op">=</span>pd.DataFrame(DTM_Count.toarray(),columns<span class="op">=</span>ColumnNames)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>DF_TF<span class="op">=</span>pd.DataFrame(DTM_TF.toarray(),columns<span class="op">=</span>ColumnNames)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>DF_stem<span class="op">=</span>pd.DataFrame(DTM_stem.toarray(),columns<span class="op">=</span>ColNamesStem)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF_Count)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF_TF.head())</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF_stem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    bring  chocolate  coffee  day  delicious  dog  drink  eat  exercise  feed  \
+0       0          3       2    1          2    0      1    1         0     0   
+1       0          3       2    0          1    1      0    0         0     0   
+2       0          3       1    0          2    0      0    0         0     0   
+3       0          5       3    1          3    0      0    1         0     0   
+4       0          9       4    2          5    1      0    2         0     1   
+5       0          5       3    1          3    0      0    1         0     0   
+6       1          1       0    0          0    0      0    0         2     0   
+7       0          0       0    0          0    2      0    0         0     0   
+8       0          1       0    0          0    3      0    0         0     0   
+9       0          0       0    0          0    2      0    0         0     0   
+10      0          0       0    0          0    4      0    0         0     0   
+11      0          0       0    0          0    4      0    0         0     0   
+
+    gear  good  great  healthy  hike  like  mountain  needed  taking  
+0      0     0      0        0     1     0         0       0       0  
+1      0     0      2        0     0     0         0       0       0  
+2      0     0      0        2     0     1         0       0       0  
+3      0     0      2        0     0     0         0       0       0  
+4      0     0      2        0     0     0         0       0       0  
+5      0     0      2        0     0     0         0       0       0  
+6      0     2      0        0     3     0         0       0       1  
+7      2     0      0        0     4     0         0       1       0  
+8      1     4      0        0     4     0         0       0       0  
+9      2     0      0        0     3     0         2       0       0  
+10     4     0      0        0     6     0         4       0       0  
+11     4     0      0        0     7     0         2       1       0  
+   bring  chocolate    coffee       day  delicious       dog     drink  \
+0    0.0   0.548759  0.433061  0.261530   0.433061  0.000000  0.384075   
+1    0.0   0.595694  0.470100  0.000000   0.235050  0.215664  0.000000   
+2    0.0   0.486345  0.191903  0.000000   0.383806  0.000000  0.000000   
+3    0.0   0.632517  0.449244  0.180869   0.449244  0.000000  0.000000   
+4    0.0   0.693190  0.364694  0.220243   0.455867  0.083654  0.000000   
+
+        eat  exercise      feed  gear  good     great   healthy      hike  \
+0  0.261530       0.0  0.000000   0.0   0.0  0.000000  0.000000  0.198672   
+1  0.000000       0.0  0.000000   0.0   0.0  0.567798  0.000000  0.000000   
+2  0.000000       0.0  0.000000   0.0   0.0  0.000000  0.680784  0.000000   
+3  0.180869       0.0  0.000000   0.0   0.0  0.361738  0.000000  0.000000   
+4  0.220243       0.0  0.161721   0.0   0.0  0.220243  0.000000  0.000000   
+
+       like  mountain  needed  taking  
+0  0.000000       0.0     0.0     0.0  
+1  0.000000       0.0     0.0     0.0  
+2  0.340392       0.0     0.0     0.0  
+3  0.000000       0.0     0.0     0.0  
+4  0.000000       0.0     0.0     0.0  
+    bring  chocol  coffe  day  delici  dog  drink  eat  exercis  feed  gear  \
+0       0       3      2    1       2    0      1    1        0     0     0   
+1       0       3      2    0       1    1      0    0        0     0     0   
+2       0       3      1    0       2    0      0    0        0     0     0   
+3       0       5      3    1       3    0      0    1        0     0     0   
+4       0       9      4    2       5    1      0    2        0     1     0   
+5       0       5      3    1       3    0      0    1        0     0     0   
+6       1       1      0    0       0    0      0    0        2     0     0   
+7       0       0      0    0       0    2      0    0        0     0     2   
+8       0       1      0    0       0    3      0    0        0     0     1   
+9       0       0      0    0       0    2      0    0        0     0     2   
+10      0       0      0    0       0    4      0    0        0     0     4   
+11      0       0      0    0       0    4      0    0        0     0     4   
+
+    good  great  healthi  hike  like  mountain  need  togeth  
+0      0      0        0     1     0         0     0       0  
+1      0      2        0     0     0         0     0       1  
+2      0      0        2     0     1         0     0       0  
+3      0      2        0     0     0         0     0       1  
+4      0      2        0     0     0         0     0       1  
+5      0      2        0     0     0         0     0       1  
+6      2      0        0     3     0         0     0       0  
+7      0      0        0     4     0         0     1       0  
+8      4      0        0     4     0         0     0       0  
+9      0      0        0     3     0         2     0       0  
+10     0      0        0     6     0         4     0       0  
+11     0      0        0     7     0         2     1       0  </code></pre>
+</div>
+</div>
+<p>OK - now we have vectorized the data - and removed punct, numbers, etc.</p>
+<p>From here, we can update the names of the rows without adding labels to the data.</p>
+<p>We CANNOT have labels in the data because: (1) Labels are not numeric and (2) Labels are NOT data - they are labels.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Now update the row names</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>MyDict<span class="op">=</span>{}</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(ListOfJustFileNames)):</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    MyDict[i] <span class="op">=</span> ListOfJustFileNames[i]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"MY DICT:"</span>, MyDict)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>DF_Count<span class="op">=</span>DF_Count.rename(MyDict, axis<span class="op">=</span><span class="st">"index"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF_Count)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>DF_TF<span class="op">=</span>DF_TF.rename(MyDict, axis<span class="op">=</span><span class="st">"index"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF_TF)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">## That's pretty!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MY DICT: {0: 'choc', 1: 'choc', 2: 'choc', 3: 'choc', 4: 'choc', 5: 'choc', 6: 'hike', 7: 'hike', 8: 'hike', 9: 'hike', 10: 'hike', 11: 'hike'}
+      bring  chocolate  coffee  day  delicious  dog  drink  eat  exercise  \
+choc      0          3       2    1          2    0      1    1         0   
+choc      0          3       2    0          1    1      0    0         0   
+choc      0          3       1    0          2    0      0    0         0   
+choc      0          5       3    1          3    0      0    1         0   
+choc      0          9       4    2          5    1      0    2         0   
+choc      0          5       3    1          3    0      0    1         0   
+hike      1          1       0    0          0    0      0    0         2   
+hike      0          0       0    0          0    2      0    0         0   
+hike      0          1       0    0          0    3      0    0         0   
+hike      0          0       0    0          0    2      0    0         0   
+hike      0          0       0    0          0    4      0    0         0   
+hike      0          0       0    0          0    4      0    0         0   
+
+      feed  gear  good  great  healthy  hike  like  mountain  needed  taking  
+choc     0     0     0      0        0     1     0         0       0       0  
+choc     0     0     0      2        0     0     0         0       0       0  
+choc     0     0     0      0        2     0     1         0       0       0  
+choc     0     0     0      2        0     0     0         0       0       0  
+choc     1     0     0      2        0     0     0         0       0       0  
+choc     0     0     0      2        0     0     0         0       0       0  
+hike     0     0     2      0        0     3     0         0       0       1  
+hike     0     2     0      0        0     4     0         0       1       0  
+hike     0     1     4      0        0     4     0         0       0       0  
+hike     0     2     0      0        0     3     0         2       0       0  
+hike     0     4     0      0        0     6     0         4       0       0  
+hike     0     4     0      0        0     7     0         2       1       0  
+         bring  chocolate    coffee       day  delicious       dog     drink  \
+choc  0.000000   0.548759  0.433061  0.261530   0.433061  0.000000  0.384075   
+choc  0.000000   0.595694  0.470100  0.000000   0.235050  0.215664  0.000000   
+choc  0.000000   0.486345  0.191903  0.000000   0.383806  0.000000  0.000000   
+choc  0.000000   0.632517  0.449244  0.180869   0.449244  0.000000  0.000000   
+choc  0.000000   0.693190  0.364694  0.220243   0.455867  0.083654  0.000000   
+choc  0.000000   0.632517  0.449244  0.180869   0.449244  0.000000  0.000000   
+hike  0.293798   0.139924  0.000000  0.000000   0.000000  0.000000  0.000000   
+hike  0.000000   0.000000  0.000000  0.000000   0.000000  0.374925  0.000000   
+hike  0.000000   0.108980  0.000000  0.000000   0.000000  0.355095  0.000000   
+hike  0.000000   0.000000  0.000000  0.000000   0.000000  0.382758  0.000000   
+hike  0.000000   0.000000  0.000000  0.000000   0.000000  0.382758  0.000000   
+hike  0.000000   0.000000  0.000000  0.000000   0.000000  0.401696  0.000000   
+
+           eat  exercise      feed      gear      good     great   healthy  \
+choc  0.261530  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000   
+choc  0.000000  0.000000  0.000000  0.000000  0.000000  0.567798  0.000000   
+choc  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000  0.680784   
+choc  0.180869  0.000000  0.000000  0.000000  0.000000  0.361738  0.000000   
+choc  0.220243  0.000000  0.161721  0.000000  0.000000  0.220243  0.000000   
+choc  0.180869  0.000000  0.000000  0.000000  0.000000  0.361738  0.000000   
+hike  0.000000  0.587595  0.000000  0.000000  0.504634  0.000000  0.000000   
+hike  0.000000  0.000000  0.000000  0.447533  0.000000  0.000000  0.000000   
+hike  0.000000  0.000000  0.000000  0.141287  0.786069  0.000000  0.000000   
+hike  0.000000  0.000000  0.000000  0.456883  0.000000  0.000000  0.000000   
+hike  0.000000  0.000000  0.000000  0.456883  0.000000  0.000000  0.000000   
+hike  0.000000  0.000000  0.000000  0.479488  0.000000  0.000000  0.000000   
+
+          hike      like  mountain    needed    taking  
+choc  0.198672  0.000000  0.000000  0.000000  0.000000  
+choc  0.000000  0.000000  0.000000  0.000000  0.000000  
+choc  0.000000  0.340392  0.000000  0.000000  0.000000  
+choc  0.000000  0.000000  0.000000  0.000000  0.000000  
+choc  0.000000  0.000000  0.000000  0.000000  0.000000  
+choc  0.000000  0.000000  0.000000  0.000000  0.000000  
+hike  0.455921  0.000000  0.000000  0.000000  0.293798  
+hike  0.749851  0.000000  0.000000  0.311238  0.000000  
+hike  0.473460  0.000000  0.000000  0.000000  0.000000  
+hike  0.574137  0.000000  0.561356  0.000000  0.000000  
+hike  0.574137  0.000000  0.561356  0.000000  0.000000  
+hike  0.702968  0.000000  0.294565  0.166730  0.000000  </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="lets-cluster.." class="level2">
+<h2 class="anchored" data-anchor-id="lets-cluster..">Let’s Cluster……..</h2>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using sklearn</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">## you will need</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">## from sklearn.cluster import KMeans</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">## import numpy as np</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>kmeans_object_Count <span class="op">=</span> sklearn.cluster.KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#print(kmeans_object)</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>kmeans_object_Count.fit(DF_Count)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Get cluster assignment labels</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> kmeans_object_Count.labels_</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>prediction_kmeans <span class="op">=</span> kmeans_object_Count.predict(DF_Count)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#print(labels)</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prediction_kmeans)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Format results as a DataFrame</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>Myresults <span class="op">=</span> pd.DataFrame([DF_Count.index,labels]).T</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Myresults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1 1 1 1 1 1 0 0 0 0 0 0]
+       0  1
+0   choc  1
+1   choc  1
+2   choc  1
+3   choc  1
+4   choc  1
+5   choc  1
+6   hike  0
+7   hike  0
+8   hike  0
+9   hike  0
+10  hike  0
+11  hike  0</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">############# ---&gt; ALWAYS USE VIS! ----------</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF_Count)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF_Count[<span class="st">"chocolate"</span>]) </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>x<span class="op">=</span>DF_Count[<span class="st">"chocolate"</span>]  <span class="co">## col 1  starting from 0</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>y<span class="op">=</span>DF_Count[<span class="st">"hike"</span>]    <span class="co">## col 14  starting from 0</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>z<span class="op">=</span>DF_Count[<span class="st">"coffee"</span>]  <span class="co">## col 2  starting from 0</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>colnames<span class="op">=</span>DF_Count.columns</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(colnames)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#print(x,y,z)</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>fig1 <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">12</span>))</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> Axes3D(fig1, rect<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">.90</span>, <span class="dv">1</span>], elev<span class="op">=</span><span class="dv">48</span>, azim<span class="op">=</span><span class="dv">134</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>ax1.scatter(x,y,z, cmap<span class="op">=</span><span class="st">"RdYlGn"</span>, edgecolor<span class="op">=</span><span class="st">'k'</span>, s<span class="op">=</span><span class="dv">200</span>,c<span class="op">=</span>prediction_kmeans)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>ax1.w_xaxis.set_ticklabels([])</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>ax1.w_yaxis.set_ticklabels([])</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>ax1.w_zaxis.set_ticklabels([])</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>ax1.set_xlabel(<span class="st">'Chocolate'</span>, fontsize<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>ax1.set_ylabel(<span class="st">'Hike'</span>, fontsize<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>ax1.set_zlabel(<span class="st">'Coffee'</span>, fontsize<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.show()</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>centers <span class="op">=</span> kmeans_object_Count.cluster_centers_</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(centers)</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="co">#print(centers)</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>C1<span class="op">=</span>centers[<span class="dv">0</span>,(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">14</span>)]</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(C1)</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>C2<span class="op">=</span>centers[<span class="dv">1</span>,(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">14</span>)]</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(C2)</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>xs<span class="op">=</span>C1[<span class="dv">0</span>],C2[<span class="dv">0</span>]</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(xs)</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>ys<span class="op">=</span>C1[<span class="dv">1</span>],C2[<span class="dv">1</span>]</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>zs<span class="op">=</span>C1[<span class="dv">2</span>],C2[<span class="dv">2</span>]</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>ax1.scatter(xs,ys,zs, c<span class="op">=</span><span class="st">'black'</span>, s<span class="op">=</span><span class="dv">2000</span>, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.cla()</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------- end of choc, dog, hike, example....</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      bring  chocolate  coffee  day  delicious  dog  drink  eat  exercise  \
+choc      0          3       2    1          2    0      1    1         0   
+choc      0          3       2    0          1    1      0    0         0   
+choc      0          3       1    0          2    0      0    0         0   
+choc      0          5       3    1          3    0      0    1         0   
+choc      0          9       4    2          5    1      0    2         0   
+choc      0          5       3    1          3    0      0    1         0   
+hike      1          1       0    0          0    0      0    0         2   
+hike      0          0       0    0          0    2      0    0         0   
+hike      0          1       0    0          0    3      0    0         0   
+hike      0          0       0    0          0    2      0    0         0   
+hike      0          0       0    0          0    4      0    0         0   
+hike      0          0       0    0          0    4      0    0         0   
+
+      feed  gear  good  great  healthy  hike  like  mountain  needed  taking  
+choc     0     0     0      0        0     1     0         0       0       0  
+choc     0     0     0      2        0     0     0         0       0       0  
+choc     0     0     0      0        2     0     1         0       0       0  
+choc     0     0     0      2        0     0     0         0       0       0  
+choc     1     0     0      2        0     0     0         0       0       0  
+choc     0     0     0      2        0     0     0         0       0       0  
+hike     0     0     2      0        0     3     0         0       0       1  
+hike     0     2     0      0        0     4     0         0       1       0  
+hike     0     1     4      0        0     4     0         0       0       0  
+hike     0     2     0      0        0     3     0         2       0       0  
+hike     0     4     0      0        0     6     0         4       0       0  
+hike     0     4     0      0        0     7     0         2       1       0  
+choc    3
+choc    3
+choc    3
+choc    5
+choc    9
+choc    5
+hike    1
+hike    0
+hike    1
+hike    0
+hike    0
+hike    0
+Name: chocolate, dtype: int64
+Index(['bring', 'chocolate', 'coffee', 'day', 'delicious', 'dog', 'drink',
+       'eat', 'exercise', 'feed', 'gear', 'good', 'great', 'healthy', 'hike',
+       'like', 'mountain', 'needed', 'taking'],
+      dtype='object')
+[[1.66666667e-01 3.33333333e-01 0.00000000e+00 5.55111512e-17
+  2.22044605e-16 2.50000000e+00 1.38777878e-17 5.55111512e-17
+  3.33333333e-01 1.38777878e-17 2.16666667e+00 1.00000000e+00
+  1.11022302e-16 2.77555756e-17 4.50000000e+00 1.38777878e-17
+  1.33333333e+00 3.33333333e-01 1.66666667e-01]
+ [1.38777878e-17 4.66666667e+00 2.50000000e+00 8.33333333e-01
+  2.66666667e+00 3.33333333e-01 1.66666667e-01 8.33333333e-01
+  2.77555756e-17 1.66666667e-01 2.22044605e-16 0.00000000e+00
+  1.33333333e+00 3.33333333e-01 1.66666667e-01 1.66666667e-01
+  1.11022302e-16 2.77555756e-17 1.38777878e-17]]
+[0.33333333 0.         4.5       ]
+[4.66666667 2.5        0.16666667]
+(0.3333333333333335, 4.666666666666666)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 1200x1200 with 0 Axes&gt;</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="kmeans-with-record-data--" class="level1">
+<h1>kmeans with record data -</h1>
+<section id="new-data-sets." class="level2">
+<h2 class="anchored" data-anchor-id="new-data-sets.">NEW DATA SETS….</h2>
+<p>DATA:</p>
+<p>[https://drive.google.com/file/d/1QtuJO1S-03zDN4f8JgR7cZ1fA3wTZ_m4/view?usp=sharing]</p>
+<p>and</p>
+<p>[https://drive.google.com/file/d/1sSFzvxkp4wTbna8xAcPBCvInlA_MjNdj/view?usp=sharing]</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Dataset1<span class="op">=</span><span class="st">"ClusterSmallDataset5D.csv"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Dataset2<span class="op">=</span><span class="st">"ClusterSmallDataset.csv"</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>DF5D<span class="op">=</span>pd.read_csv(Dataset1)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>DF3D<span class="op">=</span>pd.read_csv(Dataset2)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF3D.head())</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF5D.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Label  Height  Weight  Age
+0  BBallPlayer      84     250   17
+1    NonPlayer      72     200   16
+2    NonPlayer      70     210   15
+3  BBallPlayer      86     278   18
+4    NonPlayer      74     190   15
+         Label  Height  Weight  Age  GPA  TestScore
+0  BBallPlayer      84     250   17  3.8        994
+1    NonPlayer      72     200   16  3.5        876
+2    NonPlayer      70     210   15  3.6        769
+3  BBallPlayer      86     278   18  3.9        901
+4    NonPlayer      74     190   15  3.4        899</code></pre>
+</div>
+</div>
+<p>!!!!!!!!!!!!! This dataset has a label</p>
+<p>We MUST REMOVE IT before we can proceed</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>TrueLabel3D<span class="op">=</span>DF3D[<span class="st">"Label"</span>]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>TrueLabel5D<span class="op">=</span>DF5D[<span class="st">"Label"</span>]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(TrueLabel3D)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0    BBallPlayer
+1      NonPlayer
+2      NonPlayer
+3    BBallPlayer
+4      NonPlayer
+5    BBallPlayer
+6    BBallPlayer
+7      NonPlayer
+8      NonPlayer
+9    BBallPlayer
+Name: Label, dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>DF3D<span class="op">=</span>DF3D.drop([<span class="st">'Label'</span>], axis<span class="op">=</span><span class="dv">1</span>) <span class="co">#drop Label, axis = 1 is for columns</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>DF5D<span class="op">=</span>DF5D.drop([<span class="st">'Label'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF3D.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Height  Weight  Age
+0      84     250   17
+1      72     200   16
+2      70     210   15
+3      86     278   18
+4      74     190   15</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>kmeans_object3D <span class="op">=</span> sklearn.cluster.KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>kmeans_object5D <span class="op">=</span> sklearn.cluster.KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#print(kmeans_object)</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>kmeans_3D<span class="op">=</span>kmeans_object3D.fit(DF3D)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>kmeans_5D<span class="op">=</span>kmeans_object5D.fit(DF5D)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get cluster assignment labels</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>labels3D <span class="op">=</span>kmeans_3D.labels_</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>labels5D <span class="op">=</span>kmeans_5D.labels_</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>prediction_kmeans_3D <span class="op">=</span> kmeans_object3D.predict(DF3D)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>prediction_kmeans_5D <span class="op">=</span> kmeans_object5D.predict(DF5D)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Prediction 3D</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prediction_kmeans_3D)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Actual</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(TrueLabel3D)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Prediction 5D</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prediction_kmeans_5D)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Actual</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(TrueLabel5D)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Prediction 3D
+
+[1 0 0 1 0 1 1 0 0 1]
+Actual
+
+0    BBallPlayer
+1      NonPlayer
+2      NonPlayer
+3    BBallPlayer
+4      NonPlayer
+5    BBallPlayer
+6    BBallPlayer
+7      NonPlayer
+8      NonPlayer
+9    BBallPlayer
+Name: Label, dtype: object
+Prediction 5D
+
+[1 1 0 1 1 1 1 1 0 1]
+Actual
+
+0    BBallPlayer
+1      NonPlayer
+2      NonPlayer
+3    BBallPlayer
+4      NonPlayer
+5    BBallPlayer
+6    BBallPlayer
+7      NonPlayer
+8      NonPlayer
+9    BBallPlayer
+Name: Label, dtype: object</code></pre>
+</div>
+</div>
+</section>
+<section id="convert-true-labels-from-text-to-numeric-labels" class="level2">
+<h2 class="anchored" data-anchor-id="convert-true-labels-from-text-to-numeric-labels">Convert True Labels from text to numeric labels…</h2>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">##---------------------</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Convert True Labels from text to numeric labels...</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">##-----------------------</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(TrueLabel3D)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>data_classes <span class="op">=</span> [<span class="st">"BBallPlayer"</span>, <span class="st">"NonPlayer"</span>]</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>dc <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(data_classes, <span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">2</span>)))</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dc)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>TrueLabel3D_num<span class="op">=</span>TrueLabel3D.<span class="bu">map</span>(dc, na_action<span class="op">=</span><span class="st">'ignore'</span>)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(TrueLabel3D_num)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0    BBallPlayer
+1      NonPlayer
+2      NonPlayer
+3    BBallPlayer
+4      NonPlayer
+5    BBallPlayer
+6    BBallPlayer
+7      NonPlayer
+8      NonPlayer
+9    BBallPlayer
+Name: Label, dtype: object
+{'BBallPlayer': 0, 'NonPlayer': 1}
+0    0
+1    1
+2    1
+3    0
+4    1
+5    0
+6    0
+7    1
+8    1
+9    0
+Name: Label, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">############# ---&gt; ALWAYS USE VIS! ----------</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>fig2 <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">12</span>))</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> Axes3D(fig2, rect<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">.90</span>, <span class="dv">1</span>], elev<span class="op">=</span><span class="dv">48</span>, azim<span class="op">=</span><span class="dv">134</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF3D)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>x<span class="op">=</span>DF3D.iloc[:,<span class="dv">0</span>] <span class="co">## Height</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>y<span class="op">=</span>DF3D.iloc[:,<span class="dv">1</span>] <span class="co">## Weight</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>z<span class="op">=</span>DF3D.iloc[:,<span class="dv">2</span>] <span class="co">## Age</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x,y,z)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>ax2.scatter(x,y,z, cmap<span class="op">=</span><span class="st">"RdYlGn"</span>, edgecolor<span class="op">=</span><span class="st">'k'</span>, s<span class="op">=</span><span class="dv">200</span>,c<span class="op">=</span>prediction_kmeans_3D)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>ax2.w_xaxis.set_ticklabels([])</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>ax2.w_yaxis.set_ticklabels([])</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>ax2.w_zaxis.set_ticklabels([])</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>ax2.set_xlabel(<span class="st">'Height'</span>, fontsize<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>ax2.set_ylabel(<span class="st">'Weight'</span>, fontsize<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>ax2.set_zlabel(<span class="st">'Age'</span>, fontsize<span class="op">=</span><span class="dv">25</span>)</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Height  Weight  Age
+0      84     250   17
+1      72     200   16
+2      70     210   15
+3      86     278   18
+4      74     190   15
+5      80     245   16
+6      79     267   19
+7      71     187   15
+8      69     211   14
+9      82     289   17
+0    84
+1    72
+2    70
+3    86
+4    74
+5    80
+6    79
+7    71
+8    69
+9    82
+Name: Height, dtype: int64 0    250
+1    200
+2    210
+3    278
+4    190
+5    245
+6    267
+7    187
+8    211
+9    289
+Name: Weight, dtype: int64 0    17
+1    16
+2    15
+3    18
+4    15
+5    16
+6    19
+7    15
+8    14
+9    17
+Name: Age, dtype: int64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 1200x1200 with 0 Axes&gt;</code></pre>
+</div>
+</div>
+<p>These centers should make sense. Notice the actual values….</p>
+<p>The BBPlayers will be taller, higher weight, higher age</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>centers3D <span class="op">=</span> kmeans_3D.cluster_centers_</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(centers3D)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(centers3D[<span class="dv">0</span>,<span class="dv">0</span>])</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>xs<span class="op">=</span>(centers3D[<span class="dv">0</span>,<span class="dv">0</span>], centers3D[<span class="dv">1</span>,<span class="dv">0</span>])</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>ys<span class="op">=</span>(centers3D[<span class="dv">0</span>,<span class="dv">1</span>], centers3D[<span class="dv">1</span>,<span class="dv">1</span>])</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>zs<span class="op">=</span>(centers3D[<span class="dv">0</span>,<span class="dv">2</span>], centers3D[<span class="dv">1</span>,<span class="dv">2</span>])</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>ax2.scatter(xs,ys,zs, c<span class="op">=</span><span class="st">'black'</span>, s<span class="op">=</span><span class="dv">2000</span>, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[ 71.2 199.6  15. ]
+ [ 82.2 265.8  17.4]]
+71.2</code></pre>
+</div>
+</div>
+</section>
+<section id="looking-at-distances" class="level2">
+<h2 class="anchored" data-anchor-id="looking-at-distances">Looking at distances</h2>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>DF3D.head()</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Let's find the distances between each PAIR</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">## of vectors. What is a vector? It is a data row.</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co">## For example:  [84       250         17]</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co">## Where, in this case, 84 is the value for height</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co">## 250 is weight, and 17 is age.</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>X<span class="op">=</span>DF3D</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> euclidean_distances</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Distance between each pair of rows (vectors)</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>Euc_dist<span class="op">=</span>euclidean_distances(X, X)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> manhattan_distances</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>Man_dist<span class="op">=</span>manhattan_distances(X,X)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_distances</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>Cos_dist<span class="op">=</span>cosine_distances(X,X)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_similarity</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>Cos_Sim<span class="op">=</span>cosine_similarity(X,X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The cosine distance is equivalent to the half the squared euclidean distance if each sample is normalized to unit norm</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">##############--------------------------&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Visualize distances</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">################################################</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> pairwise_distances</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.spatial.distance <span class="im">import</span> squareform</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.cluster.hierarchy <span class="im">import</span> linkage</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.cluster.hierarchy <span class="im">import</span> dendrogram</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Euc_dist)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>X<span class="op">=</span>DF3D</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co">#sns.set()  #back to defaults</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(font_scale<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> linkage(squareform(np.around(euclidean_distances(X), <span class="dv">3</span>)))</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>fig4 <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">15</span>))</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>ax4 <span class="op">=</span> fig4.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>dendrogram(Z, ax<span class="op">=</span>ax4)</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>ax4.tick_params(axis<span class="op">=</span><span class="st">'x'</span>, which<span class="op">=</span><span class="st">'major'</span>, labelsize<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>ax4.tick_params(axis<span class="op">=</span><span class="st">'y'</span>, which<span class="op">=</span><span class="st">'major'</span>, labelsize<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="co">#ax5 = fig4.add_subplot(212)</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>fig4.savefig(<span class="st">'exampleSave.png'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[  0.          51.42956348  42.42640687  28.08914381  60.86049622
+    6.4807407   17.8325545   64.35837164  41.89272013  39.05124838]
+ [ 51.42956348   0.          10.24695077  79.27168473  10.24695077
+   45.70557953  67.43144667  13.07669683  11.5758369   89.5656184 ]
+ [ 42.42640687  10.24695077   0.          69.92138443  20.39607805
+   36.41428291  57.84461946  23.02172887   1.73205081  79.93122043]
+ [ 28.08914381  79.27168473  69.92138443   0.          88.86506625
+   33.60059523  13.07669683  92.27675764  69.23871749  11.74734012]
+ [ 60.86049622  10.24695077  20.39607805  88.86506625   0.
+   55.33534133  77.26577509   4.24264069  21.61018278  99.34284071]
+ [  6.4807407   45.70557953  36.41428291  33.60059523  55.33534133
+    0.          22.22611077  58.70264049  35.79106034  44.05678154]
+ [ 17.8325545   67.43144667  57.84461946  13.07669683  77.26577509
+   22.22611077   0.          80.49844719  57.10516614  22.29349681]
+ [ 64.35837164  13.07669683  23.02172887  92.27675764   4.24264069
+   58.70264049  80.49844719   0.          24.10394159 102.6109156 ]
+ [ 41.89272013  11.5758369    1.73205081  69.23871749  21.61018278
+   35.79106034  57.10516614  24.10394159   0.          79.13279977]
+ [ 39.05124838  89.5656184   79.93122043  11.74734012  99.34284071
+   44.05678154  22.29349681 102.6109156   79.13279977   0.        ]]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Clust2_files/figure-html/cell-20-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="normalizingvia-scaling-min-max" class="level2">
+<h2 class="anchored" data-anchor-id="normalizingvia-scaling-min-max">Normalizing…via scaling MIN MAX</h2>
+<p>For the heatmap, we must normalize first</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#import pandas as pd</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> X.values <span class="co">#returns a numpy array</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Instantiate the min-max scaler</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>min_max_scaler <span class="op">=</span> preprocessing.MinMaxScaler()</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>x_scaled <span class="op">=</span> min_max_scaler.fit_transform(x)</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>DF3D_scaled <span class="op">=</span> pd.DataFrame(x_scaled)</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(DF3D.columns)</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>sns.clustermap(DF3D_scaled,yticklabels<span class="op">=</span>TrueLabel3D, </span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>               xticklabels<span class="op">=</span>DF3D.columns)</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[ 84 250  17]
+ [ 72 200  16]
+ [ 70 210  15]
+ [ 86 278  18]
+ [ 74 190  15]
+ [ 80 245  16]
+ [ 79 267  19]
+ [ 71 187  15]
+ [ 69 211  14]
+ [ 82 289  17]]
+Index(['Height', 'Weight', 'Age'], dtype='object')</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>&lt;seaborn.matrix.ClusterGrid at 0x23959d8e4c0&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Clust2_files/figure-html/cell-21-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="silhouette-and-elbow---optimal-clusters" class="level2">
+<h2 class="anchored" data-anchor-id="silhouette-and-elbow---optimal-clusters">Silhouette and Elbow - Optimal Clusters…</h2>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_samples, silhouette_score</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co">#import pandas as pd</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co">#import numpy as np</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co">#import seaborn as sns</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co">#from sklearn.cluster import KMeans</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co">#from sklearn.metrics import silhouette_score</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The Silhouette Method helps to determine the optimal number of clustersin kmeans clustering…</p>
+<p>Silhouette Coefficient = <span class="math inline">\(\frac{x-y}{max(x,y)}\)</span></p>
+<p>where, - y is the mean intra cluster distance - the mean distance to the other instances in the same cluster. - x depicts mean nearest cluster distance i.e.&nbsp;the mean distance to the instances of the next closest cluster. - The coefficient varies between -1 and 1.</p>
+<p>A value close to 1 implies that the instance is close to its cluster is a part of the right cluster. Whereas, a value close to -1 means that the value is assigned to the wrong cluster.</p>
+<p>[https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_silhouette_analysis.html]</p>
+<hr>
+<p>The silhouette_score gives the average value for all the samples. This gives a perspective into the density and separation of the formed clusters</p>
+<p>This example is generated from a random mixture of normal data…</p>
+<p>ref:[https://towardsdatascience.com/silhouette-coefficient-validating-clustering-techniques-e976bb81d10c]</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>X<span class="op">=</span> np.random.rand(<span class="dv">100</span>,<span class="dv">2</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>Y<span class="op">=</span> <span class="dv">2</span> <span class="op">+</span> np.random.rand(<span class="dv">100</span>,<span class="dv">2</span>)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>Z<span class="op">=</span> np.concatenate((X,Y))</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>Z<span class="op">=</span>pd.DataFrame(Z) </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Z.head())</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>Z[<span class="dv">0</span>],y<span class="op">=</span>Z[<span class="dv">1</span>])</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>KMean<span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>KMean.fit(Z)</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>label<span class="op">=</span>KMean.predict(Z)</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(label)</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>Z[<span class="dv">0</span>],y<span class="op">=</span>Z[<span class="dv">1</span>], hue<span class="op">=</span>label)</span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Silhouette Score for k=2</span><span class="ch">\n</span><span class="st">"</span>,silhouette_score(Z, label))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[0.32976588 0.97079191]
+ [0.20120356 0.04009186]
+ [0.38313339 0.27913774]
+ [0.98233017 0.98146807]
+ [0.6096413  0.72870224]
+ [0.42425405 0.56979719]
+ [0.24153806 0.6710165 ]
+ [0.03193591 0.66014036]
+ [0.93198236 0.8070802 ]
+ [0.98223418 0.38595403]
+ [0.29497654 0.02886848]
+ [0.76703864 0.43342235]
+ [0.01431254 0.84507473]
+ [0.65040721 0.38089811]
+ [0.23823512 0.8107643 ]
+ [0.94111515 0.25991042]
+ [0.45572627 0.83473494]
+ [0.83247975 0.09558967]
+ [0.20284777 0.20313933]
+ [0.26509032 0.84778321]
+ [0.48909685 0.47718723]
+ [0.86557642 0.28014778]
+ [0.30693886 0.88190572]
+ [0.69362372 0.81305939]
+ [0.64513899 0.47749519]
+ [0.01471519 0.71855359]
+ [0.21078793 0.14093666]
+ [0.44518248 0.23969958]
+ [0.42701161 0.85993369]
+ [0.65351675 0.35083823]
+ [0.32982363 0.65587497]
+ [0.86091611 0.67815325]
+ [0.36599916 0.99143181]
+ [0.17482511 0.89020909]
+ [0.78515537 0.32604585]
+ [0.13705699 0.01232289]
+ [0.80673377 0.20571035]
+ [0.77797354 0.70243472]
+ [0.05931562 0.89148179]
+ [0.65497694 0.30307239]
+ [0.03979499 0.64342724]
+ [0.57440131 0.53994879]
+ [0.12617651 0.25778411]
+ [0.9914637  0.7757916 ]
+ [0.36288138 0.05929629]
+ [0.05403529 0.00757979]
+ [0.6863184  0.27950098]
+ [0.94625992 0.03982457]
+ [0.59176025 0.70731618]
+ [0.5008563  0.27732221]
+ [0.90075812 0.76669407]
+ [0.88101781 0.0194176 ]
+ [0.94537639 0.32350845]
+ [0.74088958 0.97604603]
+ [0.62364952 0.63851824]
+ [0.62738469 0.77219817]
+ [0.50799597 0.44484189]
+ [0.35324191 0.41767147]
+ [0.06100462 0.50890745]
+ [0.50618373 0.97497591]
+ [0.90649412 0.54316549]
+ [0.03898751 0.64848176]
+ [0.09652992 0.57216035]
+ [0.06508189 0.81355029]
+ [0.76725788 0.357547  ]
+ [0.57440446 0.27846386]
+ [0.35922301 0.11737743]
+ [0.57188375 0.37983046]
+ [0.97711861 0.48355593]
+ [0.46360129 0.04253321]
+ [0.94348455 0.36233953]
+ [0.51066887 0.30619803]
+ [0.20020994 0.92512926]
+ [0.29419257 0.45235935]
+ [0.45147006 0.07778964]
+ [0.1291848  0.40708444]
+ [0.32377055 0.05313946]
+ [0.3678385  0.82611556]
+ [0.54177132 0.14170721]
+ [0.50235205 0.47384619]
+ [0.11817243 0.60617175]
+ [0.68168374 0.53284906]
+ [0.56611831 0.71997027]
+ [0.2437857  0.71717121]
+ [0.97432412 0.36228003]
+ [0.17653768 0.07171965]
+ [0.28273057 0.31086046]
+ [0.00439608 0.82290895]
+ [0.24568217 0.7784609 ]
+ [0.50647348 0.84691517]
+ [0.0899808  0.28869464]
+ [0.51983536 0.35566986]
+ [0.06797467 0.56422025]
+ [0.56515648 0.72645442]
+ [0.18736652 0.06251711]
+ [0.25448242 0.85930775]
+ [0.61299402 0.60674746]
+ [0.56977449 0.17392631]
+ [0.44028695 0.97677308]
+ [0.4959815  0.51786503]]
+          0         1
+0  0.329766  0.970792
+1  0.201204  0.040092
+2  0.383133  0.279138
+3  0.982330  0.981468
+4  0.609641  0.728702</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+Silhouette Score for k=2
+ 0.8160709896912354</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Clust2_files/figure-html/cell-23-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Now - for k = 3</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>KMean<span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>KMean.fit(Z)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>label<span class="op">=</span>KMean.predict(Z)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Silhouette Score for k=3</span><span class="ch">\n</span><span class="st">"</span>,silhouette_score(Z, label))</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>Z[<span class="dv">0</span>],y<span class="op">=</span>Z[<span class="dv">1</span>], hue<span class="op">=</span>label)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Now - for k = 4</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>KMean<span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>KMean.fit(Z)</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>label<span class="op">=</span>KMean.predict(Z)</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Silhouette Score for k=4</span><span class="ch">\n</span><span class="st">"</span>,silhouette_score(Z, label))</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>Z[<span class="dv">0</span>],y<span class="op">=</span>Z[<span class="dv">1</span>], hue<span class="op">=</span>label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Silhouette Score for k=3
+ 0.5972408251103292</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Silhouette Score for k=4
+ 0.3837068579147534</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>&lt;AxesSubplot: xlabel='0', ylabel='1'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Clust2_files/figure-html/cell-24-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="silhouette-example-from-sklearn" class="level2">
+<h2 class="anchored" data-anchor-id="silhouette-example-from-sklearn">Silhouette Example from sklearn</h2>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_blobs</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co">#from sklearn.cluster import KMeans</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co">#from sklearn.metrics import silhouette_samples, silhouette_score</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co">#import matplotlib.pyplot as plt</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.cm <span class="im">as</span> cm</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="co">#import numpy as np</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_blobs(n_samples<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>                  n_features<span class="op">=</span><span class="dv">2</span>, <span class="co">## so it is 2D</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>                  centers<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>                  cluster_std<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>                  center_box<span class="op">=</span>(<span class="op">-</span><span class="fl">10.0</span>, <span class="fl">10.0</span>),</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>                  shuffle<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>                  random_state<span class="op">=</span><span class="dv">1</span>)  <span class="co"># For reproducibility</span></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>range_n_clusters <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[-6.92324165e+00 -1.06695320e+01]
+ [-8.63062033e+00 -7.13940564e+00]
+ [-9.63048069e+00 -2.72044935e+00]
+ [-2.30647659e+00  5.30797676e+00]
+ [-7.57005366e+00 -3.01446491e+00]
+ [-1.00051011e+00  2.77905153e+00]
+ [-4.81826839e+00 -2.77214822e+00]
+ [-5.33964799e+00 -1.27625764e+00]
+ [-7.94308840e+00 -3.89993901e+00]
+ [-5.54924525e+00 -3.41298968e+00]
+ [-5.14508990e+00 -9.54492198e+00]
+ [-7.09669936e+00 -8.04074036e+00]
+ [-5.82641512e+00 -1.96346196e+00]
+ [-1.83198811e+00  3.52863145e+00]
+ [-7.34267235e+00 -3.16546482e+00]
+ [-7.34072825e+00 -6.92427252e+00]
+ [-7.94653906e+00 -3.36768655e+00]
+ [-8.24598536e+00 -8.61315821e+00]
+ [-1.98197711e+00  4.02243551e+00]
+ [-4.35098035e+00 -3.69476678e+00]
+ [-1.04768696e+01 -3.60318139e+00]
+ [-1.10195984e+01 -3.15882031e+00]
+ [-5.17255904e+00 -4.31835971e+00]
+ [-2.40671820e+00  6.09894447e+00]
+ [-6.72149498e+00 -2.88440806e+00]
+ [-6.58935963e+00 -4.43379548e+00]
+ [-1.46126019e+00  4.52549851e+00]
+ [-9.19003455e-01  3.45278927e+00]
+ [-1.04093517e+01 -2.67482046e+00]
+ [-6.36722809e+00 -3.32666072e+00]
+ [-6.72766125e+00 -7.14516267e+00]
+ [-2.27956075e+00  5.10452190e+00]
+ [-5.84887560e+00 -3.03970506e+00]
+ [-6.07993051e+00 -7.08197568e+00]
+ [-5.26682929e+00 -2.69645055e+00]
+ [-6.05367512e+00 -9.62979077e+00]
+ [-1.00822205e+01 -4.25071043e+00]
+ [-1.18708735e+01 -3.03273343e+00]
+ [-5.37107307e+00 -7.95635833e+00]
+ [-9.37590900e+00 -4.55315308e+00]
+ [-6.63401987e+00 -2.58340356e+00]
+ [-9.54609655e+00 -2.84917422e+00]
+ [-1.69825542e+00  2.79071751e+00]
+ [-5.60217602e+00 -6.59908490e-01]
+ [-6.03429022e+00 -4.08821196e+00]
+ [-6.37230784e+00 -8.63190046e+00]
+ [-1.02264783e+01 -2.33998717e+00]
+ [-5.95678148e+00 -3.97905701e+00]
+ [-1.42706535e+00  5.08904128e+00]
+ [-6.20735304e-01  6.59346952e+00]
+ [-3.28102793e-01  4.11918201e+00]
+ [-1.06230545e+01 -4.54719161e+00]
+ [-9.12674270e+00 -4.46180568e+00]
+ [-5.24134497e+00 -3.23505873e+00]
+ [-7.19967531e+00 -7.10400981e+00]
+ [-1.01136977e+01 -4.12880752e+00]
+ [-1.03416132e+01 -4.95351774e+00]
+ [-1.25041532e+01 -6.06751247e+00]
+ [-9.32331640e+00 -4.67574045e+00]
+ [-7.32033002e+00 -2.73350095e+00]
+ [-2.20533407e+00  4.20765201e+00]
+ [-5.27930518e-01  5.92630669e+00]
+ [-8.87430034e+00 -3.64808151e+00]
+ [-6.66948545e+00 -4.26059884e+00]
+ [-1.37397258e+00  5.29163103e+00]
+ [-6.60085708e+00 -3.11969688e+00]
+ [-7.99175412e+00 -8.33564851e+00]
+ [-6.22447869e+00 -2.43846224e+00]
+ [-1.11054250e+01 -3.97106687e+00]
+ [-8.95762335e+00 -4.87178859e+00]
+ [-6.65461644e+00 -7.29335713e+00]
+ [-1.09531378e+01 -3.36743812e+00]
+ [-5.11351008e+00 -2.01881992e+00]
+ [-7.24251438e+00 -9.66368448e+00]
+ [-5.34929456e+00 -3.54577332e+00]
+ [-6.29261332e+00 -3.68892426e+00]
+ [-7.35387953e+00 -8.54504434e+00]
+ [-5.78423473e+00 -4.48406848e+00]
+ [-5.66256325e+00 -2.34390092e+00]
+ [-8.60893311e+00 -4.61469279e+00]
+ [-2.52019906e-01  4.53559145e+00]
+ [-1.92744799e+00  4.93684534e+00]
+ [-9.41306589e+00 -3.62907430e+00]
+ [-8.48608233e-01  5.45093196e+00]
+ [-8.66753040e-01  3.78295914e+00]
+ [-1.01842915e+01 -4.01017303e+00]
+ [-7.93192918e+00 -5.42450547e+00]
+ [-2.75447175e+00  4.57587230e+00]
+ [-1.17171070e+01 -3.89622755e+00]
+ [-8.85081213e+00 -4.00305113e+00]
+ [-1.34392496e+00  2.38428865e+00]
+ [-8.16203654e+00 -7.31459336e+00]
+ [-9.18886814e+00 -2.16359386e+00]
+ [-7.13229260e+00 -4.02296730e+00]
+ [-4.26103071e-02  4.90923075e+00]
+ [-7.24449448e+00 -7.65150300e+00]
+ [-8.13784646e+00 -7.65806949e+00]
+ [-6.73451345e+00 -1.38330194e+00]
+ [-8.96369424e+00 -9.27033880e+00]
+ [ 8.68765801e-01  4.15785509e+00]
+ [-5.45176929e-01  3.81996593e+00]
+ [-8.01694428e+00 -8.67137366e+00]
+ [-3.33375571e+00  5.23151969e+00]
+ [-1.14385885e+01 -2.72109548e+00]
+ [-2.52087627e+00  5.08120139e+00]
+ [-6.84394443e+00 -4.15058222e+00]
+ [-5.87619738e+00 -3.28078916e+00]
+ [-1.21819546e+00  4.30633464e+00]
+ [-2.00341358e+00  4.45008673e+00]
+ [-1.01077040e+01 -3.94479960e+00]
+ [-7.03045854e+00 -1.23734756e+00]
+ [-6.95685137e+00 -8.12381049e+00]
+ [-2.33022219e+00  4.78405366e+00]
+ [-9.98435983e+00 -4.64804214e+00]
+ [-2.33080604e+00  4.39382527e+00]
+ [-1.07796242e+01 -4.39085753e+00]
+ [-2.03484486e+00  3.76775946e+00]
+ [-7.16744245e+00 -3.24998378e+00]
+ [-4.99221336e-01  4.77598259e+00]
+ [-5.76681144e+00 -3.41281779e+00]
+ [-1.06990569e+01 -4.49057157e+00]
+ [-7.28729621e+00 -6.68306776e+00]
+ [-8.17831829e+00 -8.22063813e+00]
+ [-9.14443128e+00 -4.36637786e+00]
+ [-7.22323543e+00 -3.51226376e+00]
+ [-9.71296439e+00 -3.69088110e+00]
+ [-3.19091528e-02  4.74450157e+00]
+ [-7.10406044e+00 -8.38198228e+00]
+ [-7.52482501e+00 -7.50887444e+00]
+ [-6.31161343e+00 -2.97641697e+00]
+ [-5.38142198e-01  4.81539041e+00]
+ [-9.58041050e+00 -3.16857790e+00]
+ [-9.53106924e+00 -2.91966168e+00]
+ [-1.07650223e+01 -3.27877784e+00]
+ [-9.54658956e+00 -4.64826945e+00]
+ [-7.39393373e+00 -6.80612264e+00]
+ [-2.99151157e+00  2.64580131e+00]
+ [-5.67558254e+00 -4.55902255e+00]
+ [-3.51754177e+00  5.64265390e+00]
+ [-9.98539618e-01  6.19864808e+00]
+ [-5.96497901e+00 -2.03746469e+00]
+ [-8.85279507e+00 -7.79138079e+00]
+ [-4.64310426e+00 -2.22789422e+00]
+ [-1.35938959e+00  4.05424002e+00]
+ [-5.25790464e-01  3.30659860e+00]
+ [-1.15637509e+00  5.69971575e+00]
+ [-6.42530010e+00 -2.17328619e+00]
+ [-5.70183305e+00 -2.63083838e+00]
+ [-6.04632971e+00 -6.92266990e+00]
+ [-8.14559288e+00 -7.42775410e+00]
+ [-9.15685095e+00 -4.05623576e+00]
+ [-9.16170778e+00 -2.40998944e+00]
+ [-1.46864442e+00  6.50674501e+00]
+ [-6.74672798e+00 -8.17245974e+00]
+ [-1.98605940e+00  3.06381408e+00]
+ [-1.03289957e+01 -3.56680940e+00]
+ [-9.34313235e+00 -4.00453699e+00]
+ [-9.55954616e+00 -2.83102023e+00]
+ [-1.01659113e+01 -4.12752889e+00]
+ [-9.84144865e+00 -4.14356957e+00]
+ [-1.02768102e+01 -2.33049946e+00]
+ [-1.01030572e+01 -3.32315288e+00]
+ [-9.90228742e+00 -3.03189848e+00]
+ [-9.72121320e+00 -4.68662015e+00]
+ [-1.85139546e+00  3.51886090e+00]
+ [-6.69321189e+00 -6.30021862e+00]
+ [-6.53371839e+00 -8.14922726e+00]
+ [-8.46369500e+00 -8.07146029e+00]
+ [-5.75004528e+00 -3.56590967e+00]
+ [-1.17104176e+00  4.33091816e+00]
+ [-8.52628579e+00 -8.66957601e+00]
+ [-9.23890684e+00 -3.06843973e+00]
+ [-6.12803051e+00 -2.51698058e+00]
+ [-8.10406451e+00 -7.42020487e+00]
+ [-1.61589091e+00  4.18017563e+00]
+ [-8.98758533e+00 -3.03333061e+00]
+ [-1.19410359e+01 -3.60085418e+00]
+ [-1.04399418e+01 -3.62982119e+00]
+ [-1.14242679e+01 -2.18538860e+00]
+ [-9.00992914e+00 -9.06865247e+00]
+ [-6.47435649e+00 -3.74338863e+00]
+ [-9.63138049e+00 -4.99793793e+00]
+ [ 5.26015501e-01  3.00999353e+00]
+ [-9.76324393e+00 -9.36656623e+00]
+ [-6.27965526e+00 -8.81809587e+00]
+ [-9.46883276e+00 -6.19043506e+00]
+ [-5.77336618e+00 -3.56739953e+00]
+ [-6.69242533e+00 -8.30171791e+00]
+ [-7.44439970e+00 -9.16803180e+00]
+ [-7.11478469e+00 -5.38699134e+00]
+ [-3.85803976e-01  6.37359162e+00]
+ [-2.00454712e+00  4.17565013e+00]
+ [-5.75517628e+00 -9.30821074e+00]
+ [-9.14168421e+00 -7.20572694e+00]
+ [-5.92092535e+00 -3.27574048e+00]
+ [-2.35122066e+00  4.00973634e+00]
+ [-5.91907851e+00 -2.23919861e+00]
+ [-5.62200526e+00 -8.69290967e+00]
+ [-7.54246304e+00 -8.12722811e+00]
+ [-2.41395785e+00  5.65935802e+00]
+ [-6.37151596e+00 -8.91129543e+00]
+ [-1.21401792e+01 -4.78351741e+00]
+ [-4.45264491e+00  6.34401868e+00]
+ [-5.59698820e+00 -4.19535853e+00]
+ [-6.07503622e+00 -2.15606405e+00]
+ [-7.24828238e+00 -7.05222790e+00]
+ [-4.77891101e+00 -2.41333165e+00]
+ [-1.24112155e+01 -5.73091492e+00]
+ [-6.75264349e+00 -8.34654975e+00]
+ [-5.05492139e+00 -4.22257749e+00]
+ [-1.03825448e+01 -2.49524031e+00]
+ [-7.22570502e+00 -3.79313579e+00]
+ [-1.19498178e+01 -5.35567769e+00]
+ [-7.62867092e+00 -8.06354170e+00]
+ [-4.61767113e+00 -1.67111145e+00]
+ [-5.12219664e+00 -3.31302123e+00]
+ [-6.29225072e+00 -2.35738294e+00]
+ [ 2.42271161e-04  5.14853403e+00]
+ [-8.79988166e+00 -2.24875438e+00]
+ [-2.77687025e+00  4.64090557e+00]
+ [-6.39694979e+00 -3.76963703e+00]
+ [-6.92263081e+00 -7.63972262e+00]
+ [-1.15768688e+01 -4.78197653e+00]
+ [-5.66824737e+00 -3.82607509e+00]
+ [-1.11578826e+01 -2.60324173e+00]
+ [-1.04730854e+01 -3.47573837e+00]
+ [-9.98118494e+00 -3.77616083e+00]
+ [-1.04102078e+00  3.96331794e+00]
+ [-9.32856015e+00 -2.60893309e+00]
+ [-1.13898357e+00  3.26214848e+00]
+ [-6.17905638e+00 -7.96336646e+00]
+ [-1.02356544e+01 -2.79806066e+00]
+ [-5.77133256e+00 -8.59222577e+00]
+ [-9.14500844e+00 -3.91798845e+00]
+ [-1.61734616e+00  4.98930508e+00]
+ [-2.77867530e+00  6.36256877e+00]
+ [-9.54642849e+00 -5.63740853e+00]
+ [-6.91486590e+00 -7.68969378e+00]
+ [-1.84612968e+00  4.30474400e+00]
+ [-5.52834586e+00 -8.15360311e+00]
+ [-6.00915337e+00 -3.34925152e+00]
+ [-8.54628324e+00 -4.57138540e+00]
+ [-7.31655639e+00 -7.77051293e+00]
+ [-7.20423399e+00 -8.88176559e+00]
+ [-7.55600732e+00 -8.01885499e+00]
+ [-5.67856792e+00 -7.60509852e+00]
+ [-5.21446826e+00 -4.79995312e+00]
+ [-9.37662980e+00 -2.99722684e+00]
+ [-5.31844709e+00 -8.92829839e+00]
+ [-1.08278844e+01 -4.83392615e+00]
+ [-6.06569910e+00 -1.53376946e+00]
+ [-2.34673261e+00  3.56128423e+00]
+ [-1.25606826e+00  5.00006839e+00]
+ [-5.83979745e+00 -2.17836186e+00]
+ [-6.87088211e+00 -2.22716236e+00]
+ [-1.79600465e+00  4.28743568e+00]
+ [-9.37972697e+00 -4.13752487e+00]
+ [-7.23605937e+00 -4.54710992e+00]
+ [-1.02794488e+01 -1.89699302e+00]
+ [-1.41689046e+00  4.60832005e+00]
+ [-5.78045412e+00 -4.58297922e+00]
+ [ 8.52518583e-02  3.64528297e+00]
+ [-9.20268641e+00 -4.32778687e+00]
+ [-9.56818636e+00 -4.56034695e+00]
+ [-1.16434858e+00  4.23178671e+00]
+ [-6.16345851e+00 -3.10830802e+00]
+ [-6.32152564e+00 -9.66280079e+00]
+ [-7.52099974e+00 -9.13311836e+00]
+ [-9.22029330e+00 -4.07211972e+00]
+ [-1.08491682e+01 -2.95246712e+00]
+ [-9.86366431e+00 -2.75129369e+00]
+ [-6.79715224e+00 -3.45804136e+00]
+ [-9.79490066e-01  4.08668827e+00]
+ [-2.06043810e+00  5.23049549e+00]
+ [-5.66839183e+00 -7.95067847e-01]
+ [-7.57969185e-01  4.90898421e+00]
+ [-1.04205695e+01 -3.86688414e+00]
+ [-7.12425009e+00 -6.70423870e+00]
+ [-1.37889483e+00  4.33337717e+00]
+ [-6.61466444e+00 -7.52579102e+00]
+ [-1.34052081e+00  4.15711949e+00]
+ [-6.21160000e+00 -8.29293984e+00]
+ [-7.56885613e+00 -8.13527221e+00]
+ [-1.77000693e+00  3.78912781e+00]
+ [-7.36585834e+00 -7.34577219e+00]
+ [-1.49952284e+00  5.28265879e+00]
+ [-2.85882794e+00  5.26983519e+00]
+ [-7.73884935e+00 -3.24327665e+00]
+ [-1.08201797e+01 -3.23163726e+00]
+ [-8.53682012e+00 -3.36087575e+00]
+ [-1.20349137e+01 -5.89593773e+00]
+ [-5.26910909e+00 -2.73521824e+00]
+ [-6.71299604e+00 -2.90324984e+00]
+ [-8.36118634e+00 -2.72698382e+00]
+ [-5.48941428e+00 -6.94662021e+00]
+ [ 5.31139823e-01  2.51012895e+00]
+ [-5.64126775e+00 -7.24922893e+00]
+ [-9.48263889e+00 -6.73588302e+00]
+ [-7.53103704e+00 -6.76823676e+00]
+ [-6.31078595e+00 -2.05174648e+00]
+ [-8.70233178e+00 -4.19462540e+00]
+ [-6.11013071e+00 -2.31061128e+00]
+ [-5.83972633e+00 -9.20677418e+00]
+ [-1.17536381e+01 -3.23855895e+00]
+ [-9.29199482e+00 -9.85256171e+00]
+ [-7.85568214e+00 -6.92950589e+00]
+ [-1.01967107e+01 -2.08687717e+00]
+ [-7.96356538e+00 -7.83357116e+00]
+ [-6.77680402e+00 -6.65511992e+00]
+ [-1.08749940e+01 -4.82113577e+00]
+ [-1.84048021e+00  3.80256924e+00]
+ [-7.98067403e+00 -8.56048015e+00]
+ [-6.32066246e+00 -3.30751892e+00]
+ [-6.17979966e+00 -3.00803447e+00]
+ [-2.17665436e+00  3.40946304e+00]
+ [-6.73224718e-01  4.62002377e+00]
+ [-8.93892171e+00 -3.51521408e+00]
+ [-7.48937497e+00 -8.88475909e+00]
+ [-2.89641328e+00  5.28232880e+00]
+ [-8.13399258e-01  3.54697393e+00]
+ [-5.77752667e+00 -2.85145276e+00]
+ [-6.24883850e+00 -8.76563508e+00]
+ [-3.10367371e+00  3.90202401e+00]
+ [-1.05724063e+00  4.82677207e+00]
+ [-5.73215048e+00 -5.04695454e+00]
+ [-9.93696231e+00 -3.74222379e+00]
+ [-3.03267723e+00  4.72164926e+00]
+ [-1.07035530e+01 -2.76066248e+00]
+ [-5.68475631e+00 -3.76816924e+00]
+ [-8.62182374e+00 -8.76567023e+00]
+ [-6.67177294e+00 -9.97714796e+00]
+ [-1.92577841e+00  4.43910442e+00]
+ [-8.16299488e+00 -3.38896569e+00]
+ [-3.74380343e+00 -8.75345344e+00]
+ [-5.66601211e+00 -4.97019633e+00]
+ [-2.88961804e+00  4.95702736e+00]
+ [-2.35995841e+00  4.20309542e+00]
+ [-6.80491557e+00 -3.49602548e+00]
+ [-7.10480676e+00 -4.10830531e+00]
+ [-6.96685539e+00 -3.12876392e+00]
+ [-6.31354495e+00 -8.01283267e+00]
+ [-4.47120679e+00 -3.54131043e+00]
+ [-1.53940095e+00  5.02369298e+00]
+ [-1.60875215e+00  3.76949422e+00]
+ [-1.01927698e+01 -3.14795512e+00]
+ [-2.80207810e+00  4.05714715e+00]
+ [ 2.45098802e-01  5.51754657e+00]
+ [-3.31028117e+00  3.51593428e+00]
+ [-2.84187803e+00  3.74073535e+00]
+ [-5.75867612e+00 -8.75783107e+00]
+ [-5.99591056e+00 -8.11285667e+00]
+ [-4.98360687e+00 -3.20522961e+00]
+ [-1.86845414e+00  4.99311306e+00]
+ [-9.71503679e+00 -4.77944598e+00]
+ [-6.47373322e+00 -2.78682541e+00]
+ [-6.99263028e+00 -7.14344077e+00]
+ [-1.53773863e+00  5.53597378e+00]
+ [-1.04464505e+01 -4.62579659e+00]
+ [-1.09679881e+00  4.64722696e+00]
+ [-7.25256877e+00 -2.91682833e+00]
+ [-1.97451969e-01  2.34634916e+00]
+ [-1.00670412e+01 -4.06174061e+00]
+ [-6.13468589e+00 -4.50793424e+00]
+ [-1.03725172e+01 -4.70331816e+00]
+ [-1.88188805e+00  4.20573180e+00]
+ [-7.15498484e+00 -3.10778598e+00]
+ [-6.14254799e+00 -3.65202206e+00]
+ [-7.42749427e+00 -9.63838456e+00]
+ [-1.13009458e+00  4.54419108e+00]
+ [-6.28485505e+00 -8.78266971e+00]
+ [-7.33325349e+00 -8.28490373e+00]
+ [-6.40320111e+00 -7.16687592e+00]
+ [-7.22187586e+00 -9.48843083e+00]
+ [-6.09834293e+00 -7.44017905e+00]
+ [-7.20807793e+00 -7.12024433e+00]
+ [-9.68744022e+00 -6.04759636e+00]
+ [-7.87372938e+00 -7.59578865e+00]
+ [-1.14663009e+00  4.10839703e+00]
+ [-5.90344220e+00 -8.18075749e+00]
+ [-2.76017908e+00  5.55121358e+00]
+ [-1.23606555e+00  4.48382994e+00]
+ [-9.97584967e+00 -4.42202236e+00]
+ [-2.10668847e+00  5.63099757e+00]
+ [-4.73558876e+00 -4.23748969e+00]
+ [-1.07233096e+01 -4.82111722e+00]
+ [-8.26074369e+00 -5.64724782e+00]
+ [-6.88384344e+00 -7.04605265e+00]
+ [-2.15777347e+00  4.09550489e+00]
+ [-7.85988444e+00 -4.73888254e+00]
+ [-4.60642026e-01  4.59164629e+00]
+ [-5.05685487e+00 -5.02946642e+00]
+ [-7.66055006e+00 -8.46234942e+00]
+ [-8.41923982e+00 -3.45834788e+00]
+ [-1.09947323e+01 -4.06014253e+00]
+ [-6.71376529e+00 -8.22199857e+00]
+ [-1.07972600e+01 -4.24494314e+00]
+ [-8.23746328e+00 -4.01400104e+00]
+ [-2.93211866e+00  4.72003759e+00]
+ [-1.66145139e+00  3.00986944e+00]
+ [-7.65734347e+00 -1.04581360e+01]
+ [-9.98054778e+00 -4.38249083e+00]
+ [-5.51940374e+00 -2.38780334e+00]
+ [-1.96967668e+00  1.97165210e+00]
+ [-3.88464981e+00 -2.84336261e+00]
+ [-5.82969906e+00 -2.99067321e+00]
+ [-6.66700176e+00 -9.14923899e+00]
+ [-6.62889599e+00 -8.84071550e+00]
+ [-6.48944961e+00 -2.06753733e+00]
+ [-7.17134231e+00 -1.09442245e+01]
+ [-1.13042466e+01 -3.87696807e+00]
+ [-9.53654840e+00 -5.12933122e+00]
+ [-6.09866132e+00 -7.42731125e+00]
+ [-8.78925618e+00 -2.83764674e+00]
+ [-7.32386504e+00 -7.96393491e+00]
+ [-1.00330804e+01 -1.84274349e+00]
+ [-1.03619773e+00  3.97153319e+00]
+ [-6.42829877e+00 -6.74397472e+00]
+ [-2.87930430e+00  6.85585852e+00]
+ [-1.05299465e+01 -2.83521515e+00]
+ [-6.11423078e+00 -3.20893543e+00]
+ [-1.78245013e+00  3.47072043e+00]
+ [-8.95271809e+00 -3.34483385e+00]
+ [-5.16617901e+00 -3.79170586e+00]
+ [-1.64215050e+00  3.28447114e+00]
+ [-8.33534296e+00 -7.87023257e+00]
+ [-6.31107706e+00 -3.92118081e+00]
+ [-1.78002448e+00  3.17336913e+00]
+ [-1.68417686e+00  3.63132825e+00]
+ [-1.05552072e+01 -3.01417980e+00]
+ [-5.34354009e+00 -2.13897664e+00]
+ [-1.15365057e+01 -4.40124373e+00]
+ [-4.89503758e+00 -2.48633456e+00]
+ [-5.44396990e+00 -8.95941292e+00]
+ [-1.58173878e+00  5.02487013e+00]
+ [-7.02993859e+00 -6.69931052e+00]
+ [-6.17074238e+00 -2.56078204e+00]
+ [-2.22186534e+00  6.36136794e+00]
+ [-7.57385446e+00 -8.31971406e+00]
+ [-7.65822594e+00 -7.64292051e+00]
+ [-6.89501293e+00 -9.31723608e+00]
+ [-1.11141825e+01 -3.87242145e+00]
+ [-7.94152277e-01  2.10495117e+00]
+ [-6.42803193e+00 -5.52129397e+00]
+ [-5.89780702e+00 -8.19289680e+00]
+ [-6.59169697e+00 -2.44779959e+00]
+ [-6.45785776e+00 -3.30981436e+00]
+ [-1.07755713e+01 -2.83750744e+00]
+ [-1.02341495e+01 -3.22553505e+00]
+ [-6.26681839e+00 -8.25516014e+00]
+ [-5.20580980e+00 -3.29853839e+00]
+ [-5.46045264e+00 -2.30831553e+00]
+ [-7.04259952e+00 -3.45332351e+00]
+ [-6.09962804e+00 -3.14226915e+00]
+ [-5.66006950e+00 -3.43776965e+00]
+ [-7.08097398e+00 -3.03972377e+00]
+ [-8.41264712e+00 -6.68248825e+00]
+ [-7.36513410e+00 -1.38859731e+00]
+ [-1.04166504e+01 -4.43253346e+00]
+ [-6.41623854e+00 -8.04588481e+00]
+ [-5.88919348e+00 -2.37049472e+00]
+ [-1.42946517e+00  5.16850105e+00]
+ [-6.56118069e+00 -3.95967311e+00]
+ [-1.47299851e+00  4.81654152e+00]
+ [-5.88100804e+00 -3.31692615e+00]
+ [-1.04125594e+01 -3.50140251e+00]
+ [-8.55209377e+00 -3.15841000e+00]
+ [-7.90673749e-01  5.15690151e+00]
+ [-1.00754365e-01  4.51589257e+00]
+ [-1.30901393e+00  3.09420646e+00]
+ [-9.54755699e+00 -2.18801345e+00]
+ [-5.32030011e+00 -2.99303869e+00]
+ [-9.48229870e+00 -5.06821960e+00]
+ [-6.74361627e+00 -8.87844303e+00]
+ [-1.02518924e+01 -2.55350460e+00]
+ [-1.96576392e+00  5.23446451e+00]
+ [-5.88036774e+00 -2.36326290e+00]
+ [-7.34774574e+00 -8.41955499e+00]
+ [-7.58703957e-01  3.72276201e+00]
+ [-8.41357863e+00 -6.85069257e+00]
+ [-8.20576492e-01  5.33759195e+00]
+ [-7.93489041e+00 -7.78403764e+00]
+ [-5.69446566e+00 -4.06205304e+00]
+ [-8.57698874e-01  4.45305717e+00]
+ [ 1.50975008e-01  3.10076295e+00]
+ [-6.55394441e+00 -6.44256627e+00]
+ [-1.09316272e+01 -4.48636887e+00]
+ [-6.50155596e+00 -4.65329331e+00]
+ [-6.93650519e+00 -6.39281292e+00]
+ [-1.01336898e+01 -4.75061833e+00]
+ [-9.89148978e+00 -5.47902886e+00]
+ [-8.89871617e+00 -4.85498304e+00]
+ [-8.11394993e+00 -7.83656921e+00]
+ [-5.29078354e+00 -3.64846688e+00]
+ [-1.41076074e+00  4.10984872e+00]
+ [-9.50537595e+00 -4.63402669e+00]
+ [-7.82749456e+00 -2.51032104e+00]
+ [-6.38088086e+00 -8.50663809e+00]
+ [-8.96014913e+00 -8.06349899e+00]
+ [-7.66603898e+00 -7.59715459e+00]
+ [-6.46534407e+00 -2.85544633e+00]]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n_clusters <span class="kw">in</span> range_n_clusters:</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a subplot with 1 row and 2 columns</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    fig.set_size_inches(<span class="dv">18</span>, <span class="dv">7</span>)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The 1st subplot is the silhouette plot</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The silhouette coefficient can range from -1, 1 but in this example all</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># lie within [-0.1, 1]</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>    ax1.set_xlim([<span class="op">-</span><span class="fl">0.1</span>, <span class="dv">1</span>])</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The (n_clusters+1)*10 is for inserting blank space between silhouette</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plots of individual clusters, to demarcate them clearly.</span></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>    ax1.set_ylim([<span class="dv">0</span>, <span class="bu">len</span>(X) <span class="op">+</span> (n_clusters <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">10</span>])</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Initialize the clusterer with n_clusters value and a random generator</span></span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># seed of 10 for reproducibility.</span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>    clusterer <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>n_clusters, random_state<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>    cluster_labels <span class="op">=</span> clusterer.fit_predict(X)</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The silhouette_score gives the average value for all the samples.</span></span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This gives a perspective into the density and separation of the formed</span></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># clusters</span></span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>    silhouette_avg <span class="op">=</span> silhouette_score(X, cluster_labels)</span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"For n_clusters ="</span>, n_clusters,</span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>          <span class="st">"The average silhouette_score is :"</span>, silhouette_avg)</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute the silhouette scores for each sample</span></span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>    sample_silhouette_values <span class="op">=</span> silhouette_samples(X, cluster_labels)</span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>    y_lower <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_clusters):</span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Aggregate the silhouette scores for samples belonging to</span></span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># cluster i, and sort them</span></span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>        ith_cluster_silhouette_values <span class="op">=</span> <span class="op">\</span></span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>            sample_silhouette_values[cluster_labels <span class="op">==</span> i]</span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>        ith_cluster_silhouette_values.sort()</span>
+<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>        size_cluster_i <span class="op">=</span> ith_cluster_silhouette_values.shape[<span class="dv">0</span>]</span>
+<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a>        y_upper <span class="op">=</span> y_lower <span class="op">+</span> size_cluster_i</span>
+<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>        color <span class="op">=</span> cm.nipy_spectral(<span class="bu">float</span>(i) <span class="op">/</span> n_clusters)</span>
+<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a>        ax1.fill_betweenx(np.arange(y_lower, y_upper),</span>
+<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>                          <span class="dv">0</span>, ith_cluster_silhouette_values,</span>
+<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a>                          facecolor<span class="op">=</span>color, edgecolor<span class="op">=</span>color, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb51-45"><a href="#cb51-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-46"><a href="#cb51-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Label the silhouette plots with their cluster numbers at the middle</span></span>
+<span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a>        ax1.text(<span class="op">-</span><span class="fl">0.05</span>, y_lower <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> size_cluster_i, <span class="bu">str</span>(i))</span>
+<span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-49"><a href="#cb51-49" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Compute the new y_lower for next plot</span></span>
+<span id="cb51-50"><a href="#cb51-50" aria-hidden="true" tabindex="-1"></a>        y_lower <span class="op">=</span> y_upper <span class="op">+</span> <span class="dv">10</span>  <span class="co"># 10 for the 0 samples</span></span>
+<span id="cb51-51"><a href="#cb51-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-52"><a href="#cb51-52" aria-hidden="true" tabindex="-1"></a>    ax1.set_title(<span class="st">"The silhouette plot for the various clusters."</span>)</span>
+<span id="cb51-53"><a href="#cb51-53" aria-hidden="true" tabindex="-1"></a>    ax1.set_xlabel(<span class="st">"The silhouette coefficient values"</span>)</span>
+<span id="cb51-54"><a href="#cb51-54" aria-hidden="true" tabindex="-1"></a>    ax1.set_ylabel(<span class="st">"Cluster label"</span>)</span>
+<span id="cb51-55"><a href="#cb51-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-56"><a href="#cb51-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The vertical line for average silhouette score of all the values</span></span>
+<span id="cb51-57"><a href="#cb51-57" aria-hidden="true" tabindex="-1"></a>    ax1.axvline(x<span class="op">=</span>silhouette_avg, color<span class="op">=</span><span class="st">"red"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb51-58"><a href="#cb51-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-59"><a href="#cb51-59" aria-hidden="true" tabindex="-1"></a>    ax1.set_yticks([])  <span class="co"># Clear the yaxis labels / ticks</span></span>
+<span id="cb51-60"><a href="#cb51-60" aria-hidden="true" tabindex="-1"></a>    ax1.set_xticks([<span class="op">-</span><span class="fl">0.1</span>, <span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>])</span>
+<span id="cb51-61"><a href="#cb51-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-62"><a href="#cb51-62" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2nd Plot showing the actual clusters formed</span></span>
+<span id="cb51-63"><a href="#cb51-63" aria-hidden="true" tabindex="-1"></a>    colors <span class="op">=</span> cm.nipy_spectral(cluster_labels.astype(<span class="bu">float</span>) <span class="op">/</span> n_clusters)</span>
+<span id="cb51-64"><a href="#cb51-64" aria-hidden="true" tabindex="-1"></a>    ax2.scatter(X[:, <span class="dv">0</span>], X[:, <span class="dv">1</span>], marker<span class="op">=</span><span class="st">'.'</span>, s<span class="op">=</span><span class="dv">30</span>, lw<span class="op">=</span><span class="dv">0</span>, alpha<span class="op">=</span><span class="fl">0.7</span>,</span>
+<span id="cb51-65"><a href="#cb51-65" aria-hidden="true" tabindex="-1"></a>                c<span class="op">=</span>colors, edgecolor<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb51-66"><a href="#cb51-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-67"><a href="#cb51-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Labeling the clusters</span></span>
+<span id="cb51-68"><a href="#cb51-68" aria-hidden="true" tabindex="-1"></a>    centers <span class="op">=</span> clusterer.cluster_centers_</span>
+<span id="cb51-69"><a href="#cb51-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Draw white circles at cluster centers</span></span>
+<span id="cb51-70"><a href="#cb51-70" aria-hidden="true" tabindex="-1"></a>    ax2.scatter(centers[:, <span class="dv">0</span>], centers[:, <span class="dv">1</span>], marker<span class="op">=</span><span class="st">'o'</span>,</span>
+<span id="cb51-71"><a href="#cb51-71" aria-hidden="true" tabindex="-1"></a>                c<span class="op">=</span><span class="st">"white"</span>, alpha<span class="op">=</span><span class="dv">1</span>, s<span class="op">=</span><span class="dv">200</span>, edgecolor<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb51-72"><a href="#cb51-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-73"><a href="#cb51-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, c <span class="kw">in</span> <span class="bu">enumerate</span>(centers):</span>
+<span id="cb51-74"><a href="#cb51-74" aria-hidden="true" tabindex="-1"></a>        ax2.scatter(c[<span class="dv">0</span>], c[<span class="dv">1</span>], marker<span class="op">=</span><span class="st">'$</span><span class="sc">%d</span><span class="st">$'</span> <span class="op">%</span> i, alpha<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb51-75"><a href="#cb51-75" aria-hidden="true" tabindex="-1"></a>                    s<span class="op">=</span><span class="dv">50</span>, edgecolor<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb51-76"><a href="#cb51-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-77"><a href="#cb51-77" aria-hidden="true" tabindex="-1"></a>    ax2.set_title(<span class="st">"The visualization of the clustered data."</span>)</span>
+<span id="cb51-78"><a href="#cb51-78" aria-hidden="true" tabindex="-1"></a>    ax2.set_xlabel(<span class="st">"Feature space for the 1st feature"</span>)</span>
+<span id="cb51-79"><a href="#cb51-79" aria-hidden="true" tabindex="-1"></a>    ax2.set_ylabel(<span class="st">"Feature space for the 2nd feature"</span>)</span>
+<span id="cb51-80"><a href="#cb51-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-81"><a href="#cb51-81" aria-hidden="true" tabindex="-1"></a>    plt.suptitle((<span class="st">"Silhouette analysis for KMeans clustering on sample data "</span></span>
+<span id="cb51-82"><a href="#cb51-82" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"with n_clusters = </span><span class="sc">%d</span><span class="st">"</span> <span class="op">%</span> n_clusters),</span>
+<span id="cb51-83"><a href="#cb51-83" aria-hidden="true" tabindex="-1"></a>                 fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
+<span id="cb51-84"><a href="#cb51-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-85"><a href="#cb51-85" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>For n_clusters = 2 The average silhouette_score is : 0.7049787496083262</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>For n_clusters = 3 The average silhouette_score is : 0.5882004012129721</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>For n_clusters = 4 The average silhouette_score is : 0.6505186632729437</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>For n_clusters = 5 The average silhouette_score is : 0.56376469026194</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>For n_clusters = 6 The average silhouette_score is : 0.4504666294372765</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Clust2_files/figure-html/cell-26-output-6.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Clust2_files/figure-html/cell-26-output-7.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Clust2_files/figure-html/cell-26-output-8.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Clust2_files/figure-html/cell-26-output-9.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Clust2_files/figure-html/cell-26-output-10.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References:</h2>
+<p>[https://ncss-wpengine.netdna-ssl.com/wp-content/themes/ncss/pdf/Procedures/NCSS/Hierarchical_Clustering-Dendrograms.pdf]</p>
+<section id="overview-of-distances-reference." class="level3">
+<h3 class="anchored" data-anchor-id="overview-of-distances-reference.">Overview of distances reference….</h3>
+<p>‘minkowski’, ‘cityblock’, ‘cosine’, ‘correlation’,‘hamming’, ‘jaccard’, ‘chebyshev’, ‘canberra’,‘mahalanobis’, VI=None…</p>
+<p>RE: [https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html#scipy.spatial.distance.pdist]</p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
