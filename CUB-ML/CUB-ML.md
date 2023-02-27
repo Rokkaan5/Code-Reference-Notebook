@@ -14,9 +14,9 @@ permalink: /CUB-ML
 
 **Clustering-ex1.R**: Comprehensive Clustering Tutorial
 
-[Example1 qmd markdown file](CUB-ML/clust-ex1-mkdn.html)
+- [Example1 qmd markdown file](CUB-ML/clust-ex1-mkdn.html)
 
-Partitional and hierarchical clustering using csv and corpus txt file data.
+- Partitional and hierarchical clustering using csv and corpus txt file data.
 
 **Clustering-ex2.R** = Document similarity
 
@@ -24,9 +24,9 @@ Partitional and hierarchical clustering using csv and corpus txt file data.
 
 ### Python
 
-(GatesClustering1.py = Clustering with data obtained from API)
+GatesClustering1.py = Clustering with data obtained from API
 
-(GatesClustering2.py = Clustering using various data types (corpus directory, and csv's))
+(atesClustering2.py = Clustering using various data types (corpus directory, and csv's)
 
 
 ## Association Rule Mining
