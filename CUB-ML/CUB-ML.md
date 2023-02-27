@@ -28,6 +28,7 @@ GatesClustering1.py = Clustering with data obtained from API
 
 GatesClustering2.py = Clustering using various data types (corpus directory, and csv's)
 
+- [Jupyter html of Clustering example-2 (python) code](CUB-ML/Clust2.html)
 
 ## Association Rule Mining
 
