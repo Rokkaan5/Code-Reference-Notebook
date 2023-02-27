@@ -1,0 +1,672 @@
+#########################################
+##
+##  Comprehensive Clustering Tutorial
+##  
+##  Corpus - Text - Small
+##  Corpus - Text - Novels
+##  
+##  Record - 3D - Small
+## 
+##
+##  k means, hclust,  and Vis
+##
+##  Elbow, Silhouette
+##
+##  Prof. Ami Gates
+#####################################################
+## DATA
+## The pretend and general datasets can be found here
+## You MAY NEED TO MAKE CHANGES - formats always matter
+## https://drive.google.com/drive/folders/1n6RyoS18HfzP-AwHJYSNDOu6YkqcoIw7?usp=sharing
+####################################################################
+
+library(stats)  ## for dist
+#https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist
+
+## There are many clustering libraries
+#install.packages("NbClust")
+library(NbClust)
+library(cluster)
+library(mclust)
+
+library(amap)  ## for using Kmeans (notice the cap K)
+
+library(factoextra) ## for cluster vis, silhouette, etc.
+library(purrr)
+
+#install.packages("stylo")
+library(stylo)  ## for dist.cosine
+#install.packages("philentropy")
+library(philentropy)  ## for distance() which offers 46 metrics
+## https://cran.r-project.org/web/packages/philentropy/vignettes/Distances.html
+library(SnowballC)
+library(caTools)
+library(dplyr)
+library(textstem)
+library(stringr)
+library(wordcloud)
+library(tm) ## to read in corpus (text data)
+
+## Always start small and easy.
+## Let's start with the smallest and easiest dataset
+## This is a record dataset with only 3 variables
+## It is labeled data - so we will NEED TO REMOVE the label
+## before clustering.
+
+## I will set my working dir to point to the data on MY 
+## computer :) You will need to update this.
+
+setwd("C:/Users/rokka/Desktop/5622/R-code")
+Record_3D_DF_all<-read.csv("ClusterSmall3DDataset.csv")
+Record_3D_DF<-Record_3D_DF_all  ## make a copy
+## Look, clean, prep
+head(Record_3D_DF)
+str(Record_3D_DF)
+## Save the label
+(Label_3D <- Record_3D_DF$Label)
+## Remove the label from the dataset
+## remove column 1
+Record_3D_DF <- Record_3D_DF[ ,-c(1) ]
+head(Record_3D_DF)
+
+
+### Look at the pairwise distances between the vectors (rows, points in 3D)
+(Dist1<- dist(Record_3D_DF, method = "minkowski", p=1)) ##Manhattan
+(Dist2<- dist(Record_3D_DF, method = "minkowski", p=2)) #Euclidean
+(DistE<- dist(Record_3D_DF, method = "euclidean")) #same as p = 2
+
+## test to see that rescale does what you think it should --
+##v=c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+##rescale(v)
+
+## Create a normalized version of Record_3D_DF
+(Record_3D_DF_Norm <- as.data.frame(apply(Record_3D_DF[,1:3 ], 2, ##2 for col
+                                          function(x) (x - min(x))/(max(x)-min(x)))))
+
+
+## Look at scaled distances
+(Dist_norm<- dist(Record_3D_DF_Norm, method = "minkowski", p=2)) #Euclidean
+
+## You can use scale in R - I suggest you read about it first :)
+## (Record_3D_DF_scale<-scale(Record_3D_DF))
+## You can also try to code your own distance metric
+
+############################### ----------> Let's cluster
+## NbClust helps to determine the number of clusters.
+## https://cran.r-project.org/web/packages/NbClust/NbClust.pdf
+## 
+## We can also use Silhouette
+##
+######################################################
+## Learn more about NbClust and the options
+## https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjo_5GujJTsAhXSwFkKHbIuAfkQFjACegQIBxAC&url=https%3A%2F%2Fwww.jstatsoft.org%2Fv61%2Fi06%2Fpaper&usg=AOvVaw3l5m5LhJgmgjj4a3mBrn6_
+
+kmeans_3D_1<-NbClust::NbClust(Record_3D_DF_Norm, 
+                              min.nc=2, max.nc=5, method="kmeans")
+## How many clusters is best....let's SEE.........
+table(kmeans_3D_1$Best.n[1,])
+
+barplot(table(kmeans_3D_1$Best.n[1,]), 
+        xlab="Number of Clusters", ylab="",
+        main="Number of Clusters")
+
+## Does Silhouette agree?
+fviz_nbclust(Record_3D_DF_Norm, method = "silhouette", 
+             FUN = hcut, k.max = 5)
+## OK!
+## Two clusters (k = 2) is likely the best. 
+## 
+# Silhouette Coefficient = (x-y)/ max(x,y)
+# 
+# y: mean in cluster
+# x: mean dist from nearest cluster
+# -1 means val in wrong cluster
+# 1 means right cluster
+
+##############################
+## Elbow Method (WSS - within sum sq)
+############################# Elbow Methods ###################
+
+fviz_nbclust(
+  as.matrix(Record_3D_DF_Norm), 
+  kmeans, 
+  k.max = 5,
+  method = "wss",
+  diss = get_dist(as.matrix(Record_3D_DF_Norm), method = "manhattan")
+)
+
+##########################
+## k means..............
+######################################
+kmeans_3D_1_Result <- kmeans(Record_3D_DF, 2, nstart=25)   
+## I could have used the normalized data - which is better to use
+## But - by using the non-norm data, the results make more visual
+## sense - which also matters.
+
+# Print the results
+print(kmeans_3D_1_Result)
+
+kmeans_3D_1_Result$centers  
+
+aggregate(Record_3D_DF, 
+          by=list(cluster=kmeans_3D_1_Result$cluster), mean)
+
+## Compare to the labels
+table(Record_3D_DF_all$Label, kmeans_3D_1_Result$cluster)
+## This is a confusion matrix with 100% prediction (very rare :)
+
+summary(kmeans_3D_1_Result)
+## cluster  10  means that there are 10 points all placed
+## into a cluster. In our case, 5 in one and 5 in the other.
+## Centers: 6    The 6 means that each of the 2 centers is 3D
+## This is NOT intuitive!!
+## size:  2   for 2 clusters
+## More about the other measures...
+## https://www.datanovia.com/en/lessons/k-means-clustering-in-r-algorith-and-practical-examples/
+##
+
+## Place results in a table with the original data
+cbind(Record_3D_DF_all, cluster = kmeans_3D_1_Result$cluster)
+
+## See each cluster
+kmeans_3D_1_Result$cluster
+
+## This is the size (the number of points in) each cluster
+# Cluster size
+kmeans_3D_1_Result$size
+## Here we have two clusters, each with 5 points (rows/vectors) 
+
+## Visualize the clusters
+fviz_cluster(kmeans_3D_1_Result, Record_3D_DF, main="Euclidean")
+##-------------------------------------------------
+## There are other k means options in R
+## Let's try amap  Kmeans
+## Notice the "K" in Kmeans is cap...
+## k = 2
+##RE:
+## https://rdrr.io/cran/amap/man/Kmeans.html
+##-----------------------------------------------------
+My_Kmeans_3D_2<-Kmeans(Record_3D_DF_Norm, centers=2 ,method = "spearman")
+fviz_cluster(My_Kmeans_3D_2, Record_3D_DF, main="Spearman")
+## k= 3
+My_Kmeans_3D_3<-Kmeans(Record_3D_DF_Norm, centers=3 ,method = "spearman")
+fviz_cluster(My_Kmeans_3D_3, Record_3D_DF, main="Spearman")
+## k = 2 with Euclidean
+My_Kmeans_3D_E<-Kmeans(Record_3D_DF_Norm, centers=2 ,method = "euclidean")
+fviz_cluster(My_Kmeans_3D_E, Record_3D_DF, main="Euclidean")
+## k = 3 with Euclidean
+My_Kmeans_3D_E3<-Kmeans(Record_3D_DF_Norm, centers=3 ,method = "euclidean")
+fviz_cluster(My_Kmeans_3D_E3, Record_3D_DF, main="Euclidean")
+
+
+## Heat maps...
+## Recall that we have Dist2..
+##(Dist2<- dist(Record_3D_DF, method = "minkowski", p=2)) #Euclidean
+fviz_dist(Dist2, gradient = list(low = "#00AFBB", 
+                                 mid = "white", high = "#FC4E07"))+
+  ggtitle("Euclidean Heatmap")
+
+## Compare to clusters...
+cbind(Record_3D_DF_all, cluster = kmeans_3D_1_Result$cluster)
+
+
+#######################################################
+## 
+##          Hierarchical CLustering
+## 
+##
+#######################################################
+#
+# Hierarchical clustering with Ward
+# https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust
+#  
+# ward.D2" = Ward's minimum variance method -
+# however dissimilarities are **squared before clustering. 
+# "single" = Nearest neighbours method. 
+# "complete" = distance between two clusters is defined 
+# as the maximum distance between an observation in one.
+####################################################################
+##
+## For hclust, you need a distance matrix
+## You can create any distance matrix you wish...
+##
+## https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust
+####################################################################
+## Example:
+(Dist_norm_M2<- dist(Record_3D_DF_Norm, method = "minkowski", p=2)) #Euclidean
+## Now run hclust...you may use many methods - Ward, Ward.D2, complete, etc..
+## see above
+(HClust_Ward_Euc_N_3D <- hclust(Dist_norm_M2, method = "average" ))
+plot(HClust_Ward_Euc_N_3D, cex=0.9, hang=-1, main = "Minkowski p=2 (Euclidean)")
+rect.hclust(HClust_Ward_Euc_N_3D, k=4)
+
+## Using Man with Ward.D2..............................
+dist_C <- stats::dist(Record_3D_DF_Norm, method="manhattan")
+HClust_Ward_CosSim_N_3D <- hclust(dist_C, method="ward.D2")
+plot(HClust_Ward_CosSim_N_3D, cex=.7, hang=-30,main = "Manhattan")
+rect.hclust(HClust_Ward_CosSim_N_3D, k=2)
+
+## --------------------------------------------------------------------
+
+
+##################################################
+##
+##     TESTING  - Which methods to use??
+##
+##    Method with stronger clustering structures??
+######################################################
+#library(purrr)
+#install.packages("cluster")
+#library(cluster)
+
+methods <- c( "average", "single", "complete", "ward")
+names(methods) <- c( "average", "single", "complete", "ward")
+
+####### ---->  function to compute coefficient-------
+MethodMeasures <- function(x) {
+  cluster::agnes(Record_3D_DF_Norm, method = x)$ac
+}
+
+# The agnes() function will get the agglomerative coefficient (AC), 
+# which measures the amount of clustering structure found.
+# Get agglomerative coefficient for each linkage method
+(purrr::map_dbl(methods, MethodMeasures))
+
+## Looks like ward is best...................
+## RE:
+## http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/stats/html/hclust.html
+
+#############################################################################
+##
+##
+##                  Clustering Text Data from a Corpus
+##
+##############################################################################
+##
+## Let's start small first and use a small corpus so we can see
+## and understand the results.
+## Then, we will cluster novels to see if they cluster by writer...
+##############################################################################
+# library(tm)
+# #install.packages("tm")
+# library(stringr)
+# library(wordcloud)
+# 
+# library(SnowballC)
+# library(caTools)
+# library(dplyr)
+# library(textstem)  ## Needed for lemmatize_strings
+
+
+## Next, load in the documents ( from the corpus)
+SmallCorpus <- Corpus(DirSource("Corpus"))  #JK Note: changed "SmallCorpus" to "Corpus"
+(getTransformations()) ## These work with library tm
+(ndocs<-length(SmallCorpus))
+
+## Do some clean-up.............
+SmallCorpus <- tm_map(SmallCorpus, content_transformer(tolower))
+SmallCorpus <- tm_map(SmallCorpus, removePunctuation)
+## Remove all Stop Words
+SmallCorpus <- tm_map(SmallCorpus, removeWords, stopwords("english"))
+
+## You can also remove words that you do not want
+#MyStopWords <- c("and","like", "very", "can", "I", "also", "lot")
+#SmallCorpus <- tm_map(SmallCorpus, removeWords, MyStopWords)
+SmallCorpus <- tm_map(SmallCorpus, lemmatize_strings)
+##-------------------------------------------------------------
+
+## Convert to Document Term Matrix  and TERM document matrix
+## Each has its own purpose.
+
+## DOCUMENT Term Matrix  (Docs are rows)
+SmallCorpus_DTM <- DocumentTermMatrix(SmallCorpus,
+                                      control = list(
+                                        stopwords = TRUE, ## remove normal stopwords
+                                        wordLengths=c(3, 10), ## get rid of words of len 2 or smaller or larger than 15
+                                        removePunctuation = TRUE,
+                                        removeNumbers = TRUE,
+                                        tolower=TRUE
+                                        #stemming = TRUE,
+                                      ))
+
+inspect(SmallCorpus_DTM)
+
+## TERM Document Matrix  (words are rows)
+SmallCorpus_TERM_DM <- TermDocumentMatrix(SmallCorpus,
+                                          control = list(
+                                            stopwords = TRUE, ## remove normal stopwords
+                                            wordLengths=c(3, 10), ## get rid of words of len 2 or smaller or larger than 15
+                                            removePunctuation = TRUE,
+                                            removeNumbers = TRUE,
+                                            tolower=TRUE
+                                            #stemming = TRUE,
+                                          ))
+
+inspect(SmallCorpus_TERM_DM)
+
+#######################
+## Formats matter!
+##
+###-----------------------
+## Convert to DF 
+##------------------------
+(inspect(SmallCorpus_DTM))
+SmallCorpus_DF_DT <- as.data.frame(as.matrix(SmallCorpus_DTM))
+
+(inspect(SmallCorpus_TERM_DM))
+SmallCorpus_DF_TermDoc <- as.data.frame(as.matrix(SmallCorpus_TERM_DM))
+
+############ Data frames are useful in R
+SmallCorpus_DF_DT$chocolate   ## Num of times "chocolate" occurs in each of the 12 docs
+
+
+##--------------------
+## COnvert to matrix 
+## -----------------------
+SC_DTM_mat <- as.matrix(SmallCorpus_DTM)
+(SC_DTM_mat[1:12,1:10])
+
+SC_TERM_Doc_mat <- as.matrix(SmallCorpus_TERM_DM)
+(SC_TERM_Doc_mat[1:12,1:10])
+
+## WORDCLOUD ##_---------------------------------------
+word.freq <- sort(rowSums(SC_TERM_Doc_mat), decreasing = T)
+wordcloud(words = names(word.freq), freq = word.freq*2, min.freq = 2,
+          random.order = F)
+
+
+## -----------------------------
+## Get Frequencies and sums
+## -----------------------------------
+(SmallCorpusWordFreq <- colSums(SC_DTM_mat))
+## Order and sum..
+(head(SmallCorpusWordFreq))
+(length(SmallCorpusWordFreq))
+ord <- order(SmallCorpusWordFreq)
+(SmallCorpusWordFreq[head(ord)]) ## least frequent
+(SmallCorpusWordFreq[tail(ord)])  ## most frequent
+## Row Sums
+(Row_Sum_Per_doc <- rowSums((SC_DTM_mat)))  ## total words in each row (doc)
+
+#### Create your own normalization function to divide 
+#### the frequency of each word in each row
+#### by the sum of the words in that row.
+
+SC_DTM_mat_norm <- apply(SC_DTM_mat, 1, function(i) round(i/sum(i),2))
+(SC_DTM_mat_norm[1:12,1:5])
+
+##############################  Clustering Text Docs
+## k means and hclust
+##
+####################################################
+## We have many formats of our data.
+## We have a normalized DTM: SC_DTM_mat_norm
+## We have data frames: SmallCorpus_DF_DT   and SmallCorpus_DF_TermDoc
+## We have the Term Doc Matrix...SC_TERM_Doc_mat 
+#####################################################################
+
+## k means - HOW MANY Clusters?
+
+fviz_nbclust(SmallCorpus_DF_DT, method = "silhouette", 
+             FUN = hcut, k.max = 9)
+
+## k means.............on documents............
+## transpose the matrix to look at similarity between documents
+SC_DTM_mat_norm_t<-t(SC_DTM_mat_norm)
+kmeans_smallcorp_Result <- kmeans(SC_DTM_mat_norm_t, 4, nstart=25)   
+
+# Print the results
+print(kmeans_smallcorp_Result)
+
+kmeans_smallcorp_Result$centers  
+
+## Place results in a tbale with the original data
+cbind(SmallCorpus_DF_DT, cluster = kmeans_smallcorp_Result$cluster)
+
+## See each cluster
+kmeans_smallcorp_Result$cluster
+
+## This is the size (the number of points in) each cluster
+# Cluster size
+kmeans_smallcorp_Result$size
+## Here we have two clusters, each with 5 points (rows/vectors) 
+
+## Visualize the clusters
+fviz_cluster(kmeans_smallcorp_Result, SmallCorpus_DF_DT, 
+             main="Euclidean", repel = TRUE)
+
+
+## k means.............on words............
+#kmeans_smallcorp_Result <- kmeans(SC_DTM_mat_norm, 6, nstart=25) 
+kmeans_smallcorp_Result <- kmeans(t(SmallCorpus_DF_DT), 5, nstart=4) 
+
+# Print the results
+print(kmeans_smallcorp_Result)
+
+kmeans_smallcorp_Result$centers  
+
+## Place results in a tbale with the original data
+cbind(t(SmallCorpus_DF_DT), cluster = kmeans_smallcorp_Result$cluster)
+
+## See each cluster
+kmeans_smallcorp_Result$cluster
+
+## This is the size (the number of points in) each cluster
+# Cluster size
+kmeans_smallcorp_Result$size
+## Here we have two clusters, each with 5 points (rows/vectors) 
+
+## Visualize the clusters
+fviz_cluster(kmeans_smallcorp_Result, t(SmallCorpus_DF_DT), 
+             main="Euclidean",repel = TRUE)
+
+
+##########################################################
+## Let's see if we can do better with Kmeans (not kmeans)
+## and different distance metrics...
+#########################################################
+## k = 2
+My_Kmeans_SmallCorp2<-Kmeans(t(SmallCorpus_DF_DT), centers=3 ,method = "euclidean")
+fviz_cluster(My_Kmeans_SmallCorp2, t(SmallCorpus_DF_DT), main="Euclidean k=3",repel = TRUE)
+
+## k = 3
+My_Kmeans_SmallCorp3<-Kmeans(t(SmallCorpus_DF_DT), centers=3 ,method = "spearman")
+fviz_cluster(My_Kmeans_SmallCorp3, t(SmallCorpus_DF_DT), main="Spearman", repel = TRUE)
+
+## k = 4
+My_Kmeans_SmallCorp4<-Kmeans((SmallCorpus_DF_DT), centers=4 ,method = "spearman")
+fviz_cluster(My_Kmeans_SmallCorp4, t(SmallCorpus_DF_DT), main="Spearman", repel = TRUE)
+
+## k = 3 and different metric
+My_Kmeans_SmallCorp4<-Kmeans(t(SmallCorpus_DF_DT), centers=3 ,method = "manhattan")
+fviz_cluster(My_Kmeans_SmallCorp4, t(SmallCorpus_DF_DT), main="manhattan", repel = TRUE)
+
+## k = 5 and different metric
+My_Kmeans_SmallCorp5<-Kmeans(t(SmallCorpus_DF_DT), centers=5 ,method = "canberra")
+fviz_cluster(My_Kmeans_SmallCorp5, t(SmallCorpus_DF_DT), main="canberra", repel = TRUE)
+
+####################### Cluster the Docs and not the words with Kmeans....
+## change the t (undo the transpose)
+My_Kmeans_SmallCorpD<-Kmeans(SmallCorpus_DF_DT, centers=3 ,
+                             method = "euclidean")
+My_Kmeans_SmallCorpD$cluster
+#https://www.rdocumentation.org/packages/factoextra/versions/1.0.7/topics/fviz_cluster
+fviz_cluster(My_Kmeans_SmallCorpD, SmallCorpus_DF_DT, 
+             main="Euclidean k = 3",repel = TRUE) +
+  scale_color_brewer('Cluster', palette='Set2') + 
+  scale_fill_brewer('Cluster', palette='Set2') 
+#scale_shape_manual('Cluster', values=c(100,2,24, 1)
+
+###-----------------------------------------------------------------------------
+############################## Let's look at hierarchical clustering............
+###-----------------------------------------------------------------------------
+
+## Example:
+(Dist_CorpusM2<- dist(SmallCorpus_DF_DT, method = "minkowski", p=2)) #Euclidean
+## Now run hclust...you may use many methods - Ward, Ward.D2, complete, etc..
+## see above
+(HClust_SmallCorp <- hclust(Dist_CorpusM2, method = "ward.D" ))
+plot(HClust_SmallCorp, cex=0.9, hang=-1, main = "Minkowski p=2 (Euclidean)")
+rect.hclust(HClust_SmallCorp, k=4)
+
+##############################################################
+## Using Cosine Similarity with Ward.D2..............................
+## 
+## SPEICAL EXAMPLE that uses distance()  rather than dist()
+##--------------------------------------------------------------------
+## The distance method offer 46 metrics but requires some attention to 
+## data types... notice the as.dist below...
+##MORE:
+## https://cran.r-project.org/web/packages/philentropy/vignettes/Distances.html
+###----------------------------------------------------------------
+## SCALE data before using cosine sim!
+## - - - - - - 
+(dist_C_smallCorp <- distance(as.matrix(scale(t(SmallCorpus_DF_DT))), method="cosine",use.row.names = TRUE))
+dist_C_smallCorp<- as.dist(dist_C_smallCorp)
+HClust_Ward_CosSim_SmallCorp <- hclust(dist_C_smallCorp, method="ward.D")
+plot(HClust_Ward_CosSim_SmallCorp, cex=.7, hang=-1,main = "Cosine Sim")
+rect.hclust(HClust_Ward_CosSim_SmallCorp, k=3)
+
+
+### OR ### Create your own Cosine Sim Distance Metric function
+### This one works much better...........
+(My_m <- (as.matrix(scale(t(SmallCorpus_DF_DT)))))
+(My_cosine_dist = 1-crossprod(My_m) /(sqrt(colSums(My_m^2)%*%t(colSums(My_m^2)))))
+# create dist object
+My_cosine_dist <- as.dist(My_cosine_dist) ## Important
+HClust_Ward_CosSim_SmallCorp2 <- hclust(My_cosine_dist, method="ward.D")
+plot(HClust_Ward_CosSim_SmallCorp2, cex=.7, hang=-30,main = "Cosine Sim")
+rect.hclust(HClust_Ward_CosSim_SmallCorp2, k=3)
+
+
+
+
+################## SOOO much more you can do....
+# http://www.sthda.com/english/wiki/factoextra-r-package-easy-multivariate-data-analyses-and-elegant-visualization
+######################################################
+
+############## FINALLY!! - let's try this on Novels
+## Can we cluster authors based on their writing?
+######################################
+
+##################################
+##
+## Novels Corpus
+## https://drive.google.com/drive/folders/1xhsk_Dwq4sZ_1q2CtVdSIJWHEZqzMwhG?usp=sharing
+##
+#######################################
+## Next, load in the documents ( from the corpus)
+NovelCorpus <- Corpus(DirSource("Novels_Corpus"))
+(getTransformations()) ## These work with library tm
+(ndocs<-length(NovelCorpus))
+
+## Do some clean-up.............
+NovelCorpus <- tm_map(NovelCorpus, content_transformer(tolower))
+NovelCorpus <- tm_map(NovelCorpus, removePunctuation)
+
+
+##-------------------------------------------------------------
+
+## Convert to Document Term Matrix  and TERM document matrix
+## Each has its own purpose.
+
+## DOCUMENT Term Matrix  (Docs are rows)
+NovelsCorpus_DTM <- DocumentTermMatrix(NovelCorpus,
+                                       control = list(
+                                         stopwords = TRUE, ## remove normal stopwords
+                                         wordLengths=c(4, 10), 
+                                         removePunctuation = TRUE,
+                                         removeNumbers = TRUE,
+                                         tolower=TRUE
+                                         #stemming = TRUE,
+                                       ))
+
+inspect(NovelsCorpus_DTM)
+### Create a DF as well................
+Novels_DF_DT <- as.data.frame(as.matrix(NovelsCorpus_DTM))
+
+## Create a Novels Matrix
+My_novels_m <- (as.matrix(Novels_DF_DT))
+nrow(My_novels_m)
+
+## WORD CLOUD
+#word.freq <- sort(rowSums(t(My_novels_m)), decreasing = T)
+#wordcloud(words = names(word.freq), freq = word.freq*2, min.freq = 2,
+#  random.order = F)
+
+## COsine Sim
+## a * b / (||a|| * ||b||)
+
+
+CosineSim <- My_novels_m / sqrt(rowSums(My_novels_m * My_novels_m))
+CosineSim <- CosineSim %*% t(CosineSim)
+
+#Convert to distance metric
+
+D_Cos_Sim <- as.dist(1-CosineSim)
+
+HClust_Ward_CosSim_SmallCorp2 <- hclust(D_Cos_Sim, method="ward.D2")
+plot(HClust_Ward_CosSim_SmallCorp2, cex=.7, hang=-11,main = "Cosine Sim")
+rect.hclust(HClust_Ward_CosSim_SmallCorp2, k=4)
+
+
+###########################################################
+##
+## This tutorial will not cover csv text files
+## But, the following will offer syntax and hints
+## in case you have text data in a csv file rather than in a corpus
+#######################################################################
+
+#######################################
+## In R, there is a PROCESS required
+## to convert a csv file into a DTM...
+##############################################################
+## HERE, "Open" is the name of a dataframe that contains
+## open student feedback comments - which is why is it called Open.
+## However - the name does not matter. "Open" is a dataframe.
+##--------------------------------------------------------------
+# head(Open)
+# str(Open)
+# ## --CONVERT TO TEXT (not factor)
+# Open$V1<-as.character(Open$V1)  ##V1 stands for variable 1
+## --Again- this is example syntax that must be UPDATED for a different
+## --dataset.....
+# str(Open)
+# 
+# ## Next - and this is crazy hard to find - 
+# ## In R, when using tm on a csv file
+# ## The csv MUST have two columns and the following names:  doc_id   and text
+# ## DO NOT ALTER THESE NAMES!! To add them...use this........
+# ## colnames(x) <- c("doc_id", "text") 
+# 
+# ## 1) Create a column with the row numbers
+# id <- rownames(Open)
+# Open <- cbind(doc_id=id, Open)
+# ## 2) Make sure the DF has the EXACT column names of doc_id and text....
+# colnames(Open) <- c("doc_id", "text") 
+# ## Check it
+# head(Open)
+# 
+# ### CONVERT csv to corpus............................
+# OpenCorp <- Corpus(DataframeSource(Open))
+# OpenCorp <- tm_map(OpenCorp, tolower)  ### DO THIS FIRST before removing specific words!
+# OpenCorp <- tm_map(OpenCorp, removeWords, c("also", "that", "this", "with", "anly", "have",
+#                                             "class", "classes", "data"))
+# 
+# OpenCorp <- tm_map(OpenCorp, removeWords, stopwords("english"))
+# ##OpenCorp <-tm_map(OpenCorp, stemDocument)
+# OpenCorp <- tm_map(OpenCorp, lemmatize_strings)
+# 
+# Open_dtm <- DocumentTermMatrix(OpenCorp,
+#                                control = list(
+#                                  #stopwords = TRUE, 
+#                                  wordLengths=c(4, 10),
+#                                  removePunctuation = TRUE,
+#                                  removeNumbers = TRUE,
+#                                  tolower=TRUE,
+#                                  remove_separators = TRUE
+#                                  
+#                                )
+# )
+# 
+# inspect(Open_dtm)
