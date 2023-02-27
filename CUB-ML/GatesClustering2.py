@@ -8,7 +8,6 @@
 ####################################################
 ## Gates
 ####################################################
-
 import nltk
 import pandas as pd
 import sklearn
@@ -36,8 +35,8 @@ from mpl_toolkits.mplot3d import Axes3D
 ## My data and code is here - YOURS IS DIFFERENT
 ## DATA LINK
 # https://drive.google.com/drive/folders/1VSofcdX6g86hjnofMDQJwYVveT544Oy4?usp=sharing
-path="ClusterCorpus"   #"C:/Users/..."
-
+path=os.path.join('ClusterCorpus')
+# data_dir_path = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','data'))
 ## Get the text data first
 print("calling os...")
 FileNameList=os.listdir(path)
@@ -125,9 +124,9 @@ DTM_stem=MyCV_Stem.fit_transform(ListOfCompleteFilePaths)
 ## Get the complete vocab - the column names
 ## !!!!!!!!! FOr TF and CV - but NOT for stemmed...!!!
 ##################
-ColumnNames=MyVectCount.get_feature_names()
+ColumnNames=MyVectCount.get_feature_names_out()
 print("The vocab is: ", ColumnNames, "\n\n")
-ColNamesStem=MyCV_Stem.get_feature_names()
+ColNamesStem=MyCV_Stem.get_feature_names_out()
 print("The stemmed vocab is\n", ColNamesStem)
 
 ## Use pandas to create data frames
@@ -435,14 +434,14 @@ Z= np.concatenate((X,Y))
 Z=pd.DataFrame(Z) 
 print(Z.head())
 
-sns.scatterplot(Z[0],Z[1])
+sns.scatterplot(x=Z[0],y=Z[1])
 
 KMean= KMeans(n_clusters=2)
 KMean.fit(Z)
 label=KMean.predict(Z)
 print(label)
 
-sns.scatterplot(Z[0],Z[1], hue=label)
+sns.scatterplot(x=Z[0],y=Z[1], hue=label)
 print("Silhouette Score for k=2\n",silhouette_score(Z, label))
 
 
@@ -451,14 +450,14 @@ KMean= KMeans(n_clusters=3)
 KMean.fit(Z)
 label=KMean.predict(Z)
 print("Silhouette Score for k=3\n",silhouette_score(Z, label))
-sns.scatterplot(Z[0],Z[1],hue=label)
+sns.scatterplot(x=Z[0],y=Z[1], hue=label)
 
 ## Now - for k = 4
 KMean= KMeans(n_clusters=4)
 KMean.fit(Z)
 label=KMean.predict(Z)
 print("Silhouette Score for k=4\n",silhouette_score(Z, label))
-sns.scatterplot(Z[0],Z[1],hue=label)
+sns.scatterplot(x=Z[0],y=Z[1], hue=label)
 
 ###############################
 ## Silhouette Example from sklearn
