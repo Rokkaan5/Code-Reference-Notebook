@@ -10,12 +10,17 @@ permalink: /CUB-ML
 ## Clustering
 
 ### in R
+(Raw code files in GitHub Repo)
 
-Clustering-ex1.R = 
+**Clustering-ex1.R**: Comprehensive Clustering Tutorial
 
-Clustering-ex2.R =
+[Example1 qmd markdown file](CUB-ML/clust-ex1-mkdn.html)
 
-Clustering-ex3.R = 
+Partitional and hierarchical clustering using csv and corpus txt file data.
+
+**Clustering-ex2.R** = Document similarity
+
+**Clustering-ex3.R** = Text Mining and NLP Tutorial
 
 ### Python
 
