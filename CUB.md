@@ -12,3 +12,8 @@ Including Mini-projects and Class Deepnote Tutorial Notebooks
 
 Sample professor codes, etc.
 
+# R Programming
+Intro to Statistical R Programming
+
+R codes from class lectures
+
