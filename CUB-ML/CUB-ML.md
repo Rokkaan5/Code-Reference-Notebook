@@ -26,10 +26,12 @@ permalink: /CUB-ML
 
 GatesClustering1.py = Clustering with data obtained from API
 
-(atesClustering2.py = Clustering using various data types (corpus directory, and csv's)
+GatesClustering2.py = Clustering using various data types (corpus directory, and csv's)
 
 
 ## Association Rule Mining
+
+Prof Gate's ARM code in R provides examples of ARM applications, apriori algorithms, and creating interactive figures
 
 [ARM raw R-code](CUB-ML/GatesARMcode.md)
 
