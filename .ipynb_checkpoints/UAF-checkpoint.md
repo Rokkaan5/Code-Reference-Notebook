@@ -1,10 +1,16 @@
 ---
 layout: page
-title: "Useful stuff from UAF classes"
+title: "UAF Class Resources"
 permalink: /UAF-classes
 ---
+# [Intro to Computational Physics](UAF-CompPhys/UAF-CompPhys.md)
 
-# Intro to Machine Learning
+Labs and code for my [Wilberforce Pendulum Project](UAF-CompPhys/WilberforceProject.md)
+
+
+# [Intro to Machine Learning](UAF-ML-Module/UAF-ML-Module.md)
+
+Lecture Workbooks
 
 ## Basic Packages
 [Numpy Workbook](UAF-ML-module/NumPy%20Workbook.html)
@@ -34,3 +40,5 @@ permalink: /UAF-classes
 [Model Training Workbook](UAF-ML-module/Model%20Training%20Workbook.html)
 
 [Error Analysis Workbook](UAF-ML-module/Error%20Analysis%20Workbook.html)
+
+

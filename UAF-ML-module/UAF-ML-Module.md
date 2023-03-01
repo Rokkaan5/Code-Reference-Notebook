@@ -1,14 +1,10 @@
 ---
 layout: page
-title: "UAF Class Resources"
-permalink: /UAF-classes
+title: "UAF ML-Module"
+permalink: /UAF-ML-Module
 ---
-# [Intro to Computational Physics](UAF-CompPhys/UAF-CompPhys.md)
 
-Labs and code for my [Wilberforce Pendulum Project](UAF-CompPhys/WilberforceProject.md)
-
-
-# [Intro to Machine Learning](UAF-ML-Module/UAF-ML-Module.md)
+# Intro to Machine Learning
 
 Lecture Workbooks
 
@@ -40,5 +36,3 @@ Lecture Workbooks
 [Model Training Workbook](UAF-ML-module/Model%20Training%20Workbook.html)
 
 [Error Analysis Workbook](UAF-ML-module/Error%20Analysis%20Workbook.html)
-
-
