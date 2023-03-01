@@ -41,11 +41,11 @@ Preprocessing application example
 
 ## 06-Classification:
 - Decision Tree
-- KNN
+- K-Nearest Neighbor (KNN)
 - Naive Bayes
 - Random Forests
 - Stochastic Gradient Descent
-- SVM
+- Support Vector Machine (SVM)
 
 
 # Mini-projects
