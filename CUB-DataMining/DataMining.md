@@ -26,6 +26,8 @@ permalink: /CUB-DataMining
 ## [03-Data Understanding](CUB-DataMining/Lecture-Tutorials/03-Data-Understanding/DataUnderstanding.html)
 (only one (self-titled) notebook)
 
+Example of statisical analysis: central tendencies (mean, median, etc.) and dispersion (quartiles, variance, std, etc.)
+
 ## 04-Data Visualization:
 - Pandas
 - Matplotlib
