@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Collecting data from Yahoo finance using yfinance</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="CollectDataFromYahoo_files/libs/clipboard/clipboard.min.js"></script>
+<script src="CollectDataFromYahoo_files/libs/quarto-html/quarto.js"></script>
+<script src="CollectDataFromYahoo_files/libs/quarto-html/popper.min.js"></script>
+<script src="CollectDataFromYahoo_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="CollectDataFromYahoo_files/libs/quarto-html/anchor.min.js"></script>
+<link href="CollectDataFromYahoo_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="CollectDataFromYahoo_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="CollectDataFromYahoo_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="CollectDataFromYahoo_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="CollectDataFromYahoo_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
+  <li><a href="#whole-python-dictionary-is-printed-here" id="toc-whole-python-dictionary-is-printed-here" class="nav-link" data-scroll-target="#whole-python-dictionary-is-printed-here">whole python dictionary is printed here</a>
+  <ul class="collapse">
+  <li><a href="#save-the-data-to-csv" id="toc-save-the-data-to-csv" class="nav-link" data-scroll-target="#save-the-data-to-csv">Save the data to CSV</a></li>
+  <li><a href="#congratulations" id="toc-congratulations" class="nav-link" data-scroll-target="#congratulations">Congratulations!</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Collecting data from Yahoo finance using yfinance</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This tutorial will demonstrate how to use Python to retrieve financial data from Yahoo Finance. Using this, we may access historical market data as well as financial information about the company (for example, financial ratios).</p>
+<p>Prerequisites - Python and Pip</p>
+<section id="installation" class="level3">
+<h3 class="anchored" data-anchor-id="installation">Installation</h3>
+<div class="cell" data-cell_id="7ba2ff76a8a94d6d85f25c729b2581cb" data-deepnote_cell_type="code" data-execution_millis="10939" data-execution_start="1662148887639" data-source_hash="391e6f16" data-tags="[]">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install yfinance</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install yahoofinancials</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Collecting yfinance
+  Downloading yfinance-0.1.74-py2.py3-none-any.whl (27 kB)
+Requirement already satisfied: numpy&gt;=1.15 in /shared-libs/python3.9/py/lib/python3.9/site-packages (from yfinance) (1.23.1)
+Collecting multitasking&gt;=0.0.7
+  Downloading multitasking-0.0.11-py3-none-any.whl (8.5 kB)
+Requirement already satisfied: lxml&gt;=4.5.1 in /shared-libs/python3.9/py/lib/python3.9/site-packages (from yfinance) (4.9.1)
+Requirement already satisfied: requests&gt;=2.26 in /shared-libs/python3.9/py/lib/python3.9/site-packages (from yfinance) (2.28.1)
+Requirement already satisfied: pandas&gt;=0.24.0 in /shared-libs/python3.9/py/lib/python3.9/site-packages (from yfinance) (1.2.5)
+Requirement already satisfied: pytz&gt;=2017.3 in /shared-libs/python3.9/py/lib/python3.9/site-packages (from pandas&gt;=0.24.0-&gt;yfinance) (2022.1)
+Requirement already satisfied: python-dateutil&gt;=2.7.3 in /shared-libs/python3.9/py-core/lib/python3.9/site-packages (from pandas&gt;=0.24.0-&gt;yfinance) (2.8.2)
+Requirement already satisfied: idna&lt;4,&gt;=2.5 in /shared-libs/python3.9/py-core/lib/python3.9/site-packages (from requests&gt;=2.26-&gt;yfinance) (3.3)
+Requirement already satisfied: charset-normalizer&lt;3,&gt;=2 in /shared-libs/python3.9/py-core/lib/python3.9/site-packages (from requests&gt;=2.26-&gt;yfinance) (2.1.0)
+Requirement already satisfied: urllib3&lt;1.27,&gt;=1.21.1 in /shared-libs/python3.9/py/lib/python3.9/site-packages (from requests&gt;=2.26-&gt;yfinance) (1.26.11)
+Requirement already satisfied: certifi&gt;=2017.4.17 in /shared-libs/python3.9/py/lib/python3.9/site-packages (from requests&gt;=2.26-&gt;yfinance) (2022.6.15)
+Requirement already satisfied: six&gt;=1.5 in /shared-libs/python3.9/py-core/lib/python3.9/site-packages (from python-dateutil&gt;=2.7.3-&gt;pandas&gt;=0.24.0-&gt;yfinance) (1.16.0)
+Installing collected packages: multitasking, yfinance
+Successfully installed multitasking-0.0.11 yfinance-0.1.74
+WARNING: You are using pip version 22.0.4; however, version 22.2.2 is available.
+You should consider upgrading via the '/root/venv/bin/python -m pip install --upgrade pip' command.
+Collecting yahoofinancials
+  Downloading yahoofinancials-1.6.tar.gz (27 kB)
+  Preparing metadata (setup.py) ... done
+Requirement already satisfied: beautifulsoup4 in /shared-libs/python3.9/py-core/lib/python3.9/site-packages (from yahoofinancials) (4.11.1)
+Requirement already satisfied: pytz in /shared-libs/python3.9/py/lib/python3.9/site-packages (from yahoofinancials) (2022.1)
+Requirement already satisfied: soupsieve&gt;1.2 in /shared-libs/python3.9/py-core/lib/python3.9/site-packages (from beautifulsoup4-&gt;yahoofinancials) (2.3.2.post1)
+Building wheels for collected packages: yahoofinancials
+  Building wheel for yahoofinancials (setup.py) ... done
+  Created wheel for yahoofinancials: filename=yahoofinancials-1.6-py3-none-any.whl size=15192 sha256=37d35cb5972bcde18e3413e03d7e10e0ff785f778b528bfba209db3378200c93
+  Stored in directory: /root/.cache/pip/wheels/7d/59/6e/ff5fc25443eef95656f84b7a3a421fa2a9d6eaaae7a1b7c08f
+Successfully built yahoofinancials
+Installing collected packages: yahoofinancials
+Successfully installed yahoofinancials-1.6
+WARNING: You are using pip version 22.0.4; however, version 22.2.2 is available.
+You should consider upgrading via the '/root/venv/bin/python -m pip install --upgrade pip' command.</code></pre>
+</div>
+</div>
+</section>
+<section id="analysis" class="level3">
+<h3 class="anchored" data-anchor-id="analysis">Analysis</h3>
+<p>The yfinance package can be imported into Python programs once it has been installed. We must use the company’s ticker as an example in our argument.</p>
+<p>A security is given a specific set of letters called a ticker or a stock symbol for trading purposes. For instance:</p>
+<p>For Amazon, it is “AMZN” For Facebook, it is “FB” For Google, it is “GOOGL” For Microsoft, it is “MSFT”</p>
+<div class="cell" data-cell_id="bde87e0029624f2884982e51dc3d3cce" data-deepnote_cell_type="code" data-execution_millis="10" data-execution_start="1662148898582" data-source_hash="958c73f5" data-tags="[]">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> yfinance <span class="im">as</span> yahooFinance</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Here We are getting Google's financial information</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>GoogleInfo <span class="op">=</span> yahooFinance.Ticker(<span class="st">"GOOGL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="whole-python-dictionary-is-printed-here" class="level1">
+<h1>whole python dictionary is printed here</h1>
+<div class="cell" data-cell_id="93099a0cf0aa4ad6b85de110c1a9a8b0" data-deepnote_cell_type="code" data-execution_millis="3724" data-execution_start="1662148898597" data-source_hash="85443dfe" data-tags="[]">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(GoogleInfo.info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'zip': '94043', 'sector': 'Communication Services', 'fullTimeEmployees': 174014, 'longBusinessSummary': 'Alphabet Inc. provides various products and platforms in the United States, Europe, the Middle East, Africa, the Asia-Pacific, Canada, and Latin America. It operates through Google Services, Google Cloud, and Other Bets segments. The Google Services segment offers products and services, including ads, Android, Chrome, hardware, Gmail, Google Drive, Google Maps, Google Photos, Google Play, Search, and YouTube. It is also involved in the sale of apps and in-app purchases and digital content in the Google Play store; and Fitbit wearable devices, Google Nest home products, Pixel phones, and other devices, as well as in the provision of YouTube non-advertising services. The Google Cloud segment offers infrastructure, platform, and other services; Google Workspace that include cloud-based collaboration tools for enterprises, such as Gmail, Docs, Drive, Calendar, and Meet; and other services for enterprise customers. The Other Bets segment sells health technology and internet services. The company was founded in 1998 and is headquartered in Mountain View, California.', 'city': 'Mountain View', 'phone': '650 253 0000', 'state': 'CA', 'country': 'United States', 'companyOfficers': [], 'website': 'https://www.abc.xyz', 'maxAge': 1, 'address1': '1600 Amphitheatre Parkway', 'industry': 'Internet Content &amp; Information', 'ebitdaMargins': 0.34834, 'profitMargins': 0.25892, 'grossMargins': 0.56744, 'operatingCashflow': 95001001984, 'revenueGrowth': 0.126, 'operatingMargins': 0.29648, 'ebitda': 96886996992, 'targetLowPrice': 113, 'recommendationKey': 'buy', 'grossProfits': 146698000000, 'freeCashflow': 51070373888, 'targetMedianPrice': 144, 'currentPrice': 107.85, 'earningsGrowth': -0.113, 'currentRatio': 2.809, 'returnOnAssets': 0.14927, 'numberOfAnalystOpinions': 46, 'targetMeanPrice': 144.96, 'debtToEquity': 11.28, 'returnOnEquity': 0.29216, 'targetHighPrice': 187.5, 'totalCash': 124997001216, 'totalDebt': 28810000384, 'totalRevenue': 278139011072, 'totalCashPerShare': 9.583, 'financialCurrency': 'USD', 'revenuePerShare': 21.03, 'quickRatio': 2.642, 'recommendationMean': 1.8, 'exchange': 'NMS', 'shortName': 'Alphabet Inc.', 'longName': 'Alphabet Inc.', 'exchangeTimezoneName': 'America/New_York', 'exchangeTimezoneShortName': 'EDT', 'isEsgPopulated': False, 'gmtOffSetMilliseconds': '-14400000', 'quoteType': 'EQUITY', 'symbol': 'GOOGL', 'messageBoardId': 'finmb_29096', 'market': 'us_market', 'annualHoldingsTurnover': None, 'enterpriseToRevenue': 4.801, 'beta3Year': None, 'enterpriseToEbitda': 13.782, '52WeekChange': -0.23653555, 'morningStarRiskRating': None, 'forwardEps': 5.9, 'revenueQuarterlyGrowth': None, 'sharesOutstanding': 5996000256, 'fundInceptionDate': None, 'annualReportExpenseRatio': None, 'totalAssets': None, 'bookValue': 19.53, 'sharesShort': 54019534, 'sharesPercentSharesOut': 0.0041, 'fundFamily': None, 'lastFiscalYearEnd': 1640908800, 'heldPercentInstitutions': 0.78612, 'netIncomeToCommon': 72016003072, 'trailingEps': 66.57, 'lastDividendValue': None, 'SandP52WeekChange': -0.12536407, 'priceToBook': 5.522273, 'heldPercentInsiders': 0.07727, 'nextFiscalYearEnd': 1703980800, 'yield': None, 'mostRecentQuarter': 1656547200, 'shortRatio': 1.69, 'sharesShortPreviousMonthDate': 1657843200, 'floatShares': 11360932680, 'beta': 1.078487, 'enterpriseValue': 1335261528064, 'priceHint': 2, 'threeYearAverageReturn': None, 'lastSplitDate': 1658102400, 'lastSplitFactor': '20:1', 'legalType': None, 'lastDividendDate': None, 'morningStarOverallRating': None, 'earningsQuarterlyGrowth': -0.136, 'priceToSalesTrailing12Months': 5.075529, 'dateShortInterest': 1660521600, 'pegRatio': 1.57, 'ytdReturn': None, 'forwardPE': 18.279661, 'lastCapGain': None, 'shortPercentOfFloat': 0.009, 'sharesShortPriorMonth': 46968160, 'impliedSharesOutstanding': 0, 'category': None, 'fiveYearAverageReturn': None, 'previousClose': 109.74, 'regularMarketOpen': 110.59, 'twoHundredDayAverage': 127.066666, 'trailingAnnualDividendYield': 0, 'payoutRatio': 0, 'volume24Hr': None, 'regularMarketDayHigh': 110.74, 'navPrice': None, 'averageDailyVolume10Day': 23668610, 'regularMarketPreviousClose': 109.74, 'fiftyDayAverage': 114.30854, 'trailingAnnualDividendRate': 0, 'open': 110.59, 'toCurrency': None, 'averageVolume10days': 23668610, 'expireDate': None, 'algorithm': None, 'dividendRate': None, 'exDividendDate': None, 'circulatingSupply': None, 'startDate': None, 'regularMarketDayLow': 107.2616, 'currency': 'USD', 'trailingPE': 1.6200992, 'regularMarketVolume': 23528231, 'lastMarket': None, 'maxSupply': None, 'openInterest': None, 'marketCap': 1411702587392, 'volumeAllCurrencies': None, 'strikePrice': None, 'averageVolume': 32218831, 'dayLow': 107.2616, 'ask': 107.4, 'askSize': 900, 'volume': 23528231, 'fiftyTwoWeekHigh': 151.5465, 'fromCurrency': None, 'fiveYearAvgDividendYield': None, 'fiftyTwoWeekLow': 101.8845, 'bid': 107.39, 'tradeable': False, 'dividendYield': None, 'bidSize': 800, 'dayHigh': 110.74, 'coinMarketCapLink': None, 'regularMarketPrice': 107.85, 'preMarketPrice': 110.52, 'logo_url': 'https://logo.clearbit.com/abc.xyz', 'trailingPegRatio': 1.3474}</code></pre>
+</div>
+</div>
+<p>The print statement produces a Python dictionary, which we can analyze and use to get the specific financial data we’re looking for from Yahoo Finance. Let’s take a few financial critical metrics as an example.</p>
+<p>The info dictionary contains all firm information. As a result, we may extract the desired elements from the dictionary by parsing it:</p>
+<p>We can retrieve financial key metrics like Company Sector, Price Earnings Ratio, and Company Beta from the above dictionary of items easily. Let us see the below code.</p>
+<div class="cell" data-cell_id="c4ee3b457cd240f8ae27c536973567f4" data-deepnote_cell_type="code" data-execution_millis="539457" data-execution_start="1662148902326" data-source_hash="59d9c05c" data-tags="[]">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># display Company Sector</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Company Sector : "</span>, GoogleInfo.info[<span class="st">'sector'</span>])</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># display Price Earnings Ratio</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Price Earnings Ratio : "</span>, GoogleInfo.info[<span class="st">'trailingPE'</span>])</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># display Company Beta</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" Company Beta : "</span>, GoogleInfo.info[<span class="st">'beta'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Company Sector :  Communication Services
+Price Earnings Ratio :  1.6200992
+ Company Beta :  1.078487</code></pre>
+</div>
+</div>
+<p>There are a ton of more stuff in the information. By printing the informational keys, we can view all of them:</p>
+<div class="cell" data-cell_id="8b6e327dfe1945d3bd36727acd7fae90" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1662148902335" data-source_hash="18165d7" data-tags="[]">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get all key value pairs that are available</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> key, value <span class="kw">in</span> GoogleInfo.info.items():</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(key, <span class="st">":"</span>, value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>zip : 94043
+sector : Communication Services
+fullTimeEmployees : 174014
+longBusinessSummary : Alphabet Inc. provides various products and platforms in the United States, Europe, the Middle East, Africa, the Asia-Pacific, Canada, and Latin America. It operates through Google Services, Google Cloud, and Other Bets segments. The Google Services segment offers products and services, including ads, Android, Chrome, hardware, Gmail, Google Drive, Google Maps, Google Photos, Google Play, Search, and YouTube. It is also involved in the sale of apps and in-app purchases and digital content in the Google Play store; and Fitbit wearable devices, Google Nest home products, Pixel phones, and other devices, as well as in the provision of YouTube non-advertising services. The Google Cloud segment offers infrastructure, platform, and other services; Google Workspace that include cloud-based collaboration tools for enterprises, such as Gmail, Docs, Drive, Calendar, and Meet; and other services for enterprise customers. The Other Bets segment sells health technology and internet services. The company was founded in 1998 and is headquartered in Mountain View, California.
+city : Mountain View
+phone : 650 253 0000
+state : CA
+country : United States
+companyOfficers : []
+website : https://www.abc.xyz
+maxAge : 1
+address1 : 1600 Amphitheatre Parkway
+industry : Internet Content &amp; Information
+ebitdaMargins : 0.34834
+profitMargins : 0.25892
+grossMargins : 0.56744
+operatingCashflow : 95001001984
+revenueGrowth : 0.126
+operatingMargins : 0.29648
+ebitda : 96886996992
+targetLowPrice : 113
+recommendationKey : buy
+grossProfits : 146698000000
+freeCashflow : 51070373888
+targetMedianPrice : 144
+currentPrice : 107.85
+earningsGrowth : -0.113
+currentRatio : 2.809
+returnOnAssets : 0.14927
+numberOfAnalystOpinions : 46
+targetMeanPrice : 144.96
+debtToEquity : 11.28
+returnOnEquity : 0.29216
+targetHighPrice : 187.5
+totalCash : 124997001216
+totalDebt : 28810000384
+totalRevenue : 278139011072
+totalCashPerShare : 9.583
+financialCurrency : USD
+revenuePerShare : 21.03
+quickRatio : 2.642
+recommendationMean : 1.8
+exchange : NMS
+shortName : Alphabet Inc.
+longName : Alphabet Inc.
+exchangeTimezoneName : America/New_York
+exchangeTimezoneShortName : EDT
+isEsgPopulated : False
+gmtOffSetMilliseconds : -14400000
+quoteType : EQUITY
+symbol : GOOGL
+messageBoardId : finmb_29096
+market : us_market
+annualHoldingsTurnover : None
+enterpriseToRevenue : 4.801
+beta3Year : None
+enterpriseToEbitda : 13.782
+52WeekChange : -0.23653555
+morningStarRiskRating : None
+forwardEps : 5.9
+revenueQuarterlyGrowth : None
+sharesOutstanding : 5996000256
+fundInceptionDate : None
+annualReportExpenseRatio : None
+totalAssets : None
+bookValue : 19.53
+sharesShort : 54019534
+sharesPercentSharesOut : 0.0041
+fundFamily : None
+lastFiscalYearEnd : 1640908800
+heldPercentInstitutions : 0.78612
+netIncomeToCommon : 72016003072
+trailingEps : 66.57
+lastDividendValue : None
+SandP52WeekChange : -0.12536407
+priceToBook : 5.522273
+heldPercentInsiders : 0.07727
+nextFiscalYearEnd : 1703980800
+yield : None
+mostRecentQuarter : 1656547200
+shortRatio : 1.69
+sharesShortPreviousMonthDate : 1657843200
+floatShares : 11360932680
+beta : 1.078487
+enterpriseValue : 1335261528064
+priceHint : 2
+threeYearAverageReturn : None
+lastSplitDate : 1658102400
+lastSplitFactor : 20:1
+legalType : None
+lastDividendDate : None
+morningStarOverallRating : None
+earningsQuarterlyGrowth : -0.136
+priceToSalesTrailing12Months : 5.075529
+dateShortInterest : 1660521600
+pegRatio : 1.57
+ytdReturn : None
+forwardPE : 18.279661
+lastCapGain : None
+shortPercentOfFloat : 0.009
+sharesShortPriorMonth : 46968160
+impliedSharesOutstanding : 0
+category : None
+fiveYearAverageReturn : None
+previousClose : 109.74
+regularMarketOpen : 110.59
+twoHundredDayAverage : 127.066666
+trailingAnnualDividendYield : 0
+payoutRatio : 0
+volume24Hr : None
+regularMarketDayHigh : 110.74
+navPrice : None
+averageDailyVolume10Day : 23668610
+regularMarketPreviousClose : 109.74
+fiftyDayAverage : 114.30854
+trailingAnnualDividendRate : 0
+open : 110.59
+toCurrency : None
+averageVolume10days : 23668610
+expireDate : None
+algorithm : None
+dividendRate : None
+exDividendDate : None
+circulatingSupply : None
+startDate : None
+regularMarketDayLow : 107.2616
+currency : USD
+trailingPE : 1.6200992
+regularMarketVolume : 23528231
+lastMarket : None
+maxSupply : None
+openInterest : None
+marketCap : 1411702587392
+volumeAllCurrencies : None
+strikePrice : None
+averageVolume : 32218831
+dayLow : 107.2616
+ask : 107.4
+askSize : 900
+volume : 23528231
+fiftyTwoWeekHigh : 151.5465
+fromCurrency : None
+fiveYearAvgDividendYield : None
+fiftyTwoWeekLow : 101.8845
+bid : 107.39
+tradeable : False
+dividendYield : None
+bidSize : 800
+dayHigh : 110.74
+coinMarketCapLink : None
+regularMarketPrice : 107.85
+preMarketPrice : 110.52
+logo_url : https://logo.clearbit.com/abc.xyz
+trailingPegRatio : 1.3474</code></pre>
+</div>
+</div>
+<p>We can retrieve historical market prices too and display them. Additionally, we can utilize it to get earlier market data.</p>
+<p>We will use historical Google stock values over the past few years as our example. It is a relatively easy assignment to complete, as demonstrated below:</p>
+<div class="cell" data-cell_id="1ddd7b8b873549ad9b01670f4343ea68" data-deepnote_cell_type="code" data-execution_millis="1042" data-execution_start="1662148902337" data-source_hash="74c8858c" data-tags="[]">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># covering the past few years.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># max-&gt;maximum number of daily prices available</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># for Google.</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Valid options are 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y,</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 5y, 10y and ytd.</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(GoogleInfo.history(period<span class="op">=</span><span class="st">"max"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  Open        High         Low       Close     Volume  \
+Date                                                                    
+2004-08-19    2.502503    2.604104    2.401401    2.511011  893181924   
+2004-08-20    2.527778    2.729730    2.515015    2.710460  456686856   
+2004-08-23    2.771522    2.839840    2.728979    2.737738  365122512   
+2004-08-24    2.783784    2.792793    2.591842    2.624374  304946748   
+2004-08-25    2.626627    2.702703    2.599600    2.652653  183772044   
+...                ...         ...         ...         ...        ...   
+2022-08-29  109.989998  110.949997  108.800003  109.419998   21191200   
+2022-08-30  110.169998  110.500000  107.800003  108.940002   27513300   
+2022-08-31  110.650002  110.849998  108.129997  108.220001   28627000   
+2022-09-01  108.279999  110.449997  107.360001  109.739998   28360900   
+2022-09-02  110.589996  110.739998  107.261597  107.849998   23528231   
+
+            Dividends  Stock Splits  
+Date                                 
+2004-08-19          0           0.0  
+2004-08-20          0           0.0  
+2004-08-23          0           0.0  
+2004-08-24          0           0.0  
+2004-08-25          0           0.0  
+...               ...           ...  
+2022-08-29          0           0.0  
+2022-08-30          0           0.0  
+2022-08-31          0           0.0  
+2022-09-01          0           0.0  
+2022-09-02          0           0.0  
+
+[4543 rows x 7 columns]</code></pre>
+</div>
+</div>
+<p>We can pass our own start and end dates.</p>
+<div class="cell" data-cell_id="a903d8326b364f47a67c8cd583d690ee" data-deepnote_cell_type="code" data-execution_millis="337" data-execution_start="1662148903060" data-source_hash="f74cd84b" data-tags="[]">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> datetime</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> datetime.datetime(<span class="dv">2012</span>,<span class="dv">5</span>,<span class="dv">31</span>) </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> datetime.datetime(<span class="dv">2013</span>,<span class="dv">1</span>,<span class="dv">30</span>) </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(GoogleInfo.history(start<span class="op">=</span>start, end<span class="op">=</span>end))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 Open       High        Low      Close     Volume  Dividends  \
+Date                                                                           
+2012-05-31  14.732733  14.764765  14.489489  14.536036  118613268          0   
+2012-06-01  14.309059  14.330581  14.222973  14.288789  122193684          0   
+2012-06-04  14.269770  14.526777  14.264515  14.479229   97210692          0   
+2012-06-05  14.400651  14.467718  14.175926  14.274525   93502404          0   
+2012-06-06  14.426426  14.563814  14.354605  14.528779   83748168          0   
+...               ...        ...        ...        ...        ...        ...   
+2013-01-23  18.418167  18.743744  18.413162  18.556055  236127636          0   
+2013-01-24  18.549549  18.939690  18.531281  18.874125  135172692          0   
+2013-01-25  18.788038  18.980982  18.775024  18.860611   88946964          0   
+2013-01-28  18.812813  18.908909  18.715965  18.787037   65018916          0   
+2013-01-29  18.687437  18.942694  18.682182  18.860861   69814116          0   
+
+            Stock Splits  
+Date                      
+2012-05-31             0  
+2012-06-01             0  
+2012-06-04             0  
+2012-06-05             0  
+2012-06-06             0  
+...                  ...  
+2013-01-23             0  
+2013-01-24             0  
+2013-01-25             0  
+2013-01-28             0  
+2013-01-29             0  
+
+[166 rows x 7 columns]</code></pre>
+</div>
+</div>
+<p>We can simultaneously download historical prices for many stocks:</p>
+<p>The code below Pandas DataFrame including the different price data for the requested stocks. We now select the individual stock by printing df.GOOGL to have the historical market data for Google:</p>
+<div class="cell" data-cell_id="9098010f17eb47eb9fe7f55791145581" data-deepnote_cell_type="code" data-execution_millis="317" data-execution_start="1662148903105" data-source_hash="ca070834" data-tags="[]">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> yahooFinance.download(<span class="st">"AMZN GOOGL"</span>, start<span class="op">=</span><span class="st">"2019-01-01"</span>, end<span class="op">=</span><span class="st">"2020-01-01"</span>,group_by<span class="op">=</span><span class="st">"ticker"</span>) </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df) </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.GOOGL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[*********************100%***********************]  2 of 2 completed
+                 AMZN                                                         \
+                 Open       High        Low      Close  Adj Close     Volume   
+Date                                                                           
+2019-01-02  73.260002  77.667999  73.046501  76.956497  76.956497  159662000   
+2019-01-03  76.000504  76.900002  74.855499  75.014000  75.014000  139512000   
+2019-01-04  76.500000  79.699997  75.915497  78.769501  78.769501  183652000   
+2019-01-07  80.115501  81.727997  79.459503  81.475502  81.475502  159864000   
+2019-01-08  83.234497  83.830498  80.830498  82.829002  82.829002  177628000   
+...               ...        ...        ...        ...        ...        ...   
+2019-12-24  89.690498  89.778503  89.378998  89.460503  89.460503   17626000   
+2019-12-26  90.050499  93.523003  89.974998  93.438499  93.438499  120108000   
+2019-12-27  94.146004  95.070000  93.300499  93.489998  93.489998  123732000   
+2019-12-30  93.699997  94.199997  92.030998  92.344498  92.344498   73494000   
+2019-12-31  92.099998  92.663002  91.611504  92.391998  92.391998   50130000   
+
+                GOOGL                                                        
+                 Open       High        Low      Close  Adj Close    Volume  
+Date                                                                         
+2019-01-02  51.360001  53.039501  51.264000  52.734001  52.734001  31868000  
+2019-01-03  52.533501  53.313000  51.118500  51.273499  51.273499  41960000  
+2019-01-04  52.127998  54.000000  51.842999  53.903500  53.903500  46022000  
+2019-01-07  54.048500  54.134998  53.132000  53.796001  53.796001  47446000  
+2019-01-08  54.299999  54.667500  53.417500  54.268501  54.268501  35414000  
+...               ...        ...        ...        ...        ...       ...  
+2019-12-24  67.510498  67.600502  67.208504  67.221497  67.221497  13468000  
+2019-12-26  67.327499  68.160004  67.275497  68.123497  68.123497  23662000  
+2019-12-27  68.199997  68.352501  67.650002  67.732002  67.732002  23212000  
+2019-12-30  67.840500  67.849998  66.891998  66.985497  66.985497  19994000  
+2019-12-31  66.789497  67.032997  66.606499  66.969498  66.969498  19514000  
+
+[252 rows x 12 columns]
+                 Open       High        Low      Close  Adj Close    Volume
+Date                                                                       
+2019-01-02  51.360001  53.039501  51.264000  52.734001  52.734001  31868000
+2019-01-03  52.533501  53.313000  51.118500  51.273499  51.273499  41960000
+2019-01-04  52.127998  54.000000  51.842999  53.903500  53.903500  46022000
+2019-01-07  54.048500  54.134998  53.132000  53.796001  53.796001  47446000
+2019-01-08  54.299999  54.667500  53.417500  54.268501  54.268501  35414000
+...               ...        ...        ...        ...        ...       ...
+2019-12-24  67.510498  67.600502  67.208504  67.221497  67.221497  13468000
+2019-12-26  67.327499  68.160004  67.275497  68.123497  68.123497  23662000
+2019-12-27  68.199997  68.352501  67.650002  67.732002  67.732002  23212000
+2019-12-30  67.840500  67.849998  66.891998  66.985497  66.985497  19994000
+2019-12-31  66.789497  67.032997  66.606499  66.969498  66.969498  19514000
+
+[252 rows x 6 columns]</code></pre>
+</div>
+</div>
+<section id="save-the-data-to-csv" class="level3">
+<h3 class="anchored" data-anchor-id="save-the-data-to-csv">Save the data to CSV</h3>
+<div class="cell" data-cell_id="edd15737f04744daa6fa7c88f4d656f5" data-deepnote_cell_type="code" data-execution_millis="1" data-execution_start="1662149163576" data-source_hash="f1a64dac" data-tags="[]">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">'data/FinanceData.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="congratulations" class="level3">
+<h3 class="anchored" data-anchor-id="congratulations">Congratulations!</h3>
+<p>Credit: This tutorial is prepared by Ajay Sadananda.</p>
+<p><a style="text-decoration:none;line-height:16px;display:flex;color:#5B5B62;padding:10px;justify-content:end;" href="https://deepnote.com?utm_source=created-in-deepnote-cell&amp;projectId=cb1e4beb-a6b7-4729-a87b-ec0538f72c5d" target="_blank"> <img alt="Created in deepnote.com" style="display:inline;max-height:16px;margin:0px;margin-right:7.5px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODBweCIgaGVpZ2h0PSI4MHB4IiB2aWV3Qm94PSIwIDAgODAgODAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDU0LjEgKDc2NDkwKSAtIGh0dHBzOi8vc2tldGNoYXBwLmNvbSAtLT4KICAgIDx0aXRsZT5Hcm91cCAzPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGcgaWQ9IkxhbmRpbmciIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJBcnRib2FyZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTEyMzUuMDAwMDAwLCAtNzkuMDAwMDAwKSI+CiAgICAgICAgICAgIDxnIGlkPSJHcm91cC0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjM1LjAwMDAwMCwgNzkuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICA8cG9seWdvbiBpZD0iUGF0aC0yMCIgZmlsbD0iIzAyNjVCNCIgcG9pbnRzPSIyLjM3NjIzNzYyIDgwIDM4LjA0NzY2NjcgODAgNTcuODIxNzgyMiA3My44MDU3NTkyIDU3LjgyMTc4MjIgMzIuNzU5MjczOSAzOS4xNDAyMjc4IDMxLjY4MzE2ODMiPjwvcG9seWdvbj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0zNS4wMDc3MTgsODAgQzQyLjkwNjIwMDcsNzYuNDU0OTM1OCA0Ny41NjQ5MTY3LDcxLjU0MjI2NzEgNDguOTgzODY2LDY1LjI2MTk5MzkgQzUxLjExMjI4OTksNTUuODQxNTg0MiA0MS42NzcxNzk1LDQ5LjIxMjIyODQgMjUuNjIzOTg0Niw0OS4yMTIyMjg0IEMyNS40ODQ5Mjg5LDQ5LjEyNjg0NDggMjkuODI2MTI5Niw0My4yODM4MjQ4IDM4LjY0NzU4NjksMzEuNjgzMTY4MyBMNzIuODcxMjg3MSwzMi41NTQ0MjUgTDY1LjI4MDk3Myw2Ny42NzYzNDIxIEw1MS4xMTIyODk5LDc3LjM3NjE0NCBMMzUuMDA3NzE4LDgwIFoiIGlkPSJQYXRoLTIyIiBmaWxsPSIjMDAyODY4Ij48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMCwzNy43MzA0NDA1IEwyNy4xMTQ1MzcsMC4yNTcxMTE0MzYgQzYyLjM3MTUxMjMsLTEuOTkwNzE3MDEgODAsMTAuNTAwMzkyNyA4MCwzNy43MzA0NDA1IEM4MCw2NC45NjA0ODgyIDY0Ljc3NjUwMzgsNzkuMDUwMzQxNCAzNC4zMjk1MTEzLDgwIEM0Ny4wNTUzNDg5LDc3LjU2NzA4MDggNTMuNDE4MjY3Nyw3MC4zMTM2MTAzIDUzLjQxODI2NzcsNTguMjM5NTg4NSBDNTMuNDE4MjY3Nyw0MC4xMjg1NTU3IDM2LjMwMzk1NDQsMzcuNzMwNDQwNSAyNS4yMjc0MTcsMzcuNzMwNDQwNSBDMTcuODQzMDU4NiwzNy43MzA0NDA1IDkuNDMzOTE5NjYsMzcuNzMwNDQwNSAwLDM3LjczMDQ0MDUgWiIgaWQ9IlBhdGgtMTkiIGZpbGw9IiMzNzkzRUYiPjwvcGF0aD4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+">  Created in <span style="font-weight:600;margin-left:4px;">Deepnote</span></a></p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
