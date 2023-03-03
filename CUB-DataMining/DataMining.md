@@ -7,12 +7,12 @@ permalink: /CUB-DataMining
 # Lecture Tutorials
 
 ## 01-Data Integration:
-- Collect Data from CSV
-- Collect Data from SQLite
-- Collect Data from Web
-- Collect Data from Web (beautifulsoup) - Case Study - MS-DS faculty
-- Collect Data from YahooFinance
-- Data_Integration
+- [Collect Data from CSV](CUB-DataMining/Lecture-Tutorials/01-Data-Integration/CollectDataFromCSV.html)
+- [Collect Data from SQLite](CUB-DataMining/Lecture-Tutorials/01-Data-Integration/CollectDataFromSQLite.html)
+- [Collect Data from Web](CUB-DataMining/Lecture-Tutorials/01-Data-Integration/CollectDataFromWeb.html)
+- [Collect Data from Web (beautifulsoup) - Case Study - MS-DS faculty](CUB-DataMining/Lecture-Tutorials/01-Data-Integration/CollectDataFromWeb - Case Study - MSDS Faculty.html)
+- [Collect Data from YahooFinance](CUB-DataMining/Lecture-Tutorials/01-Data-Integration/CollectDataFromYahoo.html)
+- [Data_Integration](CUB-DataMining/Lecture-Tutorials/01-Data-Integration/Data_Integration.html)
 
 ## 02-Data Manipulation:
 - Numpy - Basics
