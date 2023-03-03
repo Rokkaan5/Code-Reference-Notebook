@@ -42,12 +42,12 @@ Example of statisical analysis: central tendencies (mean, median, etc.) and disp
 Preprocessing application example
 
 ## 06-Classification:
-- Decision Tree
-- K-Nearest Neighbor (KNN)
-- Naive Bayes
-- Random Forests
-- Stochastic Gradient Descent
-- Support Vector Machine (SVM)
+- [Decision Tree](CUB-DataMining/Lecture-Tutorials/06-Classification/DecisionTree.html)
+- [K-Nearest Neighbor (KNN)](CUB-DataMining/Lecture-Tutorials/06-Classification/KNN.html)
+- [Naive Bayes](CUB-DataMining/Lecture-Tutorials/06-Classification/NaiveBayes.html)
+- [Random Forests](CUB-DataMining/Lecture-Tutorials/06-Classification/RandomForests.html)
+- [Stochastic Gradient Descent](CUB-DataMining/Lecture-Tutorials/06-Classification/Stochastic Gradient Descent.html)
+- [Support Vector Machine (SVM)](CUB-DataMining/Lecture-Tutorials/06-Classification/SVM.html)
 
 
 # Mini-projects
