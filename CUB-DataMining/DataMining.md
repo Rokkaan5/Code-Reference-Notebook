@@ -29,9 +29,9 @@ permalink: /CUB-DataMining
 Example of statisical analysis: central tendencies (mean, median, etc.) and dispersion (quartiles, variance, std, etc.)
 
 ## 04-Data Visualization:
-- Pandas
-- Matplotlib
-- Seaborn
+- [Pandas](CUB-DataMining/Lecture-Tutorials/04-Data-Visualization/1 - Pandas.html)
+- [Matplotlib](CUB-DataMining/Lecture-Tutorials/04-Data-Visualization/2 - Matplotlib.html)
+- [Seaborn](CUB-DataMining/Lecture-Tutorials/04-Data-Visualization/3 - Seaborn.html)
 
 ## 05-Data Preprocessing:
 - Data Reduction
