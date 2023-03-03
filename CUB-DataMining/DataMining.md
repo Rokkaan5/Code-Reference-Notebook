@@ -23,7 +23,7 @@ permalink: /CUB-DataMining
 - [Pandas - Advanced](CUB-DataMining/Lecture-Tutorials/02-Data-Manipulation/Pandas 3 - Advanced.html)
 - [Text Processing](CUB-DataMining/Lecture-Tutorials/02-Data-Manipulation/Text Processing.html)
 
-## 03-Data Understanding
+## [03-Data Understanding](CUB-DataMining/Lecture-Tutorials/03-Data-Understanding/DataUnderstanding.html)
 (only one (self-titled) notebook)
 
 ## 04-Data Visualization:
