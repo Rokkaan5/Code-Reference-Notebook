@@ -15,13 +15,13 @@ permalink: /CUB-DataMining
 - [Data_Integration](CUB-DataMining/Lecture-Tutorials/01-Data-Integration/Data_Integration.html)
 
 ## 02-Data Manipulation:
-- Numpy - Basics
-- Numpy - Multidimensional Arrays
-- Numpy - Masks
-- Pandas - Series
-- Pandas - Dataframe
-- Pandas - Advanced
-- Text Processing
+- [Numpy - Basics](CUB-DataMining/Lecture-Tutorials/02-Data-Manipulation/Numpy 1 -  Basics.html)
+- [Numpy - Multidimensional Arrays](CUB-DataMining/Lecture-Tutorials/02-Data-Manipulation/Numpy 2 - Multi Dimensional Arrays.html)
+- [Numpy - Masks](CUB-DataMining/Lecture-Tutorials/02-Data-Manipulation/Numpy 3 - Masks.html)
+- [Pandas - Series](CUB-DataMining/Lecture-Tutorials/02-Data-Manipulation/Pandas 1 - Series.html)
+- [Pandas - Dataframe](CUB-DataMining/Lecture-Tutorials/02-Data-Manipulation/Pandas 2 - DataFrame.html)
+- [Pandas - Advanced](CUB-DataMining/Lecture-Tutorials/02-Data-Manipulation/Pandas 3 - Advanced.html)
+- [Text Processing](CUB-DataMining/Lecture-Tutorials/02-Data-Manipulation/Text Processing.html)
 
 ## 03-Data Understanding
 (only one (self-titled) notebook)
