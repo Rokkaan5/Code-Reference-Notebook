@@ -37,7 +37,7 @@ Example of statisical analysis: central tendencies (mean, median, etc.) and disp
 - [Data Reduction](CUB-DataMining/Lecture-Tutorials/05-Data-Preprocessing/DataReduction.html)
 - [Data Transformation](CUB-DataMining/Lecture-Tutorials/05-Data-Preprocessing/DataTransformation.html)
 
-## Data Preprocessing Case Study - Boulder Climate
+## [Data Preprocessing Case Study - Boulder Climate](CUB-DataMining/Lecture-Tutorials/Case-Study-Boulder-Weather/BoulderClimateCaseStudy.html)
 
 Preprocessing application example
 
