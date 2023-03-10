@@ -5,7 +5,7 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 
 [UAF classes](UAF.md)
 - [Intro to Computational Physics](UAF-CompPhys/UAF-CompPhys.md)
-- [Intro to Machine Learning](UAF-ML-Module/UAF-ML-Module.md)
+- [Intro to Machine Learning](UAF-ML-module/UAF-ML-Module.md)
 
 [CU Boulder classes](CUB.md)
 - Statistical Programming in R (coming soon)
