@@ -61,3 +61,5 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
 
 [Analyze Your Runkeeper Fitness Data](CUB-DataMining/Mini-Projects/Fitness/FitnessData.html)
 
+[Tweet Classification: Trump vs Trudeau](CUB-DataMining/Mini-Projects/Tweets/TweetClassification.html)
+
