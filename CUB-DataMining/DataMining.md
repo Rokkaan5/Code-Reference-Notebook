@@ -63,3 +63,4 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
 
 [Tweet Classification: Trump vs Trudeau](CUB-DataMining/Mini-Projects/Tweets/TweetClassification.html)
 
+[Do Left-handed People Really Die Young?](CUB-DataMining/Mini-Projects/LeftHand/LHDieYoung.html)
