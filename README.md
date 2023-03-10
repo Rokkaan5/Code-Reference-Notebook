@@ -18,6 +18,11 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 ### Language basics:
 
 - Python Packages
+    - Numpy
+    - Pandas
+    - Matplotlib
+    - Seaborn
+    - Sklearn
 - R
     - Basics
     - ggplot
@@ -34,4 +39,5 @@ Jasmine's (coding) reference material for coding, computational science, data sc
     - Association Rule Mining (ARM)
 - Supervised:
     - Classification
+    - Regression
     
