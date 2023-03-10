@@ -8,7 +8,7 @@ permalink: /UAF-classes
 Labs and code for my [Wilberforce Pendulum Project](UAF-CompPhys/WilberforceProject.md)
 
 
-# [Intro to Machine Learning](UAF-ML-Module/UAF-ML-Module.md)
+# [Intro to Machine Learning](UAF-ML-module/UAF-ML-Module.md)
 
 Lecture Workbooks
 
