@@ -4,8 +4,8 @@ title: "CU Boulder Class Resources"
 permalink: /CUB-classes
 ---
 
-# R Programming
-Intro to Statistical R Programming
+# [R Programming](CUB-RProgramming/RProgramming.md)
+Statistical Programming in R
 
 R codes from class lectures
 
