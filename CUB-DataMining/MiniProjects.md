@@ -4,7 +4,7 @@ title: "CUB-DataMining-MiniProjects"
 permalink: /CUB-DataMining-MiniProjects
 ---
 
-# Mini-projects
+# [Data Mining](CUB-DataMining/MiniProjects.md): Mini-projects
 Most of these are DataCamp Projects available through DataCamp (and these are the finished notebooks)
 
 [A Visual History of Nobel Prize Winners](CUB-DataMining/Mini-Projects/NobelPrize/nobelprize-notebook.html)

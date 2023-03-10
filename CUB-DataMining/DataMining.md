@@ -3,8 +3,9 @@ layout: page
 title: "CUB-DataMining"
 permalink: /CUB-DataMining
 ---
+# Data Mining
 
-# [Lecture Tutorials](CUB-DataMining/Lectures.md)
+## [Lecture Tutorials](CUB-DataMining/Lectures.md)
 
 - 01-Data Integration
 - 02-Data Manipulation
@@ -15,7 +16,7 @@ permalink: /CUB-DataMining
 - 06-Classification
 
 
-# [Mini-projects](CUB-DataMining/MiniProjects.md)
+## [Mini-projects](CUB-DataMining/MiniProjects.md)
 Most of these are DataCamp Projects available through DataCamp (and these are the finished notebooks)
 
 Pretty much additional examples of above topics.
