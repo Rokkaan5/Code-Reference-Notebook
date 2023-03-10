@@ -20,9 +20,7 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 - Python Packages
     - Numpy
     - Pandas
-    - Matplotlib
-    - Seaborn
-    - Sklearn
+    - etc.
 - R
     - Basics
     - ggplot
