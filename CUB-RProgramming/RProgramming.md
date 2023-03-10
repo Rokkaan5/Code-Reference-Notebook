@@ -4,8 +4,8 @@ title: "Intro to R Programming"
 permalink: /RProgramming
 ---
 
-# CU Boulder - Intro to R Programming
-(technically it was called "Statistical Programming in R")
+# CU Boulder - Statistical Programming in R
+(essentially my introduction to R programming in general)
 
 ## Lecture notes:
 Some of the code might be broken depending on if it's pre-class or post-class codes. 
