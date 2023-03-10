@@ -4,7 +4,7 @@ title: "CUB-DataMining-Lectures"
 permalink: /CUB-DataMining-Lectures
 ---
 
-# [Data Mining](CUB-DataMining/DataMining.md) - Lecture Tutorial Notebooks
+# [Data Mining](DataMining.md) - Lecture Tutorial Notebooks
 
 ## 01-Data Integration:
 - [Collect Data from CSV](CUB-DataMining/Lecture-Tutorials/01-Data-Integration/CollectDataFromCSV.html)
