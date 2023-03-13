@@ -49,6 +49,6 @@ Preprocessing application example
 - [Stochastic Gradient Descent](CUB-DataMining/Lecture-Tutorials/06-Classification/Stochastic Gradient Descent.html)
 - [Support Vector Machine (SVM)](CUB-DataMining/Lecture-Tutorials/06-Classification/SVM.html)
 
-## 07-Regression
+## 07-Regression:
 - [Linear and Polynomial Regression](CUB-DataMining/Lecture-Tutorials/07-Regression/Linear and Polynomial Regression.html)
 - [Overfitting and Underfitting](CUB-DataMining/Lecture-Tutorials/07-Regression/OverFitting and UnderFitting.html)
