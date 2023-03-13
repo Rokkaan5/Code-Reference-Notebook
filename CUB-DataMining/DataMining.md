@@ -14,6 +14,7 @@ permalink: /CUB-DataMining
 - 05-Data Preprocessing
 - [Data Preprocessing Case Study - Boulder Climate](CUB-DataMining/Lecture-Tutorials/Case-Study-Boulder-Weather/BoulderClimateCaseStudy.html)
 - 06-Classification
+- 07-Regression
 
 
 ## [Mini-projects](MiniProjects.md)
