@@ -55,8 +55,8 @@ Preprocessing application example
 
 ## 08-Clustering
 - [Clustering Algorithm Comparison](CUB-DataMining/Lecture-Tutorials/08-Clustering/ClusteringComparison.html)
+- [K-Means vs. K-Medoid](CUB-DataMining/Lecture-Tutorials/08-Clustering/KMeans_VS_KMedoid.html)
 - [DBSCAN](CUB-DataMining/Lecture-Tutorials/08-Clustering/DBSCAN.html)
 - [Grid Based Clustering](CUB-DataMining/Lecture-Tutorials/08-Clustering/GridBasedClustering.html)
-- [K-Means vs. K-Medoid](CUB-DataMining/Lecture-Tutorials/08-Clustering/KMeans_VS_KMedoid.html)
 - [PCA with Digits dataset](CUB-DataMining/Lecture-Tutorials/08-Clustering/PCA_Digits.html)
 - [PCA with Wine dataset](CUB-DataMining/Lecture-Tutorials/08-Clustering/PCA_for_Wine.html)
