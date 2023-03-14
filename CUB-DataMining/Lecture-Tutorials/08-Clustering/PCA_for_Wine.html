@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>PCA Analysis - Wine Dataset</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="PCA_for_Wine_files/libs/clipboard/clipboard.min.js"></script>
+<script src="PCA_for_Wine_files/libs/quarto-html/quarto.js"></script>
+<script src="PCA_for_Wine_files/libs/quarto-html/popper.min.js"></script>
+<script src="PCA_for_Wine_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="PCA_for_Wine_files/libs/quarto-html/anchor.min.js"></script>
+<link href="PCA_for_Wine_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="PCA_for_Wine_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="PCA_for_Wine_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="PCA_for_Wine_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="PCA_for_Wine_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#round-1-using-wine-dataset" id="toc-round-1-using-wine-dataset" class="nav-link active" data-scroll-target="#round-1-using-wine-dataset">Round 1: Using Wine Dataset</a>
+  <ul class="collapse">
+  <li><a href="#train-a-simple-logistic-regression-classifier" id="toc-train-a-simple-logistic-regression-classifier" class="nav-link" data-scroll-target="#train-a-simple-logistic-regression-classifier">Train a simple logistic regression classifier</a></li>
+  <li><a href="#conclusion-with-100-information-13-features-we-can-achieve-97.2-accuracy" id="toc-conclusion-with-100-information-13-features-we-can-achieve-97.2-accuracy" class="nav-link" data-scroll-target="#conclusion-with-100-information-13-features-we-can-achieve-97.2-accuracy">Conclusion: With 100% information (13 features), we can achieve 97.2% accuracy</a></li>
+  </ul></li>
+  <li><a href="#round-2-use-pca-with-0.95-for-analysis" id="toc-round-2-use-pca-with-0.95-for-analysis" class="nav-link" data-scroll-target="#round-2-use-pca-with-0.95-for-analysis">Round 2: Use PCA with 0.95 for analysis</a>
+  <ul class="collapse">
+  <li><a href="#keep-95-information-pca-for-dimension-deduction" id="toc-keep-95-information-pca-for-dimension-deduction" class="nav-link" data-scroll-target="#keep-95-information-pca-for-dimension-deduction">Keep 95% information PCA for dimension deduction</a></li>
+  <li><a href="#conclusion-with-95-information-10-features-we-achieved-97.2-accuracy-equally-good-as-using-13-features." id="toc-conclusion-with-95-information-10-features-we-achieved-97.2-accuracy-equally-good-as-using-13-features." class="nav-link" data-scroll-target="#conclusion-with-95-information-10-features-we-achieved-97.2-accuracy-equally-good-as-using-13-features.">Conclusion, with 95% information (10 features), we achieved 97.2% accuracy (equally good as using 13 features).</a></li>
+  </ul></li>
+  <li><a href="#round-3-use-pca-with-0.80-for-analysis" id="toc-round-3-use-pca-with-0.80-for-analysis" class="nav-link" data-scroll-target="#round-3-use-pca-with-0.80-for-analysis">Round 3: Use PCA with 0.80 for analysis</a>
+  <ul class="collapse">
+  <li><a href="#keep-80-information-pca-for-dimension-deduction" id="toc-keep-80-information-pca-for-dimension-deduction" class="nav-link" data-scroll-target="#keep-80-information-pca-for-dimension-deduction">Keep 80% information PCA for dimension deduction</a></li>
+  <li><a href="#conclusion-with-80-information-5-features-we-achieved-97.2-accuracy." id="toc-conclusion-with-80-information-5-features-we-achieved-97.2-accuracy." class="nav-link" data-scroll-target="#conclusion-with-80-information-5-features-we-achieved-97.2-accuracy.">Conclusion, with 80% information (5 features), we achieved 97.2% accuracy.</a></li>
+  </ul></li>
+  <li><a href="#round-4-use-pca-with-2-features-for-analysis" id="toc-round-4-use-pca-with-2-features-for-analysis" class="nav-link" data-scroll-target="#round-4-use-pca-with-2-features-for-analysis">Round 4: Use PCA with 2 features for analysis</a>
+  <ul class="collapse">
+  <li><a href="#keep-only-2-features-pca-for-dimension-deduction" id="toc-keep-only-2-features-pca-for-dimension-deduction" class="nav-link" data-scroll-target="#keep-only-2-features-pca-for-dimension-deduction">Keep only 2 features PCA for dimension deduction</a></li>
+  <li><a href="#conclusion-with-2-features-we-achieved-96.2-accuracy." id="toc-conclusion-with-2-features-we-achieved-96.2-accuracy." class="nav-link" data-scroll-target="#conclusion-with-2-features-we-achieved-96.2-accuracy.">Conclusion, with 2 features, we achieved 96.2% accuracy.</a></li>
+  </ul></li>
+  <li><a href="#round-5-use-pca-with-1-features-for-analysis" id="toc-round-5-use-pca-with-1-features-for-analysis" class="nav-link" data-scroll-target="#round-5-use-pca-with-1-features-for-analysis">Round 5: Use PCA with 1 features for analysis</a>
+  <ul class="collapse">
+  <li><a href="#keep-1-features-pca-for-dimension-deduction" id="toc-keep-1-features-pca-for-dimension-deduction" class="nav-link" data-scroll-target="#keep-1-features-pca-for-dimension-deduction">Keep 1 features PCA for dimension deduction</a></li>
+  <li><a href="#conclusion-with-just-1-feature-we-achieved-88.9-accuracy." id="toc-conclusion-with-just-1-feature-we-achieved-88.9-accuracy." class="nav-link" data-scroll-target="#conclusion-with-just-1-feature-we-achieved-88.9-accuracy.">Conclusion, with just 1 feature, we achieved 88.9% accuracy.</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">PCA Analysis - Wine Dataset</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="round-1-using-wine-dataset" class="level1">
+<h1>Round 1: Using Wine Dataset</h1>
+<p>##load dataset and preprocess it</p>
+<div class="cell" data-cell_id="704158e50c2b4ddbab1e1cde46fa19aa" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:13}" data-deepnote_cell_type="code" data-execution_millis="2473" data-execution_start="1667515113586" data-outputid="fdb540f0-ddf2-46da-cae9-fbf2cc29667c" data-source_hash="262a3937" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_wine</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> load_wine()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>dataset.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>dict_keys(['data', 'target', 'frame', 'target_names', 'DESCR', 'feature_names'])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="167021d6d76448fc8555e94912172d34" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:19}" data-deepnote_cell_type="code" data-execution_millis="11" data-execution_start="1667515116058" data-outputid="afd3728d-e406-40f6-d101-90f811ea9bd5" data-source_hash="23df9f60" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dataset.data.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>(178, 13)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="fe47bf8f15ce4ab18f2bbec6b8692089" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:25}" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1667515116067" data-outputid="dcdc5a53-b85d-4b95-86e5-a840f04aa355" data-source_hash="fc8d6add" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dataset.data[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>array([1.423e+01, 1.710e+00, 2.430e+00, 1.560e+01, 1.270e+02, 2.800e+00,
+       3.060e+00, 2.800e-01, 2.290e+00, 5.640e+00, 1.040e+00, 3.920e+00,
+       1.065e+03])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="dde7f5cdaff24f5183ab3fe2144a76c6" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:31}" data-deepnote_cell_type="code" data-execution_millis="6" data-execution_start="1667515116085" data-outputid="897a7ea0-2a04-4c05-ce7b-8413f40445ac" data-source_hash="defb2a08" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dataset.target</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2,
+       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+       2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+       2, 2])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="f3229f47279043a39e86f9a24d0d0ecd" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:37}" data-deepnote_cell_type="code" data-execution_millis="38" data-execution_start="1667515116092" data-outputid="9e151942-bedd-4eaa-d8c3-af063f371b17" data-source_hash="6adf3317" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(dataset.data, columns<span class="op">=</span>dataset.feature_names)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>alcohol</th>
+      <th>malic_acid</th>
+      <th>ash</th>
+      <th>alcalinity_of_ash</th>
+      <th>magnesium</th>
+      <th>total_phenols</th>
+      <th>flavanoids</th>
+      <th>nonflavanoid_phenols</th>
+      <th>proanthocyanins</th>
+      <th>color_intensity</th>
+      <th>hue</th>
+      <th>od280/od315_of_diluted_wines</th>
+      <th>proline</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>14.23</td>
+      <td>1.71</td>
+      <td>2.43</td>
+      <td>15.6</td>
+      <td>127.0</td>
+      <td>2.80</td>
+      <td>3.06</td>
+      <td>0.28</td>
+      <td>2.29</td>
+      <td>5.64</td>
+      <td>1.04</td>
+      <td>3.92</td>
+      <td>1065.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>13.20</td>
+      <td>1.78</td>
+      <td>2.14</td>
+      <td>11.2</td>
+      <td>100.0</td>
+      <td>2.65</td>
+      <td>2.76</td>
+      <td>0.26</td>
+      <td>1.28</td>
+      <td>4.38</td>
+      <td>1.05</td>
+      <td>3.40</td>
+      <td>1050.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>13.16</td>
+      <td>2.36</td>
+      <td>2.67</td>
+      <td>18.6</td>
+      <td>101.0</td>
+      <td>2.80</td>
+      <td>3.24</td>
+      <td>0.30</td>
+      <td>2.81</td>
+      <td>5.68</td>
+      <td>1.03</td>
+      <td>3.17</td>
+      <td>1185.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>14.37</td>
+      <td>1.95</td>
+      <td>2.50</td>
+      <td>16.8</td>
+      <td>113.0</td>
+      <td>3.85</td>
+      <td>3.49</td>
+      <td>0.24</td>
+      <td>2.18</td>
+      <td>7.80</td>
+      <td>0.86</td>
+      <td>3.45</td>
+      <td>1480.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>13.24</td>
+      <td>2.59</td>
+      <td>2.87</td>
+      <td>21.0</td>
+      <td>118.0</td>
+      <td>2.80</td>
+      <td>2.69</td>
+      <td>0.39</td>
+      <td>1.82</td>
+      <td>4.32</td>
+      <td>1.04</td>
+      <td>2.93</td>
+      <td>735.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="8c7e3115ecbd4f21832c4b6a315f0070" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:43}" data-deepnote_cell_type="code" data-execution_millis="36" data-execution_start="1667515116169" data-outputid="423ac3f1-6772-43cf-e71e-faba5fa675f5" data-source_hash="f88152d9" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>alcohol</th>
+      <th>malic_acid</th>
+      <th>ash</th>
+      <th>alcalinity_of_ash</th>
+      <th>magnesium</th>
+      <th>total_phenols</th>
+      <th>flavanoids</th>
+      <th>nonflavanoid_phenols</th>
+      <th>proanthocyanins</th>
+      <th>color_intensity</th>
+      <th>hue</th>
+      <th>od280/od315_of_diluted_wines</th>
+      <th>proline</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+      <td>178.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>13.000618</td>
+      <td>2.336348</td>
+      <td>2.366517</td>
+      <td>19.494944</td>
+      <td>99.741573</td>
+      <td>2.295112</td>
+      <td>2.029270</td>
+      <td>0.361854</td>
+      <td>1.590899</td>
+      <td>5.058090</td>
+      <td>0.957449</td>
+      <td>2.611685</td>
+      <td>746.893258</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.811827</td>
+      <td>1.117146</td>
+      <td>0.274344</td>
+      <td>3.339564</td>
+      <td>14.282484</td>
+      <td>0.625851</td>
+      <td>0.998859</td>
+      <td>0.124453</td>
+      <td>0.572359</td>
+      <td>2.318286</td>
+      <td>0.228572</td>
+      <td>0.709990</td>
+      <td>314.907474</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>11.030000</td>
+      <td>0.740000</td>
+      <td>1.360000</td>
+      <td>10.600000</td>
+      <td>70.000000</td>
+      <td>0.980000</td>
+      <td>0.340000</td>
+      <td>0.130000</td>
+      <td>0.410000</td>
+      <td>1.280000</td>
+      <td>0.480000</td>
+      <td>1.270000</td>
+      <td>278.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>12.362500</td>
+      <td>1.602500</td>
+      <td>2.210000</td>
+      <td>17.200000</td>
+      <td>88.000000</td>
+      <td>1.742500</td>
+      <td>1.205000</td>
+      <td>0.270000</td>
+      <td>1.250000</td>
+      <td>3.220000</td>
+      <td>0.782500</td>
+      <td>1.937500</td>
+      <td>500.500000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>13.050000</td>
+      <td>1.865000</td>
+      <td>2.360000</td>
+      <td>19.500000</td>
+      <td>98.000000</td>
+      <td>2.355000</td>
+      <td>2.135000</td>
+      <td>0.340000</td>
+      <td>1.555000</td>
+      <td>4.690000</td>
+      <td>0.965000</td>
+      <td>2.780000</td>
+      <td>673.500000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>13.677500</td>
+      <td>3.082500</td>
+      <td>2.557500</td>
+      <td>21.500000</td>
+      <td>107.000000</td>
+      <td>2.800000</td>
+      <td>2.875000</td>
+      <td>0.437500</td>
+      <td>1.950000</td>
+      <td>6.200000</td>
+      <td>1.120000</td>
+      <td>3.170000</td>
+      <td>985.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>14.830000</td>
+      <td>5.800000</td>
+      <td>3.230000</td>
+      <td>30.000000</td>
+      <td>162.000000</td>
+      <td>3.880000</td>
+      <td>5.080000</td>
+      <td>0.660000</td>
+      <td>3.580000</td>
+      <td>13.000000</td>
+      <td>1.710000</td>
+      <td>4.000000</td>
+      <td>1680.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="7805adf4aa6643af9765f4c49d89b5a1" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:49}" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1667515116203" data-source_hash="af109407" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> dataset.target</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="e1bec2ce6fea4a4bb1717aa512bdd624" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:55}" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1667515116231" data-outputid="95f679a7-887d-42c5-a74c-1f0cc167c72c" data-source_hash="2d199297" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> scaler.fit_transform(X)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>array([[ 1.51861254, -0.5622498 ,  0.23205254, ...,  0.36217728,
+         1.84791957,  1.01300893],
+       [ 0.24628963, -0.49941338, -0.82799632, ...,  0.40605066,
+         1.1134493 ,  0.96524152],
+       [ 0.19687903,  0.02123125,  1.10933436, ...,  0.31830389,
+         0.78858745,  1.39514818],
+       ...,
+       [ 0.33275817,  1.74474449, -0.38935541, ..., -1.61212515,
+        -1.48544548,  0.28057537],
+       [ 0.20923168,  0.22769377,  0.01273209, ..., -1.56825176,
+        -1.40069891,  0.29649784],
+       [ 1.39508604,  1.58316512,  1.36520822, ..., -1.52437837,
+        -1.42894777, -0.59516041]])</code></pre>
+</div>
+</div>
+<section id="train-a-simple-logistic-regression-classifier" class="level2">
+<h2 class="anchored" data-anchor-id="train-a-simple-logistic-regression-classifier">Train a simple logistic regression classifier</h2>
+<div class="cell" data-cell_id="ae92f194c89f4949815b827a64f7e4e1" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:67}" data-deepnote_cell_type="code" data-execution_start="1667515116232" data-source_hash="74193242" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="60b4e29036b542d78427276f174268f8" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:73}" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1667515116233" data-outputid="e30da734-7fc0-415d-bd25-ee7447d1bc7e" data-source_hash="45507fcb" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>model.score(X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>0.9722222222222222</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion-with-100-information-13-features-we-can-achieve-97.2-accuracy" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-with-100-information-13-features-we-can-achieve-97.2-accuracy">Conclusion: With 100% information (13 features), we can achieve 97.2% accuracy</h2>
+</section>
+</section>
+<section id="round-2-use-pca-with-0.95-for-analysis" class="level1">
+<h1>Round 2: Use PCA with 0.95 for analysis</h1>
+<section id="keep-95-information-pca-for-dimension-deduction" class="level2">
+<h2 class="anchored" data-anchor-id="keep-95-information-pca-for-dimension-deduction">Keep 95% information PCA for dimension deduction</h2>
+<div class="cell" data-cell_id="6f54e4102ac348ac97a6b8773fe76f5f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:97}" data-deepnote_cell_type="code" data-execution_millis="40" data-execution_start="1667515116236" data-outputid="5797e410-ec35-4059-bc69-5f2177558b27" data-source_hash="b2696ff6" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>array([[ 1.51861254, -0.5622498 ,  0.23205254, ...,  0.36217728,
+         1.84791957,  1.01300893],
+       [ 0.24628963, -0.49941338, -0.82799632, ...,  0.40605066,
+         1.1134493 ,  0.96524152],
+       [ 0.19687903,  0.02123125,  1.10933436, ...,  0.31830389,
+         0.78858745,  1.39514818],
+       ...,
+       [ 0.33275817,  1.74474449, -0.38935541, ..., -1.61212515,
+        -1.48544548,  0.28057537],
+       [ 0.20923168,  0.22769377,  0.01273209, ..., -1.56825176,
+        -1.40069891,  0.29649784],
+       [ 1.39508604,  1.58316512,  1.36520822, ..., -1.52437837,
+        -1.42894777, -0.59516041]])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="f1e578341c9544cf9b87f82fc692590f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:103}" data-deepnote_cell_type="code" data-execution_millis="3" data-execution_start="1667515116318" data-outputid="140aa7d9-8ce0-40f5-e5c7-f59809b8fd00" data-source_hash="83f8c40" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>X.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>(178, 13)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="f0d36e5bc463442792523ed1888c31b2" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:109}" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1667515116319" data-outputid="f5db5662-b4d8-4867-eda3-3321605d5ac7" data-source_hash="6d208beb" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(<span class="fl">0.95</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>X_pca <span class="op">=</span> pca.fit_transform(X)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>X_pca.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>(178, 10)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="4b518d9232a04133b9429a811cc71576" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:115}" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1667515116329" data-outputid="42561d24-6afe-4da6-ea00-10fccc7d5811" data-source_hash="e1bd05f4" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pca.explained_variance_ratio_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>array([0.36198848, 0.1920749 , 0.11123631, 0.0706903 , 0.06563294,
+       0.04935823, 0.04238679, 0.02680749, 0.02222153, 0.01930019])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="faa8791b76934f2397dd5cfe61ea6804" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:121}" data-deepnote_cell_type="code" data-execution_millis="3" data-execution_start="1667515116330" data-outputid="b79e8ed0-9cf4-4491-8d50-67e3db3e081d" data-source_hash="96e43f00" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pca.n_components_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>10</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="9eb2daffefb343c595ec5b60e2123c02" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:127}" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1667515116330" data-outputid="86b0b37d-5df7-42cb-e0e4-08517c4c32e7" data-source_hash="e932fda7" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>X_pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>array([[ 3.31675081e+00, -1.44346263e+00, -1.65739045e-01, ...,
+         6.51390947e-02,  6.41442706e-01,  1.02095585e+00],
+       [ 2.20946492e+00,  3.33392887e-01, -2.02645737e+00, ...,
+         1.02441595e+00, -3.08846753e-01,  1.59701372e-01],
+       [ 2.51674015e+00, -1.03115130e+00,  9.82818670e-01, ...,
+        -3.44216131e-01, -1.17783447e+00,  1.13360857e-01],
+       ...,
+       [-2.67783946e+00, -2.76089913e+00, -9.40941877e-01, ...,
+         4.70238043e-02,  1.22214687e-03, -2.47997312e-01],
+       [-2.38701709e+00, -2.29734668e+00, -5.50696197e-01, ...,
+         3.90828774e-01,  5.74476725e-02,  4.91489502e-01],
+       [-3.20875816e+00, -2.76891957e+00,  1.01391366e+00, ...,
+        -2.92913734e-01,  7.41660423e-01, -1.17969019e-01]])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="c18ca05f17854e02b5f9733977f1eb36" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:133}" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1667515116332" data-source_hash="4288c009" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>X_train_pca, X_test_pca, y_train, y_test <span class="op">=</span> train_test_split(X_pca, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="27f155760aaa4e268535b2ec717514d7" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:139}" data-deepnote_cell_type="code" data-execution_millis="9" data-execution_start="1667515116336" data-outputid="7ca7a38c-1e18-491b-c609-3acd5acacbd5" data-source_hash="827f9d98" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train_pca, y_train)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>model.score(X_test_pca, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>0.9722222222222222</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion-with-95-information-10-features-we-achieved-97.2-accuracy-equally-good-as-using-13-features." class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-with-95-information-10-features-we-achieved-97.2-accuracy-equally-good-as-using-13-features.">Conclusion, with 95% information (10 features), we achieved 97.2% accuracy (equally good as using 13 features).</h2>
+</section>
+</section>
+<section id="round-3-use-pca-with-0.80-for-analysis" class="level1">
+<h1>Round 3: Use PCA with 0.80 for analysis</h1>
+<section id="keep-80-information-pca-for-dimension-deduction" class="level2">
+<h2 class="anchored" data-anchor-id="keep-80-information-pca-for-dimension-deduction">Keep 80% information PCA for dimension deduction</h2>
+<div class="cell" data-cell_id="fbcfa14f6a3d4004858615aa4436bb6b" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:163}" data-deepnote_cell_type="code" data-execution_millis="316" data-execution_start="1667515116387" data-outputid="900aabca-ed54-4f98-94c9-9ed8db637f63" data-source_hash="b2696ff6" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>array([[ 1.51861254, -0.5622498 ,  0.23205254, ...,  0.36217728,
+         1.84791957,  1.01300893],
+       [ 0.24628963, -0.49941338, -0.82799632, ...,  0.40605066,
+         1.1134493 ,  0.96524152],
+       [ 0.19687903,  0.02123125,  1.10933436, ...,  0.31830389,
+         0.78858745,  1.39514818],
+       ...,
+       [ 0.33275817,  1.74474449, -0.38935541, ..., -1.61212515,
+        -1.48544548,  0.28057537],
+       [ 0.20923168,  0.22769377,  0.01273209, ..., -1.56825176,
+        -1.40069891,  0.29649784],
+       [ 1.39508604,  1.58316512,  1.36520822, ..., -1.52437837,
+        -1.42894777, -0.59516041]])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="b2bcbbcad9994886892231e8a2ba0806" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:169}" data-deepnote_cell_type="code" data-execution_millis="316" data-execution_start="1667515116388" data-outputid="3de51496-2722-48d4-f066-2ea62f8d8a24" data-source_hash="83f8c40" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>X.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>(178, 13)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="d32b17f0a9a74bff816386bd135eb4f1" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:175}" data-deepnote_cell_type="code" data-execution_millis="539" data-execution_start="1667515116389" data-outputid="58551e46-b5e5-4e89-d2bb-c3a37906a5e0" data-source_hash="c058b247" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(<span class="fl">0.80</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>X_pca <span class="op">=</span> pca.fit_transform(X)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>X_pca.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>(178, 5)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="b6b0793889f54e4c9c7efb241eafcecc" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:181}" data-deepnote_cell_type="code" data-execution_millis="1158" data-execution_start="1667515116394" data-outputid="e12fb4d1-1099-4e9c-dfb6-8b53d57cd02b" data-source_hash="e1bd05f4" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>pca.explained_variance_ratio_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>array([0.36198848, 0.1920749 , 0.11123631, 0.0706903 , 0.06563294])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="330c1ae382e54c0ca013af7341d3b362" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:187}" data-deepnote_cell_type="code" data-execution_millis="1212" data-execution_start="1667515116396" data-outputid="9a6b6098-96b4-4080-f7cf-1f2340635ac7" data-source_hash="96e43f00" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>pca.n_components_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>5</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="66b5cd97153b4ae8ac90affdcdc81e6b" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:193}" data-deepnote_cell_type="code" data-execution_millis="1250" data-execution_start="1667515116400" data-outputid="e75ae358-8461-4397-cc2f-84753e0bb0ba" data-source_hash="e932fda7" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>X_pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>array([[ 3.31675081e+00, -1.44346263e+00, -1.65739045e-01,
+        -2.15631188e-01,  6.93042841e-01],
+       [ 2.20946492e+00,  3.33392887e-01, -2.02645737e+00,
+        -2.91358318e-01, -2.57654635e-01],
+       [ 2.51674015e+00, -1.03115130e+00,  9.82818670e-01,
+         7.24902309e-01, -2.51033118e-01],
+       [ 3.75706561e+00, -2.75637191e+00, -1.76191842e-01,
+         5.67983308e-01, -3.11841591e-01],
+       [ 1.00890849e+00, -8.69830821e-01,  2.02668822e+00,
+        -4.09765788e-01,  2.98457503e-01],
+       [ 3.05025392e+00, -2.12240111e+00, -6.29395827e-01,
+        -5.15637495e-01, -6.32018734e-01],
+       [ 2.44908967e+00, -1.17485013e+00, -9.77094891e-01,
+        -6.58305046e-02, -1.02776191e+00],
+       [ 2.05943687e+00, -1.60896307e+00,  1.46281883e-01,
+        -1.19260801e+00,  7.69034938e-02],
+       [ 2.51087430e+00, -9.18070957e-01, -1.77096903e+00,
+         5.62703612e-02, -8.92256977e-01],
+       [ 2.75362819e+00, -7.89437674e-01, -9.84247490e-01,
+         3.49381568e-01, -4.68553076e-01],
+       [ 3.47973668e+00, -1.30233324e+00, -4.22735217e-01,
+         2.68417600e-02, -3.38374778e-01],
+       [ 1.75475290e+00, -6.11977229e-01, -1.19087832e+00,
+        -8.90164338e-01, -7.38572659e-01],
+       [ 2.11346234e+00, -6.75706339e-01, -8.65086426e-01,
+        -3.56438010e-01, -1.20992872e+00],
+       [ 3.45815682e+00, -1.13062988e+00, -1.20427635e+00,
+         1.62458063e-01, -2.02312681e+00],
+       [ 4.31278391e+00, -2.09597558e+00, -1.26391275e+00,
+         3.05773190e-01, -1.02969261e+00],
+       [ 2.30518820e+00, -1.66255173e+00,  2.17902616e-01,
+        -1.44059003e+00, -4.69550104e-01],
+       [ 2.17195527e+00, -2.32730534e+00,  8.31729866e-01,
+        -9.12601275e-01, -1.14940414e-04],
+       [ 1.89897118e+00, -1.63136888e+00,  7.94913792e-01,
+        -1.08238039e+00, -4.38705214e-01],
+       [ 3.54198508e+00, -2.51834367e+00, -4.85458508e-01,
+        -9.10322807e-01, -1.15307934e+00],
+       [ 2.08452220e+00, -1.06113799e+00, -1.64746678e-01,
+         4.84997419e-01,  8.82511354e-01],
+       [ 3.12440254e+00, -7.86897106e-01, -3.64887083e-01,
+        -2.55616906e-02,  9.72413602e-01],
+       [ 1.08657007e+00, -2.41743551e-01,  9.36961600e-01,
+         1.02990984e+00,  3.15971695e-01],
+       [ 2.53522408e+00,  9.18406207e-02, -3.11932659e-01,
+        -4.83912355e-02, -4.29581558e-01],
+       [ 1.64498834e+00,  5.16278930e-01,  1.43885095e-01,
+        -4.13720024e-01, -3.75719965e-01],
+       [ 1.76157587e+00,  3.17148933e-01,  8.90285647e-01,
+        -1.15115611e-01, -5.56668422e-01],
+       [ 9.90079102e-01, -9.40667338e-01,  3.82090801e+00,
+        -1.32156120e+00,  1.59004709e-01],
+       [ 1.77527763e+00, -6.86175134e-01, -8.67004065e-02,
+        -2.32906780e-01, -1.14294269e+00],
+       [ 1.23542396e+00,  8.98070414e-02, -1.38689654e+00,
+        -4.95682720e-01, -3.75941399e-01],
+       [ 2.18840633e+00, -6.89569621e-01,  1.39456688e+00,
+        -7.77491811e-01, -8.10584069e-01],
+       [ 2.25610898e+00, -1.91461937e-01, -1.09265726e+00,
+         2.86152299e-01, -4.83073257e-01],
+       [ 2.50022003e+00, -1.24083383e+00,  1.38601785e+00,
+        -3.66865220e-01, -6.22332864e-01],
+       [ 2.67741105e+00, -1.47187365e+00, -3.32261728e-01,
+        -3.49353875e-01, -8.65943288e-02],
+       [ 1.62857912e+00, -5.27044506e-02, -1.67128706e-01,
+        -7.49314246e-01, -6.36062749e-01],
+       [ 1.90269086e+00, -1.63306043e+00,  1.17208212e+00,
+        -2.34042904e+00, -1.86814052e-01],
+       [ 1.41038853e+00, -6.97934325e-01,  4.79743025e-01,
+        -1.06008622e+00,  9.91607444e-02],
+       [ 1.90382623e+00, -1.76710951e-01,  4.50835040e-01,
+         2.84113552e-01, -1.62949445e-01],
+       [ 1.38486223e+00, -6.58639854e-01,  4.58438581e-01,
+        -1.28465815e+00, -2.05011590e-01],
+       [ 1.12220741e+00, -1.14109760e-01, -3.91072767e-02,
+        -9.56401223e-01, -3.42211235e-01],
+       [ 1.50219450e+00,  7.69432006e-01, -1.42617735e+00,
+        -7.57508093e-01, -1.65844135e-01],
+       [ 2.52980109e+00, -1.80300198e+00, -3.43152389e-01,
+         1.18697430e+00,  1.29789571e+00],
+       [ 2.58809543e+00, -7.79616304e-01, -1.18477466e-01,
+         4.75971440e-01,  4.03322016e-01],
+       [ 6.68481994e-01, -1.69960941e-01, -7.83362548e-01,
+         1.31308378e+00, -3.71763418e-01],
+       [ 3.07080699e+00, -1.15591896e+00, -3.12758084e-01,
+         5.50284635e-01, -3.04125653e-01],
+       [ 4.62209138e-01, -3.30742132e-01, -2.01476496e-01,
+         1.43649386e+00,  2.83224877e-01],
+       [ 2.10135193e+00,  7.10089210e-02, -6.55849415e-01,
+         7.57744839e-01,  4.71537726e-01],
+       [ 1.13616618e+00, -1.77710739e+00,  2.87057358e-02,
+         6.91831212e-01, -6.09242058e-02],
+       [ 2.72660096e+00, -1.19133469e+00, -5.39773261e-01,
+         1.38955067e+00, -4.96894588e-01],
+       [ 2.82133927e+00, -6.46258599e-01, -1.15555241e+00,
+         9.87662912e-01, -9.97701769e-03],
+       [ 2.00985085e+00, -1.24702946e+00, -5.72939879e-02,
+         2.30643107e-01, -3.84651070e-01],
+       [ 2.70749130e+00, -1.75196741e+00, -6.43113612e-01,
+        -1.00231520e-01, -4.94713032e-01],
+       [ 3.21491747e+00, -1.66991995e-01, -1.97357168e+00,
+         1.12068394e+00,  1.22781973e-02],
+       [ 2.85895983e+00, -7.45278804e-01,  4.71950216e-03,
+        -2.15276557e-01, -7.58808494e-01],
+       [ 3.50560436e+00, -1.61273386e+00, -5.20774530e-01,
+         1.06536424e-01, -6.01684444e-01],
+       [ 2.22479138e+00, -1.87516800e+00,  3.39549850e-01,
+        -1.20696658e+00, -5.76644249e-01],
+       [ 2.14698782e+00, -1.01675154e+00, -9.57762762e-01,
+        -2.40318190e-01,  8.80104504e-01],
+       [ 2.46932948e+00, -1.32900831e+00,  5.13437453e-01,
+         2.55348621e-01,  9.12140102e-01],
+       [ 2.74151791e+00, -1.43654878e+00, -6.12473396e-01,
+         2.05747441e-01,  4.34263863e-01],
+       [ 2.17374092e+00, -1.21219984e+00,  2.61779593e-01,
+        -5.04426086e-01, -6.95421813e-01],
+       [ 3.13938015e+00, -1.73157912e+00, -2.85661413e-01,
+         2.30567212e-01,  7.50408361e-02],
+       [-9.28581969e-01,  3.07348616e+00, -4.58506401e+00,
+        -1.05184439e+00,  4.57124124e-01],
+       [-1.54248014e+00,  1.38144351e+00, -8.74683112e-01,
+        -2.89011975e+00, -9.78008325e-01],
+       [-1.83624976e+00,  8.29984123e-01, -1.60570219e+00,
+        -1.45210485e+00, -2.94075797e-01],
+       [ 3.06068341e-02,  1.26278614e+00, -1.78440801e+00,
+        -1.20657607e+00, -3.93604322e-01],
+       [ 2.05026161e+00,  1.92503260e+00, -7.36877735e-03,
+         7.21321903e-01, -8.11266485e-02],
+       [-6.09680827e-01,  1.90805881e+00,  6.79357938e-01,
+        -2.15307609e+00, -4.99025512e-02],
+       [ 9.00227839e-01,  7.63911474e-01,  5.73361302e-01,
+        -6.79361634e-01, -1.42633049e-01],
+       [ 2.24850719e+00,  1.88459248e+00, -2.03184019e+00,
+         1.40762723e+00, -7.32006956e-01],
+       [ 1.83384027e-01,  2.42714611e+00, -1.06974556e+00,
+         1.27417972e-01, -5.34573559e-01],
+       [-8.12805027e-01,  2.20513987e-01, -7.07005396e-01,
+        -2.48898958e+00, -5.83559831e-01],
+       [ 1.97562050e+00,  1.40328323e+00, -1.23827622e+00,
+        -1.15230649e+00,  4.18665674e+00],
+       [-1.57221622e+00,  8.84983137e-01, -6.28997950e-01,
+        -1.17184641e+00,  9.65344570e-01],
+       [ 1.65768181e+00,  9.56712197e-01,  1.95258422e+00,
+         1.52208912e-01, -7.87161183e-01],
+       [-7.25372388e-01,  1.06364540e+00,  8.03322286e-02,
+        -7.60194312e-02, -1.80165770e-01],
+       [ 2.56222717e+00, -2.60198551e-01,  3.37439396e+00,
+        -9.79399432e-01,  1.98079860e+00],
+       [ 1.83256757e+00,  1.28787820e+00,  4.58280027e-01,
+         1.71350754e-01,  1.00122223e+00],
+       [-8.67992903e-01,  2.44410119e+00, -1.56333318e+00,
+        -8.31459859e-01,  7.07979981e-01],
+       [ 3.70014404e-01,  2.15390698e+00, -2.44938635e+00,
+        -1.26159044e-01,  9.52998423e-02],
+       [-1.45737704e+00,  1.38335177e+00, -2.27306902e-01,
+        -6.96356870e-01,  1.06736218e+00],
+       [ 1.26293085e+00,  7.70849530e-01, -1.18422452e+00,
+        -9.25882244e-01,  2.61359304e+00],
+       [ 3.76150372e-01,  1.02704340e+00,  1.79446629e+00,
+         9.78544527e-01, -1.36569188e-01],
+       [ 7.62063904e-01,  3.37505381e+00, -3.57470056e-01,
+        -3.66732915e-01, -1.54440573e-01],
+       [ 1.03457797e+00,  1.45070974e+00, -3.63011773e-01,
+         2.96595780e-01, -3.05887237e-01],
+       [-4.94876756e-01,  2.38124353e+00,  1.33574318e+00,
+        -1.04097884e+00, -1.04212663e+00],
+       [-2.53897708e+00,  8.74433573e-02,  4.74251393e-01,
+         7.58601454e-01, -1.12781648e+00],
+       [ 8.35320145e-01,  1.47367055e+00,  6.10093576e-01,
+         5.82951878e-01,  8.99184784e-01],
+       [ 7.87904615e-01,  2.02662652e+00, -2.54723404e-01,
+        -8.09418080e-01,  2.58852542e-01],
+       [-8.06832156e-01,  2.23383039e+00,  7.72855797e-01,
+        -1.01371575e+00, -2.91862299e-01],
+       [-5.58042625e-01,  2.37298543e+00,  2.30761140e+00,
+        -1.03532031e+00, -4.76939508e-01],
+       [-1.11511104e+00,  1.80224719e+00,  9.59253308e-01,
+        -3.31283791e-01, -7.31510062e-01],
+       [-5.55722830e-01,  2.65754004e+00,  8.49126898e-01,
+        -3.19764133e-03, -1.34625700e+00],
+       [-1.34928528e+00,  2.11800147e+00, -4.76523208e-02,
+        -4.66250567e-01, -8.90545973e-01],
+       [-1.56448261e+00,  1.85221452e+00,  7.81067031e-01,
+        -6.05079391e-01, -5.16465365e-01],
+       [-1.93255561e+00,  1.55949546e+00, -8.92746761e-02,
+        -5.22569357e-01, -1.17369757e+00],
+       [ 7.46665942e-01,  2.31293171e+00,  1.14679769e-01,
+         1.24853870e+00,  2.62936875e-01],
+       [ 9.57455364e-01,  2.22352843e+00,  1.42444774e-01,
+         3.14042947e-01,  9.44142712e-01],
+       [ 2.54386518e+00, -1.69274023e-01,  7.88696991e-01,
+        -1.03283704e+00,  3.73107921e+00],
+       [-5.43952589e-01,  3.68926546e-01,  1.30889593e+00,
+        -1.27799856e+00,  3.34679072e+00],
+       [ 1.03104975e+00,  2.56556935e+00, -1.08639017e+00,
+         2.63860985e-01, -1.89844015e-01],
+       [ 2.25190942e+00,  1.43274138e+00, -2.30208244e-01,
+         9.21171097e-01, -2.39922932e-01],
+       [ 1.41021602e+00,  2.16619177e+00,  7.48896411e-01,
+         1.19561119e+00, -7.09857212e-01],
+       [ 7.97719793e-01,  2.37694880e+00, -1.56811253e+00,
+        -3.48163602e-02,  6.17091397e-01],
+       [-5.49531727e-01,  2.29312864e+00, -1.49893532e+00,
+        -3.07038671e-01,  3.26010934e-01],
+       [-1.61173740e-01,  1.16448332e+00,  1.00371310e+00,
+         6.61686224e-01,  3.01185142e-01],
+       [-6.59794942e-01,  2.67996119e+00, -7.64920868e-01,
+         4.69954774e-01,  1.44470385e-01],
+       [ 3.92354408e-01,  2.09873171e+00, -4.71850008e-01,
+         4.37056575e-01, -3.03810455e-01],
+       [-1.77249908e+00,  1.71728847e+00,  9.47033174e-01,
+         2.59512586e-01, -1.00482549e+00],
+       [-3.66267357e-01,  2.16935330e+00, -4.81324235e-01,
+         3.98400462e-01, -4.69051314e-01],
+       [-1.62067257e+00,  1.35558339e+00,  2.87159001e-01,
+        -2.60245460e-02, -5.69352548e-01],
+       [ 8.25357835e-02,  2.30623459e+00, -4.63574989e-01,
+         8.90351023e-01,  3.40576552e-01],
+       [ 1.57827507e+00,  1.46203429e+00,  1.77964595e+00,
+         6.13584424e-01,  2.87981736e-01],
+       [ 1.42056925e+00,  1.41820664e+00,  1.39275829e-01,
+         3.43053946e+00,  2.19688434e+00],
+       [-2.78702754e-01,  1.93056809e+00,  7.86705530e-02,
+         9.28520741e-01,  2.61495778e-01],
+       [-1.30314497e+00,  7.63172314e-01,  1.99959651e+00,
+        -1.72583588e+00, -7.34906273e-01],
+       [-4.57071866e-01,  2.26941561e+00,  1.06133897e+00,
+        -8.37432054e-01, -3.23450841e-01],
+       [-4.94185847e-01,  1.93904505e+00,  1.32393807e+00,
+        -6.15972483e-02, -8.48907529e-01],
+       [ 4.82074410e-01,  3.87178385e+00,  1.34427122e+00,
+        -8.99910492e-01, -9.32357726e-01],
+       [-2.52888878e-01,  2.82149237e+00, -3.02639785e-01,
+         4.57967101e-01,  3.71087250e-01],
+       [-1.07227638e-01,  1.92892204e+00,  6.90148243e-01,
+        -2.73722484e-01,  1.07109693e+00],
+       [-2.43301260e+00,  1.25714104e+00, -1.90302740e+00,
+         8.69731905e-01, -4.68142634e-01],
+       [-5.51089539e-01,  2.22216155e+00, -3.56228830e-01,
+         1.36331989e+00,  2.16715598e-01],
+       [ 7.39621929e-01,  1.40895667e+00,  1.12534549e+00,
+         1.20511147e+00,  4.29921233e-01],
+       [ 1.33632173e+00, -2.53336931e-01,  5.34538818e+00,
+         2.39037513e-01,  2.36502548e-01],
+       [-1.17708700e+00,  6.63966840e-01,  3.01022189e+00,
+         1.16613696e+00,  3.32728686e-01],
+       [-4.62335008e-01,  6.18288179e-01,  4.83442366e-01,
+         3.57672436e+00,  1.28821448e-01],
+       [ 9.78474079e-01,  1.44557050e+00,  1.48123697e+00,
+         3.79033509e+00,  4.99810258e-01],
+       [-9.68097263e-02,  2.10999799e+00,  4.34826116e-01,
+         1.05469528e+00, -3.11444426e-01],
+       [ 3.84871459e-02,  1.26676211e+00,  6.87577913e-01,
+         1.27288418e+00, -3.53052180e-01],
+       [-1.59715850e+00,  1.20814357e+00,  3.36117556e+00,
+        -2.19277553e-01, -6.40763433e-01],
+       [-4.79564916e-01,  1.93884066e+00,  1.29650752e+00,
+         6.86976225e-01, -6.04852194e-02],
+       [-1.79283347e+00,  1.15028810e+00,  7.82800173e-01,
+         1.47877897e+00, -5.04217973e-01],
+       [-1.32710166e+00, -1.70389232e-01, -1.18001336e+00,
+        -1.50170981e+00,  2.30529033e+00],
+       [-2.38450083e+00, -3.74582606e-01, -7.23822595e-01,
+        -3.08194983e-01,  1.33963198e+00],
+       [-2.93694010e+00, -2.63861830e-01, -1.67639816e-01,
+        -4.08773422e-01,  1.08780606e+00],
+       [-2.14681113e+00, -3.68254952e-01, -4.53301301e-01,
+         4.85275651e-02,  1.72663205e+00],
+       [-2.36986949e+00,  4.59634809e-01, -1.10139979e+00,
+        -8.56777335e-01, -1.06700654e+00],
+       [-3.06384157e+00, -3.53412835e-01, -1.09912410e+00,
+        -7.40398132e-01, -7.37708034e-01],
+       [-3.91575378e+00, -1.54582519e-01,  2.21827800e-01,
+        -9.06832745e-03, -3.62728736e-01],
+       [-3.93646339e+00, -6.59687233e-01,  1.71221542e+00,
+         5.45483801e-01, -5.37324815e-01],
+       [-3.09427612e+00, -3.48842759e-01, -1.02683141e+00,
+        -7.13492080e-02, -1.05934986e+00],
+       [-2.37447163e+00, -2.91980352e-01,  1.24191433e+00,
+        -7.48805540e-01, -4.15579113e-01],
+       [-2.77881295e+00, -2.86804873e-01,  6.09670124e-01,
+        -8.79346886e-01, -5.54423936e-01],
+       [-2.28656128e+00, -3.72507845e-01, -9.71643032e-01,
+        -3.71437736e-01, -3.38092368e-01],
+       [-2.98563349e+00, -4.89217908e-01,  9.46952932e-01,
+        -1.03622559e+00, -5.85146743e-01],
+       [-2.37519470e+00, -4.82333717e-01, -2.52883994e-01,
+         6.71149264e-01, -6.28091905e-01],
+       [-2.20986553e+00, -1.16005250e+00, -1.24512523e+00,
+         3.18838188e-01,  1.68869340e+00],
+       [-2.62562100e+00, -5.63160764e-01, -8.55961082e-01,
+         2.75684026e-01,  6.51112208e-01],
+       [-4.28063878e+00, -6.49670964e-01, -1.45819696e+00,
+         1.12816430e+00, -3.59554250e-01],
+       [-3.58264137e+00, -1.27270275e+00, -1.10784038e-01,
+         1.04990904e+00, -5.23551900e-01],
+       [-2.80706372e+00, -1.57053379e+00, -4.72527935e-01,
+         6.27358450e-01, -2.60172997e-01],
+       [-2.89965933e+00, -2.04105701e+00, -4.95959810e-01,
+         4.71155615e-01,  1.43887721e+00],
+       [-2.32073698e+00, -2.35636608e+00,  4.37681744e-01,
+        -5.22597755e-02,  2.23442719e+00],
+       [-2.54983095e+00, -2.04528309e+00, -3.12267999e-01,
+         3.86971682e-01,  1.84752262e+00],
+       [-1.81254128e+00, -1.52764595e+00,  1.36258978e+00,
+        -1.89395906e-01,  1.74938720e+00],
+       [-2.76014464e+00, -2.13893235e+00, -9.64628688e-01,
+         6.68386112e-01, -4.77041693e-01],
+       [-2.73715050e+00, -4.09886271e-01, -1.19040468e+00,
+        -6.63045204e-01,  4.59036777e-01],
+       [-3.60486887e+00, -1.80238422e+00, -9.40368613e-02,
+         1.26884047e+00, -6.09465332e-01],
+       [-2.88982600e+00, -1.92521861e+00, -7.82322556e-01,
+         1.32472540e+00, -5.71242955e-01],
+       [-3.39215608e+00, -1.31187639e+00,  1.60202597e+00,
+        -4.82842144e-01, -6.70871384e-01],
+       [-1.04818190e+00, -3.51508969e+00,  1.16003857e+00,
+         9.35329394e-01, -8.99448535e-01],
+       [-1.60991228e+00, -2.40663816e+00,  5.48559697e-01,
+         7.54309684e-01, -9.95206846e-01],
+       [-3.14313097e+00, -7.38161044e-01, -9.09987239e-02,
+         9.80647845e-01, -4.09813519e-01],
+       [-2.24015690e+00, -1.17546529e+00, -1.01376932e-01,
+        -1.16527872e+00, -2.64449292e-01],
+       [-2.84767378e+00, -5.56043966e-01,  8.04215218e-01,
+        -8.97888066e-01, -2.54801317e-01],
+       [-2.59749706e+00, -6.97965537e-01, -8.84939521e-01,
+        -2.74228748e-01,  7.72235497e-01],
+       [-2.94929937e+00, -1.55530896e+00, -9.83400727e-01,
+         1.54803469e-02, -3.64082110e-01],
+       [-3.53003227e+00, -8.82526796e-01, -4.66029128e-01,
+         5.80789625e-01, -6.68959720e-01],
+       [-2.40611054e+00, -2.59235618e+00,  4.28226211e-01,
+        -1.84335092e-01,  4.47661124e-01],
+       [-2.92908473e+00, -1.27444695e+00, -1.21335827e+00,
+         2.95316047e-01, -2.67349928e-01],
+       [-2.18141278e+00, -2.07753731e+00,  7.63782552e-01,
+        -3.89593322e-01,  3.59873602e-01],
+       [-2.38092779e+00, -2.58866743e+00,  1.41804403e+00,
+         5.88501936e-01,  1.12799681e+00],
+       [-3.21161722e+00,  2.51249104e-01, -8.47129152e-01,
+        -2.17065355e-01,  6.09095215e-01],
+       [-3.67791872e+00, -8.47747844e-01, -1.33942023e+00,
+        -1.25175865e-01, -4.86111933e-01],
+       [-2.46555580e+00, -2.19379830e+00, -9.18780960e-01,
+         1.80249950e-02, -7.01209522e-01],
+       [-3.37052415e+00, -2.21628914e+00, -3.42569512e-01,
+         1.05852684e+00, -5.74163899e-01],
+       [-2.60195585e+00, -1.75722935e+00,  2.07581355e-01,
+         3.49496422e-01,  2.55063178e-01],
+       [-2.67783946e+00, -2.76089913e+00, -9.40941877e-01,
+         3.12034746e-01,  1.27135500e+00],
+       [-2.38701709e+00, -2.29734668e+00, -5.50696197e-01,
+        -6.88284548e-01,  8.13955219e-01],
+       [-3.20875816e+00, -2.76891957e+00,  1.01391366e+00,
+         5.96903186e-01, -8.95192588e-01]])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="8dcbbc8fee5b494bbc5f25767c021c38" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:199}" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1667515116408" data-source_hash="4288c009" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>X_train_pca, X_test_pca, y_train, y_test <span class="op">=</span> train_test_split(X_pca, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="8db52b82129b4ce480206e4c34315d46" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:205}" data-deepnote_cell_type="code" data-execution_millis="1225" data-execution_start="1667515116455" data-outputid="6d5788ba-49e7-4417-d93b-2e73c451d2b2" data-source_hash="827f9d98" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train_pca, y_train)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>model.score(X_test_pca, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>0.9722222222222222</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion-with-80-information-5-features-we-achieved-97.2-accuracy." class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-with-80-information-5-features-we-achieved-97.2-accuracy.">Conclusion, with 80% information (5 features), we achieved 97.2% accuracy.</h2>
+</section>
+</section>
+<section id="round-4-use-pca-with-2-features-for-analysis" class="level1">
+<h1>Round 4: Use PCA with 2 features for analysis</h1>
+<section id="keep-only-2-features-pca-for-dimension-deduction" class="level2">
+<h2 class="anchored" data-anchor-id="keep-only-2-features-pca-for-dimension-deduction">Keep only 2 features PCA for dimension deduction</h2>
+<div class="cell" data-cell_id="1b233777b85849bd8d5c6a664925b590" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:229}" data-deepnote_cell_type="code" data-execution_millis="1224" data-execution_start="1667515116456" data-outputid="fabf5d94-5027-4b31-ca33-1ef92a1b49f9" data-source_hash="b2696ff6" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>array([[ 1.51861254, -0.5622498 ,  0.23205254, ...,  0.36217728,
+         1.84791957,  1.01300893],
+       [ 0.24628963, -0.49941338, -0.82799632, ...,  0.40605066,
+         1.1134493 ,  0.96524152],
+       [ 0.19687903,  0.02123125,  1.10933436, ...,  0.31830389,
+         0.78858745,  1.39514818],
+       ...,
+       [ 0.33275817,  1.74474449, -0.38935541, ..., -1.61212515,
+        -1.48544548,  0.28057537],
+       [ 0.20923168,  0.22769377,  0.01273209, ..., -1.56825176,
+        -1.40069891,  0.29649784],
+       [ 1.39508604,  1.58316512,  1.36520822, ..., -1.52437837,
+        -1.42894777, -0.59516041]])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="24e9de157f4e409f969cb69f9003a247" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:235}" data-deepnote_cell_type="code" data-execution_millis="1224" data-execution_start="1667515116457" data-outputid="979c22dd-5d26-4f22-efc1-0299a2da3526" data-source_hash="83f8c40" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>X.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>(178, 13)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="c04965afd59f4df599d90a7f02b47f18" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:241}" data-deepnote_cell_type="code" data-execution_millis="1191" data-execution_start="1667515116491" data-outputid="24529ece-6948-457b-b941-3395fdb253a6" data-source_hash="230c03b0" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>X_pca <span class="op">=</span> pca.fit_transform(X)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>X_pca.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>(178, 2)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="c9bc160403ce4b76b7e73acbdf9b884c" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:247}" data-deepnote_cell_type="code" data-execution_millis="1191" data-execution_start="1667515116492" data-outputid="9880d753-9706-4717-be26-bbb6ca654618" data-source_hash="e1bd05f4" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>pca.explained_variance_ratio_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>array([0.36198848, 0.1920749 ])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="bbf90168c18643e0a9d747ebaf45e40e" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:253}" data-deepnote_cell_type="code" data-execution_millis="1189" data-execution_start="1667515116495" data-outputid="1d2bdfe4-4d30-4b92-8ec1-6287c4e919c3" data-source_hash="96e43f00" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>pca.n_components_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>2</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="262182534dbf48cc842b678037c79f40" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:259}" data-deepnote_cell_type="code" data-execution_millis="1189" data-execution_start="1667515116496" data-outputid="78d1f940-07d1-4e1e-9d6b-871285dbe350" data-source_hash="e932fda7" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>X_pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>array([[ 3.31675081, -1.44346263],
+       [ 2.20946492,  0.33339289],
+       [ 2.51674015, -1.0311513 ],
+       [ 3.75706561, -2.75637191],
+       [ 1.00890849, -0.86983082],
+       [ 3.05025392, -2.12240111],
+       [ 2.44908967, -1.17485013],
+       [ 2.05943687, -1.60896307],
+       [ 2.5108743 , -0.91807096],
+       [ 2.75362819, -0.78943767],
+       [ 3.47973668, -1.30233324],
+       [ 1.7547529 , -0.61197723],
+       [ 2.11346234, -0.67570634],
+       [ 3.45815682, -1.13062988],
+       [ 4.31278391, -2.09597558],
+       [ 2.3051882 , -1.66255173],
+       [ 2.17195527, -2.32730534],
+       [ 1.89897118, -1.63136888],
+       [ 3.54198508, -2.51834367],
+       [ 2.0845222 , -1.06113799],
+       [ 3.12440254, -0.78689711],
+       [ 1.08657007, -0.24174355],
+       [ 2.53522408,  0.09184062],
+       [ 1.64498834,  0.51627893],
+       [ 1.76157587,  0.31714893],
+       [ 0.9900791 , -0.94066734],
+       [ 1.77527763, -0.68617513],
+       [ 1.23542396,  0.08980704],
+       [ 2.18840633, -0.68956962],
+       [ 2.25610898, -0.19146194],
+       [ 2.50022003, -1.24083383],
+       [ 2.67741105, -1.47187365],
+       [ 1.62857912, -0.05270445],
+       [ 1.90269086, -1.63306043],
+       [ 1.41038853, -0.69793432],
+       [ 1.90382623, -0.17671095],
+       [ 1.38486223, -0.65863985],
+       [ 1.12220741, -0.11410976],
+       [ 1.5021945 ,  0.76943201],
+       [ 2.52980109, -1.80300198],
+       [ 2.58809543, -0.7796163 ],
+       [ 0.66848199, -0.16996094],
+       [ 3.07080699, -1.15591896],
+       [ 0.46220914, -0.33074213],
+       [ 2.10135193,  0.07100892],
+       [ 1.13616618, -1.77710739],
+       [ 2.72660096, -1.19133469],
+       [ 2.82133927, -0.6462586 ],
+       [ 2.00985085, -1.24702946],
+       [ 2.7074913 , -1.75196741],
+       [ 3.21491747, -0.16699199],
+       [ 2.85895983, -0.7452788 ],
+       [ 3.50560436, -1.61273386],
+       [ 2.22479138, -1.875168  ],
+       [ 2.14698782, -1.01675154],
+       [ 2.46932948, -1.32900831],
+       [ 2.74151791, -1.43654878],
+       [ 2.17374092, -1.21219984],
+       [ 3.13938015, -1.73157912],
+       [-0.92858197,  3.07348616],
+       [-1.54248014,  1.38144351],
+       [-1.83624976,  0.82998412],
+       [ 0.03060683,  1.26278614],
+       [ 2.05026161,  1.9250326 ],
+       [-0.60968083,  1.90805881],
+       [ 0.90022784,  0.76391147],
+       [ 2.24850719,  1.88459248],
+       [ 0.18338403,  2.42714611],
+       [-0.81280503,  0.22051399],
+       [ 1.9756205 ,  1.40328323],
+       [-1.57221622,  0.88498314],
+       [ 1.65768181,  0.9567122 ],
+       [-0.72537239,  1.0636454 ],
+       [ 2.56222717, -0.26019855],
+       [ 1.83256757,  1.2878782 ],
+       [-0.8679929 ,  2.44410119],
+       [ 0.3700144 ,  2.15390698],
+       [-1.45737704,  1.38335177],
+       [ 1.26293085,  0.77084953],
+       [ 0.37615037,  1.0270434 ],
+       [ 0.7620639 ,  3.37505381],
+       [ 1.03457797,  1.45070974],
+       [-0.49487676,  2.38124353],
+       [-2.53897708,  0.08744336],
+       [ 0.83532015,  1.47367055],
+       [ 0.78790461,  2.02662652],
+       [-0.80683216,  2.23383039],
+       [-0.55804262,  2.37298543],
+       [-1.11511104,  1.80224719],
+       [-0.55572283,  2.65754004],
+       [-1.34928528,  2.11800147],
+       [-1.56448261,  1.85221452],
+       [-1.93255561,  1.55949546],
+       [ 0.74666594,  2.31293171],
+       [ 0.95745536,  2.22352843],
+       [ 2.54386518, -0.16927402],
+       [-0.54395259,  0.36892655],
+       [ 1.03104975,  2.56556935],
+       [ 2.25190942,  1.43274138],
+       [ 1.41021602,  2.16619177],
+       [ 0.79771979,  2.3769488 ],
+       [-0.54953173,  2.29312864],
+       [-0.16117374,  1.16448332],
+       [-0.65979494,  2.67996119],
+       [ 0.39235441,  2.09873171],
+       [-1.77249908,  1.71728847],
+       [-0.36626736,  2.1693533 ],
+       [-1.62067257,  1.35558339],
+       [ 0.08253578,  2.30623459],
+       [ 1.57827507,  1.46203429],
+       [ 1.42056925,  1.41820664],
+       [-0.27870275,  1.93056809],
+       [-1.30314497,  0.76317231],
+       [-0.45707187,  2.26941561],
+       [-0.49418585,  1.93904505],
+       [ 0.48207441,  3.87178385],
+       [-0.25288888,  2.82149237],
+       [-0.10722764,  1.92892204],
+       [-2.4330126 ,  1.25714104],
+       [-0.55108954,  2.22216155],
+       [ 0.73962193,  1.40895667],
+       [ 1.33632173, -0.25333693],
+       [-1.177087  ,  0.66396684],
+       [-0.46233501,  0.61828818],
+       [ 0.97847408,  1.4455705 ],
+       [-0.09680973,  2.10999799],
+       [ 0.03848715,  1.26676211],
+       [-1.5971585 ,  1.20814357],
+       [-0.47956492,  1.93884066],
+       [-1.79283347,  1.1502881 ],
+       [-1.32710166, -0.17038923],
+       [-2.38450083, -0.37458261],
+       [-2.9369401 , -0.26386183],
+       [-2.14681113, -0.36825495],
+       [-2.36986949,  0.45963481],
+       [-3.06384157, -0.35341284],
+       [-3.91575378, -0.15458252],
+       [-3.93646339, -0.65968723],
+       [-3.09427612, -0.34884276],
+       [-2.37447163, -0.29198035],
+       [-2.77881295, -0.28680487],
+       [-2.28656128, -0.37250784],
+       [-2.98563349, -0.48921791],
+       [-2.3751947 , -0.48233372],
+       [-2.20986553, -1.1600525 ],
+       [-2.625621  , -0.56316076],
+       [-4.28063878, -0.64967096],
+       [-3.58264137, -1.27270275],
+       [-2.80706372, -1.57053379],
+       [-2.89965933, -2.04105701],
+       [-2.32073698, -2.35636608],
+       [-2.54983095, -2.04528309],
+       [-1.81254128, -1.52764595],
+       [-2.76014464, -2.13893235],
+       [-2.7371505 , -0.40988627],
+       [-3.60486887, -1.80238422],
+       [-2.889826  , -1.92521861],
+       [-3.39215608, -1.31187639],
+       [-1.0481819 , -3.51508969],
+       [-1.60991228, -2.40663816],
+       [-3.14313097, -0.73816104],
+       [-2.2401569 , -1.17546529],
+       [-2.84767378, -0.55604397],
+       [-2.59749706, -0.69796554],
+       [-2.94929937, -1.55530896],
+       [-3.53003227, -0.8825268 ],
+       [-2.40611054, -2.59235618],
+       [-2.92908473, -1.27444695],
+       [-2.18141278, -2.07753731],
+       [-2.38092779, -2.58866743],
+       [-3.21161722,  0.2512491 ],
+       [-3.67791872, -0.84774784],
+       [-2.4655558 , -2.1937983 ],
+       [-3.37052415, -2.21628914],
+       [-2.60195585, -1.75722935],
+       [-2.67783946, -2.76089913],
+       [-2.38701709, -2.29734668],
+       [-3.20875816, -2.76891957]])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="b48d8443b129485480c5bc9f6294ba66" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:265}" data-deepnote_cell_type="code" data-execution_start="1667515116517" data-source_hash="4288c009" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>X_train_pca, X_test_pca, y_train, y_test <span class="op">=</span> train_test_split(X_pca, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="867424d8352c4825bc856f8d41626b17" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:271}" data-deepnote_cell_type="code" data-execution_millis="1169" data-execution_start="1667515116518" data-outputid="e6894f1c-0ca3-415f-bb3c-288f2642a99f" data-source_hash="827f9d98" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train_pca, y_train)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>model.score(X_test_pca, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>0.9722222222222222</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion-with-2-features-we-achieved-96.2-accuracy." class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-with-2-features-we-achieved-96.2-accuracy.">Conclusion, with 2 features, we achieved 96.2% accuracy.</h2>
+</section>
+</section>
+<section id="round-5-use-pca-with-1-features-for-analysis" class="level1">
+<h1>Round 5: Use PCA with 1 features for analysis</h1>
+<section id="keep-1-features-pca-for-dimension-deduction" class="level2">
+<h2 class="anchored" data-anchor-id="keep-1-features-pca-for-dimension-deduction">Keep 1 features PCA for dimension deduction</h2>
+<div class="cell" data-cell_id="45577d0c2b274c41a66253224ed9c403" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:295}" data-deepnote_cell_type="code" data-execution_millis="1168" data-execution_start="1667515116519" data-outputid="dced15ee-c24b-47cd-ec2a-930c4a0a9697" data-source_hash="b2696ff6" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>array([[ 1.51861254, -0.5622498 ,  0.23205254, ...,  0.36217728,
+         1.84791957,  1.01300893],
+       [ 0.24628963, -0.49941338, -0.82799632, ...,  0.40605066,
+         1.1134493 ,  0.96524152],
+       [ 0.19687903,  0.02123125,  1.10933436, ...,  0.31830389,
+         0.78858745,  1.39514818],
+       ...,
+       [ 0.33275817,  1.74474449, -0.38935541, ..., -1.61212515,
+        -1.48544548,  0.28057537],
+       [ 0.20923168,  0.22769377,  0.01273209, ..., -1.56825176,
+        -1.40069891,  0.29649784],
+       [ 1.39508604,  1.58316512,  1.36520822, ..., -1.52437837,
+        -1.42894777, -0.59516041]])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="5a8ee15e3ad64bd99a35bd729d8a0e1d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:301}" data-deepnote_cell_type="code" data-execution_millis="1160" data-execution_start="1667515116528" data-outputid="7eacc7e7-e0d6-4421-e1c9-8a44fd96542c" data-source_hash="83f8c40" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>X.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>(178, 13)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="c4e881eb0d744bc7a76b3cbbaa825851" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:307}" data-deepnote_cell_type="code" data-execution_millis="1158" data-execution_start="1667515116530" data-outputid="258602d1-3173-4d6a-b7e3-e41eafb1b63d" data-source_hash="8657bd2" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>X_pca <span class="op">=</span> pca.fit_transform(X)</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>X_pca.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<pre><code>(178, 1)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="818f2c8077584c588a7a169839732464" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:313}" data-deepnote_cell_type="code" data-execution_millis="1119" data-execution_start="1667515116574" data-outputid="b8f04f14-94c4-4bb8-f7ab-60e46a8edab1" data-source_hash="e1bd05f4" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>pca.explained_variance_ratio_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<pre><code>array([0.36198848])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="d2e0cc3c15f64970a7d28a170f1df1d3" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:319}" data-deepnote_cell_type="code" data-execution_millis="1110" data-execution_start="1667515116583" data-outputid="16390a23-2ca1-48de-e284-dbf7b22005f4" data-source_hash="96e43f00" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>pca.n_components_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>1</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="fb39ecb9ba8b4f93b93e36c173dad264" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:325}" data-deepnote_cell_type="code" data-execution_millis="1106" data-execution_start="1667515116588" data-outputid="9ac4c3e9-ccd9-4770-a52e-51af485512eb" data-source_hash="e932fda7" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>X_pca</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>array([[ 3.31675081],
+       [ 2.20946492],
+       [ 2.51674015],
+       [ 3.75706561],
+       [ 1.00890849],
+       [ 3.05025392],
+       [ 2.44908967],
+       [ 2.05943687],
+       [ 2.5108743 ],
+       [ 2.75362819],
+       [ 3.47973668],
+       [ 1.7547529 ],
+       [ 2.11346234],
+       [ 3.45815682],
+       [ 4.31278391],
+       [ 2.3051882 ],
+       [ 2.17195527],
+       [ 1.89897118],
+       [ 3.54198508],
+       [ 2.0845222 ],
+       [ 3.12440254],
+       [ 1.08657007],
+       [ 2.53522408],
+       [ 1.64498834],
+       [ 1.76157587],
+       [ 0.9900791 ],
+       [ 1.77527763],
+       [ 1.23542396],
+       [ 2.18840633],
+       [ 2.25610898],
+       [ 2.50022003],
+       [ 2.67741105],
+       [ 1.62857912],
+       [ 1.90269086],
+       [ 1.41038853],
+       [ 1.90382623],
+       [ 1.38486223],
+       [ 1.12220741],
+       [ 1.5021945 ],
+       [ 2.52980109],
+       [ 2.58809543],
+       [ 0.66848199],
+       [ 3.07080699],
+       [ 0.46220914],
+       [ 2.10135193],
+       [ 1.13616618],
+       [ 2.72660096],
+       [ 2.82133927],
+       [ 2.00985085],
+       [ 2.7074913 ],
+       [ 3.21491747],
+       [ 2.85895983],
+       [ 3.50560436],
+       [ 2.22479138],
+       [ 2.14698782],
+       [ 2.46932948],
+       [ 2.74151791],
+       [ 2.17374092],
+       [ 3.13938015],
+       [-0.92858197],
+       [-1.54248014],
+       [-1.83624976],
+       [ 0.03060683],
+       [ 2.05026161],
+       [-0.60968083],
+       [ 0.90022784],
+       [ 2.24850719],
+       [ 0.18338403],
+       [-0.81280503],
+       [ 1.9756205 ],
+       [-1.57221622],
+       [ 1.65768181],
+       [-0.72537239],
+       [ 2.56222717],
+       [ 1.83256757],
+       [-0.8679929 ],
+       [ 0.3700144 ],
+       [-1.45737704],
+       [ 1.26293085],
+       [ 0.37615037],
+       [ 0.7620639 ],
+       [ 1.03457797],
+       [-0.49487676],
+       [-2.53897708],
+       [ 0.83532015],
+       [ 0.78790461],
+       [-0.80683216],
+       [-0.55804262],
+       [-1.11511104],
+       [-0.55572283],
+       [-1.34928528],
+       [-1.56448261],
+       [-1.93255561],
+       [ 0.74666594],
+       [ 0.95745536],
+       [ 2.54386518],
+       [-0.54395259],
+       [ 1.03104975],
+       [ 2.25190942],
+       [ 1.41021602],
+       [ 0.79771979],
+       [-0.54953173],
+       [-0.16117374],
+       [-0.65979494],
+       [ 0.39235441],
+       [-1.77249908],
+       [-0.36626736],
+       [-1.62067257],
+       [ 0.08253578],
+       [ 1.57827507],
+       [ 1.42056925],
+       [-0.27870275],
+       [-1.30314497],
+       [-0.45707187],
+       [-0.49418585],
+       [ 0.48207441],
+       [-0.25288888],
+       [-0.10722764],
+       [-2.4330126 ],
+       [-0.55108954],
+       [ 0.73962193],
+       [ 1.33632173],
+       [-1.177087  ],
+       [-0.46233501],
+       [ 0.97847408],
+       [-0.09680973],
+       [ 0.03848715],
+       [-1.5971585 ],
+       [-0.47956492],
+       [-1.79283347],
+       [-1.32710166],
+       [-2.38450083],
+       [-2.9369401 ],
+       [-2.14681113],
+       [-2.36986949],
+       [-3.06384157],
+       [-3.91575378],
+       [-3.93646339],
+       [-3.09427612],
+       [-2.37447163],
+       [-2.77881295],
+       [-2.28656128],
+       [-2.98563349],
+       [-2.3751947 ],
+       [-2.20986553],
+       [-2.625621  ],
+       [-4.28063878],
+       [-3.58264137],
+       [-2.80706372],
+       [-2.89965933],
+       [-2.32073698],
+       [-2.54983095],
+       [-1.81254128],
+       [-2.76014464],
+       [-2.7371505 ],
+       [-3.60486887],
+       [-2.889826  ],
+       [-3.39215608],
+       [-1.0481819 ],
+       [-1.60991228],
+       [-3.14313097],
+       [-2.2401569 ],
+       [-2.84767378],
+       [-2.59749706],
+       [-2.94929937],
+       [-3.53003227],
+       [-2.40611054],
+       [-2.92908473],
+       [-2.18141278],
+       [-2.38092779],
+       [-3.21161722],
+       [-3.67791872],
+       [-2.4655558 ],
+       [-3.37052415],
+       [-2.60195585],
+       [-2.67783946],
+       [-2.38701709],
+       [-3.20875816]])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="cc82a45245854d2d86729c577062ea74" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:331}" data-deepnote_cell_type="code" data-execution_millis="1" data-execution_start="1667515116638" data-source_hash="4288c009" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>X_train_pca, X_test_pca, y_train, y_test <span class="op">=</span> train_test_split(X_pca, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="0fbcb054810a4fce91706dd23cd64bf8" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:337}" data-deepnote_cell_type="code" data-execution_millis="1055" data-execution_start="1667515116640" data-outputid="475477d9-4da0-4c40-b546-d09ecc1f7177" data-source_hash="827f9d98" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train_pca, y_train)</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>model.score(X_test_pca, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<pre><code>0.8888888888888888</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion-with-just-1-feature-we-achieved-88.9-accuracy." class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-with-just-1-feature-we-achieved-88.9-accuracy.">Conclusion, with just 1 feature, we achieved 88.9% accuracy.</h2>
+<p><a style="text-decoration:none;line-height:16px;display:flex;color:#5B5B62;padding:10px;justify-content:end;" href="https://deepnote.com?utm_source=created-in-deepnote-cell&amp;projectId=82f95966-9282-42e3-b2bd-9b459342edbc" target="_blank"> <img alt="Created in deepnote.com" style="display:inline;max-height:16px;margin:0px;margin-right:7.5px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODBweCIgaGVpZ2h0PSI4MHB4IiB2aWV3Qm94PSIwIDAgODAgODAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDU0LjEgKDc2NDkwKSAtIGh0dHBzOi8vc2tldGNoYXBwLmNvbSAtLT4KICAgIDx0aXRsZT5Hcm91cCAzPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGcgaWQ9IkxhbmRpbmciIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJBcnRib2FyZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTEyMzUuMDAwMDAwLCAtNzkuMDAwMDAwKSI+CiAgICAgICAgICAgIDxnIGlkPSJHcm91cC0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjM1LjAwMDAwMCwgNzkuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICA8cG9seWdvbiBpZD0iUGF0aC0yMCIgZmlsbD0iIzAyNjVCNCIgcG9pbnRzPSIyLjM3NjIzNzYyIDgwIDM4LjA0NzY2NjcgODAgNTcuODIxNzgyMiA3My44MDU3NTkyIDU3LjgyMTc4MjIgMzIuNzU5MjczOSAzOS4xNDAyMjc4IDMxLjY4MzE2ODMiPjwvcG9seWdvbj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0zNS4wMDc3MTgsODAgQzQyLjkwNjIwMDcsNzYuNDU0OTM1OCA0Ny41NjQ5MTY3LDcxLjU0MjI2NzEgNDguOTgzODY2LDY1LjI2MTk5MzkgQzUxLjExMjI4OTksNTUuODQxNTg0MiA0MS42NzcxNzk1LDQ5LjIxMjIyODQgMjUuNjIzOTg0Niw0OS4yMTIyMjg0IEMyNS40ODQ5Mjg5LDQ5LjEyNjg0NDggMjkuODI2MTI5Niw0My4yODM4MjQ4IDM4LjY0NzU4NjksMzEuNjgzMTY4MyBMNzIuODcxMjg3MSwzMi41NTQ0MjUgTDY1LjI4MDk3Myw2Ny42NzYzNDIxIEw1MS4xMTIyODk5LDc3LjM3NjE0NCBMMzUuMDA3NzE4LDgwIFoiIGlkPSJQYXRoLTIyIiBmaWxsPSIjMDAyODY4Ij48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMCwzNy43MzA0NDA1IEwyNy4xMTQ1MzcsMC4yNTcxMTE0MzYgQzYyLjM3MTUxMjMsLTEuOTkwNzE3MDEgODAsMTAuNTAwMzkyNyA4MCwzNy43MzA0NDA1IEM4MCw2NC45NjA0ODgyIDY0Ljc3NjUwMzgsNzkuMDUwMzQxNCAzNC4zMjk1MTEzLDgwIEM0Ny4wNTUzNDg5LDc3LjU2NzA4MDggNTMuNDE4MjY3Nyw3MC4zMTM2MTAzIDUzLjQxODI2NzcsNTguMjM5NTg4NSBDNTMuNDE4MjY3Nyw0MC4xMjg1NTU3IDM2LjMwMzk1NDQsMzcuNzMwNDQwNSAyNS4yMjc0MTcsMzcuNzMwNDQwNSBDMTcuODQzMDU4NiwzNy43MzA0NDA1IDkuNDMzOTE5NjYsMzcuNzMwNDQwNSAwLDM3LjczMDQ0MDUgWiIgaWQ9IlBhdGgtMTkiIGZpbGw9IiMzNzkzRUYiPjwvcGF0aD4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+">  Created in <span style="font-weight:600;margin-left:4px;">Deepnote</span></a></p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
