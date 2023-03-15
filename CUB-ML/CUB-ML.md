@@ -7,10 +7,11 @@ permalink: /CUB-ML
 # [CU Boulder](../CUB.md): Machine Learning
 (Spring 2023) Machine learning with Dr. Ami Gates at CU Boulder
 
-Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/))
+Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/)
 - Reference: Professor Ami Gates, Dept. Applied Math, Data Science, University of Colorado
 - All pages of raw-code = unedited code as obtained from Dr. Gates' website
-- All markdown versions = versions of Dr. Gates' code cleaned up into a notebook or markdown of somesort (Jupyter or Quarto) edited by me
+- All markdown versions = versions of Dr. Gates' code cleaned up into a notebook or markdown of somesort (Jupyter or Quarto) edited by me (Jasmine) to show code output, etc.
+
 ## Data Preprocessing (Cleaning, EDA, Visualizations)
 
 (Not all codes made available yet on her site - 3/14/2023)

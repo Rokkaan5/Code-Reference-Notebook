@@ -1,11 +1,14 @@
 ---
 layout: page
 title: "Gates ARM Raw-code"
-permalink: /CUB-ML/Raw-Code/Gates-ARM-code
+permalink: /CUB-ML/Raw/Gates-ARM-code
 ---
 
 # Association Rule Mining - Dr. Gates' full, raw (unedited) code
-[https://gatesboltonanalytics.com/?page_id=268]
+Reference: Professor Ami Gates, Dept. Applied Math, Data Science, University of Colorado
+
+[Dr. Gates' Website](https://gatesboltonanalytics.com/)
+
 ```r
 ####################################################
 ###
