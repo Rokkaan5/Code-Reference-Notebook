@@ -9,7 +9,7 @@ permalink: /CUB-ML
 
 Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/))
 
-## [Clustering](CUB-ML/Clustering/CUB-ML_Clustering.md)
+## [Clustering](CUB-ML_Clustering.md)
 
 ### in R
 (Raw code files in GitHub Repo)
@@ -32,7 +32,7 @@ GatesClustering2.py = Clustering using various data types (corpus directory, and
 
 - [Jupyter html of Clustering example-2 (python) code](CUB-ML/Clust2.html)
 
-## [Association Rule Mining](CUB-ML/ARM/CUB-ML_ARM.md)
+## [Association Rule Mining](CUB-ML_ARM.md)
 
 Prof Gate's ARM code in R provides examples of ARM applications, apriori algorithms, and creating interactive figures
 
