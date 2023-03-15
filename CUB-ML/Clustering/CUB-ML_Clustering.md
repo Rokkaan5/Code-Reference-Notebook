@@ -16,9 +16,9 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 - Partitional and hierarchical clustering using csv and corpus txt file data.
 
-**Clustering-ex2.R** (Markdown,[Raw](Raw/R-Clustering-Ex2-Raw.md) = Document similarity
+**Clustering-ex2.R** (Markdown,[Raw](Raw/R-Clustering-Ex2-Raw.md)) = Document similarity
 
-**Clustering-ex3.R** (Markdown,[Raw](Raw/R-Clustering-Ex3-Raw-R.md) = Text Mining and NLP Tutorial
+**Clustering-ex3.R** (Markdown,[Raw](Raw/R-Clustering-Ex3-Raw-R.md)) = Text Mining and NLP Tutorial
 
 ### Python
 
