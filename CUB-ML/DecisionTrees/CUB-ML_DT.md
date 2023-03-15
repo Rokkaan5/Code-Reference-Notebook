@@ -1,0 +1,18 @@
+---
+layout: page
+title: "CUB-ML Decision Trees"
+permalink: /CUB-ML/DecisionTrees
+---
+## [CU Boulder: Machine Learning](../CUB-ML.md) - Decision Trees
+Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/)
+- Reference: Professor Ami Gates, Dept. Applied Math, Data Science, University of Colorado
+- All pages of raw-code = unedited code as obtained from Dr. Gates' website
+- All markdown versions = versions of Dr. Gates' code cleaned up into a notebook or markdown of somesort (Jupyter or Quarto) edited by me (Jasmine) to show code output, etc.
+
+### in R
+- Example 1 (Markdown, Raw): Decision Trees in R using labeled record data - and visualizations
+- Example 2 (Markdown, Raw): Decision Trees for text data in R and visualizations
+- Example 3 (Markdown, Raw): Decision Trees for mixed data types (clean record data and numeric text corpus)
+### Python
+
+
