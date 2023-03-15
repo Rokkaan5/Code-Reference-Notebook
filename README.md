@@ -15,6 +15,7 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 ## Material by topics:
 (Organizing soon)
 
+(Ideally build these after all course specific pages are finished (and copy and paste from those subpages))
 ### Language basics:
 
 - Python Packages

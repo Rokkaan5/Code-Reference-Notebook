@@ -5,7 +5,7 @@ permalink: /CUB-ML
 toc: true
 ---
 
-# CU Boulder: Machine Learning
+# [CU Boulder](../CUB.md): Machine Learning
 (Spring 2023) Machine learning with Dr. Ami Gates at CU Boulder
 
 Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/))
