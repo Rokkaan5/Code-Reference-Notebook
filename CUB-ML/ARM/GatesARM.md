@@ -5,7 +5,7 @@ permalink: /CUB-ML/Gates-ARM-code
 ---
 
 # Association Rule Mining
-
+Dr. Gates' ARM code example - full raw code
 ```r
 ####################################################
 ###

@@ -9,6 +9,8 @@ toc: true
 (Spring 2023) Machine learning with Dr. Ami Gates at CU Boulder
 
 Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/))
+- All pages of raw-code = unedited code as obtained from Dr. Gates' website
+- All markdown versions = versions of Dr. Gates' code cleaned up into a notebook or markdown of somesort (Jupyter or Quarto) edited by me
 ## Data Preprocessing (Cleaning, EDA, Visualizations)
 
 (Not all codes made available yet on her site - 3/14/2023)
@@ -27,17 +29,14 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 ### in R
 
-**Clustering-ex1.R**: Comprehensive Clustering Tutorial
-
-**Clustering-ex2.R** = Document similarity
-
-**Clustering-ex3.R** = Text Mining and NLP Tutorial
+- Example 1: Comprehensive Clustering Tutorial
+- Example 2: Document similarity
+- Example 3: Text Mining and NLP Tutorial
 
 ### Python
 
-GatesClustering1.py = Clustering with data obtained from API
-
-GatesClustering2.py = Clustering using various data types (corpus directory, and csv's)
+- Code 1: Clustering with data obtained from API
+- Code 2: Clustering using various data types (corpus directory, and csv's)
 
 ## [Association Rule Mining](ARM/CUB-ML_ARM.md)
 
@@ -47,3 +46,6 @@ Prof Gate's ARM code in R provides examples of ARM applications
 - apriori algorithms
 - creating interactive figures
 
+## Decision Trees
+
+## Naive Bayes
