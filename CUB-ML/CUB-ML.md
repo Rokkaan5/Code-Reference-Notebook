@@ -58,4 +58,4 @@ Prof Gate's ARM code in R provides examples of ARM applications
 ### in Python
 - Single code example : This code includes Decision Trees, Random Forest, Support Vector Machines, a lot of vis, and several other examples.
 
-## Naive Bayes
+## [Naive Bayes](NaiveBayes/CUB-ML_NB.md)
