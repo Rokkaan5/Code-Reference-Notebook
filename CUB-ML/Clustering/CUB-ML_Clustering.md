@@ -1,15 +1,13 @@
 ---
 layout: page
-title: "CU Boulder Machine Learning"
-permalink: /CUB-ML
+title: "CUB-ML Clustering"
+permalink: /CUB-ML/Clustering
 ---
 
-# CU Boulder: Machine Learning
-(Spring 2023) Machine learning with Dr. Ami Gates at CU Boulder
+# Machine Learning
+(Spring 2023) Machine learning with Dr. Ami Gates (most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/))
 
-Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/))
-
-## Clustering
+## CU Boulder: Machine Learning - Clustering
 
 ### in R
 (Raw code files in GitHub Repo)
@@ -32,11 +30,3 @@ GatesClustering2.py = Clustering using various data types (corpus directory, and
 
 - [Jupyter html of Clustering example-2 (python) code](CUB-ML/Clust2.html)
 
-## Association Rule Mining
-
-Prof Gate's ARM code in R provides examples of ARM applications, apriori algorithms, and creating interactive figures
-
-[ARM raw R-code (md)](Gates-ARM-code)
-
-
-[Markdown html of ARM code](CUB-ML/ARM/ARMmarkdown.html)

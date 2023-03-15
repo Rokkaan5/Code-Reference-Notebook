@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Gates ARM Raw-code"
-permalink: /Gates-ARM-code
+permalink: /CUB-ML/Gates-ARM-code
 ---
 
 # Association Rule Mining
