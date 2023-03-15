@@ -9,6 +9,8 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 - All pages of raw-code = unedited code as obtained from Dr. Gates' website
 - All markdown versions = versions of Dr. Gates' code cleaned up into a notebook or markdown of somesort (Jupyter or Quarto) edited by me (Jasmine) to show code output, etc.
 
+---
+
 ### in R
 (Raw code files in GitHub Repo)
 
