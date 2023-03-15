@@ -8,6 +8,6 @@ permalink: /CUB-ML/Association-Rule-Mining
 
 Prof Gate's ARM code in R provides examples of ARM applications, apriori algorithms, and creating interactive figures
 
-[ARM raw R-code (md)](CUB-ML_ARM.md)
+[ARM raw R-code (md)](GatesARM.md)
 
 [Markdown html of ARM code](ARMmarkdown.html)
