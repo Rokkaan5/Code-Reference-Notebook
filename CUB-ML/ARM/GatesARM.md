@@ -1,11 +1,11 @@
 ---
 layout: page
 title: "Gates ARM Raw-code"
-permalink: /CUB-ML/Gates-ARM-code
+permalink: /CUB-ML/Raw-Code/Gates-ARM-code
 ---
 
-# Association Rule Mining
-Dr. Gates' ARM code example - full raw code
+# Association Rule Mining - Dr. Gates' full, raw (unedited) code
+[https://gatesboltonanalytics.com/?page_id=268]
 ```r
 ####################################################
 ###
