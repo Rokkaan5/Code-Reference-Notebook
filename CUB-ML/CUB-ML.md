@@ -34,7 +34,7 @@ GatesClustering2.py = Clustering using various data types (corpus directory, and
 
 Prof Gate's ARM code in R provides examples of ARM applications, apriori algorithms, and creating interactive figures
 
-[ARM raw R-code (md)](CUB-ML/ARM/GatesARM.md)
+[ARM raw R-code (md)](ARM/GatesARM.md)
 [ARM raw R-code (R)](ARM/GatesARMcode.R)
 
 [Markdown html of ARM code](CUB-ML/ARMmrkdwn.html)
