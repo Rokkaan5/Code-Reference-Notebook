@@ -13,7 +13,12 @@ R codes from class lectures
 - [Mini-project Examples](CUB-DataMining/MiniProjects.md)
 
 # [Machine Learning](CUB-ML/CUB-ML.md)
-
 Sample professor codes, etc.
 
-
+- Data Preprocessing (code still in progress)
+- Unsupervised Learning
+    - [Clustering](CUB-ML/Clustering/CUB-ML_Clustering.md)
+    - [ARM](CUB-ML/ARM/CUB-ML_ARM.md)
+- Supervised Learning
+    - [Decision Trees](CUB-ML/DecisionTrees/CUB-ML_DT.md)
+    - [Naive Bayes](CUB-ML/NaiveBayes/CUB-ML_NB.md)
