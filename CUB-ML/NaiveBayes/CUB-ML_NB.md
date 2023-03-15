@@ -12,7 +12,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 ---
 
 ### in R
-- Single code (Markdown, [Raw](Raw/R-NaiveBayes-Raw.md)): Naive Bayes (etc) in R for Text dat and for Record Data. Text will be corpus.
+- Single code ([Markdown](Markdown/R-NaiveBayes.html), [Raw](Raw/R-NaiveBayes-Raw.md)): Naive Bayes (etc) in R for Text dat and for Record Data. Text will be corpus.
 
 ### Python
 
@@ -20,4 +20,4 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
     - [Part 1 - Markdown](../DecisionTrees/Markdown/Python-DecisionTrees.html): Text mining example
     - [Part 2 - Markdown](../DecisionTrees/Markdown/Python-DecisionTrees-pt2.html): Mixed/Numeric Record data example
 
-- Extra code (Markdown, Raw): 
+- Extra code (Markdown, [Raw](Raw/Python-NB-Extra-Raw.md)): 
