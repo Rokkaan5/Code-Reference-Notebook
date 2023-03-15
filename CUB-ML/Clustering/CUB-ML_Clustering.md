@@ -3,12 +3,8 @@ layout: page
 title: "CUB-ML Clustering"
 permalink: /CUB-ML/Clustering
 ---
-
-# Machine Learning
-(Spring 2023) Machine learning with Dr. Ami Gates (most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/))
-
 ## CU Boulder: Machine Learning - Clustering
-
+Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/))
 ### in R
 (Raw code files in GitHub Repo)
 
