@@ -12,21 +12,16 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 ### in R
 (Raw code files in GitHub Repo)
 
-**Clustering-ex1.R**: Comprehensive Clustering Tutorial
-
-- [Markdown of Clustering-ex1](clust-ex1-mkdn.html)
+**Clustering-ex1.R** ([Markdown](Markdown/clust-ex1-mkdn.html),[Raw](Raw/Clustering-Ex1-Raw-R.md)): Comprehensive Clustering Tutorial
 
 - Partitional and hierarchical clustering using csv and corpus txt file data.
 
-**Clustering-ex2.R** = Document similarity
+**Clustering-ex2.R** (Markdown,[Raw](Raw/Clustering-Ex2-Raw-R.md) = Document similarity
 
-**Clustering-ex3.R** = Text Mining and NLP Tutorial
+**Clustering-ex3.R** (Markdown,[Raw](Raw/Clustering-Ex3-Raw-R.md) = Text Mining and NLP Tutorial
 
 ### Python
 
-GatesClustering1.py = Clustering with data obtained from API
+GatesClustering1.py (Markdown, Raw) = Clustering with data obtained from API
 
-GatesClustering2.py = Clustering using various data types (corpus directory, and csv's)
-
-- [Jupyter html of Clustering example-2 (python) code](Clust2.html)
-
+GatesClustering2.py ([Markdown](Markdown/Clust2.html),Raw) = Clustering using various data types (corpus directory, and csv's)
