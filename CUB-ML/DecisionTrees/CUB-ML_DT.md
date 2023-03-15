@@ -10,7 +10,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 - All markdown versions = versions of Dr. Gates' code cleaned up into a notebook or markdown of somesort (Jupyter or Quarto) edited by me (Jasmine) to show code output, etc.
 
 ### in R
-- Example 1 (Markdown, Raw): Decision Trees in R using labeled record data - and visualizations
+- Example 1 ([Markdown](Markdown/R-DecisionTrees-Ex1.html), [Raw](Raw/R-DecisionTrees-Ex1-Raw.md): Decision Trees in R using labeled record data - and visualizations
 - Example 2 (Markdown, Raw): Decision Trees for text data in R and visualizations
 - Example 3 (Markdown, Raw): Decision Trees for mixed data types (clean record data and numeric text corpus)
 
