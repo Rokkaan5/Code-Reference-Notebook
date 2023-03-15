@@ -9,6 +9,8 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 - All pages of raw-code = unedited code as obtained from Dr. Gates' website
 - All markdown versions = versions of Dr. Gates' code cleaned up into a notebook or markdown of somesort (Jupyter or Quarto) edited by me (Jasmine) to show code output, etc.
 
+---
+
 ### in R
 - Example 1 ([Markdown](Markdown/R-DecisionTrees-Ex1.html), [Raw](Raw/R-DecisionTrees-Ex1-Raw.md)): Decision Trees in R using labeled record data - and visualizations
 - Example 2 (Markdown, [Raw](Raw/R-DecisionTrees-Ex2-Raw.md)): Decision Trees for text data in R and visualizations
