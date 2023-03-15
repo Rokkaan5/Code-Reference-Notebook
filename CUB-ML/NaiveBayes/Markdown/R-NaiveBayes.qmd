@@ -12,13 +12,13 @@ Topics:
 - Normalization
 - Naive Bayes
 
-## THE DATA CORPUS IS HERE: 
+**THE DATA CORPUS IS HERE:** 
 <https://drive.google.com/drive/folders/1J_8BDiOttPvEYW4-JxrReKGP1wN40ccy?usp=sharing>
 
 Also - for fun - here is another corpus to play with
 <https://drive.google.com/drive/folders/1NnPZfhg_04lUAdKPNMMqkTcyfF6Z0BP2?usp=sharing>
 
-## RECORD DATA IS HERE:
+**RECORD DATA IS HERE:**
 <https://drive.google.com/file/d/18dJPOiiO9ogqOibJppc0lsDiQ2-bQs0f/view?usp=sharing>
 
 
@@ -70,30 +70,31 @@ library(mice)
 #install.packages('GGally')
 library(GGally)
 library(e1071)
-
-
+```
+# Read in the datasets
+```{r, eval=FALSE}
 ####### USE YOUR OWN PATH ############
-setwd("C:\\Users\\profa\\Documents\\RStudioFolder_1\\DrGExamples\\ANLY501\\DATA\\")
-##
-## Raad in the datasets
-## Remember - we have TWO (2) datasets here.
-## One is text data from a corpus called Novels_Corpus (link above)
-## The other is record data as csv - the Summer Student dataset.
-##
-##
-StudentDataFile="SummerStudentDataset_Record_Mixed_Labeled.csv"
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+```
+
+Remember - we have TWO (2) datasets here.
+
+One is text data from a corpus called Novels_Corpus (link above)
+
+The other is record data as csv - the Summer Student dataset.
+
+```{r}
+StudentDataFile="../../data_files/StudentSummerProgramDataClean_DT.csv"
 head(StudentDF<-read.csv(StudentDataFile))
 ## Next, load in the documents (the corpus)
-NovelsCorpus <- Corpus(DirSource("Novels_Corpus"))
+NovelsCorpus <- Corpus(DirSource("../../data_files/Novels_Corpus"))
 (ndocs<-length(NovelsCorpus))
 
 (summary(NovelsCorpus))  ## This will list the docs in the corpus
+```
 
-###################################################################
-#######       Change the COrpus into a DTM, a DF, and  Matrix
-#######
-####################################################################
-
+# Change the COrpus into a DTM, a DF, and  Matrix
+```{r}
 Novels_dtm <- DocumentTermMatrix(NovelsCorpus,
                                  control = list(
                                    #stopwords = TRUE, ## remove normal stopwords
@@ -315,7 +316,7 @@ str(DF_Train$MyNamesList)  ## GOOD! also type FACTOR
 
 ## Copy the Labels
 (DF_Test_Labels <- DF_Test$MyNamesList)
-str(Test_Labels)
+str(DF_Test_Labels)
 ## Remove the labels
 DF_Test_NL<-DF_Test[ , -which(names(DF_Test) %in% c("MyNamesList"))]
 (DF_Test[1:5, 1:5])
@@ -324,33 +325,33 @@ DF_Test_NL<-DF_Test[ , -which(names(DF_Test) %in% c("MyNamesList"))]
 DF_Train_Labels<-DF_Train$MyNamesList
 DF_Train_NL<-DF_Train[ , -which(names(DF_Train) %in% c("MyNamesList"))]
 (DF_Train_NL[1:5, 1:5])
+```
 
-###########################################################
-##
-##          Prepare the record data for 
-##          analysis. Create testing and
-##          training sets.
-##
-##          REMEMBER - we are assuming here that
-##          the record dataset is already 100% clean
-################################################################
-## Record Data..................
+# Record Data
+
+Prepare the record data for analysis. 
+Create testing and training sets.
+
+REMEMBER - we are assuming here that the record dataset is already 100% clean
+
 ## MAKE test and train data
+```{r}
 (Size <- (as.integer(nrow(StudentDF)/4)))  ## Test will be 1/4 of the data
 (SAMPLE <- sample(nrow(StudentDF), Size))
 
 (DF_Test_Student<-StudentDF[SAMPLE, ])
 (DF_Train_Student<-StudentDF[-SAMPLE, ])
-##
+```
 ## REMOVE the labels and KEEP THEM
-##   
-## 
+```{r}
 str(DF_Test_Student$Decision)  ## Notice that the label is called "Decision" and
 ## is correctly set to type FACTOR. This is IMPORTANT!!
 str(DF_Train_Student$Decision)  ## GOOD! Here "Decision" is also type FACTOR
 ##Check balance of test dataset
 table(DF_Test_Student$Decision)
-##################################### REMOVE AND SAVE LABELS...
+```
+REMOVE AND SAVE LABELS...
+```{r}
 ## Copy the Labels
 (DF_Test_Student_Labels <- DF_Test_Student$Decision)
 ## Remove the labels
@@ -359,7 +360,9 @@ DF_Test_Student_NL<-DF_Test_Student[ , -which(names(DF_Test_Student) %in% c("Dec
 ## Check size
 (ncol(DF_Test_Student_NL))
 #(DF_Test_Student_NL)
-## Train...--------------------------------
+```
+## Training set
+```{r}
 ## Copy the Labels
 (DF_Train_Student_Labels <- DF_Train_Student$Decision)
 ## Remove the labels
@@ -368,13 +371,10 @@ DF_Train_Student_NL<-DF_Train_Student[ , -which(names(DF_Train_Student) %in% c("
 ## Check size
 (ncol(DF_Train_Student_NL))
 #(DF_Train_Student_NL)
+```
 
-###############################################################
-##
-##                         NAIVE BAYES
-##
-###############################################################
-
+# NAIVE BAYES
+```{r}
 ############
 ## What do we have?
 ## ------------------------------------
@@ -396,36 +396,33 @@ DF_Train_Student_NL<-DF_Train_Student[ , -which(names(DF_Train_Student) %in% c("
 ## DF_Test_Student_Labels
 ## DF_Train_Student_Labels
 ######################################
-
-
--------------------------------------------------------------
+```
   
-  ## Just FYI......................if memory or overflow issues....
+Just FYI......................if memory or overflow issues....
+```{r}
   ## memory.limit()
   #data=DF_Train[,1:5000]
   #(data[1:5, 1:5])
   ##
-  
-  #################################################################
-##
-####### RUN Naive Bayes --------------------------------------------
-##
-######################################################################
+```
+
+
+# RUN Naive Bayes
 
 ## TEXT DATA
-## https://www.rdocumentation.org/packages/e1071/versions/1.7-3/topics/naiveBayes
-##########################################################################
+<https://www.rdocumentation.org/packages/e1071/versions/1.7-3/topics/naiveBayes>
+```{r}
 NB_e1071_2<-naiveBayes(DF_Train_NL, DF_Train_Labels, laplace = 1)
 NB_e1071_Pred <- predict(NB_e1071_2, DF_Test_NL)
 #NB_e1071_2
 table(NB_e1071_Pred,DF_Test_Labels)
 (NB_e1071_Pred)
+```
 
 
 
-##########################################################
-## Record Data----------------------------
-#######################################################
+## Record Data
+```{r}
 (NB_e1071_Student<-naiveBayes(DF_Train_Student_NL, DF_Train_Student_Labels, laplace = 1))
 NB_e1071_Pred_Student <- predict(NB_e1071_Student, DF_Test_Student_NL)
 table(NB_e1071_Pred_Student,DF_Test_Student_Labels)
