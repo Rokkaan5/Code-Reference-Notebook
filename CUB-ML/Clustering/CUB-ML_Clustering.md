@@ -22,6 +22,6 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 ### Python
 
-GatesClustering1.py (Markdown, Raw) = Clustering with data obtained from API
+GatesClustering1.py (Markdown, [Raw](Raw/R-Clustering-Ex1-Raw.md)) = Clustering with data obtained from API
 
-GatesClustering2.py ([Markdown](Markdown/Clust2.html),Raw) = Clustering using various data types (corpus directory, and csv's)
+GatesClustering2.py ([Markdown](Markdown/Clust2.html),[Raw](Raw/Python-Clustering-Ex2-Raw.md)) = Clustering using various data types (corpus directory, and csv's)
