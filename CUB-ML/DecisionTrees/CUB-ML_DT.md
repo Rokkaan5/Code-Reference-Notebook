@@ -19,6 +19,8 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 ### Python
 "The following Python code is for several ML methods including Decision Trees and Vis. If the vis prints poorly, save it as a file." - Gates Website
 
-- Single code example ([Raw](Raw/Python-DecisionTrees-Raw.md)): This code includes Decision Trees, Random Forest, Support Vector Machines, a lot of vis, and several other examples.
+- Single code example ([Raw](Raw/Python-DecisionTrees-Raw.md)): This code includes Decision Trees, Random Forest, Support Vector Machines, a lot of vis, and several other examples. (same as Naive Bayes code (I think))
     - [Part 1 - Markdown](Markdown/Python-DecisionTrees.html): Text mining example
     - [Part 2 - Markdown](Markdown/Python-DecisionTrees-pt2.html): Mixed/Numeric Record data example
+    
+- Extra code (Markdown, Raw): for Decision Trees (with vis)
