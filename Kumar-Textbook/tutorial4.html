@@ -96,6 +96,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="tutorial4_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="tutorial4_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="tutorial4_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -147,7 +150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="data-quality-issues">4.1 Data Quality Issues</h2>
 <p>Poor data quality can have an adverse effect on data mining. Among the common data quality issues include noise, outliers, missing values, and duplicate data. This section presents examples of Python code to alleviate some of these data quality problems. We begin with an example dataset from the UCI machine learning repository containing information about breast cancer patients. We will first download the dataset using Pandas read_csv() function and display its first 5 data points.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/breast-cancer-wisconsin.data'</span>, header<span class="op">=</span><span class="va">None</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data.columns <span class="op">=</span> [<span class="st">'Sample code'</span>, <span class="st">'Clump Thickness'</span>, <span class="st">'Uniformity of Cell Size'</span>, <span class="st">'Uniformity of Cell Shape'</span>,</span>
@@ -158,70 +161,294 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of instances = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">0</span>]))</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of attributes = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">1</span>]))</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of instances = 699
+Number of attributes = 10</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Clump Thickness</th>
+      <th>Uniformity of Cell Size</th>
+      <th>Uniformity of Cell Shape</th>
+      <th>Marginal Adhesion</th>
+      <th>Single Epithelial Cell Size</th>
+      <th>Bare Nuclei</th>
+      <th>Bland Chromatin</th>
+      <th>Normal Nucleoli</th>
+      <th>Mitoses</th>
+      <th>Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>7</td>
+      <td>10</td>
+      <td>3</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6</td>
+      <td>8</td>
+      <td>8</td>
+      <td>1</td>
+      <td>3</td>
+      <td>4</td>
+      <td>3</td>
+      <td>7</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
 </div>
 <section id="missing-values" class="level3">
 <h3 class="anchored" data-anchor-id="missing-values">4.1.1 Missing Values</h3>
 <p>It is not unusual for an object to be missing one or more attribute values. In some cases, the information was not collected; while in other cases, some attributes are inapplicable to the data instances. This section presents examples on the different approaches for handling missing values.</p>
 <p>According to the description of the data (https://archive.ics.uci.edu/ml/datasets/breast+cancer+wisconsin+(original), the missing values are encoded as ‘?’ in the original data. Our first task is to convert the missing values to NaNs. We can then count the number of missing values in each column of the data.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.replace(<span class="st">'?'</span>,np.NaN)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of instances = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">0</span>]))</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of attributes = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">1</span>]))</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of missing values:'</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> data.columns:</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'</span><span class="ch">\t</span><span class="sc">%s</span><span class="st">: </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (col,data[col].isna().<span class="bu">sum</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.replace(<span class="st">'?'</span>,np.NaN)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of instances = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">0</span>]))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of attributes = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">1</span>]))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of missing values:'</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> data.columns:</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'</span><span class="ch">\t</span><span class="sc">%s</span><span class="st">: </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (col,data[col].isna().<span class="bu">sum</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of instances = 699
+Number of attributes = 10
+Number of missing values:
+    Clump Thickness: 0
+    Uniformity of Cell Size: 0
+    Uniformity of Cell Shape: 0
+    Marginal Adhesion: 0
+    Single Epithelial Cell Size: 0
+    Bare Nuclei: 16
+    Bland Chromatin: 0
+    Normal Nucleoli: 0
+    Mitoses: 0
+    Class: 0</code></pre>
+</div>
 </div>
 <p>Observe that only the ‘Bare Nuclei’ column contains missing values. In the following example, the missing values in the ‘Bare Nuclei’ column are replaced by the median value of that column. The values before and after replacement are shown for a subset of the data points.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data[<span class="st">'Bare Nuclei'</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Before replacing missing values:'</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data2[<span class="dv">20</span>:<span class="dv">25</span>])</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data2.fillna(data2.median())</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'</span><span class="ch">\n</span><span class="st">After replacing missing values:'</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data2[<span class="dv">20</span>:<span class="dv">25</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data[<span class="st">'Bare Nuclei'</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Before replacing missing values:'</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data2[<span class="dv">20</span>:<span class="dv">25</span>])</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data2.fillna(data2.median())</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'</span><span class="ch">\n</span><span class="st">After replacing missing values:'</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data2[<span class="dv">20</span>:<span class="dv">25</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before replacing missing values:
+20     10
+21      7
+22      1
+23    NaN
+24      1
+Name: Bare Nuclei, dtype: object
+
+After replacing missing values:
+20     10
+21      7
+22      1
+23    1.0
+24      1
+Name: Bare Nuclei, dtype: object</code></pre>
+</div>
 </div>
 <p>Instead of replacing the missing values, another common approach is to discard the data points that contain missing values. This can be easily accomplished by applying the dropna() function to the data frame.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows in original data = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">0</span>]))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data.dropna()</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows after discarding missing values = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data2.shape[<span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows in original data = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">0</span>]))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data.dropna()</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows after discarding missing values = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data2.shape[<span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of rows in original data = 699
+Number of rows after discarding missing values = 683</code></pre>
+</div>
 </div>
 </section>
 <section id="outliers" class="level3">
 <h3 class="anchored" data-anchor-id="outliers">4.1.2 Outliers</h3>
 <p>Outliers are data instances with characteristics that are considerably different from the rest of the dataset. In the example code below, we will draw a boxplot to identify the columns in the table that contain outliers. Note that the values in all columns (except for ‘Bare Nuclei’) are originally stored as ‘int64’ whereas the values in the ‘Bare Nuclei’ column are stored as string objects (since the column initially contains strings such as ‘?’ for representing missing values). Thus, we must convert the column into numeric values first before creating the boxplot. Otherwise, the column will not be displayed when drawing the boxplot.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data.drop([<span class="st">'Class'</span>],axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>data2[<span class="st">'Bare Nuclei'</span>] <span class="op">=</span> pd.to_numeric(data2[<span class="st">'Bare Nuclei'</span>])</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>data2.boxplot(figsize<span class="op">=</span>(<span class="dv">20</span>,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data.drop([<span class="st">'Class'</span>],axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>data2[<span class="st">'Bare Nuclei'</span>] <span class="op">=</span> pd.to_numeric(data2[<span class="st">'Bare Nuclei'</span>])</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>data2.boxplot(figsize<span class="op">=</span>(<span class="dv">20</span>,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>&lt;Axes: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="tutorial4_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
 </div>
 <p>The boxplots suggest that only 5 of the columns (Marginal Adhesion, Single Epithetial Cell Size, Bland Cromatin, Normal Nucleoli, and Mitoses) contain abnormally high values. To discard the outliers, we can compute the Z-score for each attribute and remove those instances containing attributes with abnormally high or low Z-score (e.g., if Z &gt; 3 or Z &lt;= -3).</p>
 <p><strong><font color="red">Code:</font></strong></p>
 <p>The following code shows the results of standardizing the columns of the data. Note that missing values (NaN) are not affected by the standardization process.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> (data2<span class="op">-</span>data2.mean())<span class="op">/</span>data2.std()</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">20</span>:<span class="dv">25</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> (data2<span class="op">-</span>data2.mean())<span class="op">/</span>data2.std()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">20</span>:<span class="dv">25</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Clump Thickness</th>
+      <th>Uniformity of Cell Size</th>
+      <th>Uniformity of Cell Shape</th>
+      <th>Marginal Adhesion</th>
+      <th>Single Epithelial Cell Size</th>
+      <th>Bare Nuclei</th>
+      <th>Bland Chromatin</th>
+      <th>Normal Nucleoli</th>
+      <th>Mitoses</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>20</th>
+      <td>0.917080</td>
+      <td>-0.044070</td>
+      <td>-0.406284</td>
+      <td>2.519152</td>
+      <td>0.805662</td>
+      <td>1.771569</td>
+      <td>0.640688</td>
+      <td>0.371049</td>
+      <td>1.405526</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>1.982519</td>
+      <td>0.611354</td>
+      <td>0.603167</td>
+      <td>0.067638</td>
+      <td>1.257272</td>
+      <td>0.948266</td>
+      <td>1.460910</td>
+      <td>2.335921</td>
+      <td>-0.343666</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>-0.503505</td>
+      <td>-0.699494</td>
+      <td>-0.742767</td>
+      <td>-0.632794</td>
+      <td>-0.549168</td>
+      <td>-0.698341</td>
+      <td>-0.589645</td>
+      <td>-0.611387</td>
+      <td>-0.343666</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>1.272227</td>
+      <td>0.283642</td>
+      <td>0.603167</td>
+      <td>-0.632794</td>
+      <td>-0.549168</td>
+      <td>NaN</td>
+      <td>1.460910</td>
+      <td>0.043570</td>
+      <td>-0.343666</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>-1.213798</td>
+      <td>-0.699494</td>
+      <td>-0.742767</td>
+      <td>-0.632794</td>
+      <td>-0.549168</td>
+      <td>-0.698341</td>
+      <td>-0.179534</td>
+      <td>-0.611387</td>
+      <td>-0.343666</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
 </div>
 <p><strong><font color="red">Code:</font></strong></p>
 <p>The following code shows the results of discarding columns with Z &gt; 3 or Z &lt;= -3.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows before discarding outliers = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (Z.shape[<span class="dv">0</span>]))</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>Z2 <span class="op">=</span> Z.loc[((Z <span class="op">&gt;</span> <span class="op">-</span><span class="dv">3</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)<span class="op">==</span><span class="dv">9</span>) <span class="op">&amp;</span> ((Z <span class="op">&lt;=</span> <span class="dv">3</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)<span class="op">==</span><span class="dv">9</span>),:]</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows after discarding missing values = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (Z2.shape[<span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows before discarding outliers = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (Z.shape[<span class="dv">0</span>]))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>Z2 <span class="op">=</span> Z.loc[((Z <span class="op">&gt;</span> <span class="op">-</span><span class="dv">3</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)<span class="op">==</span><span class="dv">9</span>) <span class="op">&amp;</span> ((Z <span class="op">&lt;=</span> <span class="dv">3</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)<span class="op">==</span><span class="dv">9</span>),:]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows after discarding missing values = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (Z2.shape[<span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of rows before discarding outliers = 699
+Number of rows after discarding missing values = 632</code></pre>
+</div>
 </div>
 </section>
 <section id="duplicate-data" class="level3">
@@ -229,17 +456,75 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Some datasets, especially those obtained by merging multiple data sources, may contain duplicates or near duplicate instances. The term deduplication is often used to refer to the process of dealing with duplicate data issues.</p>
 <p><strong><font color="red">Code:</font></strong></p>
 <p>In the following example, we first check for duplicate instances in the breast cancer dataset.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dups <span class="op">=</span> data.duplicated()</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of duplicate rows = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (dups.<span class="bu">sum</span>()))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>data.loc[[<span class="dv">11</span>,<span class="dv">28</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dups <span class="op">=</span> data.duplicated()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of duplicate rows = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (dups.<span class="bu">sum</span>()))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>data.loc[[<span class="dv">11</span>,<span class="dv">28</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of duplicate rows = 236</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Clump Thickness</th>
+      <th>Uniformity of Cell Size</th>
+      <th>Uniformity of Cell Shape</th>
+      <th>Marginal Adhesion</th>
+      <th>Single Epithelial Cell Size</th>
+      <th>Bare Nuclei</th>
+      <th>Bland Chromatin</th>
+      <th>Normal Nucleoli</th>
+      <th>Mitoses</th>
+      <th>Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>11</th>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
 </div>
 <p>The duplicated() function will return a Boolean array that indicates whether each row is a duplicate of a previous row in the table. The results suggest there are 236 duplicate rows in the breast cancer dataset. For example, the instance with row index 11 has identical attribute values as the instance with row index 28. Although such duplicate rows may correspond to samples for different individuals, in this hypothetical example, we assume that the duplicates are samples taken from the same individual and illustrate below how to remove the duplicated rows.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows before discarding duplicates = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">0</span>]))</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data.drop_duplicates()</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows after discarding duplicates = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data2.shape[<span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows before discarding duplicates = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data.shape[<span class="dv">0</span>]))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> data.drop_duplicates()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of rows after discarding duplicates = </span><span class="sc">%d</span><span class="st">'</span> <span class="op">%</span> (data2.shape[<span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of rows before discarding duplicates = 699
+Number of rows after discarding duplicates = 463</code></pre>
+</div>
 </div>
 </section>
 </section>
@@ -249,26 +534,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In the example below, we will use the daily precipitation time series data for a weather station located at Detroit Metro Airport. The raw data was obtained from the Climate Data Online website (https://www.ncdc.noaa.gov/cdo-web/). The daily precipitation time series will be compared against its monthly values.</p>
 <p><strong><font color="red">Code:</font></strong></p>
 <p>The code below will load the precipitation time series data and draw a line plot of its daily time series.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> pd.read_csv(<span class="st">'DTW_prec.csv'</span>, header<span class="op">=</span><span class="st">'infer'</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>daily.index <span class="op">=</span> pd.to_datetime(daily[<span class="st">'DATE'</span>])</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> daily[<span class="st">'PRCP'</span>]</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> daily.plot(kind<span class="op">=</span><span class="st">'line'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">3</span>))</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Daily Precipitation (variance = </span><span class="sc">%.4f</span><span class="st">)'</span> <span class="op">%</span> (daily.var()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> pd.read_csv(<span class="st">'DTW_prec.csv'</span>, header<span class="op">=</span><span class="st">'infer'</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>daily.index <span class="op">=</span> pd.to_datetime(daily[<span class="st">'DATE'</span>])</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>daily <span class="op">=</span> daily[<span class="st">'PRCP'</span>]</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> daily.plot(kind<span class="op">=</span><span class="st">'line'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">3</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Daily Precipitation (variance = </span><span class="sc">%.4f</span><span class="st">)'</span> <span class="op">%</span> (daily.var()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>Text(0.5, 1.0, 'Daily Precipitation (variance = 0.0530)')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="tutorial4_files/figure-html/cell-11-output-2.png" class="img-fluid"></p>
+</div>
 </div>
 <p>Observe that the daily time series appear to be quite chaotic and varies significantly from one time step to another. The time series can be grouped and aggregated by month to obtain the total monthly precipitation values. The resulting time series appears to vary more smoothly compared to the daily time series.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>monthly <span class="op">=</span> daily.groupby(pd.Grouper(freq<span class="op">=</span><span class="st">'M'</span>)).<span class="bu">sum</span>()</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> monthly.plot(kind<span class="op">=</span><span class="st">'line'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">3</span>))</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Monthly Precipitation (variance = </span><span class="sc">%.4f</span><span class="st">)'</span> <span class="op">%</span> (monthly.var()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>monthly <span class="op">=</span> daily.groupby(pd.Grouper(freq<span class="op">=</span><span class="st">'M'</span>)).<span class="bu">sum</span>()</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> monthly.plot(kind<span class="op">=</span><span class="st">'line'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">3</span>))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Monthly Precipitation (variance = </span><span class="sc">%.4f</span><span class="st">)'</span> <span class="op">%</span> (monthly.var()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>Text(0.5, 1.0, 'Monthly Precipitation (variance = 2.4241)')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="tutorial4_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
+</div>
 </div>
 <p>In the example below, the daily precipitation time series are grouped and aggregated by year to obtain the annual precipitation values.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>annual <span class="op">=</span> daily.groupby(pd.Grouper(freq<span class="op">=</span><span class="st">'Y'</span>)).<span class="bu">sum</span>()</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> annual.plot(kind<span class="op">=</span><span class="st">'line'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">3</span>))</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Annual Precipitation (variance = </span><span class="sc">%.4f</span><span class="st">)'</span> <span class="op">%</span> (annual.var()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>annual <span class="op">=</span> daily.groupby(pd.Grouper(freq<span class="op">=</span><span class="st">'Y'</span>)).<span class="bu">sum</span>()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> annual.plot(kind<span class="op">=</span><span class="st">'line'</span>,figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">3</span>))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Annual Precipitation (variance = </span><span class="sc">%.4f</span><span class="st">)'</span> <span class="op">%</span> (annual.var()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>Text(0.5, 1.0, 'Annual Precipitation (variance = 23.6997)')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="tutorial4_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
+</div>
 </div>
 </section>
 <section id="sampling" class="level2">
@@ -277,26 +580,412 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In the example below, we will apply sampling with replacement and without replacement to the breast cancer dataset obtained from the UCI machine learning repository.</p>
 <p><strong><font color="red">Code:</font></strong></p>
 <p>We initially display the first five records of the table.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Clump Thickness</th>
+      <th>Uniformity of Cell Size</th>
+      <th>Uniformity of Cell Shape</th>
+      <th>Marginal Adhesion</th>
+      <th>Single Epithelial Cell Size</th>
+      <th>Bare Nuclei</th>
+      <th>Bland Chromatin</th>
+      <th>Normal Nucleoli</th>
+      <th>Mitoses</th>
+      <th>Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>4</td>
+      <td>4</td>
+      <td>5</td>
+      <td>7</td>
+      <td>10</td>
+      <td>3</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6</td>
+      <td>8</td>
+      <td>8</td>
+      <td>1</td>
+      <td>3</td>
+      <td>4</td>
+      <td>3</td>
+      <td>7</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+      <td>2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
 </div>
 <p>In the following code, a sample of size 3 is randomly selected (without replacement) from the original data.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> data.sample(n<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sample</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> data.sample(n<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>sample</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Clump Thickness</th>
+      <th>Uniformity of Cell Size</th>
+      <th>Uniformity of Cell Shape</th>
+      <th>Marginal Adhesion</th>
+      <th>Single Epithelial Cell Size</th>
+      <th>Bare Nuclei</th>
+      <th>Bland Chromatin</th>
+      <th>Normal Nucleoli</th>
+      <th>Mitoses</th>
+      <th>Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>553</th>
+      <td>4</td>
+      <td>4</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>5</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>449</th>
+      <td>5</td>
+      <td>7</td>
+      <td>9</td>
+      <td>8</td>
+      <td>6</td>
+      <td>10</td>
+      <td>8</td>
+      <td>10</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>491</th>
+      <td>5</td>
+      <td>8</td>
+      <td>9</td>
+      <td>4</td>
+      <td>3</td>
+      <td>10</td>
+      <td>7</td>
+      <td>1</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
 </div>
 <p>In the next example, we randomly select 1% of the data (without replacement) and display the selected samples. The random_state argument of the function specifies the seed value of the random number generator.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> data.sample(frac<span class="op">=</span><span class="fl">0.01</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>sample</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> data.sample(frac<span class="op">=</span><span class="fl">0.01</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>sample</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Clump Thickness</th>
+      <th>Uniformity of Cell Size</th>
+      <th>Uniformity of Cell Shape</th>
+      <th>Marginal Adhesion</th>
+      <th>Single Epithelial Cell Size</th>
+      <th>Bare Nuclei</th>
+      <th>Bland Chromatin</th>
+      <th>Normal Nucleoli</th>
+      <th>Mitoses</th>
+      <th>Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>584</th>
+      <td>5</td>
+      <td>1</td>
+      <td>1</td>
+      <td>6</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>417</th>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>606</th>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>349</th>
+      <td>4</td>
+      <td>2</td>
+      <td>3</td>
+      <td>5</td>
+      <td>3</td>
+      <td>8</td>
+      <td>7</td>
+      <td>6</td>
+      <td>1</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>134</th>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>502</th>
+      <td>4</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>4</td>
+      <td>5</td>
+      <td>5</td>
+      <td>10</td>
+      <td>4</td>
+      <td>10</td>
+      <td>7</td>
+      <td>5</td>
+      <td>8</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
 </div>
 <p>Finally, we perform a sampling with replacement to create a sample whose size is equal to 1% of the entire data. You should be able to observe duplicate instances in the sample by increasing the sample size.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> data.sample(frac<span class="op">=</span><span class="fl">0.01</span>, replace<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sample</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> data.sample(frac<span class="op">=</span><span class="fl">0.01</span>, replace<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>sample</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Clump Thickness</th>
+      <th>Uniformity of Cell Size</th>
+      <th>Uniformity of Cell Shape</th>
+      <th>Marginal Adhesion</th>
+      <th>Single Epithelial Cell Size</th>
+      <th>Bare Nuclei</th>
+      <th>Bland Chromatin</th>
+      <th>Normal Nucleoli</th>
+      <th>Mitoses</th>
+      <th>Class</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>37</th>
+      <td>6</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>7</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>235</th>
+      <td>3</td>
+      <td>1</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
+      <td>NaN</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>1</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>7</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>645</th>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>144</th>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>129</th>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>10</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>583</th>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
 </div>
 </section>
 <section id="discretization" class="level2">
@@ -304,21 +993,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Discretization is a data preprocessing step that is often used to transform a continuous-valued attribute to a categorical attribute. The example below illustrates two simple but widely-used unsupervised discretization methods (equal width and equal depth) applied to the ‘Clump Thickness’ attribute of the breast cancer dataset.</p>
 <p>First, we plot a histogram that shows the distribution of the attribute values. The value_counts() function can also be applied to count the frequency of each attribute value.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'Clump Thickness'</span>].hist(bins<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'Clump Thickness'</span>].value_counts(sort<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'Clump Thickness'</span>].hist(bins<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'Clump Thickness'</span>].value_counts(sort<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>5     130
+3     108
+6      34
+4      80
+8      46
+1     145
+2      50
+7      23
+10     69
+9      14
+Name: Clump Thickness, dtype: int64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="tutorial4_files/figure-html/cell-18-output-2.png" class="img-fluid"></p>
+</div>
 </div>
 <p>For the equal width method, we can apply the cut() function to discretize the attribute into 4 bins of similar interval widths. The value_counts() function can be used to determine the number of instances in each bin.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>bins <span class="op">=</span> pd.cut(data[<span class="st">'Clump Thickness'</span>],<span class="dv">4</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>bins.value_counts(sort<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>bins <span class="op">=</span> pd.cut(data[<span class="st">'Clump Thickness'</span>],<span class="dv">4</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>bins.value_counts(sort<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>(0.991, 3.25]    303
+(3.25, 5.5]      210
+(5.5, 7.75]       57
+(7.75, 10.0]     129
+Name: Clump Thickness, dtype: int64</code></pre>
+</div>
 </div>
 <p>For the equal frequency method, the qcut() function can be used to partition the values into 4 bins such that each bin has nearly the same number of instances.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>bins <span class="op">=</span> pd.qcut(data[<span class="st">'Clump Thickness'</span>],<span class="dv">4</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>bins.value_counts(sort<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>bins <span class="op">=</span> pd.qcut(data[<span class="st">'Clump Thickness'</span>],<span class="dv">4</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>bins.value_counts(sort<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>(0.999, 2.0]    195
+(2.0, 4.0]      188
+(4.0, 6.0]      164
+(6.0, 10.0]     152
+Name: Clump Thickness, dtype: int64</code></pre>
+</div>
 </div>
 </section>
 <section id="principal-component-analysis" class="level2">
@@ -326,52 +1045,172 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Principal component analysis (PCA) is a classical method for reducing the number of attributes in the data by projecting the data from its original high-dimensional space into a lower-dimensional space. The new attributes (also known as components) created by PCA have the following properties: (1) they are linear combinations of the original attributes, (2) they are orthogonal (perpendicular) to each other, and (3) they capture the maximum amount of variation in the data.</p>
 <p>The example below illustrates the application of PCA to an image dataset. There are 16 RGB files, each of which has a size of 111 x 111 pixels. The example code below will read each image file and convert the RGB image into a 111 x 111 x 3 = 36963 feature values. This will create a data matrix of size 16 x 36963.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.image <span class="im">as</span> mpimg</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>numImages <span class="op">=</span> <span class="dv">16</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">7</span>))</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>imgData <span class="op">=</span> np.zeros(shape<span class="op">=</span>(numImages,<span class="dv">36963</span>))</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,numImages<span class="op">+</span><span class="dv">1</span>):</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    filename <span class="op">=</span> <span class="st">'pics/Picture'</span><span class="op">+</span><span class="bu">str</span>(i)<span class="op">+</span><span class="st">'.jpg'</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> mpimg.imread(filename)</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.add_subplot(<span class="dv">4</span>,<span class="dv">4</span>,i)</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    plt.imshow(img)</span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">'off'</span>)</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="bu">str</span>(i))</span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    imgData[i<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> np.array(img.flatten()).reshape(<span class="dv">1</span>,img.shape[<span class="dv">0</span>]<span class="op">*</span>img.shape[<span class="dv">1</span>]<span class="op">*</span>img.shape[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.image <span class="im">as</span> mpimg</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>numImages <span class="op">=</span> <span class="dv">16</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">7</span>))</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>imgData <span class="op">=</span> np.zeros(shape<span class="op">=</span>(numImages,<span class="dv">36963</span>))</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,numImages<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    filename <span class="op">=</span> <span class="st">'pics/Picture'</span><span class="op">+</span><span class="bu">str</span>(i)<span class="op">+</span><span class="st">'.jpg'</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    img <span class="op">=</span> mpimg.imread(filename)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.add_subplot(<span class="dv">4</span>,<span class="dv">4</span>,i)</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    plt.imshow(img)</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="bu">str</span>(i))</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    imgData[i<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> np.array(img.flatten()).reshape(<span class="dv">1</span>,img.shape[<span class="dv">0</span>]<span class="op">*</span>img.shape[<span class="dv">1</span>]<span class="op">*</span>img.shape[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="tutorial4_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 <p>Using PCA, the data matrix is projected to its first two principal components. The projected values of the original image data are stored in a pandas DataFrame object named projected.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>numComponents <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span>numComponents)</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>pca.fit(imgData)</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>projected <span class="op">=</span> pca.transform(imgData)</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>projected <span class="op">=</span> pd.DataFrame(projected,columns<span class="op">=</span>[<span class="st">'pc1'</span>,<span class="st">'pc2'</span>],index<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>,numImages<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>projected[<span class="st">'food'</span>] <span class="op">=</span> [<span class="st">'burger'</span>, <span class="st">'burger'</span>,<span class="st">'burger'</span>,<span class="st">'burger'</span>,<span class="st">'drink'</span>,<span class="st">'drink'</span>,<span class="st">'drink'</span>,<span class="st">'drink'</span>,</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>                      <span class="st">'pasta'</span>, <span class="st">'pasta'</span>, <span class="st">'pasta'</span>, <span class="st">'pasta'</span>, <span class="st">'chicken'</span>, <span class="st">'chicken'</span>, <span class="st">'chicken'</span>, <span class="st">'chicken'</span>]</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>projected</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>numComponents <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span>numComponents)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>pca.fit(imgData)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>projected <span class="op">=</span> pca.transform(imgData)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>projected <span class="op">=</span> pd.DataFrame(projected,columns<span class="op">=</span>[<span class="st">'pc1'</span>,<span class="st">'pc2'</span>],index<span class="op">=</span><span class="bu">range</span>(<span class="dv">1</span>,numImages<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>projected[<span class="st">'food'</span>] <span class="op">=</span> [<span class="st">'burger'</span>, <span class="st">'burger'</span>,<span class="st">'burger'</span>,<span class="st">'burger'</span>,<span class="st">'drink'</span>,<span class="st">'drink'</span>,<span class="st">'drink'</span>,<span class="st">'drink'</span>,</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>                      <span class="st">'pasta'</span>, <span class="st">'pasta'</span>, <span class="st">'pasta'</span>, <span class="st">'pasta'</span>, <span class="st">'chicken'</span>, <span class="st">'chicken'</span>, <span class="st">'chicken'</span>, <span class="st">'chicken'</span>]</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>projected</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>pc1</th>
+      <th>pc2</th>
+      <th>food</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>-1576.589457</td>
+      <td>6640.433890</td>
+      <td>burger</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-493.924934</td>
+      <td>6397.735519</td>
+      <td>burger</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>990.120541</td>
+      <td>7235.956666</td>
+      <td>burger</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2189.876709</td>
+      <td>9051.122889</td>
+      <td>burger</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-7843.102684</td>
+      <td>-1061.101680</td>
+      <td>drink</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-8498.458029</td>
+      <td>-5438.346377</td>
+      <td>drink</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-11181.771712</td>
+      <td>-5319.977385</td>
+      <td>drink</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-6851.918695</td>
+      <td>1124.685193</td>
+      <td>drink</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>7635.178387</td>
+      <td>-5043.785462</td>
+      <td>pasta</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>-708.064965</td>
+      <td>-528.770854</td>
+      <td>pasta</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>7236.220367</td>
+      <td>-5301.783323</td>
+      <td>pasta</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>4417.402344</td>
+      <td>-4659.743125</td>
+      <td>pasta</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>11864.505590</td>
+      <td>1472.602932</td>
+      <td>chicken</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>76.426786</td>
+      <td>1366.232917</td>
+      <td>chicken</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>-7505.655692</td>
+      <td>-1163.983600</td>
+      <td>chicken</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>10249.755445</td>
+      <td>-4771.278202</td>
+      <td>chicken</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
 </div>
 <p>Finally, we draw a scatter plot to display the projected values. Observe that the images of burgers, drinks, and pastas are all projected to the same region. However, the images for fried chicken (shown as black squares in the diagram) are harder to discriminate.</p>
 <p><strong><font color="red">Code:</font></strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> {<span class="st">'burger'</span>:<span class="st">'b'</span>, <span class="st">'drink'</span>:<span class="st">'r'</span>, <span class="st">'pasta'</span>:<span class="st">'g'</span>, <span class="st">'chicken'</span>:<span class="st">'k'</span>}</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>markerTypes <span class="op">=</span> {<span class="st">'burger'</span>:<span class="st">'+'</span>, <span class="st">'drink'</span>:<span class="st">'x'</span>, <span class="st">'pasta'</span>:<span class="st">'o'</span>, <span class="st">'chicken'</span>:<span class="st">'s'</span>}</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> foodType <span class="kw">in</span> markerTypes:</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> projected[projected[<span class="st">'food'</span>]<span class="op">==</span>foodType]</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    plt.scatter(d[<span class="st">'pc1'</span>],d[<span class="st">'pc2'</span>],c<span class="op">=</span>colors[foodType],s<span class="op">=</span><span class="dv">60</span>,marker<span class="op">=</span>markerTypes[foodType])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> {<span class="st">'burger'</span>:<span class="st">'b'</span>, <span class="st">'drink'</span>:<span class="st">'r'</span>, <span class="st">'pasta'</span>:<span class="st">'g'</span>, <span class="st">'chicken'</span>:<span class="st">'k'</span>}</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>markerTypes <span class="op">=</span> {<span class="st">'burger'</span>:<span class="st">'+'</span>, <span class="st">'drink'</span>:<span class="st">'x'</span>, <span class="st">'pasta'</span>:<span class="st">'o'</span>, <span class="st">'chicken'</span>:<span class="st">'s'</span>}</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> foodType <span class="kw">in</span> markerTypes:</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> projected[projected[<span class="st">'food'</span>]<span class="op">==</span>foodType]</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    plt.scatter(d[<span class="st">'pc1'</span>],d[<span class="st">'pc2'</span>],c<span class="op">=</span>colors[foodType],s<span class="op">=</span><span class="dv">60</span>,marker<span class="op">=</span>markerTypes[foodType])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="tutorial4_files/figure-html/cell-23-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 </section>
 <section id="summary" class="level2">

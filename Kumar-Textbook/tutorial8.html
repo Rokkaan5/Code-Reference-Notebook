@@ -414,7 +414,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of Clusters'</span>)</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'SSE'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>Text(0,0.5,'SSE')</code></pre>
+<pre><code>Text(0, 0.5, 'SSE')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="tutorial8_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
@@ -630,29 +630,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data.drop([<span class="st">'Name'</span>,<span class="st">'Class'</span>],axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> hierarchy.linkage(X.as_matrix(), <span class="st">'single'</span>)</span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>dn <span class="op">=</span> hierarchy.dendrogram(Z,labels<span class="op">=</span>names.tolist(),orientation<span class="op">=</span><span class="st">'right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="tutorial8_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+<div class="cell-output cell-output-error">
+<pre><code>AttributeError: 'DataFrame' object has no attribute 'as_matrix'</code></pre>
 </div>
 </div>
 </section>
 <section id="complete-link-max" class="level3">
 <h3 class="anchored" data-anchor-id="complete-link-max">8.2.2 Complete Link (MAX)</h3>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> hierarchy.linkage(X.as_matrix(), <span class="st">'complete'</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dn <span class="op">=</span> hierarchy.dendrogram(Z,labels<span class="op">=</span>names.tolist(),orientation<span class="op">=</span><span class="st">'right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="tutorial8_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> hierarchy.linkage(X.as_matrix(), <span class="st">'complete'</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dn <span class="op">=</span> hierarchy.dendrogram(Z,labels<span class="op">=</span>names.tolist(),orientation<span class="op">=</span><span class="st">'right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="group-average" class="level3">
 <h3 class="anchored" data-anchor-id="group-average">8.3.3 Group Average</h3>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> hierarchy.linkage(X.as_matrix(), <span class="st">'average'</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dn <span class="op">=</span> hierarchy.dendrogram(Z,labels<span class="op">=</span>names.tolist(),orientation<span class="op">=</span><span class="st">'right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<p><img src="tutorial8_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> hierarchy.linkage(X.as_matrix(), <span class="st">'average'</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dn <span class="op">=</span> hierarchy.dendrogram(Z,labels<span class="op">=</span>names.tolist(),orientation<span class="op">=</span><span class="st">'right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -660,20 +654,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="density-based-clustering">8.3 Density-Based Clustering</h2>
 <p>Density-based clustering identifies the individual clusters as high-density regions that are separated by regions of low density. DBScan is one of the most popular density based clustering algorithms. In DBScan, data points are classified into 3 types—core points, border points, and noise points—based on the density of their local neighborhood. The local neighborhood density is defined according to 2 parameters: radius of neighborhood size (eps) and minimum number of points in the neighborhood (min_samples).</p>
 <p>For this approach, we will use a noisy, 2-dimensional dataset originally created by Karypis et al.&nbsp;[1] for evaluating their proposed CHAMELEON algorithm. The example code shown below will load and plot the distribution of the data.</p>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'chameleon.data'</span>, delimiter<span class="op">=</span><span class="st">' '</span>, names<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>data.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
-<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1d5b0a1eb00&gt;</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="tutorial8_files/figure-html/cell-11-output-2.png" class="img-fluid"></p>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'chameleon.data'</span>, delimiter<span class="op">=</span><span class="st">' '</span>, names<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>data.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We apply the DBScan clustering algorithm on the data by setting the neighborhood radius (eps) to 15.5 and minimum number of points (min_samples) to be 5. The clusters are assigned to IDs between 0 to 8 while the noise points are assigned to a cluster ID equals to -1.</p>
-<div class="cell" data-execution_count="11">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> DBSCAN</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> DBSCAN(eps<span class="op">=</span><span class="fl">15.5</span>, min_samples<span class="op">=</span><span class="dv">5</span>).fit(data)</span>
@@ -682,85 +670,61 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> pd.DataFrame(db.labels_,columns<span class="op">=</span>[<span class="st">'Cluster ID'</span>])</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pd.concat((data,labels), axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>result.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,c<span class="op">=</span><span class="st">'Cluster ID'</span>, colormap<span class="op">=</span><span class="st">'jet'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
-<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1d5b08dcc50&gt;</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="tutorial8_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
-</div>
 </div>
 </section>
 <section id="spectral-clustering" class="level2">
 <h2 class="anchored" data-anchor-id="spectral-clustering">8.4 Spectral Clustering</h2>
 <p>One of the main limitations of the k-means clustering algorithm is its tendency to seek for globular-shaped clusters. Thus, it does not work when applied to datasets with arbitrary-shaped clusters or when the cluster centroids overlapped with one another. Spectral clustering can overcome this limitation by exploiting properties of the similarity graph to overcome such limitations. To illustrate this, consider the following two-dimensional datasets.</p>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> pd.read_csv(<span class="st">'2d_data.txt'</span>, delimiter<span class="op">=</span><span class="st">' '</span>, names<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> pd.read_csv(<span class="st">'elliptical.txt'</span>, delimiter<span class="op">=</span><span class="st">' '</span>, names<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>data1.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,ax<span class="op">=</span>ax1)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>data2.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,ax<span class="op">=</span>ax2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1d5b0be1160&gt;</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="tutorial8_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> pd.read_csv(<span class="st">'2d_data.txt'</span>, delimiter<span class="op">=</span><span class="st">' '</span>, names<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> pd.read_csv(<span class="st">'elliptical.txt'</span>, delimiter<span class="op">=</span><span class="st">' '</span>, names<span class="op">=</span>[<span class="st">'x'</span>,<span class="st">'y'</span>])</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>data1.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,ax<span class="op">=</span>ax1)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>data2.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,ax<span class="op">=</span>ax2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Below, we demonstrate the results of applying k-means to the datasets (with k=2).</p>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> cluster</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>k_means <span class="op">=</span> cluster.KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>, max_iter<span class="op">=</span><span class="dv">50</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>k_means.fit(data1)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>labels1 <span class="op">=</span> pd.DataFrame(k_means.labels_,columns<span class="op">=</span>[<span class="st">'Cluster ID'</span>])</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> pd.concat((data1,labels1), axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>k_means2 <span class="op">=</span> cluster.KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>, max_iter<span class="op">=</span><span class="dv">50</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>k_means2.fit(data2)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>labels2 <span class="op">=</span> pd.DataFrame(k_means2.labels_,columns<span class="op">=</span>[<span class="st">'Cluster ID'</span>])</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> pd.concat((data2,labels2), axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>result1.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,c<span class="op">=</span><span class="st">'Cluster ID'</span>,colormap<span class="op">=</span><span class="st">'jet'</span>,ax<span class="op">=</span>ax1)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'K-means Clustering'</span>)</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>result2.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,c<span class="op">=</span><span class="st">'Cluster ID'</span>,colormap<span class="op">=</span><span class="st">'jet'</span>,ax<span class="op">=</span>ax2)</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'K-means Clustering'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
-<pre><code>Text(0.5,1,'K-means Clustering')</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="tutorial8_files/figure-html/cell-14-output-2.png" class="img-fluid"></p>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> cluster</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>k_means <span class="op">=</span> cluster.KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>, max_iter<span class="op">=</span><span class="dv">50</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>k_means.fit(data1)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>labels1 <span class="op">=</span> pd.DataFrame(k_means.labels_,columns<span class="op">=</span>[<span class="st">'Cluster ID'</span>])</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> pd.concat((data1,labels1), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>k_means2 <span class="op">=</span> cluster.KMeans(n_clusters<span class="op">=</span><span class="dv">2</span>, max_iter<span class="op">=</span><span class="dv">50</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>k_means2.fit(data2)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>labels2 <span class="op">=</span> pd.DataFrame(k_means2.labels_,columns<span class="op">=</span>[<span class="st">'Cluster ID'</span>])</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> pd.concat((data2,labels2), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>result1.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,c<span class="op">=</span><span class="st">'Cluster ID'</span>,colormap<span class="op">=</span><span class="st">'jet'</span>,ax<span class="op">=</span>ax1)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'K-means Clustering'</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>result2.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,c<span class="op">=</span><span class="st">'Cluster ID'</span>,colormap<span class="op">=</span><span class="st">'jet'</span>,ax<span class="op">=</span>ax2)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'K-means Clustering'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The plots above show the poor performance of k-means clustering. Next, we apply spectral clustering to the datasets. Spectral clustering converts the data into a similarity graph and applies the normalized cut graph partitioning algorithm to generate the clusters. In the example below, we use the Gaussian radial basis function as our affinity (similarity) measure. Users need to tune the kernel parameter (gamma) value in order to obtain the appropriate clusters for the given dataset.</p>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> cluster</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>spectral <span class="op">=</span> cluster.SpectralClustering(n_clusters<span class="op">=</span><span class="dv">2</span>,random_state<span class="op">=</span><span class="dv">1</span>,affinity<span class="op">=</span><span class="st">'rbf'</span>,gamma<span class="op">=</span><span class="dv">5000</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>spectral.fit(data1)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>labels1 <span class="op">=</span> pd.DataFrame(spectral.labels_,columns<span class="op">=</span>[<span class="st">'Cluster ID'</span>])</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> pd.concat((data1,labels1), axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>spectral2 <span class="op">=</span> cluster.SpectralClustering(n_clusters<span class="op">=</span><span class="dv">2</span>,random_state<span class="op">=</span><span class="dv">1</span>,affinity<span class="op">=</span><span class="st">'rbf'</span>,gamma<span class="op">=</span><span class="dv">100</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>spectral2.fit(data2)</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>labels2 <span class="op">=</span> pd.DataFrame(spectral2.labels_,columns<span class="op">=</span>[<span class="st">'Cluster ID'</span>])</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> pd.concat((data2,labels2), axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>result1.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,c<span class="op">=</span><span class="st">'Cluster ID'</span>,colormap<span class="op">=</span><span class="st">'jet'</span>,ax<span class="op">=</span>ax1)</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'Spectral Clustering'</span>)</span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>result2.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,c<span class="op">=</span><span class="st">'Cluster ID'</span>,colormap<span class="op">=</span><span class="st">'jet'</span>,ax<span class="op">=</span>ax2)</span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'Spectral Clustering'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
-<pre><code>Text(0.5,1,'Spectral Clustering')</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img src="tutorial8_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> cluster</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>spectral <span class="op">=</span> cluster.SpectralClustering(n_clusters<span class="op">=</span><span class="dv">2</span>,random_state<span class="op">=</span><span class="dv">1</span>,affinity<span class="op">=</span><span class="st">'rbf'</span>,gamma<span class="op">=</span><span class="dv">5000</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>spectral.fit(data1)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>labels1 <span class="op">=</span> pd.DataFrame(spectral.labels_,columns<span class="op">=</span>[<span class="st">'Cluster ID'</span>])</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> pd.concat((data1,labels1), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>spectral2 <span class="op">=</span> cluster.SpectralClustering(n_clusters<span class="op">=</span><span class="dv">2</span>,random_state<span class="op">=</span><span class="dv">1</span>,affinity<span class="op">=</span><span class="st">'rbf'</span>,gamma<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>spectral2.fit(data2)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>labels2 <span class="op">=</span> pd.DataFrame(spectral2.labels_,columns<span class="op">=</span>[<span class="st">'Cluster ID'</span>])</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> pd.concat((data2,labels2), axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>fig, (ax1,ax2) <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">5</span>))</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>result1.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,c<span class="op">=</span><span class="st">'Cluster ID'</span>,colormap<span class="op">=</span><span class="st">'jet'</span>,ax<span class="op">=</span>ax1)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'Spectral Clustering'</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>result2.plot.scatter(x<span class="op">=</span><span class="st">'x'</span>,y<span class="op">=</span><span class="st">'y'</span>,c<span class="op">=</span><span class="st">'Cluster ID'</span>,colormap<span class="op">=</span><span class="st">'jet'</span>,ax<span class="op">=</span>ax2)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'Spectral Clustering'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="summary" class="level2">
