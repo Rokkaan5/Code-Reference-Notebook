@@ -12,6 +12,9 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 - [Data Mining](CUB-DataMining/DataMining.md)
 - [Machine Learning](CUB-ML/CUB-ML.md)
 
+## Material by Textbook:
+- [Introduction to Data Mining by Kumar, et. al](Kumar-Textbook/Kumar-DataMining-textbook.md)
+
 ## Material by topics:
 (Organizing soon)
 
