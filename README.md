@@ -12,8 +12,10 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 - [Data Mining](CUB-DataMining/DataMining.md)
 - [Machine Learning](CUB-ML/CUB-ML.md)
 
-## Material by Textbook:
+## Material by Textbooks (some links to official free opensource online books):
 - [Introduction to Data Mining by Kumar, et. al](Kumar-Textbook/Kumar-DataMining-textbook.md)
+    - [An R Companion for Introduction to Data Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/index.html)
+- [The tidyverse style guide](https://style.tidyverse.org/index.html)
 
 ## Material by topics:
 (Organizing soon)

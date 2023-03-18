@@ -27,7 +27,7 @@ The links below are the same exact notebooks I re-rendered through Quarto to inc
 
 ## R-code
 
-The main "R-code examples page" (with some links to slides by one of the textbook authors, as well as the code): <https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/> 
+The main "R-code examples" page (with some links to slides by Michael Hahsler, as well as the code): <https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/> 
 
 All the example code is collected into this online book "An R Companion for Introduction to Data Mining": <https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/index.html>
 
