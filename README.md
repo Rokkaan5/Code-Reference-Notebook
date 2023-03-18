@@ -14,8 +14,8 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 
 ## Material by Textbooks (some links to official free opensource online books):
 - [Introduction to Data Mining by Kumar, et. al](Kumar-Textbook/Kumar-DataMining-textbook.md)
-    - [An R Companion for Introduction to Data Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/index.html)
-- [The tidyverse style guide](https://style.tidyverse.org/index.html)
+    - [An R Companion for Introduction to Data Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/index.html) (Direct link to web-book)
+- [The tidyverse style guide](https://style.tidyverse.org/index.html) (Direct link to web-book)
 
 ## Material by topics:
 (Organizing soon)
@@ -35,6 +35,10 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 ### Computational Physics
 
 - Nonlinear Dynamics
+
+### Data Analysis/Preparation/etc.
+- Data Exploration (EDA)
+- Data Preprocessing
 
 ### Machine Learning
 
