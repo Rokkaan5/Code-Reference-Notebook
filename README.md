@@ -17,6 +17,11 @@ Jasmine's (coding) reference material for coding, computational science, data sc
     - [An R Companion for Introduction to Data Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/index.html) (Direct link to web-book)
 - [The tidyverse style guide](https://style.tidyverse.org/index.html) (Direct link to web-book)
 
+### Supplementary example code to Oreilly textbooks
+- Introduction to Machine Learning with Python
+- Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow
+- Practical statistics for Data Scientists
+
 ## Material by topics:
 (Organizing soon)
 
