@@ -19,7 +19,7 @@ permalink: /UAF-CompPhys
 
 
 
-## [Wilberforce Pendulum Project](UAF-CompPhys/WilberforceProject.md)
+## [Wilberforce Pendulum Project](WilberforceProject.md)
 Check GitHub repo for python code files for my Wilberforce pendulum animation project
 
 Includes example uses of RK4 and matplotlib.animation
