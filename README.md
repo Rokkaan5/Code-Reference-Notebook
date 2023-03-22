@@ -22,7 +22,7 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 - Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow
 - Practical statistics for Data Scientists
 
-## Material by topics:
+## [Material by topics](Topics.md):
 (Organizing soon)
 
 (Ideally build these after all course specific pages are finished (and copy and paste from those subpages))
