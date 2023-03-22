@@ -6,9 +6,9 @@ permalink: /Clustering-topic
 
 # Clustering references/tutorials/examples
 
-## UAF ML module
+## [UAF ML module](../UAF/MachineLearning/UAF-ML-Module.md)
 
-[Clustering Workbook](../UAF/MachineLearning/Clustering%20Workbook.html)
+[Clustering Workbook](../UAF/MachineLearning/Clustering%20Workbook.html) (Python)
 
 ## CU Boulder: 
 
@@ -26,7 +26,7 @@ permalink: /Clustering-topic
 - Code 2: Clustering using various data types (corpus directory, and csv's)
 
 ## [Data Mining (lectures)](../CU-Boulder/DataMining/Lectures.md)
-08 - Clustering
+08 - Clustering (all in Python)
 - [Clustering Algorithm Comparison](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/ClusteringComparison.html)
 - [K-Means vs. K-Medoid](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/KMeans_VS_KMedoid.html)
 - [DBSCAN](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/DBSCAN.html)
