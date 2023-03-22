@@ -28,9 +28,9 @@ permalink: /Clustering-topic
 ## [Data Mining (lectures)](../CU-Boulder/DataMining/Lectures.md)
 08 - Clustering
 - [Clustering Algorithm Comparison](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/ClusteringComparison.html)
-- [K-Means vs. K-Medoid](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/KMeans_VS_KMedoid.html)
-- [DBSCAN](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/DBSCAN.html)
-- [Grid Based Clustering](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/GridBasedClustering.html)
-- [PCA with Digits dataset](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/PCA_Digits.html)
-- [PCA with Wine dataset](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/PCA_for_Wine.html)
+- [K-Means vs. K-Medoid](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/KMeans_VS_KMedoid.html)
+- [DBSCAN](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/DBSCAN.html)
+- [Grid Based Clustering](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/GridBasedClustering.html)
+- [PCA with Digits dataset](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/PCA_Digits.html)
+- [PCA with Wine dataset](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/PCA_for_Wine.html)
 
