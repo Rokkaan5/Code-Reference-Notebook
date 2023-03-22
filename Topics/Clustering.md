@@ -12,25 +12,25 @@ permalink: /Clustering-topic
 
 ## CU Boulder: 
 
-### Machine Learning Class
+### [Machine Learning Class](CU-Boulder/MachineLearning/Clustering/CUB-ML_Clustering.md)
 
 #### in R
-(Raw code files in GitHub Repo)
 
-**Clustering-ex1.R**: Comprehensive Clustering Tutorial
+- Example 1: Comprehensive Clustering Tutorial
+- Example 2: Document similarity
+- Example 3: Text Mining and NLP Tutorial
 
-- [Markdown html of Clustering-ex1](CU-Boulder/MachineLearning/clust-ex1-mkdn.html)
+#### in Python
 
-- Partitional and hierarchical clustering using csv and corpus txt file data.
+- Code 1: Clustering with data obtained from API
+- Code 2: Clustering using various data types (corpus directory, and csv's)
 
-**Clustering-ex2.R** = Document similarity
+## [Data Mining (lectures)](CU-Boulder/DataMining/Lectures.md)
+08 - Clustering
+- [Clustering Algorithm Comparison](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/ClusteringComparison.html)
+- [K-Means vs. K-Medoid](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/KMeans_VS_KMedoid.html)
+- [DBSCAN](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/DBSCAN.html)
+- [Grid Based Clustering](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/GridBasedClustering.html)
+- [PCA with Digits dataset](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/PCA_Digits.html)
+- [PCA with Wine dataset](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/PCA_for_Wine.html)
 
-**Clustering-ex3.R** = Text Mining and NLP Tutorial
-
-### Python
-
-GatesClustering1.py = Clustering with data obtained from API
-
-GatesClustering2.py = Clustering using various data types (corpus directory, and csv's)
-
-- [Jupyter html of Clustering example-2 (python) code](CU-Boulder/MachineLearning/Clustering/Markdown/Clust2.html)
