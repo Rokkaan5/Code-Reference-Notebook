@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Data Preprocessing"
-permalink: /DataPreprocessing
+permalink: /DataPreprocessing-Topic
 ---
 # Data Preprocessing
 All data analysis/preparation stages before model building
