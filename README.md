@@ -18,8 +18,8 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 - [The tidyverse style guide](https://style.tidyverse.org/index.html) (Direct link to web-book)
 
 ### Supplementary example code to Oreilly textbooks
-- Introduction to Machine Learning with Python
-- Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow
+- [Introduction to Machine Learning with Python](Textbooks/IntroMLPython/IntroMLPython.md)
+- [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](Textbooks/HandsOnML/HandsOnML.md)
 - Practical statistics for Data Scientists
 
 ## [Material by topics](Topics.md):
@@ -42,7 +42,7 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 ### Machine Learning
 
 - Unsupervised:
-    - [Clustering](Topics/Clustering.md)
+    - [Clustering](Topics/MachineLearning/Clustering.md)
     - Association Rule Mining (ARM)
 - Supervised:
     - Classification
