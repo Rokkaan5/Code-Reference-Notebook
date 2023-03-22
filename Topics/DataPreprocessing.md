@@ -46,6 +46,19 @@ All data analysis/preparation stages before model building
     - [Data Transformation](../CU-Boulder/DataMining/Lecture-Tutorials/05-Data-Preprocessing/DataTransformation.html)
 - [Data Preprocessing Case Study - Boulder Climate](../CU-Boulder/DataMining/Lecture-Tutorials/Case-Study-Boulder-Weather/BoulderClimateCaseStudy.html)
 
+### [CU-Boulder Machine Learning](../CU-Boulder/CUB-ML.md):
+(Not all codes made available yet on her site - 3/14/2023)
+- APIs
+    - in Python
+    - in R
+
+- Preparing Labelled Data
+    - in Python
+    - in R
+- Data Visualization
+    - in Python
+    - in R
+
 ## Textbook - Supplementary material/code examples
 ### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining/Kumar-DataMining-textbook.md)
 - [Introduction to Numpy and Pandas](../Textbooks/IntroDataMining/tutorial2.html)
