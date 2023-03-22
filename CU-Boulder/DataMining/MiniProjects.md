@@ -7,7 +7,7 @@ permalink: /CUB-DataMining-MiniProjects
 # [Data Mining](DataMining.md)- Mini Projects
 Most of these are DataCamp Projects available through DataCamp (and these are the finished notebooks)
 
-[A Visual History of Nobel Prize Winners](CUB-DataMining/Mini-Projects/NobelPrize/nobelprize-notebook.html)
+[A Visual History of Nobel Prize Winners](CU-Boulder/DataMining/Mini-Projects/NobelPrize/nobelprize-notebook.html)
 - 
 
 - Some basic Python applications
@@ -15,19 +15,19 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
     - plots, subplots
 - EDA
 
-[Analyzing TV Data](CUB-DataMining/Mini-Projects/TV/TVdata.html)
+[Analyzing TV Data](CU-Boulder/DataMining/Mini-Projects/TV/TVdata.html)
 -
 
 - EDA
 - Statistical analysis
 
-[Recreating John Snow's Ghost Map](CUB-DataMining/Mini-Projects/Map/GhostMap.html)
+[Recreating John Snow's Ghost Map](CU-Boulder/DataMining/Mini-Projects/Map/GhostMap.html)
 - 
 
 - plots
 - Example application of map plots (`folium` package)
 
-[Analyze Your Runkeeper Fitness Data](CUB-DataMining/Mini-Projects/Fitness/FitnessData.html)
+[Analyze Your Runkeeper Fitness Data](CU-Boulder/DataMining/Mini-Projects/Fitness/FitnessData.html)
 - 
 
 - Data Preprocessing 
@@ -40,7 +40,7 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
         - `axhline()`
         - `axhspan()`
 
-[Tweet Classification: Trump vs Trudeau](CUB-DataMining/Mini-Projects/Tweets/TweetClassification.html)
+[Tweet Classification: Trump vs Trudeau](CU-Boulder/DataMining/Mini-Projects/Tweets/TweetClassification.html)
 - 
 
 - Text processing
@@ -50,7 +50,7 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
     - Linear Support Vector Model (`LinearSVC()`)
 - Confusion matrices
 
-[Do Left-handed People Really Die Young?](CUB-DataMining/Mini-Projects/LeftHand/LHDieYoung.html)
+[Do Left-handed People Really Die Young?](CU-Boulder/DataMining/Mini-Projects/LeftHand/LHDieYoung.html)
 - 
 
 - (Naive) Bayes rule and theorem

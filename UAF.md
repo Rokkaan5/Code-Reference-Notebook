@@ -3,42 +3,41 @@ layout: page
 title: "UAF Class Resources"
 permalink: /UAF-classes
 ---
-# [Intro to Computational Physics](UAF-CompPhys/UAF-CompPhys.md)
+# [Intro to Computational Physics](UAF/ComputationalPhysics/UAF-CompPhys.md)
 
 Labs and code for my [Wilberforce Pendulum Project](UAF-CompPhys/WilberforceProject.md)
 
 
-# [Intro to Machine Learning](UAF-ML-module/UAF-ML-Module.md)
+# [Intro to Machine Learning](UAF/MachineLearning/UAF-ML-Module.md)
 
 Lecture Workbooks
 
 ## Basic Packages
-[Numpy Workbook](UAF-ML-module/NumPy%20Workbook.html)
+[Numpy Workbook](UAF/MachineLeraning/NumPy%20Workbook.html)
 
-[Matplotlib Workbook](UAF-ML-module/Matplotlib%20Workbook.html)
+[Matplotlib Workbook](UAF/MachineLeraning/Matplotlib%20Workbook.html)
 
-[Pandas Workbook](UAF-ML-module/Pandas%20Workbook.html)
+[Pandas Workbook](UAF/MachineLeraning/Pandas%20Workbook.html)
 
-[Seaborn Workbook](UAF-ML-module/Seaborn%20Workbook.html)
+[Seaborn Workbook](UAF/MachineLeraning/Seaborn%20Workbook.html)
 
-[Sklearn Workbook](UAF-ML-module/Sklearn%20Workbook.html)
+[Sklearn Workbook](UAF/MachineLeraning/Sklearn%20Workbook.html)
 
 ## Machine Learning
-[Regression Workbook](UAF-ML-module/Regression%20Workbook.html)
+[Regression Workbook](UAF/MachineLeraning/Regression%20Workbook.html)
 
-[Decision Tree Workbook](UAF-ML-module/Decision%20Tree%20Workbook.html)
+[Decision Tree Workbook](UAF/MachineLeraning/Decision%20Tree%20Workbook.html)
 
-[Classification Workbook](UAF-ML-module/Classification%20Workbook.html)
+[Classification Workbook](UAF/MachineLeraning/Classification%20Workbook.html)
 
-[Clustering Workbook](UAF-ML-module/Clustering%20Workbook.html)
+[Clustering Workbook](UAF/MachineLeraning/Clustering%20Workbook.html)
 
-[Neural Network Workbook](UAF-ML-module/Neural%20Network%20Workbook.html)
+[Neural Network Workbook](UAF/MachineLeraning/Neural%20Network%20Workbook.html)
 
 ## General DS Process
-[Data Preparation Workbook](UAF-ML-module/Data%20Preparation%20Workbook.html)
+[Data Preparation Workbook](UAF/MachineLeraning/Data%20Preparation%20Workbook.html)
 
-[Model Training Workbook](UAF-ML-module/Model%20Training%20Workbook.html)
+[Model Training Workbook](UAF/MachineLeraning/Model%20Training%20Workbook.html)
 
-[Error Analysis Workbook](UAF-ML-module/Error%20Analysis%20Workbook.html)
-
+[Error Analysis Workbook](UAF/MachineLeraning/Error%20Analysis%20Workbook.html)
 
