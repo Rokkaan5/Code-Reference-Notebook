@@ -16,14 +16,14 @@ Webpage to view and download all of the python tutorial code and data <http://ww
 
 The links below are the same exact notebooks I re-rendered through Quarto to include the table of contents on the pages. Otherwise, I made NO other changes to the notebooks are otherwise identical to the code available for download on the textbook webpage (so all credit belongs to them). 
 
-- [Introduction to Numpy and Pandas](Kumar-Textbook/tutorial2.html)
-- [Data Exploration](Kumar-Textbook/tutorial3.html)
-- [Data Preprocessing](Kumar-Textbook/tutorial4.html)
-- [Regression](Kumar-Textbook/tutorial5.html)
-- [Classification](Kumar-Textbook/tutorial6.html)
+- [Introduction to Numpy and Pandas](Textbooks/IntroDataMining-Kumar/tutorial2.html)
+- [Data Exploration](Textbooks/IntroDataMining-Kumar/tutorial3.html)
+- [Data Preprocessing](Textbooks/IntroDataMining-Kumar/tutorial4.html)
+- [Regression](Textbooks/IntroDataMining-Kumar/tutorial5.html)
+- [Classification](Textbooks/IntroDataMining-Kumar/tutorial6.html)
 - Association analysis (there wasn't anything to download on the page when I last visited (March 2023))
-- [Cluster Analysis](Kumar-Textbook/tutorial8.html)
-- [Anomaly Detection](Kumar-Textbook/tutorial9.html)
+- [Cluster Analysis](Textbooks/IntroDataMining-Kumar/tutorial8.html)
+- [Anomaly Detection](Textbooks/IntroDataMining-Kumar/tutorial9.html)
 
 ## R-code
 
