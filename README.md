@@ -13,7 +13,7 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 - [Machine Learning](CU-Boulder/MachineLearning/CUB-ML.md)
 
 ## Material by Textbooks (some links to official free opensource online books):
-- [Introduction to Data Mining by Kumar, et. al](Textbooks/Kumar-Textbook/Kumar-DataMining-textbook.md)
+- [Introduction to Data Mining by Kumar, et. al](Textbooks/IntroDataMining/Kumar-DataMining-textbook.md)
     - [An R Companion for Introduction to Data Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/index.html) (Direct link to web-book)
 - [The tidyverse style guide](https://style.tidyverse.org/index.html) (Direct link to web-book)
 
@@ -35,9 +35,9 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 
 - Nonlinear Dynamics
 
-### Data Analysis/Preparation/etc.
+### [Data Preprocessing](Topics/DataPreprocessing.md)
 - Data Exploration (EDA)
-- Data Preprocessing
+- Data Cleaning/Preparation
 
 ### Machine Learning
 
