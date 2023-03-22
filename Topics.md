@@ -7,7 +7,7 @@ permalink: /Topics
 Resources by Topic
 ---
 
-# Programming Languages
+# [Programming Languages](Topics/Languages.md)
 
 - [Python (packages)](Topics/Languages/PythonPackages.md) 
     - Numpy
@@ -19,6 +19,10 @@ Resources by Topic
     - ggplot
     - tidyverse
     - etc.
+    
+## [Data Preprocessing](Topics/DataPreprocessing.md)
+- Data Exploration (EDA)
+- Data Cleaning/Preparation
     
 # Machine Learning
 - Unsupervised
