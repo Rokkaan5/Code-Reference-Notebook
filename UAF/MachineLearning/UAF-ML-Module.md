@@ -9,30 +9,30 @@ permalink: /UAF-ML-Module
 Lecture Workbooks
 
 ## Basic Packages
-[Numpy Workbook](UAF/MachineLeraning/NumPy%20Workbook.html)
+[Numpy Workbook](UAF/MachineLearning/NumPy%20Workbook.html)
 
-[Matplotlib Workbook](UAF/MachineLeraning/Matplotlib%20Workbook.html)
+[Matplotlib Workbook](UAF/MachineLearning/Matplotlib%20Workbook.html)
 
-[Pandas Workbook](UAF/MachineLeraning/Pandas%20Workbook.html)
+[Pandas Workbook](UAF/MachineLearning/Pandas%20Workbook.html)
 
-[Seaborn Workbook](UAF/MachineLeraning/Seaborn%20Workbook.html)
+[Seaborn Workbook](UAF/MachineLearning/Seaborn%20Workbook.html)
 
-[Sklearn Workbook](UAF/MachineLeraning/Sklearn%20Workbook.html)
+[Sklearn Workbook](UAF/MachineLearning/Sklearn%20Workbook.html)
 
 ## Machine Learning
-[Regression Workbook](UAF/MachineLeraning/Regression%20Workbook.html)
+[Regression Workbook](UAF/MachineLearning/Regression%20Workbook.html)
 
-[Decision Tree Workbook](UAF/MachineLeraning/Decision%20Tree%20Workbook.html)
+[Decision Tree Workbook](UAF/MachineLearning/Decision%20Tree%20Workbook.html)
 
-[Classification Workbook](UAF/MachineLeraning/Classification%20Workbook.html)
+[Classification Workbook](UAF/MachineLearning/Classification%20Workbook.html)
 
-[Clustering Workbook](UAF/MachineLeraning/Clustering%20Workbook.html)
+[Clustering Workbook](UAF/MachineLearning/Clustering%20Workbook.html)
 
-[Neural Network Workbook](UAF/MachineLeraning/Neural%20Network%20Workbook.html)
+[Neural Network Workbook](UAF/MachineLearning/Neural%20Network%20Workbook.html)
 
 ## General DS Process
-[Data Preparation Workbook](UAF/MachineLeraning/Data%20Preparation%20Workbook.html)
+[Data Preparation Workbook](UAF/MachineLearning/Data%20Preparation%20Workbook.html)
 
-[Model Training Workbook](UAF/MachineLeraning/Model%20Training%20Workbook.html)
+[Model Training Workbook](UAF/MachineLearning/Model%20Training%20Workbook.html)
 
-[Error Analysis Workbook](UAF/MachineLeraning/Error%20Analysis%20Workbook.html)
+[Error Analysis Workbook](UAF/MachineLearning/Error%20Analysis%20Workbook.html)
