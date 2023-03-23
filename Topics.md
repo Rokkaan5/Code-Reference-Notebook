@@ -4,10 +4,9 @@ title: "Resources by Topic"
 permalink: /Topics
 ---
  
-Resources by Topic
----
+# Resources by Topic
 
-# [Programming Languages](Topics/Languages.md)
+## [Programming Languages](Topics/Languages.md)
 
 - [Python (packages)](Topics/Languages/PythonPackages.md) 
     - Numpy
@@ -24,10 +23,10 @@ Resources by Topic
 - Data Exploration (EDA)
 - Data Cleaning/Preparation
     
-# Machine Learning
+## [Machine Learning](Topics/MachineLearning.md)
 - Unsupervised
-    - Clustering
+    - [Clustering](Topics/MachineLearning/Clustering.md)
     - Association Rule Mining (ARM)
 - Supervised
-    - Classification
-    - Regression
+    - [Classification](Topics/MachineLearning/Classification.md)
+    - [Regression](Topics/MachineLearning/Regression.md)
