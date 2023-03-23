@@ -20,7 +20,7 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 ### Supplementary example code to Oreilly textbooks
 - [Introduction to Machine Learning with Python](Textbooks/IntroMLPython/IntroMLPython.md)
 - [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](Textbooks/HandsOnML/HandsOnML.md)
-- Practical statistics for Data Scientists
+- [Practical statistics for Data Scientists](Textbooks/PracticalStats/PracticalStats.md)
 
 ## [Material by topics](Topics.md):
 (Organizing soon)
