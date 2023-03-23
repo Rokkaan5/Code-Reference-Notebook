@@ -45,6 +45,6 @@ Jasmine's (coding) reference material for coding, computational science, data sc
     - [Clustering](Topics/MachineLearning/Clustering.md)
     - Association Rule Mining (ARM)
 - Supervised:
-    - Classification
-    - Regression
+    - [Classification](Topics/MachineLearning/Classification.md)
+    - [Regression](Topics/MachineLearning/Regressiong.md)
     
