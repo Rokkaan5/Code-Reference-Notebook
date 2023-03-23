@@ -12,7 +12,7 @@ permalink: /Topic-template
 
 ## CU Boulder: 
 
-### [Machine Learning Class](../CU-Boulder/MachineLearning/Clustering/CUB-ML_Clustering.md)
+### [Machine Learning Class](../CU-Boulder/MachineLearning/CUB-ML.md)
 
 #### in R
 
@@ -26,3 +26,13 @@ permalink: /Topic-template
 
 
 ## Textbook - Supplementary material/code examples
+### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining/Kumar-DataMining-textbook.md)
+
+
+### [Introduction to Machine Learning with Python](../Textbooks/IntroMLPython/IntroMLPython.md)
+
+
+### [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](../Textbooks/HandsOnML/HandsOnML.md)
+
+
+### [Practical statistics for Data Scientists](../Textbooks/PracticalStats/PracticalStats.md)
