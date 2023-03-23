@@ -16,7 +16,7 @@ All code and relevant material can be downloaded through the following GitHub re
 6. [Decision Trees](Textbooks/HandsOnML/06_decision_trees.html)
 7. [Ensemble Learning and RandomForests](Textbooks/HandsOnML/07_ensemble_learning_and_random_forests.html)
 8. [Dimensionality Reduction](Textbooks/HandsOnML/08_dimensionality_reduction.html)
-9. [Unsupervised Learning](Textbooks/HandsOnML/09_supervised_learning.html)
+9. [Unsupervised Learning](Textbooks/HandsOnML/09_unsupervised_learning.html)
 10. [NeuralNets with Keras](Textbooks/HandsOnML/10_neural_nets_with_keras.html)
 11. [Training Deep Neural Networks](Textbooks/HandsOnML/11_training_deep_neural_networks.html)
 12. [Custom Models and Training with TensorFlow](Textbooks/HandsOnML/12_custom_models_and_training_with_tensorflow.html)
