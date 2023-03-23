@@ -28,7 +28,8 @@ All data analysis/preparation stages before model building
 ## Preprocessing-Specific Tutorials
 - [UAF-ML Data Preparation Workbook](../UAF/MachineLearning/Data Preparation Workbook.html)
 
-### [CU-Boulder Data Mining](../CU-Boulder/DataMining/Lectures.md):
+### [CU-Boulder Data Mining](../CU-Boulder/DataMining/DataMining.md):
+#### [Lectures](../CU-Boulder/DataMining/Lectures.md)
 - 01-Data Integration:
     - [Collect Data from CSV](../CU-Boulder/DataMining/Lecture-Tutorials/01-Data-Integration/CollectDataFromCSV.html)
     - [Collect Data from SQLite](../CU-Boulder/DataMining/Lecture-Tutorials/01-Data-Integration/CollectDataFromSQLite.html)
@@ -46,12 +47,14 @@ All data analysis/preparation stages before model building
     - [Data Transformation](../CU-Boulder/DataMining/Lecture-Tutorials/05-Data-Preprocessing/DataTransformation.html)
 - [Data Preprocessing Case Study - Boulder Climate](../CU-Boulder/DataMining/Lecture-Tutorials/Case-Study-Boulder-Weather/BoulderClimateCaseStudy.html)
 
-### [CU-Boulder Machine Learning](../CU-Boulder/CUB-ML.md):
+#### [Mini-Projects](../CU-Boulder/DataMining/MiniProjects.md)
+
+
+### [CU-Boulder Machine Learning](../CU-Boulder/MachineLearning/CUB-ML.md):
 (Not all codes made available yet on her site - 3/14/2023)
 - APIs
     - in Python
     - in R
-
 - Preparing Labelled Data
     - in Python
     - in R
@@ -64,3 +67,11 @@ All data analysis/preparation stages before model building
 - [Introduction to Numpy and Pandas](../Textbooks/IntroDataMining/tutorial2.html)
 - [Data Exploration](../Textbooks/IntroDataMining/tutorial3.html)
 - [Data Preprocessing](../Textbooks/IntroDataMining/tutorial4.html)
+
+### [Introduction to Machine Learning with Python](../Textbooks/IntroMLPython/IntroMLPython.md)
+
+
+### [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](../Textbooks/HandsOnML/HandsOnML.md)
+
+
+### [Practical statistics for Data Scientists](../Textbooks/PracticalStats/PracticalStats.md)
