@@ -46,10 +46,6 @@ Jasmine's (coding) reference material for coding, computational science, data sc
     - Association Rule Mining (ARM)
 - Supervised:
     - [Classification](Topics/MachineLearning/Classification.md)
-    - [Regression](Topics/MachineLearning/Regressiong.md)\
+    - [Regression](Topics/MachineLearning/Regressiong.md)
 
-
-Example equation
-
-$$ c = \sqrt{a^2 + b^2} $$
     
