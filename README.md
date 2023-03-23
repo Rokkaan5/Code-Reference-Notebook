@@ -32,14 +32,14 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 - [R Programming and Packages](Topics/Languages/RPackages.md)
     
 ### Computational Physics
-
+- Oscilators
 - Nonlinear Dynamics
 
 ### [Data Preprocessing](Topics/DataPreprocessing.md)
 - Data Exploration (EDA)
 - Data Cleaning/Preparation
 
-### Machine Learning
+### [Machine Learning](Topics/MachineLearning.md)
 
 - Unsupervised:
     - [Clustering](Topics/MachineLearning/Clustering.md)
