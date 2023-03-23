@@ -29,14 +29,14 @@ All code and relevant material can be downloaded through the following GitHub re
 19. [Training and Deploying at Scale](Textbooks/HandsOnML/19_training_and_deploying_at_scale.html)
 
 ## Scientific Python Tutorials
-- NumPy
-- Matplotlib
-- Pandas
+- [NumPy](Textbooks/HandsOnML/tools_numpy.html)
+- [Matplotlib](Textbooks/HandsOnML/tools_matplotlib.html)
+- [Pandas](Textbooks/HandsOnML/tools_pandas.html)
 
 ## Math Tutorials
-- Linear Algebra
-- Differential Calculus
+- [Linear Algebra](Textbooks/HandsOnML/math_linear_algebra.html)
+- [Differential Calculus](Textbooks/HandsOnML/math_differential_calculus.html)
 
 ## Extra Material
-- Auto-differentiation
-- Gradient Descent Comparison
+- [Auto-differentiation](Textbooks/HandsOnML/extra_autodiff.html)
+- [Gradient Descent Comparison](Textbooks/HandsOnML/extra_gradient_descent_comparison.html)
