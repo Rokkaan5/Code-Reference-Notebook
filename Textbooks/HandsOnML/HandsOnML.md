@@ -7,9 +7,7 @@ permalink: /HandsOnML-textbook
 # *Hands-On Machine Learning with SciKit-Learn, Keras, and TensorFlow* - Supplementary Material and Code
 All code and relevant material can be downloaded through the following GitHub repo: <https://github.com/ageron/handson-ml2>
 
-## [Index](Textbooks/HandsOnML/index.html)
-
-
+## Chapter Notebooks
 1. The Machine Learning Landscape
 2. End to end Machine Learning Project
 3. Classification
@@ -29,3 +27,16 @@ All code and relevant material can be downloaded through the following GitHub re
 17. AutoEncoders and GANs
 18. Reinforcement Learning
 19. Training and Deploying at Scale
+
+## Scientific Python Tutorials
+- NumPy
+- Matplotlib
+- Pandas
+
+## Math Tutorials
+- Linear Algebra
+- Differential Calculus
+
+## Extra Material
+- Auto-differentiation
+- Gradient Descent Comparison
