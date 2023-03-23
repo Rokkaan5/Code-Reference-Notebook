@@ -12,8 +12,8 @@ permalink: /Clustering-topic
 
 ## CU Boulder: 
 
-### [Machine Learning Class](../CU-Boulder/MachineLearning/Clustering/CUB-ML_Clustering.md)
-
+### [Machine Learning Class](../CU-Boulder/MachineLearning/CUB-ML.md)
+[Clustering Page](../CU-Boulder/MachineLearning/Clustering/CUB-ML_Clustering.md)
 #### in R
 
 - Example 1: Comprehensive Clustering Tutorial

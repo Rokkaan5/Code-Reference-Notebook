@@ -12,7 +12,7 @@ permalink: /Classification-topic
 
 ## CU Boulder: 
 
-### [Machine Learning Class](../CU-Boulder/MachineLearning/Clustering/CUB-ML_Clustering.md)
+### [Machine Learning Class](../CU-Boulder/MachineLearning/CUB-ML.md)
 
 #### in R
 
