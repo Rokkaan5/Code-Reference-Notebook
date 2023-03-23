@@ -7,13 +7,13 @@ permalink: /DecisionTree-Topic
 # Decision Tree references/tutorials/examples
 
 ## [UAF ML module](../UAF/MachineLearning/UAF-ML-Module.md)
-
-- 
+- [Decision Tree Workbook](../UAF/MachineLearning/Decision%20Tree%20Workbook.html) (Regression)
 
 ## CU Boulder: 
 
 ### [Machine Learning Class](../CU-Boulder/MachineLearning/CUB-ML.md)
 [Decision Trees Page](../CU-Boulder/MachineLearning/DecisionTrees/CUB-ML_DT.md)
+I believe all of these are classification examples
 #### in R
 - Example 1 : Decision Trees in R using labeled record data - and visualizations
 - Example 2 : Decision Trees for text data in R and visualizations
