@@ -7,17 +7,17 @@ permalink: /Topic-template
 # Machine Learning topics
 
 ## Unsupervised
-- Clustering
+- [Clustering](MachineLearning/Clustering.md)
     - KMeans
     - Hierarchical
 - Association Rule Mining (ARM)
 
 ## Supervised
-- Classification 
-- Regression
+- [Classification](MachineLearning/Classification.md) 
+- [Regression](MachineLearning/Regression.md)
 
 ## Specific Models
-- Decision Trees
+- [Decision Trees](MachineLearning/DecisionTrees.md)
     - RandomForest
 - Naive Bayes
 - Support Vector Machines (SVM)
