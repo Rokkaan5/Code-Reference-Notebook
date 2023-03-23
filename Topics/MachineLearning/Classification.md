@@ -32,5 +32,5 @@ permalink: /Classification-topic
 - [Support Vector Machine (SVM)](../CU-Boulder/DataMining/Lecture-Tutorials/06-Classification/SVM.html)
 
 ## Textbook - Supplementary material/code examples
-### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining/Kumar-DataMining-textbook.md)
+### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining-Kumar.md)
 - [Classification](../Textbooks/IntroDataMining-Kumar/tutorial6.html)

@@ -35,5 +35,5 @@ permalink: /Clustering-topic
 - [PCA with Wine dataset](../CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/PCA_for_Wine.html)
 
 ## Textbook - Supplementary material/code examples
-### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining/Kumar-DataMining-textbook.md)
+### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining-Kumar.md)
 - [Cluster Analysis](../Textbooks/IntroDataMining-Kumar/tutorial8.html)

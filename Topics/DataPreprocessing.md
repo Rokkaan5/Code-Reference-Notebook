@@ -63,15 +63,15 @@ All data analysis/preparation stages before model building
     - in R
 
 ## Textbook - Supplementary material/code examples
-### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining/Kumar-DataMining-textbook.md)
+### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining-Kumar.md)
 - [Introduction to Numpy and Pandas](../Textbooks/IntroDataMining/tutorial2.html)
 - [Data Exploration](../Textbooks/IntroDataMining/tutorial3.html)
 - [Data Preprocessing](../Textbooks/IntroDataMining/tutorial4.html)
 
-### [Introduction to Machine Learning with Python](../Textbooks/IntroMLPython/IntroMLPython.md)
+### [Introduction to Machine Learning with Python](../Textbooks/IntroMLPython.md)
 
 
-### [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](../Textbooks/HandsOnML/HandsOnML.md)
+### [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](../Textbooks/HandsOnML.md)
 
 
-### [Practical statistics for Data Scientists](../Textbooks/PracticalStats/PracticalStats.md)
+### [Practical statistics for Data Scientists](../Textbooks/PracticalStats.md)

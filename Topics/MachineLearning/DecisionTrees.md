@@ -27,13 +27,13 @@ I believe all of these are classification examples
 - [Decision Tree](../CU-Boulder/DataMining/Lecture-Tutorials/06-Classification/DecisionTree.html)
 
 ## Textbook - Supplementary material/code examples
-### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining/Kumar-DataMining-textbook.md)
+### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMiningIntroDataMining-Kumar.md)
 
 
-### [Introduction to Machine Learning with Python](../Textbooks/IntroMLPython/IntroMLPython.md)
+### [Introduction to Machine Learning with Python](../Textbooks/IntroMLPython.md)
 
 
-### [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](../Textbooks/HandsOnML/HandsOnML.md)
+### [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](../Textbooks/HandsOnML.md)
 
 
-### [Practical statistics for Data Scientists](../Textbooks/PracticalStats/PracticalStats.md)
+### [Practical statistics for Data Scientists](../Textbooks/PracticalStats.md)

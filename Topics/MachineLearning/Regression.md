@@ -22,3 +22,13 @@ permalink: /Regression-Topic
 - [Overfitting and Underfitting](../CU-Boulder/DataMining/Lecture-Tutorials/07-Regression/OverFitting and UnderFitting.html)
 
 ## Textbook - Supplementary material/code examples
+### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining-Kumar.md)
+
+
+### [Introduction to Machine Learning with Python](../Textbooks/IntroMLPython.md)
+
+
+### [Hands-On Machine Learning with Scikit-Learn, Keras, & TensorFlow](../Textbooks/HandsOnML.md)
+
+
+### [Practical statistics for Data Scientists](../Textbooks/PracticalStats.md)
