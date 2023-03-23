@@ -34,3 +34,11 @@ permalink: /Classification-topic
 ## Textbook - Supplementary material/code examples
 ### [Intro to Data Mining (Kumar, et. al)](../Textbooks/IntroDataMining-Kumar.md)
 - [Classification](../Textbooks/IntroDataMining-Kumar/tutorial6.html)
+
+### [Introduction to Machine Learning with Python](../Textbooks/IntroMLPython.md)
+
+
+### [Hands-On Machine Learning with Scikit-Learn, Keras, & TensorFlow](../Textbooks/HandsOnML.md)
+
+
+### [Practical statistics for Data Scientists](../Textbooks/PracticalStats.md)
