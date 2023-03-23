@@ -1,7 +1,7 @@
 ---
 layout: page
-title: "Topic-subpage Template"
-permalink: /Topic-template
+title: "Template References"
+permalink: /Template-Topic
 ---
 
 # ____ references/tutorials/examples
