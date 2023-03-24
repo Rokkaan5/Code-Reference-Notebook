@@ -7,7 +7,7 @@ permalink: /DecisionTree-Topic
 # Decision Tree references/tutorials/examples
 
 ## [UAF ML module](../../UAF/MachineLearning/UAF-ML-Module.md)
-- [Decision Tree Workbook](../../UAF/MachineLearning/Decision%20Tree%20Workbook.html) (Regression)
+- [Decision Tree Workbook](../../UAF/MachineLearning/Decision Tree Workbook.html) (Regression)
 
 ## CU Boulder: 
 
