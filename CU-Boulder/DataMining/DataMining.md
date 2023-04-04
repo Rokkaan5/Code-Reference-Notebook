@@ -16,6 +16,7 @@ permalink: /CUB-DataMining
 - 06-Classification
 - 07-Regression
 - 08-Clustering
+- 09-Frequent Patterns
 
 
 ## [Mini-projects](MiniProjects.md)

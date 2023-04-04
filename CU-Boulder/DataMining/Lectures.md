@@ -60,3 +60,8 @@ Preprocessing application example
 - [Grid Based Clustering](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/GridBasedClustering.html)
 - [PCA with Digits dataset](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/PCA_Digits.html)
 - [PCA with Wine dataset](CU-Boulder/DataMining/Lecture-Tutorials/08-Clustering/PCA_for_Wine.html)
+
+## 09-Frequent Patterns
+- [Apriori-Dummy](CU-Boulder/DataMining/Lecture-Tutorials/09-Frequent-Patterns/Apriori-Dummy.html)
+- [Apriori Algorithm](CU-Boulder/DataMining/Lecture-Tutorials/09-Frequent-Patterns/AprioriAlgorithm.html)
+- [FP Growth Algorithm](CU-Boulder/DataMining/Lecture-Tutorials/09-Frequent-Patterns/FPGrowthAlgorithm.html)
