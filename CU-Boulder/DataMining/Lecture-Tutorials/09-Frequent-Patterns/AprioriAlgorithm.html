@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apriori-Algorithm</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="AprioriAlgorithm_files/libs/clipboard/clipboard.min.js"></script>
+<script src="AprioriAlgorithm_files/libs/quarto-html/quarto.js"></script>
+<script src="AprioriAlgorithm_files/libs/quarto-html/popper.min.js"></script>
+<script src="AprioriAlgorithm_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="AprioriAlgorithm_files/libs/quarto-html/anchor.min.js"></script>
+<link href="AprioriAlgorithm_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="AprioriAlgorithm_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="AprioriAlgorithm_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="AprioriAlgorithm_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="AprioriAlgorithm_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#apriori-for-frequent-pattern-mining" id="toc-apriori-for-frequent-pattern-mining" class="nav-link active" data-scroll-target="#apriori-for-frequent-pattern-mining">Apriori for Frequent Pattern Mining</a>
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#what-is-association-rule-mining" id="toc-what-is-association-rule-mining" class="nav-link" data-scroll-target="#what-is-association-rule-mining">What Is Association Rule Mining?</a></li>
+  <li><a href="#what-is-an-apriori-algorithm" id="toc-what-is-an-apriori-algorithm" class="nav-link" data-scroll-target="#what-is-an-apriori-algorithm">What Is an Apriori Algorithm?</a></li>
+  <li><a href="#how-does-the-apriori-algorithm-work" id="toc-how-does-the-apriori-algorithm-work" class="nav-link" data-scroll-target="#how-does-the-apriori-algorithm-work">How Does the Apriori Algorithm Work?</a></li>
+  <li><a href="#support" id="toc-support" class="nav-link" data-scroll-target="#support">Support :</a></li>
+  <li><a href="#confidence" id="toc-confidence" class="nav-link" data-scroll-target="#confidence">Confidence:</a></li>
+  <li><a href="#lift" id="toc-lift" class="nav-link" data-scroll-target="#lift">Lift:</a></li>
+  <li><a href="#conviction" id="toc-conviction" class="nav-link" data-scroll-target="#conviction">Conviction:</a></li>
+  </ul></li>
+  <li><a href="#a-simple-count" id="toc-a-simple-count" class="nav-link" data-scroll-target="#a-simple-count">A simple count</a></li>
+  <li><a href="#run-with-a-package" id="toc-run-with-a-package" class="nav-link" data-scroll-target="#run-with-a-package">Run with a package</a>
+  <ul class="collapse">
+  <li><a href="#apriori-algorithm-in-python--market-basket-analysis" id="toc-apriori-algorithm-in-python--market-basket-analysis" class="nav-link" data-scroll-target="#apriori-algorithm-in-python--market-basket-analysis">Apriori Algorithm in Python- Market Basket Analysis</a></li>
+  </ul></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a>
+  <ul class="collapse">
+  <li><a href="#limitations-of-apriori-algorithm" id="toc-limitations-of-apriori-algorithm" class="nav-link" data-scroll-target="#limitations-of-apriori-algorithm">Limitations of Apriori Algorithm</a></li>
+  <li><a href="#applications-of-apriori-algorithm" id="toc-applications-of-apriori-algorithm" class="nav-link" data-scroll-target="#applications-of-apriori-algorithm">Applications of Apriori Algorithm</a></li>
+  </ul></li>
+  <li><a href="#reference-and-credit" id="toc-reference-and-credit" class="nav-link" data-scroll-target="#reference-and-credit">Reference and Credit</a>
+  <ul class="collapse">
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#credit" id="toc-credit" class="nav-link" data-scroll-target="#credit">Credit</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Apriori-Algorithm</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="apriori-for-frequent-pattern-mining" class="level1">
+<h1>Apriori for Frequent Pattern Mining</h1>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<section id="what-is-association-rule-mining" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-association-rule-mining">What Is Association Rule Mining?</h3>
+<p>Association rule mining is a technique to identify frequent patterns and associations among a set of items. For example, understanding customer buying habits. By finding correlations and associations between different items that customers place in their ‘shopping basket,’ recurring patterns can be derived.</p>
+<p>Say, Joshua goes to buy a bottle of wine from the supermarket. He also grabs a couple of chips as well. The manager there analyses that, not only Joshua, people often tend to buy wine and chips together. After finding out the pattern, the manager starts to arrange these items together and notices an increase in sales.</p>
+<p>This process of identifying an association between products/items is called association rule mining.</p>
+</section>
+<section id="what-is-an-apriori-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-an-apriori-algorithm">What Is an Apriori Algorithm?</h3>
+<p>Apriori algorithm assumes that any subset of a frequent itemset must be frequent. Say, a transaction containing {wine, chips, bread} also contains {wine, bread}. So, according to the principle of Apriori, if {wine, chips, bread} is frequent, then {wine, bread} must also be frequent.</p>
+</section>
+<section id="how-does-the-apriori-algorithm-work" class="level3">
+<h3 class="anchored" data-anchor-id="how-does-the-apriori-algorithm-work">How Does the Apriori Algorithm Work?</h3>
+<p>The key concept in the Apriori algorithm is that it assumes all subsets of a frequent itemset to be frequent. Similarly, for any infrequent itemset, all its supersets must also be infrequent. Let us try and understand the working of an Apriori algorithm with the help of a very famous business scenario, market basket analysis.</p>
+<p>Here is a dataset consisting of six transactions in an hour. Each transaction is a combination of 0s and 1s, where 0 represents the absence of an item and 1 represents the presence of it.</p>
+<div class="cell" data-cell_id="2f873640608c4423863a8511bda69a89" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:49}" data-deepnote_cell_type="code" data-execution_millis="105" data-execution_start="1665093834679" data-source_hash="f4c44de2" data-tags="[]">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd  </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># assign data of lists.  </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="st">'Transaction Id'</span>: [<span class="st">'1'</span>, <span class="st">'2'</span>, <span class="st">'3'</span>, <span class="st">'4'</span>, <span class="st">'5'</span>, <span class="st">'6'</span>], <span class="st">'Wine'</span>: [<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>], <span class="st">'Chips'</span>: [<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>],<span class="st">'Bread'</span>:[<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>], <span class="st">'Milk'</span>:[<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>] }  </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DataFrame  </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)  </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the output.  </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Transaction Id  Wine  Chips  Bread  Milk
+0              1     1      1      1     1
+1              2     1      0      1     1
+2              3     0      0      1     1
+3              4     0      1      0     0
+4              5     1      1      1     1
+5              6     1      1      0     1</code></pre>
+</div>
+</div>
+<p>We can find multiple rules from this scenario. For example, in a transaction of wine, chips, and bread, if wine and chips are bought, then customers also buy bread. {wine, chips} =&gt;; {bread} In order to select the interesting rules out of multiple possible rules from this small business scenario, we will be using the following measures:</p>
+<ul>
+<li><p>Support</p></li>
+<li><p>Confidence</p></li>
+<li><p>Lift</p></li>
+<li><p>Conviction</p></li>
+</ul>
+</section>
+<section id="support" class="level3">
+<h3 class="anchored" data-anchor-id="support">Support :</h3>
+<p>Support of item x is nothing but the ratio of the number of transactions in which item x appears to the total number of transactions.i.e.,</p>
+<p>Support(wine) = Number of transactions in which wine appears/ total number of transactions = 4/6 Support(wine) = = 0.66667</p>
+</section>
+<section id="confidence" class="level3">
+<h3 class="anchored" data-anchor-id="confidence">Confidence:</h3>
+<p>Confidence (x =&gt; y) signifies the likelihood of the item y being purchased when item x is purchased. This method takes into account the popularity of item x. i.e.,</p>
+<p>Conf({wine, chips} =&gt; {bread}) = support(wine, chips, bread)/ support(wine,chips) =(2/6) / (3/6) Conf({wine, chips} =&gt; {bread})= = 0.667</p>
+</section>
+<section id="lift" class="level3">
+<h3 class="anchored" data-anchor-id="lift">Lift:</h3>
+<p>Lift (x =&gt; y) is nothing but the ‘interestingness’ or the likelihood of the item y being purchased when item x is sold. Unlike confidence (x =&gt; y), this method takes into account the popularity of the item y. i.e.,</p>
+<p>lift ({wine, chips} =&gt; {bread}) = support(wine, chips, bread)/ support(wine)* support(chips) = (2/6) / (3/6 *4/6) lift ({wine, chips} =&gt; {bread}) ==1</p>
+<ul>
+<li><p>Lift (x =&gt; y) = 1 means that there is no correlation within the itemset</p></li>
+<li><p>Lift (x =&gt; y) &gt; 1 means that there is a positive correlation within the itemset, i.e., products in the itemset, x and y, are more likely to be bought together.</p></li>
+<li><p>Lift (x =&gt; y) &lt; 1 means that there is a negative correlation within the itemset, i.e., products in itemset, x and y, are unlikely to be bought together.</p></li>
+</ul>
+</section>
+<section id="conviction" class="level3">
+<h3 class="anchored" data-anchor-id="conviction">Conviction:</h3>
+<p>Conviction of a rule can be defined as follows:</p>
+<p>conv(x =&gt; y) = (1- support(y)) / (1-conf(x=&gt;y)) i.e.,</p>
+<p>conv({wine, chips} =&gt; {bread} ) = (1- support(bread)) / (1-conf(wine, chips)=&gt;(bread))) =(1 -4/6)/ (1-2/3) =1</p>
+<p>Its value range is [0, +∞]</p>
+<ul>
+<li><p>Conv(x =&gt; y) = 1 means that x has no relation with y.</p></li>
+<li><p>Greater the conviction higher the interest in the rule.</p></li>
+</ul>
+</section>
+</section>
+<section id="a-simple-count" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-count">A simple count</h2>
+<p>Now that we know the methods to find out the interesting rules, let us go back to the example. Before we get started, let us fix the support threshold to 50%. Min_Support=0.5 (or we need 3 out of 6 transaction).</p>
+<p>Step 1: Create a frequency table of all the items that occur in all transactions</p>
+<div class="cell" data-cell_id="5a9bef7a34a6439b877dc6dc0c0ae5ab" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:151}" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1665093925427" data-source_hash="c24d387f" data-tags="[]">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign data of lists.  </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="st">'Item'</span>: [<span class="st">'Wine'</span>, <span class="st">'Chips'</span>, <span class="st">'Bread'</span>, <span class="st">'Milk'</span>], <span class="st">'Frequency'</span>: [<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>] }  </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DataFrame  </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the output.  </span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Item  Frequency
+0   Wine          4
+1  Chips          4
+2  Bread          4
+3   Milk          5</code></pre>
+</div>
+</div>
+<p>Step 2: Find the frequent 1-itemset based on the support threshold Support threshold = 3 transaction</p>
+<div class="cell" data-cell_id="71e555cb6d934de6aa252f029d7e64cb" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:160}" data-deepnote_cell_type="code" data-execution_millis="811" data-execution_start="1664939123538" data-source_hash="c24d387f" data-tags="[]">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign data of lists.  </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="st">'Item'</span>: [<span class="st">'Wine'</span>, <span class="st">'Chips'</span>, <span class="st">'Bread'</span>, <span class="st">'Milk'</span>], <span class="st">'Frequency'</span>: [<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>] }  </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DataFrame  </span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)  </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the output.  </span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Item  Frequency
+0   Wine          4
+1  Chips          4
+2  Bread          4
+3   Milk          5</code></pre>
+</div>
+</div>
+<p>Step 3: From the frequent 1-itemset, make possible pairs irrespective of the order as 2-itemsets</p>
+<div class="cell" data-cell_id="e09cde21c7f84f579f6d6b9773c492d8" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:169}" data-deepnote_cell_type="code" data-execution_millis="813" data-execution_start="1664939123543" data-source_hash="824c096" data-tags="[]">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign data of lists.  </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="st">'Item'</span>: [<span class="st">'Wine, Chips'</span>, <span class="st">'Wine, Bread'</span>, <span class="st">'Wine, Milk'</span>, <span class="st">'Chips, Bread'</span>, <span class="st">'Chips, Milk'</span>,<span class="st">'Bread, Milk'</span>], <span class="st">'Frequency'</span>: [<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>] }  </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DataFrame  </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)  </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the output.  </span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Item  Frequency
+0   Wine, Chips          3
+1   Wine, Bread          3
+2    Wine, Milk          4
+3  Chips, Bread          2
+4   Chips, Milk          3
+5   Bread, Milk          4</code></pre>
+</div>
+</div>
+<p>Step 4: Again, find the frequent 2-itemsets based on the support threshold</p>
+<div class="cell" data-cell_id="ad53ed9fad8f4045abee95f19992a878" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:178}" data-deepnote_cell_type="code" data-execution_millis="775" data-execution_start="1664939123591" data-source_hash="d729dae5" data-tags="[]">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign data of lists.  </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="st">'Item'</span>: [<span class="st">'Wine, Chips'</span>, <span class="st">'Wine, Bread'</span>, <span class="st">'Wine, Milk'</span>,  <span class="st">'Chips, Milk'</span>,<span class="st">'Bread, Milk'</span>], <span class="st">'Frequency'</span>: [<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>] }  </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DataFrame  </span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)  </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the output.  </span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Item  Frequency
+0  Wine, Chips          3
+1  Wine, Bread          3
+2   Wine, Milk          4
+3  Chips, Milk          3
+4  Bread, Milk          4</code></pre>
+</div>
+</div>
+<p>Step 5: Now, make a set of 3-itemsets that are bought together based on the frequent 2-itemset from Step 4</p>
+<div class="cell" data-cell_id="ffa8693c656e494e82804d74fce8315c" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:187}" data-deepnote_cell_type="code" data-execution_millis="772" data-execution_start="1664992440239" data-source_hash="639c9862" data-tags="[]">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign data of lists.  </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="st">'Item'</span>: [<span class="st">'Wine, Bread, Milk'</span>, <span class="st">'Wine, Chips, Milk'</span>], <span class="st">'Frequency'</span>: [<span class="dv">3</span>, <span class="dv">2</span>] }  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create DataFrame  </span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)  </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the output.  </span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Item  Frequency
+0  Wine, Bread, Milk          3
+1  Wine, Chips, Milk          2</code></pre>
+</div>
+</div>
+<p>Findings:- {Wine, Bread, Milk} is the frequent 3-itemsets we have got from the given data. But in real-world scenarios, we would have dozens of items to build rules from. Then, we might have to make four/five-pair itemsets.</p>
+</section>
+<section id="run-with-a-package" class="level2">
+<h2 class="anchored" data-anchor-id="run-with-a-package">Run with a package</h2>
+<section id="apriori-algorithm-in-python--market-basket-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="apriori-algorithm-in-python--market-basket-analysis">Apriori Algorithm in Python- Market Basket Analysis</h3>
+<p>Problem Statement: The manager of a retail store is trying to find out an association rule between six items, to figure out which items are more often bought together so that he can keep the items together in order to increase sales.</p>
+<p>Environment Setup:</p>
+<div class="cell" data-cell_id="1641dd4e344844e290791bdf12615b59" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:214}" data-deepnote_cell_type="code" data-execution_millis="3335" data-execution_start="1665094086619" data-source_hash="9f4034cb" data-tags="[]">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pip install apyori</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Collecting apyori
+  Downloading apyori-1.1.2.tar.gz (8.6 kB)
+  Preparing metadata (setup.py) ... done
+Building wheels for collected packages: apyori
+  Building wheel for apyori (setup.py) ... done
+  Created wheel for apyori: filename=apyori-1.1.2-py3-none-any.whl size=5974 sha256=e3bd070dce2ea54826fcf23aaa0348431c4a9ee9bde10facaa172a7bd6244ddd
+  Stored in directory: /root/.cache/pip/wheels/32/2a/54/10c595515f385f3726642b10c60bf788029e8f3a1323e3913a
+Successfully built apyori
+Installing collected packages: apyori
+Successfully installed apyori-1.1.2
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+WARNING: You are using pip version 22.0.4; however, version 22.2.2 is available.
+You should consider upgrading via the '/usr/local/bin/python -m pip install --upgrade pip' command.
+Note: you may need to restart the kernel to use updated packages.</code></pre>
+</div>
+</div>
+<p>Step 1: Import the libraries</p>
+<div class="cell" data-cell_id="7cd4af0793f041ca82ea37f8e1bc9a30" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:223}" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1665094101901" data-source_hash="956a694d" data-tags="[]">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> apyori <span class="im">import</span> apriori</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Step 2: Load the dataset</p>
+<div class="cell" data-cell_id="de630f38e0764a5f9e26caf91559e425" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:232}" data-deepnote_cell_type="code" data-execution_millis="2244" data-execution_start="1665094113478" data-source_hash="45d320df" data-tags="[]">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install openpyxl to read data from xlsx file</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install openpyxl </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Collecting openpyxl
+  Downloading openpyxl-3.0.10-py2.py3-none-any.whl (242 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 242.1/242.1 KB 38.5 MB/s eta 0:00:00
+Collecting et-xmlfile
+  Downloading et_xmlfile-1.1.0-py3-none-any.whl (4.7 kB)
+Installing collected packages: et-xmlfile, openpyxl
+Successfully installed et-xmlfile-1.1.0 openpyxl-3.0.10
+WARNING: You are using pip version 22.0.4; however, version 22.2.2 is available.
+You should consider upgrading via the '/root/venv/bin/python -m pip install --upgrade pip' command.</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="ea05bc9490454dfc898b35002e18b058" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:238}" data-deepnote_cell_type="code" data-execution_millis="202" data-execution_start="1665094127827" data-source_hash="1c1aa9fe" data-tags="[]">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>basket_data <span class="op">=</span> pd.read_excel(<span class="st">'Day1.xlsx'</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>basket_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Unnamed: 1</th>
+      <th>Unnamed: 2</th>
+      <th>Unnamed: 3</th>
+      <th>Unnamed: 4</th>
+      <th>Unnamed: 5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Wine</td>
+      <td>Chips</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Wine</td>
+      <td>NaN</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>Chips</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Wine</td>
+      <td>Chips</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Wine</td>
+      <td>Chips</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Milk</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Wine</td>
+      <td>Chips</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>NaN</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Wine</td>
+      <td>Chips</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Milk</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Wine</td>
+      <td>NaN</td>
+      <td>Bread</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Wine</td>
+      <td>NaN</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>NaN</td>
+      <td>Chips</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>NaN</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Wine</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Wine</td>
+      <td>Chips</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Wine</td>
+      <td>NaN</td>
+      <td>Bread</td>
+      <td>NaN</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Wine</td>
+      <td>NaN</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Wine</td>
+      <td>Chips</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>NaN</td>
+      <td>Chips</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>NaN</td>
+      <td>Chips</td>
+      <td>NaN</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>Wine</td>
+      <td>Chips</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Wine</td>
+      <td>NaN</td>
+      <td>Bread</td>
+      <td>Butter</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Wine</td>
+      <td>Chips</td>
+      <td>Bread</td>
+      <td>NaN</td>
+      <td>Milk</td>
+      <td>Apple</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>NaN</td>
+      <td>Chips</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="bdbbaa6da5114b99b93e00d7573d4239" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:244}" data-deepnote_cell_type="code" data-execution_millis="8" data-execution_start="1664939128402" data-source_hash="7703011d" data-tags="[]">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>basket_data.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>(22, 6)</code></pre>
+</div>
+</div>
+<p>Step 5: Convert Pandas DataFrame into a list of lists</p>
+<div class="cell" data-cell_id="7ffba30713be4f048b51e49ea51ae312" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:253}" data-deepnote_cell_type="code" data-execution_start="1665094192943" data-source_hash="52c07fc1" data-tags="[]">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>records<span class="op">=</span>[]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">22</span>):</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    records.append([<span class="bu">str</span>(basket_data.values[i,j]) <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">6</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="c34219537d134da0850dd0d9c971321d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:259}" data-deepnote_cell_type="code" data-execution_millis="147" data-execution_start="1665094194784" data-source_hash="c530265f" data-tags="[]">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>records</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>[['Wine', 'Chips', 'Bread', 'Butter', 'Milk ', 'Apple'],
+ ['Wine', 'nan', 'Bread', 'Butter', 'Milk ', 'nan'],
+ ['nan', 'nan', 'Bread', 'Butter', 'Milk ', 'nan'],
+ ['nan', 'Chips', 'nan', 'nan', 'nan', 'Apple'],
+ ['Wine', 'Chips', 'Bread', 'Butter', 'Milk ', 'Apple'],
+ ['Wine', 'Chips', 'nan', 'nan', 'Milk ', 'nan'],
+ ['Wine', 'Chips', 'Bread', 'Butter', 'nan', 'Apple'],
+ ['Wine', 'Chips', 'nan', 'nan', 'Milk ', 'nan'],
+ ['Wine', 'nan', 'Bread', 'nan', 'nan', 'Apple'],
+ ['Wine', 'nan', 'Bread', 'Butter', 'Milk ', 'nan'],
+ ['nan', 'Chips', 'Bread', 'Butter', 'nan', 'Apple'],
+ ['Wine', 'nan', 'nan', 'Butter', 'Milk ', 'Apple'],
+ ['Wine', 'Chips', 'Bread', 'Butter', 'Milk ', 'nan'],
+ ['Wine', 'nan', 'Bread', 'nan', 'Milk ', 'Apple'],
+ ['Wine', 'nan', 'Bread', 'Butter', 'Milk ', 'Apple'],
+ ['Wine', 'Chips', 'Bread', 'Butter', 'Milk ', 'Apple'],
+ ['nan', 'Chips', 'Bread', 'Butter', 'Milk ', 'Apple'],
+ ['nan', 'Chips', 'nan', 'Butter', 'Milk ', 'Apple'],
+ ['Wine', 'Chips', 'Bread', 'Butter', 'Milk ', 'Apple'],
+ ['Wine', 'nan', 'Bread', 'Butter', 'Milk ', 'Apple'],
+ ['Wine', 'Chips', 'Bread', 'nan', 'Milk ', 'Apple'],
+ ['nan', 'Chips', 'nan', 'nan', ' ', 'nan']]</code></pre>
+</div>
+</div>
+<p>Step 6: Build the Apriori model</p>
+<div class="cell" data-cell_id="320f497530f74a76b21f475e91abe65a" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:268}" data-deepnote_cell_type="code" data-execution_start="1665094634715" data-source_hash="97378d99" data-tags="[]">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>association_rules <span class="op">=</span> apriori(records, min_support<span class="op">=</span><span class="fl">0.40</span>, min_confidence<span class="op">=</span><span class="fl">0.70</span>, min_lift<span class="op">=</span><span class="fl">1.2</span>, min_length<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>association_results <span class="op">=</span> <span class="bu">list</span>(association_rules)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Step 7: Print out the number of rules</p>
+<div class="cell" data-cell_id="cc70b3fb9ea54aaf86ebb338ca1f993f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:277}" data-deepnote_cell_type="code" data-execution_millis="225" data-execution_start="1665094637117" data-source_hash="1bbb5021" data-tags="[]">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(association_results))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5</code></pre>
+</div>
+</div>
+<p>Step 8: Have a glance at the rule</p>
+<div class="cell" data-cell_id="2b761527036d4a30b3786187bdb3534d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:286}" data-deepnote_cell_type="code" data-execution_millis="7" data-execution_start="1665094644278" data-source_hash="61201734" data-tags="[]">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(association_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[RelationRecord(items=frozenset({'Wine', 'Bread', 'Apple'}), support=0.45454545454545453, ordered_statistics=[OrderedStatistic(items_base=frozenset({'Wine', 'Apple'}), items_add=frozenset({'Bread'}), confidence=0.9090909090909091, lift=1.25)]), RelationRecord(items=frozenset({'Butter', 'Apple', 'Milk '}), support=0.4090909090909091, ordered_statistics=[OrderedStatistic(items_base=frozenset({'Apple', 'Milk '}), items_add=frozenset({'Butter'}), confidence=0.8181818181818182, lift=1.2000000000000002)]), RelationRecord(items=frozenset({'Butter', 'Bread', 'Milk '}), support=0.5, ordered_statistics=[OrderedStatistic(items_base=frozenset({'Butter'}), items_add=frozenset({'Bread', 'Milk '}), confidence=0.7333333333333334, lift=1.241025641025641), OrderedStatistic(items_base=frozenset({'Bread', 'Milk '}), items_add=frozenset({'Butter'}), confidence=0.8461538461538461, lift=1.241025641025641)]), RelationRecord(items=frozenset({'Butter', 'Bread', 'Wine'}), support=0.45454545454545453, ordered_statistics=[OrderedStatistic(items_base=frozenset({'Butter', 'Wine'}), items_add=frozenset({'Bread'}), confidence=0.9090909090909091, lift=1.25)]), RelationRecord(items=frozenset({'Butter', 'Bread', 'Milk ', 'Wine'}), support=0.4090909090909091, ordered_statistics=[OrderedStatistic(items_base=frozenset({'Butter', 'Wine'}), items_add=frozenset({'Bread', 'Milk '}), confidence=0.8181818181818182, lift=1.3846153846153846), OrderedStatistic(items_base=frozenset({'Wine', 'Bread', 'Milk '}), items_add=frozenset({'Butter'}), confidence=0.8181818181818182, lift=1.2000000000000002), OrderedStatistic(items_base=frozenset({'Butter', 'Milk ', 'Wine'}), items_add=frozenset({'Bread'}), confidence=0.9000000000000001, lift=1.2375)])]</code></pre>
+</div>
+</div>
+<p>Step 9: Have a detailed look at the rule</p>
+<div class="cell" data-cell_id="75f71e746eaf4b1587d127e2df0954eb" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:295}" data-deepnote_cell_type="code" data-execution_millis="55" data-execution_start="1665094646351" data-source_hash="1d2ef44c" data-tags="[]">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> r <span class="kw">in</span> association_results:</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"====================================="</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Frequent itemset:</span><span class="sc">{}</span><span class="st"> with support'</span>.<span class="bu">format</span>(<span class="bu">list</span>(r[<span class="dv">0</span>])), r[<span class="dv">1</span>])</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'--Association Rules'</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a <span class="kw">in</span> r[<span class="dv">2</span>]:</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'----Rule: </span><span class="sc">{}</span><span class="st"> -&gt; </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(<span class="bu">list</span>(a[<span class="dv">0</span>]), <span class="bu">list</span>(a[<span class="dv">1</span>])))</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'------Confidence: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(a[<span class="dv">2</span>]))</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'------Lift: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(a[<span class="dv">3</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>=====================================
+Frequent itemset:['Wine', 'Bread', 'Apple'] with support 0.45454545454545453
+--Association Rules
+----Rule: ['Wine', 'Apple'] -&gt; ['Bread']
+------Confidence: 0.9090909090909091
+------Lift: 1.25
+=====================================
+Frequent itemset:['Butter', 'Apple', 'Milk '] with support 0.4090909090909091
+--Association Rules
+----Rule: ['Apple', 'Milk '] -&gt; ['Butter']
+------Confidence: 0.8181818181818182
+------Lift: 1.2000000000000002
+=====================================
+Frequent itemset:['Butter', 'Bread', 'Milk '] with support 0.5
+--Association Rules
+----Rule: ['Butter'] -&gt; ['Bread', 'Milk ']
+------Confidence: 0.7333333333333334
+------Lift: 1.241025641025641
+----Rule: ['Bread', 'Milk '] -&gt; ['Butter']
+------Confidence: 0.8461538461538461
+------Lift: 1.241025641025641
+=====================================
+Frequent itemset:['Butter', 'Bread', 'Wine'] with support 0.45454545454545453
+--Association Rules
+----Rule: ['Butter', 'Wine'] -&gt; ['Bread']
+------Confidence: 0.9090909090909091
+------Lift: 1.25
+=====================================
+Frequent itemset:['Butter', 'Bread', 'Milk ', 'Wine'] with support 0.4090909090909091
+--Association Rules
+----Rule: ['Butter', 'Wine'] -&gt; ['Bread', 'Milk ']
+------Confidence: 0.8181818181818182
+------Lift: 1.3846153846153846
+----Rule: ['Wine', 'Bread', 'Milk '] -&gt; ['Butter']
+------Confidence: 0.8181818181818182
+------Lift: 1.2000000000000002
+----Rule: ['Butter', 'Milk ', 'Wine'] -&gt; ['Bread']
+------Confidence: 0.9000000000000001
+------Lift: 1.2375</code></pre>
+</div>
+</div>
+<p>The support value for the first rule is 0.5. This number is calculated by dividing the number of transactions containing ‘Milk,’ ‘Bread,’ and ‘Butter’ by the total number of transactions.</p>
+<p>The confidence level for the rule is 0.846, which shows that out of all the transactions that contain both “Milk” and “Bread”, 84.6 % contain ‘Butter’ too.</p>
+<p>The lift of 1.241 tells us that ‘Butter’ is 1.241 times more likely to be bought by the customers who buy both ‘Milk’ and ‘Butter’ compared to the default likelihood sale of ‘Butter.’</p>
+</section>
+</section>
+<section id="discussion" class="level2">
+<h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<section id="limitations-of-apriori-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="limitations-of-apriori-algorithm">Limitations of Apriori Algorithm</h3>
+<p>Despite being a simple one, Apriori algorithms have some limitations including:</p>
+<ul>
+<li><p>Waste of time when it comes to handling a large number of candidates with frequent itemsets.</p></li>
+<li><p>The efficiency of this algorithm goes down when there is a large number of transactions going on through a limited memory capacity.</p></li>
+<li><p>Required high computation power and need to scan the entire database.</p></li>
+</ul>
+</section>
+<section id="applications-of-apriori-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="applications-of-apriori-algorithm">Applications of Apriori Algorithm</h3>
+<ul>
+<li><p>Used in forest departments to understand the intensity and probability of forest fires.</p></li>
+<li><p>The Healthcare department used such algorithms to analyze the patients’ database and predict which patients might develop blood pressure, diabetes, another common disease.</p></li>
+<li><p>E-commerce websites use it in their recommendation systems to provide a better user experience.</p></li>
+</ul>
+</section>
+</section>
+<section id="reference-and-credit" class="level2">
+<h2 class="anchored" data-anchor-id="reference-and-credit">Reference and Credit</h2>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
+<ul>
+<li>https://intellipaat.com/blog/data-science-apriori-algorithm/#1</li>
+</ul>
+</section>
+<section id="credit" class="level3">
+<h3 class="anchored" data-anchor-id="credit">Credit</h3>
+<p>This tutorial is prepared by Bhawneet Sign and Di</p>
+<p><a style="text-decoration:none;line-height:16px;display:flex;color:#5B5B62;padding:10px;justify-content:end;" href="https://deepnote.com?utm_source=created-in-deepnote-cell&amp;projectId=7dfb2556-381e-437f-bf73-7a02ebafcb82" target="_blank"> <img alt="Created in deepnote.com" style="display:inline;max-height:16px;margin:0px;margin-right:7.5px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODBweCIgaGVpZ2h0PSI4MHB4IiB2aWV3Qm94PSIwIDAgODAgODAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDU0LjEgKDc2NDkwKSAtIGh0dHBzOi8vc2tldGNoYXBwLmNvbSAtLT4KICAgIDx0aXRsZT5Hcm91cCAzPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGcgaWQ9IkxhbmRpbmciIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJBcnRib2FyZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTEyMzUuMDAwMDAwLCAtNzkuMDAwMDAwKSI+CiAgICAgICAgICAgIDxnIGlkPSJHcm91cC0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjM1LjAwMDAwMCwgNzkuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICA8cG9seWdvbiBpZD0iUGF0aC0yMCIgZmlsbD0iIzAyNjVCNCIgcG9pbnRzPSIyLjM3NjIzNzYyIDgwIDM4LjA0NzY2NjcgODAgNTcuODIxNzgyMiA3My44MDU3NTkyIDU3LjgyMTc4MjIgMzIuNzU5MjczOSAzOS4xNDAyMjc4IDMxLjY4MzE2ODMiPjwvcG9seWdvbj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0zNS4wMDc3MTgsODAgQzQyLjkwNjIwMDcsNzYuNDU0OTM1OCA0Ny41NjQ5MTY3LDcxLjU0MjI2NzEgNDguOTgzODY2LDY1LjI2MTk5MzkgQzUxLjExMjI4OTksNTUuODQxNTg0MiA0MS42NzcxNzk1LDQ5LjIxMjIyODQgMjUuNjIzOTg0Niw0OS4yMTIyMjg0IEMyNS40ODQ5Mjg5LDQ5LjEyNjg0NDggMjkuODI2MTI5Niw0My4yODM4MjQ4IDM4LjY0NzU4NjksMzEuNjgzMTY4MyBMNzIuODcxMjg3MSwzMi41NTQ0MjUgTDY1LjI4MDk3Myw2Ny42NzYzNDIxIEw1MS4xMTIyODk5LDc3LjM3NjE0NCBMMzUuMDA3NzE4LDgwIFoiIGlkPSJQYXRoLTIyIiBmaWxsPSIjMDAyODY4Ij48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMCwzNy43MzA0NDA1IEwyNy4xMTQ1MzcsMC4yNTcxMTE0MzYgQzYyLjM3MTUxMjMsLTEuOTkwNzE3MDEgODAsMTAuNTAwMzkyNyA4MCwzNy43MzA0NDA1IEM4MCw2NC45NjA0ODgyIDY0Ljc3NjUwMzgsNzkuMDUwMzQxNCAzNC4zMjk1MTEzLDgwIEM0Ny4wNTUzNDg5LDc3LjU2NzA4MDggNTMuNDE4MjY3Nyw3MC4zMTM2MTAzIDUzLjQxODI2NzcsNTguMjM5NTg4NSBDNTMuNDE4MjY3Nyw0MC4xMjg1NTU3IDM2LjMwMzk1NDQsMzcuNzMwNDQwNSAyNS4yMjc0MTcsMzcuNzMwNDQwNSBDMTcuODQzMDU4NiwzNy43MzA0NDA1IDkuNDMzOTE5NjYsMzcuNzMwNDQwNSAwLDM3LjczMDQ0MDUgWiIgaWQ9IlBhdGgtMTkiIGZpbGw9IiMzNzkzRUYiPjwvcGF0aD4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+">  Created in <span style="font-weight:600;margin-left:4px;">Deepnote</span></a></p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
