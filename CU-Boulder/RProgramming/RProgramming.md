@@ -1,10 +1,10 @@
 ---
 layout: page
 title: "INFO 5652: Statistical Programming in R"
-permalink: /RProgramming
+permalink: /CUB/RProgramming
 ---
 
-[Fall 2022] ***Statisitical Programming in R*** with Dr. Osita Onyejekwe (Dr. O) at [CU Boulder](../../CUB.qmd)
+[Fall 2022] ***Statisitical Programming in R*** with Dr. Osita Onyejekwe (Dr. O) at [CU Boulder](../../CUB.md)
 
 (essentially my introduction to R programming in general)
 
@@ -15,15 +15,15 @@ And some of the codes didn't have html files made yet, and I haven't taken the t
 
 (So might need to fix later)
 
-### [Code Day1](Lectures\Code-day1.qmd) 
+### [Code Day1](Lectures\Code-day1.html) 
 - (originally just an R-script file)
 
-### [Programming Basics](Lectures\Programming_Basics.Rmd)
+### [Programming Basics](Lectures\Programming_Basics.html)
 - Basics of markdown and adding R code chunks
 - Looks at sample dataframe `murders` dataset from `dslabs`
 - some simple `if`/`else` and `print()` statements
 
-### [Functions and loops](Lectures\FUnctions_and_loops_basics.Rmd)
+### [Functions and loops](Lectures\FUnctions_and_loops_basics.html)
 - use of `ifelse()` function (as opposed to separate `if` & `else`)
 - example use of `na_example` dataset from `dslabs`
 - **Defining Functions**
@@ -36,10 +36,10 @@ And some of the codes didn't have html files made yet, and I haven't taken the t
     - example use of `sapply()`
         - `sapply()` = element-wise operations on any function
 
-### [Quick Note: How to use dollar-operator](Lectures\Quick_notes.Rmd)
+### [Quick Note: How to use dollar-operator](Lectures\Quick_notes.html)
 - short code showing example use of dollar operator (`$`) to select column in a dataframe.
 
-### [Introduction to Tidyverse](Lectures\Introduction-to-the-Tidyvrse-Class-Lecture.Rmd)
+### [Introduction to Tidyverse](Lectures\Introduction-to-the-Tidyvrse-Class-Lecture.html)
 - **What is the Tidyverse?**
 - **Some (Very) Basic Plotting with `ggplot`**
     - using `data(mpg)` dataset
@@ -59,7 +59,7 @@ And some of the codes didn't have html files made yet, and I haven't taken the t
     - select columns with `select()`
     - changing columns with `mutate()`
 
-### [Data Wrangling](Lectures/Post-class_codes/Data-Wrangling-Post-Class-Codes.Rmd)
+### [Data Wrangling](Lectures/Post-class_codes/Data-Wrangling-Post-Class-Codes.html)
 - **Tidy data**
 - using `gapminder` data 
 - use of `%in%` operator
@@ -67,7 +67,7 @@ And some of the codes didn't have html files made yet, and I haven't taken the t
 - simple colored scatter plot of `gapminder` data using `ggplot`
 - "wide" data vs. "tidy" data
 
-### [Combining Tables](Lectures\Lecture-Combining-Tables.Rmd)
+### [Combining Tables](Lectures\Lecture-Combining-Tables.html)
 - libraries
     - `tidyverse`
     - `ggrepel`
@@ -107,7 +107,7 @@ And some of the codes didn't have html files made yet, and I haven't taken the t
     - **Set Difference:** `setdiff()`
     - **Set Equal:** `setequal()`
 
-### [Reshaping Data](Lectures\Post-class_codes\Reshaping_Data_Post_Class_Codes.Rmd)
+### [Reshaping Data](Lectures\Post-class_codes\Reshaping_Data_Post_Class_Codes.html)
 - libraries: 
     - `tidyverse`
     - `dslabs`
@@ -121,7 +121,7 @@ And some of the codes didn't have html files made yet, and I haven't taken the t
     - example usefulness using data that starts as wide data, but not exactly clean after using `gather()`
 - `unite()` (inverse of `separate()`)
 
-### [Webscraping](Lectures\Lecture-6-webscraping-Pre-Class-Codes.Rmd)
+### [Webscraping](Lectures\Lecture-6-webscraping-Pre-Class-Codes.html)
 - **The `rvest` package**
     - (within `tidyverse` package)
     - a web harvesting package
@@ -132,12 +132,12 @@ And some of the codes didn't have html files made yet, and I haven't taken the t
     - CSS = "Cascading Style Sheets"
     - `get_recipe(url)`
 
-### [Gapminder Case Study](Lectures\Lecture-7-Gapminder-Pre-Class-Codes.Rmd)
+### [Gapminder Case Study](Lectures\Lecture-7-Gapminder-Pre-Class-Codes.html)
 - Data visualization case study
 - Trends in world health and economics
 - *LOTS* of plots
 
-### [Random Variables](Lectures\Random-Variables-Pre-Class-Codes.Rmd)
+### [Random Variables](Lectures\Random-Variables-Pre-Class-Codes.html)
 - example uses of 
     - `rep()`
     - `sample()` 

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Osita Onyejewe">
+
+<title>Random Variables</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Random-Variables-Pre-Class-Codes_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Random-Variables-Pre-Class-Codes_files/libs/quarto-html/quarto.js"></script>
+<script src="Random-Variables-Pre-Class-Codes_files/libs/quarto-html/popper.min.js"></script>
+<script src="Random-Variables-Pre-Class-Codes_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Random-Variables-Pre-Class-Codes_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Random-Variables-Pre-Class-Codes_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Random-Variables-Pre-Class-Codes_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Random-Variables-Pre-Class-Codes_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Random-Variables-Pre-Class-Codes_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Random-Variables-Pre-Class-Codes_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#random-variables" id="toc-random-variables" class="nav-link active" data-scroll-target="#random-variables">Random Variables</a></li>
+  <li><a href="#sampling-models" id="toc-sampling-models" class="nav-link" data-scroll-target="#sampling-models">Sampling Models</a>
+  <ul class="collapse">
+  <li><a href="#the-probability-distribution-of-a-random-variable" id="toc-the-probability-distribution-of-a-random-variable" class="nav-link" data-scroll-target="#the-probability-distribution-of-a-random-variable">The probability distribution of a random variable</a></li>
+  <li><a href="#distribution-versus-probability-distributions" id="toc-distribution-versus-probability-distributions" class="nav-link" data-scroll-target="#distribution-versus-probability-distributions">Distribution versus probability distributions</a></li>
+  <li><a href="#notation-for-random-variables" id="toc-notation-for-random-variables" class="nav-link" data-scroll-target="#notation-for-random-variables">Notation for Random Variables</a></li>
+  </ul></li>
+  <li><a href="#central-limit-theorem" id="toc-central-limit-theorem" class="nav-link" data-scroll-target="#central-limit-theorem">Central Limit Theorem</a></li>
+  <li><a href="#the-expected-value-and-standard-error" id="toc-the-expected-value-and-standard-error" class="nav-link" data-scroll-target="#the-expected-value-and-standard-error">The Expected Value and Standard Error</a></li>
+  <li><a href="#central-limit-theorem-approximation" id="toc-central-limit-theorem-approximation" class="nav-link" data-scroll-target="#central-limit-theorem-approximation">Central Limit Theorem Approximation</a>
+  <ul class="collapse">
+  <li><a href="#averages-and-proportions" id="toc-averages-and-proportions" class="nav-link" data-scroll-target="#averages-and-proportions">Averages and proportions</a></li>
+  <li><a href="#law-of-large-numbers" id="toc-law-of-large-numbers" class="nav-link" data-scroll-target="#law-of-large-numbers">Law of large numbers</a></li>
+  <li><a href="#misinterpreting-law-of-averages" id="toc-misinterpreting-law-of-averages" class="nav-link" data-scroll-target="#misinterpreting-law-of-averages">Misinterpreting law of averages</a></li>
+  <li><a href="#how-large-is-large-in-the-clt" id="toc-how-large-is-large-in-the-clt" class="nav-link" data-scroll-target="#how-large-is-large-in-the-clt">How large is large in the CLT?</a></li>
+  <li><a href="#clt-video" id="toc-clt-video" class="nav-link" data-scroll-target="#clt-video">CLT Video</a></li>
+  </ul></li>
+  <li><a href="#sd-versus-estimate-of-sd" id="toc-sd-versus-estimate-of-sd" class="nav-link" data-scroll-target="#sd-versus-estimate-of-sd">SD versus estimate of SD</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Random Variables</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr.&nbsp;Osita Onyejewe </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="random-variables" class="level2">
+<h2 class="anchored" data-anchor-id="random-variables">Random Variables</h2>
+<p>Random variables are numeric outcomes resulting from random processes. We can easily generate random variables using some of the simple examples we have shown. For example, define <code>X</code> to be 1 if a bead is blue and 0 otherwise (if it’s red).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>beads <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"blue"</span>), <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">sample</span>(beads,<span class="dv">1</span>) <span class="sc">==</span> <span class="st">"blue"</span>, <span class="dv">1</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here <code>X</code> is a random variable: every time we select a new bead the outcome changes randomly:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(<span class="fu">sample</span>(beads,<span class="dv">1</span>) <span class="sc">==</span> <span class="st">"blue"</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(<span class="fu">sample</span>(beads,<span class="dv">1</span>) <span class="sc">==</span> <span class="st">"blue"</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(<span class="fu">sample</span>(beads,<span class="dv">1</span>) <span class="sc">==</span> <span class="st">"blue"</span>,<span class="dv">1</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>Sometimes it’s 1, sometimes it’s 0.</p>
+<p>In data science we often deal with data that is affected by chance in some way: the data comes from a random sample, the data is affected by measurement error or the data measures some outcome that is random in nature. <strong>Being able to quantify the uncertainty introduced by randomness is one of the most important jobs of a data scientist</strong>. Statistical inference offers a framework for doing this as well as several practical tools. The first step is to learn how to mathematically describe random variables. We start with games of chance.</p>
+</section>
+<section id="sampling-models" class="level2">
+<h2 class="anchored" data-anchor-id="sampling-models">Sampling Models</h2>
+<p>Many data generation procedures, those that produce the data we study, can be modeled quite well as draws from an urn. For example, we can model the process of polling likely voters as drawing 0s (Republicans) and 1s (Democrats) from an urn containing the 0 and 1 code for all likely voters. In epidemiological studies, we often assume that the subjects in our study are a random sample from the population of interest. The data related to a specific outcome can be modeled as a random sample from an urn containing that outcome for the entire population of interest. Similarly, in experimental research, we often assume that the individual organisms we are studying, for example worms, flies, or mice, are a random sample from a larger population. Randomized experiments can also be modeled by draws from an urn given the way individuals are assigned into groups: when getting assigned you draw your group at random. Sampling models are therefore ubiquitous in data science. Casino games offer a plethora of examples of real world situations in which sampling models are used to answer specific questions. We will therefore start with such examples.</p>
+<p>Suppose a very small casino hires you to consult on whether they should set up <a href="https://en.wikipedia.org/wiki/Roulette">roulette wheels</a>. To keep the example simple, we will assume that 1,000 people will play and that the only game you can play is to bet on red or black. The casino wants you to predict how much money they will make, or lose. They want a range of values and, in particular, they want to know the chance of losing money. If this probability is too high they will pass on installing roulette wheels since they can’t take the risk given that they need to pay their employees and keep the lights on.</p>
+<p>We are going to define a random variable <code>S</code> that will represent the casino’s total winnings. Let’s start by constructing the urn. A roulette wheel has <strong>18 red pockets, 18 black pockets and 2 green ones</strong>. So playing a color in one game of roulette is equivalent to drawing from this urn:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>color <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Black"</span>, <span class="st">"Red"</span>, <span class="st">"Green"</span>), <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">18</span>, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The 1,000 outcomes from 1,000 people playing are independent draws from this urn. Let’s simplify things by assuming that if red comes up, the gambler wins and the casino loses a dollar so we draw a -$1. Otherwise the casino wins a dollar and we draw a $1. We code these draws like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span>  <span class="co">#1000 players</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">ifelse</span>(color <span class="sc">==</span> <span class="st">"Red"</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>),  n, <span class="at">replace =</span> <span class="cn">TRUE</span>)  <span class="co">#the results of each player</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>X[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]    <span class="co">#only show the first 10 elements</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] -1  1  1 -1 -1 -1  1  1  1  1</code></pre>
+</div>
+</div>
+<p>Because we know the proportions of 1s and -1s, we can generate the draws with one line of code, without defining <code>color</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="dv">9</span><span class="sc">/</span><span class="dv">19</span>, <span class="dv">10</span><span class="sc">/</span><span class="dv">19</span>))  <span class="co"># prob of red is 9/19, otherwise is 10/19</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that there are 18/38 = 9/19 red spaces, 18/38 = 9/19 black spaces and 2/38 green spaces (18/38 black spaces + 2/38 green spaces = 20/38 = 10/19).</p>
+<p>We call this a <strong>sampling model</strong> since we are modelling the random behavior of roulette with the sampling of draws from an urn.</p>
+<p>The total winnings <code>S</code> is simply the sum of these 1,000 independent draws:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="dv">9</span><span class="sc">/</span><span class="dv">19</span>, <span class="dv">10</span><span class="sc">/</span><span class="dv">19</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">sum</span>(X)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>S</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 22</code></pre>
+</div>
+</div>
+<section id="the-probability-distribution-of-a-random-variable" class="level3">
+<h3 class="anchored" data-anchor-id="the-probability-distribution-of-a-random-variable">The probability distribution of a random variable</h3>
+<p>If you run the code above you see that <span class="math inline">\(S\)</span> changes every time. This is, of course, because <code>S</code> is a <strong>random variable</strong>. The probability distribution of a random variable tells us the probability of the observed value falling in any given interval. So, for example, if we want to know the probability that the casino loses money, we are asking the probability that <code>S</code> is in the interval <span class="math inline">\(S &lt; 0\)</span>.</p>
+<p>Note that if we define a cumulative distribution function <span class="math inline">\(F(a) = \mbox{Pr}(S \leq a)\)</span> then we will be able to answer any question related to the probability of events defined by our random variable <span class="math inline">\(S\)</span>, including the event <span class="math inline">\(S &lt; 0\)</span>. We call this <span class="math inline">\(F\)</span> the random variable’s <em>distribution function</em>.</p>
+<p>We can estimate the distribution function for the random variable <span class="math inline">\(S\)</span> by using a Monte Carlo simulation to generate many realizations of the random variable. With this code we run the experiment of having 1,000 people play roulette, over and over, specifically <code>B</code>= 10,000 times:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Running a Monte Carlo Simulation</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>roulette_winning <span class="ot">&lt;-</span> <span class="cf">function</span>(n){</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>),n, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="dv">9</span><span class="sc">/</span><span class="dv">19</span>,<span class="dv">10</span><span class="sc">/</span><span class="dv">19</span>))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(X)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">replicate</span>(B, <span class="fu">roulette_winning</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So now we can ask: “in our simulations, how often did we get sums larger than <code>a</code>?”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(S <span class="sc">&lt;=</span> a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will be a very good approximation of <span class="math inline">\(F(a)\)</span>. In fact we can visualize the distribution by creating a histogram showing the probability <span class="math inline">\(F(b)-F(a)\)</span> for several intervals <span class="math inline">\((a,b]\)</span>:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Random-Variables-Pre-Class-Codes_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Now we can easily answer the casino’s question, “how likely is it that we lose money?”</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(S <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0456</code></pre>
+</div>
+</div>
+<p>which we can see is quite low (less than 5%).</p>
+<p>From the histogram above we see that the distribution appears to be approximately normal. If in fact the distribution is normal then all we need to define the distribution is the average and the standard deviation. Because we have the original values from which the distribution is created, we can easily compute these:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(S)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 52.533</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(S)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31.5991</code></pre>
+</div>
+</div>
+<p>If we add a normal density, with this average and standard deviation, to the histogram above we see that it matches very well:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Random-Variables-Pre-Class-Codes_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This average and this standard deviation have special names: they are referred to as the <em><strong>expected value</strong></em> and <em><strong>standard error</strong></em> of the random variable <span class="math inline">\(S\)</span>.</p>
+<p>It turns out that statistical theory provides a way to derive the distribution of a random variable defined as independent random draws from an urn. Specifically, in our example above we can show that <span class="math inline">\((S+n)/2\)</span> follows a binomial distribution. We therefore do not need to run Monte Carlo simulations to know the probability distribution of <span class="math inline">\(S\)</span>. We did this for illustrative purposes.</p>
+<p>We can use the function <code>dbinom</code> and <code>pbinom</code> to compute the probabilities exactly. For example, to compute <span class="math inline">\(\mbox{Pr}(S &lt; 0)\)</span> we note that:</p>
+<p><span class="math display">\[\mbox{Pr}(S &lt; 0) = \mbox{Pr}\left(\frac{(S+n)}{2} &lt; \frac{(0+n)}{2}\right)\]</span></p>
+<p>and we can use the <code>pbinom</code> to compute <span class="math display">\[\mbox{Pr}(S \leq 0)\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(n<span class="sc">/</span><span class="dv">2</span>, <span class="at">size =</span> n, <span class="at">prob =</span> <span class="dv">10</span><span class="sc">/</span><span class="dv">19</span>) <span class="co"># probability of not picking red, the casino makes money</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.05109794</code></pre>
+</div>
+</div>
+<p>Because this is a discrete probability function, to get <span class="math inline">\(\mbox{Pr}(S &lt; 0)\)</span> rather than <span class="math inline">\(\mbox{Pr}(S \leq 0)\)</span> we write</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(n<span class="sc">/</span><span class="dv">2-1</span>, <span class="at">size =</span> n, <span class="at">prob =</span> <span class="dv">10</span><span class="sc">/</span><span class="dv">19</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.04479591</code></pre>
+</div>
+</div>
+<p>For the details of the binomial distribution you can consult any basic probability book or even <a href="https://en.wikipedia.org/wiki/Binomial_distribution">Wikipedia</a>.</p>
+<p>We do not cover these details. Instead, we will discuss an incredibly useful approximation provided by mathematical theory that applies generally to sums and averages of draws from any urn: the Central Limit Theorem (CLT).</p>
+</section>
+<section id="distribution-versus-probability-distributions" class="level3">
+<h3 class="anchored" data-anchor-id="distribution-versus-probability-distributions">Distribution versus probability distributions</h3>
+<p>Before we continue, let’s make an important distinction and connection between the distribution of a list of numbers and a probability distribution. In the visualization section we described how any list of numbers <span class="math inline">\(x_1,\dots,x_n\)</span> has a distribution. The definition is quite straight forward. We define <span class="math inline">\(F(a)\)</span> as the function that answers the question “what proportion of the list is less than or equal to <span class="math inline">\(a\)</span> ?”. Because they are useful summaries when the distribution is approximately normal, we define the average and standard deviation. These are defined with a straight forward operation of the vector containing the list of numbers <code>x</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>avg <span class="ot">&lt;-</span> <span class="fu">sum</span>(x)<span class="sc">/</span><span class="fu">length</span>(x)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>s   <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((x <span class="sc">-</span> avg)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">length</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A random variable <span class="math inline">\(X\)</span> has a distribution function. To define this we do not need a list of numbers. It is a theoretical concept. In this case, we define the distribution as the <span class="math inline">\(F(a)\)</span> that answers the question “what is the probability that <span class="math inline">\(X\)</span> is less than or equal to <span class="math inline">\(a\)</span> ?” There is no list of numbers.</p>
+<p>However, if <span class="math inline">\(X\)</span> is defined by drawing from an urn with numbers in it, then there is a list: the list of of numbers inside the urn. In this case, the distribution of that list is the probability distribution of <span class="math inline">\(X\)</span> and the average and standard deviation of that list are the expected value and standard error of the random variable.</p>
+<p>Another way to think about it, that does not involve an urn, is to run a Monte Carlo simulation and generate a very large list of outcomes of <span class="math inline">\(X\)</span>. These outcomes are a list of numbers. The distribution of this list will be a very good approximation of the probability distribution of <span class="math inline">\(X\)</span>. The longer the list the better the approximation. The average and standard deviation of this list will approximate the expected value and standard error of the random variable.</p>
+</section>
+<section id="notation-for-random-variables" class="level3">
+<h3 class="anchored" data-anchor-id="notation-for-random-variables">Notation for Random Variables</h3>
+<p>Note that in statistical textbooks upper case letters are used to denote random variables and we follow this convention here. Lower case letters are used for observed values. You will see some notation that includes both. For example, you will see events defined as <span class="math inline">\(X \leq x\)</span>. Here <span class="math inline">\(X\)</span> is a random variable, making it a random event, and <span class="math inline">\(x\)</span> is an arbitrary value and not random. So, for example, <span class="math inline">\(X\)</span> might represent the number on a die roll and <span class="math inline">\(x\)</span> will represent an actual value we see. So in this case, the probability of <span class="math inline">\(X=x\)</span> is 1/6 regardless of the value of <span class="math inline">\(x\)</span>. Note that this notation is a bit strange when we ask questions about probability since <span class="math inline">\(X\)</span> is not an observed quantity. Instead it’s a random quantity that we will see in the future. We can talk about what we expect it to be, what values are probable, but not what it is. But once we have data, we do see a realization of <span class="math inline">\(X\)</span>. So data scientists talk of what could have been after we see what actually happened.</p>
+</section>
+</section>
+<section id="central-limit-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="central-limit-theorem">Central Limit Theorem</h2>
+<p><strong>The Central Limit Theorem (CLT) tells us that when the number of draws, also called the <em>sample size</em>, is large the probability distribution of the sum of the independent draws is approximately normal</strong>. Because sampling models are used for so many data generation processes, the CLT is considered one of the most important mathematical insights in history.</p>
+<p>Previously, we discussed that if we know that the distribution of a list of numbers is approximated by the normal distribution all we need to describe the list are the average and standard deviation. We also know that the same applies to a probability distribution. If a random variable has a probability distribution that is approximated with the normal distribution then all we need to describe the probability distribution are the <strong>average</strong> and <strong>standard deviation</strong>, referred to as the <strong>expected value</strong> and <strong>standard error</strong>.</p>
+</section>
+<section id="the-expected-value-and-standard-error" class="level2">
+<h2 class="anchored" data-anchor-id="the-expected-value-and-standard-error">The Expected Value and Standard Error</h2>
+<p>We have described sampling models for draws. We will now go over the mathematical theory that lets us approximate the probability distributions for the sum of draws. Once we do this we will be able to help the casino predict how much money they will make.</p>
+<p>The first important concept to learn is the <em>expected value</em>. In statistics books it is common to use letter <span class="math inline">\(\mbox{E}\)</span> like this</p>
+<p><span class="math display">\[\mbox{E}[X]\]</span></p>
+<p>to denote the expected value of the random variable <span class="math inline">\(X\)</span>.</p>
+<p>A random variable will vary around its expected value in a way that if you take the average of many many draws, the average of the draws will approximate the expected value, getting closer and closer the more draws you take.</p>
+<p>Theoretical statistics provides techniques that facilitate the calculation of expected values in different circumstances. For example, a useful formula tells us that the expected value of a random variable defined by one draw is the average of the numbers in the urn. In the urn used to model betting on red on roulette we have 20 one dollars, and 18 negative one dollars, so the expected value is:</p>
+<p><span class="math display">\[
+\mbox{E}[X] = (20 + -18)/38
+\]</span></p>
+<p>which is about 5 cents. It is a bit counter-intuitive to say that <span class="math inline">\(X\)</span> varies around 0.05 when the only values it takes is 1 and -1. One way to make sense of the expected value in this context is by realizing that if we play the game over and over, the casino wins, on average, 5 cents per game. A Monte Carlo simulation confirms this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">6</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>), B, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(<span class="dv">9</span><span class="sc">/</span><span class="dv">19</span>, <span class="dv">10</span><span class="sc">/</span><span class="dv">19</span>))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.05169</code></pre>
+</div>
+</div>
+<p>In general, if the urn has two possible outcomes, say <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, with proportions <span class="math inline">\(p\)</span> and <span class="math inline">\(1-p\)</span> respectively, the average is</p>
+<p><span class="math display">\[ap + b(1-p).\]</span></p>
+<p>To see this, notice that if there are <span class="math inline">\(n\)</span> beads in the urn then we have <span class="math inline">\(np\)</span> <span class="math inline">\(a\)</span>s, <span class="math inline">\(n(1-p)\)</span> <span class="math inline">\(b\)</span>s and because the average is the sum, <span class="math inline">\(n\times a \times p + n\times b \times (1-p)\)</span>, divided by the total <span class="math inline">\(n\)</span> we get that the average is <span class="math inline">\(ap + b(1-p)\)</span>.</p>
+<p>Now the reason we define the expected value is because this mathematical definition turns out to be useful for approximating the probability distributions of sums which in turn is useful for describing the distribution of averages and proportions. The first useful fact is that the expected value of the sum of the draws is:</p>
+<p><span class="math display">\[
+\mbox{number of draws } \times \mbox{ average of the numbers in the urn}
+\]</span></p>
+<p>So if 1,000 people play roulette, the casino expects to win, on average, about 1,000 <span class="math inline">\(\times\)</span> $0.05 = $50. But this is an expected value. How different can one observation be from the expected value? The casino really needs to know this. What is the range of possibilities? If negative numbers are too likely we may not install roulette wheels. Statistical theory once again answers this question. <strong>The <em>standard error</em> (SE) gives us an idea of the size of the variation around the expected value</strong>. In statistics books it is common to use</p>
+<p><span class="math display">\[\mbox{SE}[X]\]</span></p>
+<p>to denote the standard error of a random variable.</p>
+<p><strong>If our draws are independent</strong>, then the standard error of the sum is given by the equation:</p>
+<p><span class="math display">\[
+\sqrt{\mbox{number of draws }} \times \mbox{ standard deviation of the numbers in the urn}
+\]</span></p>
+<p>Using the definition of standard deviation, we can derive, with a bit of math, that if a jar contains two values <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> with proportions <span class="math inline">\(p\)</span> and <span class="math inline">\((1-p)\)</span> respectively, the standard deviation is</p>
+<p><span class="math display">\[\mid b - a \mid \sqrt{p(1-p)}.\]</span></p>
+<p>So in our roulette example the standard deviation of the values inside the urn is: <span class="math inline">\(\mid 1 - (-1) \mid \sqrt{10/19 \times 9/19}\)</span> or</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">90</span>)<span class="sc">/</span><span class="dv">19</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.998614</code></pre>
+</div>
+</div>
+<p>The standard error tells us the typical difference between a random variable and its expectation. So because one draw is, obviously, the sum of just one draw we can use the formula above to calculate that the random variable defined by one draw has an expected value of 0.05 and a standard error of about 1. This makes sense since we either get 1 or -1 with 1 slightly favored over -1.</p>
+<p>Using the formula above, the sum of 1,000 people playing has standard error of about $32:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(n) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">90</span>)<span class="sc">/</span><span class="dv">19</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31.57895</code></pre>
+</div>
+</div>
+<p>So when 1,000 people bet on red, the casino is expected to win $50 with a standard error of $32. So it seems like a safe bet. But we still haven’t answered the question: how likely is it to lose money? Here the CLT will help.</p>
+<p><strong>Advanced note</strong>: Before continuing we note that exact probability calculations for the casino winnings can be performed with the binomial distribution. However, here we focus on the CLT which can be generally applied to sums of random variables in a way that the binomial distribution can’t.</p>
+</section>
+<section id="central-limit-theorem-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="central-limit-theorem-approximation">Central Limit Theorem Approximation</h2>
+<p>The CLT tells us that the sum <code>S</code> is approximated by a normal distribution. Using the formulas above we know that the expected value and standard error for <span class="math inline">\(n = 1,000\)</span> plays are:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>n<span class="sc">*</span>(<span class="dv">20-18</span>)<span class="sc">/</span><span class="dv">38</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 52.63158</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(n)<span class="sc">*</span><span class="dv">2</span><span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">90</span>)<span class="sc">/</span><span class="dv">19</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31.57895</code></pre>
+</div>
+</div>
+<p>Note that the theoretical values above match those obtained with the Monte Carlo simulation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(S)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 52.533</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(S)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31.5991</code></pre>
+</div>
+</div>
+<p>Using the CLT we can skip the Monte Carlo simulation and instead compute the probability of the casino losing money using this approximation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mu = expected value</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> n <span class="sc">*</span> (<span class="dv">20-18</span>)<span class="sc">/</span><span class="dv">38</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co"># se = standard error</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span>  <span class="fu">sqrt</span>(n) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">90</span>)<span class="sc">/</span><span class="dv">19</span> </span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># pnorm(0, mu, se) gives us the probability of values less than 0</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co"># in a Normal distribution with mean mu and standard deviation se</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">0</span>, mu, se)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.04779035</code></pre>
+</div>
+</div>
+<p>which is also in very good agreement with our Monte Carlo result</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(S <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0456</code></pre>
+</div>
+</div>
+<section id="averages-and-proportions" class="level3">
+<h3 class="anchored" data-anchor-id="averages-and-proportions">Averages and proportions</h3>
+<p>There are two useful mathematical results that we used above and often use when working with data. We list them below</p>
+<ol type="1">
+<li><p>The expected value of the sum of random variable is the sum of their expected values. We can write it like this:</p>
+<p><span class="math display">\[
+\mbox{E}[X_1+X_2+\dots+X_n] =  \mbox{E}[X_1] + \mbox{E}[X_2]+\dots+\mbox{E}[X_n]
+\]</span></p>
+<p>If the <span class="math inline">\(X\)</span> are independent draws from the urn then they all have the same expect value, let’s call it <span class="math inline">\(\mu\)</span> and thus</p>
+<p><span class="math display">\[
+\mbox{E}[X_1+X_2+\dots+X_n]=  n\mu
+\]</span></p>
+<p>which is another way of writing the result we show above for the sum of draws.</p></li>
+<li><p>The expected value of a random variable times a non-random constant is the expected value times the non-random constant. This is easier to explain with symbols: <span class="math display">\[
+\mbox{E}[aX] =  a\times\mbox{E}[X]
+\]</span></p>
+<p>To see why this is intuitive, think of change of units: if we change the units of a random variable, say from dollars to cents, the expectation should change in the same way. A consequence of the above two facts is that the expected value of the average of independent draws from the same urn is the expected value of the urn, call it <span class="math inline">\(\mu\)</span> again:</p>
+<p><span class="math display">\[
+\mbox{E}[(X_1+X_2+\dots+X_n) / n]=   \mbox{E}[X_1+X_2+\dots+X_n] / n = n\mu/n = \mu
+\]</span></p></li>
+<li><p>The square of the standard error of the sum of <strong>independent</strong> random variables is the sum of the square of the standard error of each random error. This one is easier to understand in math form: <span class="math display">\[
+\mbox{SE}[X_1+X_2+\dots+X_n] = \sqrt{\mbox{SE}[X_1]^2 + \mbox{SE}[X_2]^2+\dots+\mbox{SE}[X_n]^2  }
+\]</span></p>
+<p>Note that the square of the standard error is referred to as the <em>variance</em> in statistical textbooks.</p></li>
+<li><p>The standard error of a random variable times a non-random constant is the standard error times the non-random constant. As with the expectation <span class="math display">\[
+\mbox{SE}[aX] =  a \times \mbox{SE}[X]
+\]</span></p>
+<p>To see why this is intuitive, again think of units.</p>
+<p>A consequence of 3 and 4 is that the standard error of the the average of independent draws from the same urn is the standard deviation of the urn, call it <span class="math inline">\(\sigma\)</span>:</p></li>
+</ol>
+<p><span class="math display">\[
+\begin{aligned}
+\mbox{SE}[(X_1+X_2+\dots+X_n) / n] &amp;=   \mbox{SE}[X_1+X_2+\dots+X_n]/n \\
+&amp;= \sqrt{\mbox{SE}[X_1]^2+\mbox{SE}[X_2]^2+\dots+\mbox{SE}[X_n]^2}/n \\
+&amp;= \sqrt{\sigma^2+\sigma^2+\dots+\sigma^2}/n\\
+&amp;= \sqrt{n\sigma^2}/n\\
+&amp;= \sigma / \sqrt{n}    
+\end{aligned}
+\]</span></p>
+<ol start="5" type="1">
+<li>If <span class="math inline">\(X\)</span> is a normally distributed random variable, then if <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are non-random constants, <span class="math inline">\(aX + b\)</span> is also a normally distributed random variable. Note that what we are doing is changing the units of the random variable by multiplying by <span class="math inline">\(a\)</span> then shifting the center by <span class="math inline">\(b\)</span>.</li>
+</ol>
+<section id="why-we-use-mu-and-sigma" class="level4">
+<h4 class="anchored" data-anchor-id="why-we-use-mu-and-sigma">Why we use <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span></h4>
+<p>Statistical text books use the Greek letters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> to denote the expected value and standard error respectively. This is because <span class="math inline">\(\mu\)</span> is the Greek letter for <span class="math inline">\(m\)</span>, the first letter of <em>mean</em>, which is another term used for expected value. Similarly, <span class="math inline">\(\sigma\)</span> is the Greek letter for <span class="math inline">\(s\)</span>, the first letter of standard error.</p>
+</section>
+</section>
+<section id="law-of-large-numbers" class="level3">
+<h3 class="anchored" data-anchor-id="law-of-large-numbers">Law of large numbers</h3>
+<p>An important implication of the final result is that the standard error of the average becomes smaller and smaller as <span class="math inline">\(n\)</span> grows larger. When <span class="math inline">\(n\)</span> is very large then the standard error is practically 0 and the average of the draws converges to the average of the urn. This is known in statistical textbooks as the law of large numbers or the law of averages.</p>
+</section>
+<section id="misinterpreting-law-of-averages" class="level3">
+<h3 class="anchored" data-anchor-id="misinterpreting-law-of-averages">Misinterpreting law of averages</h3>
+<p>Note that the law of averages is sometimes misinterpreted. For example, if you toss a coin 5 times and see a head each time, you might hear someone argue that the next toss is probably a tail because of the law of averages: on average we should see 50% heads and 50% tails. A similar argument would be to say that red “is due” on roulette after seeing black come up five times in a row. These events are independent so the chance of a coin landing heads is 50% regardless of the previous 5. Similarly for the roulette outcome. <strong>The law of averages applies only when the number of draws is very large and not in small samples</strong>. After a million tosses you will definitely see about 50% heads regardless of what the first five were.</p>
+<p>Another funny misuse of the law of average is in sports where you hear TV announcers predict a player is about to succeed because they have failed a few times in a row.</p>
+</section>
+<section id="how-large-is-large-in-the-clt" class="level3">
+<h3 class="anchored" data-anchor-id="how-large-is-large-in-the-clt">How large is large in the CLT?</h3>
+<p>The CLT works when the number of draws is large. But large is a relative term. In many circumstances as few as 30 draws is enough to make the CLT useful. In specific instances as few as 10 is enough. However, these should not be considered general rules. Note, for example, that <strong>when the probability of success is very small, we need larger sample sizes</strong>.</p>
+<p>Consider for example the lottery. In the lottery the chances of winning are less than 1 in a million. Thousands of people play so the number of draws is very large. Yet the number of winners, the sum of the draws, range between 0 and 4. This sum is certainly not well approximated by a normal distribution so the CLT does not apply, even with the very large sample size. This is generally true when the probability of a success is very low. In these cases the Poisson distribution is more appropriate.</p>
+<p>You can examine the properties of the Poisson distribution using <code>dpois</code> and <code>ppois</code>. You can generate random variables following this distribution with <code>rpois</code>. However, we do not cover the theory here. You can learn about the Poisson distribution in any probability textbook and even <a href="https://en.wikipedia.org/wiki/Poisson_distribution">Wikipedia</a>.</p>
+</section>
+<section id="clt-video" class="level3">
+<h3 class="anchored" data-anchor-id="clt-video">CLT Video</h3>
+<p>For a more entertaining and perhaps more intuitive explanation, you can watch <a href="http://vimeo.com/75089338">this CLT video</a>.</p>
+</section>
+</section>
+<section id="sd-versus-estimate-of-sd" class="level2">
+<h2 class="anchored" data-anchor-id="sd-versus-estimate-of-sd">SD versus estimate of SD</h2>
+<p>The standard deviation of a list <code>x</code> (we use heights as an example) is defined as the square root of the average of the squared differences:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dslabs)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> heights<span class="sc">$</span>height</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((x<span class="sc">-</span>m)<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Using mathematical notation we write</p>
+<p><span class="math display">\[
+\mu = \frac{1}{n} \sum_{i=1}^n x_i \\
+\sigma =  \sqrt{\frac{1}{n} \sum_{i=1}^n (x_i - \mu)^2}
+\]</span></p>
+<p>However, note that the <code>sd</code> function returns a slightly different result:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(s,<span class="fu">sd</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>s<span class="sc">-</span><span class="fu">sd</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.001942661</code></pre>
+</div>
+</div>
+<p>This is because the <code>sd</code> function R does not return the <code>sd</code> of the list but rather uses a formula that estimates standard deviations of a population from a random sample <span class="math inline">\(X_1, \dots, X_N\)</span> which, for reasons not discussed here, divide by the <span class="math inline">\(n-1\)</span> rather than <span class="math inline">\(n\)</span>.</p>
+<p><span class="math display">\[
+\bar{X} = \frac{1}{n} \sum_{i=1}^n X_i \\
+s =  \sqrt{\frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2}
+\]</span></p>
+<p>You can see that this is the case by typing</p>
+<p>For all the theory discussed here you need to compute the actual standard deviation as defined:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((x<span class="sc">-</span>m)<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So be careful when using the <code>sd</code> function in R. However, note that throughout the course we sometimes use the <code>sd</code> function when we really want the actual SD. This is because when the list size is big, these two are practically equivalent since <span class="math inline">\(\sqrt{(n-1)/n}\)</span> is close to 1.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
