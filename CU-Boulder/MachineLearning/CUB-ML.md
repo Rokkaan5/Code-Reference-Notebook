@@ -72,20 +72,17 @@ Prof Gate's ARM code in R provides examples of ARM applications
     - Part 1 : Text mining example
     - Part 2 : Mixed/Numeric Record data example
 
-- Extra code : 
-
 
 ## [Support Vector Machines (SVM)](SVM/CUB-ML_SVM.md)
-### in R
-- N/A (nothing provided, last I checked (April 2023))
 
-### Python
-
-- Single code example : This code includes Decision Trees, Random Forest, Support Vector Machines, a lot of vis, and several other examples. 
+- Single code example (in *Python*) : This code includes Decision Trees, Random Forest, Support Vector Machines, a lot of vis, and several other examples. 
     - Part 1 : Text mining example
     - Part 2 : Mixed/Numeric Record data example
 
 ## [Neural Networks](NN/CUB-ML_NN.md)
-### in R
 
-### Python
+- Single code example in Python 
+    - (Data processing)
+    - ANN
+    - RNN
+    - CNN
