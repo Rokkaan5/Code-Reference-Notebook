@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Fall 2022 DSA Team 8: Vamsi Gontu, Sanyukta Nair, Jasmine Kobayashi">
+
+<title>Tree Data Structure</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Team8_Trees_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Team8_Trees_files/libs/quarto-html/quarto.js"></script>
+<script src="Team8_Trees_files/libs/quarto-html/popper.min.js"></script>
+<script src="Team8_Trees_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Team8_Trees_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Team8_Trees_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Team8_Trees_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Team8_Trees_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Team8_Trees_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Team8_Trees_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-tree-data-structure" id="toc-introduction-to-tree-data-structure" class="nav-link active" data-scroll-target="#introduction-to-tree-data-structure">Introduction to Tree Data Structure</a>
+  <ul class="collapse">
+  <li><a href="#important-keywords" id="toc-important-keywords" class="nav-link" data-scroll-target="#important-keywords">Important Keywords</a></li>
+  </ul></li>
+  <li><a href="#types-of-tree-data-structures" id="toc-types-of-tree-data-structures" class="nav-link" data-scroll-target="#types-of-tree-data-structures">Types of Tree Data Structures</a>
+  <ul class="collapse">
+  <li><a href="#general-tree" id="toc-general-tree" class="nav-link" data-scroll-target="#general-tree">General Tree</a></li>
+  </ul></li>
+  <li><a href="#tree-traversepre-in-post" id="toc-tree-traversepre-in-post" class="nav-link" data-scroll-target="#tree-traversepre-in-post">Tree Traverse(Pre-In-Post)</a>
+  <ul class="collapse">
+  <li><a href="#traversal---process-of-visiting-all-nodes-of-a-tree" id="toc-traversal---process-of-visiting-all-nodes-of-a-tree" class="nav-link" data-scroll-target="#traversal---process-of-visiting-all-nodes-of-a-tree">Traversal - Process of visiting all nodes of a tree</a></li>
+  <li><a href="#three-main-ways" id="toc-three-main-ways" class="nav-link" data-scroll-target="#three-main-ways">Three main ways:</a>
+  <ul class="collapse">
+  <li><a href="#pre-order" id="toc-pre-order" class="nav-link" data-scroll-target="#pre-order">Pre-order</a></li>
+  <li><a href="#in-order" id="toc-in-order" class="nav-link" data-scroll-target="#in-order">In-order:</a></li>
+  <li><a href="#post-order" id="toc-post-order" class="nav-link" data-scroll-target="#post-order">Post-order:</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#heap-trees" id="toc-heap-trees" class="nav-link" data-scroll-target="#heap-trees">Heap Trees</a>
+  <ul class="collapse">
+  <li><a href="#max-heap-tree" id="toc-max-heap-tree" class="nav-link" data-scroll-target="#max-heap-tree">Max Heap Tree:</a></li>
+  <li><a href="#min-heap-tree" id="toc-min-heap-tree" class="nav-link" data-scroll-target="#min-heap-tree">Min Heap Tree:</a></li>
+  </ul></li>
+  <li><a href="#time-complexities" id="toc-time-complexities" class="nav-link" data-scroll-target="#time-complexities">Time Complexities:</a></li>
+  <li><a href="#applications" id="toc-applications" class="nav-link" data-scroll-target="#applications">Applications:</a></li>
+  <li><a href="#learning-experience" id="toc-learning-experience" class="nav-link" data-scroll-target="#learning-experience">Learning Experience</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a>
+  <ul class="collapse">
+  <li><a href="#general-tree-1" id="toc-general-tree-1" class="nav-link" data-scroll-target="#general-tree-1">General tree</a></li>
+  <li><a href="#tree-traversal" id="toc-tree-traversal" class="nav-link" data-scroll-target="#tree-traversal">Tree traversal</a></li>
+  <li><a href="#heap-tree" id="toc-heap-tree" class="nav-link" data-scroll-target="#heap-tree">Heap Tree</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tree Data Structure</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Fall 2022 DSA Team 8: Vamsi Gontu, Sanyukta Nair, Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction-to-tree-data-structure" class="level1">
+<h1>Introduction to Tree Data Structure</h1>
+<p>A tree is a collection of nodes connected by directed (or undirected) edges. It is a nonlinear data structure, compared to arrays, linked lists, stacks and queues which are linear data structures.</p>
+<section id="important-keywords" class="level3">
+<h3 class="anchored" data-anchor-id="important-keywords">Important Keywords</h3>
+<ol type="1">
+<li><strong>Path</strong> − Path refers to the sequence of nodes along the edges of a tree.</li>
+<li><strong>Root</strong> − The node at the top of the tree is called root. * One root per tree * One path from the root node to any node.</li>
+<li><strong>Edge</strong> - connects two nodes to show the relationship between nodes.</li>
+<li><strong>Key</strong> - Represents the value in the node</li>
+<li><strong>Parent</strong> − Any node except the root node has one edge upward</li>
+<li><strong>Child</strong> − Node below a given node connected by its edge downward</li>
+<li><strong>Leaf</strong> − The node which does not have any child node</li>
+<li><strong>Subtree</strong> − Subtree represents the descendants of a node.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="/CU-Boulder/DataStructures/Trees/key_points.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Key_terms</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="types-of-tree-data-structures" class="level1">
+<h1>Types of Tree Data Structures</h1>
+<section id="general-tree" class="level2">
+<h2 class="anchored" data-anchor-id="general-tree">General Tree</h2>
+<p>General tree is a tree where each node may have zero or more children(a binary tree is a specialized case of a general tree). A data structure where there are no constraints on the hierarchical structure. General trees are used to model applications such as file systems.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="/CU-Boulder/DataStructures/Trees/general_children_ex.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">general_tree</figcaption>
+</figure>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Node:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Nodes for a binary tree</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, data):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.left <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.right <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.data <span class="op">=</span> data</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Insert Nodes</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> insertLeft(<span class="va">self</span>, data):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.left <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>          <span class="va">self</span>.left <span class="op">=</span> Node(data)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>          <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="st">"Value already filled"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> insertRight(<span class="va">self</span>, data):</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.right <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>          <span class="va">self</span>.right <span class="op">=</span> Node(data)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>          <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="st">"Value already filled"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="tree-traversepre-in-post" class="level1">
+<h1>Tree Traverse(Pre-In-Post)</h1>
+<section id="traversal---process-of-visiting-all-nodes-of-a-tree" class="level2">
+<h2 class="anchored" data-anchor-id="traversal---process-of-visiting-all-nodes-of-a-tree">Traversal - Process of visiting all nodes of a tree</h2>
+<p>Unlike linear data structures (arrays, lists, queues, stacks, etc.), trees have multiple ways to be traversed.</p>
+</section>
+<section id="three-main-ways" class="level2">
+<h2 class="anchored" data-anchor-id="three-main-ways">Three main ways:</h2>
+<p><strong>Pre-order:</strong></p>
+<p>root → left subtree → right subtree (result: A, B, D, E, G, C, F)</p>
+<p><strong>In-order:</strong></p>
+<p>left subtree → root → right subtree (result: D, B, G, E, A, C, F)</p>
+<p><strong>Post-order:</strong> left subtree → right subtree → root (result: D, G, E, B, F, C, A)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="/CU-Boulder/DataStructures/Trees/traverse_ex.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">traversal</figcaption>
+</figure>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Tree(Node):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,data):</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">super</span>().<span class="fu">__init__</span>(data)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Traversal ==============================================================================================================</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Preorder traversal-------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Root -&gt; Left -&gt; Right</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> PreorderTraversal(<span class="va">self</span>, root):</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      res <span class="op">=</span> []</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> root:</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>          res.append(root.data)                              <span class="co"># start with root node valude</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>          res <span class="op">=</span> res <span class="op">+</span> <span class="va">self</span>.PreorderTraversal(root.left)      <span class="co"># then recursively iterate through left subtrees</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>          res <span class="op">=</span> res <span class="op">+</span> <span class="va">self</span>.PreorderTraversal(root.right)     <span class="co"># then finally, recursively iterate through right subtrees</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> res</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Inorder traversal-------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Left -&gt; Root -&gt; Right</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> InorderTraversal(<span class="va">self</span>, root):</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>      res <span class="op">=</span> []</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> root:</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>          res <span class="op">=</span> <span class="va">self</span>.InorderTraversal(root.left)             <span class="co"># start by recursively iterating through left subtrees</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>          res.append(root.data)                              <span class="co"># then include root node value</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>          res <span class="op">=</span> res <span class="op">+</span> <span class="va">self</span>.InorderTraversal(root.right)      <span class="co"># then finally, recursively iterate through right subtrees</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> res</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Postorder traversal------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Left -&gt; Right -&gt; Root</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> PostorderTraversal(<span class="va">self</span>, root):</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>      res <span class="op">=</span> []</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> root:</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>          res <span class="op">=</span> <span class="va">self</span>.PostorderTraversal(root.left)           <span class="co"># start by recursively iterating through left subtrees</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>          res <span class="op">=</span> res <span class="op">+</span> <span class="va">self</span>.PostorderTraversal(root.right)    <span class="co"># then recursively iterate through right subtrees</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>          res.append(root.data)                              <span class="co"># then include root node value last</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># recreate example tree</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>root <span class="op">=</span> Tree(<span class="st">"A"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>root.insertLeft(<span class="st">"B"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>root.left.insertLeft(<span class="st">"D"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>root.left.insertRight(<span class="st">"E"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>root.left.right.insertLeft(<span class="st">"G"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>root.insertRight(<span class="st">"C"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>root.right.insertRight(<span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="cb8ed4af-19c2-45f0-8531-30eee6c38591">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test for yourself</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(root.left.left.data)   <span class="co"># should be "D"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(root.right.data)       <span class="co"># should be "C"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>D
+C</code></pre>
+</div>
+</div>
+<section id="pre-order" class="level3">
+<h3 class="anchored" data-anchor-id="pre-order">Pre-order</h3>
+<p>Visit root node Recursively traverse left subtree Recursively traverse right subtree</p>
+<p>it’s generally going from top to bottom then left to right</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="/CU-Boulder/DataStructures/Trees/preorder.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">preorder</figcaption>
+</figure>
+</div>
+<div class="cell" data-outputid="fa03868d-98ee-4f8e-aa84-61a43eda8568">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preorder traversal: Root -&gt; Left -&gt; Right</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(root.PreorderTraversal(root))   <span class="co"># should be [A, B, D, E, G, C, F]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['A', 'B', 'D', 'E', 'G', 'C', 'F']</code></pre>
+</div>
+</div>
+</section>
+<section id="in-order" class="level3">
+<h3 class="anchored" data-anchor-id="in-order">In-order:</h3>
+<ul>
+<li>Recursively traverse left subtree</li>
+<li>Visit root node</li>
+<li>Recursively traverse right subtree</li>
+</ul>
+<p>It’s generally sweeping through the tree from left to right</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="inorder.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">inorder</figcaption>
+</figure>
+</div>
+<div class="cell" data-outputid="22ac0724-c00e-49a5-c8ab-a7888ee95af5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inorder traversal: Left -&gt; Root -&gt; Right</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(root.InorderTraversal(root))    <span class="co"># should be [D, B, G, E, A, C, F]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['D', 'B', 'G', 'E', 'A', 'C', 'F']</code></pre>
+</div>
+</div>
+</section>
+<section id="post-order" class="level3">
+<h3 class="anchored" data-anchor-id="post-order">Post-order:</h3>
+<ul>
+<li>Recursively traverse left subtree</li>
+<li>Recursively traverse right subtree</li>
+<li>Visit root node</li>
+</ul>
+<p>It’s generally going from left to right then bottom to top</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="/CU-Boulder/DataStructures/Trees/postorder.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">postorder</figcaption>
+</figure>
+</div>
+<div class="cell" data-outputid="a16891db-a48f-4b30-8286-efc583e66258">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Postorder traversal: Left -&gt; Right -&gt; Root</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(root.PostorderTraversal(root))  <span class="co"># should be [D, G, E, B, F, C, A]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['D', 'G', 'E', 'B', 'F', 'C', 'A']</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="heap-trees" class="level1">
+<h1>Heap Trees</h1>
+<section id="max-heap-tree" class="level2">
+<h2 class="anchored" data-anchor-id="max-heap-tree">Max Heap Tree:</h2>
+<p>If any given node is always greater than its child node/s and the key of the root node is the largest among all other nodes. This property is also called max heap property.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="/CU-Boulder/DataStructures/Trees/maxheap.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">maxheap</figcaption>
+</figure>
+</div>
+<div class="cell" data-outputid="eefea38d-5a46-419f-9a33-10a98ebca48c">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Max heap</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Tree:</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, maxsize):</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.maxsize <span class="op">=</span> maxsize</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.size <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap <span class="op">=</span> [<span class="dv">0</span>] <span class="op">*</span> (<span class="va">self</span>.maxsize <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap[<span class="dv">0</span>] <span class="op">=</span> sys.maxsize</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.FRONT <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to return the position of parent for the node currently at position</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> parent(<span class="va">self</span>, pos):</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pos <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to return the position of the left child for the node currently at position</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> leftChild(<span class="va">self</span>, pos):</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> pos</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to return the position of the right child for the node currently at position</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> rightChild(<span class="va">self</span>, pos):</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (<span class="dv">2</span> <span class="op">*</span> pos) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function that returns true if the passed node is a leaf node</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> isLeaf(<span class="va">self</span>, pos):</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> pos <span class="op">&gt;=</span> (<span class="va">self</span>.size<span class="op">//</span><span class="dv">2</span>) <span class="kw">and</span> pos <span class="op">&lt;=</span> <span class="va">self</span>.size:</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to swap two nodes of the heap</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> swap(<span class="va">self</span>, fpos, spos):</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap[fpos], <span class="va">self</span>.Heap[spos] <span class="op">=</span> (<span class="va">self</span>.Heap[spos],</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>                                            <span class="va">self</span>.Heap[fpos])</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to heapify the node at pos</span></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> maxHeapify(<span class="va">self</span>, pos):</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># If the node is a non-leaf node and smaller than any of its child</span></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="va">self</span>.isLeaf(pos):</span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (<span class="va">self</span>.Heap[pos] <span class="op">&lt;</span> <span class="va">self</span>.Heap[<span class="va">self</span>.leftChild(pos)] <span class="kw">or</span></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.Heap[pos] <span class="op">&lt;</span> <span class="va">self</span>.Heap[<span class="va">self</span>.rightChild(pos)]):</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Swap with the left child and heapify the left child</span></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (<span class="va">self</span>.Heap[<span class="va">self</span>.leftChild(pos)] <span class="op">&gt;</span> <span class="va">self</span>.Heap[<span class="va">self</span>.rightChild(pos)]):</span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.swap(pos, <span class="va">self</span>.leftChild(pos))</span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.maxHeapify(<span class="va">self</span>.leftChild(pos))</span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Swap with the right child and heapify the right child</span></span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.swap(pos, <span class="va">self</span>.rightChild(pos))</span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.maxHeapify(<span class="va">self</span>.rightChild(pos))</span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to insert a node into the heap</span></span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> insert(<span class="va">self</span>, element):</span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.size <span class="op">&gt;=</span> <span class="va">self</span>.maxsize:</span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.size <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap[<span class="va">self</span>.size] <span class="op">=</span> element</span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>        current <span class="op">=</span> <span class="va">self</span>.size</span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> (<span class="va">self</span>.Heap[current] <span class="op">&gt;</span></span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.Heap[<span class="va">self</span>.parent(current)]):</span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.swap(current, <span class="va">self</span>.parent(current))</span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>            current <span class="op">=</span> <span class="va">self</span>.parent(current)</span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to print the contents of the heap</span></span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> Print(<span class="va">self</span>):</span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, (<span class="va">self</span>.size <span class="op">//</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"PARENT : "</span> <span class="op">+</span> <span class="bu">str</span>(<span class="va">self</span>.Heap[i]) <span class="op">+</span></span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>                <span class="st">" LEFT CHILD : "</span> <span class="op">+</span> <span class="bu">str</span>(<span class="va">self</span>.Heap[<span class="dv">2</span> <span class="op">*</span> i]) <span class="op">+</span></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>                <span class="st">" RIGHT CHILD : "</span> <span class="op">+</span> <span class="bu">str</span>(<span class="va">self</span>.Heap[<span class="dv">2</span> <span class="op">*</span> i <span class="op">+</span> <span class="dv">1</span>]))</span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to remove and return the maximum element from the heap</span></span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> Extract_Max(<span class="va">self</span>):</span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>        popped <span class="op">=</span> <span class="va">self</span>.Heap[<span class="va">self</span>.FRONT]</span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap[<span class="va">self</span>.FRONT] <span class="op">=</span> <span class="va">self</span>.Heap[<span class="va">self</span>.size]</span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.size <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.maxHeapify(<span class="va">self</span>.FRONT)</span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> popped</span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a><span class="co"># Driver Code</span></span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'The maxHeap is '</span>)</span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>    maxHeap <span class="op">=</span> Tree(<span class="dv">15</span>)</span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">5</span>)</span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">3</span>)</span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">17</span>)</span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">10</span>)</span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">75</span>)</span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">14</span>)</span>
+<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">1</span>)</span>
+<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">22</span>)</span>
+<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">9</span>)</span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a>    maxHeap.insert(<span class="dv">85</span>)</span>
+<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a>    maxHeap.Print()</span>
+<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"The Max val is "</span> <span class="op">+</span> <span class="bu">str</span>(maxHeap.Extract_Max()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The maxHeap is 
+PARENT : 85 LEFT CHILD : 75 RIGHT CHILD : 14
+PARENT : 75 LEFT CHILD : 17 RIGHT CHILD : 22
+PARENT : 14 LEFT CHILD : 5 RIGHT CHILD : 1
+PARENT : 17 LEFT CHILD : 3 RIGHT CHILD : 9
+PARENT : 22 LEFT CHILD : 10 RIGHT CHILD : 0
+The Max val is 85</code></pre>
+</div>
+</div>
+</section>
+<section id="min-heap-tree" class="level2">
+<h2 class="anchored" data-anchor-id="min-heap-tree">Min Heap Tree:</h2>
+<p>If any given node is always smaller than the child node/s and the key of the root node is the smallest among all other nodes. This property is also called min heap property.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="/CU-Boulder/DataStructures/Trees/minheap.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">minheap</figcaption>
+</figure>
+</div>
+<div class="cell" data-outputid="2142a1ea-01f8-470c-983f-2df8b290fc63">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Min Heap</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MinHeap:</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, maxsize):</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.maxsize <span class="op">=</span> maxsize</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.size <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap <span class="op">=</span> [<span class="dv">0</span>]<span class="op">*</span>(<span class="va">self</span>.maxsize <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap[<span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span> <span class="op">*</span> sys.maxsize</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.FRONT <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to return the position of parent for the node currently at position</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> parent(<span class="va">self</span>, pos):</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pos<span class="op">//</span><span class="dv">2</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to return the position of the left child for the node currently at position</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> leftChild(<span class="va">self</span>, pos):</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> pos</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to return the position of the right child for the node currently at position</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> rightChild(<span class="va">self</span>, pos):</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (<span class="dv">2</span> <span class="op">*</span> pos) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function that returns true if the passed node is a leaf node</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> isLeaf(<span class="va">self</span>, pos):</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pos<span class="op">*</span><span class="dv">2</span> <span class="op">&gt;</span> <span class="va">self</span>.size</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to swap two nodes of the heap</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> swap(<span class="va">self</span>, fpos, spos):</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap[fpos], <span class="va">self</span>.Heap[spos] <span class="op">=</span> <span class="va">self</span>.Heap[spos], <span class="va">self</span>.Heap[fpos]</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to heapify the node at pos</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> minHeapify(<span class="va">self</span>, pos):</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># If the node is a non-leaf node and greater than any of its child</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="va">self</span>.isLeaf(pos):</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (<span class="va">self</span>.Heap[pos] <span class="op">&gt;</span> <span class="va">self</span>.Heap[<span class="va">self</span>.leftChild(pos)] <span class="kw">or</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.Heap[pos] <span class="op">&gt;</span> <span class="va">self</span>.Heap[<span class="va">self</span>.rightChild(pos)]):</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Swap with the left child and heapify the left child</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="va">self</span>.Heap[<span class="va">self</span>.leftChild(pos)] <span class="op">&lt;</span> <span class="va">self</span>.Heap[<span class="va">self</span>.rightChild(pos)]:</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.swap(pos, <span class="va">self</span>.leftChild(pos))</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.minHeapify(<span class="va">self</span>.leftChild(pos))</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Swap with the right child and heapify the right child</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.swap(pos, <span class="va">self</span>.rightChild(pos))</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.minHeapify(<span class="va">self</span>.rightChild(pos))</span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to insert a node into the heap</span></span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> insert(<span class="va">self</span>, element):</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.size <span class="op">&gt;=</span> <span class="va">self</span>.maxsize :</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.size<span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap[<span class="va">self</span>.size] <span class="op">=</span> element</span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>        current <span class="op">=</span> <span class="va">self</span>.size</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="va">self</span>.Heap[current] <span class="op">&lt;</span> <span class="va">self</span>.Heap[<span class="va">self</span>.parent(current)]:</span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.swap(current, <span class="va">self</span>.parent(current))</span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>            current <span class="op">=</span> <span class="va">self</span>.parent(current)</span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to print the contents of the heap</span></span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> Print(<span class="va">self</span>):</span>
+<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, (<span class="va">self</span>.size<span class="op">//</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">" PARENT : "</span><span class="op">+</span> <span class="bu">str</span>(<span class="va">self</span>.Heap[i])<span class="op">+</span><span class="st">" LEFT CHILD : "</span><span class="op">+</span></span>
+<span id="cb14-69"><a href="#cb14-69" aria-hidden="true" tabindex="-1"></a>                                <span class="bu">str</span>(<span class="va">self</span>.Heap[<span class="dv">2</span> <span class="op">*</span> i])<span class="op">+</span><span class="st">" RIGHT CHILD : "</span><span class="op">+</span></span>
+<span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a>                                <span class="bu">str</span>(<span class="va">self</span>.Heap[<span class="dv">2</span> <span class="op">*</span> i <span class="op">+</span> <span class="dv">1</span>]))</span>
+<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to build the min heap using the minHeapify function</span></span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> minHeap(<span class="va">self</span>):</span>
+<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> pos <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.size<span class="op">//</span><span class="dv">2</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.minHeapify(pos)</span>
+<span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to remove and return the minimum element from the heap</span></span>
+<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> Extract_Min(<span class="va">self</span>):</span>
+<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a>        popped <span class="op">=</span> <span class="va">self</span>.Heap[<span class="va">self</span>.FRONT]</span>
+<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Heap[<span class="va">self</span>.FRONT] <span class="op">=</span> <span class="va">self</span>.Heap[<span class="va">self</span>.size]</span>
+<span id="cb14-83"><a href="#cb14-83" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.size<span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.minHeapify(<span class="va">self</span>.FRONT)</span>
+<span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> popped</span>
+<span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Driver Code</span></span>
+<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'The minHeap is '</span>)</span>
+<span id="cb14-91"><a href="#cb14-91" aria-hidden="true" tabindex="-1"></a>    minHeap <span class="op">=</span> MinHeap(<span class="dv">15</span>)</span>
+<span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a>    minHeap.insert(<span class="dv">5</span>)</span>
+<span id="cb14-93"><a href="#cb14-93" aria-hidden="true" tabindex="-1"></a>    minHeap.insert(<span class="dv">3</span>)</span>
+<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a>    minHeap.insert(<span class="dv">17</span>)</span>
+<span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a>    minHeap.insert(<span class="dv">10</span>)</span>
+<span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a>    minHeap.insert(<span class="dv">75</span>)</span>
+<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a>    minHeap.insert(<span class="dv">14</span>)</span>
+<span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a>    minHeap.insert(<span class="dv">1</span>)</span>
+<span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a>    minHeap.insert(<span class="dv">22</span>)</span>
+<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a>    minHeap.insert(<span class="dv">9</span>)</span>
+<span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a>    minHeap.minHeap()</span>
+<span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-103"><a href="#cb14-103" aria-hidden="true" tabindex="-1"></a>minHeap.Print()</span>
+<span id="cb14-104"><a href="#cb14-104" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The Min val is "</span> <span class="op">+</span> <span class="bu">str</span>(minHeap.Extract_Min()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The minHeap is 
+ PARENT : 1 LEFT CHILD : 5 RIGHT CHILD : 3
+ PARENT : 5 LEFT CHILD : 9 RIGHT CHILD : 75
+ PARENT : 3 LEFT CHILD : 17 RIGHT CHILD : 14
+ PARENT : 9 LEFT CHILD : 22 RIGHT CHILD : 10
+The Min val is 1</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="time-complexities" class="level1">
+<h1>Time Complexities:</h1>
+<p>Heap Data Structure:</p>
+<ul>
+<li><em>Remove</em>, <em>Insert</em> - <span class="math inline">\(O(logn)\)</span></li>
+<li><em>Search</em> - <span class="math inline">\(O(n)\)</span></li>
+<li><em>Peek</em> - <span class="math inline">\(O(1)\)</span></li>
+</ul>
+</section>
+<section id="applications" class="level1">
+<h1>Applications:</h1>
+<ol type="1">
+<li>File systems for:
+<ul>
+<li>Directory structure used to organize subdirectories and files</li>
+<li>The mechanism used to allocate and link blocks of data on the storage device</li>
+</ul></li>
+<li>Class hierarchy or “inheritance tree” showing the relationships among classes in object-oriented programming; multiple inheritance produces non-tree graphs 3.Natural language processing:
+<ul>
+<li>Parse trees</li>
+<li>Modeling utterances in a generative grammar</li>
+<li>Dialogue tree for generating conversations</li>
+</ul></li>
+<li>Search trees store data in a way that makes an efficient search algorithm possible via tree traversal
+<ul>
+<li>A binary search tree is a type of binary tree</li>
+</ul></li>
+</ol>
+</section>
+<section id="learning-experience" class="level1">
+<h1>Learning Experience</h1>
+<p>Vamsi- This project made me deep dive into the concept of tree data structure for the first time in my academics. Made me understand what all the different applications use trees and its implementation in the real time situations. It made me to do handsom practice of the code and play with it. It also helped me to understand how different is this data structure different from all others.</p>
+<p>Sanyukta - I learned how to create a heap tree and navigate it with min/max and its applications.</p>
+<p>Jasmine - In general I realized what a powerful and interesting data structure trees (or any of the non-linear data structures) are. After this implementation work in particular, it became even more clear how difficult it would be to try to traverse through a general tree (as opposed to a binary tree). And I also realized it’s difficult to visualize a tree through it’s code alone. This exercise also helped further emphasize how useful and powerful class methods in Python are.</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<section id="general-tree-1" class="level2">
+<h2 class="anchored" data-anchor-id="general-tree-1">General tree</h2>
+<p><a href="https://www.cs.cmu.edu/~clo/www/CMU/DataStructures/Lessons/lesson4_1.htm" class="uri">https://www.cs.cmu.edu/~clo/www/CMU/DataStructures/Lessons/lesson4_1.htm</a></p>
+<p><a href="https://towardsdatascience.com/8-useful-tree-data-structures-worth-knowing-8532c7231e8c" class="uri">https://towardsdatascience.com/8-useful-tree-data-structures-worth-knowing-8532c7231e8c</a></p>
+</section>
+<section id="tree-traversal" class="level2">
+<h2 class="anchored" data-anchor-id="tree-traversal">Tree traversal</h2>
+<p><a href="https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/" class="uri">https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/</a></p>
+<p><a href="https://www.tutorialspoint.com/data_structures_algorithms/tree_traversal.htm" class="uri">https://www.tutorialspoint.com/data_structures_algorithms/tree_traversal.htm</a></p>
+<p><a href="https://youtu.be/IpyCqRmaKW4" class="uri">https://youtu.be/IpyCqRmaKW4</a></p>
+</section>
+<section id="heap-tree" class="level2">
+<h2 class="anchored" data-anchor-id="heap-tree">Heap Tree</h2>
+<p><a href="https://www.youtube.com/watch?v=pLIajuc31qk" class="uri">https://www.youtube.com/watch?v=pLIajuc31qk</a></p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

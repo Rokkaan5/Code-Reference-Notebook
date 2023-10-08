@@ -42,7 +42,7 @@ permalink: /CUB/DataStructures
 
 **Team 4**: Strings
 
-[Team 4 Example code here](team-projects-codes/Strings_python.ipynb)
+[Team 4 Example code here](team-projects-codes/Strings_python.htmlb)
 
 **Team 8** (Vamsi Gontu, Sanyuta Nair, and me): ***general intro to tree structures***
 
@@ -50,11 +50,11 @@ permalink: /CUB/DataStructures
 - Heap Trees
 - Tree traversal (pre-order, in-order, post-order)
 
-[Team 8 Example code here](team-projects-codes/Team8_Trees.ipynb)
+[Team 8 Example code here](team-projects-codes/Team8_Trees.html)
 
 **Team 9** (Siddarth Tayi, ...): ***binary (search) trees***
 
-[Team 9 Example code here](team-projects-codes/Team_9_Implmentation_of_Tree_and_Tree_algorithms.ipynb)
+[Team 9 Example code here](team-projects-codes/Team_9_Implmentation_of_Tree_and_Tree_algorithms.html)
 
 
 (There were other team presentations on other data structures, but I didn't save them)
