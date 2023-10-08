@@ -12,12 +12,12 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 ---
 
-### in R
+## in R
 - Example 1 ([Markdown](Markdown/R-DecisionTrees-Ex1.html), [Raw](Raw/R-DecisionTrees-Ex1-Raw.html)): Decision Trees in R using labeled record data - and visualizations
 - Example 2 (Markdown, [Raw](Raw/R-DecisionTrees-Ex2-Raw.html)): Decision Trees for text data in R and visualizations
 - Example 3 (Markdown, [Raw](Raw/R-DecisionTrees-Ex3-Raw.html)): Decision Trees for mixed data types (clean record data and numeric text corpus)
 
-### Python
+## Python
 "The following Python code is for several ML methods including Decision Trees and Vis. If the vis prints poorly, save it as a file." - Gates Website
 
 - Single code example ([Raw](Raw/Python-DecisionTrees-Raw.html)): This code includes Decision Trees, Random Forest, Support Vector Machines, a lot of vis, and several other examples.
