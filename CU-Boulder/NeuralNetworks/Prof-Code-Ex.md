@@ -16,8 +16,8 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 # Module 1
 
-- Simple NN using just Sklearn ([Raw code](raw_code/NN_Just_sklearn_Gates.qmd); [Markdown](mrkdwn/NN_Just_sklearn_Gates.ipynb))
-- Logistic Regression ([Raw code](raw_code/LogReg_gates.qmd); [Markdown](mrkdwn/LogReg_gates.ipynb))
+- Simple NN using just Sklearn ([Raw code](raw_code/NN_Just_sklearn_Gates.md); [Markdown](mrkdwn/NN_Just_sklearn_Gates.html))
+- Logistic Regression ([Raw code](raw_code/LogReg_gates.qmd); [Markdown](mrkdwn/LogReg_gates.html))
     - Using gradient descent
     - Updating $\mathbf{w}$ and with GD and LR
     - Using the Loss Function LCE: Cross Entropy
