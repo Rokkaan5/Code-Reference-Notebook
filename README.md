@@ -1,18 +1,34 @@
-Jasmine's (coding) reference material for coding, computational science, data science
+Jasmine's "notebook" of code examples, reference, etc.
 
 
-## Material by classes:
+# This semseter's pages (Fall 2023)
+Quick access links (can delete this section after semester is over)
 
-### [UAF classes](UAF.md)
+- [Statistical Methods & Applications II](CUBoulder/Stats2/Stats2.md)
+- [Neural Networks & Deep Learning](CUBoulder/NeuralNetworks/NeuralNets.md)
+
+# College Courses
+
+## [UAF classes](UAF.md)
 - [Intro to Computational Physics](UAF/ComputationalPhysics/UAF-CompPhys.md)
 - [Intro to Machine Learning](UAF/MachineLearning/UAF-ML-Module.md)
 
-### [CU Boulder classes](CUB.md)
-- [Statistical Programming in R](CU-Boulder/RProgramming/RProgramming.md)
-- [Data Mining](CU-Boulder/DataMining/DataMining.md)
-- [Machine Learning](CU-Boulder/MachineLearning/CUB-ML.md)
+## [CU Boulder classes](CUB.md)
 
-## Material by Textbooks (some links to official free opensource online books):
+### Statistics
+- [Statistical Programming in R](CU-Boulder/RProgramming/RProgramming.md)
+- [Statistical Methods & Applications I](CU-Boulder/Stats1/Stats1.md)
+- [Statistical Methods & Applications II](CU-Boulder/Stats2/Stats2.md)
+
+### Data & Info Management
+- [Data Structures and Algorithms](CU-Boulder/DataStructures/DataStructures.md)
+- [Data Mining](CU-Boulder/DataMining/DataMining.md)
+
+### AI/ML/etc.
+- [Machine Learning](CU-Boulder/MachineLearning/CUB-ML.md)
+- [Neural Networks & Deep Learning](CU-Boulder/NeuralNetworks/NeuralNets.md)
+
+# Material by Textbooks (some links to official free opensource online books):
 - [Introduction to Data Mining by Kumar, et. al](Textbooks/IntroDataMining-Kumar.md)
     - [An R Companion for Introduction to Data Mining](https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/index.html) (Direct link to web-book)
 - [The tidyverse style guide](https://style.tidyverse.org/index.html) (Direct link to web-book)
@@ -22,30 +38,5 @@ Jasmine's (coding) reference material for coding, computational science, data sc
 - [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](Textbooks/HandsOnML.md)
 - [Practical statistics for Data Scientists](Textbooks/PracticalStats.md)
 
-## [Material by topics](Topics.md):
-(Organizing soon)
-
-(Ideally build these after all course specific pages are finished (and copy and paste from those subpages))
-### [Language basics:](Topics/Languages.md)
-
-- [Python Packages](Topics/Languages/PythonPackages.md)
-- [R Programming and Packages](Topics/Languages/RPackages.md)
-    
-### Computational Physics
-- Oscilators
-- Nonlinear Dynamics
-
-### [Data Preprocessing](Topics/DataPreprocessing.md)
-- Data Exploration (EDA)
-- Data Cleaning/Preparation
-
-### [Machine Learning](Topics/MachineLearning.md)
-
-- Unsupervised:
-    - [Clustering](Topics/MachineLearning/Clustering.md)
-    - Association Rule Mining (ARM)
-- Supervised:
-    - [Classification](Topics/MachineLearning/Classification.md)
-    - [Regression](Topics/MachineLearning/Regressiong.md)
 
     
