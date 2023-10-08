@@ -1,0 +1,90 @@
+---
+title: "STAT-Project: Regression"
+author: "Jasmine Kobayashi"
+format: html
+---
+
+```{r libraries, warning=FALSE,message=FALSE}
+#Load Tidyverse
+library(tidyverse)
+
+#load dplyr
+library(dplyr)
+
+#load ggplot2
+library(ggplot2)
+```
+
+```{r, results = "hide"}
+(df <- read.csv("regression-temp-final-df.csv"))
+```
+
+```{r}
+cor(df)
+```
+
+```{r}
+pairs(df)
+```
+
+
+```{r}
+ggplot(df, aes(x=year,y=TAVG))+
+  geom_point()
+```
+```{r}
+ggplot(df, aes(x=year,y=co2))+
+  geom_point()
+```
+
+```{r}
+ggplot(df, aes(x=co2,y=TAVG))+
+  geom_point()
+```
+```{r}
+ggplot(df, aes(x=co2_growth_abs,y=TAVG))+
+  geom_point()
+```
+
+```{r}
+regression1 <-lm(TAVG ~ co2, data=df)
+```
+
+```{r}
+summary(regression1)
+```
+```{r}
+regression2 <-lm(TAVG ~ co2 + co2_per_capita + co2_growth_abs, data=df)
+```
+
+```{r}
+summary(regression2)
+```
+
+```{r}
+regression3 <-lm(TAVG ~. , data=df %>% select(-c("TMIN","TMAX","year")))
+```
+
+```{r}
+summary(regression3)
+```
+```{r}
+regression4 <-lm(TMAX ~. , data=df %>% select(-c("TMIN","TAVG","year")))
+```
+
+```{r}
+summary(regression4)
+```
+
+```{r}
+regression5 <-lm(TMIN ~. , data=df %>% select(-c("TAVG","TMAX","year")))
+```
+
+```{r}
+summary(regression5)
+```
+
+```{r}
+confint(regression5)
+```
+

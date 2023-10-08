@@ -1,0 +1,408 @@
+
+#*****************************************************************************
+#                                    April 10 - 14 2023
+#*****************************************************************************
+
+#Install MASS Package from Tools>Install Packages> MASS
+#Install MASS Package from Tools>Install Packages> Tidyverse
+
+#load MASS package
+library(MASS)
+
+#Load Tidyverse
+library(tidyverse)
+
+#load dplyr
+library(dplyr)
+
+#load ggplot2
+library(ggplot2)
+
+#Check for dimensions of the Cars93 dataset
+
+dim(Cars93)
+
+#View the Cars93 dataset
+
+edit(Cars93)
+
+view(Cars93)
+
+class(Cars93)
+
+#Use view to bring up RStudio built-in data viewer
+
+View(Cars93)
+
+glimpse(Cars93)
+
+#Using R to find moments of variables. 
+#In statistics, moments are quantities that are related to the shape of a set of numbers
+#You use moments to describe the shape of data or a variable
+#Shape of data means the following:
+
+#1. Do the values (tend to) look alike - mean
+#2. How spread out are the values - variance, standard deviation
+#3. How symmetric is the distribution of the data?
+
+#We start with measures of central tendency
+#mean, median and mode
+
+#********************************************************
+#Mean - average value of variables in a dataset
+#********************************************************
+
+#Discussion of mean, median and mode in class
+
+#Create vector of heights
+
+heights <-c(36,42,43,37,40,45)
+
+#View heights variable
+
+heights
+
+#View variable type for hights variable
+
+class(heights)
+
+#Use R to find mean of heights - and store in a variable Mean_heights
+
+Mean_heights <-mean(heights)
+
+#Display value stored in Mean_heights
+
+Mean_heights
+
+#Just display the mean without storing it in a variable
+
+mean(heights)
+
+#Using the Cars93 dataset, suppose we are interested in the average horsepower
+#of cars made in the USA and not in the USA
+
+#Notice variable Origin in the Cars93 dataset
+
+view(Cars93)
+
+#First select Horsepower of cars made in the US into a vector
+
+Horsepower.USA <-Cars93$Horsepower[Cars93$Origin=="USA"]
+
+Horsepower.USA
+
+#Find mean of Horsepower.USA
+
+mean(Horsepower.USA)
+
+#Filter out cars not made in the USA
+
+Horsepower.NonUSA <-Cars93$Horsepower[Cars93$Origin == "non-USA"]
+
+mean(Horsepower.NonUSA)
+
+#Outliers: Means/averages are flawed because the original dataset can contain outliers
+#Outliers are extreme values in a dataset or of a variable 
+#Outiers can bias the estimate of an estimate of a population parameter
+#One way we address outliers is by trimming the mean - eliminating extreme values
+#at the low end and the high end before calculating the mean. 
+#The amount of trim is a percentage e.g. the upper and lower 5% of values
+#that represent the outliers in either direction
+
+#To see the outliers in the Cars93 dataset:
+
+ggplot(Cars93, aes(x=Horsepower))+
+  geom_histogram()+facet_wrap(~Origin)
+
+ggplot(Cars93, aes(x=Horsepower))+
+  geom_boxplot()
+
+#Calculate trimmed mean - 
+#use the trim argument to trim the upper and lower 5% (0.05)
+
+mean(Horsepower.USA, trim=0.05)
+mean(Horsepower.USA)
+
+# We see the trimmed mean is slightly 
+# lower than the untrimmed mean
+
+#************************************************************************
+#Median - the middle value in a group of observations
+#************************************************************************
+
+median(Horsepower.USA) #median horsepower for cars from the USA
+median(Horsepower.NonUSA) #median horsepower for cars from non-USA
+
+
+#*****************************************************
+#mode - the value that occurs most frequently for a variable
+#****************************************************
+
+# There can be more than one mode. 
+# If two values occur with same frequency
+# you have bi-modal data
+# If all the values occur with the same frequency, 
+# you have no mode
+
+#Base R does not provide a function for fining the mode. 
+#You need to load a package called modeest 
+#in your library to use a proper function 
+#called most frequent value (mfv) to calculate 
+#the mode for the particular variable
+
+#Install modeest package: Tools>Install Packages>modeest
+install.packages("modeest")
+
+#load modeest
+
+library(modeest)
+
+version
+
+#Examples
+
+#Create a variable Scores
+
+scores <-c(1,2,2,2,3,4,4,4,5,6)
+
+#Check for the mode for variable Scores - using the function mfv()
+mfv(scores)
+
+# mfv displays that there are two modes - so you have a bi-modal variable
+
+mfv(Horsepower.USA)
+mfv(Horsepower.NonUSA)
+#We see that variable Horsepower for USA cars has only one mode
+#We see that variable Horsepower for non-USA cars has two modes
+
+#**************************************************************************************
+#Measures of variation - variance and standard deviation                                 
+#**************************************************************************************
+
+
+#Think about variation as the average of how much each number or observation 
+# of a variable differs from the mean/average value
+#The larger the measure of variation, the more the values differ from their mean
+#The smaller the measure of variation, the less they differ from their mean
+#Smaller variation means the values/observations look more than their mean
+
+
+#Example: Create two variables for children heights in inches
+
+children_heights_1 <-c(48,48,48,48,48)
+children_heights_2 <-c(50,47,52,46,45)
+
+mean(children_heights_1)
+mean(children_heights_2)
+
+#Both variables have the same mean
+#Looking at the values tell you the second variable varies more than the first
+#The first values look alike - no deviation from their average
+#The second values vary from their average
+
+#Discussion on the sample variance formula. 
+#Use the N denominator if the sample you have
+# is the total population
+
+#Use the N-1 denominator if the sample you have 
+# is drawn from a population
+#A good estimate of the population variance 
+#can be calculated by using N-1 as denominator rather than N
+
+
+#Measures of variation in R
+
+#***************************
+#Variance in R
+#***************************
+
+
+#Use the var() function in R - it calculates the variance with N-1 as denominator
+
+children_heights_1 <-c(48,48,48,48,48)
+children_heights_2 <-c(50,47,52,46,45)
+
+#Calculate means of both variables
+
+mean(children_heights_1)
+mean(children_heights_2)
+
+#Calculate variances for both variables
+
+var(children_heights_1)
+var(children_heights_2)
+
+#Calculate means for USA and Non USA cars
+
+mean(Horsepower.USA) 
+mean(Horsepower.NonUSA)
+
+#Calculate variances for USA and Non USA cars 
+# for Cars93 dataset
+var(Horsepower.USA)
+var(Horsepower.NonUSA)
+
+#*******************************
+# Standard Deviation in R 
+#******************************
+
+#Discussion of standard deviation formulas for population and sample
+
+#The standard deviation of a population 
+#is the square root of the population variance
+
+#The standard deviation of a sample - an estimate 
+#of the standard deviation of a population - is 
+# the square root of the sample variance
+
+#R provides sd() - a function used to calculate 
+# sample standard deviation using N-1 as the denominator
+# in computing the sample variance
+
+
+children_heights_1 <-c(48,48,48,48,48)
+children_heights_2 <-c(50,47,52,46,45)
+
+sd(children_heights_1)
+sd(children_heights_2)
+
+sd(Horsepower.USA)
+sd(Horsepower.NonUSA)
+
+
+
+#**************************************************************************************
+#Measures of data symmetry  - skewness and kurtosis
+#**************************************************************************************
+
+
+
+#*****************************************
+#Skewness measures how symmetric the data distribution is
+#Kurtosis measures how fat or thin the tails of the 
+#data distribution is 
+
+
+#*****************************************
+#*Skewness
+#*****************************************
+
+#Discuss skewness formula
+#The closer skewness is to zero, 
+#the more symmetric (and well-behaved) the data is
+
+#The numerator of the formula needs to be zero 
+#in the formula for this to happen
+
+#Statisticians prefer non-skewed data more than they 
+# do skewed data (i.e. where variable skewness is 0)
+
+
+#Install "moments" package Tools>Install Package> moments
+
+install.packages("moments")
+
+#load package moments
+library(moments)
+
+#Lets see the distribution of variable Horsepower 
+#for USA and non-USA cars
+#Lets use their probability density plots
+
+ggplot(Cars93, aes(x=Horsepower))+
+  geom_density()+
+  facet_wrap(~Origin)
+
+#The plot on the left (USA) has more 
+#skewness to the right than the non-USA plot
+
+#Lets calculate the skewness for 
+#Horsepower for USA and non-USA cars
+
+skewness(Horsepower.USA)
+skewness(Horsepower.NonUSA)
+
+#We see confirmation that the skewness for variable Horsepower
+# for USA is higher/more positive than the skewness 
+# for non-USA
+#This is consistent with the density plots we saw earlier
+
+#This confirms that the Horsepower variable for USA is more right-skewed than the
+#Horsepower variable for non-USA cars. 
+
+#********************************************
+#Kurtosis
+#********************************************
+
+#In probability theory and statistics, kurtosis 
+# (meaning "curved, arching") is a measure of the "tailedness" of the probability distribution 
+# of a real-valued random variable. 
+
+#Like skewness, kurtosis describes 
+# the shape of a probability distribution 
+
+#Discuss the kurtosis formula - and statisticians preference 
+#for excess kurtosis - subtracting 3 from what 
+# you get from the kurtosis calculation
+
+#When Kurtosis is 3, then excess kurtosis is zero 
+#and the data looks more like a standard normal distribution
+
+#Distributions with negative excess kurtosis 
+# (i.e. kurtosis <3) are said to be platykurtic
+#Distributions with positive excess kurtosis 
+# (i.e. kurtosis >3) are said to be leptokurtic
+
+#Statisticians prefer data distributions 
+#that are neither leptokurtic nor platykurtic
+# i.e. kurtosis = 3 (which implies excess kurtosis = 0)
+
+kurtosis(Horsepower.USA)
+kurtosis(Horsepower.NonUSA)
+
+#We see that the the kurtosis of the Horsepower 
+#variable for non-USA cars(3.09) is closer to 3.0
+#compared with the kurtosis of the Horsepower variable 
+# for USA cars (4.4)
+
+#This shows that the shape of the Horsepower variable for
+# non-USA looks more like a normally distributed 
+# variable (well-behaved) than the Horsepower USA variable
+
+
+#********************************************
+#Summarizing a dataframe
+#********************************************
+#Use the summary() function to produce 
+#summary statistics information about numeric variables
+# in a dataframe
+
+
+
+#Example
+
+glimpse(Cars93)
+
+#Summarize the Weight variable
+
+summary(Cars93$Weight)
+
+#Summarize the MPG.Price variable
+summary(Cars93$MPG.city)
+
+#We can also summarise a set of variables.
+#Use the summary() function to produce 
+#summary statistics information about a set of numeric variables
+# in a dataframe
+
+#Create a subset of Cars93 and summarize
+autos <-subset(Cars93, select=c(MPG.city,Price,Horsepower))
+
+summary(autos)
+
+
+
+
+
+
+

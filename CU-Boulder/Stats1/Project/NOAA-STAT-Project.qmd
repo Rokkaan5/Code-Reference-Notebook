@@ -1,0 +1,41 @@
+---
+title: "STAT-Project: NOAA Data EDA"
+author: "Jasmine Kobayashi"
+format: html
+---
+
+```{r libraries, warning=FALSE,message=FALSE}
+#Load Tidyverse
+library(tidyverse)
+
+#load dplyr
+library(dplyr)
+
+#load ggplot2
+library(ggplot2)
+```
+
+
+```{r, results = "hide"}
+(noaa_df <- read.csv("NOAA-Final-DF.csv"))
+```
+
+```{r}
+summary(noaa_df)
+```
+
+```{r}
+#Build scatterplot with ggplot
+ggplot(noaa_df, aes(x=year,y=TAVG))+
+  geom_point()
+```
+```{r, results = "hide"}
+(noaa_df <- noaa_df %>% replace(is.na(.),0))
+```
+
+
+```{r}
+cor(noaa_df %>% select(-c("station")))
+```
+
+

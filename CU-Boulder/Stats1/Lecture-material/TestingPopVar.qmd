@@ -1,0 +1,317 @@
+---
+title: "Testing Population Variances"
+---
+
+Today we talk about testing for variances using R
+
+An example of testing for variance is: suppose we think or want a particular population variable (that you have measurements for) to have little variability, we can draw samples from the population, record the measurements, find the variance of those sample measurements and perform a hypothesis test that the against the (desired or assumed population) variance.
+
+We can test the null hypothesis that the sample variance is equal to a hypothesized value (one sample test).
+
+Use the `varTest()` function in the `EnvStats` package as below:
+```{r libraries, warning = FALSE, message = FALSE}
+#install.packages("EnvStats")
+library("EnvStats")
+```
+
+# Example 1: One-sample, one-sided variance test
+
+Suppose you have the following sample from a population
+```{r}
+sample_data <-c(12.43, 11.71,14.41,11.05,9.53,11.66, 9.33, 11.71, 14.35,13.81)
+
+sd(sample_data) #yields 1.8 as the standard deviation of sample_data (which is a set of measurements drawn from the population variable in question)
+```
+
+Assume there is a claim/desire that the true variance (population variance) of the population variable cannot or should not be more than 2.25 
+(i.e.the population variance is less than or equal to 2.25)
+
+We can conduct a one-sided/one-tailed significance test of  a null hypothesis (H0) that the population variance is less than or equal to 2.25 against an alternative hypothesis ($H_1$) that the population variance is greater than 2.25.
+
+- $H_0$: population variance is = 2.25
+- $H_1$: population variance > 2.25
+
+- Set $\alpha = 0.05$
+
+Use the following syntax for the `varTest()` function
+```{r}
+# varTest(data_frame, conf.level = , alt " the alternative hypothesis",
+#         sigma.squared = hypothesized variance used in the null hypothesis)
+
+varTest(sample_data, conf.level = 0.95, alt="greater", sigma.squared = 2.25)
+```
+
+Remember that sigma is standard deviation. So if you are given standard deviation in your question, remember to square it for the argument `sigma.squared` in the `varTest()` function
+
+We see that the p-value > 0.05. So we fail to reject the null hypothesis and conclude that there is evidence that the variance of the population variable in question is not greater than 2.25
+
+# Example 2: One-sample, one-sided variance test
+
+Assume that the following simulation represents a sample of heights of students at CU, Boulder
+```{r}
+height_smpl<-rnorm(600, m=5.9,s=0.7)
+```
+
+Conduct a one-sided significance test that the population variance for students' heights at CU, Boulder is at most 0.5 at the 5% significance level. Use 95% confidence level for your test.
+
+## Step 1: State the null and alternative hypotheses
+
+- $H_0$: Population height variance = 0.5
+- $H_1$: Population height variance > 0.5
+
+## Step 2: State/choose the alpha (significance level) and confidence level:
+
+- $\alpha: 5$% (= 0.05)
+= Confidence level: $95$% (0.95)
+
+## Step 3: Write the R code for the test:
+```{r}
+varTest(height_smpl, conf.level = 0.95, alt="greater", sigma.squared = 0.5)
+```
+
+## Step 4: State results/finding and conclusion:
+
+***Finding/Results:***
+
+p-value > 0.05
+
+Since the p-value from the test is not less than or equal to our alpha (0.05) we fail to reject the null hypothesis
+
+***Conclusion:***
+
+There is evidence that the variance of population height for students at CU,Boulder is greater than 0.5
+
+# Example 3 : Another One-sided test
+
+A study claims that the population of SAT scores is nearly normally distributed with mean 1500 and standard deviation 300
+
+Assume that the following simulation represents a sample of SAT scores of students enrolling for freshman year at a university
+```{r}
+SAT_smpl<-rnorm(250, m=1500,s=300)
+```
+
+Conduct a one-sided test that the variance for students SAT scores at that school is greater than 90000 at the 5% significance level. 
+
+Use 95% confidence level for your test
+
+- $H_0$: Population SAT score variance = 90000
+- $H_1$: Population SAT score variance < 90000
+
+- $\alpha$: $5$% (=0.05)
+
+- Confidence level: $95$% (0.95)
+
+**R code for the test is below:**
+```{r}
+varTest(SAT_smpl, conf.level = 0.95, alt="less", sigma.squared = 90000)
+```
+
+***Findings:***
+
+Since the p-value from the test is 0.72 - i.e not less than or equal to our alpha (0.05) we fail to reject the null hypothesis
+
+***Conclusion:***
+
+There is evidence that the variance of population SAT scores for students at the school is less than or equal to 90000
+
+# Example 4 : One-sample, two-sided significance test for variance
+
+Studies claim that the population of IQ scores for citizens of planet Earth is nearly normally distributed. 
+
+The Stanford-Binet IQ test states that IQ scores have mean 100 and standard deviation 16
+
+Assume that the following simulation represents a sample of IQ scores of young adults across major cities in the world
+```{r}
+IQ_smpl<-c(88,96,110,101,93,99,91,85,109,112,125,125,108,117,126,97,99,99,91,90,88,95)
+```
+
+There is agreement that the mean of IQ scores is 100 but another IQ test shows that the standard deviation for IQ scores for Earthlings is actually 15 and not 16.
+
+Write R code to conduct a two-sided test that the variance for IQ scores is 225 at the 5% significance level. 
+
+Use 95% confidence level for your test
+
+- $H_0$: Population IQ score variance = 225
+- $H_1$: Population IQ score variance <> (not equal to) 225
+
+- $\alpha$: $5$% (=0.05)
+
+- Confidence level: $95$% (0.95)
+
+**R code for the test is below:**
+```{r}
+varTest(IQ_smpl, conf.level = 0.95, alt="two.sided", sigma.squared = 225)
+```
+
+***Finding:***
+
+p-value (0.3626182) > alpha (0.05)
+
+Since the p-value from the test is 0.3626182 - i.e greater than our alpha (0.05) we fail to reject the null hypothesis
+
+***Conclusion:***
+
+There is evidence that the variance of population IQ scores for students at the school is not to 90000.
+
+
+# Testing Two Population (variable) variances - the F Ratio
+
+We have been testing hypothesis about means for two populations.
+
+We can also test hypothesis about variable variances from two populations.
+
+We take samples for the population variable from each of the 2 populations, and perform a tow-sample, two-sided/two-tailed or one-sided/one-tailed hypotheses tests for population variances.
+
+Unlike the case for means, when you test two variances you do not subtract one from the other you divide one by the other (i.e. you find a ratio) in determining the sample statistic.
+
+The test statistic for comparing variances across two populations is called the F-ratio, named after Sir. Ronald Fisher.
+
+The family of distributions for comparing variances across two populations is called the F-distribution
+
+Just like the Chi-square distribution, the members of the F-distribution are distinguished by the degrees of freedom
+
+## Example 1: Two Sample, two-sided/two-tailed test of variances
+
+The data below are from production times for two machines (machine1 and machine2).
+The company is trying to determine if the variances of  production time for both machines is the same in the population variable that measures production time
+
+(i.e. ratio in population variances for production time = 1)
+```{r}
+machine1 <-c(24.58,22.09,23.70, 18.89, 22.02,28.71,24.44,20.91,23.83,20.83)
+
+machine2 <-c(21.61,19.06,20.72,15.77,19,25.88,21.48,17.85,20.86,17.77)
+```
+
+To test the following hypotheses at 5% significance level(alpha):
+
+- $H_0$ (null): variance of machine1 = variance of machine2 (F-ratio equals 1)
+- $H_1$ (alternative): variance of machine1 <> variance of machine2 (F-ratio not equal to 1)
+
+- Set $\alpha = 0.05$
+
+Base R provides `var.test()` to compare population variable variances.
+
+Note that this is different from `varTest()` from the `EnvStats` package used for one-sample variance hypothesis testing
+
+### Two-sided/two-tailed R code:
+```{r}
+var.test(machine1, machine2, ratio=1, alternative="two.sided")
+```
+
+***Write your finding/result:***
+
+p-value (0.9338) > alpha (0.05) so we fail to reject the null hypothesis
+
+***Write your conclusion:***
+
+Since we fail to reject the null, there is evidence in favor of the null
+
+### One-sided/one tailed R code
+
+- $H_0$ (null): variance of machine1 = 3 times the variance of machine2 (F-ratio greater equal to 3)
+- $H_1$ (alternative): variance of machine1 < 3 times the variance of machine2 (F-ratio less than 3)
+```{r}
+var.test(machine1, machine2, ratio=3, alternative="less")
+```
+
+***Write your finding/result:***
+
+***Write your conclusion:***
+
+
+### One-sided/one tailed R code
+
+- $H_0$ (null): variance of machine1 = 16 times variance of machine2 (F-ratio less than or equal than 16)
+- $H_1$ (alternative): variance of machine1 > 16 times variance of machine2 (F-ratio greater than 16)
+```{r}
+var.test(machine1, machine2, ratio=16, alternative="greater")
+```
+
+***Write your finding/result***
+
+***Write your conclusion:***
+
+
+# Testing behavior of proportions in two populations
+## Fisher's Exact test of equality of proportions
+
+With Fisher's tests of equality of proportion, we typically want to test 
+
+- $H_0$: proportion 1 = proportion 2
+- $H_1$: proportion 1 <> proportion 2
+
+### Example: Observed heart attacks for physicians taking aspirin vs placebo. Hennekens (1988)
+
+Physicians want to know if taking aspirin will help them avoid heart attacks.
+
+Suppose out of 11,037 physicians sampled from the population that received treatment, 104 physicians developed heart attacks.
+
+Suppose out of 11,034 physicians sampled from the population that received a placebo 189 physicians developed heart attacks.
+
+A group collects the information above into the following table/matrix
+```{r}
+heart_data <-matrix(c(104,189,11037,11034), nrow=2)
+
+#Display matrix
+heart_data
+```
+
+- let *Proportion 1* = proportion of physicians taking aspirin and witnessing heart attacks in the population
+- let *Proportion 2* = proportion of physicians taking placebo and witnessing heart attacks in the population
+
+We can conduct the following significance test at 1% significance level
+
+- $H_0$: Proportion 1 = Proportion 2
+- $H_1$: Proportion 1 <> Proportion 2
+
+
+- $\alpha = 1$% (0.01)
+
+The test of equality of proportions is called Fisher's exact test
+
+The syntax in R is as below:
+```{r}
+# fisher.test(data_source, alternative="less" or "two.sided" or "greater")
+
+fisher.test(heart_data, alternative = "two.sided")
+```
+
+***Finding/Result:***
+
+p-value < alpha (0.01)
+
+We reject the null hypothesis
+
+***Conclusion:***
+
+Since the p-value < alpha, there is evidence in favor of the alternative
+
+
+### Example 2: One-sided test to check if Proportion 1 is less than Proportion 2 in the population
+
+- $H_0$: Proportion 1 = Proportion 2
+- $H_1$: Proportion 1 < Proportion 2
+
+- $\alpha = 1$% (0.01)
+
+This is a one-sided test
+```{r}
+fisher.test(heart_data, alternative = "less")
+```
+
+***Finding/Result:***
+
+p-value < alpha
+
+We reject the null hypothesis
+
+***Conclusion:***
+
+Since we reject the null hypothesis, there is evidence in favor of the alternative hypothesis.
+
+
+
+# %Session Info%
+```{r session info}
+sessionInfo()
+```
