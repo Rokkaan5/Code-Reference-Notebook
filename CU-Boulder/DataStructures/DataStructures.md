@@ -42,7 +42,7 @@ permalink: /CUB/DataStructures
 
 **Team 4**: Strings
 
-[Team 4 Example code here](team-projects-codes/Strings_python.htmlb)
+[Team 4 Example code here](team-projects-codes/Strings_python.html)
 
 **Team 8** (Vamsi Gontu, Sanyuta Nair, and me): ***general intro to tree structures***
 
