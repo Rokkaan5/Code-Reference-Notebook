@@ -62,7 +62,7 @@ Prof Gate's ARM code in R provides examples of ARM applications
     - Part 1 : Text mining example
     - Part 2 : Mixed/Numeric Record data example
 
-## [Naive Bayes](NaiveBayes/CUB-ML_NB.qmd)
+## [Naive Bayes](NaiveBayes/CUB-ML_NB.md)
 ### in R
 - Single code : Naive Bayes (etc) in R for Text data and for Record Data. Text will be corpus.
 
