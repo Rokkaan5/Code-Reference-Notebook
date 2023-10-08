@@ -1,0 +1,194 @@
+---
+title: "Regression modeling in R - a second pass (Solutions)"
+author: "Dr. Osita Onyejekwe"
+---
+
+The following dataset containts measurements related to the impact of three advertising medias on sales of a product, $P$. The variables are:
+
+- `youtube`: the advertising budget allocated to YouTube. Measured in thousands of dollars;
+
+- `facebook`: the advertising budget allocated to Facebook. Measured in thousands of dollars; and 
+
+- `newspaper`: the advertising budget allocated to a local newspaper. Measured in thousands of dollars.
+
+- `sales`: the value in the $i^{th}$ row of the sales column is a measurement of the sales (in thousands of units) for product $P$ for company $i$.
+
+The advertising data treat "a company selling product $P$" as the statistical unit, and "all companies selling product $P$" as the population. We assume that the $n = 200$ companies in the dataset were chosen at random from the population (a strong assumption!).
+
+
+```{R}
+library(ggplot2)
+
+marketing = read.csv(url("https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/marketing.txt"), sep = "")
+
+data(marketing)
+head(marketing)
+n = dim(marketing)[1]; p = dim(marketing)[2] - 1
+```
+
+Note that, before an analysis, one should explore the data. We did this in "Regression modeling in R - a first pass".
+
+## Linear regression modeling
+
+### Sums of squares and $R^2$ for simple linear regression
+
+First, let's fit the same model that we fit in the previous notebook (but to the entire dataset, rather than just a training set). In addition to running a summary of the model (using `summary()`), we'll also run an "analysis of variance", using the `anova()` function. The analysis of variance decomposes the total variability ($TSS$) into the explained variability ($ESS$), and the residual/unexplained variability ($RSS$). It also produces an "F-test" that we'll learn how to interpret in the next module.
+
+
+```{R}
+lm_marketing = lm(sales ~ facebook, data = marketing)
+summary(lm_marketing)
+anova(lm_marketing)
+```
+
+From the output, we see that:
+
+- $ESS \approx 2,590.1$
+- $RSS \approx 5,210.6$
+- $TSS \approx 2,590.1 + 5,210.6 = 7,800.7$
+
+#### Computing regression quantities "by hand"
+
+Let's connect the `lm()` function output to the computations that we studied in a previous video. 
+
+
+```{R}
+ess = sum((fitted(lm_marketing) - mean(marketing$sales))^2); 
+rss = sum(residuals(lm_marketing)^2);
+tss = with(marketing, sum((sales - mean(sales))^2)); 
+r2 = 1-rss/tss; 
+sigma = sqrt(rss/(n - p - 1)); sigma
+
+cat(paste("The explained sum of squares is", round(ess,2), "."),
+        paste("The residual sum of squares is ", round(rss,2), "."),
+        paste("The total sum of squares is ", round(tss,2), "."),
+        paste("The coefficient of determination is", round(r2,2), "."),
+        paste("The estimate of the error standard deviation is", round(sigma,2), "."),
+           sep = "\n"
+           )
+```
+
+
+5.15603992489615
+
+Note that you can extract these quantities from the `lm()` object:
+
+
+```{R}
+cat(paste("Explained sum of squares:", round(anova(lm_marketing)[[2]][1],2)),
+    paste("Residual sum of squares:",round(anova(lm_marketing)[[2]][2],2)),
+    paste("Total sum of squares:",round(anova(lm_marketing)[[2]][1] + anova(lm_marketing)[[2]][2],2)),
+    paste("Coefficient of determination:",round(summary(lm_marketing)$r.squared,2)),
+       sep = "\n")
+```
+
+## Multiple linear regression
+
+Now, let's include the other predictors in our regression model.
+
+
+```{R}
+lm_marketing_MLR = lm(sales ~ facebook + youtube + newspaper, data = marketing)
+summary(lm_marketing_MLR)
+```
+
+First, note that the intercept and `facebook` parameter estimates have changed. The reason for these changes is the fact that we've now introduced new variables that explain some variability in `sales`. 
+
+- If the model is correct, a company with no Facebook, YouTube, or newspaper advertising budget can expect to sell $\widehat\beta_0 \times 1,000 \approx 3.53 \times 1,000 = 3,530$ units of product $P$. Notice that this is down from $\approx 11,174$ units in our previous simple linear regression model. Different models can have very different predictions and explanations, so it's important to attempt to find a good model! We'll focus more on the problem of model selection later in the course.
+
+- If the model is correct, then, for a $\$1,000$ increase in the Facebook advertising budget, a company can expect to sell roughly $\widehat\beta_1 \times 1000 = 0.19 \times 1,000 = 190$ more unts, on average, *adjusting for YouTube and newspaper advertising budgets.* The adjustment is important: what we mean here is that the YouTube and newspaper advertising budgets can be held at a constant value, and the $190$ unit change is the specific change associated with the Facebook advertising budget. (Similar interpretations can be made for `youtube` and `newspaper`.)
+
+- Recall the interpretation of "multiple R-squared", $R^2$: assuming the linear model is correct, $R^2$ is the proportion of observed variability in `sales` that can be explained by the linear regression model. 
+    - For the simple linear regression model, $R^2 \approx 0.33$. Assuming that the model is correct (but it likely isn't!), only about $33\%$ of the variability in sales of $P$ can be explained by the Facebook advertising budget. 
+
+    - For the multiple linear regression model, $R^2$ increases sharply to $0.90$. We should be caseful in comparing $R^2$ across models with a different number of predictors; $R^2$ will always increase when adding a predictor. What we'd really like to know is whether that increase is important enough to attribute to a real relationship between the added precitors and the response. 
+    
+    - "Adjusted-$R^2$", which adjusts for the number of predictors in each model, is meant to compare models of different sizes. The sharp increase in the adjusted-$R^2$ suggests that adding `youtube`  and `newspaper` did, in fact, explain significantly more of the variability. We'll study the adjusted- $R^2$ more later in the course.
+
+### Sums of squares and $R^2$ for multiple linear regression
+
+Note that we can compute the sums of squares for multiple linear regression in the same was as for simple linear regression.
+
+
+```{R}
+anova(lm_marketing_MLR)
+
+ess = sum((fitted(lm_marketing_MLR) - mean(marketing$sales))^2); 
+rss = sum(residuals(lm_marketing_MLR)^2);
+tss = with(marketing, sum((sales - mean(sales))^2)); 
+r2 = 1-rss/tss; 
+sigma = sqrt(rss/(n - p - 1)); 
+
+cat(paste("The explained sum of squares is", round(ess,2), "."),
+        paste("The residual sum of squares is ", round(rss,2), "."),
+        paste("The total sum of squares is ", round(tss,2), "."),
+        paste("The coefficient of determination is", round(r2,2), "."),
+        paste("The estimate of the error standard deviation is", round(sigma,2), "."),
+           sep = "\n"
+           )
+```
+
+
+## Non-identifiability: a simulation
+
+Recall that a linear regression model will have non-identifiable parameters when the matrix $\left(X^TX\right)^{-1}$ does not exist, where $X$ is the design matrix. $\left(X^TX\right)^{-1}$ does not exist when the columns of $X$ are linearly dependent. 
+
+Let's simulate such a situation. 
+
+*An aside: simulations are an invaluable tool in statistics and data science. In a simulation, we construct a dataset ourselves, rather than collect it from the world. In doing so, we know how the data were generated. With the simulated data (sometimes called "synthetic data"), we can fit various models - models that are correct, and models that are incorrect - and study how those models perform on data with known relationships.*
+
+Let's start out by simulating data in the following way. Let $Y_i = 2 + 3x_{i,1} + \varepsilon_i$,  where $\varepsilon_i \overset{iid}{\sim} N(0, 0.5^2)$,  $i = 1,...,n$, and $n = 75$. We'll generate the predictors, $x_i$ randomly from the interval $(0,1)$. This model will be identifiable.
+
+
+```{R}
+library(ggplot2)
+set.seed(1989)
+n = 75; beta0 = 2; beta1 = 3; sigma = 0.5; e = rnorm(n, 0, sigma)
+x1 = runif(n, 0, 1)
+y = beta0 + beta1*x1 + e
+df = data.frame(x1 = x1,y = y)
+
+ggplot(df, aes(x = x1, y = y)) + 
+    geom_point(alpha = 0.5) + 
+    theme_bw()
+```
+
+Now that we've simulated the data, let's fit a simple linear regression model to the data. We know that the model will be correct, because we know how the data were generated...we generated it!
+
+
+```{R}
+l = lm(y ~ x1, df)
+summary(l)
+```
+
+So far, there is nothing alarming in the summary output, because we've fit the correct linear model. Now, let's add a second predictor, $x_{i,2}$, such that $x_{i,2} = 2x_{i,1}$, and $Y_i = 2 + 3x_{i,1} + 2x_{i,2} + \varepsilon_i$ (same assumptions on $\varepsilon_i$). This model should be non-identifiable, since two columns in the design matrix will be a constant multiple of each other.
+
+
+```{R}
+x2 = x1*2; beta2 = 2
+y = beta0 + beta1*x1 + beta2*x2 + e
+df$x2 = x2
+l_nonID = lm(y ~ x1 + x2, data = df)
+summary(l_nonID)
+```
+
+
+Notice that the row of the cofficients table corresponding to `x2` is populated with `NA`. That is because the coefficient cannot be estimated due to non-identifiability. 
+
+The situation of "strict" non-identifiability is rare and easy to diagnose: if one column is a linear combination of others, it will show up in the coefficients table as `NA`. However, "near" non-identifiability, called *collinearity* or *multicollinearity*, is less rare, and a bit trickier to diagnose. Let's simulate some collinear data. We'll set $x_3 = \gamma x_1$, where $\gamma \overset{iid}{\sim}N(0,0.05^2)$. Then we'll fit the model $Y_i = \beta_0 + \beta_1x_{i,1} + \beta_2x_{i,3} + \varepsilon_i$.
+
+
+```{R}
+set.seed(88188)
+x3 = x1*rnorm(n,0,0.05)
+df$x3 = x3
+y = beta0 + beta1*x1 + beta2*x3 + e
+
+l_MC = lm(y ~ x1 + x3, data = df)
+summary(l_MC)
+```
+
+
+Here, we notice that the coefficients table does not have any `NA` values. The reason for this is because, strictly speaking, the model is identifiable. However, there are problems with the fit. Notice that the estimate for $\beta_2$ is negative, but that the true $\beta_2 = 2$ is positive. This can easily happen with collinear data (for reasons that we will understand soon!), and is a sign that `x3` is a near constant multiple of `x1`. 
+
+Note that, if we were working with real data - data for which we didn't know the data generating process - it wouldn't necessarily be clear that that the sign of the estimate of the parameter is different from the true parameter. But, you may have reasons to believe that the sign is off, e.g., if you have good theoretical reasons to believe that `x3` and `y` ought to be positively correlated but the sign of the estimate is negative. There are other methods to diagnose and deal with collinear data, and we'll look at some of them in a later lesson!

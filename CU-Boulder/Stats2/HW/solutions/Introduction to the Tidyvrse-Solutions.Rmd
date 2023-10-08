@@ -1,0 +1,199 @@
+---
+title: "Introduction to the Tidyvrse Solutions"
+author: "Dr. Osita Onyejekwe"
+class: "STAT 5010"
+date: "08/28/2023"
+---
+# Introduction to the Tidyvrse in R
+
+Note that this notebook relies heavily on material from the textbook [R for Data Science](https://r4ds.had.co.nz/index.html) by Hadley Wickham and Garrett Grolemund, and to a lesser extent, on the [DataCamp course on the Tidyverse](https://www.datacamp.com/courses/introduction-to-the-tidyverse). Both are great resources to explore!
+
+## A. What is the Tidyverse?
+
+The Tidyverse is a collection of R packages meant to streamline data science tasks. All Tidyverse packages share an underlying design philosophy, grammar, and data structures. In this notebook, we'll learn some basics of the Tidyverse. To install the tidyverse, open R Studio and type install.packages("tidyverse", dependencies = TRUE). Then, for each new session, you will need to load the Tidyverse:
+
+
+```{r libraries, warning=FALSE,message=FALSE}
+#install.packages("tidyverse", dependencies = TRUE)
+library(tidyverse)
+```
+
+
+## B. Some (Very) Basic Plotting with ggplot
+
+Let's do some plotting with the mpg dataset. mpg contains observations collected by the US Environmental Protection Agency on 38 models of car.
+
+First, load and learn about the variables contained in this dataset. The dataset is in the ggplot2 package, which is included in the tidyverse. So, you can load the data using data(mpg).
+
+
+```{r Basic-plotting}
+data(mpg)
+head(mpg)
+#?mpg
+```
+
+Let's look at a plot that might tell us about the relationship between drv (whether the car is front, rear, or 4-wheel drive) and hwy (highway miles per gallon).
+
+We begin a plot with the function ggplot(), which creates a coordinate system that you can add layers to. Layers are created with "+" geom_boxplot() will make a boxplot. In general, a template for creating plots would be 
+
+$\text{ggplot(data = DATA) + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))}$
+
+**Here's the basic code for the boxplot (fill in the correct variables):**
+
+
+```{R}
+# changing this to a scatter plot 
+options(repr.plot.width=8, repr.plot.height=6)
+p_scatter = ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = drv, y = hwy)) + 
+  theme_bw()
+p_scatter
+```
+
+
+You can mess with *all* sorts of things. For example, you could change colors. 
+```{R}
+ggplot(data = mpg) + 
+  geom_boxplot(mapping = aes(x = drv, y = hwy, color = drv)) + 
+scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9"))
+```
+
+
+You can mess with *all* sorts of things. For example, you could change colors:
+
+```{R}
+ggplot(data = mpg) + 
+  geom_boxplot(mapping = aes(x = drv, y = hwy, color = drv)) + 
+scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9"))
+```
+
+**What do we notice about the relationship between engine displacement and hwy miles per gallon?**
+There is a downward trending `hwy` as `displ` increases. This trend appears roughly, linear. However, there may be some evidence of curvature at the extremes of the `displ`.
+
+**Now, let's color points based on whether they represent a vehicle that is front, rear, or 4-wheel drive.**
+
+```{R}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = drv)) +
+      scale_color_manual(values=c("#CFB87C", "#000000", "#A2A4A3")) +
+ theme_bw()
+
+```
+
+**What do we notice?**
+
+- The relationship between `hwy` and `dipl` is grouped by `drv`
+- we also notice a downward trend between `hwy` and `displ` in each group (though it seems like a weak downward trend for rear wheel drive)
+- On average, front wheel drive cars with low engine displacement have the highest highway mpg. On the contrary, rear wheel drive cars with high engine displacement have the lowest highway mpg.
+
+Another way to add information from a categorical variable to plots is by using *facets*. Facets split a plot into subplots, such that each subplot contains data for a particular level of the categorical variable.
+
+We can facet by adding the function `facet_wrap(~ Catvar, nrow = x)` to our ggplot. Where, `Catvar` is the categorical variable that we want to facet on, and `x` is the number of rows that we'd like (we could also `ncol`...)
+
+*Create a facet plot where you split the data based on the class variable*
+```{R}
+options(repr.plot.width = 8, repr.plot.height = 6)
+p_facet = ggplot(data = mpg) + 
+  geom_point(mapping = aes(x= displ, y= hwy)) + 
+  facet_wrap(~ class , nrow=2) + 
+  theme_bw()
+p_facet
+```
+
+
+Instead of seeing the individual data points, we might be interested in visualizing some overall trend between displ and hwy. We could do this by substituting `geom_points()` with `geom_smooth()`. **Try it!**
+```{R}
+options(repr.plot.width = 8, repr.plot.height = 6)
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x= displ, y= hwy), color = "#CFB87C") +
+  theme_bw()
+```
+
+And, we can layer the smooth over the scatterplot pretty easily by adding "+ geom_point()". **Try it!**
+```{R}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x= displ, y= hwy, color = drv)) +
+  geom_point(mapping = aes(x= displ, y= hwy, color = drv)) +
+scale_color_manual(values = c("#CFB87C", "#000000", "#A2A4A3"))
+```
+
+## C. Data Manipulation and Transformation
+
+dplyr is a package in the Tidyverse that provides simple “verbs”, or functions that correspond to the most common data manipulation tasks, to help you translate your thoughts into code. Let's see how some of these verbs work on the gapminder dataset. **First, if you haven't already, let's install and load the gapminder package.**
+
+
+```{R}
+#install.packages("gapminder")
+library(gapminder)
+library(dplyr)
+```
+
+    
+    
+
+**Write a summary of the variables in this dataset. **
+
+
+```{R}
+data(gapminder)
+head(gapminder)
+```
+
+### Filter rows with filter()
+
+The verb filter will easily allow you to filter rows (observations) in a data frame. Here's one possibility:
+
+
+```{R}
+#filter(gapminder, country == "United States")
+#or
+gapminder %>%
+    filter(country == "United States")
+```
+
+
+**Filter 
+
+### Arranging with arrange()
+
+**Use the arrange() verb, in conjunction with the code above to put the United States data in descending order with respect to year.**
+
+
+```{R}
+gapminder %>% 
+          filter(country == "United States") %>% 
+          arrange(desc(year))
+```
+
+### Selecting columns with select()
+
+In addition to being able to filter out a subset of rows, you can also filter out a subset of columns with the select() verb. **Try to select just the country and year variables.**
+
+
+```{R}
+head(select(gapminder, country, year))
+```
+
+### Changing columns with mutate()
+
+We can also mutate certain columns. For example, suppose that we wanted life expectancy to be measured in years. We might write:
+
+
+```{R}
+head(gapminder %>%
+    mutate(lifeExp = lifeExp*12))
+```
+
+
+**Create a new column in the data frame that is just GDP (not GDP per capita).**
+
+
+```{R}
+gapminder_GDP = head(gapminder %>%
+                    mutate(gdp = gdpPercap * pop))
+gapminder_GDP
+
+```
+
+

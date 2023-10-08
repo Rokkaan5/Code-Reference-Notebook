@@ -1,0 +1,110 @@
+---
+title: "Intro to R-Markdown Solutions"
+author: "Dr. Osita Onyejekwe"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lab 2: Data Wrangling and Tidy Data
+
+During today's recitation we will focus on data wrangling, including importing data, changing data types, subsetting variables and observations, and calculating basic functions. 
+
+## Question 1: Importing Data
+Download the California foreclosure auctions dataset and save it to a folder on your desktop. Then load the data into R and save it as a data frame.
+
+```{r }
+library(tidyverse)
+# load data 
+df <- read.csv("../California Foreclosure Auctions_updated.csv")
+```
+
+## Question 2: Check out the Data
+What is the observational unit of this data? Is the data in tidy format? What needs to be cleaned up about this data?
+```{r }
+# make a copy of the data so we don't overwrite the original when we make changes
+df_clean <- df
+
+# make zip code a factor instead of an integer
+df_clean$Zip <- as.factor(df$Zip)
+```
+
+```{r}
+# convert transfer amount to an integer instead of a character
+library(readr)
+df_clean$TransferAmount <- parse_number(df$TransferAmount)
+
+# check for missing values in the varaibles of interest
+which(df$RadarID=="")
+
+```
+
+```{r}
+which(is.na(df$Zip))
+
+```
+
+```{r}
+# drop observations with missing data
+df_clean <- df_clean %>% filter(df$RadarID != "")
+```
+
+This dataset is pretty clean: the import successfully identified column names that are easy to use, the variables corresponding to demographic information were imported as characters (`RadarID`, `County`, `Address` etc…) and most of the numeric variables were imported as numeric variables (`Units`, `SqFt`, `YearBuilt` etc…).
+
+However, it looks like Zip code was imported as an integer. This is troublesome because it will allow mathematical operations on zip codes which doesn’t make sense (for example multiplying a zip code times 2 has no meaning) so we want to make that a factor variable. Also, the `TransferAmount` variable was imported as a character so we will need to change this to a numeric.
+
+Lastly, there are some missing values in the last few rows. In the code above, the `which()` function returns the row numbers that have missing values in the columns `RadarID` or `Zip`.
+
+
+## Question 3: Subset Rows and Columns
+Create a new data frame that contains only the auctions that are "TrusteesDeed-3rd" type, and only the variables required to uniquely identify each observation, along with "TransferAmount". (Bonus: make a scatter plot of the estimated value vs the final sale price and color code it by County - make some interpretations)
+
+```{r }
+# how to do this using tidyverse
+library(tidyverse)
+df_small <- df_clean %>%
+            filter(TransferType == "TrusteesDeed-3rd") %>%
+            select(RadarID, County, TransferAmount)
+
+# another way to do this using base r
+df_small <- df_clean[df_clean$TransferType == "TrusteesDeed-3rd", c("RadarID","County","TransferAmount")]
+
+```
+
+## Question 4: Tidy the Data
+If we wish to treat the County as the observational unit, then we must tidy the data. We can do this by averaging across all observations within the new observational unit. Creat a new data.frame that contains the County variable along with average transfer price.
+
+```{r}
+# how to do this using tidyverse
+df_tidy <- df_clean %>%
+           group_by(County) %>% 
+           summarise(AvgPrice = mean(TransferAmount, na.rm=TRUE))
+head(df_tidy)
+```
+
+```{r}
+# another way to do this using base r
+df_tidy <- aggregate(TransferAmount ~ County, data = df_clean, FUN = mean)
+head(df_tidy)
+```
+
+
+## Question 5: Calculate By Groups
+What is the average sale price for TrusteesDeed-3rd transfers for each county? Which county is the most expensive?
+```{r }
+df_small %>% group_by(County) %>% summarise(AvgPrice = mean(TransferAmount, na.rm=TRUE))
+
+```
+
+```{r}
+# another way using base r
+aggregate(TransferAmount ~ County, data = df_small, FUN = mean)
+```
+
+
+## Final Questions:
+
+1) What was the main point of today's content?
+
+2) What is the muddiest point of the class so far?

@@ -1,0 +1,168 @@
+---
+title: "t-tests in R --- Brief Run Through"
+author: "Dr. Osita Onyejekwe"
+output:
+  html_document: default
+---
+
+In this lesson, we will perform t-tests for individual regression parameters in R. To do this, we'll use a [dataset](https://dasl.datadescription.com/datafile/amazon-books/?_sfm_methods=Multiple+Regression&_sfm_cases=4+59943) about book prices from Amazon. The data consists of data on $n = 325$ books and includes measurements of:
+
+- `aprice`: The price listed on Amazon (dollars)
+
+
+- `lprice`: The book's list price (dollars)
+
+
+- `weight`: The book's weight (ounces)
+
+
+- `pages`: The number of pages in the book
+
+
+- `height`: The book's height (inches)
+
+
+- `width`: The book's width (inches)
+
+
+- `thick`: The thickness of the book (inches)
+
+
+- `cover`: Whether the book is a hard cover or paperback.
+
+
+- And other variables...
+
+We'll explore a model that will use `lprice`, `pages`, and `width` to predict `aprice`. But first, we'll do some work cleaning and wrangling the data.
+
+## Data cleaning and wrangling
+
+Let's read in the data and see if there are any missing values.
+
+
+```{R, warning = FALSE, message = FALSE}
+library(RCurl) #a package that includes the function getURL(), which allows for reading data from github.
+library(ggplot2)
+library(testthat)
+
+amazon = read.csv("https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/amazon.txt" ,sep = "\t")
+
+names(amazon)
+
+df = data.frame(aprice = amazon$Amazon.Price, lprice = as.numeric(amazon$List.Price),  
+                pages = amazon$NumPages, width = amazon$Width, weight = amazon$Weight..oz,  
+                height = amazon$Height, thick = amazon$Thick, cover = amazon$Hard..Paper)
+
+summary(df)
+which(is.na(df$lprice))
+```
+
+205
+
+
+From the summary, we can see that there are missing values in the dataset, coded as `NA`. There are many ways to deal with missing data. Suppose that sample unit $i$ has a missing measurement for variable $z_j$. We could:
+
+1. Delete sample unit $i$ from the dataset, i.e., delete the entire row. That might be reasonable if there are very view missing values and if we think the values are missing at random.
+
+2. Delete the variable $z_j$ from the dataset, i.e., delete the entire column. This might be reasonable if there are many many other missing values for $z_j$ and if we think $z_j$ might not be necessary for our overall prediction/explanation goals.
+
+3.  Impute missing values by substituting each missing value with an estimate.
+
+For more information on missing values, see this [resource](https://www.bu.edu/sph/files/2014/05/Marina-tech-report.pdf).
+
+Since most of our columns/variables are not missing values, and since these variables will be useful to us in our analysis, option 2 seems unreasonable. Let's first try option 3: impute the missing values of `lprice`, `pages`, `width`, `weight`, `height`, and `thick` with the mean of each.
+
+
+```{R}
+df$lprice[which(is.na(df$lprice))] = mean(df$lprice, na.rm = TRUE)
+df$weight[which(is.na(df$weight))] = mean(df$weight, na.rm = TRUE)
+df$pages[which(is.na(df$pages))] = mean(df$pages, na.rm = TRUE)
+df$height[which(is.na(df$height))] = mean(df$height, na.rm = TRUE)
+df$width[which(is.na(df$width))] = mean(df$width, na.rm = TRUE)
+df$thick[which(is.na(df$thick))] = mean(df$thick, na.rm = TRUE)
+summary(df)
+```
+
+This removed the `NA` values, and substituted them with the mean of all the other values in the corresponding column. This isn't always a good idea, however. Let's take a look at a scatter plot of the Amazon price as a function of the list price (with points colored according to whether they are hardcover of paperback).
+
+
+```{R}
+options(repr.plot.width = 6, repr.plot.height = 4)
+ggplot(df) + 
+    geom_point(aes(x = lprice, y = aprice, colour = cover)) +
+    scale_colour_manual(name = 'Cover Type', values = setNames(c('#CFB87C','grey'),c("H", "P"))) +
+    theme_bw() +
+    xlab('List Price') + ylab('Amazon Price')
+```
+
+Arguably, there are many outliers here, but some of them won't really make a difference with respect to the fit of a linear model. However, one clearly will, namely the grey point that has a very high Amazon price and a relatively low list price. We might call this point an *influential point*, since it would influence the fit of the regression model. Let's see if this is the value that we imputed:
+
+
+```{R}
+which(df$aprice >100 & df$lprice < 50)
+amazon[205,]
+```
+
+205
+
+It is! This suggests that the imputation method probably did more harm than good, since it created a list price value that does not follow the trend in the data. Of course it's *possible* that this is the true list price for this book, but given that Amazon rarely has this much of a gap between its prices and list prices is a red flag! So instead, we'll remove the unit. Note though, that in a real data analysis, we should investigate the cause of the missing values, and perhaps try a more sophisticated imputation method if we think the values are not missing at random. Also, we should do similar explorations to see whether the other imputations that we performed cause similar problems. For now, we'll leave the other variables as is.
+
+
+```{R}
+df = df[-205,]
+options(repr.plot.width = 6, repr.plot.height = 4)
+ggplot(df) + 
+    geom_point(aes(x = lprice, y = aprice, colour = cover)) +
+    scale_colour_manual(name = 'Cover Type', values = setNames(c('#CFB87C','grey'),c("H", "P"))) +
+    theme_bw() +
+    xlab('List Price') + ylab('Amazon Price')
+```
+
+
+There's clearly a strong linear relationship between the two prices. Let's look at relationships between other variables.
+
+
+```{R}
+library(corrplot)
+col4 = colorRampPalette(c("black", "darkgrey", "grey","#CFB87C"))
+corrplot(cor(df[,1:4]), method = "ellipse", col = col4(100),  addCoef.col = "black", tl.col = "black")
+```
+
+  
+```{R}
+pairs(df[,1:4], main = "Amazon Data", pch = 21, 
+      bg = c("#CFB87C"))
+```
+
+
+Some appear linear, but outliers exist. In a full analysis, we would work on identifying those outliers and decide why they were so different than other measurements. For the purposes of learning something about statistical inference in regression, we'll continue with the data as is; but note that outliers can impact statistical significance.
+
+## Linear modeling
+
+Let's model the Amazon price as a function of the list price, the number of pages, and the width of the book. When conducting hypothesis tests, let's set $\alpha = 0.05$. 
+
+
+```{R}
+lm_amazon = lm(aprice ~ lprice + pages + width, data = df)
+summary(lm_amazon)
+```
+
+
+Let $\beta_{width}$ be the parameter associated with the `width` predictor. Consider the hypothesis test:
+
+$$H_0: \beta_{width} = 0 \,\,\, vs \,\,\, H_1: \beta_{width} \ne 0.$$
+
+Notice that the p-value for this test is $0.285$, which is not less than $\alpha$. Thus, the parameter associated with `width` is not statistically significant at the $\alpha = 0.05$ level. As such, we do not have evidence that that parameter is different from zero, and, equivalently, we don't have statistical evidence to suggest that `width` should stay in the model.
+
+Interestingly, the number of pages *is* statistically significant, but the *magnitude*, i.e., size of the association, of the parameter estimate is much lower than the estimate for the width:
+
+$$\big| \, \widehat\beta_{pages}\, \big| = 0.006 < \big| \,  \widehat\beta_{width}\, \big|  = 0.326. $$
+
+So, it may be that `pages` is statistically significant, but practically insignificant. To explore this, let's interpret the `pages` estimate: (assuming the model is roughly correct), adjusting for the list price and width, for every additional page added to a book, we can expect the amazon price to decrease by $\$0.006$, less than a penny. That is, an increase of 100 pages - a relatively large difference - is associated with a $\$0.60$ increase. Is this worth keeping in the model, even though it's *statistically* significant? It depends! Some important questions are:
+
+1. Are researchers counting book pages themselves, and thus spending time and money on it, or is this page data easily available? 
+
+
+2. How precise do our predictions need to be?
+
+If researchers counting book pages themselves, and if predictions don't need to be all that precise, using `pages` as a predictor might be more trouble than it's worth! However, often, page information is available from publishers, and competing with Amazon prices might require a highly precise model. So, researchers might opt to keep `pages` in the model. In short, answering this question requires knowledge of the domain area and data collection process!

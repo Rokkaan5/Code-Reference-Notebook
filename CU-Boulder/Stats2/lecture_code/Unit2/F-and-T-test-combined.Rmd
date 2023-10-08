@@ -1,0 +1,150 @@
+---
+title: "F-test with T-test"
+author: "Jasmine Kobayashi"
+date: "2023-09-29"
+output: html_document
+---
+
+```{r, warning=FALSE, message=FALSE}
+#install.packages("ISLR")
+library(ISLR)
+```
+
+```{r}
+hitters_cc <- Hitters[complete.cases(Hitters),]
+```
+
+* Goal here is to predict salaries using two features `AtBat` and `Hits`
+* Is this model better than an intercept model
+
+$$
+H_0: \beta_1 = \beta_2 = 0
+$$
+
+The null hypothesis is saying that the coefficients for `AtBat` and `Hits` are equal to zero. Recall that
+
+\begin{equation}
+F_{stat} = \frac{(RSS_R - RSS_{UR})/q}{RSS_{UR}/(n-p-1)}
+\end{equation}
+
+In this particular case, because we are just comparing it to the intercept only model, the $RSS_R$ is equivalent to the sum of the sum of the total squares (TSS). (You can verify this on your own time.)
+
+* First let's create the small model
+* Then we create the full model
+
+```{r}
+small <- lm(Salary ~ 1, data = hitters_cc)
+larger <- lm(Salary ~ AtBat + Hits, data = hitters_cc)
+```
+
+
+# Method 1 to get RSS (Rarely mentioned)
+
+$$
+RSS = \sigma^2 \times (n-p-1)
+$$
+
+```{r}
+rss_small <- summary(small)$sigma^2 * (nrow(hitters_cc) - 1)   #p = 0 for the first model
+rss_larger <- summary(larger)$sigma^2 * (nrow(hitters_cc) - 3) #p = 2
+
+rss_small
+rss_larger
+```
+
+
+# Method 2 to get `RSS`
+
+Easier way to do this using the `deviance` function that will give us the Residual Sum of Squares
+
+```{r}
+rss_small <- deviance(small)
+rss_larger <- deviance(larger)
+
+rss_small
+rss_larger
+```
+Now, let's calculate the F-test
+
+```{r}
+F <- ((rss_small - rss_larger)/2)/(rss_larger/(nrow(hitters_cc)-3))
+F
+```
+
+We can use the F - distribution to decide if the F-stat is a meaningful number. If we assume that the null hypothesis is true, then we can look at the probability of seeing a statistic as extreme or more extreme than $33.23299$.
+
+```{r}
+1 - pf(F, 2, nrow(hitters_cc) - 3)
+```
+
+The `pf` is a way of calculating the probability under the F-distribution. (?pf). Then we plug in the `2` for the degrees of freedom for the numerator and the `n-3` for the degrees of freedom of the denominator. Therefore we have a small p-value (F-crit). Thus there is a very small probability of seeing a statistic as such or more extreme (given that the null hypothesis is true). Therefore we are going to reject the null hypothesis.
+
+## Easier: ANOVA analysis
+There is a much easier way to do this. We are going to use the **ANOVA** analysis - Analysis of Variance.
+
+```{r}
+anova(small,larger)
+```
+
+What if we just wanted to know if the `Hits` variable is an important contribution?
+
+
+$$H_0: \beta_2 = 0$$
+
+$$H_A: \beta_2 \neq 0$$
+
+```{r}
+small <- lm(Salary ~ AtBat , data = hitters_cc)
+larger <- lm(Salary ~ AtBat + Hits, data = hitters_cc)
+
+anova(small, larger)
+```
+
+# Even Easier way - t-test!
+
+```{r}
+summary(larger)
+```
+
+The t-value is `3.948` and the p-value is `0.000101`. Thus we can see that it is significant and reject the null hypothesis.
+
+# Application - Take home Quiz - 10/01/23 at 11:59 PM
+
+Using the hitters data
+
+1. Fit the model predicting `salary` from `AtBat` and `HmRun`
+2. Perform an F-test for the null hypothesis that the coefficient associated with `HmRun` is insignificant
+3. Compare this to the t-test obtained from the summary statement
+4. Submit the quiz. :)
+
+HAVE A LOVELY WEEKEND
+
+## 1. Fit model
+
+```{r}
+mdl <- lm(Salary ~ AtBat + HmRun, data = hitters_cc)
+summary(mdl)
+```
+## 2. F-test for null
+
+Null Hypothesis: $$H_0: \beta_2 = 0$$
+
+```{r}
+anova(small,mdl)
+```
+
+According to the `anova()` analysis the F-statistic for the model with `HmRun` is $7.0173$.
+
+```{r}
+1 - pf(7.0173, 2, nrow(hitters_cc) - 3)
+```
+
+From the results of the F-test, we reject the null.
+
+## 3. Compare with t-test
+
+```{r}
+summary(mdl)
+```
+
+Even from the t-test, with a t-value of $2.649$ which is greater than the p-value of $0.00857$, we proceed to reject the null hypothesis.

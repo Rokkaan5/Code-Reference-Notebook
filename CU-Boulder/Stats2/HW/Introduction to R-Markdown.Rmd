@@ -1,0 +1,97 @@
+---
+title: "Introduction to R-Markdown"
+author: "Jasmine Kobayashi"
+date: "08/28/2023"
+---
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(readr)
+```
+# Data Wrangling and Tidy Data
+
+We will focus on data wrangling, including importing data, changing data types, sub-setting variables and observations, and calculating basic functions. 
+
+## Question 1: Importing Data
+Download the California foreclosure auctions dataset and save it to a folder on your desktop. Then load the data into R and save it as a data frame.
+```{r Q1-read_data}
+#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))  # set working directory to current file directory
+data <- read.csv("California Foreclosure Auctions_updated.csv")
+```
+
+## Question 2: Check out the Data
+What is the observational unit of this data? Is the data in tidy format? What needs to be cleaned up about this data?
+```{r Q2-Check_data}
+(head(data))
+(colnames(data))
+(summary(data))
+```
+**JK answer:**
+From what I understand about what's considered "tidy", I don't believe this is "tidy". What I understand is what's considered "tidy" in R (as opposed to "clean data" in other senses), the data has rows for each entry of data and columns for all potential variables; in that sense, this data qualifies for all of those. But need to also have entries in all cells and there are definitely some missing data.
+
+## Question 3: Subset Rows and Columns
+Create a new data frame that contains only the auctions that are "TrusteesDeed-3rd" type, and only the variables required to uniquely identify each observation, along with "TransferAmount". (Bonus: make a scatter plot of the estimated value vs the final sale price and color code it by County - make some interpretations)
+
+```{r Q3-subset}
+# new dataframe of TransferType
+# (I'm guessing "uniquely identify each observation" is implying the index of the data)
+td3 <- data %>% filter(TransferType=="TrusteesDeed-3rd") %>% select(TransferType,TransferAmount)
+head(td3)
+
+```
+
+```{r Bonus-scatter_plot,warning=FALSE,message=FALSE}
+# Bonus scatter plot (Estimated value vs Final Price; color coded by county)
+
+# parse_number() (from readr) apparently converts to numeric while ignoring "$"s & commas
+data$TransferAmount <- parse_number(data$TransferAmount)  
+data$EstimatedValue <- parse_number(data$EstimatedValue)
+
+# scatter plot
+data %>% filter(TransferType=="TrusteesDeed-3rd") %>% 
+          ggplot(aes(x=TransferAmount,y=EstimatedValue,col=County)) + 
+          geom_point() 
+```
+
+## Question 4: Tidy the Data
+If we wish to treat the County as the observational unit, then we must tidy the data. We can do this by averaging across all observations within the new observational unit. Create a new data.frame that contains the County variable along with average transfer price.
+
+```{r Q4-Tidy}
+tidy_county <- data %>% 
+                group_by(County) %>% 
+                mutate(avg_transfer = mean(TransferAmount,na.rm = TRUE)) %>%   
+                select(County,avg_transfer)
+
+head(tidy_county)
+```
+
+## Question 5: Calculate By Groups
+What is the average sale price for "TrusteesDeed-3rd" transfers for each county? Which county is the most expensive?
+```{r Q5-calculate_groups}
+tidy_county_td3 <- data %>% 
+                  filter(TransferType=="TrusteesDeed-3rd") %>% 
+                  group_by(County) %>% 
+                  mutate(avg_transfer = mean(TransferAmount,na.rm = TRUE)) %>% 
+                  select(County,avg_transfer)
+
+distinct(tidy_county_td3)
+```
+
+
+## Final Questions:
+
+1) What was the main point of today's content?
+
+To review relatively basic data reading, EDA, and tidying in R. 
+
+2) What is the muddiest point of the class so far?
+
+I use more Python than R, so I often need to remind myself of many coding syntax in R. 
+(But fortunately I love linear algebra so at least I don't have to worry about that aspect as much! :D)
+
+### Knit the File to HTML and Submit!! 

@@ -1,0 +1,311 @@
+---
+title: "STAT 5010: Homework1"
+author: "Jasmine Kobayashi"
+---
+
+# Homework #1
+
+**See Canvas for the due date of this assignment**. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don't know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems, but please see the class [scanning policy](https://docs.google.com/document/d/1d_7PJvTGtMGtHWq8BezaTzYI5aYZkFgmchV_hTId6Ks/edit?usp=sharing). Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work.
+
+## A. Theoretical Problems
+
+### A.1: Connections between linear algebra and statistics
+
+Let $\mathbf{a} = (a_1,...,a_n)^\top$ and $\mathbf{y} = (y_1,...,y_n)^\top$ be two vectors. Define the *inner product* of $\mathbf{a}$ and $\mathbf{y}$ to be $\mathbf{a}^\top\mathbf{y} = a_1y_1 + a_2y_2 + ... + a_ny_n$.
+
+**A.1 (a) [5 points] Interpret** $\mathbf{y}$ as a set of observations of a variable. Find $\mathbf{a}$ such that $\mathbf{a}^\top\mathbf{y}$ is equal to the sample mean of $\mathbf{y}$, i.e., $\bar{y}$.
+
+YOUR ANSWER HERE
+
+(I apologize if this isn't proper "proof" standards in terms of wording and structure flow. Math is my favorite subject, but proofs was my least favorite aspect of it so I never took a formal course in it. But I hope at least my conceptual understanding of the ideas and math accurately come across.)
+
+If we want $\mathbf{a}^\top\mathbf{y}$ to equal the sample mean, $\bar{y}$, then the general goal looks like this: $$\mathbf{a}^\top\mathbf{y} = \bar{y} = \frac{1}{n}\sum^n_{i=1}y_i$$.
+
+And as explained above, the dot product between two vectors is $$\mathbf{a}^\top\mathbf{y} = a_1y_1 + a_2y_2 + ... + a_ny_n$$
+
+Or in summation form: 
+$$\mathbf{a}^\top\mathbf{y} = \sum^n_{i=1}a_i y_i$$
+thus now we ultimately have:
+
+$$\mathbf{a}^\top\mathbf{y} = \bar{y}$$
+$$\Rightarrow  \sum^n_{i=1}a_i y_i = \frac{1}{n}\sum^n_{i=1}y_i $$
+
+Okay to move forward we need to match the "form" of the summations on both sides.
+
+So if all elements in the vector $\mathbf{a}$ are the same value, we can represent all $a_i$ as a $a$ to treat as a constant and move out of the summation. i.e.
+
+If
+$$a_i = a \quad \forall \quad  i=1,...,n$$
+then
+$$\Rightarrow \sum^n_{i=1}a_i y_i = a\sum^n_{i=1}y_i$$
+
+Then from there we have: 
+$$a\sum^n_{i=1}y_i = \frac{1}{n}\sum^n_{i=1}y_i$$
+
+Then solve for $a$:
+$$\Rightarrow a = \frac{1}{n}$$
+
+So $\mathbf{a}$ is a vector where all elements equal $\frac{1}{n}$. (i.e. $\mathbf{a} = (\frac{1}{n},...,\frac{1}{n})^\top$)
+
+**A.1 (b) [7 points] Define** $\mathbf{\bar{y}} = (\bar{y},..., \bar{y})^\top$ (that is, $\mathbf{\bar{y}}$ is a vector where every entry is the sample mean of $\mathbf{y}$). Write $\displaystyle \sum^n_{i=1}(y_i - \bar{y})^2$ as an inner product of two vectors.
+
+YOUR ANSWER HERE
+
+If we subtract vector $\mathbf{\bar{y}}$ from vector $\mathbf{y}$, we get a vector that looks like this:
+\begin{equation}
+
+\mathbf{y} - \mathbf{\bar{y}} = 
+
+\begin{bmatrix}
+y_1 \\
+\vdots \\
+y_n
+\end{bmatrix}
+
+-
+
+\begin{bmatrix}
+\bar{y}\\
+\vdots \\
+\bar{y}
+\end{bmatrix}
+
+=
+
+\begin{bmatrix}
+y_1 - \bar{y}\\
+\vdots \\
+y_n - \bar{y}
+\end{bmatrix}
+\end{equation}
+
+For less-writing sake, we could name that vector $\mathbf{A}$ (for instance)
+
+\begin{equation}
+\mathbf{A} = 
+
+\begin{bmatrix}
+y_1 - \bar{y}\\
+\vdots \\
+y_n - \bar{y}
+\end{bmatrix}
+
+\end{equation}
+
+
+And if we took the dot product (inner product) of the vector with itself, we get the following:
+
+$$ \mathbf{A} \cdot \mathbf{A} = \mathbf{A}^\top\mathbf{A} = \sum^n_{i=1}(y_i - \bar{y})(y_i - \bar{y})=\sum^n_{i=1}(y_i - \bar{y})^2$$
+
+Thus, $\displaystyle \sum^n_{i=1}(y_i - \bar{y})^2$ can be written as a dot product between two vectors where both vectors are the vector result of taking the difference between vector $\mathbf{y}$ and $\mathbf{\bar{y}}$. 
+
+### A.2 Linear regression with matrices and vectors
+
+**This problem might require some outside-of-class research if you haven't taken a linear algebra/matrix methods course.**
+
+Matrices and vectors will play an important role for us in linear regression. Let's review some matrix theory as it might relate to linear regression.
+
+Consider the system of linear equations
+
+\begin{equation} 
+Y_i = \beta_0 + \sum^p_{j=1}\beta_j x_{i,j} + \varepsilon_i,
+\end{equation} for $i = 1,...,n$, where $n$ is the number of data points (measurements in the sample), and $j = 1,...,p$, where
+
+1.  $p+1$ is the number of parameters in the model.
+2.  $Y_i$ is the $i^{th}$ measurement of the *response variable*.
+3.  $x_{i,j}$ is the $i^{th}$ measurement of the $j^{th}$ *predictor variable*.
+4.  $\varepsilon_i$ is the $i^{th}$ *error term* and is a random variable, often assumed to be $N(0, \sigma^2)$.
+5.  $\beta_j$, $j = 0,...,p$ are *unknown parameters* of the model. We hope to estimate these, which would help us characterize the relationship between the predictors and response.
+
+**A.2.(a) [5 points] Write the equation above in matrix vector form. Call the matrix including the predictors** $X$, the vector of $Y_i$s $\mathbf{Y}$, the vector of parameters $\mathbf{\beta}$, and the vector of error terms $\mathbf{\varepsilon}$. (This is more LaTeX practice than anything else...)
+
+YOUR ANSWER HERE
+
+\begin{equation}
+\mathbf{X} = 
+
+\begin{bmatrix}
+1 & x_{11} & \cdots & x_{1p}\\
+\vdots & \vdots & \ddots & \vdots\\
+1 & x_{n1} & \cdots & x_{np}
+\end{bmatrix}
+\end{equation}
+
+$$\mathbf{Y} = (Y_1,...,Y_n)^\top$$
+
+$$\mathbf{\beta} = (\beta_0,...,\beta_p)^\top$$
+
+$$\mathbf{\varepsilon} = (\varepsilon_1,...,\varepsilon_p)^\top$$
+
+Matrix/Vector form of equation: 
+
+$$\mathbf{Y} = X\mathbf{\beta} + \mathbf{\varepsilon}$$
+\begin{equation}
+\Rightarrow 
+\begin{bmatrix}
+Y_{1} \\
+\vdots\\
+Y_{n}
+\end{bmatrix}
+
+=
+
+\begin{bmatrix}
+1 & x_{11} & \cdots & x_{1p}\\
+\vdots & \vdots & \ddots & \vdots\\
+1 & x_{n1} & \cdots & x_{np}
+\end{bmatrix}
+
+\begin{bmatrix}
+\beta_{0} \\
+\vdots\\
+\beta_{p}
+\end{bmatrix}
+
++ 
+
+\begin{bmatrix}
+\varepsilon_{1}\\
+\vdots\\
+\varepsilon_{p}
+\end{bmatrix}
+\end{equation}
+
+**A.2.(b) [8 points] In class, we will find that the OLS estimator for** $\mathbf{\beta}$ in MLR is $\widehat{\boldsymbol\beta} = (X^\top X)^{-1}X^\top\mathbf{Y}$.
+
+1.  What condition must be true about the columns of $X$ for the "Gram" matrix $X^\top X$ to be invertible?
+2.  What does this condition mean in practical terms?
+3.  Suppose that the number of measurements ($n$) is less than the number of model parameters ($p+1$). What does this say about the invertibility of $X^\top X$? What does this mean on a practical level?
+4.  What is true about about $\widehat{\boldsymbol\beta}$ if $X^\top X$ is not invertible?
+
+YOUR ANSWER HERE
+
+1. Conditions of an invertible matrix (in general): The matrix must be a square (number of columns = number of rows) non-singular matrix. (Non-singular matrix means a matrix with a *non*-zero determinant.)
+
+This means that the Gram matrix $X^\top X$ must be square and non-singular. The inner product of matrices with the same dimensions (thus matrices that are the exactly the same) will always result in a square matrix. And apparently a non-singular square matrix of shape $m\times m$ has rank($m$), which known as a "full-rank" matrix. If the (potentially non-square) matrix $X$ is full-rank, then the resulting Gram matrix will also be full-rank ([proof found on the web](https://www.statlect.com/matrix-algebra/matrix-product-and-rank)). 
+
+So, for $X$ to be "full-rank" the number of columns of $X$ needs to be equal or less ($\le$) than the number of rows.
+
+2. In practical terms, the interpretation of this condition ($X$ rows $\ge$ $X$ columns) means that there needs to be more observations than model parameters. 
+
+3. If the number of measurements $n$ is less than the number of model parameters ($p+1$) then this says that the Gram matrix, $X^\top X$, is not invertible. If the Gram matrix is not invertible, then the columns are not linearly independent (columns can be written as linear combination of others; [proof found on web](https://sparse-plex.readthedocs.io/en/latest/book/matrices/invertible_matrices.html#:~:text=Thus%20if%20the%20Gram%20matrix,of%20A%20are%20linearly%20dependent.)). Thus, on a practical level, it may suggest that certain parameters have similar effects on the data as other parameters (thus kinda redundant as separate parameters).
+
+4. If $X^\top X$ is not invertible, then $\widehat{\boldsymbol\beta}$ does not exist.
+
+## B. Computational Problems
+
+### B.1 Exploratory data analysis and basic regression
+
+**B.1.(a) Load the "gala" dataset, and describe the variables.**
+
+```{R}
+gala = read.csv("https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/gala.csv")
+gala = gala[,-1]
+summary(gala)
+```
+
+**B.1.(b) [8 points] Use ggplot() to explore the relationship between the `Species` variable (response) and `Endemics`, `Elevation`, `Nearest`, and `Adjacent` (predictor variables). You might do so by creating four separate scatter plots. Do these relationships look linear? Does the variability in `Species` change as a function of any of the predictors? Are there any outliers in any of the plots?**
+
+```{r scatterplots, warning=FALSE, message=FALSE}
+#install.packages("gridExtra")
+library(gridExtra)
+library(ggplot2)
+
+# YOUR CODE HERE
+# plotting using for-loop
+features <- c("Endemics","Elevation","Nearest","Adjacent")
+
+for(col in features){
+  print(ggplot(data = gala) + geom_point(mapping = aes(x=gala[,col],y=Species))+ xlab(col))
+
+}
+```
+```{r subplots, warning=FALSE,message=FALSE}
+# alternative code to see all plots as subplots in a single figure
+library(ggpubr) #(for subplot arrangement using `ggarrange`)
+
+end_plt = ggplot(gala) + geom_point(mapping = aes(x=Endemics,y=Species))
+elv_plt = ggplot(gala) + geom_point(mapping = aes(x=Elevation,y=Species))
+nst_plt = ggplot(gala) + geom_point(mapping = aes(x=Nearest,y=Species))
+adj_plt = ggplot(gala) + geom_point(mapping = aes(x=Adjacent,y=Species))
+
+ggarrange(end_plt,elv_plt,nst_plt,adj_plt,
+          ncol=2,nrow=2)
+
+```
+
+
+```{r, include=FALSE,echo=FALSE,eval=FALSE}
+# should not appear in knitted document
+# JK added self: 
+# pairwise plots for simplicity in plot coding (but I guess not necessarily visually ideal)
+library(tidyverse)
+gala_sub <- gala %>% select("Endemics","Elevation","Nearest","Adjacent","Species")
+pairs(gala_sub)
+```
+
+YOUR ANSWER HERE
+
+Regarding linear relationship:
+
+The relationship between "Species" and "Endemics" appears to have the most linear-looking relationship. One may be able to see some linear relationship between "Species" and "Elevation", but other than that, the relationship between "Species" and the other predictors ("Nearest" and "Adjacent"), don't appear all that linear. 
+
+Regarding outliers:
+
+I suppose one could say that less linear-looking relationship between "Species" and the predictors other than "Endemics" could be due to the amount of outliers. If one imagined a best fit line between "Species" and "Elevation" one could say that there's about two or three outliers. And I suppose there's a very obvious outlier in the relation between "Species" and "Adjacent", particularly the one point around (100,4500) if I wrote the point as a coordinate. (Or in words, the point around value 100 for "Species" and value 4500 for "Adjacent"). 
+
+
+**B.1.(c) [18 points] Perform a linear regression with `Species` as the response and `Endemics`, `Elevation`, `Nearest`, and `Adjacent` as predictors. Store your `lm()` object in the variable `lm_species`. Interpret the parameter estimate associated with Endemics in the markdown cell below (assume, for the moment, that the model is correct, and so the interpretation holds).**
+
+```{R}
+# YOUR CODE HERE
+lm_species <- lm(Species ~ Endemics+Elevation+Nearest+Adjacent, data = gala)
+summary(lm_species)
+```
+
+YOUR ANSWER HERE
+
+The "Endemics" parameter estimate from the linear regression model is the only parameter estimate that is positive (interestingly). It supposedly has a relationship with the response variable "Species" with a slope of about $4.2$. It definitely has the highest relationship with "Species" out of the four predictors (as expected).
+
+### B.2 Wildfire data
+
+The wildfire data has the following variables measured for $517$ wildfires:
+
+1.  `X`: $x$-axis spatial coordinate within the Montesinho park map: $1$ to $9$
+2.  `Y`: $y$-axis spatial coordinate within the Montesinho park map: $2$ to $9$
+3.  `month`: month of the year: 'jan' to 'dec'
+4.  `day`: day of the week: 'mon' to 'sun'
+5.  `FFMC`: FFMC index from the FWI system: $18.7$ to $96.20$
+6.  `DMC`: DMC index from the FWI system: $1.1$ to $291.3$
+7.  `DC`: DC index from the FWI system: $7.9$ to $860.6$
+8.  `ISI`: ISI index from the FWI system: $0.0$ to $56.10$
+9.  `temp`: temperature in Celsius degrees: $2.2$ to $33.30$
+10. `RH`: relative humidity in $\%$: $15.0$ to $100$
+11. `wind`: wind speed in km/h: $0.40$ to $9.40$
+12. `rain`: outside rain in mm/m2 : $0.0$ to $6.4$
+13. `area`: the burned area of the forest (in ha): $0.00$ to $1090.84$
+
+```{R}
+
+fire = read.csv("https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/forestfires.csv")
+#dim(fire)
+
+head(fire)
+```
+
+**B.2 (a) The area variable is very skewed towards** $0.0$. Thus it may make sense to model with the logarithm transform. Transform the $y =$ `area` variable using $\log(y + 1)$. Store this new variable in a $14^{th}$ column and name that column `log_area`. Also print a summary to to verify that the new column is part of the dataset.
+
+```{R}
+#fire2 = fire[fire$area != 0,]
+#dim(fire2)
+
+#convert to log area
+# YOUR CODE HERE
+fire$log_area <- log(fire$area+1)
+
+#convert rain to factor
+# YOUR CODE HERE
+fire$rain <- as.factor(fire$rain)
+#summary for new column verification
+summary(fire)
+```
