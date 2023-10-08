@@ -1,8 +1,10 @@
 ---
+layout: page
 title: "CUB-ML ARM"
+permalink: /CUB/ML/ARM
 ---
 
-# [CU Boulder: Machine Learning](../CUB-ML.qmd) - Association Rule Mining (ARM)
+# [CU Boulder: Machine Learning](../CUB-ML.md) - Association Rule Mining (ARM)
 Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/)
 
 - Reference: Professor Ami Gates, Dept. Applied Math, Data Science, University of Colorado
@@ -15,6 +17,6 @@ Prof Gate's ARM code in R provides examples of ARM applications
 - apriori algorithms
 - creating interactive visualization of ARM rules
 
-[ARM raw R-code (md)](Raw/GatesARM.qmd)
+[ARM raw R-code](Raw/GatesARM.html)
 
-[Markdown of ARM code](Markdown/ARMmarkdown.qmd)
+[Markdown of ARM code](Markdown/ARMmarkdown.html)
