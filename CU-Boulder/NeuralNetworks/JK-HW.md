@@ -1,8 +1,10 @@
 ---
+layout: page
 title: "Neural Networks: Jasmine's HW Submissions"
+permalink: /CUB/NeuralNetworks/HW
 ---
 
-# [CU Boulder](../../CUB.qmd): [Neural Networks](NeuralNets.qmd)
+# [CU Boulder](../../CUB.md): [Neural Networks](NeuralNets.md)
 (Fall 2023) Neural Networks with Dr. Ami Gates at CU Boulder
 
 # HW Submissions by Module
@@ -11,8 +13,8 @@ These are my homework submissions, so all my code. As much as possible done "fro
 
 ## Module 1
 
-- [Assignment 1 (Jupyter Notebook)](HW/hw1/A1_JasmineKobayashi.ipynb)
-    - [Simple OOP of Logistic Regression (for this HW)](HW/hw1/hw1_log_reg_code.qmd)
+- [Assignment 1 (Jupyter Notebook)](HW/hw1/A1_JasmineKobayashi.html)
+    - [Simple OOP of Logistic Regression (for this HW)](HW/hw1/hw1_log_reg_code.md)
 
 ## Module 2
 

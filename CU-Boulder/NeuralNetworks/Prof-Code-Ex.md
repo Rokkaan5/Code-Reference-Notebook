@@ -1,7 +1,9 @@
 ---
+layout: page
 title: "Neural Networks: Prof Gates' Code Examples"
+permalink: /CUB/NeuralNetworks/ProfGatesCode
 ---
-# [CU Boulder](../../CUB.qmd): [Neural Networks](NeuralNets.qmd)
+# [CU Boulder](../../CUB.md): [Neural Networks](NeuralNets.md)
 (Fall 2023) Neural Networks with Dr. Ami Gates at CU Boulder
 
 ## Dr. Gates' Code Examples

@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "HW1_log_reg"
-author: "Jasmine Kobayashi"
+permalink: CUB/NeuralNetworks/HW/hw1-rawcode
 ---
 
 ```python

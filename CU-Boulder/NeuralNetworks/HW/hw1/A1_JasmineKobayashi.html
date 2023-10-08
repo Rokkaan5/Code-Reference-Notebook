@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>Module 1 Assignment</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="A1_JasmineKobayashi_files/libs/clipboard/clipboard.min.js"></script>
+<script src="A1_JasmineKobayashi_files/libs/quarto-html/quarto.js"></script>
+<script src="A1_JasmineKobayashi_files/libs/quarto-html/popper.min.js"></script>
+<script src="A1_JasmineKobayashi_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="A1_JasmineKobayashi_files/libs/quarto-html/anchor.min.js"></script>
+<link href="A1_JasmineKobayashi_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="A1_JasmineKobayashi_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="A1_JasmineKobayashi_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="A1_JasmineKobayashi_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="A1_JasmineKobayashi_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#create-small-3d-dataset" id="toc-create-small-3d-dataset" class="nav-link" data-scroll-target="#create-small-3d-dataset">(1) - Create Small 3D Dataset</a></li>
+  <li><a href="#linear-equation" id="toc-linear-equation" class="nav-link" data-scroll-target="#linear-equation">(2) - Linear Equation</a>
+  <ul class="collapse">
+  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a">(a)</a></li>
+  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b">(b)</a></li>
+  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c">(c)</a></li>
+  <li><a href="#d" id="toc-d" class="nav-link" data-scroll-target="#d">(d)</a></li>
+  </ul></li>
+  <li><a href="#read-and-visualize-3d-dataset" id="toc-read-and-visualize-3d-dataset" class="nav-link" data-scroll-target="#read-and-visualize-3d-dataset">(3) - Read and Visualize 3D Dataset</a></li>
+  <li><a href="#data-obviously-clustered" id="toc-data-obviously-clustered" class="nav-link" data-scroll-target="#data-obviously-clustered">(4) - Data = obviously clustered?</a></li>
+  <li><a href="#sigmoid-function" id="toc-sigmoid-function" class="nav-link" data-scroll-target="#sigmoid-function">(5)- Sigmoid Function</a>
+  <ul class="collapse">
+  <li><a href="#a-1" id="toc-a-1" class="nav-link" data-scroll-target="#a-1">(a)</a></li>
+  <li><a href="#b-1" id="toc-b-1" class="nav-link" data-scroll-target="#b-1">(b)</a></li>
+  <li><a href="#c-1" id="toc-c-1" class="nav-link" data-scroll-target="#c-1">(c)</a></li>
+  <li><a href="#d-1" id="toc-d-1" class="nav-link" data-scroll-target="#d-1">(d)</a></li>
+  </ul></li>
+  <li><a href="#use-small-dataset-for-calculations-by-hand" id="toc-use-small-dataset-for-calculations-by-hand" class="nav-link" data-scroll-target="#use-small-dataset-for-calculations-by-hand">(6) - Use small dataset for calculations by hand</a>
+  <ul class="collapse">
+  <li><a href="#a-2" id="toc-a-2" class="nav-link" data-scroll-target="#a-2">(a)</a></li>
+  <li><a href="#b-2" id="toc-b-2" class="nav-link" data-scroll-target="#b-2">(b)</a></li>
+  <li><a href="#c-2" id="toc-c-2" class="nav-link" data-scroll-target="#c-2">(c)</a></li>
+  <li><a href="#d-2" id="toc-d-2" class="nav-link" data-scroll-target="#d-2">(d)</a></li>
+  <li><a href="#e" id="toc-e" class="nav-link" data-scroll-target="#e">(e)</a></li>
+  </ul></li>
+  <li><a href="#binary-cross-entropy-loss-function" id="toc-binary-cross-entropy-loss-function" class="nav-link" data-scroll-target="#binary-cross-entropy-loss-function">(7) - (Binary) Cross Entropy Loss Function</a>
+  <ul class="collapse">
+  <li><a href="#a-3" id="toc-a-3" class="nav-link" data-scroll-target="#a-3">(a)</a></li>
+  <li><a href="#b-3" id="toc-b-3" class="nav-link" data-scroll-target="#b-3">(b)</a></li>
+  <li><a href="#c-3" id="toc-c-3" class="nav-link" data-scroll-target="#c-3">(c)</a></li>
+  </ul></li>
+  <li><a href="#play-with-parameters" id="toc-play-with-parameters" class="nav-link" data-scroll-target="#play-with-parameters">(8) - Play with parameters</a></li>
+  <li><a href="#gradients-aka-jacobian-partial-derivatives" id="toc-gradients-aka-jacobian-partial-derivatives" class="nav-link" data-scroll-target="#gradients-aka-jacobian-partial-derivatives">(9) - Gradients (aka Jacobian): Partial Derivatives</a>
+  <ul class="collapse">
+  <li><a href="#a-4" id="toc-a-4" class="nav-link" data-scroll-target="#a-4">(a)</a></li>
+  <li><a href="#b-4" id="toc-b-4" class="nav-link" data-scroll-target="#b-4">(b)</a></li>
+  </ul></li>
+  <li><a href="#update-parameters-using-gradient" id="toc-update-parameters-using-gradient" class="nav-link" data-scroll-target="#update-parameters-using-gradient">(10) - Update parameters using Gradient</a>
+  <ul class="collapse">
+  <li><a href="#a-5" id="toc-a-5" class="nav-link" data-scroll-target="#a-5">(a)</a></li>
+  <li><a href="#b-5" id="toc-b-5" class="nav-link" data-scroll-target="#b-5">(b)</a></li>
+  </ul></li>
+  <li><a href="#code-everything-from-scratch" id="toc-code-everything-from-scratch" class="nav-link" data-scroll-target="#code-everything-from-scratch">(11) - Code Everything from Scratch</a>
+  <ul class="collapse">
+  <li><a href="#code-nitty-gritty-step-by-step-cell-by-cell" id="toc-code-nitty-gritty-step-by-step-cell-by-cell" class="nav-link" data-scroll-target="#code-nitty-gritty-step-by-step-cell-by-cell">Code (nitty-gritty step-by-step, cell-by-cell)</a>
+  <ul class="collapse">
+  <li><a href="#read-data-create-xy" id="toc-read-data-create-xy" class="nav-link" data-scroll-target="#read-data-create-xy">Read data &amp; create X/y</a></li>
+  <li><a href="#initialize-parameters-weight-vector-bias-and-learning-rate" id="toc-initialize-parameters-weight-vector-bias-and-learning-rate" class="nav-link" data-scroll-target="#initialize-parameters-weight-vector-bias-and-learning-rate">Initialize Parameters (weight vector, bias, and Learning Rate)</a></li>
+  <li><a href="#normalizing-not-required" id="toc-normalizing-not-required" class="nav-link" data-scroll-target="#normalizing-not-required">Normalizing (not required)</a></li>
+  <li><a href="#functions-linear-eq-sigmoid" id="toc-functions-linear-eq-sigmoid" class="nav-link" data-scroll-target="#functions-linear-eq-sigmoid">Functions (Linear eq &amp; Sigmoid)</a></li>
+  <li><a href="#gradient-descent" id="toc-gradient-descent" class="nav-link" data-scroll-target="#gradient-descent">Gradient Descent</a></li>
+  <li><a href="#loss-function-lce" id="toc-loss-function-lce" class="nav-link" data-scroll-target="#loss-function-lce">Loss Function (LCE)</a></li>
+  <li><a href="#repeat-for-multiple-of-epochs-iterations" id="toc-repeat-for-multiple-of-epochs-iterations" class="nav-link" data-scroll-target="#repeat-for-multiple-of-epochs-iterations">Repeat for multiple (# of epochs) iterations</a></li>
+  <li><a href="#visualization-confusion-matrix-and-lce-plot" id="toc-visualization-confusion-matrix-and-lce-plot" class="nav-link" data-scroll-target="#visualization-confusion-matrix-and-lce-plot">Visualization (Confusion Matrix and Lce Plot)</a></li>
+  </ul></li>
+  <li><a href="#code-via-object-oriented-python-script" id="toc-code-via-object-oriented-python-script" class="nav-link" data-scroll-target="#code-via-object-oriented-python-script">Code via object-oriented python script</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Module 1 Assignment</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<p>This assignment will enable you to practice with logistic regression, coding in Python, Loss functions (binary cross entropy in this case), learning rates, gradient descent and derivatives, activation function (sigmoid in this case), and drawing an architecture.</p>
+<p>All concepts here will extend into perceptrons and ANNs with layers. For this reason, it is critical to gain a solid foundation, to practice, to code these concepts by hand (using an easy and small dataset), and to work through the math.</p>
+<p>All requirements, concepts, and math here will be on Exam 1.</p>
+<p>This is an individual assignment. This means that you should do your own work and your submission should be yours alone. While it is OK to discuss concepts, it is not OK to duplicate work. If you ever have any questions about cheating, plagiarism, sharing, etc. please ask.</p>
+</section>
+<section id="create-small-3d-dataset" class="level1">
+<h1>(1) - Create Small 3D Dataset</h1>
+<p>Create your own small, 3D, labeled dataset. Your labels should be binary. Save your dataset as <code>A1_Data_YourName.csv</code>. You will be submitting this raw dataset with your Assignment.</p>
+<p>A 3D dataset has three columns (variables/features). The label will be in the 4th column. Recall that labels are not part of the dataset but rather are the categories (also called classes or groups) that each data row (example, observation) is a member of. Your dataset should have 5 - 7 rows. Please invent the dataset BUT be sure that it makes sense. In other words, the labels should have a correlation with the data. You do not need to mathematically test the correlation :) just do it intuitively.</p>
+<p>All of your data must be numeric. The label (which is not part of the dataset) can be any binary label such as POS and NEG, YES and NO, BBPlayer and NotBBPlayer. There are an infinite number of options.</p>
+<p><strong>JK:</strong></p>
+<p>See submitted <em>csv</em> file (named: <code>A1_Data_JasmineKobayashi.csv</code>)</p>
+</section>
+<section id="linear-equation" class="level1">
+<h1>(2) - Linear Equation</h1>
+<section id="a" class="level2">
+<h2 class="anchored" data-anchor-id="a">(a)</h2>
+<p><strong>Write out a general linear equation (call it <span class="math inline">\(z\)</span>) to represent a linear function that multiplies individual weights by each <span class="math inline">\(x\)</span> value.</strong></p>
+<p><strong>Example: For a 4D dataset, a general linear equation is:</strong> <strong>$z = w_1x_1 + w_2x_2 + w_3x_3 + w_4x_4 + b $</strong></p>
+<p><strong>JK:</strong></p>
+<p><span class="math display">\[z = w_1x_1 + w_2x_2 + ... + w_nx_n + b\]</span> <span class="math display">\[ = \sum_{i=1}^n (w_ix_i) + b\]</span></p>
+<p>for <span class="math inline">\(n\)</span>-dimensional data (in other words, <span class="math inline">\(n\)</span> is number of data columns)</p>
+</section>
+<section id="b" class="level2">
+<h2 class="anchored" data-anchor-id="b">(b)</h2>
+<p>Write your linear equation using vector format</p>
+<p>Example: $ z = ^ + b $</p>
+<p><strong>JK:</strong></p>
+<p><span class="math display">\[z = \mathbf{w}^\top \mathbf{x} + b\]</span></p>
+<p><span class="math display">\[\begin{equation}
+=
+
+\begin{bmatrix}
+w_1 \\
+w_2 \\
+\vdots \\
+w_n
+\end{bmatrix}
+^\top
+
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+\vdots \\
+x_n
+\end{bmatrix}
+
++
+
+\begin{bmatrix}
+b \\
+b \\
+\vdots \\
+b
+\end{bmatrix}
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+=
+\begin{bmatrix}
+w_1 &amp; w_2 &amp; \cdots &amp; w_n
+\end{bmatrix}
+
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+\vdots \\
+x_n
+\end{bmatrix}
+
++
+
+\begin{bmatrix}
+b \\
+b \\
+\vdots \\
+b
+\end{bmatrix}
+\end{equation}\]</span></p>
+</section>
+<section id="c" class="level2">
+<h2 class="anchored" data-anchor-id="c">(c)</h2>
+<p>What do the <span class="math inline">\(w\)</span> values represent?</p>
+<p><strong>JK:</strong> The <span class="math inline">\(w\)</span> values are parameters applied to the dimensions of the data, usually called “weights”.</p>
+</section>
+<section id="d" class="level2">
+<h2 class="anchored" data-anchor-id="d">(d)</h2>
+<p>What does the “<span class="math inline">\(b\)</span>” represent?</p>
+<p><strong>JK:</strong> Often referred to as the “bias”, <span class="math inline">\(b\)</span> is associated with an “intercept” of a linear equation. In other words, it is the value of the dependent variable when the independent variable(s) is/are all zero.</p>
+</section>
+</section>
+<section id="read-and-visualize-3d-dataset" class="level1">
+<h1>(3) - Read and Visualize 3D Dataset</h1>
+<p>Use Python to read in your dataset and to plot the data (not the label) in 3D.</p>
+<p><strong>Hint:</strong> (This is an option, not the only option)</p>
+<pre><code>import matplotlib.pyplot as plt
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+x1 = ....
+x2 = ....
+x3 = ....
+# plotting
+ax.scatter(x1, x2, x3, s=50)
+ax.set_title('Dataset')
+plt.show()</code></pre>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_file <span class="op">=</span> <span class="st">'A1_Data_JasmineKobayashi.csv'</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(data_file)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   feat1  feat2  feat3 LABEL
+0     22     10     24    No
+1      5     12     52   Yes
+2      3     15     59   Yes
+3     25     11     23    No
+4     23     14     21    No
+5      8     19     54   Yes
+6      4     13     57   Yes</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#%matplotlib widget</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># above line is to make the plot interactive in VScode (need to pip install ipympl package if not in local machine already)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># If running this file in Anaconda's Jupyter, replace "widget" with "notebook"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># (or just comment out the line to view the standard static plot)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#plot data (not label)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plt.axes(projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># the following code is assuming first three columns are data ()</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> df.columns</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> df[cols[<span class="dv">0</span>]]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>x2 <span class="op">=</span> df[cols[<span class="dv">1</span>]]</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>x3 <span class="op">=</span> df[cols[<span class="dv">2</span>]]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># plotting</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>ax.scatter(x1, x2, x3, s<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(cols[<span class="dv">0</span>])</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(cols[<span class="dv">1</span>])</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>ax.set_zlabel(cols[<span class="dv">2</span>])</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'3D Plot'</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="A1_JasmineKobayashi_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="data-obviously-clustered" class="level1">
+<h1>(4) - Data = obviously clustered?</h1>
+<p>Does your dataset appear to have clusters of groups? Does it appear to be separable - especially with respect to your labeling?</p>
+<p>(Side note: If your data appears chaotic and/or does not appear separable with respect to your labeling, make adjustments to your dataset and do the above again. The goal here is to have an easy and simple dataset that will do what is expected.)</p>
+<p><strong>JK:</strong> Yes, there appear to be apparent clusters.</p>
+</section>
+<section id="sigmoid-function" class="level1">
+<h1>(5)- Sigmoid Function</h1>
+<section id="a-1" class="level2">
+<h2 class="anchored" data-anchor-id="a-1">(a)</h2>
+<p>Write out the Sigmoid function - include both ways to write it.</p>
+<p><strong>JK:</strong></p>
+<p><span class="math display">\[S(z) = \frac{e^z}{1+e^z} \\[6pt] = \frac{1}{1+e^{-z}} \]</span></p>
+</section>
+<section id="b-1" class="level2">
+<h2 class="anchored" data-anchor-id="b-1">(b)</h2>
+<p>Prove that <span class="math inline">\(\frac{1}{(1+e^{-x})}\)</span> is the same as <span class="math inline">\(\frac{e^x}{(1+e^x)}\)</span> are the same. <strong>Show all steps carefully.</strong></p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers to see step-by-step hand-written calculation.</em></p>
+</section>
+<section id="c-1" class="level2">
+<h2 class="anchored" data-anchor-id="c-1">(c)</h2>
+<p>Use Python to create a plot (from -100 to 100 with steps of 1) of the Sigmoid function. Inclue the plot here.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">100</span>,<span class="dv">101</span>,<span class="dv">1</span>)   <span class="co"># np.arange doesn't include endpoint</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sig(z):</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>(math.e<span class="op">**</span>(<span class="op">-</span>z)))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>fig2 <span class="op">=</span> plt.figure() </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>plt.plot(x,sig(x),<span class="st">'.'</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Sigmoid'</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'z'</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'S(z)'</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="A1_JasmineKobayashi_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="d-1" class="level2">
+<h2 class="anchored" data-anchor-id="d-1">(d)</h2>
+<p>Let <span class="math inline">\(S(z) = \frac{1}{(1+e^{-z})}\)</span> be the Sigmoid function. Prove that the first derivative of <span class="math inline">\(S(z)\)</span> is <span class="math inline">\(S(z)*(1-S(z))\)</span>. <strong>Show every step carefully.</strong></p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers.</em></p>
+</section>
+</section>
+<section id="use-small-dataset-for-calculations-by-hand" class="level1">
+<h1>(6) - Use small dataset for calculations by hand</h1>
+<p>Using your dataset and initial weight vector of all ones, an initial <span class="math inline">\(b\)</span> value of 0, do the following.</p>
+<p>(Before you start, be sure to convert your labels to 0 and 1. For example, if my labels are POS and NEG, then I can change all POS to 1 and all NEG to 0.)</p>
+<p><strong>Required: for the following, do this in vector/matrix form.</strong> (Example on Canvas assignment page)</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data dimensions (to make weight vector creation flexible to data with different dimensions)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data_dimension <span class="op">=</span> df.shape[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">1</span>   <span class="co">#"data" doesn't include label, so dimension is # of cols minus 1</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'dimension of data ='</span>,data_dimension)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># weight vector (of all ones)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array([[<span class="dv">1</span>]]<span class="op">*</span>data_dimension)     <span class="co"># weight vector (of ones) of length = dimension of data</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'weight vector (w):</span><span class="ch">\n</span><span class="st">'</span>,w)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># bias (b)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'bias(b) ='</span>,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dimension of data = 3
+weight vector (w):
+ [[1]
+ [1]
+ [1]]
+bias(b) = 0</code></pre>
+</div>
+</div>
+<section id="a-2" class="level2">
+<h2 class="anchored" data-anchor-id="a-2">(a)</h2>
+<p>What is your weight vector? Show it here. (You can draw it if you wish)</p>
+<p><strong>JK:</strong> I did “draw” the weight vector also. See submitted pdf of written answers.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'weight vector (w):</span><span class="ch">\n</span><span class="st">'</span>,w)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'shape of weight vector:'</span>,w.shape)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># (not asked for this question, just nice info) </span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># transpose of weight vector</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'transpose of w:'</span>,w.T)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'shape of transpose:'</span>,w.T.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>weight vector (w):
+ [[1]
+ [1]
+ [1]]
+shape of weight vector: (3, 1)
+transpose of w: [[1 1 1]]
+shape of transpose: (1, 3)</code></pre>
+</div>
+</div>
+</section>
+<section id="b-2" class="level2">
+<h2 class="anchored" data-anchor-id="b-2">(b)</h2>
+<p>Use your weight vectors of all ones and your <span class="math inline">\(b\)</span> of 0 and your dataset to calculate z for all of your data. <strong>Show every step and do this by hand.</strong></p>
+<p><strong>JK:</strong></p>
+<p>I’m scaling the data (for <span class="math inline">\(\mathbf{X}\)</span>) here because I’m not patient enough to scale data by hand (and it’s not asked to be done by the question).</p>
+<p>But just to show I know how to scale (and just because it’s generally useful information), I’ll display the “formula” for the scaling used here (min-max) which would’ve hypothetically been applied to every value in each column of the data.</p>
+<p>Min-max scaling: <span class="math display">\[x' = \frac{x - min}{max - min}\]</span></p>
+<p>Where <span class="math inline">\(x'\)</span> is the scaled value, <span class="math inline">\(x\)</span> is the value to scale. (<span class="math inline">\(min\)</span> &amp; <span class="math inline">\(max\)</span> are the minimum value and maximum value of the list of values to scale to.)</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>mm_scaler <span class="op">=</span> MinMaxScaler()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>scale_data <span class="op">=</span> mm_scaler.fit_transform(df[cols[<span class="dv">0</span>:<span class="op">-</span><span class="dv">1</span>]])</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Min-max scaled data:</span><span class="ch">\n</span><span class="st">"</span>, pd.DataFrame(scale_data,columns<span class="op">=</span>cols[<span class="dv">0</span>:<span class="op">-</span><span class="dv">1</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Min-max scaled data:
+       feat1     feat2     feat3
+0  0.863636  0.000000  0.078947
+1  0.090909  0.222222  0.815789
+2  0.000000  0.555556  1.000000
+3  1.000000  0.111111  0.052632
+4  0.909091  0.444444  0.000000
+5  0.227273  1.000000  0.868421
+6  0.045455  0.333333  0.947368</code></pre>
+</div>
+</div>
+<p><em>See submitted pdf of written answers to see step-by-step hand-written calculation.</em></p>
+</section>
+<section id="c-2" class="level2">
+<h2 class="anchored" data-anchor-id="c-2">(c)</h2>
+<p>Once you have your <span class="math inline">\(z\)</span> values, apply the Sigmoid function to each and show your <span class="math inline">\(\hat{y}=S(x)\)</span> vector. <strong>Do this by hand and show every step.</strong></p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers to see step-by-step hand-written calculation.</em></p>
+</section>
+<section id="d-2" class="level2">
+<h2 class="anchored" data-anchor-id="d-2">(d)</h2>
+<p>Are your current parameters (<span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(b\)</span>) doing a good job predicting the correct labels? Show the correct label (<span class="math inline">\(y\)</span>) and the predicted label (<span class="math inline">\(\hat{y}\)</span>). How many are incorrect?</p>
+<p>(Note that <span class="math inline">\(\hat{y}\)</span> is pronounced y hat and is the value predicted by applying the Sigmoid to the linear equation).</p>
+<p><strong>Show all your work.</strong></p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers to see step-by-step hand-written calculation.</em></p>
+</section>
+<section id="e" class="level2">
+<h2 class="anchored" data-anchor-id="e">(e)</h2>
+<p>What can you do to improve your predictions? In other words, what can you do to reduce the differences between the <span class="math inline">\(y\)</span> (the known label) and the <span class="math inline">\(\hat{y}\)</span> (predicted value)?</p>
+<p><strong>JK:</strong></p>
+<p>To improve predictions, we want to find a way to “measure” how well the model performs and optimize it. One way to do this is to measure the “error” (difference) between predicted and true values and <em>optimize</em> it by minimizing that difference. (This is method is known as minimizing the loss function in the topic of neural networks.)</p>
+</section>
+</section>
+<section id="binary-cross-entropy-loss-function" class="level1">
+<h1>(7) - (Binary) Cross Entropy Loss Function</h1>
+<section id="a-3" class="level2">
+<h2 class="anchored" data-anchor-id="a-3">(a)</h2>
+<p>Write out the cross-entropy function for binary labels here.</p>
+<p>$L_{CE} (y,) = $ …</p>
+<p><span class="math display">\[-\frac{1}{m} \sum_i^m ylog(\hat{y}) + (1-y)log(1-\hat{y})\]</span></p>
+<p>(Also handwritten on pdf of written answers.)</p>
+</section>
+<section id="b-3" class="level2">
+<h2 class="anchored" data-anchor-id="b-3">(b)</h2>
+<p>For all of your data rows, calculate the <span class="math inline">\(L_{CE}\)</span>. <strong>Show all of your work and do this by hand. Include ALL steps.</strong> Continue to use the weight vector of all ones and a <span class="math inline">\(b\)</span> of 0.</p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers to see step-by-step hand-written calculation.</em></p>
+</section>
+<section id="c-3" class="level2">
+<h2 class="anchored" data-anchor-id="c-3">(c)</h2>
+<p>Using your result from <strong>(b)</strong>, what would you say your current “Loss” or “error” is? How might you improve/reduce this? What does it mean if the <span class="math inline">\(L_{CE}\)</span> is 0?</p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers.</em></p>
+</section>
+</section>
+<section id="play-with-parameters" class="level1">
+<h1>(8) - Play with parameters</h1>
+<p>To reduce the error (or loss), we need to adjust (change) the parameters. Recall that in this case, our parameters are <span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(b\)</span>. If we change the values of <span class="math inline">\(\mathbf{w}\)</span> and/or <span class="math inline">\(b\)</span>, this will result in a change in the <span class="math inline">\(L_{CE}\)</span> and the overall difference between <span class="math inline">\(\hat{y}\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>Do this by hand.</p>
+<p>Change your <span class="math inline">\(\mathbf{w}\)</span> to values other than 1. Leave <span class="math inline">\(b\)</span> as 0. Recalculate <span class="math inline">\(L_{CE}\)</span>.</p>
+<p><strong>Show every step and all of your work. Do this by hand. Your <span class="math inline">\(\mathbf{w}\)</span> values are invented by you.</strong></p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers to see step-by-step hand-written calculation.</em></p>
+</section>
+<section id="gradients-aka-jacobian-partial-derivatives" class="level1">
+<h1>(9) - Gradients (aka Jacobian): Partial Derivatives</h1>
+<p>To make changes to parameters, such as <span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(b\)</span> so that we get closer and closer to the minimum (in other words to optimize the values of <span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(b\)</span>) we need to take the partial derivatives of <span class="math inline">\(L_{CE}\)</span> with respect to both <span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(b\)</span>. The <strong>Jacobian</strong> is a vector or matrix that contains all partial derivatives of a function with respect to all possible parameters. Here, our Jacobian has two values, one for <span class="math inline">\(\frac{\partial L_{CE}}{\partial b}\)</span>, where “<span class="math inline">\(\partial\)</span>” here is partial derivative.</p>
+<section id="a-4" class="level2">
+<h2 class="anchored" data-anchor-id="a-4">(a)</h2>
+<p>Find the partial derivative of the <span class="math inline">\(L_{CE}\)</span> with respect to <span class="math inline">\(\mathbf{w}\)</span>. <strong>Show all steps and work and use the chain rule. HINT (chain rule): <span class="math inline">\(\frac{\partial L_{CE}}{\partial \mathbf{w}} = \frac{\partial L_{CE}}{\partial \hat{y}} * \frac{\partial \hat{y}}{\partial z} * \frac{\partial z}{\partial \mathbf{w}}\)</span></strong></p>
+<p>HINT2: The two derivatives are:</p>
+<p><span class="math inline">\(\frac{\partial L_{CE}}{\partial \mathbf{w}} = \frac{1}{n} (\hat{y}-y)^{\intercal} \mathbf{x}\)</span></p>
+<p><span class="math inline">\(\frac{\partial L_{CE}}{\partial b} = \frac{1}{n} (\hat{y} - y)\)</span></p>
+<p>You will be graded on the work as you already have the final answer :)</p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers to see step-by-step hand-written calculation.</em></p>
+</section>
+<section id="b-4" class="level2">
+<h2 class="anchored" data-anchor-id="b-4">(b)</h2>
+<p>In words, how would you describe the derivatives here? What do that “mean”? (3-4 sentences is enough)</p>
+<p><strong>JK:</strong></p>
+</section>
+</section>
+<section id="update-parameters-using-gradient" class="level1">
+<h1>(10) - Update parameters using Gradient</h1>
+<section id="a-5" class="level2">
+<h2 class="anchored" data-anchor-id="a-5">(a)</h2>
+<p>Using <span class="math inline">\(\frac{\partial L_{CE}}{d \mathbf{w}} = \frac{1}{n} (\hat{y}-y)^\intercal \mathbf{x}\)</span> and using the original <span class="math inline">\(\mathbf{w}\)</span> of all ones, calculate and update <span class="math inline">\(\mathbf{w}\)</span>.</p>
+<p><strong>Show all of the work and do this by hand vector style</strong> (For now we will assume that the learning rate, <code>LR</code>, is 1.)</p>
+<p>(Example on Canvas assignment page)</p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers to see step-by-step hand-written calculation.</em></p>
+</section>
+<section id="b-5" class="level2">
+<h2 class="anchored" data-anchor-id="b-5">(b)</h2>
+<p>Once you update <span class="math inline">\(\mathbf{w}\)</span> and keeping <span class="math inline">\(b\)</span> as 0, recalculate <span class="math inline">\(L_{CE}\)</span> and compare your new <span class="math inline">\(L_{CE}\)</span> to the original <span class="math inline">\(L_{CE}\)</span>. Did it reduce? <strong>Show all work and steps and do this by hand.</strong></p>
+<p><strong>JK:</strong> <em>See submitted pdf of written answers to see step-by-step hand-written calculation.</em></p>
+</section>
+</section>
+<section id="code-everything-from-scratch" class="level1">
+<h1>(11) - Code Everything from Scratch</h1>
+<p>Code logistic regression using Python. DO NOT use a “package” but rather, code it by hand. Yes you can use simple packages like <code>NumPy</code>, etc. You cannot use a Logistic regression package.</p>
+<p>You must write code that will:</p>
+<ol type="a">
+<li><p>Read in any <code>.csv</code> labeled dataset where the Label is called “LABEL”.</p></li>
+<li><p>Your code should create “<span class="math inline">\(y\)</span>” (the label) as a numpy array of 0 and 1. So, if the labels are originally something POS and NEG, your code will need to determine this, and then update all POS to 1 and all NEG to 0. Your code should be able to do this for any two label options.</p></li>
+<li><p>Your code will also create <span class="math inline">\(X\)</span> which is the entire dataset (without the labels) as a numpy array.</p></li>
+<li><p>Your code will initialize <span class="math inline">\(\mathbf{w}\)</span> and <span class="math inline">\(b\)</span> and a learning rate.</p></li>
+<li><p>Your code will need to contain a function for Sigmoid and for z, etc.</p></li>
+<li><p>Your code will then need to perform gradient descent to optimize (reduce) <span class="math inline">\(L_{CE}\)</span>.</p></li>
+<li><p>Be sure that your code can run interatively for as many epochs as you wish.</p></li>
+<li><p>Show a final confusion matrix (see example below) AND show a graph of how the <span class="math inline">\(L_{CE}\)</span> reduces as epochs iterate (see example on Canvas assignment page).</p></li>
+</ol>
+<p><strong>Recommended:</strong> Use your code to see if your by-hand results from above are right. The goal here is to really understand all the steps, which steps are repeated (epochs), the loss function (<span class="math inline">\(L_{CE}\)</span> here), the activation function (Sigmoid here), updating the parameters, etc.</p>
+<p>Here is <a href="https://gatesboltonanalytics.com/?page_id=873">example code I wrote</a>. I strongly suggest NOT using this code first - but rather - try to understand the above and write your own code from scratch. If you get stuck, you can use my code as a reference.</p>
+<p>(All “I” and “my” are referring to Dr.&nbsp;Gates who wrote the problem.)</p>
+<p><strong>Hint:</strong></p>
+<pre><code>cm = confusion_matrix(labels, Prediction)
+print(cm)
+ax= plt.subplot()
+sns.heatmap(cm, annot=True, fmt='g', ax=ax, cmap='Blues')  
+#annot=True to annotate cells, ftm='g' to disable scientific notation
+
+# labels, title and ticks
+ax.set_xlabel("Predicted labels")
+ax.set_ylabel("True labels")
+ax.set_title("Confusion Matrix")
+ax.xaxis.set_ticklabels(["Not BB Player", "BB Player"])
+ax.yaxis.set_ticklabels(["Not BB Player", "BB Player"])</code></pre>
+<section id="code-nitty-gritty-step-by-step-cell-by-cell" class="level2">
+<h2 class="anchored" data-anchor-id="code-nitty-gritty-step-by-step-cell-by-cell">Code (nitty-gritty step-by-step, cell-by-cell)</h2>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># libraries</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder,MinMaxScaler</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix  </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="read-data-create-xy" class="level3">
+<h3 class="anchored" data-anchor-id="read-data-create-xy">Read data &amp; create X/y</h3>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'A1_Data_JasmineKobayashi.csv'</span>)    <span class="co"># requirement (a)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># X matrix</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array(df.drop(columns<span class="op">=</span>[<span class="st">'LABEL'</span>],axis<span class="op">=</span><span class="dv">1</span>))     <span class="co"># requirement (c)</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X:</span><span class="ch">\n</span><span class="st">"</span>, X)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of X:"</span>, X.shape)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># y</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>encode <span class="op">=</span> LabelEncoder()</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.array([encode.fit_transform(df[<span class="st">'LABEL'</span>])])   <span class="co"># requirement (b)</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y: </span><span class="ch">\n</span><span class="st">"</span>, y)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of y:"</span>, y.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>X:
+ [[22 10 24]
+ [ 5 12 52]
+ [ 3 15 59]
+ [25 11 23]
+ [23 14 21]
+ [ 8 19 54]
+ [ 4 13 57]]
+Shape of X: (7, 3)
+
+y: 
+ [[0 1 1 0 0 1 1]]
+Shape of y: (1, 7)</code></pre>
+</div>
+</div>
+</section>
+<section id="initialize-parameters-weight-vector-bias-and-learning-rate" class="level3">
+<h3 class="anchored" data-anchor-id="initialize-parameters-weight-vector-bias-and-learning-rate">Initialize Parameters (weight vector, bias, and Learning Rate)</h3>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize  parameters and other variables (requirement (d))</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">## initialize weight vector, w, of all ones</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array([[<span class="dv">1</span>]]<span class="op">*</span>(df.shape[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">1</span>))   <span class="co"># assuming all columns other than LABEL are data columns</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"weight vector, w: </span><span class="ch">\n</span><span class="st">"</span>,w)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of w:"</span>,w.shape)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">## initialize b = 0</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">## initialize Learning Rate</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>weight vector, w: 
+ [[1]
+ [1]
+ [1]]
+Shape of w: (3, 1)</code></pre>
+</div>
+</div>
+</section>
+<section id="normalizing-not-required" class="level3">
+<h3 class="anchored" data-anchor-id="normalizing-not-required">Normalizing (not required)</h3>
+<p>not required for the assignment but helps later on</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not required, but min-max noramlizing X </span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (especially to make it comparable with written work)</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>scale_data <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> scale_data:</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    mm_scaler <span class="op">=</span> MinMaxScaler()</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> mm_scaler.fit_transform(df.drop(columns<span class="op">=</span><span class="st">"LABEL"</span>,axis<span class="op">=</span><span class="dv">1</span>))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Min-max scaled data:</span><span class="ch">\n</span><span class="st">"</span>, X)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Shape of scaled X:"</span>,X.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Min-max scaled data:
+ [[0.86363636 0.         0.07894737]
+ [0.09090909 0.22222222 0.81578947]
+ [0.         0.55555556 1.        ]
+ [1.         0.11111111 0.05263158]
+ [0.90909091 0.44444444 0.        ]
+ [0.22727273 1.         0.86842105]
+ [0.04545455 0.33333333 0.94736842]]
+Shape of scaled X: (7, 3)</code></pre>
+</div>
+</div>
+</section>
+<section id="functions-linear-eq-sigmoid" class="level3">
+<h3 class="anchored" data-anchor-id="functions-linear-eq-sigmoid">Functions (Linear eq &amp; Sigmoid)</h3>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Functions (requirement (e))</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Linear equation z</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lin_eq(X,w,b):       <span class="co"># requires shapes of inputted parameters to be correct</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X <span class="op">@</span> w <span class="op">+</span> b</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> lin_eq(X,w,b)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"z: </span><span class="ch">\n</span><span class="st">"</span>,z)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of z:"</span>,z.shape)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co">## Sigmoid function</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Sigmoid(z):</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span>math.e<span class="op">**</span>(<span class="op">-</span>z))</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span> Sigmoid(z)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"S(z) = y^: </span><span class="ch">\n</span><span class="st">"</span>,y_hat)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of y^:"</span>, y_hat.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>z: 
+ [[0.94258373]
+ [1.12892079]
+ [1.55555556]
+ [1.16374269]
+ [1.35353535]
+ [2.09569378]
+ [1.3261563 ]]
+Shape of z: (7, 1)
+
+S(z) = y^: 
+ [[0.71962126]
+ [0.75563968]
+ [0.82571468]
+ [0.76201212]
+ [0.79470701]
+ [0.89048393]
+ [0.79020413]]
+Shape of y^: (7, 1)</code></pre>
+</div>
+</div>
+</section>
+<section id="gradient-descent" class="level3">
+<h3 class="anchored" data-anchor-id="gradient-descent">Gradient Descent</h3>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gradient Descent (requirement (f))</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">## Partial derivatives</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_hat.shape)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#print(y_hat)</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y.shape)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">#print(y.T)</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y.T.shape,<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> y_hat<span class="op">-</span>y.T</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y^-y =</span><span class="ch">\n</span><span class="st">"</span>,error)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co">### dL/dw = (1/n)(y^-y)*X</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>dL_dw <span class="op">=</span> (<span class="dv">1</span><span class="op">/</span>(df.shape[<span class="dv">0</span>]))<span class="op">*</span>(error.T<span class="op">@</span>X)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"dL/dw ="</span>,dL_dw,<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co">### dL/db = (1/n)(y^-y)</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>dL_db <span class="op">=</span> (<span class="dv">1</span><span class="op">/</span>(df.shape[<span class="dv">0</span>]))<span class="op">*</span>error</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"dL/db ="</span>,dL_db)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="co">### if want a single value for b to use, </span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="co">### there are a number of ways to select which value to use</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="co">### Dr. Gates used the average in her code (but that's not the only option)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(7, 1)
+(1, 7)
+(7, 1) 
+
+y^-y =
+ [[ 0.71962126]
+ [-0.24436032]
+ [-0.17428532]
+ [ 0.76201212]
+ [ 0.79470701]
+ [-0.10951607]
+ [-0.20979587]]
+dL/dw = [[ 0.29276048  0.01532795 -0.08151055]] 
+
+dL/db = [[ 0.10280304]
+ [-0.03490862]
+ [-0.0248979 ]
+ [ 0.10885887]
+ [ 0.11352957]
+ [-0.01564515]
+ [-0.02997084]]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># functions for ease of gradient descent</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> grad_desc(y_hat,y,X):</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    error <span class="op">=</span> y_hat<span class="op">-</span>y.T</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> X.shape[<span class="dv">0</span>]</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    dL_dw <span class="op">=</span> (<span class="dv">1</span><span class="op">/</span>m)<span class="op">*</span>(error.T<span class="op">@</span>X)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    dL_db <span class="op">=</span> (<span class="dv">1</span><span class="op">/</span>m)<span class="op">*</span>error</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    dL_db <span class="op">=</span> np.mean(dL_db)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dL_dw.T, dL_db</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="loss-function-lce" class="level3">
+<h3 class="anchored" data-anchor-id="loss-function-lce">Loss Function (LCE)</h3>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> LCE(y_hat,y):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> y_hat.shape[<span class="dv">0</span>]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    summation <span class="op">=</span> np.<span class="bu">sum</span>(y.T<span class="op">*</span>np.log(y_hat)<span class="op">+</span>((<span class="dv">1</span><span class="op">-</span>y.T)<span class="op">*</span>np.log(<span class="dv">1</span><span class="op">-</span>y_hat)))</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="op">-</span><span class="dv">1</span><span class="op">/</span>m)<span class="op">*</span>summation</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"loss ="</span>,LCE(y_hat,y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>loss = 0.730516772865319</code></pre>
+</div>
+</div>
+</section>
+<section id="repeat-for-multiple-of-epochs-iterations" class="level3">
+<h3 class="anchored" data-anchor-id="repeat-for-multiple-of-epochs-iterations">Repeat for multiple (# of epochs) iterations</h3>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>Lce_list <span class="op">=</span> []</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    dL_dw,dL_db <span class="op">=</span> grad_desc(y_hat,y,X)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> w <span class="op">-</span> LR<span class="op">*</span>dL_dw</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> b <span class="op">-</span> LR<span class="op">*</span>dL_db</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> lin_eq(X,w,b)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    y_hat <span class="op">=</span> Sigmoid(z)</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    Lce_list.append(LCE(y_hat,y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualization-confusion-matrix-and-lce-plot" class="level3">
+<h3 class="anchored" data-anchor-id="visualization-confusion-matrix-and-lce-plot">Visualization (Confusion Matrix and Lce Plot)</h3>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>prediction <span class="op">=</span> y_hat</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>prediction[y_hat <span class="op">&gt;=</span> <span class="fl">.5</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>prediction[y_hat <span class="op">&lt;</span> <span class="fl">.5</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[0.]
+ [1.]
+ [1.]
+ [0.]
+ [0.]
+ [1.]
+ [1.]]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> y.T</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[0]
+ [1]
+ [1]
+ [0]
+ [0]
+ [1]
+ [1]]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix (requirement (h))</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(labels, prediction)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cm)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>ax<span class="op">=</span> plt.subplot()</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>sns.heatmap(cm, annot<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">'g'</span>, ax<span class="op">=</span>ax, cmap<span class="op">=</span><span class="st">'Blues'</span>)  </span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co">#annot=True to annotate cells, ftm='g' to disable scientific notation</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co"># labels, title and ticks</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Predicted labels"</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"True labels"</span>)</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Confusion Matrix"</span>)</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>ax.xaxis.set_ticklabels([<span class="st">"0"</span>, <span class="st">"1"</span>])</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>ax.yaxis.set_ticklabels([<span class="st">"0"</span>, <span class="st">"1"</span>])</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[3 0]
+ [0 4]]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A1_JasmineKobayashi_files/figure-html/cell-20-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot of Lce (requirement (h) cont.)</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>plt.plot(np.arange(<span class="dv">0</span>,epochs,<span class="dv">1</span>),Lce_list,<span class="st">'-'</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"epochs"</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="A1_JasmineKobayashi_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="code-via-object-oriented-python-script" class="level2">
+<h2 class="anchored" data-anchor-id="code-via-object-oriented-python-script">Code via object-oriented python script</h2>
+<p><strong>JK:</strong> I also created a python script file creating a simple object-oriented code</p>
+<p>Note: The figures might not show up properly due to the <code>%matplotlib widget</code> code I have several code cells above, but if you run the python script in a separate notebook or terminal and run the following code it should work (with some other adjustable parameters).</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> HW1_log_reg <span class="im">as</span> lr</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>HW1 <span class="op">=</span> lr.log_reg(<span class="st">'A1_Data_JasmineKobayashi.csv'</span>,epochs<span class="op">=</span><span class="dv">60</span>,LR<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>HW1.run_model(print_all_params<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>finished running all epochs
+[[3 0]
+ [0 4]]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A1_JasmineKobayashi_files/figure-html/cell-22-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A1_JasmineKobayashi_files/figure-html/cell-22-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

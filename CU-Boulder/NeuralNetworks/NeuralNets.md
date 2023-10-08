@@ -1,23 +1,25 @@
 ---
+layout: page
 title: "CSCI 5922: Neural Networks & Deep Learning"
+permalink: /CUB/NeuralNetworks
 ---
 
-[Fall 2023] ***Neural Networks*** with Dr. Ami Gates at [CU Boulder](../../CUB.qmd)
+[Fall 2023] ***Neural Networks*** with Dr. Ami Gates at [CU Boulder](../../CUB.md)
 
 # Sub pages
 
-- [Professor Gates' Code Examples](Prof-Code-Ex.qmd)
-- [Jasmine's Homework Submissions](JK-HW.qmd)
+- [Professor Gates' Code Examples](Prof-Code-Ex.md)
+- [Jasmine's Homework Submissions](JK-HW.md)
 
 # Module 1: Intro to NN and Logistic Regression
 
 ## Resources
-[Two code examples by professor:](Prof-Code-Ex.qmd#module-1) 
+[Two code examples by professor:](Prof-Code-Ex.md#module-1) 
 
 - Simple NN with Sklearn
 - Logistic Regression
 
-[One Assignment:](JK-HW.qmd#module-1) 
+[One Assignment:](JK-HW.md#module-1) 
 
 - Assignment 1
 
@@ -45,14 +47,14 @@ title: "CSCI 5922: Neural Networks & Deep Learning"
 # Module 2: Neural Networks
 
 ## Resources
-[Three code examples by professor (+ one extra):](Prof-Code-Ex.qmd#module-2) 
+[Three code examples by professor (+ one extra):](Prof-Code-Ex.md#module-2) 
 
 - NN to predict XOR 
 - NN with 3D Data - Binary Label
 - Using FF, BP, Softmax, CCE, One-Hot Encoding, etc.
 - ***Extra:*** Softmax, CCE, and One-Hot Encoding - 3 Outputs
 
-[One Assignment - Two Parts:](JK-HW.qmd#module-2) 
+[One Assignment - Two Parts:](JK-HW.md#module-2) 
 
 - Assignment 2 - Part 1: One Layer NN with One Output
 - Assignment 2 - Part 2: Multinomial NN with Softmax, CCE, and One-Hot Encoding
@@ -82,7 +84,7 @@ title: "CSCI 5922: Neural Networks & Deep Learning"
 (Not there yet)
 
 ## Resources
-[(...) code examples by professor:](Prof-Code-Ex.qmd#module-3) 
+[(...) code examples by professor:](Prof-Code-Ex.md#module-3) 
 
 
-[One Assignment:](JK-HW.qmd#module-3) 
+[One Assignment:](JK-HW.md#module-3) 
