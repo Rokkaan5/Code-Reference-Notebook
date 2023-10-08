@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Visualization - Pandas</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="1 - Pandas_files/libs/clipboard/clipboard.min.js"></script>
+<script src="1 - Pandas_files/libs/quarto-html/quarto.js"></script>
+<script src="1 - Pandas_files/libs/quarto-html/popper.min.js"></script>
+<script src="1 - Pandas_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="1 - Pandas_files/libs/quarto-html/anchor.min.js"></script>
+<link href="1 - Pandas_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="1 - Pandas_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="1 - Pandas_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="1 - Pandas_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="1 - Pandas_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-visualization" id="toc-data-visualization" class="nav-link active" data-scroll-target="#data-visualization">Data Visualization</a>
+  <ul class="collapse">
+  <li><a href="#import-packages" id="toc-import-packages" class="nav-link" data-scroll-target="#import-packages">import packages</a></li>
+  <li><a href="#scatter-plots" id="toc-scatter-plots" class="nav-link" data-scroll-target="#scatter-plots">Scatter Plots</a></li>
+  <li><a href="#line-plots" id="toc-line-plots" class="nav-link" data-scroll-target="#line-plots">Line Plots</a></li>
+  <li><a href="#area-plots" id="toc-area-plots" class="nav-link" data-scroll-target="#area-plots">Area Plots</a></li>
+  <li><a href="#bar-charts" id="toc-bar-charts" class="nav-link" data-scroll-target="#bar-charts">Bar Charts</a></li>
+  <li><a href="#histograms" id="toc-histograms" class="nav-link" data-scroll-target="#histograms">Histograms</a></li>
+  <li><a href="#box-plot" id="toc-box-plot" class="nav-link" data-scroll-target="#box-plot">Box plot</a></li>
+  <li><a href="#pie-charts" id="toc-pie-charts" class="nav-link" data-scroll-target="#pie-charts">Pie Charts</a></li>
+  <li><a href="#color-map" id="toc-color-map" class="nav-link" data-scroll-target="#color-map">Color map</a></li>
+  <li><a href="#documentation" id="toc-documentation" class="nav-link" data-scroll-target="#documentation">Documentation</a></li>
+  <li><a href="#practice" id="toc-practice" class="nav-link" data-scroll-target="#practice">Practice</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data Visualization - Pandas</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="data-visualization" class="level1">
+<h1>Data Visualization</h1>
+<p>It is hard to digest many data at the same time. Data visualizaiton is a way to make the process simple and straightforward.</p>
+<p>For example, the sorting algorithms we have learned so far, are hard to beginners. However, a data visualizaiton can help the comparison much simpler: https://www.youtube.com/watch?v=kPRA0W1kECg</p>
+<p>Because Data Visualization is so important and essential in today’s business, pandas as a data-driven package provides built-in plotting functions. We will learn some basic usage of them today.</p>
+<section id="import-packages" class="level2">
+<h2 class="anchored" data-anchor-id="import-packages">import packages</h2>
+<div class="cell" data-cell_id="6fb12e6b02624765bbef8221762d61fb" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:13}" data-deepnote_cell_type="code" data-execution_millis="2762625" data-execution_start="1669415882419" data-source_hash="b7dcc9c8" data-tags="[]" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="d7b04156b3ed4d288585c33dcf266051" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:19}" data-deepnote_cell_type="code" data-execution_millis="224" data-execution_start="1669415882422" data-source_hash="be3f53b" data-tags="[]" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'/work/superstore.csv'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.drop(<span class="st">'Row ID'</span>, axis <span class="op">=</span> <span class="dv">1</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Order ID</th>
+<th data-quarto-table-cell-role="th">Order Date</th>
+<th data-quarto-table-cell-role="th">Ship Date</th>
+<th data-quarto-table-cell-role="th">Ship Mode</th>
+<th data-quarto-table-cell-role="th">Customer ID</th>
+<th data-quarto-table-cell-role="th">Customer Name</th>
+<th data-quarto-table-cell-role="th">Segment</th>
+<th data-quarto-table-cell-role="th">Country</th>
+<th data-quarto-table-cell-role="th">City</th>
+<th data-quarto-table-cell-role="th">State</th>
+<th data-quarto-table-cell-role="th">Postal Code</th>
+<th data-quarto-table-cell-role="th">Region</th>
+<th data-quarto-table-cell-role="th">Product ID</th>
+<th data-quarto-table-cell-role="th">Category</th>
+<th data-quarto-table-cell-role="th">Sub-Category</th>
+<th data-quarto-table-cell-role="th">Product Name</th>
+<th data-quarto-table-cell-role="th">Sales</th>
+<th data-quarto-table-cell-role="th">Quantity</th>
+<th data-quarto-table-cell-role="th">Discount</th>
+<th data-quarto-table-cell-role="th">Profit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>CA-2016-152156</td>
+<td>11/8/16</td>
+<td>11/11/16</td>
+<td>Second Class</td>
+<td>CG-12520</td>
+<td>Claire Gute</td>
+<td>Consumer</td>
+<td>United States</td>
+<td>Henderson</td>
+<td>Kentucky</td>
+<td>42420</td>
+<td>South</td>
+<td>FUR-BO-10001798</td>
+<td>Furniture</td>
+<td>Bookcases</td>
+<td>Bush Somerset Collection Bookcase</td>
+<td>261.9600</td>
+<td>2</td>
+<td>0.00</td>
+<td>41.9136</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>CA-2016-152156</td>
+<td>11/8/16</td>
+<td>11/11/16</td>
+<td>Second Class</td>
+<td>CG-12520</td>
+<td>Claire Gute</td>
+<td>Consumer</td>
+<td>United States</td>
+<td>Henderson</td>
+<td>Kentucky</td>
+<td>42420</td>
+<td>South</td>
+<td>FUR-CH-10000454</td>
+<td>Furniture</td>
+<td>Chairs</td>
+<td>Hon Deluxe Fabric Upholstered Stacking Chairs,...</td>
+<td>731.9400</td>
+<td>3</td>
+<td>0.00</td>
+<td>219.5820</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>CA-2016-138688</td>
+<td>6/12/16</td>
+<td>6/16/16</td>
+<td>Second Class</td>
+<td>DV-13045</td>
+<td>Darrin Van Huff</td>
+<td>Corporate</td>
+<td>United States</td>
+<td>Los Angeles</td>
+<td>California</td>
+<td>90036</td>
+<td>West</td>
+<td>OFF-LA-10000240</td>
+<td>Office Supplies</td>
+<td>Labels</td>
+<td>Self-Adhesive Address Labels for Typewriters b...</td>
+<td>14.6200</td>
+<td>2</td>
+<td>0.00</td>
+<td>6.8714</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>US-2015-108966</td>
+<td>10/11/15</td>
+<td>10/18/15</td>
+<td>Standard Class</td>
+<td>SO-20335</td>
+<td>Sean O'Donnell</td>
+<td>Consumer</td>
+<td>United States</td>
+<td>Fort Lauderdale</td>
+<td>Florida</td>
+<td>33311</td>
+<td>South</td>
+<td>FUR-TA-10000577</td>
+<td>Furniture</td>
+<td>Tables</td>
+<td>Bretford CR4500 Series Slim Rectangular Table</td>
+<td>957.5775</td>
+<td>5</td>
+<td>0.45</td>
+<td>-383.0310</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>US-2015-108966</td>
+<td>10/11/15</td>
+<td>10/18/15</td>
+<td>Standard Class</td>
+<td>SO-20335</td>
+<td>Sean O'Donnell</td>
+<td>Consumer</td>
+<td>United States</td>
+<td>Fort Lauderdale</td>
+<td>Florida</td>
+<td>33311</td>
+<td>South</td>
+<td>OFF-ST-10000760</td>
+<td>Office Supplies</td>
+<td>Storage</td>
+<td>Eldon Fold 'N Roll Cart System</td>
+<td>22.3680</td>
+<td>2</td>
+<td>0.20</td>
+<td>2.5164</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="22020c43694643789b1e535b035d2327" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:25}" data-deepnote_cell_type="code" data-execution_millis="141" data-execution_start="1669415882544" data-source_hash="de1e323c" data-tags="[]" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 9994 entries, 0 to 9993
+Data columns (total 20 columns):
+ #   Column         Non-Null Count  Dtype  
+---  ------         --------------  -----  
+ 0   Order ID       9994 non-null   object 
+ 1   Order Date     9994 non-null   object 
+ 2   Ship Date      9994 non-null   object 
+ 3   Ship Mode      9994 non-null   object 
+ 4   Customer ID    9994 non-null   object 
+ 5   Customer Name  9994 non-null   object 
+ 6   Segment        9994 non-null   object 
+ 7   Country        9994 non-null   object 
+ 8   City           9994 non-null   object 
+ 9   State          9994 non-null   object 
+ 10  Postal Code    9994 non-null   int64  
+ 11  Region         9994 non-null   object 
+ 12  Product ID     9994 non-null   object 
+ 13  Category       9994 non-null   object 
+ 14  Sub-Category   9994 non-null   object 
+ 15  Product Name   9994 non-null   object 
+ 16  Sales          9994 non-null   float64
+ 17  Quantity       9994 non-null   int64  
+ 18  Discount       9994 non-null   float64
+ 19  Profit         9994 non-null   float64
+dtypes: float64(3), int64(2), object(15)
+memory usage: 1.5+ MB</code></pre>
+</div>
+</div>
+</section>
+<section id="scatter-plots" class="level2">
+<h2 class="anchored" data-anchor-id="scatter-plots">Scatter Plots</h2>
+<div class="cell" data-cell_id="52abf3b86fe44b04bb033a967ab409cd" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:37}" data-deepnote_cell_type="code" data-execution_millis="1438" data-execution_start="1669415882554" data-source_hash="61243da8" data-tags="[]" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.plot(x <span class="op">=</span> <span class="st">'Sales'</span>, y <span class="op">=</span> <span class="st">'Profit'</span>, kind <span class="op">=</span> <span class="st">'scatter'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>&lt;AxesSubplot: xlabel='Sales', ylabel='Profit'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="line-plots" class="level2">
+<h2 class="anchored" data-anchor-id="line-plots">Line Plots</h2>
+<div class="cell" data-cell_id="0362b7357c5f49058b8b437a6cb8c223" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:49}" data-deepnote_cell_type="code" data-execution_millis="57" data-execution_start="1669415883313" data-source_hash="9d96239b" data-tags="[]" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Order Date'</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">'Order Date'</span>])</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Order Year'</span>] <span class="op">=</span> df[<span class="st">'Order Date'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> d: d.year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="6fc1cd58eac94288b3960d824a632c9e" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:55}" data-deepnote_cell_type="code" data-execution_millis="582" data-execution_start="1669415883417" data-source_hash="7eb2b8e4" data-tags="[]" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df.plot(x <span class="op">=</span> <span class="st">'Order Year'</span>, y <span class="op">=</span> <span class="st">'Sales'</span>, kind <span class="op">=</span> <span class="st">'line'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>&lt;AxesSubplot: xlabel='Order Year'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="bb1d9d650bf44cfb8867c326ff33c002" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:61}" data-deepnote_cell_type="code" data-execution_millis="247" data-execution_start="1669415883752" data-source_hash="70a9b05c" data-tags="[]" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> df.groupby(<span class="st">'Order Year'</span>).<span class="bu">sum</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Postal Code</th>
+<th data-quarto-table-cell-role="th">Sales</th>
+<th data-quarto-table-cell-role="th">Quantity</th>
+<th data-quarto-table-cell-role="th">Discount</th>
+<th data-quarto-table-cell-role="th">Profit</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Order Year</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2014</td>
+<td>113271247</td>
+<td>484247.4981</td>
+<td>7581</td>
+<td>315.46</td>
+<td>49543.9741</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2015</td>
+<td>111208247</td>
+<td>470532.5090</td>
+<td>7979</td>
+<td>327.09</td>
+<td>61618.6037</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2016</td>
+<td>141003420</td>
+<td>609205.5980</td>
+<td>9837</td>
+<td>400.32</td>
+<td>81795.1743</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2017</td>
+<td>186089738</td>
+<td>733215.2552</td>
+<td>12476</td>
+<td>518.22</td>
+<td>93439.2696</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="76f5157d36b34db09a2c71d31bbcb8f3" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:67}" data-deepnote_cell_type="code" data-execution_millis="207" data-execution_start="1669415883837" data-source_hash="1d3bcc8d" data-tags="[]" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df2.plot(y <span class="op">=</span> <span class="st">'Sales'</span>, kind <span class="op">=</span> <span class="st">'line'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>&lt;AxesSubplot: xlabel='Order Year'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="area-plots" class="level2">
+<h2 class="anchored" data-anchor-id="area-plots">Area Plots</h2>
+<div class="cell" data-cell_id="2fb6445c4c9a43398d006b06fb859fe6" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:79}" data-deepnote_cell_type="code" data-execution_millis="285" data-execution_start="1669415884053" data-source_hash="b3242a4e" data-tags="[]" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df2.plot(y <span class="op">=</span> <span class="st">'Sales'</span>, kind <span class="op">=</span> <span class="st">'area'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>&lt;AxesSubplot: xlabel='Order Year'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-10-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="3ca932f087cc4a91875fadd10744dd2d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:85}" data-deepnote_cell_type="code" data-execution_millis="7" data-execution_start="1669415884393" data-source_hash="a6e86f7" data-tags="[]" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Order Month'</span>] <span class="op">=</span> df[<span class="st">'Order Date'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> d: d.month)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df3 <span class="op">=</span> df.groupby([<span class="st">'Order Year'</span>,<span class="st">'Order Month'</span>]).<span class="bu">sum</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>df3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Postal Code</th>
+<th data-quarto-table-cell-role="th">Sales</th>
+<th data-quarto-table-cell-role="th">Quantity</th>
+<th data-quarto-table-cell-role="th">Discount</th>
+<th data-quarto-table-cell-role="th">Profit</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Order Year</th>
+<th data-quarto-table-cell-role="th">Order Month</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td rowspan="12" data-quarto-table-cell-role="th" data-valign="top">2014</td>
+<td data-quarto-table-cell-role="th">1</td>
+<td>4342297</td>
+<td>14236.8950</td>
+<td>284</td>
+<td>10.00</td>
+<td>2450.1907</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3049775</td>
+<td>4519.8920</td>
+<td>159</td>
+<td>8.10</td>
+<td>862.3084</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>8314538</td>
+<td>55691.0090</td>
+<td>585</td>
+<td>26.30</td>
+<td>498.7299</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>7723827</td>
+<td>28295.3450</td>
+<td>536</td>
+<td>14.85</td>
+<td>3488.8352</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>6497804</td>
+<td>23648.2870</td>
+<td>466</td>
+<td>18.95</td>
+<td>2738.7096</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>6827435</td>
+<td>34595.1276</td>
+<td>521</td>
+<td>23.22</td>
+<td>4976.5244</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>9046189</td>
+<td>33946.3930</td>
+<td>550</td>
+<td>24.55</td>
+<td>-841.4826</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>8628386</td>
+<td>27909.4685</td>
+<td>609</td>
+<td>20.05</td>
+<td>5318.1050</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>14521813</td>
+<td>81777.3508</td>
+<td>1000</td>
+<td>42.87</td>
+<td>8328.0994</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>9703910</td>
+<td>31453.3930</td>
+<td>573</td>
+<td>25.45</td>
+<td>3448.2573</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>18115551</td>
+<td>78628.7167</td>
+<td>1219</td>
+<td>48.07</td>
+<td>9292.1269</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>16499722</td>
+<td>69545.6205</td>
+<td>1079</td>
+<td>53.05</td>
+<td>8983.5699</td>
+</tr>
+<tr class="odd">
+<td rowspan="12" data-quarto-table-cell-role="th" data-valign="top">2015</td>
+<td data-quarto-table-cell-role="th">1</td>
+<td>3088076</td>
+<td>18174.0756</td>
+<td>236</td>
+<td>10.32</td>
+<td>-3281.0070</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3276216</td>
+<td>11951.4110</td>
+<td>239</td>
+<td>8.30</td>
+<td>2813.8508</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>7532550</td>
+<td>38726.2520</td>
+<td>515</td>
+<td>19.34</td>
+<td>9732.0978</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>8741181</td>
+<td>34195.2085</td>
+<td>543</td>
+<td>28.15</td>
+<td>4187.4962</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>7776607</td>
+<td>30131.6865</td>
+<td>575</td>
+<td>24.25</td>
+<td>4667.8690</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>7061027</td>
+<td>24797.2920</td>
+<td>486</td>
+<td>23.80</td>
+<td>3335.5572</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>6339078</td>
+<td>28765.3250</td>
+<td>557</td>
+<td>23.85</td>
+<td>3288.6483</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>8601153</td>
+<td>36898.3322</td>
+<td>598</td>
+<td>24.87</td>
+<td>5355.8084</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>13802915</td>
+<td>64595.9180</td>
+<td>1086</td>
+<td>41.30</td>
+<td>8209.1627</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>10319534</td>
+<td>31404.9235</td>
+<td>631</td>
+<td>26.95</td>
+<td>2817.3660</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>16519466</td>
+<td>75972.5635</td>
+<td>1310</td>
+<td>52.59</td>
+<td>12474.7884</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>18150444</td>
+<td>74919.5212</td>
+<td>1203</td>
+<td>43.37</td>
+<td>8016.9659</td>
+</tr>
+<tr class="odd">
+<td rowspan="12" data-quarto-table-cell-role="th" data-valign="top">2016</td>
+<td data-quarto-table-cell-role="th">1</td>
+<td>4357734</td>
+<td>18542.4910</td>
+<td>358</td>
+<td>11.80</td>
+<td>2824.8233</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3691682</td>
+<td>22978.8150</td>
+<td>306</td>
+<td>8.00</td>
+<td>5004.5795</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>8211243</td>
+<td>51715.8750</td>
+<td>579</td>
+<td>31.12</td>
+<td>3611.9680</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>8543605</td>
+<td>38750.0390</td>
+<td>635</td>
+<td>26.50</td>
+<td>2977.8149</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>11176945</td>
+<td>56987.7280</td>
+<td>863</td>
+<td>41.50</td>
+<td>8662.1464</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>10697105</td>
+<td>40344.5340</td>
+<td>742</td>
+<td>27.60</td>
+<td>4750.3781</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>11237025</td>
+<td>39261.9630</td>
+<td>758</td>
+<td>32.05</td>
+<td>4432.8779</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>9976149</td>
+<td>31115.3743</td>
+<td>693</td>
+<td>32.67</td>
+<td>2062.0693</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>20640857</td>
+<td>73410.0249</td>
+<td>1316</td>
+<td>54.24</td>
+<td>9328.6576</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>10953889</td>
+<td>59687.7450</td>
+<td>767</td>
+<td>28.85</td>
+<td>16243.1425</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>20563725</td>
+<td>79411.9658</td>
+<td>1406</td>
+<td>58.32</td>
+<td>4011.4075</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>20953461</td>
+<td>96999.0430</td>
+<td>1414</td>
+<td>47.67</td>
+<td>17885.3093</td>
+</tr>
+<tr class="odd">
+<td rowspan="12" data-quarto-table-cell-role="th" data-valign="top">2017</td>
+<td data-quarto-table-cell-role="th">1</td>
+<td>9331591</td>
+<td>43971.3740</td>
+<td>597</td>
+<td>25.00</td>
+<td>7140.4391</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>6793677</td>
+<td>20301.1334</td>
+<td>363</td>
+<td>19.47</td>
+<td>1613.8720</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>13934376</td>
+<td>58872.3528</td>
+<td>885</td>
+<td>31.14</td>
+<td>14751.8915</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>10137966</td>
+<td>36521.5361</td>
+<td>733</td>
+<td>39.47</td>
+<td>933.2900</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>14187724</td>
+<td>44261.1102</td>
+<td>887</td>
+<td>36.89</td>
+<td>6342.5828</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>13582238</td>
+<td>52981.7257</td>
+<td>931</td>
+<td>42.12</td>
+<td>8223.3357</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>11905252</td>
+<td>45264.4160</td>
+<td>840</td>
+<td>31.65</td>
+<td>6952.6212</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>13521406</td>
+<td>63120.8880</td>
+<td>884</td>
+<td>31.30</td>
+<td>9040.9557</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>25163354</td>
+<td>87866.6520</td>
+<td>1660</td>
+<td>67.65</td>
+<td>10991.5556</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>16610947</td>
+<td>77776.9232</td>
+<td>1133</td>
+<td>51.92</td>
+<td>9275.2755</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>25327074</td>
+<td>118447.8250</td>
+<td>1840</td>
+<td>73.89</td>
+<td>9690.1037</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>25594133</td>
+<td>83829.3188</td>
+<td>1723</td>
+<td>67.72</td>
+<td>8483.3468</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="91e48e75aae54a56a920ec8c8f82e59f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:91}" data-deepnote_cell_type="code" data-execution_millis="196" data-execution_start="1669415884453" data-source_hash="2073b603" data-tags="[]" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df3.plot(y <span class="op">=</span> <span class="st">'Sales'</span>, kind <span class="op">=</span> <span class="st">'area'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>&lt;AxesSubplot: xlabel='Order Year,Order Month'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="bar-charts" class="level2">
+<h2 class="anchored" data-anchor-id="bar-charts">Bar Charts</h2>
+<div class="cell" data-cell_id="cc16129a5a324432bc73cb67c81d0e9e" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:103}" data-deepnote_cell_type="code" data-execution_millis="545" data-execution_start="1669415884697" data-source_hash="67b5c227" data-tags="[]" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df3.plot(y <span class="op">=</span> <span class="st">'Sales'</span>, kind <span class="op">=</span> <span class="st">'bar'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>&lt;AxesSubplot: xlabel='Order Year,Order Month'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="9270f1a30de64bedbbaf31c4242d17df" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:109}" data-deepnote_cell_type="code" data-execution_millis="293" data-execution_start="1669415885251" data-source_hash="c8686c8f" data-tags="[]" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df2.plot(y <span class="op">=</span> <span class="st">'Sales'</span>, kind <span class="op">=</span> <span class="st">'bar'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>&lt;AxesSubplot: xlabel='Order Year'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-14-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="f8a85cb5fab94e8d82016788736680b4" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:115}" data-deepnote_cell_type="code" data-execution_millis="1369" data-execution_start="1669415885475" data-source_hash="ee8fed99" data-tags="[]" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df3.plot(y <span class="op">=</span> <span class="st">'Sales'</span>, kind <span class="op">=</span> <span class="st">'barh'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>&lt;AxesSubplot: ylabel='Order Year,Order Month'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="e1d07d512da9482fbaccaf85627c799d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:121}" data-deepnote_cell_type="code" data-execution_millis="894" data-execution_start="1669415886025" data-source_hash="21cc131d" data-tags="[]" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df2.plot(y <span class="op">=</span> <span class="st">'Sales'</span>, kind <span class="op">=</span> <span class="st">'barh'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>&lt;AxesSubplot: ylabel='Order Year'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-16-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="histograms" class="level2">
+<h2 class="anchored" data-anchor-id="histograms">Histograms</h2>
+<div class="cell" data-cell_id="7d4bf7c4839d42b084f6327a9612db23" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:133}" data-deepnote_cell_type="code" data-execution_millis="691" data-execution_start="1669415886229" data-source_hash="7b1fbd2c" data-tags="[]" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Sales'</span>].plot(kind <span class="op">=</span> <span class="st">'hist'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>&lt;AxesSubplot: ylabel='Frequency'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="80ce7b2becb344ea855dd56a1f20136c" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:139}" data-deepnote_cell_type="code" data-execution_millis="476" data-execution_start="1669415886450" data-source_hash="c81c6613" data-tags="[]" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Sales'</span>].plot(kind <span class="op">=</span> <span class="st">'hist'</span>, bins <span class="op">=</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>&lt;AxesSubplot: ylabel='Frequency'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-18-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="515b7f9912fc4ee99087ee64b7ec3bff" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:145}" data-deepnote_cell_type="code" data-execution_millis="149" data-execution_start="1669415886813" data-source_hash="301a27f8" data-tags="[]" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Quantity'</span>].plot(kind <span class="op">=</span> <span class="st">'hist'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>&lt;AxesSubplot: ylabel='Frequency'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-19-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="444abd429b774cc9a00c177f81ff6cd6" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:151}" data-deepnote_cell_type="code" data-execution_millis="1029" data-execution_start="1669415887005" data-source_hash="80b72ab3" data-tags="[]" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Quantity'</span>].plot(kind <span class="op">=</span> <span class="st">'kde'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>&lt;AxesSubplot: ylabel='Density'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-20-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="box-plot" class="level2">
+<h2 class="anchored" data-anchor-id="box-plot">Box plot</h2>
+<div class="cell" data-cell_id="aa2d734bbabf498a80d88718d3a73330" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:163}" data-deepnote_cell_type="code" data-execution_millis="231" data-execution_start="1669415888035" data-source_hash="517c7bfb" data-tags="[]" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Sales'</span>].plot(kind <span class="op">=</span> <span class="st">'box'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>&lt;AxesSubplot: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-21-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="13251435fa5e474ab409eca291c4222f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:169}" data-deepnote_cell_type="code" data-execution_millis="154" data-execution_start="1669415888268" data-source_hash="a5757a5" data-tags="[]" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Quantity'</span>].plot(kind <span class="op">=</span> <span class="st">'box'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>&lt;AxesSubplot: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-22-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="pie-charts" class="level2">
+<h2 class="anchored" data-anchor-id="pie-charts">Pie Charts</h2>
+<div class="cell" data-cell_id="010691cd00fc4913ad75337b4890bad9" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:181}" data-deepnote_cell_type="code" data-execution_millis="119" data-execution_start="1669415888469" data-source_hash="b4b04ccb" data-tags="[]" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">'Ship Mode'</span>)[<span class="st">'Ship Mode'</span>].count().plot(kind <span class="op">=</span> <span class="st">'pie'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>&lt;AxesSubplot: ylabel='Ship Mode'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-23-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="color-map" class="level2">
+<h2 class="anchored" data-anchor-id="color-map">Color map</h2>
+<div class="cell" data-cell_id="8d2a98a1b5e942b4bce35d5285f5ef42" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:193}" data-deepnote_cell_type="code" data-execution_millis="638" data-execution_start="1669416224019" data-source_hash="6aef76f3" data-tags="[]" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df.plot.scatter(x <span class="op">=</span> <span class="st">'Order Date'</span>, y <span class="op">=</span> <span class="st">'Sales'</span>, c <span class="op">=</span> <span class="st">'Profit'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>&lt;AxesSubplot: xlabel='Order Date', ylabel='Sales'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-24-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="88db7088e9c7491dac6f3955c9dfc220" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:199}" data-deepnote_cell_type="code" data-execution_millis="551" data-execution_start="1669416519521" data-source_hash="d025605e" data-tags="[]" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>df.plot.scatter(x <span class="op">=</span> <span class="st">'Sales'</span>, y <span class="op">=</span> <span class="st">'Profit'</span>, c <span class="op">=</span> <span class="st">'Discount'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<pre><code>&lt;AxesSubplot: xlabel='Sales', ylabel='Profit'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="1%20-%20Pandas_files/figure-html/cell-25-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="documentation" class="level2">
+<h2 class="anchored" data-anchor-id="documentation">Documentation</h2>
+<ul>
+<li>You can find more details in the documentation here: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.html</li>
+<li>Here is another useful reference: https://pandas.pydata.org/docs/user_guide/visualization.html</li>
+</ul>
+</section>
+<section id="practice" class="level2">
+<h2 class="anchored" data-anchor-id="practice">Practice</h2>
+<p>You can choose a dataset you like, and apply the plots we learned here.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
