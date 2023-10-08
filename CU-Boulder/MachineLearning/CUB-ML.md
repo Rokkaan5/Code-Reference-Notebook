@@ -51,7 +51,7 @@ Prof Gate's ARM code in R provides examples of ARM applications
 - apriori algorithms
 - creating interactive figures
 
-## [Decision Trees](DecisionTrees/CUB-ML_DT.qmd)
+## [Decision Trees](DecisionTrees/CUB-ML_DT.md)
 ### in R
 - Example 1 : Decision Trees in R using labeled record data - and visualizations
 - Example 2 : Decision Trees for text data in R and visualizations
