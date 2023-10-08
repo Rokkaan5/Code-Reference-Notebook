@@ -77,7 +77,7 @@ The following are all *my* submissions to the lab assignments when I was taking 
         - perturb chain
     
 ## Lab Solutions
-[Lab 6: (Nonlinear lab) answer](Lab-Solutions/Delamere_Lab6a.ipynb) (Which I got from Hunter when he had the class)
+[Lab 6: (Nonlinear lab) answer](Lab-Solutions/Delamere_Lab6a.html) (Which I got from Hunter when he had the class)
 
 # Wilberforce Pendulum Project
 

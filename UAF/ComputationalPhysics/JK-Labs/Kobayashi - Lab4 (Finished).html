@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lab 4: Simple harmonic oscillations and second-order methods</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Kobayashi - Lab4 (Finished)_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Kobayashi - Lab4 (Finished)_files/libs/quarto-html/quarto.js"></script>
+<script src="Kobayashi - Lab4 (Finished)_files/libs/quarto-html/popper.min.js"></script>
+<script src="Kobayashi - Lab4 (Finished)_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Kobayashi - Lab4 (Finished)_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Kobayashi - Lab4 (Finished)_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Kobayashi - Lab4 (Finished)_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Kobayashi - Lab4 (Finished)_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Kobayashi - Lab4 (Finished)_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Kobayashi - Lab4 (Finished)_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#lab-4-simple-harmonic-oscillations-and-second-order-methods" id="toc-lab-4-simple-harmonic-oscillations-and-second-order-methods" class="nav-link active" data-scroll-target="#lab-4-simple-harmonic-oscillations-and-second-order-methods">Lab 4: Simple harmonic oscillations and second-order methods</a>
+  <ul class="collapse">
+  <li><a href="#exercise-1-log-log-plots" id="toc-exercise-1-log-log-plots" class="nav-link" data-scroll-target="#exercise-1-log-log-plots">Exercise 1: Log-log plots</a></li>
+  <li><a href="#exercise-2-truncation-error" id="toc-exercise-2-truncation-error" class="nav-link" data-scroll-target="#exercise-2-truncation-error">Exercise 2: Truncation error</a></li>
+  <li><a href="#exercise-3-simple-harmonic-oscillator-sho" id="toc-exercise-3-simple-harmonic-oscillator-sho" class="nav-link" data-scroll-target="#exercise-3-simple-harmonic-oscillator-sho">Exercise 3: Simple harmonic oscillator (SHO)</a>
+  <ul class="collapse">
+  <li><a href="#ex.3-cont." id="toc-ex.3-cont." class="nav-link" data-scroll-target="#ex.3-cont.">Ex.3 cont.</a></li>
+  <li><a href="#ex.3-cont.-1" id="toc-ex.3-cont.-1" class="nav-link" data-scroll-target="#ex.3-cont.-1">Ex.3 cont.</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 4: Simple harmonic oscillations and second-order methods</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="lab-4-simple-harmonic-oscillations-and-second-order-methods" class="level1">
+<h1>Lab 4: Simple harmonic oscillations and second-order methods</h1>
+<p><strong>Goal</strong>: Compare the first-order Euler method with second-order methods.</p>
+<ul>
+<li>Recall, that given</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\frac{d x(t)}{dt} = F(x,t), ~~t^i \le t \le t^f
+\end{equation*}\]</span></p>
+<p>we want to find</p>
+<p><span class="math display">\[\begin{equation*}
+x(t), ~~t^i \le t \le t^f
+\end{equation*}\]</span></p>
+<ul>
+<li>Basic algorithm uses an intermediate time (fractional) step to “leapfrog” to the next whole time step.</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+x^{n+1} = x^n  + \Delta t (\gamma_1 F^n + \gamma_2 F^{n+\alpha})
+\end{equation*}\]</span></p>
+<ul>
+<li>Choose <span class="math inline">\(\gamma_1\)</span>, <span class="math inline">\(\gamma_2\)</span>, and <span class="math inline">\(\alpha\)</span> such that the method is consistent with the Taylor series expansion through second order in <span class="math inline">\(\Delta t\)</span> (leading term in the truncation error is <span class="math inline">\(\mathcal{O}((\Delta t^3))\)</span>, i.e.,</li>
+</ul>
+<p><span class="math display">\[\begin{align}
+x^{n+1} &amp;=&amp; x(t^n + \Delta t) \\ \nonumber
+&amp; = &amp; x^n + \Delta t \left( \frac{dx}{dt}\right)^n + \frac{1}{2!} (\Delta t)^2 \left(\frac{d^2 x}{dt^2} \right)^n + O((\Delta t)^3) \\
+&amp; = &amp; x^n + \Delta t F^n + \frac{1}{2} (\Delta t)^2 \left(\frac{d F}{dt} \right)^n + O((\Delta t)^3)
+\end{align}\]</span></p>
+<p>Some standard choices:</p>
+<p><strong>Modified Euler method</strong>: <span class="math inline">\(\gamma_1 = 0, \gamma_2 = 1, \alpha = \frac{1}{2}\)</span></p>
+<p><span class="math display">\[\begin{align}
+x^{n+1} &amp;=&amp; x^n + \Delta t F^{n+1/2} \\
+&amp;=&amp; x^n + \Delta t F\left(x^n + \frac{1}{2} \Delta t F^n, t^n + \frac{1}{2} \Delta t \right)
+\end{align}\]</span></p>
+<p><strong>Improved Euler method</strong>: <span class="math inline">\(\gamma_1 = \frac{1}{2}, \gamma_2 = \frac{1}{2}, \alpha = 1\)</span></p>
+<p><span class="math display">\[\begin{align}
+x^{n+1} &amp; = &amp;  x^n + \frac{1}{2} \Delta t \left(F^n + F^{n+1}\right) \\
+&amp;=&amp; x^n + \frac{1}{2} \Delta t \left[ F^n + F\left(x^n +  \Delta t F^n, t^n + \Delta t\right) \right]
+\end{align}\]</span></p>
+<section id="exercise-1-log-log-plots" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1-log-log-plots">Exercise 1: Log-log plots</h2>
+<p>Suppose we wish to test whether two variables <span class="math inline">\(y and x\)</span> satisfy some particular functional relationship <span class="math inline">\(y = f(x)\)</span>. The simplest relation is linear, i.e., y = mx +b. The existence of such a relationship can be seen by plotting <span class="math inline">\(y\)</span> vs.&nbsp;<span class="math inline">\(x\)</span>.</p>
+<p>Now suppose that <span class="math inline">\(y\)</span> is not a linear function of <span class="math inline">\(x\)</span>. For instance, <span class="math inline">\(y(x)\)</span> could be of the form</p>
+<p><span class="math display">\[ y(x) = A e^{rx}\]</span></p>
+<p>where <span class="math inline">\(A\)</span> and <span class="math inline">\(r\)</span> and unknown parameters.</p>
+<p>We can take the natural logarithm of both sides, giving</p>
+<p><span class="math display">\[ \ln y = \ln A + rx\]</span>.</p>
+<p>A plot a <span class="math inline">\(\ln y\)</span> vs.&nbsp;<span class="math inline">\(x\)</span> (semi-log) would be a straight line with slope <span class="math inline">\(r\)</span> and intercept <span class="math inline">\(\ln A\)</span>.</p>
+<p>Now consider a power law function of the form</p>
+<p><span class="math display">\[ y(x) = A x^r\]</span>.</p>
+<p>Taking the natural log of both sides yields</p>
+<p><span class="math display">\[\ln y = \ln A + r \ln x\]</span>.</p>
+<p>In this case, plotting <span class="math inline">\(\ln y\)</span> vs.&nbsp;<span class="math inline">\(\ln x\)</span> (log-log) gives a straight line with slope <span class="math inline">\(r\)</span> and intercept <span class="math inline">\(\ln A\)</span>.</p>
+<ol type="1">
+<li>Compute the numerical values of the period <span class="math inline">\(T\)</span> for different values of <span class="math inline">\(\omega_0\)</span>. Assume that <span class="math inline">\(T \propto (k/m)^\alpha\)</span> and estimate the exponent by making a log-log plot of <span class="math inline">\(T\)</span> vs.&nbsp;<span class="math inline">\(k/m\)</span>.</li>
+</ol>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Name: Jasmine Kobayashi</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Lab 4: SHO &amp; Second order methods</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Date: 2/6/20</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>om0 <span class="op">=</span> np.linspace(<span class="dv">1</span>,<span class="dv">10</span>,<span class="dv">100</span>)            <span class="co">#omega values</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>Ta <span class="op">=</span> []                                <span class="co">#period values</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span> (<span class="dv">0</span>,<span class="bu">len</span>(om0)):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    Tp <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span>(om0[i])</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    Ta.append(Tp)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#T vs. omega plot    </span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>plt.plot(om0<span class="op">**</span><span class="dv">2</span>,Ta)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Period (T) vs. Omega$^2$($\omega^2$)"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"$\omega^2$ (k/m)"</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Period T"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ln(T) vs. ln(k/m)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">2</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>plt.plot(np.log(om0<span class="op">**</span><span class="dv">2</span>),np.log(Ta))</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Log-Log Plot"</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"log(k/m)"</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"log(T)"</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">#linear regression</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>om <span class="op">=</span> LinearRegression()</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>お <span class="op">=</span> np.log(om0<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>お <span class="op">=</span> お.reshape((<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>om.fit(お,np.log(Ta))</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Exponent of k/m ="</span>, om.coef_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Exponent of k/m = [-0.5]</code></pre>
+</div>
+</div>
+</section>
+<section id="exercise-2-truncation-error" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2-truncation-error">Exercise 2: Truncation error</h2>
+<ol start="2" type="1">
+<li><p>Write python functions for modified Euler and improved Euler. Try to generalize as much as possible (i.e., don’t make the function dependent on a particular ODE like exponential decay vs.&nbsp;SHO).</p></li>
+<li><p>Repeat the last part of Lab 2 (truncation error), solving the dimensionless ODE, comparing the %error <span class="math inline">\(\tau = 1\)</span>. Plot %error vs.&nbsp;<span class="math inline">\(d\tau\)</span> for each of the three methods. Are the second order methods <span class="math inline">\(\propto \Delta t^2\)</span> (plot log-log)?</p></li>
+</ol>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use your dimensionless ODO function from lab 2 here.  Add functions for modified and improved Euler.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> F(y0): <span class="co">#dy/dx = -y</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>y0 </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> euler(dtau,tau,y0):</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#y0 is y(tau=0), initial condition</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">#tau is the dimensionless time array</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">#dtau is the time step </span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> []                          <span class="co">#initialize an array for the output</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    y.append(y0)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="bu">len</span>(tau)):     </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        y0 <span class="op">=</span> y0 <span class="op">+</span> F(y0)<span class="op">*</span>dtau</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        y.append(y0)                <span class="co">#add the n+1 value to y array</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> euler_modified(dtau,tau,y0):</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#y0 is y(tau=0), initial condition</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">#tau is the dimensionless time array</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">#dtau is the time step </span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> []</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(tau)):</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        y.append(y0)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        yph <span class="op">=</span> y0 <span class="op">+</span> (F(y0)<span class="op">*</span>dtau<span class="op">/</span><span class="dv">2</span>)           <span class="co">#F^n+(0.5) </span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        y0 <span class="op">=</span> y0 <span class="op">+</span> F(yph)<span class="op">*</span>dtau               <span class="co">#y^n+1 using F^n+0.5</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> euler_improved(dtau,tau,y0):</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">#y0 is y(tau=0), initial condition</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">#tau is the dimensionless time array</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="co">#dtau is the time step </span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> []</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(tau)):</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        y.append(y0)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        ypi <span class="op">=</span> y0 <span class="op">+</span> F(y0)<span class="op">*</span>dtau               <span class="co">#F^n+1</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>        y0 <span class="op">=</span> y0 <span class="op">+</span> (F(y0)<span class="op">+</span>F(ypi))<span class="op">*</span>dtau<span class="op">/</span><span class="dv">2</span>     <span class="co">#y^n+1 using F^n &amp; F^n+1</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#set up tau array</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>tau_final <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>dtau_array <span class="op">=</span>[]</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">14</span>):</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    dtau_array.append(dtau)</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    dtau <span class="op">=</span> dtau<span class="op">/</span><span class="fl">2.</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>dy_array <span class="op">=</span> []</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="co">#Euler Graphs---------------------------------------------------------------------</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>)</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>tau <span class="op">=</span> np.arange(<span class="dv">0</span>,tau_final,dtau)</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>plt.plot(tau,euler(dtau,tau,y0),label<span class="op">=</span><span class="st">'1st order Euler'</span>)</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Euler comparisons"</span>)</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"tau"</span>)</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Euler outcome (y)"</span>)</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co">#Add a comparison of the secord order methods</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>plt.plot(tau,euler_modified(dtau,tau,y0),label<span class="op">=</span><span class="st">"Modified"</span>)</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>plt.plot(tau,euler_improved(dtau,tau,y0),<span class="st">"-."</span>,label<span class="op">=</span><span class="st">"Improved"</span>)</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>plt.plot(tau,np.exp(<span class="op">-</span>tau),<span class="st">'+'</span>,label<span class="op">=</span><span class="st">'exact'</span>)</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="co">#Lab 2 repeat--------------------------------------------------------------------</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>dy_m <span class="op">=</span> []                          <span class="co">#dy for modified</span></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>dy_i <span class="op">=</span> []                          <span class="co">#dy for improved</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(dtau_array)):</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    tau <span class="op">=</span> np.arange(<span class="dv">0</span>,tau_final,dtau_array[i])</span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> euler(dtau_array[i],tau,y0)</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="co">#add second order methods</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    dy_array.append(<span class="dv">100</span><span class="op">*</span>(<span class="bu">abs</span>(y[<span class="op">-</span><span class="dv">1</span>]<span class="op">-</span>np.exp(<span class="op">-</span>tau[<span class="op">-</span><span class="dv">1</span>]))<span class="op">/</span>np.exp(<span class="op">-</span>tau[<span class="op">-</span><span class="dv">1</span>])))</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>    mod <span class="op">=</span> euler_modified(dtau_array[i],tau,y0)</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>    imp <span class="op">=</span> euler_improved(dtau_array[i],tau,y0)</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    dy_m.append(<span class="dv">100</span><span class="op">*</span>(<span class="bu">abs</span>(mod[<span class="op">-</span><span class="dv">1</span>]<span class="op">-</span>np.exp(<span class="op">-</span>tau[<span class="op">-</span><span class="dv">1</span>]))<span class="op">/</span>np.exp(<span class="op">-</span>tau[<span class="op">-</span><span class="dv">1</span>])))</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>    dy_i.append(<span class="dv">100</span><span class="op">*</span>(<span class="bu">abs</span>(imp[<span class="op">-</span><span class="dv">1</span>]<span class="op">-</span>np.exp(<span class="op">-</span>tau[<span class="op">-</span><span class="dv">1</span>]))<span class="op">/</span>np.exp(<span class="op">-</span>tau[<span class="op">-</span><span class="dv">1</span>])))</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a><span class="co">#Lab 2 Error Graph----------------------------------------------------------------</span></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">2</span>)</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>plt.plot(dtau_array,dy_array,label<span class="op">=</span><span class="st">'Euler'</span>)</span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="co">#add second-order plots</span></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>plt.plot(dtau_array,dy_m,label <span class="op">=</span> <span class="st">"Modified"</span>)</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>plt.plot(dtau_array,dy_i,<span class="st">"-."</span>,label <span class="op">=</span> <span class="st">"Improved"</span>)</span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'dtau'</span>)</span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'error (%)'</span>)</span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Error graph (Lab 2 redo)"</span>)</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>plt.yscale(<span class="st">'log'</span>)</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>plt.xscale(<span class="st">'log'</span>)</span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="co">#use linear regression to determine the slope.  </span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>model<span class="op">=</span>LinearRegression()</span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.log(dtau_array)</span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x.reshape((<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))           <span class="co">#What does reshape do? Look it up and try printing before and after.</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>model.fit(x,np.log(dy_array))</span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'slope 1st order ='</span>, model.coef_)</span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>second<span class="op">=</span>LinearRegression()</span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>second.fit(x,np.log(dy_i))</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"second order slope ="</span>, second.coef_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>slope 1st order = [0.99153445]
+second order slope = [1.99549552]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-3-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-3-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="exercise-3-simple-harmonic-oscillator-sho" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-3-simple-harmonic-oscillator-sho">Exercise 3: Simple harmonic oscillator (SHO)</h2>
+<ol start="4" type="1">
+<li><p>Now apply the three Euler ODE methods to the SHO problem (mass on a spring) and compute <span class="math inline">\(\Delta^n\)</span> (homework) over one cycle.</p></li>
+<li><p>Plot the numerical solutions with the analytical solution [<span class="math inline">\(x(t) = A \cos(\omega_0 t + \delta)\)</span>].</p></li>
+<li><p>Plot the time dependence of the potential energy and the kinetic energy through one cycle. Where in the cycle is the kinetic energy a maximum?</p></li>
+</ol>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Simple Harmonic Oscillator</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>omega2 <span class="op">=</span> <span class="dv">9</span>                    <span class="co">#omega^2 = (k/m) (k= spring constant,m = mass)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span>np.sqrt(omega2)   <span class="co">#Period (units = seconds)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="fl">0.01</span><span class="op">*</span>T                   <span class="co">#time step, in relation to period</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> <span class="fl">1.0</span>                      <span class="co">#Initial position (displacement from equilibrium position) (units=meters?)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>v0 <span class="op">=</span> <span class="fl">0.0</span>                      <span class="co">#Initial velocity (m/s?)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> vdot(omega2,x0):          <span class="co">#acceleration(dv/dt)(b/c x"(t) = -omega^2*x); just to make F^n for velocity easier to identify</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>omega2<span class="op">*</span>x0</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#-----------------------------------------SHO Euler Functions---------------------------------------------------------------</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#First order Euler</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> SHO(x0,v0,omega2,T,dt):      <span class="co">#Simple Harmonic Oscillator (outputs, array of position, vel., and time of 2 periods)</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> []                       <span class="co">#position (disp. from equi. position)</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> []                       <span class="co">#velocity</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    time <span class="op">=</span> []                    <span class="co">#time</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="fl">0.0</span>                      <span class="co">#initial time</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    tfinal <span class="op">=</span> T                   <span class="co">#ends after one period(one cycle)</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> t <span class="op">&lt;</span> tfinal:</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        time.append(t)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        x.append(x0)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        v.append(v0)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        vp <span class="op">=</span> v0 <span class="op">+</span> vdot(omega2,x0)<span class="op">*</span>dt       <span class="co">#F^n+1 = v^n+1 = v^n + (dv/dt)*dt</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        x0 <span class="op">=</span> x0 <span class="op">+</span> v0<span class="op">*</span>dt                    <span class="co">#x^n+1 = x^n + (F^n)*dt</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        v0 <span class="op">=</span> vp</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> t<span class="op">+</span>dt</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x, v, time</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#Modified Euler</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> SHO_mod(x0,v0,omega2,T,dt):  </span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    xm <span class="op">=</span> []                       <span class="co">#position (disp. from equi. position)</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    vm <span class="op">=</span> []                       <span class="co">#velocity</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    time_m <span class="op">=</span> []                   <span class="co">#time</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="fl">0.0</span>                       <span class="co">#initial time</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    tfinal <span class="op">=</span> T                    <span class="co">#ends after one period(one cycle)</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> t <span class="op">&lt;</span> tfinal:</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        time_m.append(t)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>        xm.append(x0)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        vm.append(v0)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        xph <span class="op">=</span> x0 <span class="op">+</span>(<span class="fl">0.5</span>)<span class="op">*</span>v0<span class="op">*</span>dt              <span class="co">#x^n+0.5 = x^n + (1/2)*(F^n)*dt</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>        vp <span class="op">=</span> v0 <span class="op">+</span> vdot(omega2,xph)<span class="op">*</span>dt      <span class="co">#F^n+1; v^n+1 using x^n+0.5</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>        vph <span class="op">=</span> v0 <span class="op">+</span> (vdot(omega2,x0)<span class="op">*</span>dt)<span class="op">/</span><span class="dv">2</span>  <span class="co">#F^n+0.5 (v^n+0.5)   </span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>        xp <span class="op">=</span> x0 <span class="op">+</span> vph<span class="op">*</span>dt                   <span class="co">#x^n+1 = x^n + (F^n+0.5)*dt   </span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        x0 <span class="op">=</span> xp</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>        v0 <span class="op">=</span> vp</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> t <span class="op">+</span> dt                 </span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> xm, vm, time_m</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co">#Improved Euler</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> SHO_impr(x0,v0,omega2,T,dt):</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    xi <span class="op">=</span> []                       <span class="co">#position (disp. from equi. position)</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    vi <span class="op">=</span> []                       <span class="co">#velocity</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>    time_i <span class="op">=</span> []                   <span class="co">#time</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="fl">0.0</span>                       <span class="co">#initial time</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    tfinal <span class="op">=</span> T                    <span class="co">#ends after one period(one cycle)</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> t <span class="op">&lt;</span> tfinal:</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>        time_i.append(t)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>        xi.append(x0)</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        vi.append(v0)</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        xpi <span class="op">=</span> x0 <span class="op">+</span> v0<span class="op">*</span>dt                   <span class="co">#x^n+1 = x^n + F^n*(dt); x^n+1 1st order that'll be used in 2nd order</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>        vp <span class="op">=</span> v0 <span class="op">+</span> vdot(omega2,xpi)<span class="op">*</span>dt      <span class="co">#F^n+1; v^n+1 using x^n+1 first order</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>        xp <span class="op">=</span> x0 <span class="op">+</span> (v0<span class="op">+</span>vp)<span class="op">*</span>dt<span class="op">*</span><span class="fl">0.5</span>           <span class="co">#x^n+1 = x^n + (1/2)(dt)(F^n + F^n+1); Second order x^n+1</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>        v0 <span class="op">=</span> vp</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>        x0 <span class="op">=</span> xpi</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> t <span class="op">+</span> dt</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> xi, vi, time_i</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>[x,v,time] <span class="op">=</span> SHO(x0,v0,omega2,T,dt)</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>[xma,vma,時ma] <span class="op">=</span> SHO_mod(x0,v0,omega2,T,dt)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>[xI,vI,時I] <span class="op">=</span> SHO_impr(x0,v0,omega2,T,dt)</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="co">#Difference in Energy-------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>E0_下m <span class="op">=</span>(<span class="fl">0.5</span>)<span class="op">*</span>omega2<span class="op">*</span>(x0<span class="op">**</span><span class="dv">2</span>)               <span class="co">#Initial energy (E0/m)</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Initial Energy="</span>,E0_下m)</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="co">#First order</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>E <span class="op">=</span> []                                     <span class="co">#Total energy array</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>dif <span class="op">=</span> []                                   <span class="co">#Difference in energy array</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(x)):</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>    Eom <span class="op">=</span> (<span class="fl">0.5</span>)<span class="op">*</span>v[k]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> (<span class="fl">0.5</span>)<span class="op">*</span>omega2<span class="op">*</span>(x[k]<span class="op">**</span><span class="dv">2</span>) <span class="co">#E/m = (1/2)v^2 + (1/2)(k/m)(x^2) </span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>    E.append(Eom)</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> (E[k]<span class="op">-</span>E0_下m)<span class="op">/</span>E0_下m                <span class="co">#The difference of energy between initial and at a certain time step</span></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>    dif.append(d)</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="co">#Second Order</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="co">#Modified Euler</span></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>Em <span class="op">=</span> []                                     <span class="co">#Total energy (Modified)</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>difm <span class="op">=</span> []                                   <span class="co">#Difference in energy (Modified)</span></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>EI <span class="op">=</span> []                                     <span class="co">#Total energy (Improved)</span></span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>difI <span class="op">=</span> []                                   <span class="co">#Diff. in energy (Improved)</span></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(xma)):</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>    Eomm <span class="op">=</span> ((<span class="fl">0.5</span>)<span class="op">*</span>(vma[i]<span class="op">**</span><span class="dv">2</span>)) <span class="op">+</span> ((<span class="fl">0.5</span>)<span class="op">*</span>omega2<span class="op">*</span>(xma[i]<span class="op">**</span><span class="dv">2</span>)) <span class="co">#Energy at time step n for modified</span></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>    Em.append(Eomm)</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>    dm <span class="op">=</span> (Em[i]<span class="op">-</span>E0_下m)<span class="op">/</span>E0_下m              <span class="co">#Difference in energy</span></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>    difm.append(dm)</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a><span class="co">#Improved Euler   </span></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(xI)):</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>    Eomi <span class="op">=</span> ((<span class="fl">0.5</span>)<span class="op">*</span>(vI[j]<span class="op">**</span><span class="dv">2</span>)) <span class="op">+</span> ((<span class="fl">0.5</span>)<span class="op">*</span>omega2<span class="op">*</span>(xI[j]<span class="op">**</span><span class="dv">2</span>))   <span class="co">#Energy at time step n for improved</span></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>    EI.append(Eomi)</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>    di <span class="op">=</span> (EI[j]<span class="op">-</span>E0_下m)<span class="op">/</span>E0_下m              <span class="co">#Difference in energy</span></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>    difI.append(di)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Initial Energy= 4.5</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Graphs</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#position vs time</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.plot(time,x,label <span class="op">=</span> <span class="st">"1st"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.plot(時ma,xma,<span class="st">"-."</span>,label <span class="op">=</span> <span class="st">"Modified"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.plot(時I,xI,<span class="st">":"</span>,label <span class="op">=</span> <span class="st">"Improved"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Position vs. Time"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Position"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Velocity vs time</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">2</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>plt.plot(time,v,label <span class="op">=</span> <span class="st">"1st"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>plt.plot(時ma,vma,<span class="st">"-."</span>,label <span class="op">=</span> <span class="st">"Modified"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>plt.plot(時I,vI,<span class="st">":"</span>,label <span class="op">=</span> <span class="st">"Improved"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Velocity vs. Time"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Velocity"</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#Energy difference</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">3</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>plt.plot(time,dif,label <span class="op">=</span> <span class="st">"First"</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>plt.plot(時ma,difm,<span class="st">"-."</span>,label<span class="op">=</span><span class="st">"Modified"</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>plt.plot(時I,difI,<span class="st">":"</span>,label <span class="op">=</span> <span class="st">"Improved"</span>) </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Energy difference"</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$\Delta^n$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>Text(0, 0.5, '$\\Delta^n$')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-5-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-5-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Close ups of Second order Energy differences</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.plot(時ma,difm,<span class="st">"-."</span>,label<span class="op">=</span><span class="st">"Modified"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"$\Delta^n$ for Modified"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$\Delta^n$"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">2</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>plt.plot(時I,difI,<span class="st">":"</span>,label <span class="op">=</span> <span class="st">"Improved"</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"$\Delta^n$ for Improved"</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$\Delta^n$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>Text(0, 0.5, '$\\Delta^n$')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-6-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<section id="ex.3-cont." class="level3">
+<h3 class="anchored" data-anchor-id="ex.3-cont.">Ex.3 cont.</h3>
+<ol start="5" type="1">
+<li>Plot the numerical solutions with the analytical solution [<span class="math inline">\(x(t) = A \cos(\omega_0 t + \delta)\)</span>].</li>
+</ol>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#numerical vs analytical comparison</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>om <span class="op">=</span> omega2<span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>ta <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="dv">2</span>,dt)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Analytical solution</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> analytical(om,t):  </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.cos(om<span class="op">*</span>t)       <span class="co">#x = Acos(omega*(t) + phase); where A(Amplitude) = 1, phase = 0</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>Xa<span class="op">=</span>[]</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(ta)):</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    xあ <span class="op">=</span> analytical(om,ta[i])</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    Xa.append(xあ)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#comparison graph</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>plt.plot(ta,Xa,label <span class="op">=</span> <span class="st">"Analytical"</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>plt.plot(time,x,label <span class="op">=</span> <span class="st">"1st order(numerical)"</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>plt.plot(時ma,xma,<span class="st">"-."</span>,label <span class="op">=</span> <span class="st">"Modified(numerical)"</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>plt.plot(時I,xI,<span class="st">":"</span>,label <span class="op">=</span> <span class="st">"Improved(numerical)"</span>)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Comparing all: Analytical, 1st order, &amp; 2nd order"</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Position"</span>)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">2</span>)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>plt.plot(ta,Xa,label <span class="op">=</span> <span class="st">"Analytical"</span>)</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>plt.plot(time,x,label <span class="op">=</span> <span class="st">"1st order(numerical)"</span>)</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Comparing Analytical &amp; 1st order"</span>)</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Position"</span>)</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">3</span>)</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>plt.plot(ta,Xa,label <span class="op">=</span> <span class="st">"Analytical"</span>)</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>plt.plot(時ma,xma,<span class="st">"-."</span>,label <span class="op">=</span> <span class="st">"Modified(numerical)"</span>)</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>plt.plot(時I,xI,<span class="st">":"</span>,label <span class="op">=</span> <span class="st">"Improved(numerical)"</span>)</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Comparing Analytical &amp; Second order"</span>)</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Position"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>Text(0, 0.5, 'Position')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-7-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-7-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="ex.3-cont.-1" class="level3">
+<h3 class="anchored" data-anchor-id="ex.3-cont.-1">Ex.3 cont.</h3>
+<ol start="6" type="1">
+<li>Plot the time dependence of the potential energy and the kinetic energy through one cycle. Where in the cycle is the kinetic energy a maximum?</li>
+</ol>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Potential and Kinetic</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#First order</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>UE <span class="op">=</span> []                      <span class="co">#Potential</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>KE <span class="op">=</span> []                      <span class="co">#Kinetic</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(x)):</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    U <span class="op">=</span> (<span class="fl">0.5</span>)<span class="op">*</span>omega2<span class="op">*</span>(x[k]<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    UE.append(U)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    K <span class="op">=</span> (<span class="fl">0.5</span>)<span class="op">*</span>v[k]<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    KE.append(K)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Second Order</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Modified</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>UEm <span class="op">=</span> []                     <span class="co">#Potential (Modified)</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>KEm <span class="op">=</span> []                     <span class="co">#Kinetic (Modified)</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(xma)):</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    Um <span class="op">=</span>((<span class="fl">0.5</span>)<span class="op">*</span>omega2<span class="op">*</span>(xma[i]<span class="op">**</span><span class="dv">2</span>)) </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    UEm.append(Um)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    Km <span class="op">=</span>  ((<span class="fl">0.5</span>)<span class="op">*</span>(vma[i]<span class="op">**</span><span class="dv">2</span>))             </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    KEm.append(Km)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">#Improved</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>UEi <span class="op">=</span> []                     <span class="co">#Potential (Improved)</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>KEi <span class="op">=</span> []                     <span class="co">#Kinetic (Improved)</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(xI)):</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    Ui <span class="op">=</span> ((<span class="fl">0.5</span>)<span class="op">*</span>omega2<span class="op">*</span>(xI[j]<span class="op">**</span><span class="dv">2</span>))   </span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    UEi.append(Ui)</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    Ki <span class="op">=</span> ((<span class="fl">0.5</span>)<span class="op">*</span>(vI[j]<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    KEi.append(Ki)</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="co">#Graphs</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>)</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>plt.plot(time,UE,label<span class="op">=</span><span class="st">"1st order potential"</span>)</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>plt.plot(時ma,UEm,<span class="st">"-."</span>,label<span class="op">=</span><span class="st">"Modified potential"</span>)</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>plt.plot(時I,UEi,<span class="st">":"</span>,label<span class="op">=</span><span class="st">"Improved potential"</span>)</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Potential energy vs. time"</span>)</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Potential Energy"</span>)</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">2</span>)</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>plt.plot(time,KE,label<span class="op">=</span><span class="st">"1st order kinetic"</span>)</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>plt.plot(時ma,KEm,<span class="st">"-."</span>,label<span class="op">=</span><span class="st">"Modified kinetic"</span>)</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>plt.plot(時I,KEi,<span class="st">":"</span>,label<span class="op">=</span><span class="st">"Improved kinetic"</span>)</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Kinetic energy vs. time"</span>)</span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time"</span>)</span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Kinetic Energy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>Text(0, 0.5, 'Kinetic Energy')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-8-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Kobayashi%20-%20Lab4%20(Finished)_files/figure-html/cell-8-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Maximum kinetic energy</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>km <span class="op">=</span> time[KE.index(<span class="bu">max</span>(KE))]           <span class="co">#Time of max kinetic energy for first order</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>kmm <span class="op">=</span> 時ma[KEm.index(<span class="bu">max</span>(KEm))]        <span class="co">#Time of max kinetic energy for modified</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>kmi <span class="op">=</span> 時I[KEi.index(<span class="bu">max</span>(KEi))]         <span class="co">#Time of max kinetic energy for improved</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Max kinetic energy at time="</span><span class="op">+</span><span class="bu">str</span>(km),<span class="st">"sec. for first order Euler."</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Max kinetic energy at time="</span><span class="op">+</span><span class="bu">str</span>(kmm),<span class="st">"sec. for second order Euler."</span>) </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Only used time for 'modified' here for time of second order, but if I used time of 'improved' it would still be the same.(Which makes sense)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Max kinetic energy at time=1.5917402778188297 sec. for first order Euler.
+Max kinetic energy at time=1.5707963267948977 sec. for second order Euler.</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lab 6 - Damped and driven non-linear pendulum</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Delamere_Lab6a_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Delamere_Lab6a_files/libs/quarto-html/quarto.js"></script>
+<script src="Delamere_Lab6a_files/libs/quarto-html/popper.min.js"></script>
+<script src="Delamere_Lab6a_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Delamere_Lab6a_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Delamere_Lab6a_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Delamere_Lab6a_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Delamere_Lab6a_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Delamere_Lab6a_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Delamere_Lab6a_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#exercise-1" id="toc-exercise-1" class="nav-link active" data-scroll-target="#exercise-1">Exercise 1:</a></li>
+  <li><a href="#exercise-2" id="toc-exercise-2" class="nav-link" data-scroll-target="#exercise-2">Exercise 2:</a></li>
+  <li><a href="#exercise-3" id="toc-exercise-3" class="nav-link" data-scroll-target="#exercise-3">Exercise 3:</a></li>
+  <li><a href="#exercise-4" id="toc-exercise-4" class="nav-link" data-scroll-target="#exercise-4">Exercise 4</a></li>
+  <li><a href="#exercise-5" id="toc-exercise-5" class="nav-link" data-scroll-target="#exercise-5">Exercise 5</a></li>
+  <li><a href="#exercise-6" id="toc-exercise-6" class="nav-link" data-scroll-target="#exercise-6">Exercise 6</a></li>
+  <li><a href="#exercise-7" id="toc-exercise-7" class="nav-link" data-scroll-target="#exercise-7">Exercise 7</a></li>
+  <li><a href="#exercise-8-optional" id="toc-exercise-8-optional" class="nav-link" data-scroll-target="#exercise-8-optional">Exercise 8 (optional)</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 6 - Damped and driven non-linear pendulum</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<ul>
+<li>Most oscillatory motion in nature gradually decreases until the displacement becomes zero; such motion is said to be <em>damped</em>.</li>
+<li>Consider the mass on a spring when a horizontal drag force is included.</li>
+<li>For small velocities, assume that the drag force is proportional to velocity. The equation of motion can be written as</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\frac{d^2 x}{dt^2} = -\omega_0^2 x - \gamma \frac{dx}{dt}
+\end{equation*}\]</span> where the <em>damping coefficient</em> <span class="math inline">\(\gamma\)</span> is a measure of the magnitude of the drag term. - Note that the drag term opposes the motion.</p>
+<ul>
+<li>In the linear case, the response of the damped harmonic oscillator to an external driving force is linear.</li>
+<li>If the magnitude of the external force is doubled, then the magnitude of the steady state motion is also doubled.</li>
+<li>What happens with a non-linear oscillator?</li>
+<li>Here we consider the non-linear pendulum with an external harmonic force and linear drag term.<br>
+</li>
+<li>The equation of motion is</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+mL\frac{d^2 \theta}{dt^2} = -mg \sin \theta - \gamma \frac{d \theta}{dt}
++ F_D \cos(\omega_D t)
+\end{equation*}\]</span> where <span class="math inline">\(\gamma\)</span> is the friction (damping) parameter, <span class="math inline">\(F_D\)</span> is the strength of the driving force divided by <span class="math inline">\(mL\)</span>, and <span class="math inline">\(\omega_D\)</span> is the driving frequency.</p>
+<ul>
+<li>Convert to dimensionless DEQ.</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\tau = t/t_0  \implies dt = t_0 d\tau
+\end{equation*}\]</span></p>
+<p><span class="math display">\[\begin{equation*}
+\frac{mL}{t_0^2}\frac{d^2 \theta}{d\tau^2} = - mg \sin \theta - \frac{\gamma}{t_0} \frac{d \theta}{d\tau}
++ F_D \cos(\omega_D t_0 \tau)
+\end{equation*}\]</span></p>
+<p><span class="math display">\[\begin{equation*}
+\frac{d^2 \theta}{d\tau^2} = - \frac{gt_0^2}{L} \sin \theta -
+\frac{\gamma t_0}{mL}  \frac{d \theta}{d\tau}
++ \frac{F_D t_0^2}{mL}  \cos(\omega_D t_0 \tau)
+\end{equation*}\]</span> - Let <span class="math inline">\(t_0 = \sqrt{L/g} \implies F_D t_0^2/(mL) = F_D L/(mLg) =  F_D/(mg) = G\)</span>. - Let $ q = t_0/mL.$ - Let <span class="math inline">\(\Omega_D = \omega_0 t_0\)</span>. So</p>
+<p><span class="math display">\[\begin{equation*}
+\boxed{\frac{d^2 \theta}{d\tau^2} = - \sin \theta -
+q  \frac{d \theta}{d\tau}
++ G \cos(\Omega_D  \tau)}
+\end{equation*}\]</span></p>
+<ul>
+<li><p>We want to model this as a set of three coupled ODEs with <span class="math inline">\(\phi = \Omega_d \tau\)</span>. <span class="math display">\[\begin{eqnarray*}
+\frac{d \theta}{d\tau} &amp;=&amp; \omega \\
+\frac{d \omega}{d\tau} &amp;=&amp; -\sin \theta - q \omega + G \cos(\phi)\\
+\frac{d \phi}{d \tau} &amp;=&amp; \Omega_D
+\end{eqnarray*}\]</span></p></li>
+<li><p>Chaotic behavior is the interplay between driving forces (i.e., <span class="math inline">\(\Omega_D\)</span>) and the natural frequency (i.e., <span class="math inline">\(\sqrt{g/L}\)</span>).</p></li>
+</ul>
+<section id="exercise-1" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1">Exercise 1:</h2>
+<p>Write a python program to simulate a damped, driven pendulum using the 4th-order Runge-Kutta (rk4) method. The rk4 function should be written as generally as possible to handle the remaining exercises. You can define multiple functions and pass the name of the function to the rk4 solver. In this example, the function “F1” is being passed to the “pend_rk4” function.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> F1</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>[theta,omega,time] <span class="op">=</span> pend_rk4(F,theta_0,omega_0,taufinal,dtau)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The (inadequately-commented) code included below will get you started.</p>
+<p>Be prepared to plot the periodic angle <span class="math inline">\(\theta\)</span> on the interval <span class="math inline">\(-\pi &lt; \theta \le \pi\)</span>. A driven pendulum can make circular motions with <span class="math inline">\(|\theta|\)</span> increasing to large values. It might be useful to consider the “mod” operator (%) and the <code>np.where</code> function.</p>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:17771,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1644553516324,&quot;user&quot;:{&quot;displayName&quot;:&quot;Hunter Barndt&quot;,&quot;photoUrl&quot;:&quot;https://lh3.googleusercontent.com/a-/AOh14GjvpuI1IvPTvNpIs3jWqKnKyttp43sog8zhOkz5=s64&quot;,&quot;userId&quot;:&quot;10580160471144704125&quot;},&quot;user_tz&quot;:540}" data-outputid="401ccddd-e8a3-4ddb-e149-d8d17ea6618b" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d <span class="im">import</span> Axes3D</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.signal <span class="im">import</span> resample</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> F1(theta,omega,tau):</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([omega, <span class="op">-</span>np.sin(theta) <span class="op">-</span> gamma<span class="op">*</span>omega <span class="op">+</span> G<span class="op">*</span>np.cos(Omega_d<span class="op">*</span>tau)])</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pend_rk4(F,theta1,omega1,taufinal,dtau):  <span class="co">#dimensionless solve</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> []</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    omega <span class="op">=</span> []</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    time <span class="op">=</span> []</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    tau <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> tau <span class="op">&lt;</span> taufinal:</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        time.append(tau)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        theta.append(theta1)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        omega.append(omega1)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        k1 <span class="op">=</span> dtau<span class="op">*</span>F(theta1,omega1,tau)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        k2 <span class="op">=</span> dtau<span class="op">*</span>F(theta1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">0</span>], omega1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">1</span>], tau<span class="op">+</span>dtau<span class="op">/</span><span class="fl">2.</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        k3 <span class="op">=</span> dtau<span class="op">*</span>F(theta1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">0</span>], omega1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">1</span>], tau<span class="op">+</span>dtau<span class="op">/</span><span class="fl">2.</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        k4 <span class="op">=</span> dtau<span class="op">*</span>F(theta1 <span class="op">+</span> k3[<span class="dv">0</span>], omega1 <span class="op">+</span> k3[<span class="dv">1</span>], tau<span class="op">+</span>dtau)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        theta1 <span class="op">=</span> theta1 <span class="op">+</span> (k1[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">0</span>] <span class="op">+</span> k4[<span class="dv">0</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        omega1 <span class="op">=</span> omega1 <span class="op">+</span> (k1[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">1</span>] <span class="op">+</span> k4[<span class="dv">1</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        tau <span class="op">=</span> tau<span class="op">+</span>dtau</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.asarray(theta),np.asarray(omega),np.asarray(time)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">#--------------Initialize parameters----------------------------------------------</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>g_over_L <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>np.sqrt(g_over_L)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>Q <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>Q</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="fl">1.2</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>omega_d <span class="op">=</span> <span class="fl">0.667</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>Omega_d <span class="op">=</span> omega_d<span class="op">*</span>t0 <span class="co">#dimenionless frequency</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span>Omega_d</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.002</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>theta_0 <span class="op">=</span> <span class="fl">20.0</span><span class="op">*</span>np.pi<span class="op">/</span><span class="fl">180.</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>omega_0 <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>taufinal <span class="op">=</span> <span class="dv">60</span><span class="op">*</span>T</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>ncycle <span class="op">=</span> (<span class="bu">round</span>(taufinal<span class="op">*</span>Omega_d<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi)))  <span class="co">#sample phase space once per cycle.</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------rk4---------------------------------------------------------------</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> F1</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>[theta,omega,time] <span class="op">=</span> pend_rk4(F,theta_0,omega_0,taufinal,dtau)</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> (theta <span class="op">+</span> np.pi)<span class="op">%</span>(<span class="dv">2</span><span class="op">*</span>np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>nstep <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(time)<span class="op">/</span>ncycle)</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(<span class="dv">3</span>)</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>ax.plot(theta,omega,<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">1.5</span>, markeredgewidth<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>ax.plot(theta[::nstep],omega[::nstep],<span class="st">'o'</span>)</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'$\omega$'</span>)</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">4</span>)</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>plt.plot(theta[::nstep],omega[::nstep],<span class="st">'o'</span>)</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$\omega$'</span>)</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="co">#fig = plt.figure(5)</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">#ax = fig.add_subplot(111, projection='3d')</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co">#ax.scatter(time[::nstep],theta[::nstep],omega[::nstep])</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="co">#ax.set_xlabel('time')</span></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co">#ax.set_ylabel('theta')</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="co">#ax.set_zlabel('omega')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-2-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="exercise-2" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2">Exercise 2:</h2>
+<p>Examine the case of zero damping, zero driving, and small angle. Here, <span class="math inline">\(q \rightarrow 0\)</span>, <span class="math inline">\(G \rightarrow 0\)</span>, <span class="math inline">\(\Omega_D \rightarrow 0\)</span>, and <span class="math inline">\(\sin \theta \rightarrow \theta\)</span> such that <span class="math display">\[\begin{eqnarray*}
+\frac{d \theta}{d \tau} &amp;=&amp; \omega\\
+\frac{d \omega}{d \tau} &amp; = &amp; - \theta
+\end{eqnarray*}\]</span> with analytical solutions <span class="math inline">\(\theta(\tau) = A \cos \tau\)</span> and <span class="math inline">\(\omega(\tau) = - A \sin \tau\)</span> where A is determined from initial conditions [<span class="math inline">\(\theta(\tau = 0)\)</span>]. Plot the phase space trajectory (<span class="math inline">\(\omega\)</span> vs.&nbsp;<span class="math inline">\(\theta\)</span>) for several cycles. Is the area preserved properly? If not, experiment with the time step. We expect the area to be preserved for conservative systems.</p>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:11920,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1644553528238,&quot;user&quot;:{&quot;displayName&quot;:&quot;Hunter Barndt&quot;,&quot;photoUrl&quot;:&quot;https://lh3.googleusercontent.com/a-/AOh14GjvpuI1IvPTvNpIs3jWqKnKyttp43sog8zhOkz5=s64&quot;,&quot;userId&quot;:&quot;10580160471144704125&quot;},&quot;user_tz&quot;:540}" data-outputid="2f4edb15-6922-411c-de15-923b70f1edc6" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Fsmall(theta,omega,tau):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([omega, <span class="op">-</span>theta <span class="op">-</span> gamma<span class="op">*</span>omega <span class="op">+</span> G<span class="op">*</span>np.cos(Omega_d<span class="op">*</span>tau)])</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.001</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> Fsmall</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">/</span>g_over_L</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>taufinal <span class="op">=</span> <span class="dv">60</span><span class="op">*</span>T</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>ncycle <span class="op">=</span> (<span class="bu">round</span>(taufinal<span class="op">*</span>g_over_L<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi)))  <span class="co">#sample phase space once per cycle.</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>[theta,omega,time] <span class="op">=</span> pend_rk4(F,theta_0,omega_0,taufinal,dtau)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> (theta <span class="op">+</span> np.pi)<span class="op">%</span>(<span class="dv">2</span><span class="op">*</span>np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>nstep <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(time)<span class="op">/</span>ncycle)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>ax.plot(theta,omega,<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">1.5</span>, markeredgewidth<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>ax.plot(theta[::nstep],omega[::nstep],<span class="st">'o'</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'$\omega$'</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="exercise-3" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-3">Exercise 3:</h2>
+<p>Now consider nonzero damping (e.g., <span class="math inline">\(q = 0.5\)</span>), zero driving, and small angle. Here, <span class="math inline">\(G \rightarrow 0\)</span> and <span class="math inline">\(\sin \theta \rightarrow \theta\)</span>. The solutions are <span class="math display">\[\begin{eqnarray*}
+\frac{d \theta}{d \tau } &amp;=&amp; \omega \\
+\frac{d \omega}{d \tau} &amp; = &amp; -q \omega - \theta.
+\end{eqnarray*}\]</span> Plot the phase space trajectory. Is the phase space area preserved? This is a dispersive system now.</p>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:6073,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1644553534291,&quot;user&quot;:{&quot;displayName&quot;:&quot;Hunter Barndt&quot;,&quot;photoUrl&quot;:&quot;https://lh3.googleusercontent.com/a-/AOh14GjvpuI1IvPTvNpIs3jWqKnKyttp43sog8zhOkz5=s64&quot;,&quot;userId&quot;:&quot;10580160471144704125&quot;},&quot;user_tz&quot;:540}" data-outputid="09a048d9-95e8-4808-8ffb-6f4c3206eab5" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.002</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> Fsmall</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>[theta,omega,time] <span class="op">=</span> pend_rk4(F,theta_0,omega_0,taufinal,dtau)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>theta <span class="op">=</span> (theta <span class="op">+</span> np.pi)<span class="op">%</span>(<span class="dv">2</span><span class="op">*</span>np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>nstep <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(time)<span class="op">/</span>ncycle)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>ax.plot(theta,omega,<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">1.5</span>, markeredgewidth<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>ax.plot(theta[::nstep],omega[::nstep],<span class="st">'o'</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'$\omega$'</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="exercise-4" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-4">Exercise 4</h2>
+<p>Now consider the non-linear term for zero damping and zero driving, i.e., <span class="math inline">\(q \rightarrow 0\)</span>, <span class="math inline">\(G \rightarrow 0\)</span>, with equations <span class="math display">\[\begin{eqnarray*}
+\frac{d \theta}{d \tau} &amp;=&amp; \omega \\
+\frac{d \omega}{d \tau} &amp;=&amp; - \sin \theta.
+\end{eqnarray*}\]</span> The phase space trajectories are <span class="math inline">\(\frac{1}{2} \omega^2 - \cos \theta = const\)</span>. Proof: <span class="math display">\[\begin{eqnarray*}
+\frac{d \omega}{d \tau} &amp;=&amp; \frac{d \omega}{d \theta}\frac{d \theta}{d \tau} = - \sin \theta\\
+&amp; = &amp; \omega \frac{d \omega}{d \theta} = - \sin \theta \\
+&amp; = &amp; \frac{d}{d \theta} \left[ \frac{1}{2} \omega^2 \right]  =  \frac{d}{d\theta} [\cos \theta]
+\end{eqnarray*}\]</span> Plot several phase space trajectories for different initial conditions.</p>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:8242,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1644553542513,&quot;user&quot;:{&quot;displayName&quot;:&quot;Hunter Barndt&quot;,&quot;photoUrl&quot;:&quot;https://lh3.googleusercontent.com/a-/AOh14GjvpuI1IvPTvNpIs3jWqKnKyttp43sog8zhOkz5=s64&quot;,&quot;userId&quot;:&quot;10580160471144704125&quot;},&quot;user_tz&quot;:540}" data-outputid="5731cfd4-24bd-4b00-da62-97416d62793d" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.002</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>taufinal <span class="op">=</span> <span class="dv">10</span><span class="op">*</span>T</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>ncycle <span class="op">=</span> (<span class="bu">round</span>(taufinal<span class="op">*</span>g_over_L<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi)))  <span class="co">#sample phase space once per cycle.</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> F1</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>theta_0<span class="op">=</span>np.array([<span class="dv">10</span>,<span class="dv">30</span>,<span class="dv">60</span>,<span class="dv">90</span>,<span class="dv">120</span>,<span class="dv">150</span>,<span class="dv">179</span>])<span class="op">*</span>np.pi<span class="op">/</span><span class="dv">180</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(theta_0)):</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    [theta,omega,time] <span class="op">=</span> pend_rk4(F,theta_0[i],omega_0,taufinal,dtau)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> (theta <span class="op">+</span> np.pi)<span class="op">%</span>(<span class="dv">2</span><span class="op">*</span>np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    nstep <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(time)<span class="op">/</span>ncycle)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    ax.plot(theta,omega,<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">1.5</span>, markeredgewidth<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    ax.plot(theta[::nstep],omega[::nstep],<span class="st">'o'</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'$\omega$'</span>)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#plot analytical trajectories</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> np.cos(theta_0)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(k)):</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> np.linspace(<span class="op">-</span>np.pi,np.pi,<span class="dv">500</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    om2 <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>(np.cos(theta) <span class="op">+</span> k[i])</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    wh <span class="op">=</span> np.where(om2 <span class="op">&gt;=</span><span class="dv">0</span>)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    omega <span class="op">=</span> np.sqrt(om2[wh])</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    ax.plot(theta[wh],omega, <span class="st">'r'</span>, theta[wh],<span class="op">-</span>omega, <span class="st">'r'</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">#ax.plot(theta[wh],-omega)</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'$\omega$'</span>)</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="exercise-5" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-5">Exercise 5</h2>
+<p>Repeat exercise 4 with nonzero damping (e.g., <span class="math inline">\(q = 0.5\)</span>). Here the equations are <span class="math display">\[\begin{eqnarray*}
+\frac{d \theta}{d \tau} &amp;=&amp; \omega \\
+\frac{d \omega}{ d \tau} &amp; = &amp; - q \omega - \sin \theta
+\end{eqnarray*}\]</span></p>
+<p>Experiment with different values of <span class="math inline">\(q\)</span>.</p>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:817,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1644553543320,&quot;user&quot;:{&quot;displayName&quot;:&quot;Hunter Barndt&quot;,&quot;photoUrl&quot;:&quot;https://lh3.googleusercontent.com/a-/AOh14GjvpuI1IvPTvNpIs3jWqKnKyttp43sog8zhOkz5=s64&quot;,&quot;userId&quot;:&quot;10580160471144704125&quot;},&quot;user_tz&quot;:540}" data-outputid="2c870ad3-46a6-4382-ebd0-0b58f1274b43" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.02</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> F1</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>theta_0 <span class="op">=</span> <span class="dv">60</span><span class="op">*</span>np.pi<span class="op">/</span><span class="dv">180</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#theta_0=np.array([10,30,60,90,120,150,179])*np.pi/180</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>qarr <span class="op">=</span> np.array([<span class="dv">0</span>,<span class="fl">0.2</span>,<span class="fl">0.5</span>,<span class="fl">1.0</span>])</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(qarr)):</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure()</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    gamma <span class="op">=</span> qarr[i]</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    [theta,omega,time] <span class="op">=</span> pend_rk4(F,theta_0,omega_0,taufinal,dtau)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> (theta <span class="op">+</span> np.pi)<span class="op">%</span>(<span class="dv">2</span><span class="op">*</span>np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    nstep <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(time)<span class="op">/</span>ncycle)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    ax.plot(theta,omega,<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">1.5</span>, markeredgewidth<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    ax.plot(theta[::nstep],omega[::nstep],<span class="st">'o'</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'$\omega$'</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'q = '</span><span class="op">+</span><span class="bu">str</span>(gamma))</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-6-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-6-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="exercise-6" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-6">Exercise 6</h2>
+<p>Repeat exercise 4 with nonzero damping (e.g., <span class="math inline">\(q = 0.5\)</span>), nonzero driving (e.g., <span class="math inline">\(G = 0.5\)</span>), and small angle (mass on a spring). The equations are <span class="math display">\[\begin{eqnarray*}
+\frac{d \theta}{d \tau} &amp;=&amp; \omega \\
+\frac{d \omega}{d \tau} &amp; = &amp; -q \omega - \theta + G \sin \theta \\
+\frac{ d \phi}{d \tau} &amp; = &amp; \Omega_D
+\end{eqnarray*}\]</span></p>
+<p>Experiment with different values of <span class="math inline">\(q\)</span> and <span class="math inline">\(G\)</span>.</p>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:34569,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1644553577887,&quot;user&quot;:{&quot;displayName&quot;:&quot;Hunter Barndt&quot;,&quot;photoUrl&quot;:&quot;https://lh3.googleusercontent.com/a-/AOh14GjvpuI1IvPTvNpIs3jWqKnKyttp43sog8zhOkz5=s64&quot;,&quot;userId&quot;:&quot;10580160471144704125&quot;},&quot;user_tz&quot;:540}" data-outputid="d217799d-e79a-4994-a226-10c9bc909a29" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.002</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> Fsmall</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>theta_0 <span class="op">=</span> <span class="dv">60</span><span class="op">*</span>np.pi<span class="op">/</span><span class="dv">180</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>Garr <span class="op">=</span> np.array([<span class="fl">0.5</span>,<span class="fl">0.9</span>,<span class="fl">1.07</span>,<span class="fl">1.35</span>, <span class="fl">1.47</span>, <span class="fl">1.5</span>])</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>taufinal <span class="op">=</span> <span class="dv">60</span><span class="op">*</span>T</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>ncycle <span class="op">=</span> (<span class="bu">round</span>(taufinal<span class="op">*</span>Omega_d<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi)))  <span class="co">#sample phase space once per cycle.</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(Garr)):</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> Garr[i]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure()</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    [theta,omega,time] <span class="op">=</span> pend_rk4(F,theta_0,omega_0,taufinal,dtau)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> (theta <span class="op">+</span> np.pi)<span class="op">%</span>(<span class="dv">2</span><span class="op">*</span>np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    nstep <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(time)<span class="op">/</span>ncycle)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    ax.plot(theta,omega,<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">1.5</span>, markeredgewidth<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    ax.plot(theta[::nstep],omega[::nstep],<span class="st">'o'</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'$\omega$'</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'G = '</span> <span class="op">+</span> <span class="bu">str</span>(G))</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-7-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-7-output-4.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-7-output-5.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-7-output-6.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="exercise-7" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-7">Exercise 7</h2>
+<p>Finally, investigate the damped, sinusoidally-driven pendulum. Make two plots for each case: 1) phase space and 2) a stroboscopic phase space. Generally, the steady solution settles with a period equal to <span class="math inline">\(\Omega_D\)</span>. You will want to sample the results with the <span class="math inline">\(\Omega_D\)</span> frequency. This corresponds to times <span class="math display">\[\begin{equation*}
+t = \frac{2 \pi}{\Omega_D} n
+\end{equation*}\]</span> where <span class="math inline">\(n\)</span> is the number of completed cycles. For well-behaved systems, this reduces the phase space plot to a single point: the value of (<span class="math inline">\(\theta, \omega\)</span>) that is repeated at each cycle. Chaotic system behave differently, but surprisingly the points gather on preferred points, or <em>strange attractors</em>.</p>
+<p>Run the program for the following parameters (<span class="math inline">\(q = 0.5\)</span>): <span class="math inline">\(G = [0.5, 0.9, 1.07, 1.15, 1.35, 1.47, 1.5]\)</span>. Finally, try G = 1.5 for different values of <span class="math inline">\(q\)</span>.</p>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:14023,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1644553591892,&quot;user&quot;:{&quot;displayName&quot;:&quot;Hunter Barndt&quot;,&quot;photoUrl&quot;:&quot;https://lh3.googleusercontent.com/a-/AOh14GjvpuI1IvPTvNpIs3jWqKnKyttp43sog8zhOkz5=s64&quot;,&quot;userId&quot;:&quot;10580160471144704125&quot;},&quot;user_tz&quot;:540}" data-outputid="2cd1dfe1-1530-442b-eda9-82540a4aaf82" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.002</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>taufinal <span class="op">=</span> <span class="dv">20</span><span class="op">*</span>T</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ncycle <span class="op">=</span> (<span class="bu">round</span>(taufinal<span class="op">*</span>Omega_d<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi)))  <span class="co">#sample phase space once per cycle.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> F1</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>theta_0<span class="op">=</span> <span class="dv">20</span><span class="op">*</span>np.pi<span class="op">/</span><span class="dv">180</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>Garr <span class="op">=</span> np.array([<span class="fl">0.5</span>,<span class="fl">0.9</span>,<span class="fl">1.07</span>,<span class="fl">1.35</span>, <span class="fl">1.47</span>, <span class="fl">1.5</span>])</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(Garr)):</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> Garr[i]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure()</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    [theta,omega,time] <span class="op">=</span> pend_rk4(F,theta_0,omega_0,taufinal,dtau)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> (theta <span class="op">+</span> np.pi)<span class="op">%</span>(<span class="dv">2</span><span class="op">*</span>np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    nstep <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(time)<span class="op">/</span>ncycle)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    ax.plot(theta,omega,<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">1.5</span>, markeredgewidth<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    ax.plot(theta[::nstep],omega[::nstep],<span class="st">'o'</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'$\omega$'</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#ax.set_aspect('equal')</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-8-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-8-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-8-output-4.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-8-output-5.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Delamere_Lab6a_files/figure-html/cell-8-output-6.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="exercise-8-optional" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-8-optional">Exercise 8 (optional)</h2>
+<p>Time permitting, attempt to make a <em>bifurcation diagram</em>. Determine the steady state periods (can be multiple periods) vs.&nbsp;G. Try running for <span class="math inline">\(0.9 &lt; G &lt; 1.2\)</span>.</p>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:2361545,&quot;status&quot;:&quot;error&quot;,&quot;timestamp&quot;:1644555953419,&quot;user&quot;:{&quot;displayName&quot;:&quot;Hunter Barndt&quot;,&quot;photoUrl&quot;:&quot;https://lh3.googleusercontent.com/a-/AOh14GjvpuI1IvPTvNpIs3jWqKnKyttp43sog8zhOkz5=s64&quot;,&quot;userId&quot;:&quot;10580160471144704125&quot;},&quot;user_tz&quot;:540}" data-outputid="65953e23-f4d8-48b4-9014-54cd5c65209c" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>G0 <span class="op">=</span> <span class="fl">0.9</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>G1 <span class="op">=</span> <span class="fl">1.2</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>dG <span class="op">=</span> <span class="fl">0.0001</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>Garr <span class="op">=</span> np.arange(G0,G1,dG)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> <span class="fl">0.002</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>taufinal <span class="op">=</span> <span class="dv">20</span><span class="op">*</span>T</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">6</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>Garray <span class="op">=</span> []</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>Tarr<span class="op">=</span>[]</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> F1</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(Garr)):</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i,<span class="bu">len</span>(Garr))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> Garr[i]</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    [theta,omega,time] <span class="op">=</span> pend_rk4(F,theta_0,omega_0,taufinal,dtau)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    theta <span class="op">=</span> (theta <span class="op">+</span> np.pi)<span class="op">%</span>(<span class="dv">2</span><span class="op">*</span>np.pi) <span class="op">-</span> np.pi</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> time[::nstep]</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    th <span class="op">=</span> theta[::nstep]</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>):</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        Garray.append(Garr[i])</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>        Tarr.append(th[<span class="op">-</span><span class="dv">5</span><span class="op">+</span>j])</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(G,th)</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>plt.plot(Garray,Tarr,<span class="st">'.'</span>,markersize<span class="op">=</span><span class="dv">1</span>)       </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'G'</span>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'$</span><span class="ch">\\</span><span class="st">theta$'</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.savefig('bifurcation.pdf')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0 3000
+1 3000
+2 3000
+3 3000
+4 3000
+5 3000
+6 3000
+7 3000
+8 3000
+9 3000
+10 3000
+11 3000
+12 3000
+13 3000
+14 3000
+15 3000
+16 3000
+17 3000
+18 3000
+19 3000
+20 3000
+21 3000
+22 3000
+23 3000
+24 3000
+25 3000
+26 3000
+27 3000
+28 3000
+29 3000
+30 3000
+31 3000
+32 3000
+33 3000
+34 3000
+35 3000
+36 3000
+37 3000
+38 3000
+39 3000
+40 3000
+41 3000
+42 3000
+43 3000
+44 3000
+45 3000
+46 3000
+47 3000
+48 3000
+49 3000
+50 3000
+51 3000
+52 3000
+53 3000
+54 3000
+55 3000
+56 3000
+57 3000
+58 3000
+59 3000
+60 3000
+61 3000
+62 3000
+63 3000
+64 3000
+65 3000
+66 3000
+67 3000
+68 3000
+69 3000
+70 3000
+71 3000
+72 3000
+73 3000
+74 3000
+75 3000
+76 3000
+77 3000
+78 3000
+79 3000
+80 3000
+81 3000
+82 3000
+83 3000
+84 3000
+85 3000
+86 3000
+87 3000
+88 3000
+89 3000
+90 3000
+91 3000
+92 3000
+93 3000
+94 3000
+95 3000
+96 3000
+97 3000
+98 3000
+99 3000
+100 3000
+101 3000
+102 3000
+103 3000
+104 3000
+105 3000
+106 3000
+107 3000
+108 3000
+109 3000
+110 3000
+111 3000
+112 3000
+113 3000
+114 3000
+115 3000
+116 3000
+117 3000
+118 3000
+119 3000
+120 3000
+121 3000
+122 3000
+123 3000
+124 3000
+125 3000
+126 3000
+127 3000
+128 3000
+129 3000
+130 3000
+131 3000
+132 3000
+133 3000
+134 3000
+135 3000
+136 3000
+137 3000
+138 3000
+139 3000
+140 3000
+141 3000
+142 3000
+143 3000
+144 3000
+145 3000
+146 3000
+147 3000
+148 3000
+149 3000
+150 3000
+151 3000
+152 3000
+153 3000
+154 3000
+155 3000
+156 3000
+157 3000
+158 3000
+159 3000
+160 3000
+161 3000
+162 3000
+163 3000
+164 3000
+165 3000
+166 3000
+167 3000
+168 3000
+169 3000
+170 3000
+171 3000
+172 3000
+173 3000
+174 3000
+175 3000
+176 3000
+177 3000
+178 3000
+179 3000
+180 3000
+181 3000
+182 3000
+183 3000
+184 3000
+185 3000
+186 3000
+187 3000
+188 3000
+189 3000
+190 3000
+191 3000
+192 3000
+193 3000
+194 3000
+195 3000
+196 3000
+197 3000
+198 3000
+199 3000
+200 3000
+201 3000
+202 3000
+203 3000
+204 3000
+205 3000
+206 3000
+207 3000
+208 3000
+209 3000
+210 3000
+211 3000
+212 3000
+213 3000
+214 3000
+215 3000
+216 3000
+217 3000
+218 3000
+219 3000
+220 3000
+221 3000
+222 3000
+223 3000
+224 3000
+225 3000
+226 3000
+227 3000
+228 3000
+229 3000
+230 3000
+231 3000
+232 3000
+233 3000
+234 3000
+235 3000
+236 3000
+237 3000
+238 3000
+239 3000
+240 3000
+241 3000
+242 3000
+243 3000
+244 3000
+245 3000
+246 3000
+247 3000
+248 3000
+249 3000
+250 3000
+251 3000
+252 3000
+253 3000
+254 3000
+255 3000
+256 3000
+257 3000
+258 3000
+259 3000
+260 3000
+261 3000
+262 3000
+263 3000
+264 3000
+265 3000
+266 3000
+267 3000
+268 3000
+269 3000
+270 3000
+271 3000
+272 3000
+273 3000
+274 3000
+275 3000
+276 3000
+277 3000
+278 3000
+279 3000
+280 3000
+281 3000
+282 3000
+283 3000
+284 3000
+285 3000
+286 3000
+287 3000
+288 3000
+289 3000
+290 3000
+291 3000
+292 3000
+293 3000
+294 3000
+295 3000
+296 3000
+297 3000
+298 3000
+299 3000
+300 3000
+301 3000
+302 3000
+303 3000
+304 3000
+305 3000
+306 3000
+307 3000
+308 3000
+309 3000
+310 3000
+311 3000
+312 3000
+313 3000
+314 3000
+315 3000
+316 3000
+317 3000
+318 3000
+319 3000
+320 3000
+321 3000
+322 3000
+323 3000
+324 3000
+325 3000
+326 3000
+327 3000
+328 3000
+329 3000
+330 3000
+331 3000
+332 3000
+333 3000
+334 3000
+335 3000
+336 3000
+337 3000
+338 3000
+339 3000
+340 3000
+341 3000
+342 3000
+343 3000
+344 3000
+345 3000
+346 3000
+347 3000
+348 3000
+349 3000
+350 3000
+351 3000
+352 3000
+353 3000
+354 3000
+355 3000
+356 3000
+357 3000
+358 3000
+359 3000
+360 3000
+361 3000
+362 3000
+363 3000
+364 3000
+365 3000
+366 3000
+367 3000
+368 3000
+369 3000
+370 3000
+371 3000
+372 3000
+373 3000
+374 3000
+375 3000
+376 3000
+377 3000
+378 3000
+379 3000
+380 3000
+381 3000
+382 3000
+383 3000
+384 3000
+385 3000
+386 3000
+387 3000
+388 3000
+389 3000
+390 3000
+391 3000
+392 3000
+393 3000
+394 3000
+395 3000
+396 3000
+397 3000
+398 3000
+399 3000
+400 3000
+401 3000
+402 3000
+403 3000
+404 3000
+405 3000
+406 3000
+407 3000
+408 3000
+409 3000
+410 3000
+411 3000
+412 3000
+413 3000
+414 3000
+415 3000
+416 3000
+417 3000
+418 3000
+419 3000
+420 3000
+421 3000
+422 3000
+423 3000
+424 3000
+425 3000
+426 3000
+427 3000
+428 3000
+429 3000
+430 3000
+431 3000
+432 3000
+433 3000
+434 3000
+435 3000
+436 3000
+437 3000
+438 3000
+439 3000
+440 3000
+441 3000
+442 3000
+443 3000
+444 3000
+445 3000
+446 3000
+447 3000
+448 3000
+449 3000
+450 3000
+451 3000
+452 3000
+453 3000
+454 3000
+455 3000
+456 3000
+457 3000
+458 3000
+459 3000
+460 3000
+461 3000
+462 3000
+463 3000
+464 3000
+465 3000
+466 3000
+467 3000
+468 3000
+469 3000
+470 3000
+471 3000
+472 3000
+473 3000
+474 3000
+475 3000
+476 3000
+477 3000
+478 3000
+479 3000
+480 3000
+481 3000
+482 3000
+483 3000
+484 3000
+485 3000
+486 3000
+487 3000
+488 3000
+489 3000
+490 3000
+491 3000
+492 3000
+493 3000
+494 3000
+495 3000
+496 3000
+497 3000
+498 3000
+499 3000
+500 3000
+501 3000
+502 3000
+503 3000
+504 3000
+505 3000
+506 3000
+507 3000
+508 3000
+509 3000
+510 3000
+511 3000
+512 3000
+513 3000
+514 3000
+515 3000
+516 3000
+517 3000
+518 3000
+519 3000
+520 3000
+521 3000
+522 3000
+523 3000
+524 3000
+525 3000
+526 3000
+527 3000
+528 3000
+529 3000
+530 3000
+531 3000
+532 3000
+533 3000
+534 3000
+535 3000
+536 3000
+537 3000
+538 3000
+539 3000
+540 3000
+541 3000
+542 3000
+543 3000
+544 3000
+545 3000
+546 3000
+547 3000
+548 3000
+549 3000
+550 3000
+551 3000
+552 3000
+553 3000
+554 3000
+555 3000
+556 3000
+557 3000
+558 3000
+559 3000
+560 3000
+561 3000
+562 3000
+563 3000
+564 3000
+565 3000
+566 3000
+567 3000
+568 3000
+569 3000
+570 3000
+571 3000
+572 3000
+573 3000
+574 3000
+575 3000
+576 3000
+577 3000
+578 3000
+579 3000
+580 3000
+581 3000
+582 3000
+583 3000
+584 3000
+585 3000
+586 3000
+587 3000
+588 3000
+589 3000
+590 3000
+591 3000
+592 3000
+593 3000
+594 3000
+595 3000
+596 3000
+597 3000
+598 3000
+599 3000
+600 3000
+601 3000
+602 3000
+603 3000
+604 3000
+605 3000
+606 3000
+607 3000
+608 3000
+609 3000
+610 3000
+611 3000
+612 3000
+613 3000
+614 3000
+615 3000
+616 3000
+617 3000
+618 3000
+619 3000
+620 3000
+621 3000
+622 3000
+623 3000
+624 3000
+625 3000
+626 3000
+627 3000
+628 3000
+629 3000
+630 3000
+631 3000
+632 3000
+633 3000
+634 3000
+635 3000
+636 3000
+637 3000
+638 3000
+639 3000
+640 3000
+641 3000
+642 3000
+643 3000
+644 3000
+645 3000
+646 3000
+647 3000
+648 3000
+649 3000
+650 3000
+651 3000
+652 3000
+653 3000
+654 3000
+655 3000
+656 3000
+657 3000
+658 3000
+659 3000
+660 3000
+661 3000
+662 3000
+663 3000
+664 3000
+665 3000
+666 3000
+667 3000
+668 3000
+669 3000
+670 3000
+671 3000
+672 3000
+673 3000
+674 3000
+675 3000
+676 3000
+677 3000
+678 3000
+679 3000
+680 3000
+681 3000
+682 3000
+683 3000
+684 3000
+685 3000
+686 3000
+687 3000
+688 3000
+689 3000
+690 3000
+691 3000
+692 3000
+693 3000
+694 3000
+695 3000
+696 3000
+697 3000
+698 3000
+699 3000
+700 3000
+701 3000
+702 3000
+703 3000
+704 3000
+705 3000
+706 3000
+707 3000
+708 3000
+709 3000
+710 3000
+711 3000
+712 3000
+713 3000
+714 3000
+715 3000
+716 3000
+717 3000
+718 3000
+719 3000
+720 3000
+721 3000
+722 3000
+723 3000
+724 3000
+725 3000
+726 3000
+727 3000
+728 3000
+729 3000
+730 3000
+731 3000
+732 3000
+733 3000
+734 3000
+735 3000
+736 3000
+737 3000
+738 3000
+739 3000
+740 3000
+741 3000
+742 3000
+743 3000
+744 3000
+745 3000
+746 3000
+747 3000
+748 3000
+749 3000
+750 3000
+751 3000
+752 3000
+753 3000
+754 3000
+755 3000
+756 3000
+757 3000
+758 3000
+759 3000
+760 3000
+761 3000
+762 3000
+763 3000
+764 3000
+765 3000
+766 3000
+767 3000
+768 3000
+769 3000
+770 3000
+771 3000
+772 3000
+773 3000
+774 3000
+775 3000
+776 3000
+777 3000
+778 3000
+779 3000
+780 3000
+781 3000
+782 3000
+783 3000
+784 3000
+785 3000
+786 3000
+787 3000
+788 3000
+789 3000
+790 3000
+791 3000
+792 3000
+793 3000
+794 3000
+795 3000
+796 3000
+797 3000
+798 3000
+799 3000
+800 3000
+801 3000
+802 3000
+803 3000
+804 3000
+805 3000
+806 3000
+807 3000
+808 3000
+809 3000
+810 3000
+811 3000
+812 3000
+813 3000
+814 3000
+815 3000
+816 3000
+817 3000
+818 3000
+819 3000
+820 3000
+821 3000
+822 3000
+823 3000
+824 3000
+825 3000
+826 3000
+827 3000
+828 3000
+829 3000
+830 3000
+831 3000
+832 3000
+833 3000
+834 3000
+835 3000
+836 3000
+837 3000
+838 3000
+839 3000
+840 3000
+841 3000
+842 3000
+843 3000
+844 3000
+845 3000
+846 3000
+847 3000
+848 3000
+849 3000
+850 3000
+851 3000
+852 3000
+853 3000
+854 3000
+855 3000
+856 3000
+857 3000
+858 3000
+859 3000
+860 3000
+861 3000
+862 3000
+863 3000
+864 3000
+865 3000
+866 3000
+867 3000
+868 3000
+869 3000
+870 3000
+871 3000
+872 3000
+873 3000
+874 3000
+875 3000
+876 3000
+877 3000
+878 3000
+879 3000
+880 3000
+881 3000
+882 3000
+883 3000
+884 3000
+885 3000
+886 3000
+887 3000
+888 3000
+889 3000
+890 3000
+891 3000
+892 3000
+893 3000
+894 3000
+895 3000
+896 3000
+897 3000
+898 3000
+899 3000
+900 3000
+901 3000
+902 3000
+903 3000
+904 3000
+905 3000
+906 3000
+907 3000
+908 3000
+909 3000
+910 3000
+911 3000
+912 3000
+913 3000
+914 3000
+915 3000
+916 3000
+917 3000
+918 3000
+919 3000
+920 3000
+921 3000
+922 3000
+923 3000
+924 3000
+925 3000
+926 3000
+927 3000
+928 3000
+929 3000
+930 3000
+931 3000
+932 3000
+933 3000
+934 3000
+935 3000
+936 3000
+937 3000
+938 3000
+939 3000
+940 3000
+941 3000
+942 3000
+943 3000
+944 3000
+945 3000
+946 3000
+947 3000
+948 3000
+949 3000
+950 3000
+951 3000
+952 3000
+953 3000
+954 3000
+955 3000
+956 3000
+957 3000
+958 3000
+959 3000
+960 3000
+961 3000
+962 3000
+963 3000
+964 3000
+965 3000
+966 3000
+967 3000
+968 3000
+969 3000
+970 3000
+971 3000
+972 3000
+973 3000
+974 3000
+975 3000
+976 3000
+977 3000
+978 3000
+979 3000
+980 3000
+981 3000
+982 3000
+983 3000
+984 3000
+985 3000
+986 3000
+987 3000
+988 3000
+989 3000
+990 3000
+991 3000
+992 3000
+993 3000
+994 3000
+995 3000
+996 3000
+997 3000
+998 3000
+999 3000
+1000 3000
+1001 3000
+1002 3000
+1003 3000
+1004 3000
+1005 3000
+1006 3000
+1007 3000
+1008 3000
+1009 3000
+1010 3000
+1011 3000
+1012 3000
+1013 3000
+1014 3000
+1015 3000
+1016 3000
+1017 3000
+1018 3000
+1019 3000
+1020 3000
+1021 3000
+1022 3000
+1023 3000
+1024 3000
+1025 3000
+1026 3000
+1027 3000
+1028 3000
+1029 3000
+1030 3000
+1031 3000
+1032 3000
+1033 3000
+1034 3000
+1035 3000
+1036 3000
+1037 3000
+1038 3000
+1039 3000
+1040 3000
+1041 3000
+1042 3000
+1043 3000
+1044 3000
+1045 3000
+1046 3000
+1047 3000
+1048 3000
+1049 3000
+1050 3000
+1051 3000
+1052 3000
+1053 3000
+1054 3000
+1055 3000
+1056 3000
+1057 3000
+1058 3000
+1059 3000
+1060 3000
+1061 3000
+1062 3000
+1063 3000
+1064 3000
+1065 3000
+1066 3000
+1067 3000
+1068 3000
+1069 3000
+1070 3000
+1071 3000
+1072 3000
+1073 3000
+1074 3000
+1075 3000
+1076 3000
+1077 3000
+1078 3000
+1079 3000
+1080 3000
+1081 3000
+1082 3000
+1083 3000
+1084 3000
+1085 3000</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>KeyboardInterrupt: ignored</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 432x288 with 0 Axes&gt;</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
