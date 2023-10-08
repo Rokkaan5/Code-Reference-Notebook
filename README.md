@@ -4,8 +4,8 @@ Jasmine's "notebook" of code examples, reference, etc.
 # This semseter's pages (Fall 2023)
 Quick access links (can delete this section after semester is over)
 
-- [Statistical Methods & Applications II](CUBoulder/Stats2/Stats2.md)
-- [Neural Networks & Deep Learning](CUBoulder/NeuralNetworks/NeuralNets.md)
+- [Statistical Methods & Applications II](CU-Boulder/Stats2/Stats2.md)
+- [Neural Networks & Deep Learning](CU-Boulder/NeuralNetworks/NeuralNets.md)
 
 # College Courses
 
