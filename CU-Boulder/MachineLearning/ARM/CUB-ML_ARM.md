@@ -4,7 +4,7 @@ title: "CUB-ML ARM"
 permalink: /CUB/ML/ARM
 ---
 
-# [CU Boulder: Machine Learning](../CUB-ML.md) - Association Rule Mining (ARM)
+# [CU Boulder](../../../CUB.md): [Machine Learning](../CUB-ML.md) - Association Rule Mining (ARM)
 Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/)
 
 - Reference: Professor Ami Gates, Dept. Applied Math, Data Science, University of Colorado
