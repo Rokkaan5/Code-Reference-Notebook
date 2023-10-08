@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data Transformation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="DataTransformation_files/libs/clipboard/clipboard.min.js"></script>
+<script src="DataTransformation_files/libs/quarto-html/quarto.js"></script>
+<script src="DataTransformation_files/libs/quarto-html/popper.min.js"></script>
+<script src="DataTransformation_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="DataTransformation_files/libs/quarto-html/anchor.min.js"></script>
+<link href="DataTransformation_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="DataTransformation_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="DataTransformation_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="DataTransformation_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="DataTransformation_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-transformation" id="toc-data-transformation" class="nav-link active" data-scroll-target="#data-transformation">Data Transformation</a>
+  <ul class="collapse">
+  <li><a href="#data-smoothing" id="toc-data-smoothing" class="nav-link" data-scroll-target="#data-smoothing">Data Smoothing</a></li>
+  <li><a href="#discretization" id="toc-discretization" class="nav-link" data-scroll-target="#discretization">Discretization</a></li>
+  <li><a href="#normalization" id="toc-normalization" class="nav-link" data-scroll-target="#normalization">Normalization</a></li>
+  <li><a href="#congratulations" id="toc-congratulations" class="nav-link" data-scroll-target="#congratulations">Congratulations!</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Data Transformation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="data-transformation" class="level1">
+<h1>Data Transformation</h1>
+<p>Data transformation is the process of changing the data values, format or the structure. In context of Statistics, it also means to have a Mathematical expression applied to each value in the data. In the context of Data Engineering, it means to change data from one form to another in the ETL process - Extract Transform Load.</p>
+<p>Data Transformation involves multiple steps and methods described as below.</p>
+<section id="data-smoothing" class="level3">
+<h3 class="anchored" data-anchor-id="data-smoothing">Data Smoothing</h3>
+<p>Data smoothing is the process of eliminating outliers from datasets to identify the patterns. The outliers are sometimes referred to as noise and those are eliminated using certain algorithms. The use of data smoothing can help identify better patterns such as forecasting in share market.</p>
+<p>There are various methods like simple moving average, random method, random walk, simple exponential, and exponential moving average and binning.</p>
+<p>Refer https://www.geeksforgeeks.org/python-binning-method-for-data-smoothing for various binning methods for data smoothing.</p>
+</section>
+<section id="discretization" class="level3">
+<h3 class="anchored" data-anchor-id="discretization">Discretization</h3>
+<p>Discretization is the process of transforming continuous variables, functions and models into a discrete form. This can be achieved b creating bins which is a set of contiguous Intervals.</p>
+<p>Consider the problem statement of BMI Calculation. A particular group can be considered as healthy, Overweight, Underweight or Obese based on a range rather than just going by the number. Every BMI value is a continuous variable but when grouped, it is binned that makes much easier to understand.</p>
+<p>Discretization also helps when a continuous variable needs to be as part of the Input to algorithms such Decision Trees or Random Forest. It is mostly required during the feature Engineering i.e checking if a particular attribute is having an impact on the output variable.</p>
+<p>Not to forget, Discretization is used in Data Smoothing as explained above thus removing statistical noise from the data.</p>
+<p>Different Discretization Methods</p>
+<ul>
+<li>Equal-Width</li>
+<li>Equal-Frequency</li>
+<li>K-Means</li>
+</ul>
+<p>Equal Width</p>
+<p>As the name suggests separating the values into ‘N’ number of bins, each having the same width is the Equal-Width Discretization. Formula</p>
+<p>Width = (maximum value - minimum value) / N * where N is the number of bins or intervals.</p>
+<div class="cell" data-cell_id="ed511f3807bf48a7856a862265dcebd5" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:73}" data-deepnote_cell_type="code" data-execution_millis="1547" data-execution_start="1675018603445" data-source_hash="b4f2082" data-tags="[]" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> KBinsDiscretizer</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'/work/data/House_Rent_Dataset.csv'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>discretizer <span class="op">=</span> KBinsDiscretizer(n_bins<span class="op">=</span><span class="dv">10</span>, encode<span class="op">=</span><span class="st">'ordinal'</span>, strategy<span class="op">=</span><span class="st">'quantile'</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>rent <span class="op">=</span> df[<span class="st">'Rent'</span>].values.reshape(<span class="dv">4746</span>,<span class="dv">1</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>discretizer.fit(rent)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>Xt <span class="op">=</span> discretizer.transform(rent)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Rent_Group'</span>] <span class="op">=</span> Xt</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Posted On</th>
+<th data-quarto-table-cell-role="th">BHK</th>
+<th data-quarto-table-cell-role="th">Rent</th>
+<th data-quarto-table-cell-role="th">Size</th>
+<th data-quarto-table-cell-role="th">Floor</th>
+<th data-quarto-table-cell-role="th">Area Type</th>
+<th data-quarto-table-cell-role="th">Area Locality</th>
+<th data-quarto-table-cell-role="th">City</th>
+<th data-quarto-table-cell-role="th">Furnishing Status</th>
+<th data-quarto-table-cell-role="th">Tenant Preferred</th>
+<th data-quarto-table-cell-role="th">Bathroom</th>
+<th data-quarto-table-cell-role="th">Point of Contact</th>
+<th data-quarto-table-cell-role="th">Rent_Group</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2022-05-18</td>
+<td>2</td>
+<td>10000</td>
+<td>1100</td>
+<td>Ground out of 2</td>
+<td>Super Area</td>
+<td>Bandel</td>
+<td>Kolkata</td>
+<td>Unfurnished</td>
+<td>Bachelors/Family</td>
+<td>2</td>
+<td>Contact Owner</td>
+<td>2.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2022-05-13</td>
+<td>2</td>
+<td>20000</td>
+<td>800</td>
+<td>1 out of 3</td>
+<td>Super Area</td>
+<td>Phool Bagan, Kankurgachi</td>
+<td>Kolkata</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>6.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2022-05-16</td>
+<td>2</td>
+<td>17000</td>
+<td>1000</td>
+<td>1 out of 3</td>
+<td>Super Area</td>
+<td>Salt Lake City Sector 2</td>
+<td>Kolkata</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>5.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2022-07-04</td>
+<td>2</td>
+<td>10000</td>
+<td>800</td>
+<td>1 out of 2</td>
+<td>Super Area</td>
+<td>Dumdum Park</td>
+<td>Kolkata</td>
+<td>Unfurnished</td>
+<td>Bachelors/Family</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>2.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2022-05-09</td>
+<td>2</td>
+<td>7500</td>
+<td>850</td>
+<td>1 out of 2</td>
+<td>Carpet Area</td>
+<td>South Dum Dum</td>
+<td>Kolkata</td>
+<td>Unfurnished</td>
+<td>Bachelors</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4741</td>
+<td>2022-05-18</td>
+<td>2</td>
+<td>15000</td>
+<td>1000</td>
+<td>3 out of 5</td>
+<td>Carpet Area</td>
+<td>Bandam Kommu</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>2</td>
+<td>Contact Owner</td>
+<td>4.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4742</td>
+<td>2022-05-15</td>
+<td>3</td>
+<td>29000</td>
+<td>2000</td>
+<td>1 out of 4</td>
+<td>Super Area</td>
+<td>Manikonda, Hyderabad</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>3</td>
+<td>Contact Owner</td>
+<td>7.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4743</td>
+<td>2022-07-10</td>
+<td>3</td>
+<td>35000</td>
+<td>1750</td>
+<td>3 out of 5</td>
+<td>Carpet Area</td>
+<td>Himayath Nagar, NH 7</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>3</td>
+<td>Contact Agent</td>
+<td>7.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4744</td>
+<td>2022-07-06</td>
+<td>3</td>
+<td>45000</td>
+<td>1500</td>
+<td>23 out of 34</td>
+<td>Carpet Area</td>
+<td>Gachibowli</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Family</td>
+<td>2</td>
+<td>Contact Agent</td>
+<td>8.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4745</td>
+<td>2022-05-04</td>
+<td>2</td>
+<td>15000</td>
+<td>1000</td>
+<td>4 out of 5</td>
+<td>Carpet Area</td>
+<td>Suchitra Circle</td>
+<td>Hyderabad</td>
+<td>Unfurnished</td>
+<td>Bachelors</td>
+<td>2</td>
+<td>Contact Owner</td>
+<td>4.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>4746 rows × 13 columns</p>
+</div>
+</div>
+</div>
+<p>Equal Width is able to handle outliers. However it doesn’t improve the value spread</p>
+<p>Equal-Frequency Discretization</p>
+<p>As the name suggests separating the values into ‘N’ number of bins, each having the same amount of observations is the Equal-Frequency Discretization.</p>
+<div class="cell" data-cell_id="f06b9046233841ac9fcd732ba01410a2" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:88}" data-deepnote_cell_type="code" data-execution_millis="121" data-execution_start="1675018604996" data-source_hash="79f50572" data-tags="[]" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> KBinsDiscretizer</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>discretizer <span class="op">=</span> KBinsDiscretizer(n_bins<span class="op">=</span><span class="dv">10</span>, encode<span class="op">=</span><span class="st">'ordinal'</span>, strategy<span class="op">=</span><span class="st">'quantile'</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>rent <span class="op">=</span> df[<span class="st">'Rent'</span>].values.reshape(<span class="dv">4746</span>,<span class="dv">1</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>discretizer.fit(rent)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>Xt <span class="op">=</span> discretizer.transform(rent)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Rent_Group_Eq_Freq'</span>] <span class="op">=</span> Xt</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Posted On</th>
+<th data-quarto-table-cell-role="th">BHK</th>
+<th data-quarto-table-cell-role="th">Rent</th>
+<th data-quarto-table-cell-role="th">Size</th>
+<th data-quarto-table-cell-role="th">Floor</th>
+<th data-quarto-table-cell-role="th">Area Type</th>
+<th data-quarto-table-cell-role="th">Area Locality</th>
+<th data-quarto-table-cell-role="th">City</th>
+<th data-quarto-table-cell-role="th">Furnishing Status</th>
+<th data-quarto-table-cell-role="th">Tenant Preferred</th>
+<th data-quarto-table-cell-role="th">Bathroom</th>
+<th data-quarto-table-cell-role="th">Point of Contact</th>
+<th data-quarto-table-cell-role="th">Rent_Group</th>
+<th data-quarto-table-cell-role="th">Rent_Group_Eq_Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2022-05-18</td>
+<td>2</td>
+<td>10000</td>
+<td>1100</td>
+<td>Ground out of 2</td>
+<td>Super Area</td>
+<td>Bandel</td>
+<td>Kolkata</td>
+<td>Unfurnished</td>
+<td>Bachelors/Family</td>
+<td>2</td>
+<td>Contact Owner</td>
+<td>2.0</td>
+<td>2.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2022-05-13</td>
+<td>2</td>
+<td>20000</td>
+<td>800</td>
+<td>1 out of 3</td>
+<td>Super Area</td>
+<td>Phool Bagan, Kankurgachi</td>
+<td>Kolkata</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>6.0</td>
+<td>6.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2022-05-16</td>
+<td>2</td>
+<td>17000</td>
+<td>1000</td>
+<td>1 out of 3</td>
+<td>Super Area</td>
+<td>Salt Lake City Sector 2</td>
+<td>Kolkata</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>5.0</td>
+<td>5.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2022-07-04</td>
+<td>2</td>
+<td>10000</td>
+<td>800</td>
+<td>1 out of 2</td>
+<td>Super Area</td>
+<td>Dumdum Park</td>
+<td>Kolkata</td>
+<td>Unfurnished</td>
+<td>Bachelors/Family</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>2.0</td>
+<td>2.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2022-05-09</td>
+<td>2</td>
+<td>7500</td>
+<td>850</td>
+<td>1 out of 2</td>
+<td>Carpet Area</td>
+<td>South Dum Dum</td>
+<td>Kolkata</td>
+<td>Unfurnished</td>
+<td>Bachelors</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4741</td>
+<td>2022-05-18</td>
+<td>2</td>
+<td>15000</td>
+<td>1000</td>
+<td>3 out of 5</td>
+<td>Carpet Area</td>
+<td>Bandam Kommu</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>2</td>
+<td>Contact Owner</td>
+<td>4.0</td>
+<td>4.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4742</td>
+<td>2022-05-15</td>
+<td>3</td>
+<td>29000</td>
+<td>2000</td>
+<td>1 out of 4</td>
+<td>Super Area</td>
+<td>Manikonda, Hyderabad</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>3</td>
+<td>Contact Owner</td>
+<td>7.0</td>
+<td>7.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4743</td>
+<td>2022-07-10</td>
+<td>3</td>
+<td>35000</td>
+<td>1750</td>
+<td>3 out of 5</td>
+<td>Carpet Area</td>
+<td>Himayath Nagar, NH 7</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>3</td>
+<td>Contact Agent</td>
+<td>7.0</td>
+<td>7.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4744</td>
+<td>2022-07-06</td>
+<td>3</td>
+<td>45000</td>
+<td>1500</td>
+<td>23 out of 34</td>
+<td>Carpet Area</td>
+<td>Gachibowli</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Family</td>
+<td>2</td>
+<td>Contact Agent</td>
+<td>8.0</td>
+<td>8.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4745</td>
+<td>2022-05-04</td>
+<td>2</td>
+<td>15000</td>
+<td>1000</td>
+<td>4 out of 5</td>
+<td>Carpet Area</td>
+<td>Suchitra Circle</td>
+<td>Hyderabad</td>
+<td>Unfurnished</td>
+<td>Bachelors</td>
+<td>2</td>
+<td>Contact Owner</td>
+<td>4.0</td>
+<td>4.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>4746 rows × 14 columns</p>
+</div>
+</div>
+</div>
+<p>Equal Frequency is able to handle outliers. However it doesn’t improve the value spread</p>
+<p>K-Means Discretization</p>
+<p>Let’s now apply K-Means clustering to the continuous variable to divide into groups or clusters.</p>
+<div class="cell" data-cell_id="d4aa3e60c2c44a68b53ed3d02d844419" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:103}" data-deepnote_cell_type="code" data-execution_millis="499" data-execution_start="1675018605161" data-source_hash="2b086a5b" data-tags="[]" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> KBinsDiscretizer</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>discretizer <span class="op">=</span> KBinsDiscretizer(n_bins<span class="op">=</span><span class="dv">10</span>, encode<span class="op">=</span><span class="st">'ordinal'</span>, strategy<span class="op">=</span><span class="st">'kmeans'</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>rent <span class="op">=</span> df[<span class="st">'Rent'</span>].values.reshape(<span class="dv">4746</span>,<span class="dv">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>discretizer.fit(rent)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>Xt <span class="op">=</span> discretizer.transform(rent)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Rent_Group_KMeans'</span>] <span class="op">=</span> Xt</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Posted On</th>
+<th data-quarto-table-cell-role="th">BHK</th>
+<th data-quarto-table-cell-role="th">Rent</th>
+<th data-quarto-table-cell-role="th">Size</th>
+<th data-quarto-table-cell-role="th">Floor</th>
+<th data-quarto-table-cell-role="th">Area Type</th>
+<th data-quarto-table-cell-role="th">Area Locality</th>
+<th data-quarto-table-cell-role="th">City</th>
+<th data-quarto-table-cell-role="th">Furnishing Status</th>
+<th data-quarto-table-cell-role="th">Tenant Preferred</th>
+<th data-quarto-table-cell-role="th">Bathroom</th>
+<th data-quarto-table-cell-role="th">Point of Contact</th>
+<th data-quarto-table-cell-role="th">Rent_Group</th>
+<th data-quarto-table-cell-role="th">Rent_Group_Eq_Freq</th>
+<th data-quarto-table-cell-role="th">Rent_Group_KMeans</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2022-05-18</td>
+<td>2</td>
+<td>10000</td>
+<td>1100</td>
+<td>Ground out of 2</td>
+<td>Super Area</td>
+<td>Bandel</td>
+<td>Kolkata</td>
+<td>Unfurnished</td>
+<td>Bachelors/Family</td>
+<td>2</td>
+<td>Contact Owner</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2022-05-13</td>
+<td>2</td>
+<td>20000</td>
+<td>800</td>
+<td>1 out of 3</td>
+<td>Super Area</td>
+<td>Phool Bagan, Kankurgachi</td>
+<td>Kolkata</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>6.0</td>
+<td>6.0</td>
+<td>2.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2022-05-16</td>
+<td>2</td>
+<td>17000</td>
+<td>1000</td>
+<td>1 out of 3</td>
+<td>Super Area</td>
+<td>Salt Lake City Sector 2</td>
+<td>Kolkata</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>5.0</td>
+<td>5.0</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2022-07-04</td>
+<td>2</td>
+<td>10000</td>
+<td>800</td>
+<td>1 out of 2</td>
+<td>Super Area</td>
+<td>Dumdum Park</td>
+<td>Kolkata</td>
+<td>Unfurnished</td>
+<td>Bachelors/Family</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2022-05-09</td>
+<td>2</td>
+<td>7500</td>
+<td>850</td>
+<td>1 out of 2</td>
+<td>Carpet Area</td>
+<td>South Dum Dum</td>
+<td>Kolkata</td>
+<td>Unfurnished</td>
+<td>Bachelors</td>
+<td>1</td>
+<td>Contact Owner</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4741</td>
+<td>2022-05-18</td>
+<td>2</td>
+<td>15000</td>
+<td>1000</td>
+<td>3 out of 5</td>
+<td>Carpet Area</td>
+<td>Bandam Kommu</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>2</td>
+<td>Contact Owner</td>
+<td>4.0</td>
+<td>4.0</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4742</td>
+<td>2022-05-15</td>
+<td>3</td>
+<td>29000</td>
+<td>2000</td>
+<td>1 out of 4</td>
+<td>Super Area</td>
+<td>Manikonda, Hyderabad</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>3</td>
+<td>Contact Owner</td>
+<td>7.0</td>
+<td>7.0</td>
+<td>2.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4743</td>
+<td>2022-07-10</td>
+<td>3</td>
+<td>35000</td>
+<td>1750</td>
+<td>3 out of 5</td>
+<td>Carpet Area</td>
+<td>Himayath Nagar, NH 7</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Bachelors/Family</td>
+<td>3</td>
+<td>Contact Agent</td>
+<td>7.0</td>
+<td>7.0</td>
+<td>2.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4744</td>
+<td>2022-07-06</td>
+<td>3</td>
+<td>45000</td>
+<td>1500</td>
+<td>23 out of 34</td>
+<td>Carpet Area</td>
+<td>Gachibowli</td>
+<td>Hyderabad</td>
+<td>Semi-Furnished</td>
+<td>Family</td>
+<td>2</td>
+<td>Contact Agent</td>
+<td>8.0</td>
+<td>8.0</td>
+<td>3.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4745</td>
+<td>2022-05-04</td>
+<td>2</td>
+<td>15000</td>
+<td>1000</td>
+<td>4 out of 5</td>
+<td>Carpet Area</td>
+<td>Suchitra Circle</td>
+<td>Hyderabad</td>
+<td>Unfurnished</td>
+<td>Bachelors</td>
+<td>2</td>
+<td>Contact Owner</td>
+<td>4.0</td>
+<td>4.0</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>4746 rows × 15 columns</p>
+</div>
+</div>
+</div>
+<p>K-Means can handle outliers (centroid bias may exist) and doesn’t improve the value spread</p>
+</section>
+<section id="normalization" class="level3">
+<h3 class="anchored" data-anchor-id="normalization">Normalization</h3>
+<p>Normalization is the process of the scaling an attribute say from -1.0 to 1.0 or 0.0 to 1.0. It is applied on numerical attributes without distorting differences in the ranges of values. It is generally used for classification problems and a dataset doesn’t have to undergo normalization necessarily.</p>
+<p>For example, let us consider the house rent data set used for Discretization, size and rent. Where size ranges from 250-1100, while rent ranges from 7000 to 27000 and higher. rent is about 20 times larger than size. So, these two features are in very different ranges. When we do further analysis, like multivariate linear regression, we might have rent influence as a strong predictor when it necessarily need not be.</p>
+<p>Methods of Data Normalization –</p>
+<p>Decimal Scaling Min-Max Normalization z-Score Normalization(zero-mean Normalization)</p>
+<p>Decimal Scaling</p>
+<p>It normalizes by moving the decimal point of values of the data. To normalize the data by this technique, we divide each value of the data by the maximum absolute value of data.</p>
+<p>$v_i^{’} = $</p>
+<p>Lets understand it by an example: Suppose we have data set in which the value ranges from -9900 to 9877. In this case the maximum absolute value is 9900. So to perform decimal normalization, we divide each of values in data set by 10000 i.e j=4.(since it near to 9900).</p>
+<p>MinMaxScalar Normalization</p>
+<p>It is the process of performing a linear transformation on original data.</p>
+<p><span class="math inline">\(U_i = \frac{V_i - X_1}{X_2 - X_1} (Y_2 - Y_1) + Y_1\)</span></p>
+<p>where (X1,X2) is min and max boundary of an attribute and (Y1,Y2) is the new scale at which we are normalizing, then for Vi value of attribute and v is the old value of each entry in data.</p>
+<div class="cell" data-cell_id="890ddef4d50c48bebaa7578d6131f391" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:163}" data-deepnote_cell_type="code" data-execution_millis="7" data-execution_start="1675018605686" data-source_hash="1a0e11af" data-tags="[]" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> preprocessing.MinMaxScaler(feature_range<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">2</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> df[<span class="st">'Size'</span>].values.reshape(<span class="dv">4746</span>,<span class="dv">1</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>norm <span class="op">=</span> scaler.fit_transform(size)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>norm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>array([[0.27284105],
+       [0.19774718],
+       [0.24780976],
+       ...,
+       [0.43554443],
+       [0.37296621],
+       [0.24780976]])</code></pre>
+</div>
+</div>
+<p>Z-score Normalization/standardization( Zero mean normalization /standardization) :</p>
+<p>In this technique, the values are normalized based on the mean and standard deviation of attribute A. For Vi value of attribute A, normalized value Ui is given as,</p>
+<p><span class="math inline">\(U_i = \frac{V_i - Avg(A)}{Std(A)}\)</span></p>
+<div class="cell" data-cell_id="4de669fffdb34c769ef6f76c5edddfa3" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:181}" data-deepnote_cell_type="code" data-execution_millis="9" data-execution_start="1675018605696" data-source_hash="14fcbe82" data-tags="[]" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> preprocessing</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> preprocessing.StandardScaler()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> df[<span class="st">'Size'</span>].values.reshape(<span class="dv">4746</span>,<span class="dv">1</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>norm <span class="op">=</span> scaler.fit_transform(size)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>norm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>array([[ 0.2089605 ],
+       [-0.26412451],
+       [ 0.0512655 ],
+       ...,
+       [ 1.233978  ],
+       [ 0.8397405 ],
+       [ 0.0512655 ]])</code></pre>
+</div>
+</div>
+<p>Can you see the negative values above? Do you think it is going to mater? Think about what positive/negative values mean for z-score. With z-score positive values simply mean that the value is above the group mean while negative values can be interpreted as value is below the group mean. You should not be able to worry as long as you are able to revert to its original form</p>
+</section>
+<section id="congratulations" class="level3">
+<h3 class="anchored" data-anchor-id="congratulations">Congratulations!</h3>
+<p>Credit: This tutorial is prepared by Ajay Sadananda</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
