@@ -1,9 +1,9 @@
 ---
 layout: page
 title: "CUB-ML Naive Bayes"
-permalink: /CUB-ML/NaiveBayes
+permalink: /CUB/ML/NaiveBayes
 ---
-## [CU Boulder: Machine Learning](../CUB-ML.qmd) - 
+# [CU Boulder](../../../CUB.md): [Machine Learning](../CUB-ML.md) - Naive Bayes
 Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/)
 
 - Reference: Professor Ami Gates, Dept. Applied Math, Data Science, University of Colorado
@@ -12,10 +12,10 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 ---
 
-### in R
+## in R
 - Single code ([Markdown](Markdown/R-NaiveBayes.qmd), [Raw](Raw/R-NaiveBayes-Raw.qmd)): Naive Bayes (etc) in R for Text data and for Record Data. Text will be corpus.
 
-### Python
+## Python
 
 - Single code example (Markdown, [Raw](../DecisionTrees/Raw/Python-DecisionTrees-Raw.qmd)): This code includes Decision Trees, Random Forest, Support Vector Machines, a lot of vis, and several other examples. 
     - [Part 1 - Markdown](../DecisionTrees/Markdown/Python-DecisionTrees.qmd#naive-bayes-): Text mining example
