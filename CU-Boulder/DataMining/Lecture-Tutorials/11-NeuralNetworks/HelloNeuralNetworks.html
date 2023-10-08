@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Hello Neural Networks</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="HelloNeuralNetworks_files/libs/clipboard/clipboard.min.js"></script>
+<script src="HelloNeuralNetworks_files/libs/quarto-html/quarto.js"></script>
+<script src="HelloNeuralNetworks_files/libs/quarto-html/popper.min.js"></script>
+<script src="HelloNeuralNetworks_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="HelloNeuralNetworks_files/libs/quarto-html/anchor.min.js"></script>
+<link href="HelloNeuralNetworks_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="HelloNeuralNetworks_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="HelloNeuralNetworks_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="HelloNeuralNetworks_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="HelloNeuralNetworks_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#hello-neural-networks." id="toc-hello-neural-networks." class="nav-link active" data-scroll-target="#hello-neural-networks.">Hello Neural Networks.</a>
+  <ul class="collapse">
+  <li><a href="#important-supporting-libraries" id="toc-important-supporting-libraries" class="nav-link" data-scroll-target="#important-supporting-libraries">Important supporting libraries</a></li>
+  <li><a href="#prepare-a-simple-neural-network" id="toc-prepare-a-simple-neural-network" class="nav-link" data-scroll-target="#prepare-a-simple-neural-network">Prepare a simple Neural Network</a></li>
+  <li><a href="#prepare-a-simple-dataset" id="toc-prepare-a-simple-dataset" class="nav-link" data-scroll-target="#prepare-a-simple-dataset">Prepare a simple dataset</a></li>
+  <li><a href="#visualize-the-dataset" id="toc-visualize-the-dataset" class="nav-link" data-scroll-target="#visualize-the-dataset">Visualize the dataset</a></li>
+  <li><a href="#train-the-neural-network" id="toc-train-the-neural-network" class="nav-link" data-scroll-target="#train-the-neural-network">Train the Neural Network</a></li>
+  <li><a href="#try-a-test-dataset" id="toc-try-a-test-dataset" class="nav-link" data-scroll-target="#try-a-test-dataset">Try a test dataset</a></li>
+  <li><a href="#try-with-the-training-dataset" id="toc-try-with-the-training-dataset" class="nav-link" data-scroll-target="#try-with-the-training-dataset">Try with the training dataset</a></li>
+  <li><a href="#visualize-the-result" id="toc-visualize-the-result" class="nav-link" data-scroll-target="#visualize-the-result">Visualize the result</a></li>
+  <li><a href="#it-might-not-be-clear-how-the-nn-is-trained.-lets-show-it-step-by-step." id="toc-it-might-not-be-clear-how-the-nn-is-trained.-lets-show-it-step-by-step." class="nav-link" data-scroll-target="#it-might-not-be-clear-how-the-nn-is-trained.-lets-show-it-step-by-step.">It might not be clear how the NN is trained. Let’s show it step by step.</a></li>
+  </ul></li>
+  <li><a href="#compare-nn-with-linear-regression" id="toc-compare-nn-with-linear-regression" class="nav-link" data-scroll-target="#compare-nn-with-linear-regression">Compare NN with Linear Regression</a>
+  <ul class="collapse">
+  <li><a href="#round-1-linear-relationship-with-few-data-points" id="toc-round-1-linear-relationship-with-few-data-points" class="nav-link" data-scroll-target="#round-1-linear-relationship-with-few-data-points">Round 1: Linear relationship with few data points</a>
+  <ul class="collapse">
+  <li><a href="#train-a-linear-regression-model" id="toc-train-a-linear-regression-model" class="nav-link" data-scroll-target="#train-a-linear-regression-model">Train a Linear Regression model</a></li>
+  <li><a href="#conclusion-linear-regression-won" id="toc-conclusion-linear-regression-won" class="nav-link" data-scroll-target="#conclusion-linear-regression-won">Conclusion: Linear Regression Won!</a></li>
+  </ul></li>
+  <li><a href="#round-2-linear-relationship-with-many-data-points" id="toc-round-2-linear-relationship-with-many-data-points" class="nav-link" data-scroll-target="#round-2-linear-relationship-with-many-data-points">Round 2: Linear relationship with many data points</a>
+  <ul class="collapse">
+  <li><a href="#lets-visualize-the-new-dataset" id="toc-lets-visualize-the-new-dataset" class="nav-link" data-scroll-target="#lets-visualize-the-new-dataset">Let’s visualize the new dataset</a></li>
+  <li><a href="#lets-train-the-neural-network-again" id="toc-lets-train-the-neural-network-again" class="nav-link" data-scroll-target="#lets-train-the-neural-network-again">Let’s train the neural network again</a></li>
+  <li><a href="#lets-observe-the-result" id="toc-lets-observe-the-result" class="nav-link" data-scroll-target="#lets-observe-the-result">Let’s observe the result</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion:</a></li>
+  </ul></li>
+  <li><a href="#round-3-multi-variable-linear-relationship." id="toc-round-3-multi-variable-linear-relationship." class="nav-link" data-scroll-target="#round-3-multi-variable-linear-relationship.">Round 3: Multi-variable Linear relationship.</a>
+  <ul class="collapse">
+  <li><a href="#prepare-a-nn-with-2-inputs" id="toc-prepare-a-nn-with-2-inputs" class="nav-link" data-scroll-target="#prepare-a-nn-with-2-inputs">Prepare a NN with 2 inputs</a></li>
+  <li><a href="#prepare-some-2-dimensional-datapoints-and-train-the-model" id="toc-prepare-some-2-dimensional-datapoints-and-train-the-model" class="nav-link" data-scroll-target="#prepare-some-2-dimensional-datapoints-and-train-the-model">Prepare some 2-dimensional datapoints and train the model</a></li>
+  <li><a href="#test-the-model" id="toc-test-the-model" class="nav-link" data-scroll-target="#test-the-model">Test the model</a></li>
+  <li><a href="#prepare-a-linear-regression-and-test" id="toc-prepare-a-linear-regression-and-test" class="nav-link" data-scroll-target="#prepare-a-linear-regression-and-test">Prepare a Linear Regression and test</a></li>
+  <li><a href="#conclusion-still-lr-won." id="toc-conclusion-still-lr-won." class="nav-link" data-scroll-target="#conclusion-still-lr-won.">Conclusion: Still LR won.</a></li>
+  <li><a href="#train-the-nn-again-with-more-data" id="toc-train-the-nn-again-with-more-data" class="nav-link" data-scroll-target="#train-the-nn-again-with-more-data">Train the NN again with more data</a></li>
+  <li><a href="#lets-observe-the-result-1" id="toc-lets-observe-the-result-1" class="nav-link" data-scroll-target="#lets-observe-the-result-1">Let’s observe the result</a></li>
+  <li><a href="#conclusion-1" id="toc-conclusion-1" class="nav-link" data-scroll-target="#conclusion-1">Conclusion:</a></li>
+  </ul></li>
+  <li><a href="#round4-lets-learn-some-non-linear-relationship-then" id="toc-round4-lets-learn-some-non-linear-relationship-then" class="nav-link" data-scroll-target="#round4-lets-learn-some-non-linear-relationship-then">Round4: Let’s learn some non-linear relationship then</a>
+  <ul class="collapse">
+  <li><a href="#create-a-square-root-relationship" id="toc-create-a-square-root-relationship" class="nav-link" data-scroll-target="#create-a-square-root-relationship">Create a square root relationship</a></li>
+  <li><a href="#visualize-the-relationship" id="toc-visualize-the-relationship" class="nav-link" data-scroll-target="#visualize-the-relationship">Visualize the relationship</a></li>
+  <li><a href="#train-a-deep-neural-network" id="toc-train-a-deep-neural-network" class="nav-link" data-scroll-target="#train-a-deep-neural-network">Train a deep neural network</a></li>
+  <li><a href="#observe-the-result-and-compare-it-with-the-training-data" id="toc-observe-the-result-and-compare-it-with-the-training-data" class="nav-link" data-scroll-target="#observe-the-result-and-compare-it-with-the-training-data">Observe the result and compare it with the training data</a></li>
+  <li><a href="#train-a-linear-regression-model-1" id="toc-train-a-linear-regression-model-1" class="nav-link" data-scroll-target="#train-a-linear-regression-model-1">Train a Linear Regression model</a></li>
+  </ul></li>
+  <li><a href="#round-5-try-an-arbitrary-relationship-then" id="toc-round-5-try-an-arbitrary-relationship-then" class="nav-link" data-scroll-target="#round-5-try-an-arbitrary-relationship-then">Round 5: Try an arbitrary relationship then</a></li>
+  <li><a href="#round-6-try-another-arbitrary-relationship" id="toc-round-6-try-another-arbitrary-relationship" class="nav-link" data-scroll-target="#round-6-try-another-arbitrary-relationship">Round 6: Try another arbitrary relationship</a></li>
+  <li><a href="#conclusion-finally-nn-is-better-for-non-linear-relationships-and-with-many-data-points." id="toc-conclusion-finally-nn-is-better-for-non-linear-relationships-and-with-many-data-points." class="nav-link" data-scroll-target="#conclusion-finally-nn-is-better-for-non-linear-relationships-and-with-many-data-points.">Conclusion: Finally, NN is better (for non linear relationships and with many data points).</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Hello Neural Networks</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="hello-neural-networks." class="level1">
+<h1>Hello Neural Networks.</h1>
+<section id="important-supporting-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="important-supporting-libraries">Important supporting libraries</h2>
+<div class="cell" data-cell_id="1e3fbea45c4b4b059e4af2cc8420e902" data-deepnote_cell_type="code" data-execution_millis="8326" data-execution_start="1681408220340" data-source_hash="79cee3de" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="prepare-a-simple-neural-network" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-a-simple-neural-network">Prepare a simple Neural Network</h2>
+<div class="cell" data-cell_id="5af24b9fe83042488d1b600e18318293" data-deepnote_cell_type="code" data-execution_millis="120" data-execution_start="1681408233356" data-source_hash="1ba29f0a" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> tf.keras.Sequential([keras.layers.Dense(units<span class="op">=</span><span class="dv">1</span>, input_shape<span class="op">=</span>[<span class="dv">1</span>])])</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'mean_squared_error'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="prepare-a-simple-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-a-simple-dataset">Prepare a simple dataset</h2>
+<div class="cell" data-cell_id="74b679dad2d944c981618fe35e5b1386" data-deepnote_cell_type="code" data-execution_millis="7" data-execution_start="1681408237662" data-outputid="2c399bdf-c23d-42a5-e70c-fa96e6f75ce3" data-source_hash="1a937675" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> np.array([<span class="op">-</span><span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>, <span class="fl">4.0</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> np.array([<span class="op">-</span><span class="fl">2.0</span>, <span class="fl">0.0</span>, <span class="fl">2.0</span>, <span class="fl">4.0</span>, <span class="fl">6.0</span>, <span class="fl">8.0</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(xs)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[-1.  0.  1.  2.  3.  4.]
+[-2.  0.  2.  4.  6.  8.]</code></pre>
+</div>
+</div>
+<p>ys = 2* xs</p>
+</section>
+<section id="visualize-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-the-dataset">Visualize the dataset</h2>
+<div class="cell" data-cell_id="665ac34a54e8422db130948fda92886d" data-deepnote_cell_type="code" data-execution_millis="423" data-execution_start="1681408244133" data-outputid="5ba4c5a9-8f8c-49e6-fb76-30ae4696101e" data-source_hash="bcbc30cb" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sns.relplot(x <span class="op">=</span> xs,  y <span class="op">=</span> ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-the-neural-network" class="level2">
+<h2 class="anchored" data-anchor-id="train-the-neural-network">Train the Neural Network</h2>
+<div class="cell" data-cell_id="bc988f6c56f649649396d50ccac8ea96" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="1407" data-execution_start="1668135256367" data-outputid="a8e29c75-6a79-4fbe-f27a-c1c7fa3a7c00" data-source_hash="dacbfba6" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model.fit(xs, ys, epochs<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/50
+1/1 [==============================] - 0s 250ms/step - loss: 63.6840
+Epoch 2/50
+1/1 [==============================] - 0s 2ms/step - loss: 50.2190
+Epoch 3/50
+1/1 [==============================] - 0s 2ms/step - loss: 39.6231
+Epoch 4/50
+1/1 [==============================] - 0s 3ms/step - loss: 31.2844
+Epoch 5/50
+1/1 [==============================] - 0s 2ms/step - loss: 24.7216
+Epoch 6/50
+1/1 [==============================] - 0s 2ms/step - loss: 19.5561
+Epoch 7/50
+1/1 [==============================] - 0s 2ms/step - loss: 15.4899
+Epoch 8/50
+1/1 [==============================] - 0s 2ms/step - loss: 12.2887
+Epoch 9/50
+1/1 [==============================] - 0s 17ms/step - loss: 9.7681
+Epoch 10/50
+1/1 [==============================] - 0s 2ms/step - loss: 7.7829
+Epoch 11/50
+1/1 [==============================] - 0s 2ms/step - loss: 6.2191
+Epoch 12/50
+1/1 [==============================] - 0s 2ms/step - loss: 4.9868
+Epoch 13/50
+1/1 [==============================] - 0s 2ms/step - loss: 4.0153
+Epoch 14/50
+1/1 [==============================] - 0s 2ms/step - loss: 3.2491
+Epoch 15/50
+1/1 [==============================] - 0s 2ms/step - loss: 2.6445
+Epoch 16/50
+1/1 [==============================] - 0s 2ms/step - loss: 2.1669
+Epoch 17/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.7895
+Epoch 18/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.4908
+Epoch 19/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.2540
+Epoch 20/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.0661
+Epoch 21/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.9167
+Epoch 22/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.7975
+Epoch 23/50
+1/1 [==============================] - 0s 58ms/step - loss: 0.7021
+Epoch 24/50
+1/1 [==============================] - 0s 3ms/step - loss: 0.6256
+Epoch 25/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.5639
+Epoch 26/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.5138
+Epoch 27/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.4730
+Epoch 28/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.4395
+Epoch 29/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.4118
+Epoch 30/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3886
+Epoch 31/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3690
+Epoch 32/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3523
+Epoch 33/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3379
+Epoch 34/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3253
+Epoch 35/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3142
+Epoch 36/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3042
+Epoch 37/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2952
+Epoch 38/50
+1/1 [==============================] - 0s 3ms/step - loss: 0.2870
+Epoch 39/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2794
+Epoch 40/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2723
+Epoch 41/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2657
+Epoch 42/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2594
+Epoch 43/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2534
+Epoch 44/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2477
+Epoch 45/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2422
+Epoch 46/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2369
+Epoch 47/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2318
+Epoch 48/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2268
+Epoch 49/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2220
+Epoch 50/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2173</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>&lt;keras.callbacks.History at 0x7f6e600874c0&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="try-a-test-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="try-a-test-dataset">Try a test dataset</h2>
+<div class="cell" data-cell_id="31ea52e926564d7197665c82dc44b692" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="777" data-execution_start="1668135257005" data-outputid="a7158dd6-3184-40ee-f6ee-6b12be94165e" data-source_hash="68aefa77" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.array([<span class="fl">5.0</span>, <span class="fl">6.0</span>, <span class="fl">7.0</span>])</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/1 [==============================] - 0s 61ms/step
+[[ 9.58381  ]
+ [11.3789835]
+ [13.174158 ]]</code></pre>
+</div>
+</div>
+</section>
+<section id="try-with-the-training-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="try-with-the-training-dataset">Try with the training dataset</h2>
+<div class="cell" data-cell_id="40b63a71184948be920aa29f2a4ff481" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="671" data-execution_start="1668135257158" data-outputid="ed99870a-0188-4d3a-870e-7784e848b859" data-source_hash="6533d690" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span> model.predict(xs)[:,<span class="dv">0</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(xs)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ys)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_hat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/1 [==============================] - 0s 15ms/step
+[-1.  0.  1.  2.  3.  4.]
+[-2.  0.  2.  4.  6.  8.]
+[-1.1872342  0.6079398  2.4031138  4.198288   5.9934616  7.7886357]</code></pre>
+</div>
+</div>
+</section>
+<section id="visualize-the-result" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-the-result">Visualize the result</h2>
+<div class="cell" data-cell_id="265b7d15a05b4411831e278e848ed4b2" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="636" data-execution_start="1668135257199" data-outputid="273efaa7-d539-4c65-e936-0270c6eba288" data-source_hash="a0656dd1" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(xs, y_hat, label <span class="op">=</span> <span class="st">'predicted'</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(xs, ys, label <span class="op">=</span> <span class="st">'actual'</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f6e48370a00&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="it-might-not-be-clear-how-the-nn-is-trained.-lets-show-it-step-by-step." class="level2">
+<h2 class="anchored" data-anchor-id="it-might-not-be-clear-how-the-nn-is-trained.-lets-show-it-step-by-step.">It might not be clear how the NN is trained. Let’s show it step by step.</h2>
+<div class="cell" data-cell_id="d320430dbf944be09a8242df105be6bb" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_start="1668135257579" data-source_hash="1ba29f0a" data-tags="[]" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> tf.keras.Sequential([keras.layers.Dense(units<span class="op">=</span><span class="dv">1</span>, input_shape<span class="op">=</span>[<span class="dv">1</span>])])</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'mean_squared_error'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="ad4f7c756b3940849cb597df6b9a5a0b" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="513" data-execution_start="1668135257579" data-outputid="e964d1a8-9aa7-47fb-8000-17b7130df992" data-source_hash="ac553e96" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model.fit(xs, ys, epochs<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span> model.predict(xs)[:,<span class="dv">0</span>]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(xs, y_hat, label <span class="op">=</span> <span class="st">'predicted'</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>plt.scatter(xs, ys, label <span class="op">=</span> <span class="st">'actual'</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/1 [==============================] - 0s 158ms/step - loss: 59.5742
+1/1 [==============================] - 0s 36ms/step</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f6e30d31b20&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-11-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="compare-nn-with-linear-regression" class="level1">
+<h1>Compare NN with Linear Regression</h1>
+<section id="round-1-linear-relationship-with-few-data-points" class="level2">
+<h2 class="anchored" data-anchor-id="round-1-linear-relationship-with-few-data-points">Round 1: Linear relationship with few data points</h2>
+<section id="train-a-linear-regression-model" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-linear-regression-model">Train a Linear Regression model</h3>
+<div class="cell" data-cell_id="e386f1fee9cb4cce9ad06e54582d7a58" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_start="1668135258147" data-outputid="d3f9617f-49ba-4e8e-fddf-aacddf1f5ef1" data-source_hash="6b63667e" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> xs.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> t.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression().fit(xs, ys)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reg.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[10. 12. 14.]</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion-linear-regression-won" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-linear-regression-won">Conclusion: Linear Regression Won!</h3>
+<p>We learned Neural Network is not as good as Linear Regression simply beacause we have so few data. Let’s create a larger data set then.</p>
+</section>
+</section>
+<section id="round-2-linear-relationship-with-many-data-points" class="level2">
+<h2 class="anchored" data-anchor-id="round-2-linear-relationship-with-many-data-points">Round 2: Linear relationship with many data points</h2>
+<div class="cell" data-cell_id="1038235f142846068fd2cb7e5a85126d" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="1" data-execution_start="1668135258148" data-outputid="cf79d044-dfd3-4bbd-a2b8-0b9ee0cf1267" data-source_hash="c74e36c0" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>x_large <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, (<span class="dv">10000</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>x_large.sort()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>y_large <span class="op">=</span> x_large<span class="op">*</span><span class="dv">2</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x_large)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_large)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[-9.99885156 -9.99196827 -9.98839674 ...  9.98231861  9.99611098
+  9.99823514]
+[-19.99770313 -19.98393653 -19.97679347 ...  19.96463721  19.99222197
+  19.99647028]</code></pre>
+</div>
+</div>
+<section id="lets-visualize-the-new-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="lets-visualize-the-new-dataset">Let’s visualize the new dataset</h3>
+<div class="cell" data-cell_id="d46b7bc61ca34231912005cc5592081a" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="302" data-execution_start="1668135258148" data-outputid="850aaf1b-6cea-4b05-8a95-32b8ed24a3f6" data-source_hash="868a64b" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sns.relplot(x <span class="op">=</span> x_large, y <span class="op">=</span> y_large)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="lets-train-the-neural-network-again" class="level3">
+<h3 class="anchored" data-anchor-id="lets-train-the-neural-network-again">Let’s train the neural network again</h3>
+<div class="cell" data-cell_id="dde4508f684a405ba0d790d085285142" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="14695" data-execution_start="1668135258495" data-outputid="a90e6bc6-21f8-48bc-b8a5-391fd2e95abf" data-source_hash="c60b761c" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> tf.keras.Sequential([keras.layers.Dense(units<span class="op">=</span><span class="dv">1</span>, input_shape<span class="op">=</span>[<span class="dv">1</span>])])</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'mean_squared_error'</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>model.fit(x_large, y_large, epochs<span class="op">=</span><span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/50
+313/313 [==============================] - 0s 929us/step - loss: 0.2925
+Epoch 2/50
+313/313 [==============================] - 0s 917us/step - loss: 4.1208e-11
+Epoch 3/50
+313/313 [==============================] - 0s 900us/step - loss: 3.2328e-15
+Epoch 4/50
+313/313 [==============================] - 0s 900us/step - loss: 2.9490e-16
+Epoch 5/50
+313/313 [==============================] - 0s 808us/step - loss: 1.1694e-16
+Epoch 6/50
+313/313 [==============================] - 0s 878us/step - loss: 2.1803e-17
+Epoch 7/50
+313/313 [==============================] - 0s 936us/step - loss: 1.7773e-17
+Epoch 8/50
+313/313 [==============================] - 0s 891us/step - loss: 1.5041e-17
+Epoch 9/50
+313/313 [==============================] - 0s 931us/step - loss: 9.5303e-18
+Epoch 10/50
+313/313 [==============================] - 0s 787us/step - loss: 2.9244e-18
+Epoch 11/50
+313/313 [==============================] - 0s 909us/step - loss: 2.6396e-18
+Epoch 12/50
+313/313 [==============================] - 0s 890us/step - loss: 2.4627e-18
+Epoch 13/50
+313/313 [==============================] - 0s 904us/step - loss: 2.0767e-18
+Epoch 14/50
+313/313 [==============================] - 0s 806us/step - loss: 1.9257e-18
+Epoch 15/50
+313/313 [==============================] - 0s 902us/step - loss: 1.8228e-18
+Epoch 16/50
+313/313 [==============================] - 0s 913us/step - loss: 9.9992e-19
+Epoch 17/50
+313/313 [==============================] - 0s 882us/step - loss: 3.9834e-19
+Epoch 18/50
+313/313 [==============================] - 0s 928us/step - loss: 3.8860e-19
+Epoch 19/50
+313/313 [==============================] - 0s 830us/step - loss: 3.6854e-19
+Epoch 20/50
+313/313 [==============================] - 0s 896us/step - loss: 3.5967e-19
+Epoch 21/50
+313/313 [==============================] - 0s 894us/step - loss: 3.5462e-19
+Epoch 22/50
+313/313 [==============================] - 0s 932us/step - loss: 2.7860e-19
+Epoch 23/50
+313/313 [==============================] - 0s 885us/step - loss: 2.4379e-19
+Epoch 24/50
+313/313 [==============================] - 0s 800us/step - loss: 2.3807e-19
+Epoch 25/50
+313/313 [==============================] - 0s 924us/step - loss: 2.3670e-19
+Epoch 26/50
+313/313 [==============================] - 0s 894us/step - loss: 2.1936e-19
+Epoch 27/50
+313/313 [==============================] - 0s 910us/step - loss: 2.1812e-19
+Epoch 28/50
+313/313 [==============================] - 0s 816us/step - loss: 2.1344e-19
+Epoch 29/50
+313/313 [==============================] - 0s 900us/step - loss: 2.0123e-19
+Epoch 30/50
+313/313 [==============================] - 0s 881us/step - loss: 6.2450e-20
+Epoch 31/50
+313/313 [==============================] - 0s 897us/step - loss: 6.2450e-20
+Epoch 32/50
+313/313 [==============================] - 0s 843us/step - loss: 6.1474e-20
+Epoch 33/50
+313/313 [==============================] - 0s 801us/step - loss: 6.1474e-20
+Epoch 34/50
+313/313 [==============================] - 0s 903us/step - loss: 5.8438e-20
+Epoch 35/50
+313/313 [==============================] - 0s 910us/step - loss: 5.7831e-20
+Epoch 36/50
+313/313 [==============================] - 0s 925us/step - loss: 5.7549e-20
+Epoch 37/50
+313/313 [==============================] - 0s 793us/step - loss: 5.6986e-20
+Epoch 38/50
+313/313 [==============================] - 0s 904us/step - loss: 5.6986e-20
+Epoch 39/50
+313/313 [==============================] - 0s 903us/step - loss: 4.6577e-20
+Epoch 40/50
+313/313 [==============================] - 0s 924us/step - loss: 4.6577e-20
+Epoch 41/50
+313/313 [==============================] - 0s 892us/step - loss: 4.6577e-20
+Epoch 42/50
+313/313 [==============================] - 0s 799us/step - loss: 4.5862e-20
+Epoch 43/50
+313/313 [==============================] - 0s 938us/step - loss: 4.5862e-20
+Epoch 44/50
+313/313 [==============================] - 0s 866us/step - loss: 4.4561e-20
+Epoch 45/50
+313/313 [==============================] - 0s 937us/step - loss: 4.3260e-20
+Epoch 46/50
+313/313 [==============================] - 0s 901us/step - loss: 4.3260e-20
+Epoch 47/50
+313/313 [==============================] - 0s 961us/step - loss: 4.2869e-20
+Epoch 48/50
+313/313 [==============================] - 0s 840us/step - loss: 4.2674e-20
+Epoch 49/50
+313/313 [==============================] - 0s 884us/step - loss: 4.1286e-20
+Epoch 50/50
+313/313 [==============================] - 0s 933us/step - loss: 6.5919e-21</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>&lt;keras.callbacks.History at 0x7f6e30bbcca0&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="lets-observe-the-result" class="level3">
+<h3 class="anchored" data-anchor-id="lets-observe-the-result">Let’s observe the result</h3>
+<div class="cell" data-cell_id="fa84f38c04a04c199fe82d81bac04952" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="560" data-execution_start="1668135272695" data-outputid="2ec56bc4-cf9e-4d67-d7db-9c21f07c5364" data-source_hash="68aefa77" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.array([<span class="fl">5.0</span>, <span class="fl">6.0</span>, <span class="fl">7.0</span>])</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/1 [==============================] - 0s 57ms/step
+[[10.]
+ [12.]
+ [14.]]</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion:</h3>
+<p>With many datapoints, a Neural Network can do as well as a Linear Regression model (for a simple straightline relationship)</p>
+</section>
+</section>
+<section id="round-3-multi-variable-linear-relationship." class="level2">
+<h2 class="anchored" data-anchor-id="round-3-multi-variable-linear-relationship.">Round 3: Multi-variable Linear relationship.</h2>
+<p>We tried one variable input, how about two variables?</p>
+<section id="prepare-a-nn-with-2-inputs" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-a-nn-with-2-inputs">Prepare a NN with 2 inputs</h3>
+<div class="cell" data-cell_id="9204d721dc1a4bff8b7113441da0a2bc" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_start="1668135272780" data-source_hash="631b1004" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> tf.keras.Sequential([keras.layers.Dense(units<span class="op">=</span><span class="dv">1</span>, input_shape<span class="op">=</span>[<span class="dv">2</span>])])</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'mean_squared_error'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="prepare-some-2-dimensional-datapoints-and-train-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-some-2-dimensional-datapoints-and-train-the-model">Prepare some 2-dimensional datapoints and train the model</h3>
+<div class="cell" data-cell_id="f90b5a9d845b4599b6b641c37b1f502e" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="535" data-execution_start="1668135272780" data-outputid="7adbc9bf-4c83-4f0d-ae4f-ab9ae7cf59de" data-source_hash="893fd23a" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> np.array([[<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">2</span>], [<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>]])</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> np.array([<span class="op">-</span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>model.fit(xs, ys, epochs <span class="op">=</span> <span class="dv">50</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">#ys = xs1 + xs2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/50
+1/1 [==============================] - 0s 169ms/step - loss: 3.2576
+Epoch 2/50
+1/1 [==============================] - 0s 2ms/step - loss: 3.0287
+Epoch 3/50
+1/1 [==============================] - 0s 2ms/step - loss: 2.8169
+Epoch 4/50
+1/1 [==============================] - 0s 2ms/step - loss: 2.6208
+Epoch 5/50
+1/1 [==============================] - 0s 2ms/step - loss: 2.4392
+Epoch 6/50
+1/1 [==============================] - 0s 3ms/step - loss: 2.2709
+Epoch 7/50
+1/1 [==============================] - 0s 2ms/step - loss: 2.1151
+Epoch 8/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.9707
+Epoch 9/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.8368
+Epoch 10/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.7127
+Epoch 11/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.5976
+Epoch 12/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.4909
+Epoch 13/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.3918
+Epoch 14/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.2999
+Epoch 15/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.2146
+Epoch 16/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.1354
+Epoch 17/50
+1/1 [==============================] - 0s 2ms/step - loss: 1.0618
+Epoch 18/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.9934
+Epoch 19/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.9299
+Epoch 20/50
+1/1 [==============================] - 0s 62ms/step - loss: 0.8709
+Epoch 21/50
+1/1 [==============================] - 0s 3ms/step - loss: 0.8159
+Epoch 22/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.7649
+Epoch 23/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.7173
+Epoch 24/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.6731
+Epoch 25/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.6319
+Epoch 26/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.5936
+Epoch 27/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.5578
+Epoch 28/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.5246
+Epoch 29/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.4935
+Epoch 30/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.4646
+Epoch 31/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.4376
+Epoch 32/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.4124
+Epoch 33/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3889
+Epoch 34/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3669
+Epoch 35/50
+1/1 [==============================] - 0s 3ms/step - loss: 0.3464
+Epoch 36/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3272
+Epoch 37/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.3093
+Epoch 38/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2926
+Epoch 39/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2769
+Epoch 40/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2622
+Epoch 41/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2485
+Epoch 42/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2357
+Epoch 43/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2236
+Epoch 44/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2123
+Epoch 45/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.2018
+Epoch 46/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.1918
+Epoch 47/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.1825
+Epoch 48/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.1738
+Epoch 49/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.1656
+Epoch 50/50
+1/1 [==============================] - 0s 2ms/step - loss: 0.1579</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>&lt;keras.callbacks.History at 0x7f6e307a0fa0&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="test-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="test-the-model">Test the model</h3>
+<div class="cell" data-cell_id="b68ccc6dbf66428cac4f5a4a0b624519" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="57" data-execution_start="1668135273313" data-outputid="39cc464d-fa4e-4265-a052-70ceea28916d" data-source_hash="62655c70" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.array([[<span class="dv">3</span>, <span class="dv">4</span>], [<span class="dv">0</span>, <span class="dv">9</span>], [<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>]])</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/1 [==============================] - 0s 29ms/step
+[[ 5.6687555]
+ [11.833715 ]
+ [ 2.1177921]]</code></pre>
+</div>
+</div>
+</section>
+<section id="prepare-a-linear-regression-and-test" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-a-linear-regression-and-test">Prepare a Linear Regression and test</h3>
+<div class="cell" data-cell_id="4d55ca1cbe5540d387a6718f4e3b9381" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="260" data-execution_start="1668135273415" data-outputid="1eb329c7-19b3-469e-da20-74acbbfce5e9" data-source_hash="c4ceb60b" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression().fit(xs, ys)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reg.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[ 7.00000000e+00  9.00000000e+00 -1.16573418e-15]</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion-still-lr-won." class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-still-lr-won.">Conclusion: Still LR won.</h3>
+<p>Maybe we need more data</p>
+<div class="cell" data-cell_id="6a92bb8065c64bd18840880643358ef5" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="260" data-execution_start="1668135273416" data-outputid="13f5a3f9-84ff-4350-9d98-5f4797edae0e" data-source_hash="df27d041" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>x_large <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>, (<span class="dv">10000</span>, <span class="dv">2</span>))</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x_large)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>y_large <span class="op">=</span> np.<span class="bu">sum</span>(x_large, axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_large)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[ 3.83318192e+00 -9.69160794e+00]
+ [-1.60615131e-03 -6.14233634e+00]
+ [-2.91511449e+00 -1.25782616e-01]
+ ...
+ [ 2.52837268e+00 -5.01966462e+00]
+ [ 2.64744448e+00  1.82292700e+00]
+ [-1.16130409e+00  8.95057456e+00]]
+[-5.85842602 -6.14394249 -3.04089711 ... -2.49129194  4.47037148
+  7.78927047]</code></pre>
+</div>
+</div>
+</section>
+<section id="train-the-nn-again-with-more-data" class="level3">
+<h3 class="anchored" data-anchor-id="train-the-nn-again-with-more-data">Train the NN again with more data</h3>
+<div class="cell" data-cell_id="bb816161d71943c6821f3c822ac89d78" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="20703" data-execution_start="1668135273416" data-outputid="660eef04-2b9b-4387-eb7f-e17469cfd3c5" data-source_hash="101dc5b9" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> tf.keras.Sequential([keras.layers.Dense(units<span class="op">=</span><span class="dv">1</span>, input_shape<span class="op">=</span>[<span class="dv">2</span>])])</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'mean_squared_error'</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>model.fit(x_large, y_large, epochs <span class="op">=</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/50
+313/313 [==============================] - 0s 947us/step - loss: 0.2193
+Epoch 2/50
+313/313 [==============================] - 0s 894us/step - loss: 1.9676e-11
+Epoch 3/50
+313/313 [==============================] - 0s 779us/step - loss: 1.3513e-13
+Epoch 4/50
+313/313 [==============================] - 0s 816us/step - loss: 1.3398e-13
+Epoch 5/50
+313/313 [==============================] - 0s 898us/step - loss: 1.3539e-13
+Epoch 6/50
+313/313 [==============================] - 0s 895us/step - loss: 1.3393e-13
+Epoch 7/50
+313/313 [==============================] - 0s 922us/step - loss: 1.3474e-13
+Epoch 8/50
+313/313 [==============================] - 0s 800us/step - loss: 1.3396e-13
+Epoch 9/50
+313/313 [==============================] - 0s 893us/step - loss: 1.3556e-13
+Epoch 10/50
+313/313 [==============================] - 0s 891us/step - loss: 1.3740e-13
+Epoch 11/50
+313/313 [==============================] - 0s 957us/step - loss: 1.3395e-13
+Epoch 12/50
+313/313 [==============================] - 0s 875us/step - loss: 1.3458e-13
+Epoch 13/50
+313/313 [==============================] - 0s 823us/step - loss: 1.3440e-13
+Epoch 14/50
+313/313 [==============================] - 0s 890us/step - loss: 1.3558e-13
+Epoch 15/50
+313/313 [==============================] - 0s 901us/step - loss: 1.3393e-13
+Epoch 16/50
+313/313 [==============================] - 0s 929us/step - loss: 1.3768e-13
+Epoch 17/50
+313/313 [==============================] - 0s 798us/step - loss: 1.3458e-13
+Epoch 18/50
+313/313 [==============================] - 0s 844us/step - loss: 1.3681e-13
+Epoch 19/50
+313/313 [==============================] - 0s 787us/step - loss: 1.3394e-13
+Epoch 20/50
+313/313 [==============================] - 0s 904us/step - loss: 1.3585e-13
+Epoch 21/50
+313/313 [==============================] - 0s 877us/step - loss: 1.3395e-13
+Epoch 22/50
+313/313 [==============================] - 0s 944us/step - loss: 1.3397e-13
+Epoch 23/50
+313/313 [==============================] - 0s 794us/step - loss: 1.3392e-13
+Epoch 24/50
+313/313 [==============================] - 0s 897us/step - loss: 1.3682e-13
+Epoch 25/50
+313/313 [==============================] - 0s 913us/step - loss: 1.3663e-13
+Epoch 26/50
+313/313 [==============================] - 0s 900us/step - loss: 1.3462e-13
+Epoch 27/50
+313/313 [==============================] - 0s 796us/step - loss: 1.3447e-13
+Epoch 28/50
+313/313 [==============================] - 0s 894us/step - loss: 1.3523e-13
+Epoch 29/50
+313/313 [==============================] - 0s 929us/step - loss: 1.3393e-13
+Epoch 30/50
+313/313 [==============================] - 0s 885us/step - loss: 1.3542e-13
+Epoch 31/50
+313/313 [==============================] - 0s 805us/step - loss: 1.3394e-13
+Epoch 32/50
+313/313 [==============================] - 0s 889us/step - loss: 1.3394e-13
+Epoch 33/50
+313/313 [==============================] - 0s 915us/step - loss: 1.3561e-13
+Epoch 34/50
+313/313 [==============================] - 0s 900us/step - loss: 1.3395e-13
+Epoch 35/50
+313/313 [==============================] - 0s 799us/step - loss: 1.3396e-13
+Epoch 36/50
+313/313 [==============================] - 0s 845us/step - loss: 1.3502e-13
+Epoch 37/50
+313/313 [==============================] - 0s 918us/step - loss: 1.3395e-13
+Epoch 38/50
+313/313 [==============================] - 0s 907us/step - loss: 1.3394e-13
+Epoch 39/50
+313/313 [==============================] - 0s 870us/step - loss: 1.3396e-13
+Epoch 40/50
+313/313 [==============================] - 0s 938us/step - loss: 1.3496e-13
+Epoch 41/50
+313/313 [==============================] - 0s 810us/step - loss: 1.3392e-13
+Epoch 42/50
+313/313 [==============================] - 0s 889us/step - loss: 1.3393e-13
+Epoch 43/50
+313/313 [==============================] - 0s 918us/step - loss: 1.3489e-13
+Epoch 44/50
+313/313 [==============================] - 0s 917us/step - loss: 1.3433e-13
+Epoch 45/50
+313/313 [==============================] - 0s 904us/step - loss: 1.3393e-13
+Epoch 46/50
+313/313 [==============================] - 0s 820us/step - loss: 1.3394e-13
+Epoch 47/50
+313/313 [==============================] - 0s 921us/step - loss: 1.3530e-13
+Epoch 48/50
+313/313 [==============================] - 0s 911us/step - loss: 1.3525e-13
+Epoch 49/50
+313/313 [==============================] - 0s 903us/step - loss: 1.3398e-13
+Epoch 50/50
+313/313 [==============================] - 0s 914us/step - loss: 1.3516e-13</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>&lt;keras.callbacks.History at 0x7f6e30737f10&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="lets-observe-the-result-1" class="level3">
+<h3 class="anchored" data-anchor-id="lets-observe-the-result-1">Let’s observe the result</h3>
+<div class="cell" data-cell_id="349b80d7692248218bbdec95f1cc8100" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="67" data-execution_start="1668135294120" data-outputid="bbffba77-5d41-4f92-acc2-0f0fddd50486" data-source_hash="62655c70" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.array([[<span class="dv">3</span>, <span class="dv">4</span>], [<span class="dv">0</span>, <span class="dv">9</span>], [<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>]])</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>WARNING:tensorflow:5 out of the last 6 calls to &lt;function Model.make_predict_function.&lt;locals&gt;.predict_function at 0x7f6e3048a280&gt; triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+1/1 [==============================] - 0s 37ms/step
+[[7.000000e+00]
+ [9.000000e+00]
+ [7.636544e-09]]</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion-1" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-1">Conclusion:</h3>
+<p>OK.. Again, Neural Network is just as good as Linear Regression</p>
+</section>
+</section>
+<section id="round4-lets-learn-some-non-linear-relationship-then" class="level2">
+<h2 class="anchored" data-anchor-id="round4-lets-learn-some-non-linear-relationship-then">Round4: Let’s learn some non-linear relationship then</h2>
+<section id="create-a-square-root-relationship" class="level3">
+<h3 class="anchored" data-anchor-id="create-a-square-root-relationship">Create a square root relationship</h3>
+<div class="cell" data-cell_id="51f6490a8bab44b2bd4fd2d86be7c721" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="39" data-execution_start="1668135294186" data-source_hash="9be6a6b7" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> <span class="dv">100000</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">10</span>, (size))</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>xs.sort()</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> [<span class="dv">0</span>] <span class="op">*</span> size</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(size):</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  ys[i] <span class="op">=</span> math.sqrt(xs[i])</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> np.array(ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-relationship" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-relationship">Visualize the relationship</h3>
+<div class="cell" data-cell_id="65a816c38c404ed69c3d6a53449b11b2" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="1393" data-execution_start="1668135294229" data-outputid="09097177-f9b1-4d48-b39d-ff9f718967ab" data-source_hash="fe5d5ca5" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x <span class="op">=</span> xs, y <span class="op">=</span> ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>&lt;AxesSubplot: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-25-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-deep-neural-network" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-deep-neural-network">Train a deep neural network</h3>
+<div class="cell" data-cell_id="45061b9135f84b909e02902b4eb0289f" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="206284" data-execution_start="1668135294693" data-outputid="fd46cc45-9b3b-41f3-f8ec-99112d12482c" data-source_hash="6be3bd75" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> keras.Sequential([</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">64</span>, input_shape <span class="op">=</span> [<span class="dv">1</span>]),</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">64</span>, activation <span class="op">=</span> <span class="st">'sigmoid'</span>),</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">64</span>, activation <span class="op">=</span> <span class="st">'sigmoid'</span>),</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">1</span>)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  ])</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'mean_squared_error'</span>)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>model.fit(xs, ys, epochs<span class="op">=</span><span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0234
+Epoch 2/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0043
+Epoch 3/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0041
+Epoch 4/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0038
+Epoch 5/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0034
+Epoch 6/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0029
+Epoch 7/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0025
+Epoch 8/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0020
+Epoch 9/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0016
+Epoch 10/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0013
+Epoch 11/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0011
+Epoch 12/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 8.9498e-04
+Epoch 13/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 7.5326e-04
+Epoch 14/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 6.4453e-04
+Epoch 15/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 5.6217e-04
+Epoch 16/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 4.9794e-04
+Epoch 17/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 4.4878e-04
+Epoch 18/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 4.1082e-04
+Epoch 19/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 3.8056e-04
+Epoch 20/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 3.5716e-04
+Epoch 21/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 3.3704e-04
+Epoch 22/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 3.2141e-04
+Epoch 23/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 3.0762e-04
+Epoch 24/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.9600e-04
+Epoch 25/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.8558e-04
+Epoch 26/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.7660e-04
+Epoch 27/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.6820e-04
+Epoch 28/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.6049e-04
+Epoch 29/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.5346e-04
+Epoch 30/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.4675e-04
+Epoch 31/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.4060e-04
+Epoch 32/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.3468e-04
+Epoch 33/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.2956e-04
+Epoch 34/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.2430e-04
+Epoch 35/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.1948e-04
+Epoch 36/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.1484e-04
+Epoch 37/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.1065e-04
+Epoch 38/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.0669e-04
+Epoch 39/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.0268e-04
+Epoch 40/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.9908e-04
+Epoch 41/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.9572e-04
+Epoch 42/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.9252e-04
+Epoch 43/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.8926e-04
+Epoch 44/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.8630e-04
+Epoch 45/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.8352e-04
+Epoch 46/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.8086e-04
+Epoch 47/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.7812e-04
+Epoch 48/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.7575e-04
+Epoch 49/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.7360e-04
+Epoch 50/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.7137e-04</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>&lt;keras.callbacks.History at 0x7f6e07dc4d60&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="observe-the-result-and-compare-it-with-the-training-data" class="level3">
+<h3 class="anchored" data-anchor-id="observe-the-result-and-compare-it-with-the-training-data">Observe the result and compare it with the training data</h3>
+<div class="cell" data-cell_id="e11ee4bdd4b9423e91652e1f2fecac6a" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="868" data-execution_start="1668135500556" data-outputid="755245ad-7697-4cdc-fd13-c3f8a10ea45a" data-source_hash="955075b1" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">10</span>,<span class="fl">0.001</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>plt.plot(t, model.predict(t), label <span class="op">=</span> <span class="st">'Prediction'</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>plt.plot(xs, ys, label <span class="op">=</span> <span class="st">'Actual'</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>WARNING:tensorflow:6 out of the last 7 calls to &lt;function Model.make_predict_function.&lt;locals&gt;.predict_function at 0x7f6e300a6430&gt; triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+313/313 [==============================] - 0s 824us/step</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f6e06b0f610&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-27-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="f0e24f3dd83544259364fba2ed595fa4" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="171" data-execution_start="1668135501406" data-outputid="92b739d1-d05b-4b78-b387-824770f64ac2" data-source_hash="d55dbbd0" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="dv">10</span>, <span class="dv">20</span>, (<span class="dv">100</span>))</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>t.sort()</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>plt.plot(xs, ys)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>plt.plot(t, model.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4/4 [==============================] - 0s 1ms/step</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-28-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-linear-regression-model-1" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-linear-regression-model-1">Train a Linear Regression model</h3>
+<div class="cell" data-cell_id="4f016485ed0d47998e43cb654229c3e1" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="204" data-execution_start="1668135501579" data-outputid="fbbec42f-0173-41c2-c3d2-5a41263a94f8" data-source_hash="59dac255" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> xs.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> t.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression().fit(xs, ys)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reg.predict(t))</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>plt.plot(xs, ys)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>plt.plot(t, reg.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[-1.42569093 -1.30205542 -1.09828043 -1.04867071 -1.03044785 -0.98600164
+ -0.96865632 -0.9023989  -0.71853787 -0.69083633 -0.62417619 -0.60805478
+ -0.54816478 -0.05101514  0.08713875  0.13057828  0.13475977  0.13864074
+  0.16797048  0.17713     0.19727745  0.22970649  0.31431312  0.37632993
+  0.63559054  0.69113312  0.70850827  0.88635407  0.89324519  0.92056171
+  0.99958658  1.10725201  1.17041577  1.27106823  1.30859389  1.32635898
+  1.3309071   1.38584883  1.40506766  1.40536572  1.42412021  1.58427221
+  1.683908    1.70211711  1.70970825  1.717564    1.87871458  1.98351473
+  2.11698049  2.11766604  2.1471542   2.19429567  2.3539216   2.38552702
+  2.41069027  2.51431647  2.52863949  2.57170389  2.63274016  2.72523481
+  2.79188304  2.79576683  3.06269909  3.15886559  3.27573822  3.37948444
+  3.39700664  3.43381774  3.45008318  3.4932293   3.52634682  3.78797497
+  3.89568843  4.03664514  4.04758793  4.08558755  4.11044801  4.11900392
+  4.12712782  4.22970685  4.25126194  4.28865898  4.3163758   4.32361748
+  4.36675904  4.41386179  4.44791997  4.46648179  4.52180494  4.71696863
+  4.72037875  4.81396369  4.81829441  4.97508789  4.99347484  5.23088123
+  5.23426318  5.32470282  5.36773324  5.88546246]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-29-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="9f4eff32d3b34ba3904e00a9070dcace" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="196282" data-execution_start="1668135501831" data-outputid="2d178ca3-3f1c-412c-8b92-8bb5b9d477e7" data-source_hash="cce41212" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> keras.Sequential([</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">2</span>, input_shape <span class="op">=</span> [<span class="dv">1</span>]),</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">64</span>, activation <span class="op">=</span> <span class="st">'relu'</span>),</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">64</span>, activation <span class="op">=</span> <span class="st">'relu'</span>),</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">1</span>)</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  ])</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'mean_squared_error'</span>)</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>model.fit(xs, ys, epochs<span class="op">=</span><span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0147
+Epoch 2/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 9.6181e-04
+Epoch 3/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 3.7634e-04
+Epoch 4/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.3227e-04
+Epoch 5/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.7060e-04
+Epoch 6/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.5108e-04
+Epoch 7/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.6084e-04
+Epoch 8/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.8447e-04
+Epoch 9/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.2366e-04
+Epoch 10/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.0303e-04
+Epoch 11/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.5917e-04
+Epoch 12/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 2.2970e-04
+Epoch 13/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 6.9329e-05
+Epoch 14/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 6.7857e-05
+Epoch 15/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 6.9192e-05
+Epoch 16/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 8.4352e-05
+Epoch 17/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 9.0722e-05
+Epoch 18/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.0956e-04
+Epoch 19/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.0441e-04
+Epoch 20/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 8.0185e-05
+Epoch 21/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.3061e-04
+Epoch 22/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 5.1739e-05
+Epoch 23/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 7.8681e-05
+Epoch 24/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 8.0863e-05
+Epoch 25/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.1494e-04
+Epoch 26/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 9.1416e-05
+Epoch 27/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 4.6811e-05
+Epoch 28/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.0611e-04
+Epoch 29/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 7.2222e-05
+Epoch 30/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 5.6831e-05
+Epoch 31/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 5.6454e-05
+Epoch 32/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.3881e-04
+Epoch 33/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 5.8258e-05
+Epoch 34/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 4.8645e-05
+Epoch 35/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 5.5545e-05
+Epoch 36/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 6.7602e-05
+Epoch 37/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.1466e-04
+Epoch 38/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 4.2625e-05
+Epoch 39/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 3.9022e-05
+Epoch 40/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 6.0201e-05
+Epoch 41/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 4.7673e-05
+Epoch 42/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 5.1120e-05
+Epoch 43/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.1484e-04
+Epoch 44/50
+3125/3125 [==============================] - 5s 1ms/step - loss: 4.3091e-05
+Epoch 45/50
+3125/3125 [==============================] - 5s 2ms/step - loss: 3.7601e-05
+Epoch 46/50
+3125/3125 [==============================] - 5s 2ms/step - loss: 5.5629e-05
+Epoch 47/50
+3125/3125 [==============================] - 5s 2ms/step - loss: 3.8547e-05
+Epoch 48/50
+3125/3125 [==============================] - 5s 2ms/step - loss: 9.7383e-05
+Epoch 49/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 3.4859e-05
+Epoch 50/50
+3125/3125 [==============================] - 4s 1ms/step - loss: 4.9066e-05</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>&lt;keras.callbacks.History at 0x7f6e0695a2b0&gt;</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="e2cbfa08964a41f0ae198691bcbb6ae4" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="356" data-execution_start="1668135698017" data-outputid="d75da37e-cd36-4f5c-b2f1-1e19f5872841" data-source_hash="e8d6fda" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">10</span>, <span class="fl">0.01</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>plt.plot(t, model.predict(t), label <span class="op">=</span> <span class="st">"Prediction"</span>)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>plt.plot(xs, ys, label <span class="op">=</span> <span class="st">"Actual"</span>)</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>32/32 [==============================] - 0s 697us/step</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f6e0626ec10&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-31-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="round-5-try-an-arbitrary-relationship-then" class="level2">
+<h2 class="anchored" data-anchor-id="round-5-try-an-arbitrary-relationship-then">Round 5: Try an arbitrary relationship then</h2>
+<div class="cell" data-cell_id="efaa54a48d2244abb799fff703ec7719" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="527" data-execution_start="1668135698374" data-outputid="eecd7685-aee9-477f-8cc5-ae29bf6f3255" data-source_hash="46e1a925" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> <span class="dv">100000</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">10</span>, (size))</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>xs.sort()</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> [<span class="dv">0</span>] <span class="op">*</span> size</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(size):</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>  ys[i] <span class="op">=</span> math.sqrt(xs[i])<span class="op">*</span><span class="dv">2</span> <span class="op">-</span> math.atan(xs[i])<span class="op">*</span><span class="dv">3</span> <span class="op">+</span> np.random.random()<span class="op">*</span><span class="fl">0.01</span></span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> np.array(ys)</span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x <span class="op">=</span> xs, y <span class="op">=</span> ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>&lt;AxesSubplot: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-32-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="1179572e9c964946b343936763fe2b5b" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="21245" data-execution_start="1668135698907" data-outputid="4920f454-c48c-4640-fd6a-e9c05ece23c6" data-source_hash="1a2e40f8" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> keras.Sequential([</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">64</span>, input_shape <span class="op">=</span> [<span class="dv">1</span>]),</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">64</span>, activation<span class="op">=</span><span class="st">'relu'</span>),</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">64</span>, activation<span class="op">=</span><span class="st">'relu'</span>),</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">1</span>)</span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  ])</span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'mean_squared_error'</span>)</span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>model.fit(xs, ys, epochs<span class="op">=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/5
+3125/3125 [==============================] - 4s 1ms/step - loss: 0.0125
+Epoch 2/5
+3125/3125 [==============================] - 4s 1ms/step - loss: 8.0274e-04
+Epoch 3/5
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.8838e-04
+Epoch 4/5
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.8755e-04
+Epoch 5/5
+3125/3125 [==============================] - 4s 1ms/step - loss: 1.5765e-04</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>&lt;keras.callbacks.History at 0x7f6de54a7910&gt;</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="fbe540e30fda4615bf295469ad189c3f" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="625" data-execution_start="1668135720151" data-outputid="e9d8e588-2a06-4653-8f1f-be55a11daaa0" data-source_hash="743ca42" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">10</span>, <span class="fl">0.001</span>)</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>plt.plot(xs, ys)</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>plt.plot(t, model.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>313/313 [==============================] - 0s 764us/step</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-34-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="round-6-try-another-arbitrary-relationship" class="level2">
+<h2 class="anchored" data-anchor-id="round-6-try-another-arbitrary-relationship">Round 6: Try another arbitrary relationship</h2>
+<div class="cell" data-cell_id="9553f71487c94aba89690f76889b8283" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="1727" data-execution_start="1668135720778" data-outputid="e529eb05-c1c9-4788-d5b1-e61da56ab5e6" data-source_hash="47081b15" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create dataset</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> <span class="dv">100000</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>np.random.seed(seed<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> np.random.uniform(low<span class="op">=</span><span class="fl">0.0</span>, high<span class="op">=</span><span class="fl">10.0</span>, size<span class="op">=</span>(size))</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>xs.sort()</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>slope <span class="op">=</span> <span class="fl">0.25</span></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> <span class="fl">0.02</span></span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>ys <span class="op">=</span> np.sin(xs<span class="op">/</span>(<span class="dv">2</span>)<span class="op">*</span>np.pi) <span class="op">+</span> np.random.normal(loc<span class="op">=</span><span class="fl">0.0</span>, scale<span class="op">=</span>noise, size<span class="op">=</span>(size,))</span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>sns.relplot(x <span class="op">=</span> xs, y <span class="op">=</span> ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-35-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="5e2d1eb33ccb490bae207c63d271a45f" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="84027" data-execution_start="1668135721376" data-outputid="dd5210e1-0845-41e6-898e-6b13989ddcc2" data-source_hash="cf882f68" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> keras.Sequential([</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">256</span>, input_shape <span class="op">=</span> [<span class="dv">1</span>]),</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">256</span>, activation<span class="op">=</span><span class="st">'relu'</span>),</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">256</span>, activation<span class="op">=</span><span class="st">'relu'</span>),</span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">256</span>, activation<span class="op">=</span><span class="st">'elu'</span>),</span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>      tf.keras.layers.Dense(<span class="dv">1</span>)</span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>  ])</span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'sgd'</span>, loss<span class="op">=</span><span class="st">'mean_squared_error'</span>)</span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a>model.fit(xs, ys, epochs<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/10
+3125/3125 [==============================] - 8s 3ms/step - loss: 0.3777
+Epoch 2/10
+3125/3125 [==============================] - 9s 3ms/step - loss: 0.2052
+Epoch 3/10
+3125/3125 [==============================] - 9s 3ms/step - loss: 0.0779
+Epoch 4/10
+3125/3125 [==============================] - 9s 3ms/step - loss: 0.0482
+Epoch 5/10
+3125/3125 [==============================] - 8s 3ms/step - loss: 0.0322
+Epoch 6/10
+3125/3125 [==============================] - 8s 3ms/step - loss: 0.0244
+Epoch 7/10
+3125/3125 [==============================] - 8s 3ms/step - loss: 0.0173
+Epoch 8/10
+3125/3125 [==============================] - 8s 3ms/step - loss: 0.0123
+Epoch 9/10
+3125/3125 [==============================] - 8s 3ms/step - loss: 0.0101
+Epoch 10/10
+3125/3125 [==============================] - 8s 3ms/step - loss: 0.0069</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>&lt;keras.callbacks.History at 0x7f6de553cf10&gt;</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="ecdcaf23d37142b79d1d26047db09b9b" data-deepnote_cell_type="code" data-deepnote_to_be_reexecuted="true" data-execution_millis="4335" data-execution_start="1668135805151" data-outputid="1d7e8ce1-ee0f-4594-82b8-2aed1d79089b" data-source_hash="7dd658ba" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">10</span>, (<span class="dv">100000</span>))</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>t.sort()</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>t.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>plt.plot(xs, ys)</span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>plt.plot(t, model.predict(t))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3125/3125 [==============================] - 3s 1ms/step</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="HelloNeuralNetworks_files/figure-html/cell-37-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="conclusion-finally-nn-is-better-for-non-linear-relationships-and-with-many-data-points." class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-finally-nn-is-better-for-non-linear-relationships-and-with-many-data-points.">Conclusion: Finally, NN is better (for non linear relationships and with many data points).</h2>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
