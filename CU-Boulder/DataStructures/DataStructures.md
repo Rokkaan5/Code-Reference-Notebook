@@ -1,8 +1,10 @@
 ---
+layout: page
 title: "CSCI 5501: Data Structures & Algorithms"
+permalink: /CUB/DataStructures
 ---
 
-[Fall 2022] ***Data Structures & Algorithms*** with Professor Di Wu at [CU Boulder](../../CUB.qmd)
+[Fall 2022] ***Data Structures & Algorithms*** with Professor Di Wu at [CU Boulder](../../CUB.md)
 
 ## Homeworks
 
