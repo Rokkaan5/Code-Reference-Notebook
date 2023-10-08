@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Linear and Polynomial Regression</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Linear and Polynomial Regression_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Linear and Polynomial Regression_files/libs/quarto-html/quarto.js"></script>
+<script src="Linear and Polynomial Regression_files/libs/quarto-html/popper.min.js"></script>
+<script src="Linear and Polynomial Regression_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Linear and Polynomial Regression_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Linear and Polynomial Regression_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Linear and Polynomial Regression_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Linear and Polynomial Regression_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Linear and Polynomial Regression_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Linear and Polynomial Regression_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#linear-and-polynomial-regression" id="toc-linear-and-polynomial-regression" class="nav-link active" data-scroll-target="#linear-and-polynomial-regression">Linear and Polynomial Regression</a>
+  <ul class="collapse">
+  <li><a href="#linear-regression" id="toc-linear-regression" class="nav-link" data-scroll-target="#linear-regression">Linear Regression</a>
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
+  </ul></li>
+  <li><a href="#polynomial-regression" id="toc-polynomial-regression" class="nav-link" data-scroll-target="#polynomial-regression">Polynomial Regression</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1">Introduction</a></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Linear and Polynomial Regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="linear-and-polynomial-regression" class="level1">
+<h1>Linear and Polynomial Regression</h1>
+<p>In this tutorial, we’ll discuss how to implement a simple linear regression model using the least squares approach to fit the data. After that, we’ll extend the model to a polynomial regression model in order to capture more complex signals. We’ll be using the mean squared error to measure the quality of fit for every model we generate.</p>
+<section id="linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="linear-regression">Linear Regression</h2>
+<section id="introduction" class="level3">
+<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<p>Linear Regression:</p>
+<p>Simple linear regression is useful for finding the relationship between two continuous variables. One is the predictor or independent variable and the other is the response or dependent variable. It looks for a statistical relationship but a not deterministic relationship. A relationship between two variables is said to be deterministic if one variable can be accurately expressed by the other.</p>
+<p>For example, using temperature in degree Celsius it is possible to predict Fahrenheit accurately. The statistical relationship is not accurate in determining the relationship between two variables. For example, the relationship between height and weight.</p>
+<p>Concept:</p>
+<p>The core idea is to obtain a line that best fits the data. The best fit line is the one for which the total prediction error (all data points) is as small as possible. Error is the distance between the point to the regression line.</p>
+<p>Y(pred) = b0 + b1*x</p>
+<p>The values b0 and b1 must be chosen so that they minimize the error. If sum of squared error is taken as a metric to evaluate the model, then goal to obtain a line that best reduces the error.</p>
+</section>
+<section id="example" class="level3">
+<h3 class="anchored" data-anchor-id="example">Example</h3>
+<p>Loading and Plotting the Data :</p>
+<p>Let’s start by loading the training data into the memory and plotting it as a graph to see what we’re working with. Think of train_features as x-values and train_desired_outputs as y-values. The graph below is the resulting scatter plot of all the values.</p>
+<div class="cell" data-cell_id="41ad4b91a617407b9a8b20a8515377d3" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:55}" data-deepnote_cell_type="code" data-execution_millis="875" data-execution_start="1665790090315" data-source_hash="d625afed" data-tags="[]" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and plot data files</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the training data hw1xtr.dat and hw1ytr.dat into the memory</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>train_features <span class="op">=</span> pd.read_csv(<span class="st">'xtr.dat'</span>,  header <span class="op">=</span> <span class="va">None</span>) </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>train_desired_outputs <span class="op">=</span> pd.read_csv(<span class="st">'ytr.dat'</span>, header <span class="op">=</span> <span class="va">None</span>) </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># # Plot training_data and desired_outputs</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>train_features_vals <span class="op">=</span> train_features.values</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>train_desired_outputs_vals <span class="op">=</span> train_desired_outputs.values</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>plt.scatter(train_features_vals, train_desired_outputs_vals, color <span class="op">=</span> <span class="st">'g'</span>, marker <span class="op">=</span> <span class="st">'o'</span>, s <span class="op">=</span> <span class="dv">30</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Training Data'</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the test data hw1xte.dat and hw1yte.dat into the memory</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>test_features <span class="op">=</span> pd.read_csv(<span class="st">'xte.dat'</span>,  header <span class="op">=</span> <span class="va">None</span>) </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>test_desired_outputs <span class="op">=</span> pd.read_csv(<span class="st">'yte.dat'</span>, header <span class="op">=</span> <span class="va">None</span>) </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># # Plot training_data and desired_outputs</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>plt.scatter(test_features.values, test_desired_outputs.values, color <span class="op">=</span> <span class="st">'b'</span>, marker <span class="op">=</span> <span class="st">'o'</span>, s <span class="op">=</span> <span class="dv">30</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Testing Data'</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Linear%20and%20Polynomial%20Regression_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Linear%20and%20Polynomial%20Regression_files/figure-html/cell-2-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Now it’s time to write a simple linear regression model to try fit the data. Our goal is to find a line that best resembles the underlying pattern of the training data shown in the graph. We’re going to use the least squares method to parameterize our model with the coefficients that best describe the training set before seeing how well the model generalizes to data it hasn’t seen before. Recall that the simple linear regression model is parameterized by a y-intercept and the slope of the regression line.</p>
+<p>Training Our Linear Regression Model :</p>
+<p>The process of finding parameters so that our model fits the training data is called ‘training’ our model. Given a design matrix X and a column vector of target outputs y, we can use the following equation to find the best intercept and slope coefficients for our linear model through least squares regression (for an in-depth view into the linear algebra concepts behind this equation,</p>
+<p>w= (X^T. X)^-1 . X^T. Y</p>
+<p>We first create a design matrix X which holds a column of ones (in order to estimate the y-intercept) and another column to hold the values of our explanatory variable x. Then we take the inverse of the dot product of X with its transpose, and dot product it with the dot product of the X-transpose and y (the y-values for training_desired_outputs).</p>
+<div class="cell" data-cell_id="029e8ad58389429ea956a10d137ee69a" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:79}" data-deepnote_cell_type="code" data-execution_millis="1355" data-execution_start="1665790107017" data-source_hash="9fe4c06f" data-tags="[]">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Train linear regression model on training set</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>train_features_vals <span class="op">=</span> train_features.values</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>train_desired_outputs_vals <span class="op">=</span> train_desired_outputs.values</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="bu">len</span>(train_features)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.c_[np.ones(N), train_features_vals]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.linalg.inv(X.T<span class="op">@</span>X)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> A<span class="op">@</span>X.T</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> D<span class="op">@</span>train_desired_outputs_vals</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> []</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regression_line(x, y, b): </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the actual points as scatter plot </span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x, y, color <span class="op">=</span> <span class="st">"m"</span>, </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>            marker <span class="op">=</span> <span class="st">"o"</span>, s <span class="op">=</span> <span class="dv">30</span>) </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Predicted response vector </span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> y_pred</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> b[<span class="dv">0</span>] <span class="op">+</span> b[<span class="dv">1</span>]<span class="op">*</span>x </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the regression line </span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    plt.plot(x, y_pred, color <span class="op">=</span> <span class="st">"g"</span>) </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># putting labels </span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'x'</span>) </span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">'y'</span>) </span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to show plot </span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    plt.show() </span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot scatter plot</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>plt.scatter(train_features_vals, train_desired_outputs_vals, color <span class="op">=</span> <span class="st">'m'</span>, marker <span class="op">=</span> <span class="st">'o'</span>, s <span class="op">=</span> <span class="dv">30</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>plot_regression_line(train_features_vals, train_desired_outputs_vals, result)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Find average error on the training set</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.square(y_pred <span class="op">-</span> train_desired_outputs_vals)</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> np.<span class="bu">sum</span>(A)<span class="op">/</span>N</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'MSE on the training set: '</span>, error)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Linear%20and%20Polynomial%20Regression_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MSE on the training set:  2.1739455790492586</code></pre>
+</div>
+</div>
+<p>We can quantify how well our model fits the data by using the mean squared error (MSE) to calculate the average squared difference between our line and the actual data point in the training set. The MSE is calculated as follows:</p>
+<p>Testing Our Linear Regression Model :</p>
+<p>Now let’s see how well our model predicts on data it hasn’t seen before. We call this step the testing phase. Remember, our model is defined by the coefficients returned by :</p>
+<p>w= (X^T. X)^-1 . X^T. Y</p>
+<p>So the function above returns w which contains coefficients for the y-intercept and the slope. We’re going to test our model using the same values we used to train it.</p>
+<div class="cell" data-cell_id="58d15a4d3cbc4666a11013ed40497dfb" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:100}" data-deepnote_cell_type="code" data-execution_millis="521" data-execution_start="1665790117873" data-source_hash="87dfa3bb" data-tags="[]" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Test linear regression model on testing set</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>test_features_vals <span class="op">=</span> test_features.values</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>test_desired_outputs_vals <span class="op">=</span> test_desired_outputs.values</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>plt.scatter(test_features_vals, test_desired_outputs, color <span class="op">=</span> <span class="st">'b'</span>, marker <span class="op">=</span> <span class="st">'o'</span>, s <span class="op">=</span> <span class="dv">30</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>y_pred_test <span class="op">=</span> []</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regression_line(x, y, b): </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the actual points as scatter plot </span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x, y, color <span class="op">=</span> <span class="st">"m"</span>, </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>            marker <span class="op">=</span> <span class="st">"o"</span>, s <span class="op">=</span> <span class="dv">30</span>) </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Predicted response vector </span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> y_pred_test</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    y_pred_test <span class="op">=</span> b[<span class="dv">0</span>] <span class="op">+</span> b[<span class="dv">1</span>]<span class="op">*</span>x </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plotting the regression line </span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    plt.plot(x, y_pred_test, color <span class="op">=</span> <span class="st">"g"</span>) </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Putting labels </span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'x'</span>) </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">'y'</span>) </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function to show plot </span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    plt.show() </span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>plot_regression_line(test_features_vals, test_desired_outputs_vals, result)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Find average error on the training set</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.square(y_pred_test <span class="op">-</span> test_desired_outputs_vals)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> np.<span class="bu">sum</span>(A)<span class="op">/</span>test_features_vals.shape[<span class="dv">0</span>]</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average error on the testing set: '</span>, error)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Linear%20and%20Polynomial%20Regression_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Average error on the testing set:  2.3118753456727994</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="polynomial-regression" class="level2">
+<h2 class="anchored" data-anchor-id="polynomial-regression">Polynomial Regression</h2>
+<section id="introduction-1" class="level3">
+<h3 class="anchored" data-anchor-id="introduction-1">Introduction</h3>
+<p>Polynomial Regression: Polynomial Regression is a regression algorithm that models the relationship between a dependent(y) and independent variable(x) as nth degree polynomial.</p>
+<p>It is also called the special case of Multiple Linear Regression in ML. Because we add some polynomial terms to the Multiple Linear regression equation to convert it into Polynomial Regression.</p>
+<p>It is a linear model with some modification in order to increase the accuracy.The dataset used in Polynomial regression for training is of non-linear nature. It makes use of a linear regression model to fit the complicated and non-linear functions and datasets.</p>
+<p>Concept:</p>
+<p>All we need to do to implement polynomial regression is to take our linear regression model and add more features. Recall the form of the linear regression model and compare it to the form of the polynomial regression model</p>
+<p>y = b0 + b1 xi + b2 xi^2 + b3 xi^3………………………….+ bm xi^m + ei (i=1,2,3………)</p>
+<p>You can see that we need an extra coefficient for every additional feature, denoted by x²…xᵐ. The order of the polynomial regression model depends on the number of features included in the model, so a model with m features is an mᵗʰ-degree or mᵗʰ-order polynomial regression. We’ll start with 2nd-order polynomial regression and you’ll notice that it’s quite easy to increase the complexity of your regression model (increasing model complexity isn’t always a good thing and can lead to overfitting!!!).</p>
+</section>
+<section id="example-1" class="level3">
+<h3 class="anchored" data-anchor-id="example-1">Example</h3>
+<p>2nd-Order Polynomial Regression:</p>
+<p>Since we’re including another feature into our model, we’re going to have to account for it by adding another term into our design matrix. The general form of the design matrix with m-degrees looks like this</p>
+<p>Notice how we included a column for the x² features on the right hand side of the design matrix X. The resulting three coefficients are stored in coeffs. Let’s apply the model to our training data and print out the regression line.</p>
+<p>Here’s how our 2nd-order polynomial regression model fit the training data:</p>
+<div class="cell" data-cell_id="2082e7b5f9fa4353a92263c59dbdde9d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:157}" data-deepnote_cell_type="code" data-execution_millis="13644" data-execution_start="1665790207593" data-source_hash="fd6f4e97" data-tags="[]" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Train 2nd-order regression model on training set</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>train_features_vals <span class="op">=</span> train_features.values</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>train_desired_outputs_vals <span class="op">=</span> train_desired_outputs.values</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># # Plot scatter plot</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.scatter(train_features_vals, train_desired_outputs_vals, color = 'm', marker = 'o', s = 30)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="bu">len</span>(train_features)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.c_[np.ones(N), train_features_vals, np.square(train_features)]</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.linalg.inv(X.T<span class="op">@</span>X)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> A<span class="op">@</span>X.T</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> D<span class="op">@</span>train_desired_outputs_vals</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> []</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regression_line(x, y, b): </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plotting the actual points as scatter plot </span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x, y, color <span class="op">=</span> <span class="st">"m"</span>, </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>            marker <span class="op">=</span> <span class="st">"o"</span>, s <span class="op">=</span> <span class="dv">30</span>) </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    x_line <span class="op">=</span> np.linspace(train_features_vals.<span class="bu">min</span>(), train_features_vals.<span class="bu">max</span>(), <span class="dv">100</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> y_pred</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> b[<span class="dv">2</span>]<span class="op">*</span>np.square(x_line) <span class="op">+</span> b[<span class="dv">1</span>]<span class="op">*</span>x_line <span class="op">+</span> b[<span class="dv">0</span>] </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    regression_line <span class="op">=</span> y_pred</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the regression line </span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    plt.plot(x_line, regression_line, color <span class="op">=</span> <span class="st">"g"</span>) </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Putting labels </span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'x'</span>) </span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">'y'</span>)     </span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot scatter plot</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>plt.scatter(train_features_vals, train_desired_outputs_vals, color <span class="op">=</span> <span class="st">'m'</span>, marker <span class="op">=</span> <span class="st">'o'</span>, s <span class="op">=</span> <span class="dv">30</span>)</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>plot_regression_line(train_features_vals, train_desired_outputs_vals, result)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>plt.show() </span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Find average error on the training set</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.square(result[<span class="dv">2</span>]<span class="op">*</span>np.square(train_features_vals) <span class="op">+</span> result[<span class="dv">1</span>]<span class="op">*</span>train_features_vals <span class="op">+</span> result[<span class="dv">0</span>]  <span class="op">-</span> train_desired_outputs_vals)</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> np.<span class="bu">sum</span>(A)<span class="op">/</span>N</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average error on the training set: '</span>, error)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Linear%20and%20Polynomial%20Regression_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Average error on the training set:  0.48468450312715505</code></pre>
+</div>
+</div>
+<p>And now let’s apply our model to the testing data.</p>
+<div class="cell" data-cell_id="d2a15b6a70a8439287aa110fccdf85b0" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:166}" data-deepnote_cell_type="code" data-execution_millis="725" data-execution_start="1665790259737" data-source_hash="5e725c00" data-tags="[]" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Test 2nd-order regression model on testing set</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>test_features_vals <span class="op">=</span> test_features.values</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>test_desired_outputs_vals <span class="op">=</span> test_desired_outputs.values</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plt.scatter(test_features_vals, test_desired_outputs, color <span class="op">=</span> <span class="st">'b'</span>, marker <span class="op">=</span> <span class="st">'o'</span>, s <span class="op">=</span> <span class="dv">30</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> []</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regression_line(x, y, b): </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the actual points as scatter plot </span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x, y, color <span class="op">=</span> <span class="st">"m"</span>, </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>            marker <span class="op">=</span> <span class="st">"o"</span>, s <span class="op">=</span> <span class="dv">30</span>) </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    x_line <span class="op">=</span> np.linspace(train_features_vals.<span class="bu">min</span>(), train_features_vals.<span class="bu">max</span>(), <span class="dv">100</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> y_pred</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> b[<span class="dv">2</span>]<span class="op">*</span>np.square(x_line) <span class="op">+</span> b[<span class="dv">1</span>]<span class="op">*</span>x_line <span class="op">+</span> b[<span class="dv">0</span>] </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    regression_line <span class="op">=</span> y_pred</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the regression line </span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    plt.plot(x_line, regression_line, color <span class="op">=</span> <span class="st">"g"</span>) </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Putting labels </span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'x'</span>) </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">'y'</span>) </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>plt.scatter(test_features_vals, test_desired_outputs, color <span class="op">=</span> <span class="st">'b'</span>, marker <span class="op">=</span> <span class="st">'o'</span>, s <span class="op">=</span> <span class="dv">30</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>plot_regression_line(test_features_vals, test_desired_outputs_vals, result)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>plt.show() </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Find average error on the training set</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.square(result[<span class="dv">2</span>]<span class="op">*</span>np.square(test_features_vals) <span class="op">+</span> result[<span class="dv">1</span>]<span class="op">*</span>test_features_vals <span class="op">+</span> result[<span class="dv">0</span>]  <span class="op">-</span> test_desired_outputs_vals)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> np.<span class="bu">sum</span>(A)<span class="op">/</span>test_features_vals.shape[<span class="dv">0</span>]</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average error on the testing set: '</span>, error)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'2nd-order polynomial regression is a better fit than linear regression.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Linear%20and%20Polynomial%20Regression_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Average error on the testing set:  0.7573635655517964
+2nd-order polynomial regression is a better fit than linear regression.</code></pre>
+</div>
+</div>
+<p>When comparing the MSE’s of our linear regression model and 2nd-order polynomial regression model, we see that the latter fit the testing set better than former. Hooray! We were able to improve the accuracy of our model by increasing the complexity. Be warned, however, that increasing model complexity doesn’t always lead to better accuracy.</p>
+<p>In order to extend this model further, try implementing a 3rd-order polynomial regression by adding in a cubed term for the feature x in the design matrix X, like this:</p>
+<div class="cell" data-cell_id="4279d9b3083c4a0c99f8f04bd6a42e81" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:178}" data-deepnote_cell_type="code" data-execution_millis="744" data-execution_start="1665790311412" data-source_hash="1533e0fe" data-tags="[]" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Train 3rd-order regression model on training set</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>train_features_vals <span class="op">=</span> train_features.values</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>train_desired_outputs_vals <span class="op">=</span> train_desired_outputs.values</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot scatter plot</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>plt.scatter(train_features_vals, train_desired_outputs_vals, color <span class="op">=</span> <span class="st">'m'</span>, marker <span class="op">=</span> <span class="st">'o'</span>, s <span class="op">=</span> <span class="dv">30</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="bu">len</span>(train_features)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.c_[np.ones(N), train_features_vals, np.square(train_features), np.power(train_features, <span class="dv">3</span>)]</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.linalg.inv(X.T<span class="op">@</span>X)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> A<span class="op">@</span>X.T</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> D<span class="op">@</span>train_desired_outputs_vals</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> []</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regression_line(x, y, b): </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the actual points as scatter plot </span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x, y, color <span class="op">=</span> <span class="st">"m"</span>, </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>            marker <span class="op">=</span> <span class="st">"o"</span>, s <span class="op">=</span> <span class="dv">30</span>) </span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    x_line <span class="op">=</span> np.linspace(train_features_vals.<span class="bu">min</span>(), train_features_vals.<span class="bu">max</span>(), <span class="dv">100</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> y_pred</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> b[<span class="dv">3</span>]<span class="op">*</span>np.power(x_line, <span class="dv">3</span>) <span class="op">+</span> b[<span class="dv">2</span>]<span class="op">*</span>np.square(x_line) <span class="op">+</span> b[<span class="dv">1</span>]<span class="op">*</span>x_line <span class="op">+</span> b[<span class="dv">0</span>]     </span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    regression_line <span class="op">=</span> y_pred</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the regression line </span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    plt.plot(x_line, regression_line, color <span class="op">=</span> <span class="st">"g"</span>) </span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Putting labels </span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'x'</span>) </span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">'y'</span>) </span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>plot_regression_line(train_features_vals, train_desired_outputs_vals, result)</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>plt.show() </span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Find average error on the training set</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.square(result[<span class="dv">3</span>]<span class="op">*</span>np.power(train_features_vals, <span class="dv">3</span>) <span class="op">+</span> result[<span class="dv">2</span>]<span class="op">*</span>np.square(train_features_vals) <span class="op">+</span> result[<span class="dv">1</span>]<span class="op">*</span>train_features_vals <span class="op">+</span> result[<span class="dv">0</span>]  <span class="op">-</span> train_desired_outputs_vals)</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> np.<span class="bu">sum</span>(A)<span class="op">/</span>N</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average error on the training set: '</span>, error)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Linear%20and%20Polynomial%20Regression_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Average error on the training set:  0.4805521334453259</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="364ab52afe144230800d43fdc97bc133" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:184}" data-deepnote_cell_type="code" data-execution_millis="865" data-execution_start="1665790319085" data-source_hash="2f02a647" data-tags="[]" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Test 3rd-order regression model on testing set</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>test_features_vals <span class="op">=</span> test_features.values</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>test_desired_outputs_vals <span class="op">=</span> test_desired_outputs.values</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.scatter(test_features_vals, test_desired_outputs, color <span class="op">=</span> <span class="st">'b'</span>, marker <span class="op">=</span> <span class="st">'o'</span>, s <span class="op">=</span> <span class="dv">30</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> []</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regression_line(x, y, b): </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the actual points as scatter plot </span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    plt.scatter(x, y, color <span class="op">=</span> <span class="st">"m"</span>, </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>            marker <span class="op">=</span> <span class="st">"o"</span>, s <span class="op">=</span> <span class="dv">30</span>) </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    x_line <span class="op">=</span> np.linspace(test_features_vals.<span class="bu">min</span>(), test_features_vals.<span class="bu">max</span>(), <span class="dv">100</span>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> y_pred</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> b[<span class="dv">3</span>]<span class="op">*</span>np.power(x_line, <span class="dv">3</span>) <span class="op">+</span> b[<span class="dv">2</span>]<span class="op">*</span>np.square(x_line) <span class="op">+</span> b[<span class="dv">1</span>]<span class="op">*</span>x_line <span class="op">+</span> b[<span class="dv">0</span>] </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    regression_line <span class="op">=</span> y_pred</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plotting the regression line </span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    plt.plot(x_line, regression_line, color <span class="op">=</span> <span class="st">"g"</span>) </span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Putting labels </span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'x'</span>) </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">'y'</span>) </span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>plot_regression_line(test_features_vals, test_desired_outputs_vals, result)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>plt.show() </span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Find average error on the training set</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.square(result[<span class="dv">3</span>]<span class="op">*</span>np.power(test_features_vals, <span class="dv">3</span>) <span class="op">+</span> result[<span class="dv">2</span>]<span class="op">*</span>np.square(test_features_vals) <span class="op">+</span> result[<span class="dv">1</span>]<span class="op">*</span>test_features_vals <span class="op">+</span> result[<span class="dv">0</span>]  <span class="op">-</span> test_desired_outputs_vals)</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> np.<span class="bu">sum</span>(A)<span class="op">/</span>test_features_vals.shape[<span class="dv">0</span>]</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Average error on the testing set: '</span>, error)</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'3rd-order polynomial regression is a better fit than 2nd-order polynomial regression.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Linear%20and%20Polynomial%20Regression_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Average error on the testing set:  0.691124536288844
+3rd-order polynomial regression is a better fit than 2nd-order polynomial regression.</code></pre>
+</div>
+</div>
+<p>References: https://towardsdatascience.com/implementing-linear-and-polynomial-regression-from-scratch-f1e3d422e6b4 https://towardsdatascience.com/machine-learning-polynomial-regression-with-python-5328e4e8a386</p>
+<p>Credit: This tutorial is prepared by Bhawneet Singh</p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
