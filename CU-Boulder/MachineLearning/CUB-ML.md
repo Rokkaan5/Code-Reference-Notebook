@@ -75,7 +75,7 @@ Prof Gate's ARM code in R provides examples of ARM applications
 - Extra code : 
 
 
-## [Support Vector Machines (SVM)](SVM/CUB-ML_SVM.qmd)
+## [Support Vector Machines (SVM)](SVM/CUB-ML_SVM.md)
 ### in R
 - N/A (nothing provided, last I checked (April 2023))
 
@@ -85,13 +85,7 @@ Prof Gate's ARM code in R provides examples of ARM applications
     - Part 1 : Text mining example
     - Part 2 : Mixed/Numeric Record data example
 
-## Regression
-### in R
-
-### Python
-
-
-## [Neural Networks](NN/CUB-ML_NN.qmd)
+## [Neural Networks](NN/CUB-ML_NN.md)
 ### in R
 
 ### Python
