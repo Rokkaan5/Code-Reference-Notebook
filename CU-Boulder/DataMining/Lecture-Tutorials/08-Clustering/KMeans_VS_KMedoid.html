@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>K-Means vs.&nbsp;K-Medoid</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="KMeans_VS_KMedoid_files/libs/clipboard/clipboard.min.js"></script>
+<script src="KMeans_VS_KMedoid_files/libs/quarto-html/quarto.js"></script>
+<script src="KMeans_VS_KMedoid_files/libs/quarto-html/popper.min.js"></script>
+<script src="KMeans_VS_KMedoid_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="KMeans_VS_KMedoid_files/libs/quarto-html/anchor.min.js"></script>
+<link href="KMeans_VS_KMedoid_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="KMeans_VS_KMedoid_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="KMeans_VS_KMedoid_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="KMeans_VS_KMedoid_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="KMeans_VS_KMedoid_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#k-means-and-k-medoid" id="toc-k-means-and-k-medoid" class="nav-link active" data-scroll-target="#k-means-and-k-medoid">K-Means and K-Medoid</a>
+  <ul class="collapse">
+  <li><a href="#prepare-the-packages" id="toc-prepare-the-packages" class="nav-link" data-scroll-target="#prepare-the-packages">Prepare the packages</a></li>
+  </ul></li>
+  <li><a href="#round-1-lets-create-some-simple-dataset." id="toc-round-1-lets-create-some-simple-dataset." class="nav-link" data-scroll-target="#round-1-lets-create-some-simple-dataset.">Round 1: Let’s create some simple dataset.</a>
+  <ul class="collapse">
+  <li><a href="#create-3-clusters-of-data-points." id="toc-create-3-clusters-of-data-points." class="nav-link" data-scroll-target="#create-3-clusters-of-data-points.">Create 3 clusters of data points.</a></li>
+  <li><a href="#lets-visualize-the-dataset-using-seaborn" id="toc-lets-visualize-the-dataset-using-seaborn" class="nav-link" data-scroll-target="#lets-visualize-the-dataset-using-seaborn">Let’s visualize the dataset using Seaborn</a></li>
+  <li><a href="#lets-train-a-model-using-kmeans" id="toc-lets-train-a-model-using-kmeans" class="nav-link" data-scroll-target="#lets-train-a-model-using-kmeans">Let’s train a model using KMeans</a></li>
+  <li><a href="#lets-train-a-model-using-kmedoid" id="toc-lets-train-a-model-using-kmedoid" class="nav-link" data-scroll-target="#lets-train-a-model-using-kmedoid">Lets train a model using KMedoid</a></li>
+  <li><a href="#visualize-the-result" id="toc-visualize-the-result" class="nav-link" data-scroll-target="#visualize-the-result">Visualize the result</a></li>
+  <li><a href="#conclusion-kmean-and-kmedoid-did-equaly-well-for-this-dataset." id="toc-conclusion-kmean-and-kmedoid-did-equaly-well-for-this-dataset." class="nav-link" data-scroll-target="#conclusion-kmean-and-kmedoid-did-equaly-well-for-this-dataset.">Conclusion: KMean and KMedoid did equaly well for this dataset.</a>
+  <ul class="collapse">
+  <li><a href="#create-the-same-random-clusters" id="toc-create-the-same-random-clusters" class="nav-link" data-scroll-target="#create-the-same-random-clusters">Create the same random clusters</a></li>
+  <li><a href="#create-an-outlier." id="toc-create-an-outlier." class="nav-link" data-scroll-target="#create-an-outlier.">Create an outlier.</a></li>
+  <li><a href="#visualize-the-dataset" id="toc-visualize-the-dataset" class="nav-link" data-scroll-target="#visualize-the-dataset">Visualize the dataset</a></li>
+  <li><a href="#train-a-model-using-kmeans" id="toc-train-a-model-using-kmeans" class="nav-link" data-scroll-target="#train-a-model-using-kmeans">Train a model using KMeans</a></li>
+  <li><a href="#visualize-the-result-1" id="toc-visualize-the-result-1" class="nav-link" data-scroll-target="#visualize-the-result-1">Visualize the result</a></li>
+  <li><a href="#train-a-model-using-kmedoids" id="toc-train-a-model-using-kmedoids" class="nav-link" data-scroll-target="#train-a-model-using-kmedoids">Train a model using KMedoids</a></li>
+  <li><a href="#conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed" id="toc-conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed" class="nav-link" data-scroll-target="#conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed">Conclusion: KMedoid did well even with an outlier. KMeans failed</a></li>
+  </ul></li>
+  <li><a href="#create-a-dataset" id="toc-create-a-dataset" class="nav-link" data-scroll-target="#create-a-dataset">create a dataset</a>
+  <ul class="collapse">
+  <li><a href="#visualize-the-dataset-1" id="toc-visualize-the-dataset-1" class="nav-link" data-scroll-target="#visualize-the-dataset-1">Visualize the dataset</a></li>
+  <li><a href="#train-a-model-using-kmeans-1" id="toc-train-a-model-using-kmeans-1" class="nav-link" data-scroll-target="#train-a-model-using-kmeans-1">Train a model using KMeans</a></li>
+  <li><a href="#visualize-the-result-2" id="toc-visualize-the-result-2" class="nav-link" data-scroll-target="#visualize-the-result-2">Visualize the result</a></li>
+  <li><a href="#train-a-model-using-kmdoids" id="toc-train-a-model-using-kmdoids" class="nav-link" data-scroll-target="#train-a-model-using-kmdoids">Train a model using KMdoids</a></li>
+  <li><a href="#visualize-the-result-3" id="toc-visualize-the-result-3" class="nav-link" data-scroll-target="#visualize-the-result-3">Visualize the result</a></li>
+  <li><a href="#conclusion-kmeans-and-kmedoid-did-equally-well." id="toc-conclusion-kmeans-and-kmedoid-did-equally-well." class="nav-link" data-scroll-target="#conclusion-kmeans-and-kmedoid-did-equally-well.">Conclusion: KMeans and KMedoid did equally well.</a></li>
+  </ul></li>
+  <li><a href="#create-a-dataset-with-an-outlier" id="toc-create-a-dataset-with-an-outlier" class="nav-link" data-scroll-target="#create-a-dataset-with-an-outlier">Create a dataset with an outlier</a>
+  <ul class="collapse">
+  <li><a href="#visualize-the-dataset-2" id="toc-visualize-the-dataset-2" class="nav-link" data-scroll-target="#visualize-the-dataset-2">Visualize the dataset</a></li>
+  <li><a href="#train-a-model-using-kmeans-2" id="toc-train-a-model-using-kmeans-2" class="nav-link" data-scroll-target="#train-a-model-using-kmeans-2">Train a model using KMeans</a></li>
+  <li><a href="#visualize-the-result-4" id="toc-visualize-the-result-4" class="nav-link" data-scroll-target="#visualize-the-result-4">Visualize the result</a></li>
+  <li><a href="#train-a-model-using-kmdoids-1" id="toc-train-a-model-using-kmdoids-1" class="nav-link" data-scroll-target="#train-a-model-using-kmdoids-1">Train a model using KMdoids</a></li>
+  <li><a href="#visualize-the-result-5" id="toc-visualize-the-result-5" class="nav-link" data-scroll-target="#visualize-the-result-5">Visualize the result</a></li>
+  <li><a href="#conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed-1" id="toc-conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed-1" class="nav-link" data-scroll-target="#conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed-1">Conclusion: KMedoid did well even with an outlier. KMeans failed</a></li>
+  </ul></li>
+  <li><a href="#create-a-dataset-with-an-outlier-1" id="toc-create-a-dataset-with-an-outlier-1" class="nav-link" data-scroll-target="#create-a-dataset-with-an-outlier-1">Create a dataset with an outlier</a>
+  <ul class="collapse">
+  <li><a href="#visualize-the-dataset-3" id="toc-visualize-the-dataset-3" class="nav-link" data-scroll-target="#visualize-the-dataset-3">Visualize the dataset</a></li>
+  <li><a href="#train-a-model-using-kmeans-3" id="toc-train-a-model-using-kmeans-3" class="nav-link" data-scroll-target="#train-a-model-using-kmeans-3">Train a model using KMeans</a></li>
+  <li><a href="#visualize-the-result-6" id="toc-visualize-the-result-6" class="nav-link" data-scroll-target="#visualize-the-result-6">Visualize the result</a></li>
+  <li><a href="#train-a-model-using-kmdoids-2" id="toc-train-a-model-using-kmdoids-2" class="nav-link" data-scroll-target="#train-a-model-using-kmdoids-2">Train a model using KMdoids</a></li>
+  <li><a href="#visualize-the-result-7" id="toc-visualize-the-result-7" class="nav-link" data-scroll-target="#visualize-the-result-7">Visualize the result</a></li>
+  <li><a href="#conclusion-kmedoid-did-well-even-with-more-outliers.-kmeans-failed" id="toc-conclusion-kmedoid-did-well-even-with-more-outliers.-kmeans-failed" class="nav-link" data-scroll-target="#conclusion-kmedoid-did-well-even-with-more-outliers.-kmeans-failed">Conclusion: KMedoid did well even with more outliers. KMeans failed</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">K-Means vs.&nbsp;K-Medoid</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="k-means-and-k-medoid" class="level1">
+<h1>K-Means and K-Medoid</h1>
+<p>We learned both K-Means and K-Medoid as basic clustering methods. Let’s play with them and observe the differences.</p>
+<section id="prepare-the-packages" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-the-packages">Prepare the packages</h2>
+<ul>
+<li>K-Means is included in sklearn package, we can import it directly.</li>
+<li>K-Medoid is included in sklearn extra package, we should install it first, then import it.</li>
+<li>We will need numpy and pandas to create some dummy dataset</li>
+<li>We will need seaborn for visualize the result.</li>
+</ul>
+<div class="cell" data-cell_id="807f47c89f4e49c8b9dd65ac609a68c1" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:13}" data-deepnote_cell_type="code" data-outputid="c3da2651-e990-42c8-b953-afcab049666c">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install scikit<span class="op">-</span>learn<span class="op">-</span>extra</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Collecting scikit-learn-extra
+  Downloading scikit_learn_extra-0.2.0-cp37-cp37m-manylinux2010_x86_64.whl (1.7 MB)
+     |████████████████████████████████| 1.7 MB 5.1 MB/s 
+Requirement already satisfied: scipy&gt;=0.19.1 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-extra) (1.4.1)
+Requirement already satisfied: numpy&gt;=1.13.3 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-extra) (1.21.5)
+Requirement already satisfied: scikit-learn&gt;=0.23.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn-extra) (1.0.2)
+Requirement already satisfied: threadpoolctl&gt;=2.0.0 in /usr/local/lib/python3.7/dist-packages (from scikit-learn&gt;=0.23.0-&gt;scikit-learn-extra) (3.1.0)
+Requirement already satisfied: joblib&gt;=0.11 in /usr/local/lib/python3.7/dist-packages (from scikit-learn&gt;=0.23.0-&gt;scikit-learn-extra) (1.1.0)
+Installing collected packages: scikit-learn-extra
+Successfully installed scikit-learn-extra-0.2.0</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="7f2d7f6144914782815c493b4734bc8c" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:19}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn_extra.cluster <span class="im">import</span> KMedoids</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="round-1-lets-create-some-simple-dataset." class="level1">
+<h1>Round 1: Let’s create some simple dataset.</h1>
+<p>For visualization purpose, we create datapoints with 2 dimensions.</p>
+<section id="create-3-clusters-of-data-points." class="level3">
+<h3 class="anchored" data-anchor-id="create-3-clusters-of-data-points.">Create 3 clusters of data points.</h3>
+<p>Each cluster has 1000 data points, each data point has 2 dimensions. Data points has normal distribution with specified mean and std.</p>
+<div class="cell" data-cell_id="b20c171a40b6417d979e6ccc2e6e2332" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:37}" data-deepnote_cell_type="code" data-outputid="93437331-ccd5-4256-dca5-7d97bfaffc60">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>c1 <span class="op">=</span> np.random.normal(<span class="dv">5</span>, <span class="dv">3</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>c2 <span class="op">=</span> np.random.normal(<span class="dv">15</span>, <span class="dv">5</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>c3 <span class="op">=</span> np.random.normal(<span class="op">-</span><span class="dv">5</span>, <span class="dv">2</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> np.concatenate((c1, c2, c3), axis <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>d.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>(300, 2)</code></pre>
+</div>
+</div>
+</section>
+<section id="lets-visualize-the-dataset-using-seaborn" class="level3">
+<h3 class="anchored" data-anchor-id="lets-visualize-the-dataset-using-seaborn">Let’s visualize the dataset using Seaborn</h3>
+<div class="cell" data-cell_id="227d1b4e31c34f02a68966735d554d9d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:49}" data-deepnote_cell_type="code" data-outputid="1262e16e-25ec-49f1-bbb6-72feb723b96c">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> d, x <span class="op">=</span> d[:,<span class="dv">0</span>], y <span class="op">=</span> d[:,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f547096a2d0&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="lets-train-a-model-using-kmeans" class="level3">
+<h3 class="anchored" data-anchor-id="lets-train-a-model-using-kmeans">Let’s train a model using KMeans</h3>
+<div class="cell" data-cell_id="da21a04d24454f1b8aaca2fadf603675" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:61}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="d293358646d240cf834f17a0b88f190b" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:67}" data-deepnote_cell_type="code" data-outputid="82444510-5d2e-42fc-9345-7a984832059d">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> d, x <span class="op">=</span> d[:,<span class="dv">0</span>], y <span class="op">=</span> d[:,<span class="dv">1</span>],hue <span class="op">=</span> kmeans.predict(d))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f546ef3fa10&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="lets-train-a-model-using-kmedoid" class="level3">
+<h3 class="anchored" data-anchor-id="lets-train-a-model-using-kmedoid">Lets train a model using KMedoid</h3>
+<div class="cell" data-cell_id="2d4ed8565d194abebcb858279f5d2ce3" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:79}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>kmedoids <span class="op">=</span> KMedoids(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-result" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-result">Visualize the result</h3>
+<div class="cell" data-cell_id="fddddbbb968845bc9b6c6f13d1a1ac8d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:91}" data-deepnote_cell_type="code" data-outputid="f109ae54-a013-46a5-c7aa-e06e845aa60f">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> d, x <span class="op">=</span> d[:,<span class="dv">0</span>], y <span class="op">=</span> d[:,<span class="dv">1</span>],hue <span class="op">=</span> kmedoids.predict(d))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f54679ccc50&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="conclusion-kmean-and-kmedoid-did-equaly-well-for-this-dataset." class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-kmean-and-kmedoid-did-equaly-well-for-this-dataset.">Conclusion: KMean and KMedoid did equaly well for this dataset.</h2>
+<p>#Round 2: Let us add one outlier to the dataset</p>
+<section id="create-the-same-random-clusters" class="level3">
+<h3 class="anchored" data-anchor-id="create-the-same-random-clusters">Create the same random clusters</h3>
+<div class="cell" data-cell_id="87590a738bd84d3da4e47e169dc9485c" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:115}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>c1 <span class="op">=</span> np.random.normal(<span class="dv">5</span>, <span class="dv">3</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>c2 <span class="op">=</span> np.random.normal(<span class="dv">15</span>, <span class="dv">5</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>c3 <span class="op">=</span> np.random.normal(<span class="op">-</span><span class="dv">5</span>, <span class="dv">2</span>, (<span class="dv">100</span>, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="create-an-outlier." class="level3">
+<h3 class="anchored" data-anchor-id="create-an-outlier.">Create an outlier.</h3>
+<p>The outlier is far away from all other data points</p>
+<div class="cell" data-cell_id="e38296766327438bbe188bd1bd61b37f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:127}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>outlier <span class="op">=</span> np.array([[<span class="dv">100</span>, <span class="dv">100</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="4f3208b5fe80452cb0541058a7c8ee01" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:133}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> np.concatenate((c1, c2, c3, outlier), axis <span class="op">=</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-dataset">Visualize the dataset</h3>
+<div class="cell" data-cell_id="0e8d2e7b284e4c8889057d3155bddb99" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:145}" data-deepnote_cell_type="code" data-outputid="ce9f65fe-143c-4529-fc0a-780a98c3a4bb">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> d, x <span class="op">=</span> d[:,<span class="dv">0</span>], y <span class="op">=</span> d[:,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f54678f9a90&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-model-using-kmeans" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-model-using-kmeans">Train a model using KMeans</h3>
+<div class="cell" data-cell_id="67189b83022342c79246b2c509c8b426" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:157}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-result-1" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-result-1">Visualize the result</h3>
+<div class="cell" data-cell_id="1d0c49b999e54a88ad2d09d20ec45569" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:169}" data-deepnote_cell_type="code" data-outputid="554c1a53-7f0e-40f5-8c47-6ca6934964bb">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> d, x <span class="op">=</span> d[:,<span class="dv">0</span>], y <span class="op">=</span> d[:,<span class="dv">1</span>], hue <span class="op">=</span> kmeans.predict(d))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f54678f6690&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-model-using-kmedoids" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-model-using-kmedoids">Train a model using KMedoids</h3>
+<div class="cell" data-cell_id="9e46bd5262534608a4cc97756f53ce2d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:181}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>kmedoids <span class="op">=</span> KMedoids(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>###visualize the result</p>
+<div class="cell" data-cell_id="697b6c4702884a58a13445f47937f8bb" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:193}" data-deepnote_cell_type="code" data-outputid="91cdf79a-49f7-495b-8290-51344a9facac">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> d, x <span class="op">=</span> d[:,<span class="dv">0</span>], y <span class="op">=</span> d[:,<span class="dv">1</span>],hue <span class="op">=</span> kmedoids.predict(d))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f5467861390&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed">Conclusion: KMedoid did well even with an outlier. KMeans failed</h3>
+<p>#Round 3: Let’s create a more realistic dataset using pandas</p>
+</section>
+</section>
+<section id="create-a-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-dataset">create a dataset</h2>
+<div class="cell" data-cell_id="f292315b57134c338a24cdae82d7bdcd" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:217}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'x'</span>: np.random.normal(<span class="dv">5</span>, <span class="dv">3</span>, (<span class="dv">100</span>)), <span class="st">'y'</span>: np.random.normal(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, (<span class="dv">100</span>))})</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.append(pd.DataFrame({<span class="st">'x'</span>: np.random.normal(<span class="dv">15</span>, <span class="dv">2</span>, (<span class="dv">100</span>)), <span class="st">'y'</span>: np.random.normal(<span class="dv">22</span>, <span class="dv">2</span>, (<span class="dv">100</span>))}))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.append(pd.DataFrame({<span class="st">'x'</span>: np.random.normal(<span class="op">-</span><span class="dv">5</span>, <span class="dv">3</span>, (<span class="dv">100</span>)), <span class="st">'y'</span>: np.random.normal(<span class="dv">8</span>, <span class="dv">2</span>, (<span class="dv">100</span>))}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="visualize-the-dataset-1" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-dataset-1">Visualize the dataset</h3>
+<div class="cell" data-cell_id="6cd81cada5c4461b9b733d6ace52767e" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:229}" data-deepnote_cell_type="code" data-outputid="9ef9ea84-dc29-4946-a227-d1b52b2ad184">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sns.relplot(data <span class="op">=</span> df, x <span class="op">=</span> <span class="st">'x'</span>, y <span class="op">=</span> <span class="st">'y'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-model-using-kmeans-1" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-model-using-kmeans-1">Train a model using KMeans</h3>
+<div class="cell" data-cell_id="5d574e11e4a44c27840a0ace1d261ae4" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:241}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-result-2" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-result-2">Visualize the result</h3>
+<div class="cell" data-cell_id="dfc0c695697a4b54910354aca1107805" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:253}" data-deepnote_cell_type="code" data-outputid="cad88ec9-2db0-4ed6-aa19-fc6d6f000c84">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> df, x <span class="op">=</span> <span class="st">'x'</span>, y <span class="op">=</span> <span class="st">'y'</span>, hue <span class="op">=</span> kmeans.predict(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f5467754890&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-21-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-model-using-kmdoids" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-model-using-kmdoids">Train a model using KMdoids</h3>
+<div class="cell" data-cell_id="7810a58c4f394bd3aaf3d4e42c80008b" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:265}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>kmedoids <span class="op">=</span> KMedoids(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-result-3" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-result-3">Visualize the result</h3>
+<div class="cell" data-cell_id="8b63fc023246455496aaf7b61e805913" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:277}" data-deepnote_cell_type="code" data-outputid="041f88d5-e6b4-43de-eba2-28666b3cce71">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> df, x <span class="op">=</span> <span class="st">'x'</span>, y <span class="op">=</span> <span class="st">'y'</span>, hue <span class="op">=</span> kmedoids.predict(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f5467685b90&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-23-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="conclusion-kmeans-and-kmedoid-did-equally-well." class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-kmeans-and-kmedoid-did-equally-well.">Conclusion: KMeans and KMedoid did equally well.</h3>
+<p>#Round 4: Let’s add an outlier</p>
+</section>
+</section>
+<section id="create-a-dataset-with-an-outlier" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-dataset-with-an-outlier">Create a dataset with an outlier</h2>
+<div class="cell" data-cell_id="0a9380dd94854ceca3ea0beade9b0240" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:301}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'x'</span>: np.random.normal(<span class="dv">5</span>, <span class="dv">3</span>, (<span class="dv">100</span>)), <span class="st">'y'</span>: np.random.normal(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, (<span class="dv">100</span>))})</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.append(pd.DataFrame({<span class="st">'x'</span>: np.random.normal(<span class="dv">15</span>, <span class="dv">2</span>, (<span class="dv">100</span>)), <span class="st">'y'</span>: np.random.normal(<span class="dv">22</span>, <span class="dv">2</span>, (<span class="dv">100</span>))}))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.append(pd.DataFrame({<span class="st">'x'</span>: np.random.normal(<span class="op">-</span><span class="dv">5</span>, <span class="dv">3</span>, (<span class="dv">100</span>)), <span class="st">'y'</span>: np.random.normal(<span class="dv">8</span>, <span class="dv">2</span>, (<span class="dv">100</span>))}))</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co">#outlier</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.append(pd.DataFrame({<span class="st">'x'</span>: [<span class="dv">100</span>], <span class="st">'y'</span>: [<span class="dv">100</span>]}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="visualize-the-dataset-2" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-dataset-2">Visualize the dataset</h3>
+<div class="cell" data-cell_id="ba378b50e06345f1bb14774a8ef2a1e5" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:313}" data-deepnote_cell_type="code" data-outputid="56ccfd15-bed8-4df3-e9b5-24931b057b81">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>sns.relplot(data <span class="op">=</span> df, x <span class="op">=</span> <span class="st">'x'</span>, y <span class="op">=</span> <span class="st">'y'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-25-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-model-using-kmeans-2" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-model-using-kmeans-2">Train a model using KMeans</h3>
+<div class="cell" data-cell_id="e524673a267e42ae8b110b116a619e4d" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:325}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-result-4" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-result-4">Visualize the result</h3>
+<div class="cell" data-cell_id="bf3c4753d8f84c56af76459b06d56602" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:337}" data-deepnote_cell_type="code" data-outputid="10d33a1d-52f0-4c4b-cc26-44fecc26b6ca">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> df, x <span class="op">=</span> <span class="st">'x'</span>, y <span class="op">=</span> <span class="st">'y'</span>, hue <span class="op">=</span> kmeans.predict(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f546786dbd0&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-27-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-model-using-kmdoids-1" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-model-using-kmdoids-1">Train a model using KMdoids</h3>
+<div class="cell" data-cell_id="1afc6a4dccaa4cb49e77d0177af7616f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:349}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>kmedoids <span class="op">=</span> KMedoids(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-result-5" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-result-5">Visualize the result</h3>
+<div class="cell" data-cell_id="05f7f4c3a621450e81ebaf74742c4016" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:361}" data-deepnote_cell_type="code" data-outputid="8de8d7a7-e55b-43b7-b5f2-760f6b352e0f">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> df, x <span class="op">=</span> <span class="st">'x'</span>, y <span class="op">=</span> <span class="st">'y'</span>, hue <span class="op">=</span> kmedoids.predict(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f5467634bd0&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-29-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed-1" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-kmedoid-did-well-even-with-an-outlier.-kmeans-failed-1">Conclusion: KMedoid did well even with an outlier. KMeans failed</h3>
+<p>#Round 5: Let’s add two outliers</p>
+</section>
+</section>
+<section id="create-a-dataset-with-an-outlier-1" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-dataset-with-an-outlier-1">Create a dataset with an outlier</h2>
+<div class="cell" data-cell_id="631fe81fd2b94123b6f2038dca45ce1f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:385}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">'x'</span>: np.random.normal(<span class="dv">5</span>, <span class="dv">3</span>, (<span class="dv">100</span>)), <span class="st">'y'</span>: np.random.normal(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>, (<span class="dv">100</span>))})</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.append(pd.DataFrame({<span class="st">'x'</span>: np.random.normal(<span class="dv">15</span>, <span class="dv">2</span>, (<span class="dv">100</span>)), <span class="st">'y'</span>: np.random.normal(<span class="dv">22</span>, <span class="dv">2</span>, (<span class="dv">100</span>))}))</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.append(pd.DataFrame({<span class="st">'x'</span>: np.random.normal(<span class="op">-</span><span class="dv">5</span>, <span class="dv">3</span>, (<span class="dv">100</span>)), <span class="st">'y'</span>: np.random.normal(<span class="dv">8</span>, <span class="dv">2</span>, (<span class="dv">100</span>))}))</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co">#outlier</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.append(pd.DataFrame({<span class="st">'x'</span>: [<span class="dv">200</span>], <span class="st">'y'</span>: [<span class="dv">200</span>]}))</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.append(pd.DataFrame({<span class="st">'x'</span>: [<span class="op">-</span><span class="dv">200</span>], <span class="st">'y'</span>: [<span class="op">-</span><span class="dv">200</span>]}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="visualize-the-dataset-3" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-dataset-3">Visualize the dataset</h3>
+<div class="cell" data-cell_id="43505d5bf6df48629823c89911bdc72e" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:397}" data-deepnote_cell_type="code" data-outputid="b4ff417b-d896-41a4-fdd6-9eb7b83608b8">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>sns.relplot(data <span class="op">=</span> df, x <span class="op">=</span> <span class="st">'x'</span>, y <span class="op">=</span> <span class="st">'y'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-31-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-model-using-kmeans-3" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-model-using-kmeans-3">Train a model using KMeans</h3>
+<div class="cell" data-cell_id="bc1acf6a4c62451e90afc13ea3c1e9a2" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:409}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>).fit(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-result-6" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-result-6">Visualize the result</h3>
+<div class="cell" data-cell_id="fb3494662ab642709b1b36b69f7eae77" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:421}" data-deepnote_cell_type="code" data-outputid="9500b199-8ea7-4d2e-8b93-65d43d0e8460">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> df, x <span class="op">=</span> <span class="st">'x'</span>, y <span class="op">=</span> <span class="st">'y'</span>, hue <span class="op">=</span> kmeans.predict(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f54673b0890&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-33-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="train-a-model-using-kmdoids-2" class="level3">
+<h3 class="anchored" data-anchor-id="train-a-model-using-kmdoids-2">Train a model using KMdoids</h3>
+<div class="cell" data-cell_id="9d4a801e5c884c04a68a1586e38d047e" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:433}" data-deepnote_cell_type="code">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>kmedoids <span class="op">=</span> KMedoids(n_clusters<span class="op">=</span><span class="dv">3</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualize-the-result-7" class="level3">
+<h3 class="anchored" data-anchor-id="visualize-the-result-7">Visualize the result</h3>
+<div class="cell" data-cell_id="8508bb9efd5d4735b1a9006d6aa2d678" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:445}" data-deepnote_cell_type="code" data-outputid="4a985baa-79e0-4cb3-fd08-da96c7e761d9">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> df, x <span class="op">=</span> <span class="st">'x'</span>, y <span class="op">=</span> <span class="st">'y'</span>, hue <span class="op">=</span> kmedoids.predict(df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f54672d65d0&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="KMeans_VS_KMedoid_files/figure-html/cell-35-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="conclusion-kmedoid-did-well-even-with-more-outliers.-kmeans-failed" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-kmedoid-did-well-even-with-more-outliers.-kmeans-failed">Conclusion: KMedoid did well even with more outliers. KMeans failed</h3>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
