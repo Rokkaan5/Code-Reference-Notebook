@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "CUB-ML Clustering"
-permalink: /CUB-ML/Clustering
+permalink: /CUB/ML/Clustering
 ---
 
 # [CU Boulder](../../../CUB.md): [Machine Learning](../CUB-ML.md) - Clustering
@@ -16,16 +16,16 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 ## in R
 (Raw code files in GitHub Repo)
 
-**Clustering-ex1.R** ([Markdown](Markdown/clust-ex1-mkdn.qmd),[Raw](Raw/R-Clustering-Ex1-Raw.qmd)): Comprehensive Clustering Tutorial
+**Clustering-ex1.R** ([Markdown](Markdown/clust-ex1-mkdn.html),[Raw](Raw/R-Clustering-Ex1-Raw.html)): Comprehensive Clustering Tutorial
 
 - Partitional and hierarchical clustering using csv and corpus txt file data.
 
-**Clustering-ex2.R** (Markdown,[Raw](Raw/R-Clustering-Ex2-Raw.qmd)) = Document similarity
+**Clustering-ex2.R** (Markdown,[Raw](Raw/R-Clustering-Ex2-Raw.html)) = Document similarity
 
-**Clustering-ex3.R** (Markdown,[Raw](Raw/R-Clustering-Ex3-Raw.qmd)) = Text Mining and NLP Tutorial
+**Clustering-ex3.R** (Markdown,[Raw](Raw/R-Clustering-Ex3-Raw.html)) = Text Mining and NLP Tutorial
 
 ## Python
 
-GatesClustering1.py (Markdown, [Raw](Raw/R-Clustering-Ex1-Raw.qmd)) = Clustering with data obtained from API
+GatesClustering1.py (Markdown, [Raw](Raw/R-Clustering-Ex1-Raw.html)) = Clustering with data obtained from API
 
-GatesClustering2.py ([Markdown](Markdown/Clust2.ipynb),[Raw](Raw/Python-Clustering-Ex2-Raw.qmd)) = Clustering using various data types (corpus directory, and csv's)
+GatesClustering2.py ([Markdown](Markdown/Clust2.html),[Raw](Raw/Python-Clustering-Ex2-Raw.html)) = Clustering using various data types (corpus directory, and csv's)
