@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Correlation analysis and Regression analysis in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="CorrReg_files/libs/clipboard/clipboard.min.js"></script>
+<script src="CorrReg_files/libs/quarto-html/quarto.js"></script>
+<script src="CorrReg_files/libs/quarto-html/popper.min.js"></script>
+<script src="CorrReg_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="CorrReg_files/libs/quarto-html/anchor.min.js"></script>
+<link href="CorrReg_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="CorrReg_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="CorrReg_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="CorrReg_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="CorrReg_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#correlation-analysis" id="toc-correlation-analysis" class="nav-link active" data-scroll-target="#correlation-analysis">CORRELATION ANALYSIS</a>
+  <ul class="collapse">
+  <li><a href="#example-1-working-with-aptitude-and-performance-scoredata" id="toc-example-1-working-with-aptitude-and-performance-scoredata" class="nav-link" data-scroll-target="#example-1-working-with-aptitude-and-performance-scoredata">Example 1: Working with aptitude and performance score/data</a></li>
+  <li><a href="#types-of-correlation-coefficient" id="toc-types-of-correlation-coefficient" class="nav-link" data-scroll-target="#types-of-correlation-coefficient">Types of Correlation Coefficient</a></li>
+  <li><a href="#example-2-working-with-aptitude-performance-and-personality-scores" id="toc-example-2-working-with-aptitude-performance-and-personality-scores" class="nav-link" data-scroll-target="#example-2-working-with-aptitude-performance-and-personality-scores">Example 2: Working with aptitude, performance and personality scores</a></li>
+  <li><a href="#testing-hypothesis-about-correlation-measures" id="toc-testing-hypothesis-about-correlation-measures" class="nav-link" data-scroll-target="#testing-hypothesis-about-correlation-measures">Testing Hypothesis about Correlation measures</a>
+  <ul class="collapse">
+  <li><a href="#case-1is-a-correlation-between-two-variables-greater-than-0-in-the-population" id="toc-case-1is-a-correlation-between-two-variables-greater-than-0-in-the-population" class="nav-link" data-scroll-target="#case-1is-a-correlation-between-two-variables-greater-than-0-in-the-population">Case 1:Is a correlation between two variables greater than 0 in the population?</a></li>
+  </ul></li>
+  <li><a href="#testing-whether-two-correlation-coefficients-are-same-for-two-numeric-variables-in-the-population" id="toc-testing-whether-two-correlation-coefficients-are-same-for-two-numeric-variables-in-the-population" class="nav-link" data-scroll-target="#testing-whether-two-correlation-coefficients-are-same-for-two-numeric-variables-in-the-population">Testing whether two correlation coefficients are same for two numeric variables in the population</a>
+  <ul class="collapse">
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example 1</a></li>
+  </ul></li>
+  <li><a href="#calculating-visualizing-correlation-matrices" id="toc-calculating-visualizing-correlation-matrices" class="nav-link" data-scroll-target="#calculating-visualizing-correlation-matrices">Calculating &amp; visualizing correlation matrices</a></li>
+  </ul></li>
+  <li><a href="#regression-analysis-using-r" id="toc-regression-analysis-using-r" class="nav-link" data-scroll-target="#regression-analysis-using-r">REGRESSION ANALYSIS USING R</a>
+  <ul class="collapse">
+  <li><a href="#case-1-simple-linear-regression-in-r" id="toc-case-1-simple-linear-regression-in-r" class="nav-link" data-scroll-target="#case-1-simple-linear-regression-in-r">CASE 1: SIMPLE LINEAR REGRESSION IN R</a>
+  <ul class="collapse">
+  <li><a href="#example-1-simple-linear-regression-analysis-for-aptitude-and-performance" id="toc-example-1-simple-linear-regression-analysis-for-aptitude-and-performance" class="nav-link" data-scroll-target="#example-1-simple-linear-regression-analysis-for-aptitude-and-performance">Example 1: Simple linear regression analysis for aptitude and performance</a></li>
+  </ul></li>
+  <li><a href="#case-2-multiple-linear-regression-mlr-model-in-r" id="toc-case-2-multiple-linear-regression-mlr-model-in-r" class="nav-link" data-scroll-target="#case-2-multiple-linear-regression-mlr-model-in-r">CASE 2: MULTIPLE LINEAR REGRESSION (MLR) MODEL IN R</a>
+  <ul class="collapse">
+  <li><a href="#example-1-1" id="toc-example-1-1" class="nav-link" data-scroll-target="#example-1-1">Example 1</a></li>
+  <li><a href="#how-to-read-results-in-a-mlr-summary-report" id="toc-how-to-read-results-in-a-mlr-summary-report" class="nav-link" data-scroll-target="#how-to-read-results-in-a-mlr-summary-report">How to read results in a MLR summary report</a></li>
+  <li><a href="#example-2-using-synthetic-data" id="toc-example-2-using-synthetic-data" class="nav-link" data-scroll-target="#example-2-using-synthetic-data">Example 2: Using synthetic data</a></li>
+  <li><a href="#example-3using-real-world-data-from-the-web" id="toc-example-3using-real-world-data-from-the-web" class="nav-link" data-scroll-target="#example-3using-real-world-data-from-the-web">Example 3:Using real-world data from the web</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">%Session Info%</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Correlation analysis and Regression analysis in R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load Tidyverse</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load dplyr</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#load ggplot2</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="correlation-analysis" class="level1">
+<h1>CORRELATION ANALYSIS</h1>
+<p>We can use a scatterplot to get a visualization of if and how two variables appear to/tend to “move” together or not.</p>
+<p>Remember that the correlation coefficient measures the magnitude (small, zero, large), strength (weak, non-existent, strong) and direction (negative, flat, positive) of an assumed linear relationship between two numeric variables.</p>
+<p>Note that you still need to calculate the correlation coefficient to check correlation regardless of what a scatterplot shows you</p>
+<p>Lets build a scatterplot for two variables: performance on the vertical axis and aptitude on the horizontal axis</p>
+<section id="example-1-working-with-aptitude-and-performance-scoredata" class="level2">
+<h2 class="anchored" data-anchor-id="example-1-working-with-aptitude-and-performance-scoredata">Example 1: Working with aptitude and performance score/data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Variables</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>aptitude <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">45</span>,<span class="dv">81</span>,<span class="dv">65</span>,<span class="dv">87</span>,<span class="dv">68</span>,<span class="dv">91</span>,<span class="dv">77</span>,<span class="dv">61</span>,<span class="dv">55</span>,<span class="dv">66</span>,<span class="dv">82</span>,<span class="dv">93</span>,<span class="dv">76</span>,<span class="dv">83</span>,<span class="dv">61</span>,<span class="dv">74</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>performance <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">56</span>,<span class="dv">74</span>,<span class="dv">56</span>,<span class="dv">81</span>,<span class="dv">75</span>,<span class="dv">84</span>,<span class="dv">68</span>,<span class="dv">52</span>,<span class="dv">57</span>,<span class="dv">82</span>,<span class="dv">73</span>,<span class="dv">90</span>,<span class="dv">67</span>,<span class="dv">79</span>,<span class="dv">70</span>,<span class="dv">66</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Create a data frame</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>corr_data <span class="ot">&lt;-</span><span class="fu">data.frame</span>(aptitude,performance)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>corr_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   aptitude performance
+1        45          56
+2        81          74
+3        65          56
+4        87          81
+5        68          75
+6        91          84
+7        77          68
+8        61          52
+9        55          57
+10       66          82
+11       82          73
+12       93          90
+13       76          67
+14       83          79
+15       61          70
+16       74          66</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Build scatterplot with ggplot</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(corr_data, <span class="fu">aes</span>(<span class="at">x=</span>aptitude, <span class="at">y=</span>performance))<span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="CorrReg_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The ggplot suggests that the two variables tend to “move” together. The visual suggests that performance and aptitude have a possible positive correlation.</p>
+<p>We must still confirm the correlation via a calculation of the correlation coefficient as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(corr_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             aptitude performance
+aptitude    1.0000000   0.7827927
+performance 0.7827927   1.0000000</code></pre>
+</div>
+</div>
+<p>Since the performance-aptitude correlation coefficient is 0.78, we can say that performance and aptitude have a strong positive correlation (positive linear relationship).</p>
+<p>OR</p>
+<p>We say that performance and aptitude are strongly positively correlated variables for the data we have</p>
+</section>
+<section id="types-of-correlation-coefficient" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-correlation-coefficient">Types of Correlation Coefficient</h2>
+<p>We can compute three kinds of correlation coefficient</p>
+<ol type="1">
+<li><p><strong><em>Pearson correlation coefficient:</em></strong> measures the strength of a linear relationship between two numeric variables</p></li>
+<li><p><strong><em>Kendall correlation coefficient:</em></strong> measures correlation for ranked data</p></li>
+<li><p><strong><em>Spearman correlation coefficient:</em></strong> measures correlation for monotonic relationships</p></li>
+</ol>
+<p>Note that R, by default, computes Pearson correlation coefficient</p>
+</section>
+<section id="example-2-working-with-aptitude-performance-and-personality-scores" class="level2">
+<h2 class="anchored" data-anchor-id="example-2-working-with-aptitude-performance-and-personality-scores">Example 2: Working with aptitude, performance and personality scores</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>aptitude <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">45</span>,<span class="dv">81</span>,<span class="dv">65</span>,<span class="dv">87</span>,<span class="dv">68</span>,<span class="dv">91</span>,<span class="dv">77</span>,<span class="dv">61</span>,<span class="dv">55</span>,<span class="dv">66</span>,<span class="dv">82</span>,<span class="dv">93</span>,<span class="dv">76</span>,<span class="dv">83</span>,<span class="dv">61</span>,<span class="dv">74</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>performance <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">56</span>,<span class="dv">74</span>,<span class="dv">56</span>,<span class="dv">81</span>,<span class="dv">75</span>,<span class="dv">84</span>,<span class="dv">68</span>,<span class="dv">52</span>,<span class="dv">57</span>,<span class="dv">82</span>,<span class="dv">73</span>,<span class="dv">90</span>,<span class="dv">67</span>,<span class="dv">79</span>,<span class="dv">70</span>,<span class="dv">66</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>personality <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">9</span>,<span class="dv">15</span>,<span class="dv">11</span>,<span class="dv">15</span>,<span class="dv">14</span>,<span class="dv">19</span>,<span class="dv">12</span>,<span class="dv">10</span>,<span class="dv">9</span>,<span class="dv">14</span>,<span class="dv">15</span>,<span class="dv">14</span>,<span class="dv">16</span>,<span class="dv">18</span>,<span class="dv">15</span>,<span class="dv">12</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Create a data frame</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>corr_data <span class="ot">&lt;-</span><span class="fu">data.frame</span>(aptitude,performance, personality)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>corr_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   aptitude performance personality
+1        45          56           9
+2        81          74          15
+3        65          56          11
+4        87          81          15
+5        68          75          14
+6        91          84          19
+7        77          68          12
+8        61          52          10
+9        55          57           9
+10       66          82          14
+11       82          73          15
+12       93          90          14
+13       76          67          16
+14       83          79          18
+15       61          70          15
+16       74          66          12</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Build scatterplot with ggplot</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(corr_data, <span class="fu">aes</span>(<span class="at">x=</span>aptitude, <span class="at">y=</span>performance))<span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="CorrReg_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The ggplot suggests that the two variables tend to “move” together. The visual suggests that performance and aptitude have a possible positive correlation.</p>
+<p>Note the following:</p>
+<ol type="1">
+<li>A scatterplot that appears to show a positive correlation between 2 numeric variables might sometimes conflict with the value of your correlation coefficient</li>
+</ol>
+<p>Your correlation coefficient might not always agree with your scatterplot. So always try to present both your scatterplot and Correlation coefficient.</p>
+<ol start="2" type="1">
+<li>A positive (or negative) correlation coefficient for 2 numeric variables does not mean there is a statistically significant relationship between the two variables. You have to run a regression (and test hypothesis) between the two variables to confirm this (i.e you have to reject the null to confirm that a statistically significant relationship exists between the two variables)</li>
+</ol>
+</section>
+<section id="testing-hypothesis-about-correlation-measures" class="level2">
+<h2 class="anchored" data-anchor-id="testing-hypothesis-about-correlation-measures">Testing Hypothesis about Correlation measures</h2>
+<p>A scatterplot is a graphical way of showing a (possible/potential) relationship between two numeric variables</p>
+<p>The correlation coefficient between two variables indicates the strength, sign, and direction of the linear relationship between the variables.</p>
+<p>The correlation coefficient we typically compute is for a sample dataset - hence its called the sample correlation coefficient.</p>
+<p>We might want to extend the analysis to see if what holds in the sample holds in the population</p>
+<p>Beyond the actual value of the correlation coefficient, two kinds of questions are important in connection with the sample correlation coefficient value we obtain:</p>
+<ol type="1">
+<li>Is a correlation coefficient greater than 0 for the two numeric variables in the population?</li>
+<li>Are two correlation coefficients different from each other in the population?</li>
+</ol>
+<section id="case-1is-a-correlation-between-two-variables-greater-than-0-in-the-population" class="level3">
+<h3 class="anchored" data-anchor-id="case-1is-a-correlation-between-two-variables-greater-than-0-in-the-population">Case 1:Is a correlation between two variables greater than 0 in the population?</h3>
+<p>We can go beyond just computing the value of the sample correlation coefficient and test the null hypothesis that the population correlation coefficient is equal to zero versus the alternative hypothesis that the population correlation coefficient is greater than zero</p>
+<p>Suppose there is a claim that the true/population correlation between two variables (e.g.&nbsp;aptitude and performance) is positive before you obtain sample data per variable</p>
+<p>We can test the following</p>
+<ol type="1">
+<li><p>Two-sided test</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: population correlation coefficient = 0</li>
+<li><span class="math inline">\(H_1\)</span>: population correlation coefficient &lt;&gt; 0 (two-sided test)</li>
+</ul></li>
+<li><p>One-sided test</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: population correlation coefficient = 0</li>
+<li><span class="math inline">\(H_1\)</span>: population correlation coefficient &gt; 0 (one-sided test)</li>
+</ul></li>
+<li><p>One-sided test</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: population correlation coefficient = 0</li>
+<li><span class="math inline">\(H_1\)</span>: population correlation coefficient &lt; 0 (one-sided test)</li>
+</ul></li>
+</ol>
+<p>We can compute the correlation coefficient for 2 variables in a multi-variable data frame using the following code syntax</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(corr_data, <span class="fu">cor</span>(aptitude, performance))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7827927</code></pre>
+</div>
+</div>
+<p>We can build out a correlation matrix for all the numeric variables in our data frame, corr_data - use the <code>cor()</code> function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(corr_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             aptitude performance personality
+aptitude    1.0000000   0.7827927   0.7499305
+performance 0.7827927   1.0000000   0.7709271
+personality 0.7499305   0.7709271   1.0000000</code></pre>
+</div>
+</div>
+<p>We see the correlation coefficient between aptitude and performance is 0.783</p>
+<p>Note that the correlation matrix confirms that every variable has a perfect positive correlation (i.e.&nbsp;+1) with itself</p>
+<p>we can also use <code>cor()</code> to compute the three kinds of correlation coefficient:</p>
+<ol type="1">
+<li>Pearson</li>
+<li>Spearman</li>
+<li>Kendall</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(corr_data, <span class="at">method =</span> <span class="st">"pearson"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             aptitude performance personality
+aptitude    1.0000000   0.7827927   0.7499305
+performance 0.7827927   1.0000000   0.7709271
+personality 0.7499305   0.7709271   1.0000000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(corr_data, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             aptitude performance personality
+aptitude    1.0000000   0.7673049   0.7051817
+performance 0.7673049   1.0000000   0.6694386
+personality 0.7051817   0.6694386   1.0000000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(corr_data, <span class="at">method =</span> <span class="st">"kendall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             aptitude performance personality
+aptitude    1.0000000   0.6386555   0.5795050
+performance 0.6386555   1.0000000   0.4917012
+personality 0.5795050   0.4917012   1.0000000</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="testing-whether-two-correlation-coefficients-are-same-for-two-numeric-variables-in-the-population" class="level2">
+<h2 class="anchored" data-anchor-id="testing-whether-two-correlation-coefficients-are-same-for-two-numeric-variables-in-the-population">Testing whether two correlation coefficients are same for two numeric variables in the population</h2>
+<p>This is also the same as testing the difference between two correlation coefficients</p>
+<ol type="1">
+<li>Two-sided test that two coefficients are similar/equal to each other (i.e.&nbsp;difference = 0)</li>
+</ol>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: population correlation coefficient 1 = population correlation coefficient 2</li>
+<li><span class="math inline">\(H_1\)</span>: population correlation coefficient 1 &lt;&gt; population correlation coefficient 2 (two sided test)</li>
+</ul>
+<p>Let statistical significance (alpha) = 5% (0.05)</p>
+<p>If you compute two sample correlation coefficients, you can test if those values are similar in the population or if their difference is equal to zero</p>
+<p>We use the package <code>psych</code>, which contains the <code>r.test()</code> function to perform this test</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("psych")</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"psych"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The syntax for the r.test() function is as follows:</p>
+<pre><code>r.test(coefficient 1, sample size 1, coefficient 2, sample size 2)</code></pre>
+<section id="example-1" class="level3">
+<h3 class="anchored" data-anchor-id="example-1">Example 1</h3>
+<p>Suppose we draw aptitude and performance data from two groups of consultants from a population and we want to confirm whether or not the population/true aptitude-performance correlations for these two groups are similar per the overall population from which the two groups were created from</p>
+<ul>
+<li><p><em>G1_corr</em> = .783</p></li>
+<li><p><em>G2_corr</em> = .695</p></li>
+<li><p><em>sample_size1</em> = 16</p></li>
+<li><p><em>sample_size2</em> = 20</p></li>
+<li><p><span class="math inline">\(H_0\)</span>: <em>G1_corr</em> = <em>G2_corr</em> in the population</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: <em>G1_corr</em> &lt;&gt; <em>G2_corr</em> in the population</p></li>
+<li><p><span class="math inline">\(\alpha = 5\)</span>% (0.05)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">r.test</span>(<span class="at">r12 =</span> .<span class="dv">783</span>, <span class="at">n=</span><span class="dv">16</span>, <span class="at">r34 =</span> .<span class="dv">695</span>, <span class="at">n2=</span><span class="dv">20</span>, <span class="at">twotailed =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Correlation tests 
+Call:r.test(n = 16, r12 = 0.783, r34 = 0.695, n2 = 20, twotailed = TRUE)
+Test of difference between two independent correlations 
+ z value 0.53    with probability  0.6</code></pre>
+</div>
+</div>
+<p>The <code>r.test()</code> function uses <code>r12</code> as holder for the first correlation coefficient and <code>r34</code> as holder for the second correlation coefficient</p>
+<p>Note <code>n</code> for sample size 1 and n2 for sample size 2</p>
+<p>The Z value (0.53) is the test statistic</p>
+<p>The p-value (0.6) is greater than the chosen alpha, so we fail to reject the null hypothesis.</p>
+<p>We conclude that there is evidence in favor of the null hypothesis. The true/population correlation coefficients are similar/equal.</p>
+</section>
+</section>
+<section id="calculating-visualizing-correlation-matrices" class="level2">
+<h2 class="anchored" data-anchor-id="calculating-visualizing-correlation-matrices">Calculating &amp; visualizing correlation matrices</h2>
+<p>We can produce correlation matrices for a multi-variable data frame as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Variables</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>aptitude <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">45</span>,<span class="dv">81</span>,<span class="dv">65</span>,<span class="dv">87</span>,<span class="dv">68</span>,<span class="dv">91</span>,<span class="dv">77</span>,<span class="dv">61</span>,<span class="dv">55</span>,<span class="dv">66</span>,<span class="dv">82</span>,<span class="dv">93</span>,<span class="dv">76</span>,<span class="dv">83</span>,<span class="dv">61</span>,<span class="dv">74</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>performance <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">56</span>,<span class="dv">74</span>,<span class="dv">56</span>,<span class="dv">81</span>,<span class="dv">75</span>,<span class="dv">84</span>,<span class="dv">68</span>,<span class="dv">52</span>,<span class="dv">57</span>,<span class="dv">82</span>,<span class="dv">73</span>,<span class="dv">90</span>,<span class="dv">67</span>,<span class="dv">79</span>,<span class="dv">70</span>,<span class="dv">66</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>personality <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">9</span>,<span class="dv">15</span>,<span class="dv">11</span>,<span class="dv">15</span>,<span class="dv">14</span>,<span class="dv">19</span>,<span class="dv">12</span>,<span class="dv">10</span>,<span class="dv">9</span>,<span class="dv">14</span>,<span class="dv">15</span>,<span class="dv">14</span>,<span class="dv">16</span>,<span class="dv">18</span>,<span class="dv">15</span>,<span class="dv">12</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Create a data frame</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>(corr_data <span class="ot">&lt;-</span><span class="fu">data.frame</span>(aptitude,performance, personality))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   aptitude performance personality
+1        45          56           9
+2        81          74          15
+3        65          56          11
+4        87          81          15
+5        68          75          14
+6        91          84          19
+7        77          68          12
+8        61          52          10
+9        55          57           9
+10       66          82          14
+11       82          73          15
+12       93          90          14
+13       76          67          16
+14       83          79          18
+15       61          70          15
+16       74          66          12</code></pre>
+</div>
+</div>
+<p>We can produce a visual of correlation matrices for a multi-variable data frame as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(corr_data) <span class="co">#produces a visual </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="CorrReg_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(corr_data)   <span class="co">#produces a number matrix</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             aptitude performance personality
+aptitude    1.0000000   0.7827927   0.7499305
+performance 0.7827927   1.0000000   0.7709271
+personality 0.7499305   0.7709271   1.0000000</code></pre>
+</div>
+</div>
+<p>The <code>pairs()</code> function produces a visual correlation matrix.</p>
+<p>The <code>cor()</code> function produces the correlation matrix.</p>
+</section>
+</section>
+<section id="regression-analysis-using-r" class="level1">
+<h1>REGRESSION ANALYSIS USING R</h1>
+<p>We study two cases of regression analysis:</p>
+<ul>
+<li><strong>Case 1:</strong> <em>Simple linear regression (SLR)</em>, where only two variables are involved to check variable associations and to make predictions</li>
+<li><strong>Case 2:</strong> <em>Multiple linear regression (MLR)</em>, where more than two variables are involved to check variable associations and to make predictions</li>
+</ul>
+<section id="case-1-simple-linear-regression-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="case-1-simple-linear-regression-in-r">CASE 1: SIMPLE LINEAR REGRESSION IN R</h2>
+<p>Today we discuss simple linear regression (SLR) and how to implement it in R</p>
+<p>Recall that the key tasks in statistics are:</p>
+<ol type="1">
+<li>Descriptive statistics - describing data</li>
+<li>Inferential statistics - inferring insights from data and data analysis</li>
+</ol>
+<p>One of the main things statisticians do is to examine relationships between variables (mainly numeric) to see if:</p>
+<ol type="1">
+<li>There is an association between those variables</li>
+<li>You can use one variable to predict the other variable</li>
+</ol>
+<p>Regression is the technique/procedure to check for variable associations and make predictions</p>
+<p>To check variable associations, we test the null hypothesis that the variables have no relationship between them versus the alternative hypothesis that there is a relationship between them i.e.&nbsp;for a given significance level:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: the coefficient of independent variable = 0</li>
+<li><span class="math inline">\(H_1\)</span>: the coefficient of independent variable &lt;&gt; 0</li>
+</ul>
+<p>If you reject <span class="math inline">\(H_0\)</span>, we say:</p>
+<ol type="1">
+<li>the coefficient of the independent variable is statistically significant</li>
+<li>There is a statistically significant relationship between the dependent and independent variable</li>
+</ol>
+<p>To check for a statistically significant relationship between two numeric variables, you need to do the following (after checking for correlation):</p>
+<ol type="1">
+<li>Agree a theory or philosophy for what you are doing - regression analysis only makes sense in the context of an existing theory or philosophy</li>
+<li>Determine your target/outcome/predicted variable</li>
+<li>Determine your independent/predictor variable</li>
+<li>Steps 2 and 3 above are to be guided by your theory in Step 1 above</li>
+<li>Gather data, write out your null and alternative hypotheses</li>
+<li>Select your alpha</li>
+<li>Setup your data the right way</li>
+<li>Run the regression function on your data</li>
+<li>Write your finding/result - based on the p-value you get</li>
+<li>Write your conclusion - based on your finding/result in Step 9</li>
+<li>Write your model - for statistically significant relationships only</li>
+<li>Interpret your model</li>
+<li>Perform diagnostics on assumptions of the SLR</li>
+<li>Use your model for predictions</li>
+</ol>
+<p>To use one variable to predict the other, we use a mathematical model certified as the statistically significant relationship between two variables to make those predictions. Typically, this model is established when we have been able to reject the null hypothesis.</p>
+<p>In the SLR case we are looking for the best-fitting line through a 2-Dimensional scatterplot.</p>
+<p>The best fitting plane is the one that has the least/minimum sum of squared residuals (SSR)</p>
+<section id="example-1-simple-linear-regression-analysis-for-aptitude-and-performance" class="level3">
+<h3 class="anchored" data-anchor-id="example-1-simple-linear-regression-analysis-for-aptitude-and-performance">Example 1: Simple linear regression analysis for aptitude and performance</h3>
+<p>Suppose there is a theory that aptitude determines performance in any field of endeavor (i.e.&nbsp;higher aptitude is associated with higher performance) we can check if there is statistical evidence that this is true using data and regression analysis.</p>
+<p>Suppose you have the following data showing measurements for the variables aptitude and performance for 16 consultants on a hiring test</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>aptitude <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">45</span>,<span class="dv">81</span>,<span class="dv">65</span>,<span class="dv">87</span>,<span class="dv">68</span>,<span class="dv">91</span>,<span class="dv">77</span>,<span class="dv">61</span>,<span class="dv">55</span>,<span class="dv">66</span>,<span class="dv">82</span>,<span class="dv">93</span>,<span class="dv">76</span>,<span class="dv">83</span>,<span class="dv">61</span>,<span class="dv">74</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>performance <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">56</span>,<span class="dv">74</span>,<span class="dv">56</span>,<span class="dv">81</span>,<span class="dv">75</span>,<span class="dv">84</span>,<span class="dv">68</span>,<span class="dv">52</span>,<span class="dv">57</span>,<span class="dv">82</span>,<span class="dv">73</span>,<span class="dv">90</span>,<span class="dv">67</span>,<span class="dv">79</span>,<span class="dv">70</span>,<span class="dv">66</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Checking for a statistically significant association between aptitude and performance means that we test the hypothesis:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\beta_1 = 0\)</span> (There is no statistically significant relationship between aptitude and performance)</li>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\beta_1\)</span> &lt;&gt; <span class="math inline">\(0\)</span> (there is a statistically significant relationship between aptitude and performance)</li>
+</ul>
+<p>Lets use <span class="math inline">\(\alpha\)</span> of 5% (0.05) - meaning we are OK with rejecting a true null hypothesis 5% of the time (i.e committing a Type 1 error)</p>
+<p>We need to put the vectors into a <code>data.frame</code> before we</p>
+<ol type="1">
+<li>perform regression analysis to check for association between them and</li>
+<li>if we get a statistical model, we can use it to make predictions</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>consultant_data <span class="ot">&lt;-</span><span class="fu">data.frame</span>(aptitude, performance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We use the <code>lm()</code> function to build a SLR model and test for association between the variables</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>regression1 <span class="ot">&lt;-</span><span class="fu">lm</span>(performance <span class="sc">~</span> aptitude, <span class="at">data=</span>consultant_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Use the <code>summary()</code> function to produce the results of your regression - and extract the p-value for the test, so we can make the decision to reject or fail to reject the null hypothesis</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regression1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = performance ~ aptitude, data = consultant_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.9036  -5.3720  -0.4379   4.2111  15.8281 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  23.0299    10.2732   2.242 0.041697 *  
+aptitude      0.6537     0.1389   4.707 0.000337 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.249 on 14 degrees of freedom
+Multiple R-squared:  0.6128,    Adjusted R-squared:  0.5851 
+F-statistic: 22.15 on 1 and 14 DF,  p-value: 0.0003368</code></pre>
+</div>
+</div>
+<p><strong><em>Finding/result</em></strong></p>
+<p>the p-value (0.0003368) &lt; alpha (0.05). So we reject the null hypothesis</p>
+<p><strong><em>Conclusion</em></strong></p>
+<p>Since we reject the null hypothesis, there is evidence in favor of the alternative hypothesis</p>
+<p>i.e.&nbsp;there is evidence that since beta1 is not statistically equal to zero there is a statistically significant relationship between performance and aptitude</p>
+<p>we can also extract only parts of the information stored in <code>regression1</code></p>
+<section id="extract-coefficients-only-and-write-your-model-using-those-coefficients" class="level4">
+<h4 class="anchored" data-anchor-id="extract-coefficients-only-and-write-your-model-using-those-coefficients">1. Extract coefficients only and write your model using those coefficients</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coefficients</span>(regression1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)    aptitude 
+  23.029869    0.653667 </code></pre>
+</div>
+</div>
+<p>Note also the following:</p>
+<ul>
+<li>F-statistic</li>
+<li>R-squared</li>
+</ul>
+</section>
+<section id="extract-coefficients-confidence-intervals" class="level4">
+<h4 class="anchored" data-anchor-id="extract-coefficients-confidence-intervals">2. Extract coefficients + confidence intervals</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(regression1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                2.5 %     97.5 %
+(Intercept) 0.9961369 45.0636002
+aptitude    0.3558034  0.9515307</code></pre>
+</div>
+</div>
+</section>
+<section id="testing-the-linear-model-assumptions" class="level4">
+<h4 class="anchored" data-anchor-id="testing-the-linear-model-assumptions">3. Testing the linear model assumptions</h4>
+<p>The simple linear regression (SLR) model places the following assumptions on the data set that we should try to verify before we proceed with any statistical inference.</p>
+<ol type="1">
+<li>the linear model is appropriate to represent the relationship
+<ul>
+<li>we use a residual plot to decide this</li>
+</ul></li>
+<li>the error distribution should be normally distributed
+<ul>
+<li>we use the residual histogram or preferably a quantile-normal plot (Normal Q-Q plot) to investigate if a normal assumption is appropriate</li>
+<li>for the quantile-normal plot (Normal Q-Q plot), deviations from a straight line indicate non-normality</li>
+</ul></li>
+<li>In addition to normality, an assumption of the linear model is that the error terms have a common variance.
+<ul>
+<li>When this is the case, a residual plot will show residual points scattered without a pattern around a horizontal line</li>
+</ul></li>
+</ol>
+</section>
+<section id="making-predictions-with-our-model" class="level4">
+<h4 class="anchored" data-anchor-id="making-predictions-with-our-model">4. Making predictions with our model</h4>
+<p>Since we have a statistically significant relationship, we can adopt the model and use it to make some predictions.</p>
+<p>The value of linear regression is that it gives you the ability to predict next values for the dependent variable.</p>
+<p>R provides a function - <code>predict()</code> - to make predictions of values for the dependent variable, given a value for the independent variable</p>
+<p>Given the value 34 for aptitude (independent variable), what prediction does our model offer for performance (dependent variable)?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#predict only one dependent variable value from one given value for the independent variable</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(regression1, <span class="fu">data.frame</span>(<span class="at">aptitude=</span><span class="fu">c</span>(<span class="dv">34</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1 
+45.25455 </code></pre>
+</div>
+</div>
+<p>Note you have to create a data frame that holds the given independent variable value</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#predict two dependent variable values</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(regression1, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">aptitude=</span><span class="fu">c</span>(<span class="dv">34</span>,<span class="dv">33</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1        2 
+45.25455 44.60088 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#predict sixteen dependent variable values</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(regression1, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="at">aptitude=</span><span class="fu">c</span>(<span class="dv">34</span>,<span class="dv">33</span>,<span class="dv">45</span>,<span class="dv">23</span>,<span class="dv">45</span>,<span class="dv">46</span>,<span class="dv">45</span>,<span class="dv">79</span>,<span class="dv">86</span>,<span class="dv">99</span>,<span class="dv">86</span>,<span class="dv">25</span>,<span class="dv">26</span>,<span class="dv">55</span>,<span class="dv">57</span>,<span class="dv">59</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1        2        3        4        5        6        7        8 
+45.25455 44.60088 52.44489 38.06421 52.44489 53.09855 52.44489 74.66956 
+       9       10       11       12       13       14       15       16 
+79.24523 87.74291 79.24523 39.37154 40.02521 58.98156 60.28889 61.59622 </code></pre>
+</div>
+</div>
+</section>
+<section id="confidence-in-the-predicted-values" class="level4">
+<h4 class="anchored" data-anchor-id="confidence-in-the-predicted-values">5. Confidence in the predicted values</h4>
+<p>The confidence interval argument in the <code>predict()</code> function helps us gauge the uncertainty in the predictions</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(regression1, <span class="fu">data.frame</span>(<span class="at">aptitude=</span><span class="fu">c</span>(<span class="dv">34</span>,<span class="dv">33</span>,<span class="dv">45</span>,<span class="dv">23</span>,<span class="dv">45</span>,<span class="dv">46</span>,<span class="dv">45</span>,<span class="dv">79</span>,<span class="dv">86</span>,<span class="dv">99</span>,<span class="dv">86</span>,<span class="dv">25</span>,<span class="dv">26</span>,<span class="dv">55</span>,<span class="dv">57</span>,<span class="dv">59</span>)), <span class="at">interval=</span><span class="st">'confidence'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        fit      lwr      upr
+1  45.25455 33.05781 57.45128
+2  44.60088 32.12145 57.08031
+3  52.44489 43.29406 61.59571
+4  38.06421 22.72622 53.40220
+5  52.44489 43.29406 61.59571
+6  53.09855 44.21648 61.98062
+7  52.44489 43.29406 61.59571
+8  74.66956 70.36791 78.97122
+9  79.24523 73.71918 84.77129
+10 87.74291 79.02785 96.45796
+11 79.24523 73.71918 84.77129
+12 39.37154 24.60907 54.13402
+13 40.02521 25.54987 54.50055
+14 58.98156 52.40448 65.55863
+15 60.28889 54.18223 66.39555
+16 61.59622 55.93632 67.25612</code></pre>
+</div>
+</div>
+<p><code>lwr</code> and <code>upr</code> refer to lower and upper values/bounds for the confidence interval around the predictions</p>
+<p>So for the predicted performance value of 45.25 (for the given aptitude value of 34), we can infer that the prediction is likely to lie between a <code>lwr</code> (lower limit) of 33.05 and <code>upr</code> (upper limit) 57.45</p>
+<p>We use the confidence intervals to check the accuracy of our predictions.</p>
+</section>
+<section id="visualize-the-scatterplot-and-regression-line-for-your-model" class="level4">
+<h4 class="anchored" data-anchor-id="visualize-the-scatterplot-and-regression-line-for-your-model">6. Visualize the scatterplot and regression line for your model</h4>
+<p>Use the following R code to see what your model looks like</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(consultant_data, <span class="fu">aes</span>(<span class="at">x=</span>aptitude, <span class="at">y=</span>performance))<span class="sc">+</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="CorrReg_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>the first line shows where the data comes from</p>
+<p>the second line plots points in the graph</p>
+<p>the third line specifies a geom function that adds the regression line (as indicated by the method=lm argument)</p>
+</section>
+<section id="plotting-the-residuals---to-show-if-the-relationship-between-the-independent-and-dependent-variables-is-really-a-linear-one-or-not" class="level4">
+<h4 class="anchored" data-anchor-id="plotting-the-residuals---to-show-if-the-relationship-between-the-independent-and-dependent-variables-is-really-a-linear-one-or-not">7. Plotting the residuals - to show if the relationship between the independent and dependent variables is really a linear one or not</h4>
+<p>When doing regression analysis, it is a good idea to plot the residuals against the predicted values.</p>
+<p>If the residuals form a random pattern around a horizontal line at zero, there is evidence in favor of a linear relationship between the independent and dependent variables.</p>
+<section id="example-ggplot-to-show-residual-plot" class="level5">
+<h5 class="anchored" data-anchor-id="example-ggplot-to-show-residual-plot">Example: <code>ggplot</code> to show residual plot</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(regression1, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">fitted</span>(regression1), <span class="at">y=</span><span class="fu">residuals</span>(regression1)))<span class="sc">+</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">0</span>, <span class="at">linetype=</span><span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="CorrReg_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><code>fitted(regression1)</code> retrieves the predicted values</p>
+<p><code>residuals(regression1)</code> retrieves the residuals</p>
+<p><code>geom_point()</code> plots points</p>
+<p><code>geom_hline()</code> plots the dashed horizontal line whose y-intercept is 0</p>
+<p>The pattern of residuals around the line is evidence consistent with a linear model</p>
+</section>
+<section id="example-four-diagnostic-charts-for-linear-model-assumptions" class="level5">
+<h5 class="anchored" data-anchor-id="example-four-diagnostic-charts-for-linear-model-assumptions">Example: Four Diagnostic charts for linear model assumptions</h5>
+<p>We can also use the following 4 charts to diagnose for normality and also to check if the statistical relationship is actually linear or if a linear model is appropriate to represent the statistical relationship.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)) <span class="co">#set a 2 by 2 grid to plot diagnostic charts on 4 panes</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(regression1) <span class="co"># plot the diagnostic charts</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="CorrReg_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ol type="1">
+<li><p>the linear model is appropriate if the scatterplot of residuals does NOT show any pattern around the horizontal dashed line</p></li>
+<li><p>The assumption of normality of error terms hold if there is little or no deviation from the straight line in the Q-Q plot</p></li>
+<li><p>In addition to normality, an assumption of the linear model is that the error terms have a common variance.</p>
+<ul>
+<li>When this is the case, a residual plot will show residual points scattered without a pattern around a horizontal dashed line</li>
+</ul></li>
+</ol>
+</section>
+<section id="example-association-between-heights-of-parents-and-their-kids" class="level5">
+<h5 class="anchored" data-anchor-id="example-association-between-heights-of-parents-and-their-kids">Example : Association between heights of parents and their kids</h5>
+<p>Tall parents are, in theory, assumed to produce tall kids. Is this true?</p>
+<p>Can we expect:</p>
+<ol type="1">
+<li>a statistically significant relationship to exit between the heights of parents and that of their kids?</li>
+<li>If #1 above is true, be able to predict a kid’s height using a given parent’s height?</li>
+</ol>
+<p>We can collect data about parents and their kids height (in inches) to test the following:</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\beta_1 = 0\)</span> (there is no statistically significant relationship between parent height and child height)</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\beta_1\)</span> &lt;&gt; <span class="math inline">\(0\)</span> (there is a statistically significant relationship between parent height and child height)</p></li>
+<li><p><span class="math inline">\(\alpha = 1\)</span>% (0.01)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>kid_height <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">39</span>,<span class="dv">30</span>,<span class="dv">32</span>,<span class="dv">34</span>,<span class="dv">35</span>,<span class="dv">36</span>,<span class="dv">36</span>,<span class="dv">30</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>parent_height <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">71</span>,<span class="dv">63</span>,<span class="dv">63</span>,<span class="dv">67</span>,<span class="dv">68</span>,<span class="dv">68</span>,<span class="dv">70</span>,<span class="dv">64</span>)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Form data frame:</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>height_data <span class="ot">&lt;-</span><span class="fu">data.frame</span>(kid_height,parent_height)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Decide which variable is outcome/dependent variable and which is independent variable</p>
+<ul>
+<li>Dependent variable: <code>kid_height</code></li>
+<li>Independent variable: <code>parent_height</code></li>
+</ul>
+<p>Run regression function <code>lm()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>regression2 <span class="ot">&lt;-</span><span class="fu">lm</span> (kid_height <span class="sc">~</span> parent_height, <span class="at">data=</span>height_data)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co">#produce summary information about regression</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regression2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = kid_height ~ parent_height, data = height_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.3518 -0.5741 -0.2222  0.8241  1.6111 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   -30.2778     9.0358  -3.351 0.015403 *  
+parent_height   0.9630     0.1352   7.120 0.000386 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.111 on 6 degrees of freedom
+Multiple R-squared:  0.8942,    Adjusted R-squared:  0.8765 
+F-statistic:  50.7 on 1 and 6 DF,  p-value: 0.000386</code></pre>
+</div>
+</div>
+<p><strong><em>Finding/result</em></strong></p>
+<p>the p-value (0.000386) is less than alpha (0.01). So we reject the null hypothesis</p>
+<p><strong><em>Conclusion</em></strong></p>
+<p>Since we reject the null hypothesis, there is evidence in favor of the alternative hypothesis. There is evidence of a statistically significant relationship between <code>kid_height</code> and <code>parent_height</code></p>
+<p>Write out the model - using the coefficients you estimated above.</p>
+<p><code>kid_height</code> = <em>intercept</em> + <em>slope</em> * <code>parent_height</code></p>
+<p>Interpret the model you have written above</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">#predict the height values for two kids with parent height values of 74 and 77 inches</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(regression2, <span class="fu">data.frame</span>(<span class="at">parent_height=</span><span class="fu">c</span>(<span class="dv">74</span>,<span class="dv">77</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1        2 
+40.98148 43.87037 </code></pre>
+</div>
+</div>
+</section>
+<section id="example-does-number-of-bedrooms-determine-the-price-of-a-house" class="level5">
+<h5 class="anchored" data-anchor-id="example-does-number-of-bedrooms-determine-the-price-of-a-house">Example : Does number of bedrooms determine the price of a house?</h5>
+<p>There is a theory that the more bedrooms a house has, the more expensive it is? Is this true?</p>
+</section>
+</section>
+</section>
+</section>
+<section id="case-2-multiple-linear-regression-mlr-model-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="case-2-multiple-linear-regression-mlr-model-in-r">CASE 2: MULTIPLE LINEAR REGRESSION (MLR) MODEL IN R</h2>
+<p><em>Multiple linear regression</em> (MLR) involves most of the same procedure for simple linear regression.</p>
+<p>MLR involves working with one dependent variable and two or more independent variables</p>
+<p>The other key difference between SLR and MLR is you interpret the relationship between your two variables of interest while keeping any other independent variables equal or constant.</p>
+<p>Furthermore, the standard error of estimates should decrease from SLR to MLR. Since MLR uses more information than SLR, it decreases the error</p>
+<p><strong>MLR enables you do the following:</strong></p>
+<ol type="1">
+<li><p>Check for the existence or otherwise of a statistically significant relationship between a dependent variable and an independent variable while in the presence of other independent variables</p></li>
+<li><p>If you find a statistically significant relationship from #1 above, use your linear model to estimate what happens to the dependent variable when the independent variable increased by 1 unit.</p></li>
+<li><p>If you find a statistically significant relationship from #1 above, use your linear model for prediction.</p></li>
+</ol>
+<section id="example-1-1" class="level3">
+<h3 class="anchored" data-anchor-id="example-1-1">Example 1</h3>
+<p>Suppose we have personality scores in addition to aptitude and performance scores we worked with in the SLR case above:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>aptitude_score <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">45</span>,<span class="dv">81</span>,<span class="dv">65</span>,<span class="dv">87</span>,<span class="dv">68</span>,<span class="dv">91</span>,<span class="dv">77</span>,<span class="dv">61</span>,<span class="dv">55</span>,<span class="dv">66</span>,<span class="dv">82</span>,<span class="dv">93</span>,<span class="dv">76</span>,<span class="dv">83</span>,<span class="dv">61</span>,<span class="dv">74</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>performance_score <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">56</span>,<span class="dv">74</span>,<span class="dv">56</span>,<span class="dv">81</span>,<span class="dv">75</span>,<span class="dv">84</span>,<span class="dv">68</span>,<span class="dv">52</span>,<span class="dv">57</span>,<span class="dv">82</span>,<span class="dv">73</span>,<span class="dv">90</span>,<span class="dv">67</span>,<span class="dv">79</span>,<span class="dv">70</span>,<span class="dv">66</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>personality_score <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">9</span>,<span class="dv">15</span>,<span class="dv">11</span>,<span class="dv">15</span>,<span class="dv">14</span>,<span class="dv">19</span>,<span class="dv">12</span>,<span class="dv">10</span>,<span class="dv">9</span>,<span class="dv">14</span>,<span class="dv">15</span>,<span class="dv">14</span>,<span class="dv">16</span>,<span class="dv">18</span>,<span class="dv">15</span>,<span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Suppose there is a theory that there is no relationship between consultant performance and aptitude given (or while accounting for) consultant personality. How do we check this?</p>
+<p>We look for a statistically significant relationship between aptitude and performance by regressing performance on aptitude and add personality as a control variable</p>
+<p>MLR involves looking for the best-fitting plane through a 3-Dimensional scatterplot</p>
+<p>The best fitting plane is the one that has the least/minimum sum of squared residuals</p>
+<p>We create a data frame with the vectors above</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>(consultant_data2 <span class="ot">&lt;-</span><span class="fu">data.frame</span>(aptitude_score,performance_score,personality_score))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   aptitude_score performance_score personality_score
+1              45                56                 9
+2              81                74                15
+3              65                56                11
+4              87                81                15
+5              68                75                14
+6              91                84                19
+7              77                68                12
+8              61                52                10
+9              55                57                 9
+10             66                82                14
+11             82                73                15
+12             93                90                14
+13             76                67                16
+14             83                79                18
+15             61                70                15
+16             74                66                12</code></pre>
+</div>
+</div>
+<p>To explore for the performance-aptitude relationship while accounting for personality we test the following hypothesis:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\beta_1 = 0\)</span></li>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\beta_1\)</span> &lt;&gt; <span class="math inline">\(0\)</span></li>
+</ul>
+<p>Lets choose <span class="math inline">\(\alpha = 10\)</span>% (0.1)</p>
+<p>The regression equation is specified as follows:</p>
+<pre><code>lm(dependent_variable ~ independent_variable + control_variable, data = data frame)</code></pre>
+<p>You may choose to store your results in a variable - and use summary() to report the results</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>regression3 <span class="ot">&lt;-</span><span class="fu">lm</span>(performance_score <span class="sc">~</span> aptitude_score <span class="sc">+</span> personality_score, <span class="at">data=</span>consultant_data2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Produce summary report on regression</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regression3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = performance_score ~ aptitude_score + personality_score, 
+    data = consultant_data2)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-8.689 -2.834 -1.840  2.886 13.432 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)        20.2825     9.6595   2.100   0.0558 .
+aptitude_score      0.3905     0.1949   2.003   0.0664 .
+personality_score   1.6079     0.8932   1.800   0.0951 .
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.73 on 13 degrees of freedom
+Multiple R-squared:   0.69, Adjusted R-squared:  0.6423 
+F-statistic: 14.47 on 2 and 13 DF,  p-value: 0.0004938</code></pre>
+</div>
+</div>
+</section>
+<section id="how-to-read-results-in-a-mlr-summary-report" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-read-results-in-a-mlr-summary-report">How to read results in a MLR summary report</h3>
+<ol type="1">
+<li><p>Check for F-statistics and its p-value</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\beta_0 = \beta_1 = \beta_2 = 0\)</span></li>
+<li><span class="math inline">\(H_1\)</span>: at least one beta &lt;&gt; 0</li>
+</ul></li>
+<li><p>Conduct individual parameter t-test versus p-value</p></li>
+<li><p>Check R-squared for indication of prediction power of your overall model</p></li>
+</ol>
+<p><strong><em>Finding/Result</em></strong></p>
+<p>Note results that are not statistically significant - the accompanying variables may be excluded from the model</p>
+<p>Write the generic equation for the regression plane:</p>
+<p><em>performance</em> = <em>intercept</em> + <em>slope1</em> * <code>aptitude</code> + <em>slope2</em> * <code>personality</code></p>
+<p>Note that high F-values and low p-values are indicators that the regression plane is a good fit for the scatter plot</p>
+<p><strong><em>Write your conclusion</em></strong></p>
+<p>Making predictions with your model</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(regression3, <span class="fu">data.frame</span>(<span class="at">aptitude_score=</span><span class="fu">c</span>(<span class="dv">85</span>,<span class="dv">62</span>),<span class="at">personality_score=</span><span class="fu">c</span>(<span class="dv">14</span>,<span class="dv">17</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1        2 
+75.98742 71.82924 </code></pre>
+</div>
+</div>
+</section>
+<section id="example-2-using-synthetic-data" class="level3">
+<h3 class="anchored" data-anchor-id="example-2-using-synthetic-data">Example 2: Using synthetic data</h3>
+<p>While we can work with real-world data, note we can also use simulated data for regression analysis as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>                  <span class="co"># create variable x with values from 1 to 10</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span><span class="fu">rchisq</span>(<span class="dv">10</span>,<span class="dv">3</span>)          <span class="co"># create 10 values with a Chi-square distribution and 3 degrees of freedom</span></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span><span class="dv">1</span> <span class="sc">+</span> x <span class="sc">+</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">10</span>) <span class="co"># create variable z (which holds 10 values/observations)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Suppose our goal is to examine the relationship between <code>z</code> and <code>x</code>, controlling/accounting for <code>y</code> (i.e holding y fixed)</p>
+<p>Let alpha = 1%(0.01)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>regression4 <span class="ot">&lt;-</span><span class="fu">lm</span>(z<span class="sc">~</span> x <span class="sc">+</span> y)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(regression4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = z ~ x + y)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.8361 -0.6359 -0.2611  0.5164  1.5786 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   0.4619     0.6206   0.744   0.4810    
+x             1.0555     0.1247   8.467 6.34e-05 ***
+y             0.9374     0.2902   3.230   0.0144 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.9064 on 7 degrees of freedom
+Multiple R-squared:  0.9624,    Adjusted R-squared:  0.9517 
+F-statistic: 89.67 on 2 and 7 DF,  p-value: 1.028e-05</code></pre>
+</div>
+</div>
+<ol type="1">
+<li><p>F-Stat = ? ; F-Stat p-value = ?</p></li>
+<li><p>p-value for coefficient on x = ?</p></li>
+<li><p>p-value for coefficient on y = ?</p></li>
+<li><p>R-squared for model = ?</p></li>
+</ol>
+<p>Note that simulated data might not give the same results every time you run the model except you use <code>set.seed()</code> function</p>
+<p>Plot residual chart to examine (1) homoskedasticity and (2) if a linear model is appropriate</p>
+<p>Use Base R</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fitted</span>(regression4), <span class="fu">resid</span>(regression4))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="CorrReg_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>OR use ggplot</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(regression4, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">fitted</span>(regression4), <span class="at">y=</span><span class="fu">residuals</span>(regression4)))<span class="sc">+</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">0</span>, <span class="at">linetype=</span><span class="st">"dashed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="CorrReg_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The residual plot appears to confirm (1) and (2) above</p>
+</section>
+<section id="example-3using-real-world-data-from-the-web" class="level3">
+<h3 class="anchored" data-anchor-id="example-3using-real-world-data-from-the-web">Example 3:Using real-world data from the web</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the key packages</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"readxl"</span>)</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"readr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load the key packages</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Read data from the web.</p>
+<p><strong><em>Citation:</em></strong> <em>Verbeek, Marno (2004)</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>air_quality <span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="st">"https://vincentarelbundock.github.io/Rdatasets/csv/Ecdat/Airq.csv"</span>)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(air_quality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 30
+Columns: 7
+$ rownames &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18…
+$ airq     &lt;dbl&gt; 104, 85, 127, 145, 84, 135, 88, 118, 74, 104, 64, 75, 131, 12…
+$ vala     &lt;dbl&gt; 2734.4, 2479.2, 4845.0, 19733.8, 4093.6, 1849.8, 4179.4, 2525…
+$ rain     &lt;dbl&gt; 12.63, 47.14, 42.77, 33.18, 34.55, 14.81, 45.94, 39.25, 42.36…
+$ coas     &lt;chr&gt; "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "yes", "…
+$ dens     &lt;dbl&gt; 1815.86, 804.86, 1907.86, 1876.08, 340.93, 335.52, 315.78, 36…
+$ medi     &lt;dbl&gt; 4397, 5667, 15817, 32698, 6250, 4705, 7165, 4472, 2658, 33885…</code></pre>
+</div>
+</div>
+<p>We can examine if at 5% significance level, there is a statistically significant relationship between air quality (<code>airq</code>) and amount of rain (<code>rain</code>), keeping population density (<code>dens</code>) constant</p>
+<p>This is a MLR situation/case</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>air_regressionMLR <span class="ot">&lt;-</span><span class="fu">lm</span>(airq <span class="sc">~</span> rain <span class="sc">+</span> dens, <span class="at">data=</span>air_quality)</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(air_regressionMLR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = airq ~ rain + dens, data = air_quality)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.984 -24.871   8.916  22.542  59.943 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  1.073e+02  1.568e+01   6.844 2.37e-07 ***
+rain        -5.377e-02  3.995e-01  -0.135    0.894    
+dens        -3.834e-04  1.906e-03  -0.201    0.842    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 29.02 on 27 degrees of freedom
+Multiple R-squared:  0.002184,  Adjusted R-squared:  -0.07173 
+F-statistic: 0.02955 on 2 and 27 DF,  p-value: 0.9709</code></pre>
+</div>
+</div>
+<p>We see that the F-statistic’s p-value (0.9709) is greater than our alpha (0.05). So all the coefficients are jointly statistically equal to zero.</p>
+<p>Suppose we want to examine if at 5% significance level, there is a statistically significant relationship between air quality (<code>airq</code>) and amount of rain without accounting for population density (<code>dens</code>)</p>
+<p>This is a SLR situation</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>air_regressionSLR <span class="ot">&lt;-</span><span class="fu">lm</span>(airq <span class="sc">~</span> rain, <span class="at">data=</span>air_quality)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(air_regressionSLR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = airq ~ rain, data = air_quality)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.648 -24.679   9.367  21.734  60.303 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 106.6662    15.0895   7.069 1.09e-07 ***
+rain         -0.0545     0.3926  -0.139    0.891    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 28.51 on 28 degrees of freedom
+Multiple R-squared:  0.0006878, Adjusted R-squared:  -0.035 
+F-statistic: 0.01927 on 1 and 28 DF,  p-value: 0.8906</code></pre>
+</div>
+</div>
+<p>What about testing the theory that density negatively affects air quality at 5% significance level? We can use the SLR below to examine that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>air_regressionSLR2 <span class="ot">&lt;-</span><span class="fu">lm</span>(airq <span class="sc">~</span> dens, <span class="at">data=</span>air_quality)</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(air_regressionSLR2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = airq ~ dens, data = air_quality)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.051 -24.248   8.847  22.365  59.937 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  1.054e+02  6.128e+00  17.195   &lt;2e-16 ***
+dens        -3.857e-04  1.872e-03  -0.206    0.838    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 28.5 on 28 degrees of freedom
+Multiple R-squared:  0.001514,  Adjusted R-squared:  -0.03415 
+F-statistic: 0.04246 on 1 and 28 DF,  p-value: 0.8382</code></pre>
+</div>
+</div>
+<p>Note that the variable dens has the expected sign but is not statistically significant at 5%.</p>
+<p>Also note that if we were testing for a relationship at 10% significance level, the variable dens would be statistically significant</p>
+</section>
+</section>
+</section>
+<section id="session-info" class="level1">
+<h1>%Session Info%</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 (2022-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] readxl_1.4.3    psych_2.3.6     lubridate_1.9.2 forcats_1.0.0  
+ [5] stringr_1.5.0   dplyr_1.1.2     purrr_1.0.1     readr_2.1.4    
+ [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.0  xfun_0.39         splines_4.2.2     lattice_0.20-45  
+ [5] colorspace_2.1-0  vctrs_0.6.3       generics_0.1.3    htmltools_0.5.5  
+ [9] yaml_2.3.7        mgcv_1.8-41       utf8_1.2.3        rlang_1.1.1      
+[13] pillar_1.9.0      glue_1.6.2        withr_2.5.0       bit64_4.0.5      
+[17] lifecycle_1.0.3   munsell_0.5.0     gtable_0.3.3      cellranger_1.1.0 
+[21] htmlwidgets_1.6.2 evaluate_0.21     labeling_0.4.2    knitr_1.43       
+[25] tzdb_0.4.0        fastmap_1.1.1     curl_5.0.1        parallel_4.2.2   
+[29] fansi_1.0.4       scales_1.2.1      vroom_1.6.3       jsonlite_1.8.4   
+[33] bit_4.0.5         farver_2.1.1      mnormt_2.1.1      hms_1.1.3        
+[37] digest_0.6.33     stringi_1.7.12    grid_4.2.2        cli_3.6.1        
+[41] tools_4.2.2       magrittr_2.0.3    crayon_1.5.2      pkgconfig_2.0.3  
+[45] Matrix_1.6-0      timechange_0.2.0  rmarkdown_2.23    rstudioapi_0.15.0
+[49] R6_2.5.1          nlme_3.1-160      compiler_4.2.2   </code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

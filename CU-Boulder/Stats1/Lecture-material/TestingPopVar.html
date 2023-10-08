@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Testing Population Variances</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="TestingPopVar_files/libs/clipboard/clipboard.min.js"></script>
+<script src="TestingPopVar_files/libs/quarto-html/quarto.js"></script>
+<script src="TestingPopVar_files/libs/quarto-html/popper.min.js"></script>
+<script src="TestingPopVar_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="TestingPopVar_files/libs/quarto-html/anchor.min.js"></script>
+<link href="TestingPopVar_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="TestingPopVar_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="TestingPopVar_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="TestingPopVar_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="TestingPopVar_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#example-1-one-sample-one-sided-variance-test" id="toc-example-1-one-sample-one-sided-variance-test" class="nav-link active" data-scroll-target="#example-1-one-sample-one-sided-variance-test">Example 1: One-sample, one-sided variance test</a></li>
+  <li><a href="#example-2-one-sample-one-sided-variance-test" id="toc-example-2-one-sample-one-sided-variance-test" class="nav-link" data-scroll-target="#example-2-one-sample-one-sided-variance-test">Example 2: One-sample, one-sided variance test</a>
+  <ul class="collapse">
+  <li><a href="#step-1-state-the-null-and-alternative-hypotheses" id="toc-step-1-state-the-null-and-alternative-hypotheses" class="nav-link" data-scroll-target="#step-1-state-the-null-and-alternative-hypotheses">Step 1: State the null and alternative hypotheses</a></li>
+  <li><a href="#step-2-statechoose-the-alpha-significance-level-and-confidence-level" id="toc-step-2-statechoose-the-alpha-significance-level-and-confidence-level" class="nav-link" data-scroll-target="#step-2-statechoose-the-alpha-significance-level-and-confidence-level">Step 2: State/choose the alpha (significance level) and confidence level:</a></li>
+  <li><a href="#step-3-write-the-r-code-for-the-test" id="toc-step-3-write-the-r-code-for-the-test" class="nav-link" data-scroll-target="#step-3-write-the-r-code-for-the-test">Step 3: Write the R code for the test:</a></li>
+  <li><a href="#step-4-state-resultsfinding-and-conclusion" id="toc-step-4-state-resultsfinding-and-conclusion" class="nav-link" data-scroll-target="#step-4-state-resultsfinding-and-conclusion">Step 4: State results/finding and conclusion:</a></li>
+  </ul></li>
+  <li><a href="#example-3-another-one-sided-test" id="toc-example-3-another-one-sided-test" class="nav-link" data-scroll-target="#example-3-another-one-sided-test">Example 3 : Another One-sided test</a></li>
+  <li><a href="#example-4-one-sample-two-sided-significance-test-for-variance" id="toc-example-4-one-sample-two-sided-significance-test-for-variance" class="nav-link" data-scroll-target="#example-4-one-sample-two-sided-significance-test-for-variance">Example 4 : One-sample, two-sided significance test for variance</a></li>
+  <li><a href="#testing-two-population-variable-variances---the-f-ratio" id="toc-testing-two-population-variable-variances---the-f-ratio" class="nav-link" data-scroll-target="#testing-two-population-variable-variances---the-f-ratio">Testing Two Population (variable) variances - the F Ratio</a>
+  <ul class="collapse">
+  <li><a href="#example-1-two-sample-two-sidedtwo-tailed-test-of-variances" id="toc-example-1-two-sample-two-sidedtwo-tailed-test-of-variances" class="nav-link" data-scroll-target="#example-1-two-sample-two-sidedtwo-tailed-test-of-variances">Example 1: Two Sample, two-sided/two-tailed test of variances</a>
+  <ul class="collapse">
+  <li><a href="#two-sidedtwo-tailed-r-code" id="toc-two-sidedtwo-tailed-r-code" class="nav-link" data-scroll-target="#two-sidedtwo-tailed-r-code">Two-sided/two-tailed R code:</a></li>
+  <li><a href="#one-sidedone-tailed-r-code" id="toc-one-sidedone-tailed-r-code" class="nav-link" data-scroll-target="#one-sidedone-tailed-r-code">One-sided/one tailed R code</a></li>
+  <li><a href="#one-sidedone-tailed-r-code-1" id="toc-one-sidedone-tailed-r-code-1" class="nav-link" data-scroll-target="#one-sidedone-tailed-r-code-1">One-sided/one tailed R code</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#testing-behavior-of-proportions-in-two-populations" id="toc-testing-behavior-of-proportions-in-two-populations" class="nav-link" data-scroll-target="#testing-behavior-of-proportions-in-two-populations">Testing behavior of proportions in two populations</a>
+  <ul class="collapse">
+  <li><a href="#fishers-exact-test-of-equality-of-proportions" id="toc-fishers-exact-test-of-equality-of-proportions" class="nav-link" data-scroll-target="#fishers-exact-test-of-equality-of-proportions">Fisher’s Exact test of equality of proportions</a>
+  <ul class="collapse">
+  <li><a href="#example-observed-heart-attacks-for-physicians-taking-aspirin-vs-placebo.-hennekens-1988" id="toc-example-observed-heart-attacks-for-physicians-taking-aspirin-vs-placebo.-hennekens-1988" class="nav-link" data-scroll-target="#example-observed-heart-attacks-for-physicians-taking-aspirin-vs-placebo.-hennekens-1988">Example: Observed heart attacks for physicians taking aspirin vs placebo. Hennekens (1988)</a></li>
+  <li><a href="#example-2-one-sided-test-to-check-if-proportion-1-is-less-than-proportion-2-in-the-population" id="toc-example-2-one-sided-test-to-check-if-proportion-1-is-less-than-proportion-2-in-the-population" class="nav-link" data-scroll-target="#example-2-one-sided-test-to-check-if-proportion-1-is-less-than-proportion-2-in-the-population">Example 2: One-sided test to check if Proportion 1 is less than Proportion 2 in the population</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">%Session Info%</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Testing Population Variances</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Today we talk about testing for variances using R</p>
+<p>An example of testing for variance is: suppose we think or want a particular population variable (that you have measurements for) to have little variability, we can draw samples from the population, record the measurements, find the variance of those sample measurements and perform a hypothesis test that the against the (desired or assumed population) variance.</p>
+<p>We can test the null hypothesis that the sample variance is equal to a hypothesized value (one sample test).</p>
+<p>Use the <code>varTest()</code> function in the <code>EnvStats</code> package as below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("EnvStats")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"EnvStats"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="example-1-one-sample-one-sided-variance-test" class="level1">
+<h1>Example 1: One-sample, one-sided variance test</h1>
+<p>Suppose you have the following sample from a population</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">12.43</span>, <span class="fl">11.71</span>,<span class="fl">14.41</span>,<span class="fl">11.05</span>,<span class="fl">9.53</span>,<span class="fl">11.66</span>, <span class="fl">9.33</span>, <span class="fl">11.71</span>, <span class="fl">14.35</span>,<span class="fl">13.81</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(sample_data) <span class="co">#yields 1.8 as the standard deviation of sample_data (which is a set of measurements drawn from the population variable in question)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.801471</code></pre>
+</div>
+</div>
+<p>Assume there is a claim/desire that the true variance (population variance) of the population variable cannot or should not be more than 2.25 (i.e.the population variance is less than or equal to 2.25)</p>
+<p>We can conduct a one-sided/one-tailed significance test of a null hypothesis (H0) that the population variance is less than or equal to 2.25 against an alternative hypothesis (<span class="math inline">\(H_1\)</span>) that the population variance is greater than 2.25.</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: population variance is = 2.25</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: population variance &gt; 2.25</p></li>
+<li><p>Set <span class="math inline">\(\alpha = 0.05\)</span></p></li>
+</ul>
+<p>Use the following syntax for the <code>varTest()</code> function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># varTest(data_frame, conf.level = , alt " the alternative hypothesis",</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#         sigma.squared = hypothesized variance used in the null hypothesis)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">varTest</span>(sample_data, <span class="at">conf.level =</span> <span class="fl">0.95</span>, <span class="at">alt=</span><span class="st">"greater"</span>, <span class="at">sigma.squared =</span> <span class="fl">2.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Results of Hypothesis Test
+--------------------------
+
+Null Hypothesis:                 variance = 2.25
+
+Alternative Hypothesis:          True variance is greater than 2.25
+
+Test Name:                       Chi-Squared Test on Variance
+
+Estimated Parameter(s):          variance = 3.245299
+
+Data:                            sample_data
+
+Test Statistic:                  Chi-Squared = 12.9812
+
+Test Statistic Parameter:        df = 9
+
+P-value:                         0.163459
+
+95% Confidence Interval:         LCL = 1.726327
+                                 UCL =      Inf</code></pre>
+</div>
+</div>
+<p>Remember that sigma is standard deviation. So if you are given standard deviation in your question, remember to square it for the argument <code>sigma.squared</code> in the <code>varTest()</code> function</p>
+<p>We see that the p-value &gt; 0.05. So we fail to reject the null hypothesis and conclude that there is evidence that the variance of the population variable in question is not greater than 2.25</p>
+</section>
+<section id="example-2-one-sample-one-sided-variance-test" class="level1">
+<h1>Example 2: One-sample, one-sided variance test</h1>
+<p>Assume that the following simulation represents a sample of heights of students at CU, Boulder</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>height_smpl<span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="dv">600</span>, <span class="at">m=</span><span class="fl">5.9</span>,<span class="at">s=</span><span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Conduct a one-sided significance test that the population variance for students’ heights at CU, Boulder is at most 0.5 at the 5% significance level. Use 95% confidence level for your test.</p>
+<section id="step-1-state-the-null-and-alternative-hypotheses" class="level2">
+<h2 class="anchored" data-anchor-id="step-1-state-the-null-and-alternative-hypotheses">Step 1: State the null and alternative hypotheses</h2>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: Population height variance = 0.5</li>
+<li><span class="math inline">\(H_1\)</span>: Population height variance &gt; 0.5</li>
+</ul>
+</section>
+<section id="step-2-statechoose-the-alpha-significance-level-and-confidence-level" class="level2">
+<h2 class="anchored" data-anchor-id="step-2-statechoose-the-alpha-significance-level-and-confidence-level">Step 2: State/choose the alpha (significance level) and confidence level:</h2>
+<ul>
+<li><span class="math inline">\(\alpha: 5\)</span>% (= 0.05) = Confidence level: <span class="math inline">\(95\)</span>% (0.95)</li>
+</ul>
+</section>
+<section id="step-3-write-the-r-code-for-the-test" class="level2">
+<h2 class="anchored" data-anchor-id="step-3-write-the-r-code-for-the-test">Step 3: Write the R code for the test:</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varTest</span>(height_smpl, <span class="at">conf.level =</span> <span class="fl">0.95</span>, <span class="at">alt=</span><span class="st">"greater"</span>, <span class="at">sigma.squared =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Results of Hypothesis Test
+--------------------------
+
+Null Hypothesis:                 variance = 0.5
+
+Alternative Hypothesis:          True variance is greater than 0.5
+
+Test Name:                       Chi-Squared Test on Variance
+
+Estimated Parameter(s):          variance = 0.5091053
+
+Data:                            height_smpl
+
+Test Statistic:                  Chi-Squared = 609.9081
+
+Test Statistic Parameter:        df = 599
+
+P-value:                         0.3697585
+
+95% Confidence Interval:         LCL = 0.4641289
+                                 UCL =       Inf</code></pre>
+</div>
+</div>
+</section>
+<section id="step-4-state-resultsfinding-and-conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="step-4-state-resultsfinding-and-conclusion">Step 4: State results/finding and conclusion:</h2>
+<p><strong><em>Finding/Results:</em></strong></p>
+<p>p-value &gt; 0.05</p>
+<p>Since the p-value from the test is not less than or equal to our alpha (0.05) we fail to reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>There is evidence that the variance of population height for students at CU,Boulder is greater than 0.5</p>
+</section>
+</section>
+<section id="example-3-another-one-sided-test" class="level1">
+<h1>Example 3 : Another One-sided test</h1>
+<p>A study claims that the population of SAT scores is nearly normally distributed with mean 1500 and standard deviation 300</p>
+<p>Assume that the following simulation represents a sample of SAT scores of students enrolling for freshman year at a university</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>SAT_smpl<span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="dv">250</span>, <span class="at">m=</span><span class="dv">1500</span>,<span class="at">s=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Conduct a one-sided test that the variance for students SAT scores at that school is greater than 90000 at the 5% significance level.</p>
+<p>Use 95% confidence level for your test</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: Population SAT score variance = 90000</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Population SAT score variance &lt; 90000</p></li>
+<li><p><span class="math inline">\(\alpha\)</span>: <span class="math inline">\(5\)</span>% (=0.05)</p></li>
+<li><p>Confidence level: <span class="math inline">\(95\)</span>% (0.95)</p></li>
+</ul>
+<p><strong>R code for the test is below:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varTest</span>(SAT_smpl, <span class="at">conf.level =</span> <span class="fl">0.95</span>, <span class="at">alt=</span><span class="st">"less"</span>, <span class="at">sigma.squared =</span> <span class="dv">90000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Results of Hypothesis Test
+--------------------------
+
+Null Hypothesis:                 variance = 90000
+
+Alternative Hypothesis:          True variance is less than 90000
+
+Test Name:                       Chi-Squared Test on Variance
+
+Estimated Parameter(s):          variance = 91047.22
+
+Data:                            SAT_smpl
+
+Test Statistic:                  Chi-Squared = 251.8973
+
+Test Statistic Parameter:        df = 249
+
+P-value:                         0.5632371
+
+95% Confidence Interval:         LCL =      0.0
+                                 UCL = 106203.5</code></pre>
+</div>
+</div>
+<p><strong><em>Findings:</em></strong></p>
+<p>Since the p-value from the test is 0.72 - i.e not less than or equal to our alpha (0.05) we fail to reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>There is evidence that the variance of population SAT scores for students at the school is less than or equal to 90000</p>
+</section>
+<section id="example-4-one-sample-two-sided-significance-test-for-variance" class="level1">
+<h1>Example 4 : One-sample, two-sided significance test for variance</h1>
+<p>Studies claim that the population of IQ scores for citizens of planet Earth is nearly normally distributed.</p>
+<p>The Stanford-Binet IQ test states that IQ scores have mean 100 and standard deviation 16</p>
+<p>Assume that the following simulation represents a sample of IQ scores of young adults across major cities in the world</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>IQ_smpl<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">88</span>,<span class="dv">96</span>,<span class="dv">110</span>,<span class="dv">101</span>,<span class="dv">93</span>,<span class="dv">99</span>,<span class="dv">91</span>,<span class="dv">85</span>,<span class="dv">109</span>,<span class="dv">112</span>,<span class="dv">125</span>,<span class="dv">125</span>,<span class="dv">108</span>,<span class="dv">117</span>,<span class="dv">126</span>,<span class="dv">97</span>,<span class="dv">99</span>,<span class="dv">99</span>,<span class="dv">91</span>,<span class="dv">90</span>,<span class="dv">88</span>,<span class="dv">95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There is agreement that the mean of IQ scores is 100 but another IQ test shows that the standard deviation for IQ scores for Earthlings is actually 15 and not 16.</p>
+<p>Write R code to conduct a two-sided test that the variance for IQ scores is 225 at the 5% significance level.</p>
+<p>Use 95% confidence level for your test</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: Population IQ score variance = 225</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Population IQ score variance &lt;&gt; (not equal to) 225</p></li>
+<li><p><span class="math inline">\(\alpha\)</span>: <span class="math inline">\(5\)</span>% (=0.05)</p></li>
+<li><p>Confidence level: <span class="math inline">\(95\)</span>% (0.95)</p></li>
+</ul>
+<p><strong>R code for the test is below:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varTest</span>(IQ_smpl, <span class="at">conf.level =</span> <span class="fl">0.95</span>, <span class="at">alt=</span><span class="st">"two.sided"</span>, <span class="at">sigma.squared =</span> <span class="dv">225</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Results of Hypothesis Test
+--------------------------
+
+Null Hypothesis:                 variance = 225
+
+Alternative Hypothesis:          True variance is not equal to 225
+
+Test Name:                       Chi-Squared Test on Variance
+
+Estimated Parameter(s):          variance = 161.619
+
+Data:                            IQ_smpl
+
+Test Statistic:                  Chi-Squared = 15.08444
+
+Test Statistic Parameter:        df = 21
+
+P-value:                         0.3626182
+
+95% Confidence Interval:         LCL =  95.66256
+                                 UCL = 330.06260</code></pre>
+</div>
+</div>
+<p><strong><em>Finding:</em></strong></p>
+<p>p-value (0.3626182) &gt; alpha (0.05)</p>
+<p>Since the p-value from the test is 0.3626182 - i.e greater than our alpha (0.05) we fail to reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>There is evidence that the variance of population IQ scores for students at the school is not to 90000.</p>
+</section>
+<section id="testing-two-population-variable-variances---the-f-ratio" class="level1">
+<h1>Testing Two Population (variable) variances - the F Ratio</h1>
+<p>We have been testing hypothesis about means for two populations.</p>
+<p>We can also test hypothesis about variable variances from two populations.</p>
+<p>We take samples for the population variable from each of the 2 populations, and perform a tow-sample, two-sided/two-tailed or one-sided/one-tailed hypotheses tests for population variances.</p>
+<p>Unlike the case for means, when you test two variances you do not subtract one from the other you divide one by the other (i.e.&nbsp;you find a ratio) in determining the sample statistic.</p>
+<p>The test statistic for comparing variances across two populations is called the F-ratio, named after Sir. Ronald Fisher.</p>
+<p>The family of distributions for comparing variances across two populations is called the F-distribution</p>
+<p>Just like the Chi-square distribution, the members of the F-distribution are distinguished by the degrees of freedom</p>
+<section id="example-1-two-sample-two-sidedtwo-tailed-test-of-variances" class="level2">
+<h2 class="anchored" data-anchor-id="example-1-two-sample-two-sidedtwo-tailed-test-of-variances">Example 1: Two Sample, two-sided/two-tailed test of variances</h2>
+<p>The data below are from production times for two machines (machine1 and machine2). The company is trying to determine if the variances of production time for both machines is the same in the population variable that measures production time</p>
+<p>(i.e.&nbsp;ratio in population variances for production time = 1)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>machine1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">24.58</span>,<span class="fl">22.09</span>,<span class="fl">23.70</span>, <span class="fl">18.89</span>, <span class="fl">22.02</span>,<span class="fl">28.71</span>,<span class="fl">24.44</span>,<span class="fl">20.91</span>,<span class="fl">23.83</span>,<span class="fl">20.83</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>machine2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">21.61</span>,<span class="fl">19.06</span>,<span class="fl">20.72</span>,<span class="fl">15.77</span>,<span class="dv">19</span>,<span class="fl">25.88</span>,<span class="fl">21.48</span>,<span class="fl">17.85</span>,<span class="fl">20.86</span>,<span class="fl">17.77</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To test the following hypotheses at 5% significance level(alpha):</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span> (null): variance of machine1 = variance of machine2 (F-ratio equals 1)</p></li>
+<li><p><span class="math inline">\(H_1\)</span> (alternative): variance of machine1 &lt;&gt; variance of machine2 (F-ratio not equal to 1)</p></li>
+<li><p>Set <span class="math inline">\(\alpha = 0.05\)</span></p></li>
+</ul>
+<p>Base R provides <code>var.test()</code> to compare population variable variances.</p>
+<p>Note that this is different from <code>varTest()</code> from the <code>EnvStats</code> package used for one-sample variance hypothesis testing</p>
+<section id="two-sidedtwo-tailed-r-code" class="level3">
+<h3 class="anchored" data-anchor-id="two-sidedtwo-tailed-r-code">Two-sided/two-tailed R code:</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(machine1, machine2, <span class="at">ratio=</span><span class="dv">1</span>, <span class="at">alternative=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  machine1 and machine2
+F = 0.94462, num df = 9, denom df = 9, p-value = 0.9338
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.2346291 3.8030156
+sample estimates:
+ratio of variances 
+         0.9446153 </code></pre>
+</div>
+</div>
+<p><strong><em>Write your finding/result:</em></strong></p>
+<p>p-value (0.9338) &gt; alpha (0.05) so we fail to reject the null hypothesis</p>
+<p><strong><em>Write your conclusion:</em></strong></p>
+<p>Since we fail to reject the null, there is evidence in favor of the null</p>
+</section>
+<section id="one-sidedone-tailed-r-code" class="level3">
+<h3 class="anchored" data-anchor-id="one-sidedone-tailed-r-code">One-sided/one tailed R code</h3>
+<ul>
+<li><span class="math inline">\(H_0\)</span> (null): variance of machine1 = 3 times the variance of machine2 (F-ratio greater equal to 3)</li>
+<li><span class="math inline">\(H_1\)</span> (alternative): variance of machine1 &lt; 3 times the variance of machine2 (F-ratio less than 3)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(machine1, machine2, <span class="at">ratio=</span><span class="dv">3</span>, <span class="at">alternative=</span><span class="st">"less"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  machine1 and machine2
+F = 0.31487, num df = 9, denom df = 9, p-value = 0.05013
+alternative hypothesis: true ratio of variances is less than 3
+95 percent confidence interval:
+ 0.000000 3.002831
+sample estimates:
+ratio of variances 
+         0.9446153 </code></pre>
+</div>
+</div>
+<p><strong><em>Write your finding/result:</em></strong></p>
+<p><strong><em>Write your conclusion:</em></strong></p>
+</section>
+<section id="one-sidedone-tailed-r-code-1" class="level3">
+<h3 class="anchored" data-anchor-id="one-sidedone-tailed-r-code-1">One-sided/one tailed R code</h3>
+<ul>
+<li><span class="math inline">\(H_0\)</span> (null): variance of machine1 = 16 times variance of machine2 (F-ratio less than or equal than 16)</li>
+<li><span class="math inline">\(H_1\)</span> (alternative): variance of machine1 &gt; 16 times variance of machine2 (F-ratio greater than 16)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var.test</span>(machine1, machine2, <span class="at">ratio=</span><span class="dv">16</span>, <span class="at">alternative=</span><span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    F test to compare two variances
+
+data:  machine1 and machine2
+F = 0.059038, num df = 9, denom df = 9, p-value = 0.9999
+alternative hypothesis: true ratio of variances is greater than 16
+95 percent confidence interval:
+ 0.2971523       Inf
+sample estimates:
+ratio of variances 
+         0.9446153 </code></pre>
+</div>
+</div>
+<p><strong><em>Write your finding/result</em></strong></p>
+<p><strong><em>Write your conclusion:</em></strong></p>
+</section>
+</section>
+</section>
+<section id="testing-behavior-of-proportions-in-two-populations" class="level1">
+<h1>Testing behavior of proportions in two populations</h1>
+<section id="fishers-exact-test-of-equality-of-proportions" class="level2">
+<h2 class="anchored" data-anchor-id="fishers-exact-test-of-equality-of-proportions">Fisher’s Exact test of equality of proportions</h2>
+<p>With Fisher’s tests of equality of proportion, we typically want to test</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: proportion 1 = proportion 2</li>
+<li><span class="math inline">\(H_1\)</span>: proportion 1 &lt;&gt; proportion 2</li>
+</ul>
+<section id="example-observed-heart-attacks-for-physicians-taking-aspirin-vs-placebo.-hennekens-1988" class="level3">
+<h3 class="anchored" data-anchor-id="example-observed-heart-attacks-for-physicians-taking-aspirin-vs-placebo.-hennekens-1988">Example: Observed heart attacks for physicians taking aspirin vs placebo. Hennekens (1988)</h3>
+<p>Physicians want to know if taking aspirin will help them avoid heart attacks.</p>
+<p>Suppose out of 11,037 physicians sampled from the population that received treatment, 104 physicians developed heart attacks.</p>
+<p>Suppose out of 11,034 physicians sampled from the population that received a placebo 189 physicians developed heart attacks.</p>
+<p>A group collects the information above into the following table/matrix</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>heart_data <span class="ot">&lt;-</span><span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">104</span>,<span class="dv">189</span>,<span class="dv">11037</span>,<span class="dv">11034</span>), <span class="at">nrow=</span><span class="dv">2</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Display matrix</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>heart_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]  [,2]
+[1,]  104 11037
+[2,]  189 11034</code></pre>
+</div>
+</div>
+<ul>
+<li>let <em>Proportion 1</em> = proportion of physicians taking aspirin and witnessing heart attacks in the population</li>
+<li>let <em>Proportion 2</em> = proportion of physicians taking placebo and witnessing heart attacks in the population</li>
+</ul>
+<p>We can conduct the following significance test at 1% significance level</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: Proportion 1 = Proportion 2</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Proportion 1 &lt;&gt; Proportion 2</p></li>
+<li><p><span class="math inline">\(\alpha = 1\)</span>% (0.01)</p></li>
+</ul>
+<p>The test of equality of proportions is called Fisher’s exact test</p>
+<p>The syntax in R is as below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fisher.test(data_source, alternative="less" or "two.sided" or "greater")</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(heart_data, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Fisher's Exact Test for Count Data
+
+data:  heart_data
+p-value = 8.979e-07
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.4281664 0.7035910
+sample estimates:
+odds ratio 
+ 0.5501329 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value &lt; alpha (0.01)</p>
+<p>We reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since the p-value &lt; alpha, there is evidence in favor of the alternative</p>
+</section>
+<section id="example-2-one-sided-test-to-check-if-proportion-1-is-less-than-proportion-2-in-the-population" class="level3">
+<h3 class="anchored" data-anchor-id="example-2-one-sided-test-to-check-if-proportion-1-is-less-than-proportion-2-in-the-population">Example 2: One-sided test to check if Proportion 1 is less than Proportion 2 in the population</h3>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: Proportion 1 = Proportion 2</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Proportion 1 &lt; Proportion 2</p></li>
+<li><p><span class="math inline">\(\alpha = 1\)</span>% (0.01)</p></li>
+</ul>
+<p>This is a one-sided test</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.test</span>(heart_data, <span class="at">alternative =</span> <span class="st">"less"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Fisher's Exact Test for Count Data
+
+data:  heart_data
+p-value = 4.553e-07
+alternative hypothesis: true odds ratio is less than 1
+95 percent confidence interval:
+ 0.0000000 0.6774085
+sample estimates:
+odds ratio 
+ 0.5501329 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value &lt; alpha</p>
+<p>We reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since we reject the null hypothesis, there is evidence in favor of the alternative hypothesis.</p>
+</section>
+</section>
+</section>
+<section id="session-info" class="level1">
+<h1>%Session Info%</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 (2022-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] EnvStats_2.8.0
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.2.2    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.2.2       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43        jsonlite_1.8.4    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

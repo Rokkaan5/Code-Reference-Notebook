@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Testing Population Means</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="TestingPopMean_files/libs/clipboard/clipboard.min.js"></script>
+<script src="TestingPopMean_files/libs/quarto-html/quarto.js"></script>
+<script src="TestingPopMean_files/libs/quarto-html/popper.min.js"></script>
+<script src="TestingPopMean_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="TestingPopMean_files/libs/quarto-html/anchor.min.js"></script>
+<link href="TestingPopMean_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="TestingPopMean_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="TestingPopMean_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="TestingPopMean_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="TestingPopMean_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#one-sample-z-testing-of-population-means-in-r" id="toc-one-sample-z-testing-of-population-means-in-r" class="nav-link active" data-scroll-target="#one-sample-z-testing-of-population-means-in-r">One sample Z-testing of population means in R</a></li>
+  <li><a href="#case-1-z-test-for-means---population-standard-deviation-is-known-and-sample-size-is-large-enough" id="toc-case-1-z-test-for-means---population-standard-deviation-is-known-and-sample-size-is-large-enough" class="nav-link" data-scroll-target="#case-1-z-test-for-means---population-standard-deviation-is-known-and-sample-size-is-large-enough">Case 1: Z test for means - population standard deviation is known and sample size is large enough</a>
+  <ul class="collapse">
+  <li><a href="#example-1-simulating-a-random-sample" id="toc-example-1-simulating-a-random-sample" class="nav-link" data-scroll-target="#example-1-simulating-a-random-sample">Example 1: simulating a random sample</a></li>
+  <li><a href="#example-2-iq-scores" id="toc-example-2-iq-scores" class="nav-link" data-scroll-target="#example-2-iq-scores">Example 2: IQ Scores</a>
+  <ul class="collapse">
+  <li><a href="#findingresult" id="toc-findingresult" class="nav-link" data-scroll-target="#findingresult">Finding/result</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#case-2-t-test-for-means---population-standard-deviation-is-not-known-or-sample-size-is-small---or-both" id="toc-case-2-t-test-for-means---population-standard-deviation-is-not-known-or-sample-size-is-small---or-both" class="nav-link" data-scroll-target="#case-2-t-test-for-means---population-standard-deviation-is-not-known-or-sample-size-is-small---or-both">Case 2: t-test for means - population standard deviation is not known or sample size is small - or both</a>
+  <ul class="collapse">
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example 1</a></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2">Example 2</a></li>
+  <li><a href="#example-3" id="toc-example-3" class="nav-link" data-scroll-target="#example-3">Example 3</a></li>
+  <li><a href="#example-4" id="toc-example-4" class="nav-link" data-scroll-target="#example-4">Example 4:</a></li>
+  <li><a href="#example-5" id="toc-example-5" class="nav-link" data-scroll-target="#example-5">Example 5:</a>
+  <ul class="collapse">
+  <li><a href="#question-1" id="toc-question-1" class="nav-link" data-scroll-target="#question-1">Question 1</a></li>
+  </ul></li>
+  <li><a href="#example-6" id="toc-example-6" class="nav-link" data-scroll-target="#example-6">Example 6:</a></li>
+  </ul></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">%Session Info%</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Testing Population Means</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="one-sample-z-testing-of-population-means-in-r" class="level1">
+<h1>One sample Z-testing of population means in R</h1>
+<p>One sample tests for (population) means</p>
+<p>In trying to describe the behavior of a population, we sometimes need to ask if the mean of the population is equal to some hypothesized value</p>
+<p>We use a sample drawn from that population to perform the comparison.</p>
+<p>There are two cases for one sample tests of significance of population variable means</p>
+<p><strong>Case 1:</strong> when the population variable standard deviation is known and your sample size is large enough: here we use the Z test</p>
+<p><strong>Case 2:</strong> when the population standard deviation is unknown and you have a small sample: here we use the t-test</p>
+</section>
+<section id="case-1-z-test-for-means---population-standard-deviation-is-known-and-sample-size-is-large-enough" class="level1">
+<h1>Case 1: Z test for means - population standard deviation is known and sample size is large enough</h1>
+<p>Base R does not have a fucntion for z.test for means so we install and load the TeachingDemos package that has that function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("TeachingDemos")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"TeachingDemos"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="example-1-simulating-a-random-sample" class="level2">
+<h2 class="anchored" data-anchor-id="example-1-simulating-a-random-sample">Example 1: simulating a random sample</h2>
+<p>We can create one random sample from a normal population of mean = 3 and standard deviation = 4</p>
+<p>Note that we know the mean and standard deviation</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sample_1 <span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="dv">38</span>,<span class="at">mean=</span><span class="dv">3</span>, <span class="at">sd=</span><span class="dv">4</span>) <span class="co">#note that n&gt;30 here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can then use this random sample to test if the population mean (i.e.&nbsp;the true mean) is equal to 1 (the hypothesized population mean value) in the null hypothesis.</p>
+<p>Note that this is an example of a two-sided/two-tailed test</p>
+<p><strong>Steps</strong></p>
+<ol type="1">
+<li>Write out your null and alternative hypothesis</li>
+<li>Choose your alpha (significance level) and confidence interval</li>
+<li>Perform your test and obtain the p-value associated with your test statistic</li>
+<li>Compare your p-value with your alpha</li>
+<li>Write your finding</li>
+<li>Write your conclusion in layman’s English</li>
+</ol>
+<p><strong>Case 1:</strong> If p-value <span class="math inline">\(\le \alpha\)</span>,</p>
+<p>Reject null hypothesis and conclude that there is evidence in favor of the alternative hypothesis</p>
+<p><strong>Case 2:</strong> If p-value <span class="math inline">\(&gt; \alpha\)</span></p>
+<p>Fail to reject the null hypothesis and conclude there is evidence in favor of the null hypothesis</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: true mean (population variable mean) = 1</li>
+<li><span class="math inline">\(H_1\)</span>: true mean (population variable mean) &lt;&gt; 1 (&lt;&gt; is “not equal to”)</li>
+<li><span class="math inline">\(\alpha = 5% (0.05)\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">z.test</span>(sample_1,<span class="at">mu=</span><span class="dv">1</span>, <span class="at">sd=</span><span class="dv">4</span>, <span class="at">conf.level=</span><span class="fl">0.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample z-test
+
+data:  sample_1
+z = 2.5433, n = 38.00000, Std. Dev. = 4.00000, Std. Dev. of the sample
+mean = 0.64889, p-value = 0.01098
+alternative hypothesis: true mean is not equal to 1
+90 percent confidence interval:
+ 1.583000 3.717644
+sample estimates:
+mean of sample_1 
+        2.650322 </code></pre>
+</div>
+</div>
+<p>We see that the p-value from the test is less than our alpha of 0.05 so we reject the null hypothesis and say that there is evidence that the true mean (i.e.&nbsp;population variable mean) is not equal to 1</p>
+<p><strong>Write your finding below:</strong></p>
+<p>the p-value &lt; alpha. So we reject the null hypothesis</p>
+<p><strong>Write your conclusion below:</strong></p>
+<p>There is evidence that the true mean is not equal to 1</p>
+</section>
+<section id="example-2-iq-scores" class="level2">
+<h2 class="anchored" data-anchor-id="example-2-iq-scores">Example 2: IQ Scores</h2>
+<p>Suppose we have a vector (sample of) of IQ scores as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>IQ_data <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">101</span>, <span class="dv">104</span>, <span class="dv">109</span>, <span class="dv">125</span>, <span class="dv">116</span>, <span class="dv">105</span>, <span class="dv">108</span>,<span class="dv">110</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: true mean = 100</li>
+<li><span class="math inline">\(H_1\)</span>: true mean &lt;&gt; 100</li>
+<li>$ = 5% (0.05)$</li>
+</ul>
+<p>Suppose we know that the standard deviation of IQ score variable in the population is 15. We can test if the population mean is 100 in a null hypothesis against the alternative that it is not 100</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">z.test</span>(IQ_data,<span class="dv">100</span>, <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample z-test
+
+data:  IQ_data
+z = 1.7333, n = 9, Std. Dev. = 15, Std. Dev. of the sample mean = 5,
+p-value = 0.08304
+alternative hypothesis: true mean is not equal to 100
+95 percent confidence interval:
+  98.86685 118.46649
+sample estimates:
+mean of IQ_data 
+       108.6667 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">z.test</span>(IQ_data, <span class="dv">100</span>, <span class="dv">15</span>, <span class="at">alt=</span><span class="st">"two.sided"</span>)<span class="co">#two-tailed version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample z-test
+
+data:  IQ_data
+z = 1.7333, n = 9, Std. Dev. = 15, Std. Dev. of the sample mean = 5,
+p-value = 0.08304
+alternative hypothesis: true mean is not equal to 100
+95 percent confidence interval:
+  98.86685 118.46649
+sample estimates:
+mean of IQ_data 
+       108.6667 </code></pre>
+</div>
+</div>
+<section id="findingresult" class="level3">
+<h3 class="anchored" data-anchor-id="findingresult">Finding/result</h3>
+<p>p-value is <span class="math inline">\(&gt; \alpha (0.05)\)</span>, so we fail to reject the null hypothesis</p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<ul>
+<li>There is evidence that the true/population mean is 100</li>
+<li>There is evidence in favor of the null</li>
+</ul>
+<p>We can conduct a one-sided significance test (i.e.&nbsp;if the population mean is greater than or equal to 100 in a null hypothesis) against the alternative that it is less than 100.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: true mean (population IQ mean) <span class="math inline">\(\ge 100\)</span></li>
+<li><span class="math inline">\(H_1\)</span>: true mean (population IQ mean) <span class="math inline">\(&lt; 100\)</span></li>
+<li><span class="math inline">\(\alpha = 5%\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">z.test</span>(IQ_data,<span class="dv">100</span>, <span class="dv">15</span>, <span class="at">alt=</span><span class="st">"less"</span>)<span class="co"># One-tailed version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample z-test
+
+data:  IQ_data
+z = 1.7333, n = 9, Std. Dev. = 15, Std. Dev. of the sample mean = 5,
+p-value = 0.9585
+alternative hypothesis: true mean is less than 100
+95 percent confidence interval:
+     -Inf 116.8909
+sample estimates:
+mean of IQ_data 
+       108.6667 </code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="case-2-t-test-for-means---population-standard-deviation-is-not-known-or-sample-size-is-small---or-both" class="level1">
+<h1>Case 2: t-test for means - population standard deviation is not known or sample size is small - or both</h1>
+<p>Note that we also use the t test when we have small random samples (i.e.&nbsp;<span class="math inline">\(n&lt;30\)</span>)</p>
+<p>The t-distribution is defined by degrees of freedom, which are related to sample size. The t-distribution is most useful for small sample sizes or when the population standard deviation is not known - or both.</p>
+<p>As the sample size increases, the t-distribution shape looks more like a normal distribution shape.</p>
+<p>Similarly, as the degrees of freedom approaches infinity the shape of a t-distribution approaches the shape of the normal distribution.</p>
+<p>To calculate the degrees of freedom for a question use <span class="math inline">\(n-1\)</span>, where <span class="math inline">\(n\)</span> is sample size. Degrees of freedom relate to the maximum number logically independent values (values that have the freedom to vary) in a data sample.</p>
+<p>We can use the t-distribution (a.k.a Student’s t) family when we have small samples.</p>
+<p>Just as you can use d,p,q and r prefixes for the normal distribution family in R, you can also use the following for the t-distribution family</p>
+<ul>
+<li><code>dt()</code> - to get density</li>
+<li><code>pt()</code> - for cumulative density, cdf</li>
+<li><code>qt()</code> - for quantiles</li>
+<li><code>rt()</code> - random number generation</li>
+</ul>
+<p>Note that a variable with t-distribution is distinguised from another variable with t-distribution by their degrees of freedom.</p>
+<p>Note that the <code>t.test()</code> function exists in Base R</p>
+<section id="example-1" class="level2">
+<h2 class="anchored" data-anchor-id="example-1">Example 1</h2>
+<p>Suppose The United States Department of Agriculture (USDA) provides the following sample data for wheat crop yields from across various farm plots in the US. Note data is in bushels per plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>yield_data <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">2.5</span>, <span class="fl">3.0</span>, <span class="fl">3.1</span>, <span class="fl">4.0</span>, <span class="fl">1.2</span>, <span class="fl">5.0</span>, <span class="fl">4.1</span>,<span class="fl">3.9</span>, <span class="fl">3.2</span>, <span class="fl">3.3</span>,<span class="fl">2.8</span>,<span class="fl">4.1</span>,<span class="fl">2.7</span>,<span class="fl">2.9</span>,<span class="fl">3.7</span>,<span class="fl">2.6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There is a debate within the USDA: leadership believes the mean population yield in the population of farms across the US is 2 bushels per plot while the USDA research team believes it is higher than 2.</p>
+<p>To settle the debate, the USDA hires you as an external research consultant to perform a test of significance for the population mean and test the following at a 5% significance level.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: Mean population yield is 2</li>
+<li><span class="math inline">\(H_1\)</span>: Mean population yield is greater than 2</li>
+<li><span class="math inline">\(\alpha = 5% (0.05)\)</span></li>
+</ul>
+<p>Write R code to conduct the test</p>
+<p><strong>Write your answer below:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(yield_data, <span class="at">alternative=</span><span class="st">"greater"</span>, <span class="at">mu=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  yield_data
+t = 5.7143, df = 15, p-value = 2.049e-05
+alternative hypothesis: true mean is greater than 2
+95 percent confidence interval:
+ 2.870855      Inf
+sample estimates:
+mean of x 
+  3.25625 </code></pre>
+</div>
+</div>
+<p>Question: What is your finding/result from the test?</p>
+<p><em>Write your answer below:</em></p>
+<p>p-value <span class="math inline">\(&lt; \alpha\)</span>. So we reject the null hypothesis</p>
+<p>Question: What is your conclusion?</p>
+<p><em>Write your answer below:</em></p>
+<p>Since the p-value <span class="math inline">\(&lt; \alpha\)</span>, there is evidence that the mean population yield is greater than 2.</p>
+</section>
+<section id="example-2" class="level2">
+<h2 class="anchored" data-anchor-id="example-2">Example 2</h2>
+<p>Generate one random sample with <code>rnorm()</code> but pretend you do not know the population standard deviation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sample_2 <span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="dv">15</span>,<span class="at">mean=</span><span class="dv">3</span>, <span class="at">sd=</span><span class="dv">4</span>) <span class="co">#note that n&lt;30 here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Test, at the 5% significance level the null hypothesis that the true mean is less than or equal to 2, against the alternative that the true mean is greater than 2.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: true mean <span class="math inline">\(\le 2\)</span></li>
+<li><span class="math inline">\(H_1\)</span>: true mean <span class="math inline">\(&gt;2\)</span></li>
+<li><span class="math inline">\(\alpha = 5% (=0.05)\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(sample_2,<span class="at">mu=</span><span class="dv">2</span>, <span class="at">conf.level=</span><span class="fl">0.9</span>, <span class="at">alternative=</span><span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  sample_2
+t = 4.1005, df = 14, p-value = 0.0005406
+alternative hypothesis: true mean is greater than 2
+90 percent confidence interval:
+ 3.848607      Inf
+sample estimates:
+mean of x 
+ 4.750985 </code></pre>
+</div>
+</div>
+<p>Compare p-value of test versus chosen alpha (5% or 0.05)</p>
+<p><em>Write your finding:</em></p>
+<p><em>Write your conclusion in layman’s terms:</em></p>
+</section>
+<section id="example-3" class="level2">
+<h2 class="anchored" data-anchor-id="example-3">Example 3</h2>
+<p>Suppose we have a small vector (one random sample) of height data for 4th graders (population) in the US</p>
+<p>We do not know what the standard deviation of height data for 4th grade is in the population. We are asked to test if the population mean is less than or equal to 4.2 ft or greater than 4.2 using the small sample we have at alpha level 0.05 and confidence level of <span class="math inline">\(0.95\)</span>.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: mean population height <span class="math inline">\(\le 4.2\)</span></li>
+<li><span class="math inline">\(H_1\)</span>: mean population height <span class="math inline">\(&gt; 4.2\)</span></li>
+<li><span class="math inline">\(\alpha = 5% (0.05)\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sample_3 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">3.9</span>, <span class="fl">3.1</span>, <span class="fl">4.5</span>, <span class="fl">4.3</span>, <span class="fl">4.0</span>, <span class="fl">3.42</span>, <span class="fl">3.3</span>, <span class="fl">3.4</span>,<span class="fl">4.1</span>, <span class="fl">4.3</span>,<span class="fl">3.9</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(sample_3, <span class="at">mu=</span><span class="fl">4.2</span>,<span class="at">conf.level=</span><span class="fl">0.95</span>, <span class="at">alternative=</span><span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  sample_3
+t = -2.577, df = 10, p-value = 0.9862
+alternative hypothesis: true mean is greater than 4.2
+95 percent confidence interval:
+ 3.583711      Inf
+sample estimates:
+mean of x 
+ 3.838182 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/result?</em></strong></p>
+<p>p-value <span class="math inline">\(&gt; \alpha\)</span>. So we fail to reject the null hypothesis</p>
+<p><strong><em>Conclusion?</em></strong></p>
+<p>Since p-value <span class="math inline">\(&gt; \alpha\)</span> and we fail to reject the null hypothesis, there is evidence that the true mean is less than or equal to <span class="math inline">\(4.2\)</span></p>
+<p>Note that alternative or <code>alt</code> can have the following values: <code>alt="less"</code>, <code>alt="greater"</code>, <code>alt= "two.sided"</code> (the default in R)</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: mean population height <span class="math inline">\(= 4.2\)</span></li>
+<li><span class="math inline">\(H_1\)</span>: mean population height &lt;&gt; 4.2</li>
+<li><span class="math inline">\(\alpha = 5% (0.05)\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sample_3 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">3.9</span>, <span class="fl">3.1</span>, <span class="fl">4.5</span>, <span class="fl">4.3</span>, <span class="fl">4.0</span>, <span class="fl">3.42</span>, <span class="fl">3.3</span>, <span class="fl">3.4</span>,<span class="fl">4.1</span>, <span class="fl">4.3</span>,<span class="fl">3.9</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(sample_3, <span class="at">mu=</span><span class="fl">4.2</span>,<span class="at">conf.level=</span><span class="fl">0.95</span>, <span class="at">alt=</span><span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  sample_3
+t = -2.577, df = 10, p-value = 0.02756
+alternative hypothesis: true mean is not equal to 4.2
+95 percent confidence interval:
+ 3.525349 4.151014
+sample estimates:
+mean of x 
+ 3.838182 </code></pre>
+</div>
+</div>
+<p>So the p-values under a one-sided test (i.e.”greater”) suggests we fail to reject the null hypothesis whereas under a two sided test suggest we can safely reject the null hypothesis.</p>
+<p>How can we tell whether it is a one-tailed or a two-tailed test? It depends on the original claim in the question. A one-tailed test looks for an “increase” or “decrease” in the population parameter, whereas a two-tailed test looks for a “change” (could be increase or decrease) in the population parameter.</p>
+<p>Compare p-value of test versus chosen alpha (5% or 0.05)</p>
+<p><strong><em>Finding/result?</em></strong></p>
+<p>p-value <span class="math inline">\(&lt; \alpha\)</span>. So we fail to reject the null hypothesis</p>
+<p><strong><em>Conclusion?</em></strong></p>
+<p>Since p-value <span class="math inline">\(&lt; \alpha\)</span> and we reject the null hypothesis there is evidence that the true mean is not equal to 4.2</p>
+</section>
+<section id="example-4" class="level2">
+<h2 class="anchored" data-anchor-id="example-4">Example 4:</h2>
+<p>Suppose a consumer group wishes to see whether the actual mileage of a new SUV matches the advertised 17 miles per gallon. The group suspects it is lower. To test the claim, the group fills the SUV’s tank and records the mileage. This is repeated 10 times.The results are presented in the variable <code>mpg</code> below:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">11.4</span>,<span class="fl">13.1</span>,<span class="fl">14.7</span>,<span class="fl">14.7</span>,<span class="fl">15.0</span>,<span class="fl">15.5</span>,<span class="fl">15.6</span>,<span class="fl">15.9</span>, <span class="fl">16.0</span>, <span class="fl">16.8</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>xbar <span class="ot">&lt;-</span><span class="fu">mean</span>(mpg) <span class="co">#compute mean</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>s<span class="ot">&lt;-</span><span class="fu">sd</span>(mpg) <span class="co">#compute standard deviation from the mean</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>n<span class="ot">&lt;-</span><span class="fu">length</span>(mpg) <span class="co"># compute number of rows/observations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To settle the debate, we can conduct a one sample significance test of the null that mean mpg is greater than or equal to 17 against alternative that mean mpg is less than 17 at a 5% significance level</p>
+<p>Note that since we have the alternative as less than in the question, we have to perform a one-sided test.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: true mean mpg is greater than or less than 17</li>
+<li><span class="math inline">\(H_1\)</span>: true mean mpg is less than 17</li>
+<li><span class="math inline">\(\alpha = 5%\)</span> or <span class="math inline">\(0.05\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(mpg, <span class="at">mu=</span><span class="dv">17</span>, <span class="at">alt=</span><span class="st">"less"</span>)<span class="co"># one-tailed version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  mpg
+t = -4.2847, df = 9, p-value = 0.001018
+alternative hypothesis: true mean is less than 17
+95 percent confidence interval:
+     -Inf 15.78127
+sample estimates:
+mean of x 
+    14.87 </code></pre>
+</div>
+</div>
+<p>Compare p-value of test versus chosen <span class="math inline">\(\alpha\)</span> (<span class="math inline">\(5%\)</span> or <span class="math inline">\(0.05\)</span>)</p>
+<p><em>Write your finding:</em></p>
+<p><span class="math inline">\(Write your conclusion in layman's terms:\)</span></p>
+</section>
+<section id="example-5" class="level2">
+<h2 class="anchored" data-anchor-id="example-5">Example 5:</h2>
+<p>A college bookstore claims that, on average students will pay 500 per semester for textbooks and supplies. A student group investigates this claim by randomly selecting and interviewing twelve students and finding the amount of spent on textbooks and supplies for each. The observations collected are:</p>
+<p>Costs ($): 304, 431, 385, 987, 303, 480, 455, 724, 642, 506, 507,451</p>
+<section id="question-1" class="level3">
+<h3 class="anchored" data-anchor-id="question-1">Question 1</h3>
+<p>Do a one sample significance test at 5% of the null that mean costs is equal to $500 versus/against the alternative that mean costs is greater than $500.</p>
+<p>Perform the tests above at</p>
+<ul>
+<li><span class="math inline">\(\alpha = 0.05\)</span></li>
+<li>Confidence level of 95%</li>
+</ul>
+<p>Let cost be the object that holds the data above</p>
+<p><strong>Code for Question 1</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cost <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">304</span>, <span class="dv">431</span>, <span class="dv">385</span>, <span class="dv">987</span>, <span class="dv">303</span>, <span class="dv">480</span>, <span class="dv">455</span>, <span class="dv">724</span>, <span class="dv">642</span>, <span class="dv">506</span>, <span class="dv">507</span>,<span class="dv">451</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(cost, <span class="at">mu=</span><span class="dv">500</span>, <span class="at">conf.level=</span><span class="fl">0.95</span>, <span class="at">alt=</span><span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  cost
+t = 0.26325, df = 11, p-value = 0.3986
+alternative hypothesis: true mean is greater than 500
+95 percent confidence interval:
+ 415.0975      Inf
+sample estimates:
+mean of x 
+ 514.5833 </code></pre>
+</div>
+</div>
+<p>the p-value suggests we fail to reject the null</p>
+</section>
+</section>
+<section id="example-6" class="level2">
+<h2 class="anchored" data-anchor-id="example-6">Example 6:</h2>
+<p>Suppose the US Department of Energy conducts weekly phone surveys on the price of gasoline sold in the US. Suppose one week the sample average was $4.03, the sample standard deviation was $0.42 and the sample size is 800. Perform a one-sided significance test of the null that the population mean gas price is $4.00 versus/against the alternative that it is greater than $4.00.</p>
+<p>Working with the t-distribution in R</p>
+<p>Since we do not know the population standard deviation, we can use the t-test here.</p>
+<p>Lets first generate a random sample of size 800 with t-distribution</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>gas <span class="ot">&lt;-</span><span class="fu">rt</span>(<span class="dv">800</span>, <span class="dv">799</span>) <span class="co">#sample size 800, with degrees of freedom 799</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>gas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1]  0.088067834  0.656821702 -1.258058607 -1.730641859 -1.192872204
+  [6] -1.004569129 -0.101381358 -1.833741309  2.207644999 -0.630195725
+ [11]  0.926491105 -0.234607990 -0.657713816 -0.293133490  0.224378685
+ [16] -0.170275999 -0.051696022  1.733652888  0.868832163  0.215832483
+ [21]  1.397012485 -0.933408135  0.067428028 -2.257611954 -0.196012561
+ [26] -0.839947808 -0.676231815 -0.236334277  1.108791296  0.215840919
+ [31]  2.436564171  0.807449007 -1.498085776 -0.046707813  1.293401678
+ [36] -0.852185424  0.149413756 -0.501766164 -0.285482920  0.984665990
+ [41]  0.342501618  0.406754178  2.439993276  0.193076133 -1.341373005
+ [46]  0.744944302  0.270627077 -1.440713921  0.186052713 -0.363017051
+ [51] -0.809498256  0.371524906 -0.344105896  0.578927618  0.795456543
+ [56] -1.191113867  1.304682665  0.342791690 -1.383622793  0.627586090
+ [61] -0.345040408  2.185081563 -1.105479514 -0.390534783 -0.010505209
+ [66] -0.217525388 -0.229376840 -0.819450808 -0.425357904  0.836440064
+ [71] -1.319990283 -0.395326343  1.542335710  1.601051937 -0.954632986
+ [76]  0.842836469  2.544693519  0.691162592  0.494409935  0.847099019
+ [81] -0.399434657  0.990215831  0.582961139  0.402838510  0.072174204
+ [86]  0.667296070  1.151707684  1.495933787  1.060681370 -0.665061512
+ [91]  0.258261667  0.321675654  1.698044890  0.154874025 -0.570619221
+ [96]  0.118816881 -0.982611244  2.086288812 -1.189844999 -0.750246352
+[101] -0.043901092 -0.280065485 -0.887141343  2.936237573  2.159995091
+[106]  2.127306439  0.124290704  0.016515949  0.006202950  0.461061236
+[111] -0.267042872 -0.788095992  0.131561067  2.016818177 -1.806943790
+[116] -0.225126662 -0.350907181  0.186030539  0.773120609  0.050289118
+[121] -0.297339489  0.971621539  0.498020820  0.219862228  2.503125316
+[126]  1.988173578 -0.625957656 -0.035393584  0.420587418 -0.458660630
+[131] -0.372955623 -0.063089368  2.376001079 -0.944737124  0.823871017
+[136] -0.117504717 -2.797373419  0.915449231  0.534084376 -0.965697394
+[141]  1.390866211  1.288825876 -0.126559076 -1.287944205  0.272343946
+[146] -0.705706221 -0.294378853  0.462172773 -1.279739252 -0.445123735
+[151] -0.700412520  0.691400388 -1.107259430 -1.882916709  0.902535414
+[156]  1.104076849 -0.282786785  0.739468671 -0.022090669 -0.540325090
+[161] -1.185701983  0.089331177  0.445384236  0.999308168  0.502235913
+[166]  0.765033170 -1.291423502 -0.098651707 -0.279061428  0.521088337
+[171]  0.941962750  1.252240565  0.196272568  0.012310706 -0.947232637
+[176]  0.241443659  1.738337525  0.971840946  1.421717425  0.324667196
+[181]  0.184091489 -0.527667034  3.119524922  0.526484830  0.099849183
+[186] -0.571699205 -0.036032835  0.045594965 -1.072753454  1.336861520
+[191]  0.454564540  1.627455855 -1.287529919  0.843930041 -2.252871925
+[196]  1.440042244 -0.118028569 -2.072132643  0.749797769 -1.173674607
+[201]  0.465122159  0.331426693 -0.696156055 -0.272731449 -0.627820348
+[206] -0.071855991  0.325662106  0.578347649  0.738798432 -0.243158086
+[211]  0.761594781 -1.393440276  0.372678687 -2.078055581  1.494031592
+[216]  1.436785603  0.252544223 -0.433195792  1.567452508  1.110055831
+[221]  1.168084456 -0.695545857  0.088333050 -0.823421883 -1.750300001
+[226]  0.839560593 -0.754208214  0.870719013 -0.862124668 -0.634149616
+[231]  0.596628483  0.116432946  0.296187034 -0.377867244 -1.304499321
+[236] -1.780458643 -0.763603271 -0.052961356 -0.191330681 -0.797484459
+[241] -0.398064682  0.769443516  2.147572214  0.510522245  0.354603805
+[246] -1.788713719 -0.304154240  2.303391653  0.216585890  1.701080644
+[251] -0.077111828 -0.265791765  1.047354926  0.247031788  0.896131248
+[256] -0.483936474  0.578627249  0.102208556 -0.855928615 -1.529058144
+[261]  0.666699096 -1.992520653  0.695447337 -0.012684700  1.380384045
+[266]  0.450727902 -0.075236133 -0.250449472  1.005886278 -0.006584884
+[271] -0.291030618 -0.077362431  0.865784752 -0.794188366  1.831077385
+[276]  0.172856479 -0.890619728 -0.736920611  0.651930059  1.047873775
+[281]  0.649975065 -0.173208921  0.078425342 -0.635660654  0.942157671
+[286] -0.225455107 -0.057014225  0.248284227  0.734217434 -0.630726750
+[291]  0.114216359 -0.726061286 -0.453274551 -1.212268106  0.058789731
+[296] -0.766239413 -0.356059427  0.737988723  0.454270619 -0.005705527
+[301]  0.222378559 -0.010064101 -0.945603903 -2.420967309 -0.528525130
+[306]  0.665552940  0.193060179  0.151663403  2.510783452 -0.422631711
+[311]  2.747694228 -0.846220880 -0.714657140 -0.269073831 -0.481703389
+[316] -0.286470647 -0.057618183  0.534837664  0.327476208 -0.031257781
+[321]  0.390285757 -0.514568864 -1.207929908 -0.011176918  0.169992664
+[326] -0.552967763 -0.447349113 -0.387899345 -0.416831046 -1.479441734
+[331]  1.384406944 -1.919814807 -0.033665282  1.713247801 -1.354693103
+[336]  0.715220077 -0.002834316  0.139823432  1.087102520 -0.198573933
+[341]  0.076957547  0.501295151 -1.877871403 -1.659304692 -0.060036392
+[346] -0.248356718 -0.155611852 -0.260166334  1.492929583 -0.446037810
+[351] -1.066078194 -2.022084098 -0.515251898 -1.105259823 -0.548622870
+[356] -0.493169838  1.469932355  0.231338543 -0.750122364 -0.225544272
+[361] -0.330517951  1.431218895 -0.209860794  1.439276090  0.524913296
+[366] -1.820265989 -1.275501901 -0.691429131  0.693930003  0.132060563
+[371] -0.745924225  0.340511351 -0.416493985  0.078981273  0.742308126
+[376] -0.078301525 -0.202224447  2.491864977 -0.431255277 -0.015477022
+[381] -2.062438470 -0.214263182 -0.111818450  0.603746331  0.376713349
+[386]  0.975372792  0.637105023  0.068501427 -1.162523298  1.028471377
+[391]  0.149678848  0.145714645  0.919569361 -1.330142946 -0.317475267
+[396]  1.237271332  2.176488350 -0.732352817  0.080371419 -0.735435687
+[401] -1.102982446 -1.192692410  0.116266918  0.042401429 -0.418404510
+[406] -1.129730819  1.274197918 -0.710588180 -2.334186340  0.462879718
+[411] -0.290946819 -0.447128794 -0.259300487 -0.380151717 -1.493240922
+[416]  1.039121829  0.115895527 -0.593015692  0.197294049  1.311851932
+[421]  0.945902494  0.576987831 -0.717439237 -0.207772063 -0.136613862
+[426]  0.631525650 -1.484994178 -0.127358804  1.467384908  0.292167635
+[431]  0.947403901  0.403707094 -0.253854205  0.604563916 -0.735602718
+[436]  0.244707699 -1.585306514  1.229524791 -0.742865153 -1.498871038
+[441] -0.330308548  0.604563305  0.939260257 -0.403108745  1.759464386
+[446] -0.656843502  1.201394798  1.309726945 -2.066394322 -0.212423107
+[451] -0.350439095 -0.538439885  0.746829734 -0.498203600 -0.242085375
+[456] -0.564249087 -1.337187806  0.691108930 -0.720156670  1.962176199
+[461]  0.705719813  0.500456034 -0.719539428 -0.533791558 -0.363754341
+[466] -0.494619350 -0.226083178  1.097844746 -0.001203633 -0.965994113
+[471] -1.059746040  1.465726440 -0.734189385  0.053664766  1.783782536
+[476] -0.722388206 -0.166528703 -1.311229228 -0.041779186  0.332934263
+[481] -0.472012455 -0.353779628 -1.104405885 -0.214789188  0.356364620
+[486]  0.081622053 -0.752744726 -0.694502159  1.590720248 -0.012817245
+[491] -0.048588125 -0.310465618  0.206767458  0.480150944  0.138393963
+[496]  0.225155506 -1.583640080 -1.607347361  0.387396930  1.891295168
+[501]  1.612754058  1.171789330  1.184189952 -1.302718844  0.683170324
+[506] -0.501196521 -1.107114076 -1.689026907 -0.635236423  2.067509170
+[511]  1.686276037 -0.199719003 -1.357566797 -0.660297246  1.689800635
+[516]  0.488643615  0.452390991 -1.684211167  1.341630679 -0.613559023
+[521] -0.030793260 -0.506415683  0.798386687 -2.117757632  0.421896465
+[526]  0.358917807  0.709946249  1.097156156 -0.857170669  1.364383632
+[531] -0.323540279  0.057563694 -1.457987138 -0.129003079  0.577620743
+[536] -1.607171834  0.900341169 -0.363175991  0.688321836  0.496508920
+[541] -0.441681490  0.771701342 -1.491700392  0.195305387  2.301776878
+[546]  1.249288397 -1.857751221  0.509260179  0.106517648 -1.313685493
+[551]  0.805491006 -0.304857702  0.481852818 -0.478753730 -0.019774996
+[556] -0.012278074  1.977281140  1.986706053 -0.028197770  0.322862463
+[561]  0.442732937  0.448866907  0.256981127  0.890215512  0.708462385
+[566] -0.671996739 -0.194845536 -0.954892919  0.329904758  1.436108568
+[571] -1.367725059 -1.355151598 -0.985613636  0.102186569  0.725507178
+[576]  0.818034720 -0.328651650 -0.549361127  0.636328122  1.490875227
+[581] -1.118311173 -0.431904286 -0.121711055  0.187332987  0.107547404
+[586] -0.554417908 -1.049576684  0.932119976 -0.314171667 -1.659301477
+[591] -0.638999244  1.291167092 -2.395060502  1.381805345 -0.704929613
+[596] -0.740898836  0.718374202 -2.448825256 -0.372561981  1.073584263
+[601] -0.955091499  0.562146730  0.100427828  2.476162697 -0.153995776
+[606] -0.623112198 -0.940934019  0.384651378 -1.199711636  0.316668960
+[611] -1.664152034  1.376322208  0.063197413  0.751522873  1.086335860
+[616]  0.391229687  0.468967323 -1.296474023 -0.466751451 -0.293521931
+[621] -0.149130529  0.156158239 -0.958832883 -1.223409748 -0.622588514
+[626] -0.209688108 -0.910108973 -0.138992887 -1.534455721  0.506193880
+[631]  0.078235869 -0.655821252 -0.722698870 -0.698257085  0.386929702
+[636]  0.078317167  0.609329695 -0.808713722 -0.048524290 -1.261030952
+[641] -1.077179521  0.965860519 -0.399301293  0.250428024 -0.214929102
+[646] -2.098816189  0.640638377  0.089360138 -0.037624696 -1.203313641
+[651]  1.007755968  0.855416602  0.554449420  1.986540085 -1.349574324
+[656] -0.418613497  0.818494225 -0.260056072  0.323902055 -0.050268966
+[661] -0.338222279 -0.008574400 -1.197162478  1.952883890 -0.190315577
+[666] -0.115163624 -0.985579949  0.882724212 -0.119891937 -1.437970381
+[671]  0.343379070  1.490177689 -0.740384620  0.624914914 -0.549600771
+[676]  1.210079424 -1.074340276  0.796484218  1.496867709  0.854160858
+[681] -0.822167047 -1.910271069  0.363883246  0.525718002 -0.853022418
+[686] -1.661700994 -0.083299136 -1.661403971  1.910484931 -0.263835286
+[691] -0.831518388  0.169155463  0.427661979 -0.918253719  0.052329414
+[696] -0.659950259  0.425430302  1.352894503  1.313931532 -1.583660809
+[701]  1.044281157  1.574120807  0.325960525  1.460646217 -0.552833015
+[706]  0.180450196  0.038888950 -0.309141678 -0.697591575  0.395572866
+[711] -1.752326424 -1.736422919 -0.437139328  1.072086229  1.052122444
+[716]  0.639122259  0.036835801 -0.212822266 -1.041322632 -0.759256782
+[721]  0.656559680 -1.006349573  0.026646911 -0.472917994  0.612736062
+[726] -0.935672794 -0.598386955 -0.296483261  0.024830577 -1.245312603
+[731]  0.738140617 -0.142656489  0.013004163  0.322645283  0.197531810
+[736]  1.506265900 -2.190827728  1.365894100  0.317370234 -0.459886689
+[741]  0.708665953  0.980657349 -0.870160612  0.144385156 -0.480602861
+[746] -0.862822487 -1.513774019 -1.886870637 -0.790618153  0.936323340
+[751]  0.141559294  0.827187951  0.986176627 -0.154263447  0.984787899
+[756]  0.562535479  1.556008968 -1.592250341 -0.954917097 -0.898044814
+[761]  0.624947658 -0.178259398  0.189096549  2.201682762 -1.365814353
+[766]  0.136185920  0.350182206 -0.581329991  0.610485515  0.568694306
+[771] -1.319771710  2.098756945 -0.669834559 -0.283544047  0.612737630
+[776]  0.339680067  0.508853934  0.391662492 -0.267155522  0.351577590
+[781]  0.063346073  0.555525003 -1.461411361  1.051164408 -0.094022596
+[786] -0.449358752 -0.283245729  1.369171078  0.304382237 -1.495491581
+[791]  0.111813551  0.046789610 -0.175063614  1.518821071  1.626053960
+[796] -0.589689689 -0.412796453  0.353105889  2.264280874 -0.755974275</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>gas_2 <span class="ot">&lt;-</span><span class="fu">rnorm</span>(<span class="dv">800</span>, <span class="at">m=</span><span class="fl">4.03</span>, <span class="at">s=</span><span class="fl">0.42</span>) <span class="co">#Use given sample statistics</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gas_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.174684 3.672083 4.600927 3.663395 4.042657 3.848965</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(gas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  0.08806783  0.65682170 -1.25805861 -1.73064186 -1.19287220 -1.00456913</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(gas, <span class="at">mu=</span><span class="fl">4.00</span>, <span class="at">conf.level=</span><span class="fl">0.95</span>, <span class="at">alt=</span><span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  gas
+t = -114.54, df = 799, p-value = 1
+alternative hypothesis: true mean is greater than 4
+95 percent confidence interval:
+ -0.0372434        Inf
+sample estimates:
+ mean of x 
+0.01997685 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(gas_2, <span class="at">mu=</span><span class="fl">4.00</span>, <span class="at">conf.level=</span><span class="fl">0.95</span>, <span class="at">alt=</span><span class="st">"greater"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  gas_2
+t = 1.4602, df = 799, p-value = 0.07231
+alternative hypothesis: true mean is greater than 4
+95 percent confidence interval:
+ 3.997151      Inf
+sample estimates:
+mean of x 
+ 4.022307 </code></pre>
+</div>
+</div>
+<p>We can use the t-distribution (a.k.a Student’s t) family when we have small samples.</p>
+</section>
+</section>
+<section id="session-info" class="level1">
+<h1>%Session Info%</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 (2022-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] TeachingDemos_2.12
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.2.2    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.2.2       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43        jsonlite_1.8.4    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

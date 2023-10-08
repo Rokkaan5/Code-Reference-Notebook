@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>STAT-Project: NOAA Data EDA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="NOAA-STAT-Project_files/libs/clipboard/clipboard.min.js"></script>
+<script src="NOAA-STAT-Project_files/libs/quarto-html/quarto.js"></script>
+<script src="NOAA-STAT-Project_files/libs/quarto-html/popper.min.js"></script>
+<script src="NOAA-STAT-Project_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="NOAA-STAT-Project_files/libs/quarto-html/anchor.min.js"></script>
+<link href="NOAA-STAT-Project_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="NOAA-STAT-Project_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="NOAA-STAT-Project_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="NOAA-STAT-Project_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="NOAA-STAT-Project_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">STAT-Project: NOAA Data EDA</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load Tidyverse</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load dplyr</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#load ggplot2</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(noaa_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"NOAA-Final-DF.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(noaa_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      year        station               DT00              DT32       
+ Min.   :1763   Length:696         Min.   : 0.0000   Min.   :  0.00  
+ 1st Qu.:1861   Class :character   1st Qu.: 0.0000   1st Qu.:  0.00  
+ Median :1904   Mode  :character   Median : 0.0000   Median :  7.00  
+ Mean   :1906                      Mean   : 0.4833   Mean   : 29.04  
+ 3rd Qu.:1961                      3rd Qu.: 0.0000   3rd Qu.: 61.00  
+ Max.   :2021                      Max.   :16.0000   Max.   :157.00  
+                                   NA's   :427       NA's   :443     
+      DX32              DX70            DX90             EMNT        
+ Min.   :  0.000   Min.   :  0.0   Min.   :  0.00   Min.   :-27.500  
+ 1st Qu.:  0.000   1st Qu.: 97.0   1st Qu.:  1.00   1st Qu.:-11.500  
+ Median :  0.000   Median :181.0   Median : 13.00   Median : -2.000  
+ Mean   :  9.601   Mean   :170.3   Mean   : 36.54   Mean   : -5.453  
+ 3rd Qu.: 11.250   3rd Qu.:218.0   3rd Qu.: 35.00   3rd Qu.:  0.500  
+ Max.   :184.000   Max.   :364.0   Max.   :247.00   Max.   :  9.400  
+ NA's   :428       NA's   :438     NA's   :448      NA's   :471      
+      EMXT            FZF0              FZF5             FZF6        
+ Min.   :18.80   Min.   :-7.0000   Min.   :-4.900   Min.   :-13.500  
+ 1st Qu.:31.90   1st Qu.:-1.1000   1st Qu.:-1.000   1st Qu.: -3.800  
+ Median :38.10   Median :-0.6000   Median :-0.500   Median : -3.100  
+ Mean   :37.35   Mean   :-0.8274   Mean   :-0.743   Mean   : -3.551  
+ 3rd Qu.:42.45   3rd Qu.:-0.2000   3rd Qu.:-0.200   3rd Qu.: -2.475  
+ Max.   :49.30   Max.   : 0.0000   Max.   : 0.000   Max.   : -2.200  
+ NA's   :465     NA's   :583       NA's   :554      NA's   :600      
+      FZF7              TAVG            TMAX            TMIN       
+ Min.   :-14.000   Min.   : 7.36   Min.   : 1.05   Min.   : 4.250  
+ 1st Qu.: -6.875   1st Qu.:10.16   1st Qu.:14.14   1st Qu.: 7.865  
+ Median : -5.550   Median :16.56   Median :22.11   Median :11.860  
+ Mean   : -6.187   Mean   :14.56   Mean   :20.59   Mean   :11.296  
+ 3rd Qu.: -4.700   3rd Qu.:17.76   3rd Qu.:23.43   3rd Qu.:13.873  
+ Max.   : -4.400   Max.   :26.03   Max.   :36.63   Max.   :20.270  
+ NA's   :606       NA's   :550     NA's   :508     NA's   :532     
+      CDSD             CLDD             FZF1             HDSD       
+ Min.   :  17.1   Min.   :  17.1   Min.   :-7.000   Min.   :  16.1  
+ 1st Qu.: 186.9   1st Qu.: 193.6   1st Qu.:-3.525   1st Qu.: 997.4  
+ Median : 658.1   Median : 664.0   Median :-2.900   Median :2253.6  
+ Mean   : 798.5   Mean   : 803.7   Mean   :-3.234   Mean   :2126.4  
+ 3rd Qu.: 975.7   3rd Qu.: 975.6   3rd Qu.:-2.500   3rd Qu.:3245.0  
+ Max.   :2814.6   Max.   :2814.6   Max.   :-2.200   Max.   :4328.9  
+ NA's   :458      NA's   :465      NA's   :608      NA's   :542     
+      HTDD             FZF8              FZF2             FZF9       
+ Min.   :  16.1   Min.   :-14.400   Min.   :-8.700   Min.   :-17.20  
+ 1st Qu.: 991.0   1st Qu.: -8.875   1st Qu.:-6.000   1st Qu.:-12.00  
+ Median :2253.6   Median : -7.750   Median :-5.200   Median :-10.45  
+ Mean   :2115.0   Mean   : -8.323   Mean   :-5.507   Mean   :-11.00  
+ 3rd Qu.:3248.9   3rd Qu.: -7.000   3rd Qu.:-4.700   3rd Qu.: -9.50  
+ Max.   :4008.8   Max.   : -6.700   Max.   :-4.400   Max.   : -8.90  
+ NA's   :548      NA's   :626       NA's   :627      NA's   :638     
+      FZF3              FZF4             DP01             DP10       
+ Min.   :-13.200   Min.   :-13.40   Min.   :  0.00   Min.   :  0.00  
+ 1st Qu.: -8.700   1st Qu.:-10.85   1st Qu.: 62.00   1st Qu.: 37.00  
+ Median : -8.000   Median : -9.90   Median : 88.00   Median : 52.00  
+ Mean   : -8.206   Mean   :-10.20   Mean   : 86.86   Mean   : 48.89  
+ 3rd Qu.: -7.100   3rd Qu.: -9.15   3rd Qu.:112.75   3rd Qu.: 66.00  
+ Max.   : -6.700   Max.   : -8.90   Max.   :203.00   Max.   :127.00  
+ NA's   :643       NA's   :657      NA's   :150      NA's   :171     
+      DP1X             EMXP             PRCP             DSND          DSNW    
+ Min.   : 0.000   Min.   :  0.00   Min.   :   0.0   Min.   :0     Min.   :0    
+ 1st Qu.: 1.000   1st Qu.: 30.30   1st Qu.: 437.0   1st Qu.:0     1st Qu.:0    
+ Median : 3.000   Median : 44.30   Median : 589.6   Median :0     Median :0    
+ Mean   : 4.158   Mean   : 49.07   Mean   : 603.1   Mean   :0     Mean   :0    
+ 3rd Qu.: 6.000   3rd Qu.: 60.50   3rd Qu.: 755.8   3rd Qu.:0     3rd Qu.:0    
+ Max.   :24.000   Max.   :245.10   Max.   :2059.3   Max.   :0     Max.   :0    
+ NA's   :182      NA's   :267      NA's   :291      NA's   :688   NA's   :687  
+      EMSD          EMSN          SNOW          DYTS    
+ Min.   :0     Min.   :0     Min.   :0     Min.   :1    
+ 1st Qu.:0     1st Qu.:0     1st Qu.:0     1st Qu.:1    
+ Median :0     Median :0     Median :0     Median :1    
+ Mean   :0     Mean   :0     Mean   :0     Mean   :1    
+ 3rd Qu.:0     3rd Qu.:0     3rd Qu.:0     3rd Qu.:1    
+ Max.   :0     Max.   :0     Max.   :0     Max.   :1    
+ NA's   :688   NA's   :687   NA's   :687   NA's   :695  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Build scatterplot with ggplot</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(noaa_df, <span class="fu">aes</span>(<span class="at">x=</span>year,<span class="at">y=</span>TAVG))<span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="NOAA-STAT-Project_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(noaa_df <span class="ot">&lt;-</span> noaa_df <span class="sc">%&gt;%</span> <span class="fu">replace</span>(<span class="fu">is.na</span>(.),<span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(noaa_df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">"station"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             year         DT00        DT32        DX32        DX70        DX90
+year  1.000000000 -0.204129584 -0.46041479 -0.26447818  0.21178473  0.29516884
+DT00 -0.204129584  1.000000000  0.53419843  0.46608130  0.03546923 -0.05033076
+DT32 -0.460414787  0.534198434  1.00000000  0.62736083  0.10353003 -0.08288564
+DX32 -0.264478182  0.466081301  0.62736083  1.00000000  0.02501592 -0.08112200
+DX70  0.211784732  0.035469230  0.10353003  0.02501592  1.00000000  0.72656437
+DX90  0.295168838 -0.050330765 -0.08288564 -0.08112200  0.72656437  1.00000000
+EMNT  0.464080751 -0.631348356 -0.89912247 -0.63736426 -0.06459934  0.11360512
+EMXT -0.004275926  0.175341817  0.35812642  0.24433911  0.83749655  0.46577407
+FZF0  0.307217316 -0.348882316 -0.58294649 -0.39455117 -0.07602058  0.06942722
+FZF5  0.257408539 -0.159341194 -0.52057578 -0.28842805 -0.15521708  0.05303041
+FZF6  0.448215003 -0.395484517 -0.78006874 -0.50965110 -0.08205800  0.10523952
+FZF7  0.463282857 -0.492776253 -0.86536792 -0.55829227 -0.07971851  0.11011137
+TAVG -0.033560399  0.051211108  0.18902046  0.08849670  0.59821787  0.15981708
+TMAX  0.136388092  0.017960271  0.07038071  0.02279651  0.82515459  0.55923935
+TMIN  0.052956315  0.012289641  0.07690955  0.01096577  0.39925572  0.10098955
+CDSD  0.243479758 -0.030025282 -0.03810780 -0.06235080  0.33679550  0.31495198
+CLDD  0.241272525 -0.028501076 -0.03384906 -0.05992817  0.34721138  0.32147472
+FZF1  0.454203156 -0.435792389 -0.83319275 -0.54197215 -0.09739470  0.08898869
+HDSD -0.408010247  0.485970596  0.81593782  0.54114093  0.22136678 -0.07768815
+HTDD -0.417490509  0.446817601  0.77712024  0.53888626  0.21772278 -0.07536388
+FZF8  0.423384926 -0.533723308 -0.84768839 -0.59898628 -0.07616319  0.09522668
+FZF2  0.414617410 -0.464287470 -0.80012839 -0.55028818 -0.08903886  0.07830393
+FZF9  0.394603378 -0.495379883 -0.78317495 -0.58253422 -0.06078783  0.09288775
+FZF3  0.381921109 -0.479119521 -0.75073946 -0.56853971 -0.05170310  0.08879388
+FZF4  0.334660985 -0.482338148 -0.68490214 -0.52685476 -0.04651920  0.07635510
+DP01 -0.186761157 -0.070042349 -0.19138704 -0.11990180 -0.24092657 -0.25320025
+DP10 -0.063414208 -0.097258896 -0.26175977 -0.17162315 -0.17741239 -0.21945216
+DP1X  0.078423936 -0.085351574 -0.22603841 -0.15707495 -0.03584053 -0.10393138
+EMXP  0.056575935 -0.076726580 -0.23793134 -0.15610395 -0.12241076 -0.15379917
+PRCP  0.004568606 -0.122271305 -0.30025539 -0.19746666 -0.15975230 -0.16101032
+DSND           NA           NA          NA          NA          NA          NA
+DSNW           NA           NA          NA          NA          NA          NA
+EMSD           NA           NA          NA          NA          NA          NA
+EMSN           NA           NA          NA          NA          NA          NA
+SNOW           NA           NA          NA          NA          NA          NA
+DYTS  0.030171454 -0.006090961 -0.01563198 -0.01012422 -0.02520935 -0.01263593
+            EMNT         EMXT        FZF0         FZF5        FZF6        FZF7
+year  0.46408075 -0.004275926  0.30721732  0.257408539  0.44821500  0.46328286
+DT00 -0.63134836  0.175341817 -0.34888232 -0.159341194 -0.39548452 -0.49277625
+DT32 -0.89912247  0.358126423 -0.58294649 -0.520575782 -0.78006874 -0.86536792
+DX32 -0.63736426  0.244339106 -0.39455117 -0.288428046 -0.50965110 -0.55829227
+DX70 -0.06459934  0.837496548 -0.07602058 -0.155217080 -0.08205800 -0.07971851
+DX90  0.11360512  0.465774073  0.06942722  0.053030405  0.10523952  0.11011137
+EMNT  1.00000000 -0.334892109  0.62713747  0.521919122  0.79063851  0.86907377
+EMXT -0.33489211  1.000000000 -0.26342017 -0.342836752 -0.34309909 -0.36231407
+FZF0  0.62713747 -0.263420172  1.00000000  0.419289739  0.57222386  0.60168156
+FZF5  0.52191912 -0.342836752  0.41928974  1.000000000  0.56448900  0.58389022
+FZF6  0.79063851 -0.343099089  0.57222386  0.564489000  1.00000000  0.86999050
+FZF7  0.86907377 -0.362314071  0.60168156  0.583890217  0.86999050  1.00000000
+TAVG -0.13488524  0.695075879 -0.16209374 -0.270514608 -0.22697296 -0.23797830
+TMAX -0.04291269  0.870087201 -0.07212364 -0.146318834 -0.11249731 -0.11203039
+TMIN  0.02009272  0.455423714 -0.07777802 -0.165918527 -0.12457091 -0.11525662
+CDSD  0.08551225  0.192938846  0.03994714 -0.001392267  0.06560274  0.07701563
+CLDD  0.08268554  0.202370210  0.03728395 -0.004981766  0.06225165  0.07363835
+FZF1  0.84636828 -0.368481362  0.63933105  0.534765258  0.76015863  0.80515383
+HDSD -0.82348080  0.507042094 -0.59233002 -0.554158339 -0.74332668 -0.82499804
+HTDD -0.80514419  0.493723004 -0.57926878 -0.521434044 -0.73355288 -0.78791747
+FZF8  0.87778976 -0.340127385  0.54773625  0.518037150  0.77085447  0.87771975
+FZF2  0.82418617 -0.342398726  0.57073772  0.508034761  0.69208991  0.77310632
+FZF9  0.84923047 -0.310445017  0.55776167  0.457034655  0.70877974  0.79998467
+FZF3  0.78325156 -0.287972373  0.47432857  0.408800747  0.64909627  0.71583158
+FZF4  0.70275138 -0.243653838  0.46567782  0.357426631  0.56000565  0.60180082
+DP01  0.15849396 -0.249022408  0.11356267  0.150776253  0.15910000  0.19383807
+DP10  0.23667390 -0.220008601  0.15467883  0.182885296  0.23004547  0.26402856
+DP1X  0.20914320 -0.117436658  0.14399679  0.141751520  0.20428679  0.22080880
+EMXP  0.21487731 -0.077692871  0.13721589  0.137892523  0.20281248  0.23053276
+PRCP  0.26623619 -0.124800816  0.18013757  0.180961187  0.24426482  0.25755230
+DSND          NA           NA          NA           NA          NA          NA
+DSNW          NA           NA          NA           NA          NA          NA
+EMSD          NA           NA          NA           NA          NA          NA
+EMSN          NA           NA          NA           NA          NA          NA
+SNOW          NA           NA          NA           NA          NA          NA
+DYTS  0.01219936 -0.026219212  0.01026348  0.012160546  0.01337904  0.01381370
+            TAVG        TMAX        TMIN         CDSD         CLDD        FZF1
+year -0.03356040  0.13638809  0.05295631  0.243479758  0.241272525  0.45420316
+DT00  0.05121111  0.01796027  0.01228964 -0.030025282 -0.028501076 -0.43579239
+DT32  0.18902046  0.07038071  0.07690955 -0.038107805 -0.033849056 -0.83319275
+DX32  0.08849670  0.02279651  0.01096577 -0.062350802 -0.059928167 -0.54197215
+DX70  0.59821787  0.82515459  0.39925572  0.336795499  0.347211377 -0.09739470
+DX90  0.15981708  0.55923935  0.10098955  0.314951982  0.321474718  0.08898869
+EMNT -0.13488524 -0.04291269  0.02009272  0.085512253  0.082685540  0.84636828
+EMXT  0.69507588  0.87008720  0.45542371  0.192938846  0.202370210 -0.36848136
+FZF0 -0.16209374 -0.07212364 -0.07777802  0.039947138  0.037283950  0.63933105
+FZF5 -0.27051461 -0.14631883 -0.16591853 -0.001392267 -0.004981766  0.53476526
+FZF6 -0.22697296 -0.11249731 -0.12457091  0.065602739  0.062251649  0.76015863
+FZF7 -0.23797830 -0.11203039 -0.11525662  0.077015628  0.073638352  0.80515383
+TAVG  1.00000000  0.72679755  0.74472182  0.321551499  0.329870932 -0.21179903
+TMAX  0.72679755  1.00000000  0.52192885  0.178273146  0.186234561 -0.08834075
+TMIN  0.74472182  0.52192885  1.00000000  0.215858967  0.223614573 -0.08864580
+CDSD  0.32155150  0.17827315  0.21585897  1.000000000  0.985944398  0.05526933
+CLDD  0.32987093  0.18623456  0.22361457  0.985944398  1.000000000  0.05173979
+FZF1 -0.21179903 -0.08834075 -0.08864580  0.055269329  0.051739789  1.00000000
+HDSD  0.42062984  0.25064366  0.23085168  0.011037556  0.016166289 -0.78559913
+HTDD  0.43908872  0.26732203  0.24614506  0.015604186  0.020649303 -0.77783992
+FZF8 -0.18733022 -0.08292218 -0.04902206  0.065864599  0.062820370  0.77669516
+FZF2 -0.17708450 -0.06396933 -0.05660397  0.051640772  0.048470843  0.86072839
+FZF9 -0.16950393 -0.07289724 -0.03852353  0.070824751  0.068147626  0.74267086
+FZF3 -0.10620812 -0.02780498 -0.02825742  0.070168456  0.067637764  0.71955674
+FZF4 -0.09373365 -0.03071831 -0.04114275  0.056966019  0.054775856  0.61347561
+DP01 -0.20096597 -0.27280276 -0.21084680 -0.306922042 -0.295516213  0.18101306
+DP10 -0.17334495 -0.21221218 -0.15577762 -0.296936943 -0.285894195  0.24242538
+DP1X -0.08138844 -0.08640252 -0.06930414 -0.170875157 -0.164294390  0.20670566
+EMXP -0.04240034 -0.06639139  0.02986120 -0.245412311 -0.237263959  0.21274633
+PRCP -0.03900039 -0.04993451 -0.01318789 -0.262234730 -0.254369127  0.26146703
+DSND          NA          NA          NA           NA           NA          NA
+DSNW          NA          NA          NA           NA           NA          NA
+EMSD          NA          NA          NA           NA           NA          NA
+EMSN          NA          NA          NA           NA           NA          NA
+SNOW          NA          NA          NA           NA           NA          NA
+DYTS -0.01854404 -0.02166620 -0.01982823 -0.018184234 -0.017922985  0.01367274
+            HDSD        HTDD        FZF8        FZF2        FZF9        FZF3
+year -0.40801025 -0.41749051  0.42338493  0.41461741  0.39460338  0.38192111
+DT00  0.48597060  0.44681760 -0.53372331 -0.46428747 -0.49537988 -0.47911952
+DT32  0.81593782  0.77712024 -0.84768839 -0.80012839 -0.78317495 -0.75073946
+DX32  0.54114093  0.53888626 -0.59898628 -0.55028818 -0.58253422 -0.56853971
+DX70  0.22136678  0.21772278 -0.07616319 -0.08903886 -0.06078783 -0.05170310
+DX90 -0.07768815 -0.07536388  0.09522668  0.07830393  0.09288775  0.08879388
+EMNT -0.82348080 -0.80514419  0.87778976  0.82418617  0.84923047  0.78325156
+EMXT  0.50704209  0.49372300 -0.34012739 -0.34239873 -0.31044502 -0.28797237
+FZF0 -0.59233002 -0.57926878  0.54773625  0.57073772  0.55776167  0.47432857
+FZF5 -0.55415834 -0.52143404  0.51803715  0.50803476  0.45703466  0.40880075
+FZF6 -0.74332668 -0.73355288  0.77085447  0.69208991  0.70877974  0.64909627
+FZF7 -0.82499804 -0.78791747  0.87771975  0.77310632  0.79998467  0.71583158
+TAVG  0.42062984  0.43908872 -0.18733022 -0.17708450 -0.16950393 -0.10620812
+TMAX  0.25064366  0.26732203 -0.08292218 -0.06396933 -0.07289724 -0.02780498
+TMIN  0.23085168  0.24614506 -0.04902206 -0.05660397 -0.03852353 -0.02825742
+CDSD  0.01103756  0.01560419  0.06586460  0.05164077  0.07082475  0.07016846
+CLDD  0.01616629  0.02064930  0.06282037  0.04847084  0.06814763  0.06763776
+FZF1 -0.78559913 -0.77783992  0.77669516  0.86072839  0.74267086  0.71955674
+HDSD  1.00000000  0.97135928 -0.79569422 -0.73730069 -0.75017802 -0.67570253
+HTDD  0.97135928  1.00000000 -0.77396262 -0.72013452 -0.72989136 -0.65518826
+FZF8 -0.79569422 -0.77396262  1.00000000  0.74709792  0.89154467  0.71725187
+FZF2 -0.73730069 -0.72013452  0.74709792  1.00000000  0.72465754  0.83984157
+FZF9 -0.75017802 -0.72989136  0.89154467  0.72465754  1.00000000  0.69358018
+FZF3 -0.67570253 -0.65518826  0.71725187  0.83984157  0.69358018  1.00000000
+FZF4 -0.59205056 -0.56571588  0.62592589  0.71370217  0.57765502  0.86226482
+DP01 -0.16159736 -0.14803850  0.10086669  0.16033111  0.11970960  0.10543853
+DP10 -0.23438766 -0.22228034  0.18869966  0.21861825  0.18899571  0.16935241
+DP1X -0.20201665 -0.19499516  0.18161449  0.19170761  0.17180488  0.16603201
+EMXP -0.18116646 -0.17379208  0.17154713  0.19450038  0.17167483  0.16050634
+PRCP -0.22518495 -0.21120333  0.22198575  0.23630664  0.21563363  0.20459137
+DSND          NA          NA          NA          NA          NA          NA
+DSNW          NA          NA          NA          NA          NA          NA
+EMSD          NA          NA          NA          NA          NA          NA
+EMSN          NA          NA          NA          NA          NA          NA
+SNOW          NA          NA          NA          NA          NA          NA
+DYTS -0.01710115 -0.01667859  0.01234378  0.01234032  0.01124601  0.01072832
+             FZF4        DP01        DP10        DP1X        EMXP         PRCP
+year  0.334660985 -0.18676116 -0.06341421  0.07842394  0.05657593  0.004568606
+DT00 -0.482338148 -0.07004235 -0.09725890 -0.08535157 -0.07672658 -0.122271305
+DT32 -0.684902141 -0.19138704 -0.26175977 -0.22603841 -0.23793134 -0.300255392
+DX32 -0.526854762 -0.11990180 -0.17162315 -0.15707495 -0.15610395 -0.197466657
+DX70 -0.046519202 -0.24092657 -0.17741239 -0.03584053 -0.12241076 -0.159752297
+DX90  0.076355104 -0.25320025 -0.21945216 -0.10393138 -0.15379917 -0.161010316
+EMNT  0.702751380  0.15849396  0.23667390  0.20914320  0.21487731  0.266236186
+EMXT -0.243653838 -0.24902241 -0.22000860 -0.11743666 -0.07769287 -0.124800816
+FZF0  0.465677815  0.11356267  0.15467883  0.14399679  0.13721589  0.180137572
+FZF5  0.357426631  0.15077625  0.18288530  0.14175152  0.13789252  0.180961187
+FZF6  0.560005648  0.15910000  0.23004547  0.20428679  0.20281248  0.244264824
+FZF7  0.601800820  0.19383807  0.26402856  0.22080880  0.23053276  0.257552295
+TAVG -0.093733653 -0.20096597 -0.17334495 -0.08138844 -0.04240034 -0.039000386
+TMAX -0.030718307 -0.27280276 -0.21221218 -0.08640252 -0.06639139 -0.049934514
+TMIN -0.041142753 -0.21084680 -0.15577762 -0.06930414  0.02986120 -0.013187889
+CDSD  0.056966019 -0.30692204 -0.29693694 -0.17087516 -0.24541231 -0.262234730
+CLDD  0.054775856 -0.29551621 -0.28589420 -0.16429439 -0.23726396 -0.254369127
+FZF1  0.613475614  0.18101306  0.24242538  0.20670566  0.21274633  0.261467032
+HDSD -0.592050563 -0.16159736 -0.23438766 -0.20201665 -0.18116646 -0.225184949
+HTDD -0.565715877 -0.14803850 -0.22228034 -0.19499516 -0.17379208 -0.211203331
+FZF8  0.625925892  0.10086669  0.18869966  0.18161449  0.17154713  0.221985752
+FZF2  0.713702169  0.16033111  0.21861825  0.19170761  0.19450038  0.236306641
+FZF9  0.577655015  0.11970960  0.18899571  0.17180488  0.17167483  0.215633627
+FZF3  0.862264818  0.10543853  0.16935241  0.16603201  0.16050634  0.204591365
+FZF4  1.000000000  0.11347356  0.16176086  0.13948925  0.14118745  0.206818196
+DP01  0.113473562  1.00000000  0.84761183  0.43122165  0.47159470  0.576865979
+DP10  0.161760864  0.84761183  1.00000000  0.63062073  0.60263401  0.719199092
+DP1X  0.139489254  0.43122165  0.63062073  1.00000000  0.63687323  0.655764478
+EMXP  0.141187454  0.47159470  0.60263401  0.63687323  1.00000000  0.807805412
+PRCP  0.206818196  0.57686598  0.71919909  0.65576448  0.80780541  1.000000000
+DSND           NA          NA          NA          NA          NA           NA
+DSNW           NA          NA          NA          NA          NA           NA
+EMSD           NA          NA          NA          NA          NA           NA
+EMSN           NA          NA          NA          NA          NA           NA
+SNOW           NA          NA          NA          NA          NA           NA
+DYTS  0.009170833 -0.04807007 -0.04653336 -0.02754674 -0.03513324 -0.034681491
+     DSND DSNW EMSD EMSN SNOW         DYTS
+year   NA   NA   NA   NA   NA  0.030171454
+DT00   NA   NA   NA   NA   NA -0.006090961
+DT32   NA   NA   NA   NA   NA -0.015631979
+DX32   NA   NA   NA   NA   NA -0.010124216
+DX70   NA   NA   NA   NA   NA -0.025209352
+DX90   NA   NA   NA   NA   NA -0.012635933
+EMNT   NA   NA   NA   NA   NA  0.012199360
+EMXT   NA   NA   NA   NA   NA -0.026219212
+FZF0   NA   NA   NA   NA   NA  0.010263484
+FZF5   NA   NA   NA   NA   NA  0.012160546
+FZF6   NA   NA   NA   NA   NA  0.013379041
+FZF7   NA   NA   NA   NA   NA  0.013813704
+TAVG   NA   NA   NA   NA   NA -0.018544038
+TMAX   NA   NA   NA   NA   NA -0.021666196
+TMIN   NA   NA   NA   NA   NA -0.019828231
+CDSD   NA   NA   NA   NA   NA -0.018184234
+CLDD   NA   NA   NA   NA   NA -0.017922985
+FZF1   NA   NA   NA   NA   NA  0.013672736
+HDSD   NA   NA   NA   NA   NA -0.017101147
+HTDD   NA   NA   NA   NA   NA -0.016678587
+FZF8   NA   NA   NA   NA   NA  0.012343778
+FZF2   NA   NA   NA   NA   NA  0.012340324
+FZF9   NA   NA   NA   NA   NA  0.011246006
+FZF3   NA   NA   NA   NA   NA  0.010728323
+FZF4   NA   NA   NA   NA   NA  0.009170833
+DP01   NA   NA   NA   NA   NA -0.048070074
+DP10   NA   NA   NA   NA   NA -0.046533356
+DP1X   NA   NA   NA   NA   NA -0.027546743
+EMXP   NA   NA   NA   NA   NA -0.035133237
+PRCP   NA   NA   NA   NA   NA -0.034681491
+DSND    1   NA   NA   NA   NA           NA
+DSNW   NA    1   NA   NA   NA           NA
+EMSD   NA   NA    1   NA   NA           NA
+EMSN   NA   NA   NA    1   NA           NA
+SNOW   NA   NA   NA   NA    1           NA
+DYTS   NA   NA   NA   NA   NA  1.000000000</code></pre>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Analysis of Variance (ANOVA)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="ANOVA_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ANOVA_files/libs/quarto-html/quarto.js"></script>
+<script src="ANOVA_files/libs/quarto-html/popper.min.js"></script>
+<script src="ANOVA_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="ANOVA_files/libs/quarto-html/anchor.min.js"></script>
+<link href="ANOVA_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ANOVA_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="ANOVA_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="ANOVA_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="ANOVA_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#case-1.-testing-hypothesis-when-samples-are-independent-of-each-other" id="toc-case-1.-testing-hypothesis-when-samples-are-independent-of-each-other" class="nav-link active" data-scroll-target="#case-1.-testing-hypothesis-when-samples-are-independent-of-each-other">Case 1. testing hypothesis when samples are independent of each other</a>
+  <ul class="collapse">
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example 1:</a>
+  <ul class="collapse">
+  <li><a href="#step-1-create-a-single-vector-that-consists-of-smpl1smpl2smpl3" id="toc-step-1-create-a-single-vector-that-consists-of-smpl1smpl2smpl3" class="nav-link" data-scroll-target="#step-1-create-a-single-vector-that-consists-of-smpl1smpl2smpl3">Step 1: create a single vector that consists of smpl1,smpl2,smpl3</a></li>
+  <li><a href="#step-2-create-a-vector-consisting-of-the-sample-names-matches-up-against-the-respective-numbers" id="toc-step-2-create-a-vector-consisting-of-the-sample-names-matches-up-against-the-respective-numbers" class="nav-link" data-scroll-target="#step-2-create-a-vector-consisting-of-the-sample-names-matches-up-against-the-respective-numbers">Step 2: create a vector consisting of the sample names matches up against the respective numbers</a></li>
+  <li><a href="#step-3-create-data-frame" id="toc-step-3-create-data-frame" class="nav-link" data-scroll-target="#step-3-create-data-frame">Step 3: create data frame:</a></li>
+  <li><a href="#step-4-view-the-data-frame-sample_df" id="toc-step-4-view-the-data-frame-sample_df" class="nav-link" data-scroll-target="#step-4-view-the-data-frame-sample_df">Step 4: view the data frame, <code>sample_df</code></a></li>
+  <li><a href="#step-5-conduct-analysis-of-variance" id="toc-step-5-conduct-analysis-of-variance" class="nav-link" data-scroll-target="#step-5-conduct-analysis-of-variance">Step 5: conduct analysis of variance</a></li>
+  <li><a href="#step-6-use-summary-function-to-display-anova-results" id="toc-step-6-use-summary-function-to-display-anova-results" class="nav-link" data-scroll-target="#step-6-use-summary-function-to-display-anova-results">Step 6: Use summary function to display ANOVA results</a></li>
+  </ul></li>
+  <li><a href="#example-2-energy-drink-consumption-levels-and-energy-activity-levels" id="toc-example-2-energy-drink-consumption-levels-and-energy-activity-levels" class="nav-link" data-scroll-target="#example-2-energy-drink-consumption-levels-and-energy-activity-levels">Example 2: Energy drink consumption levels and energy activity levels</a></li>
+  </ul></li>
+  <li><a href="#case-2-anova-for-dependent-samples---i.e.-more-than-two-matched-samples" id="toc-case-2-anova-for-dependent-samples---i.e.-more-than-two-matched-samples" class="nav-link" data-scroll-target="#case-2-anova-for-dependent-samples---i.e.-more-than-two-matched-samples">Case 2: ANOVA for dependent samples - i.e.&nbsp;more than two matched samples</a>
+  <ul class="collapse">
+  <li><a href="#example-1-1" id="toc-example-1-1" class="nav-link" data-scroll-target="#example-1-1">Example 1</a></li>
+  <li><a href="#case-a.-aovweight-time-data-finalweight_df" id="toc-case-a.-aovweight-time-data-finalweight_df" class="nav-link" data-scroll-target="#case-a.-aovweight-time-data-finalweight_df">Case A. <code>aov(weight ~ time, data = finalweight_df)</code></a></li>
+  <li><a href="#case-b.-aovweight-time-errorpersontimedata-finalweight_df" id="toc-case-b.-aovweight-time-errorpersontimedata-finalweight_df" class="nav-link" data-scroll-target="#case-b.-aovweight-time-errorpersontimedata-finalweight_df">Case B. <code>aov(weight ~ time + Error(person/time),data = finalweight_df)</code></a></li>
+  </ul></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">%Session Info%</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Analysis of Variance (ANOVA)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load Tidyverse</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load dplyr</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#load ggplot2</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Today we discuss hypothesis testing about samples from about more than two populations.</p>
+<p>This analysis is called Analysis of Variance (ANOVA).</p>
+<p>Analysis of variance (ANOVA) is a method of comparing means (behavior) across several populations using several samples based on variations from the mean.</p>
+<p>If variations from the mean are different for the populations it is unlikely that the population means are the same.</p>
+<p>We use more than two samples when we have more than two populations.</p>
+<p>We will discuss the following cases:</p>
+<ul>
+<li><strong>Case 1:</strong> testing hypothesis when samples are independent of each other</li>
+<li><strong>Case 2:</strong> testing hypothesis when samples are dependent on each other</li>
+</ul>
+<section id="case-1.-testing-hypothesis-when-samples-are-independent-of-each-other" class="level1">
+<h1>Case 1. testing hypothesis when samples are independent of each other</h1>
+<section id="example-1" class="level2">
+<h2 class="anchored" data-anchor-id="example-1">Example 1:</h2>
+<p>Suppose we have the following weight samples from three different populations. The samples drawn from these populations are likely independent since they are drawn from three different populations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>smpl1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">95</span>,<span class="dv">91</span>,<span class="dv">89</span>,<span class="dv">90</span>,<span class="dv">99</span>,<span class="dv">88</span>,<span class="dv">96</span>,<span class="dv">98</span>,<span class="dv">95</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>smpl2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">83</span>,<span class="dv">89</span>,<span class="dv">85</span>,<span class="dv">89</span>,<span class="dv">81</span>,<span class="dv">89</span>,<span class="dv">90</span>,<span class="dv">82</span>,<span class="dv">84</span>,<span class="dv">80</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>smpl3 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">68</span>,<span class="dv">75</span>,<span class="dv">79</span>,<span class="dv">74</span>,<span class="dv">75</span>,<span class="dv">81</span>,<span class="dv">73</span>,<span class="dv">77</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Suppose we want to check if the population means are likely the same or whether they are they different?</p>
+<p>We can test the following null hypothesis at 5% significance level.</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: population mean 1 = population mean 2 = population mean 3</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Not <span class="math inline">\(H_0\)</span></p></li>
+<li><p>Set <span class="math inline">\(\alpha = 5\)</span>% (0.05)</p></li>
+</ul>
+<p>The procedure for testing more than two populations using more than two samples is called Analysis of Variance (ANOVA).</p>
+<p>The R function for ANOVA is <code>aov()</code></p>
+<p>The syntax for <code>aov()</code> is as follows:</p>
+<pre><code>aov(Dependent_variable ~ Independent_variable, data)</code></pre>
+<p>Suppose we have drawn three samples of weights from three populations:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>smpl1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">95</span>,<span class="dv">91</span>,<span class="dv">89</span>,<span class="dv">90</span>,<span class="dv">99</span>,<span class="dv">88</span>,<span class="dv">96</span>,<span class="dv">98</span>,<span class="dv">95</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>smpl2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">83</span>,<span class="dv">89</span>,<span class="dv">85</span>,<span class="dv">89</span>,<span class="dv">81</span>,<span class="dv">89</span>,<span class="dv">90</span>,<span class="dv">82</span>,<span class="dv">84</span>,<span class="dv">80</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>smpl3 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">68</span>,<span class="dv">75</span>,<span class="dv">79</span>,<span class="dv">74</span>,<span class="dv">75</span>,<span class="dv">81</span>,<span class="dv">73</span>,<span class="dv">77</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Our goal is to answer the question: are weights on average the same or different across the three populations from where we obtained the samples if we assume equal variances across the three populations?</p>
+<p>We have to convert the data into a data frame to use <code>aov()</code></p>
+<section id="step-1-create-a-single-vector-that-consists-of-smpl1smpl2smpl3" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-create-a-single-vector-that-consists-of-smpl1smpl2smpl3">Step 1: create a single vector that consists of smpl1,smpl2,smpl3</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>single_vector <span class="ot">&lt;-</span><span class="fu">c</span>(smpl1,smpl2,smpl3)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>single_vector <span class="co">#Note all numbers are now in one variable single_vector</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 95 91 89 90 99 88 96 98 95 83 89 85 89 81 89 90 82 84 80 68 75 79 74 75 81
+[26] 73 77</code></pre>
+</div>
+</div>
+</section>
+<section id="step-2-create-a-vector-consisting-of-the-sample-names-matches-up-against-the-respective-numbers" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-create-a-vector-consisting-of-the-sample-names-matches-up-against-the-respective-numbers">Step 2: create a vector consisting of the sample names matches up against the respective numbers</h3>
+<p>i.e.&nbsp;a vector consisting of “smpl1” repeated 9 times, “smpl2” repeated 10 times and “smpl3” repeated 8 times.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>long_vector <span class="ot">&lt;-</span><span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"smpl1"</span>, <span class="st">"smpl2"</span>, <span class="st">"smpl3"</span>),</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">times=</span><span class="fu">c</span>(<span class="fu">length</span>(smpl1),<span class="fu">length</span>(smpl2), <span class="fu">length</span>(smpl3)))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>long_vector <span class="co">#entries created to help identify the numbers in single_vector</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "smpl1" "smpl1" "smpl1" "smpl1" "smpl1" "smpl1" "smpl1" "smpl1" "smpl1"
+[10] "smpl2" "smpl2" "smpl2" "smpl2" "smpl2" "smpl2" "smpl2" "smpl2" "smpl2"
+[19] "smpl2" "smpl3" "smpl3" "smpl3" "smpl3" "smpl3" "smpl3" "smpl3" "smpl3"</code></pre>
+</div>
+</div>
+</section>
+<section id="step-3-create-data-frame" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-create-data-frame">Step 3: create data frame:</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sample_df <span class="ot">&lt;-</span><span class="fu">data.frame</span>(long_vector,single_vector)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-4-view-the-data-frame-sample_df" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-view-the-data-frame-sample_df">Step 4: view the data frame, <code>sample_df</code></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sample_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   long_vector single_vector
+1        smpl1            95
+2        smpl1            91
+3        smpl1            89
+4        smpl1            90
+5        smpl1            99
+6        smpl1            88
+7        smpl1            96
+8        smpl1            98
+9        smpl1            95
+10       smpl2            83
+11       smpl2            89
+12       smpl2            85
+13       smpl2            89
+14       smpl2            81
+15       smpl2            89
+16       smpl2            90
+17       smpl2            82
+18       smpl2            84
+19       smpl2            80
+20       smpl3            68
+21       smpl3            75
+22       smpl3            79
+23       smpl3            74
+24       smpl3            75
+25       smpl3            81
+26       smpl3            73
+27       smpl3            77</code></pre>
+</div>
+</div>
+<p>Note that the sample now has the structure of a data frame</p>
+</section>
+<section id="step-5-conduct-analysis-of-variance" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-conduct-analysis-of-variance">Step 5: conduct analysis of variance</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>anova_analysis <span class="ot">&lt;-</span><span class="fu">aov</span>(single_vector <span class="sc">~</span> long_vector, <span class="at">data=</span>sample_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-6-use-summary-function-to-display-anova-results" class="level3">
+<h3 class="anchored" data-anchor-id="step-6-use-summary-function-to-display-anova-results">Step 6: Use summary function to display ANOVA results</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova_analysis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+long_vector  2 1402.7   701.3   45.82 6.38e-09 ***
+Residuals   24  367.3    15.3                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><strong><em>Write your finding/result:</em></strong></p>
+<p>Compare p-value with your chosen alpha</p>
+<p>We see that the p-value is <span class="math inline">\(\le \alpha\)</span> (5%) - so we reject the null (<span class="math inline">\(H_0\)</span>)</p>
+<p><strong><em>Write your conclusion:</em></strong></p>
+<p>We conclude that there is evidence in favor of the alternative hypothesis</p>
+<p>i.e.&nbsp;Not <span class="math inline">\(H_0\)</span></p>
+<p>i.e the means of the populations (from where the samples were drawn) are not the same</p>
+<p>i.e.&nbsp;the average behavior of the populations are not the same</p>
+<p>The R function <code>oneway.test()</code> also lets us achieve the same results from <code>aov()</code> above</p>
+<p>The test above is also called one way ANOVA when we assume the variance from the means for all populations are equal.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oneway.test</span>(single_vector <span class="sc">~</span> long_vector, <span class="at">data=</span>sample_df, <span class="at">var.equal=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One-way analysis of means
+
+data:  single_vector and long_vector
+F = 45.824, num df = 2, denom df = 24, p-value = 6.381e-09</code></pre>
+</div>
+</div>
+<p>The advantage of the <code>oneway.test()</code> function is that you write fewer code (e.g you do not need a summary statement to display your ANOVA summary)</p>
+</section>
+</section>
+<section id="example-2-energy-drink-consumption-levels-and-energy-activity-levels" class="level2">
+<h2 class="anchored" data-anchor-id="example-2-energy-drink-consumption-levels-and-energy-activity-levels">Example 2: Energy drink consumption levels and energy activity levels</h2>
+<p>Imagine we wanted to test the effects of energy drinks on students in a university population. So we ask a sample of students to consume energy drinks in various quantities. We obtain the following data that captures consumption category and energy level after consumption.</p>
+<p>Our goal is to answer the question: are energy levels the same across energy drink consumption levels if we assume equal variances for the populations?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>energy_level <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">7</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">6</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>consumption_level<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">3</span>,<span class="dv">5</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No consumption"</span>, <span class="st">"Low consumption"</span>, <span class="st">"High consumption"</span>))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>study_data <span class="ot">&lt;-</span><span class="fu">data.frame</span>(consumption_level,energy_level)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>gl()</code> function is used to generate factor levels - essentially</p>
+<p>create categorical/level values for the categorical variable</p>
+<p>One syntax of the <code>gl()</code> function:</p>
+<pre><code>gl(n, k, length = n*k, labels = seq_len(n), ordered = FALSE)</code></pre>
+<p>Where:</p>
+<ul>
+<li><code>n</code>: This is an integer that indicates the number of levels</li>
+<li><code>k</code>: This is an integer that indicates the number of replications</li>
+<li><code>length</code>: This is an integer that indicates the length of the result</li>
+<li><code>labels</code>: This is an optional vector of labels for the output of the factor levels</li>
+<li><code>ordered</code>: This takes a logical value (either TRUE or FALSE), which indicates whether the output should be ordered or not.</li>
+</ul>
+<p>Display data frame</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>study_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   consumption_level energy_level
+1     No consumption            3
+2     No consumption            2
+3     No consumption            1
+4     No consumption            1
+5     No consumption            4
+6    Low consumption            5
+7    Low consumption            2
+8    Low consumption            4
+9    Low consumption            2
+10   Low consumption            3
+11  High consumption            7
+12  High consumption            4
+13  High consumption            5
+14  High consumption            3
+15  High consumption            6</code></pre>
+</div>
+</div>
+<p>R Code to test the claim that energy levels are the same for students in the population regardless of energy drink consumption level.</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: no change in energy level regardless of energy drink consumption level</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Not <span class="math inline">\(H_0\)</span></p></li>
+<li><p><span class="math inline">\(\alpha = 5\)</span>% (0.05)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>anova2 <span class="ot">&lt;-</span><span class="fu">aov</span>(energy_level <span class="sc">~</span> consumption_level, <span class="at">data=</span>study_data)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  Df Sum Sq Mean Sq F value Pr(&gt;F)  
+consumption_level  2  20.13  10.067   5.119 0.0247 *
+Residuals         12  23.60   1.967                 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Alternative R code is to run the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oneway.test</span>(energy_level <span class="sc">~</span> consumption_level, <span class="at">data=</span>study_data, <span class="at">var.equal=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One-way analysis of means
+
+data:  energy_level and consumption_level
+F = 5.1186, num df = 2, denom df = 12, p-value = 0.02469</code></pre>
+</div>
+</div>
+<p>Note that the assumptions for one-way ANOVA include the following:</p>
+<ol type="1">
+<li>Variances are are equal (or homogeneous)</li>
+<li>Samples/observations are independent</li>
+<li>dependent variable should be measured on at least an interval scale</li>
+</ol>
+</section>
+</section>
+<section id="case-2-anova-for-dependent-samples---i.e.-more-than-two-matched-samples" class="level1">
+<h1>Case 2: ANOVA for dependent samples - i.e.&nbsp;more than two matched samples</h1>
+<p>This type of ANOVA is also called repeated measures or randomized blocks or within-subjects</p>
+<section id="example-1-1" class="level2">
+<h2 class="anchored" data-anchor-id="example-1-1">Example 1</h2>
+<p>Repeated measures ANOVA in R</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppose we have the following people sign up for a weight-loss program</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>person <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"Al"</span>, <span class="st">"Bill"</span>,<span class="st">"Charlie"</span>,<span class="st">"Dan"</span>, <span class="st">"Ed"</span>, <span class="st">"Fred"</span>,<span class="st">"Gary"</span>, <span class="st">"Harry"</span>, <span class="st">"Irv"</span>, <span class="st">"Jon"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppose their respective weight measurements before entering the program are:</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>before <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">198</span>,<span class="dv">201</span>,<span class="dv">210</span>,<span class="dv">185</span>,<span class="dv">204</span>,<span class="dv">156</span>,<span class="dv">167</span>,<span class="dv">197</span>,<span class="dv">220</span>,<span class="dv">186</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppose their respective weight measurements after 1 month in the program are:</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>one_month <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">194</span>,<span class="dv">203</span>,<span class="dv">200</span>,<span class="dv">183</span>,<span class="dv">200</span>,<span class="dv">153</span>,<span class="dv">166</span>,<span class="dv">197</span>,<span class="dv">215</span>,<span class="dv">184</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppose their respective weight measurement after 2 months in the program are:</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>two_month <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">191</span>,<span class="dv">200</span>,<span class="dv">192</span>,<span class="dv">180</span>,<span class="dv">195</span>,<span class="dv">150</span>,<span class="dv">167</span>,<span class="dv">195</span>,<span class="dv">209</span>,<span class="dv">179</span>)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppose their respective weight measurement after 3 months in the program are:</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>three_month <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">188</span>,<span class="dv">196</span>,<span class="dv">188</span>,<span class="dv">178</span>,<span class="dv">191</span>,<span class="dv">145</span>,<span class="dv">166</span>,<span class="dv">192</span>,<span class="dv">205</span>,<span class="dv">175</span>)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame to hold the data</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>initweight_df <span class="ot">&lt;-</span><span class="fu">data.frame</span>(person, before, one_month, two_month, three_month)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="co"># View the final data frame containing weight measures for the participants:</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>initweight_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    person before one_month two_month three_month
+1       Al    198       194       191         188
+2     Bill    201       203       200         196
+3  Charlie    210       200       192         188
+4      Dan    185       183       180         178
+5       Ed    204       200       195         191
+6     Fred    156       153       150         145
+7     Gary    167       166       167         166
+8    Harry    197       197       195         192
+9      Irv    220       215       209         205
+10     Jon    186       184       179         175</code></pre>
+</div>
+</div>
+<p>Note that the data is in wide format. We need to reshape the data into long format. We use the <code>melt()</code> function to convert the data frame from wide format to long format. Make sure to install and load the “reshape” package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("reshape")</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"reshape"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>finalweight_df <span class="ot">&lt;-</span><span class="fu">melt</span>(initweight_df, <span class="at">id=</span><span class="st">"person"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Label the new columns appropriately</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(finalweight_df) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"person"</span>, <span class="st">"time"</span>,<span class="st">"weight"</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the new data frame</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>finalweight_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    person        time weight
+1       Al      before    198
+2     Bill      before    201
+3  Charlie      before    210
+4      Dan      before    185
+5       Ed      before    204
+6     Fred      before    156
+7     Gary      before    167
+8    Harry      before    197
+9      Irv      before    220
+10     Jon      before    186
+11      Al   one_month    194
+12    Bill   one_month    203
+13 Charlie   one_month    200
+14     Dan   one_month    183
+15      Ed   one_month    200
+16    Fred   one_month    153
+17    Gary   one_month    166
+18   Harry   one_month    197
+19     Irv   one_month    215
+20     Jon   one_month    184
+21      Al   two_month    191
+22    Bill   two_month    200
+23 Charlie   two_month    192
+24     Dan   two_month    180
+25      Ed   two_month    195
+26    Fred   two_month    150
+27    Gary   two_month    167
+28   Harry   two_month    195
+29     Irv   two_month    209
+30     Jon   two_month    179
+31      Al three_month    188
+32    Bill three_month    196
+33 Charlie three_month    188
+34     Dan three_month    178
+35      Ed three_month    191
+36    Fred three_month    145
+37    Gary three_month    166
+38   Harry three_month    192
+39     Irv three_month    205
+40     Jon three_month    175</code></pre>
+</div>
+</div>
+<p>Conduct a repeated measures ANOVA at 5% significance level</p>
+<p>We can use ANOVA to check the following two cases based on the data frame <code>finalweight_df</code></p>
+<ul>
+<li><p><strong>Case A:</strong> Check if weight across time is the same or not in the population regardless of person</p></li>
+<li><p><strong>Case B:</strong> Check if weight across time is the same or not in the population per person/accounting for person</p></li>
+</ul>
+</section>
+<section id="case-a.-aovweight-time-data-finalweight_df" class="level2">
+<h2 class="anchored" data-anchor-id="case-a.-aovweight-time-data-finalweight_df">Case A. <code>aov(weight ~ time, data = finalweight_df)</code></h2>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: weight before and across time (i.e.&nbsp;one_month, etc) are equal/ no change from before to other periods</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Not <span class="math inline">\(H_0\)</span></p></li>
+<li><p><span class="math inline">\(\alpha =5\)</span>% (0.05)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>anova1 <span class="ot">&lt;-</span><span class="fu">aov</span>(weight <span class="sc">~</span> time, <span class="at">data=</span>finalweight_df)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>anova1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call:
+   aov(formula = weight ~ time, data = finalweight_df)
+
+Terms:
+                     time Residuals
+Sum of Squares    569.075 11840.900
+Deg. of Freedom         3        36
+
+Residual standard error: 18.13598
+Estimated effects may be unbalanced</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)
+time         3    569   189.7   0.577  0.634
+Residuals   36  11841   328.9               </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/result:</em></strong></p>
+<p>p-value (0.634) &gt; alpha (0.05).</p>
+<p>We fail to reject the null hypothesis <span class="math inline">\(H_0\)</span></p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>There is evidence that weight before and across time (i.e.&nbsp;one_month, etc) are equal/ no change</p>
+</section>
+<section id="case-b.-aovweight-time-errorpersontimedata-finalweight_df" class="level2">
+<h2 class="anchored" data-anchor-id="case-b.-aovweight-time-errorpersontimedata-finalweight_df">Case B. <code>aov(weight ~ time + Error(person/time),data = finalweight_df)</code></h2>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: weight before study and across time (i.e.&nbsp;one_month, etc) after study are equal/no change from before to other periods per person</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Not <span class="math inline">\(H_0\)</span></p></li>
+<li><p><span class="math inline">\(\alpha =5\)</span>% (0.05)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>anova2 <span class="ot">&lt;-</span><span class="fu">aov</span>(weight <span class="sc">~</span> time <span class="sc">+</span><span class="fu">Error</span> (person<span class="sc">/</span>time), <span class="at">data=</span>finalweight_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The code above allows us do a “within-subjects” ANOVA analysis</p>
+<p>Display ANOVA results</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Error: person
+          Df Sum Sq Mean Sq F value Pr(&gt;F)
+Residuals  9  11632    1292               
+
+Error: person:time
+          Df Sum Sq Mean Sq F value  Pr(&gt;F)    
+time       3  569.1  189.69   24.48 7.3e-08 ***
+Residuals 27  209.2    7.75                    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(anova1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Df Sum Sq Mean Sq F value Pr(&gt;F)
+time         3    569   189.7   0.577  0.634
+Residuals   36  11841   328.9               </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/result:</em></strong></p>
+<p>p-value (7.3e-08) &lt; alpha (0.05).</p>
+<p>We reject the null hypothesis <span class="math inline">\(H_0\)</span></p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>There is evidence in favor of the alternative</p>
+<p>i.e.&nbsp;there is evidence that weight before and across time (i.e.&nbsp;one month, etc) are not equal per person across time</p>
+</section>
+</section>
+<section id="session-info" class="level1">
+<h1>%Session Info%</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 (2022-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] reshape_0.8.9   lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0  
+ [5] dplyr_1.1.2     purrr_1.0.1     readr_2.1.4     tidyr_1.3.0    
+ [9] tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.11       plyr_1.8.8        compiler_4.2.2    pillar_1.9.0     
+ [5] tools_4.2.2       digest_0.6.33     timechange_0.2.0  jsonlite_1.8.4   
+ [9] evaluate_0.21     lifecycle_1.0.3   gtable_0.3.3      pkgconfig_2.0.3  
+[13] rlang_1.1.1       cli_3.6.1         rstudioapi_0.15.0 yaml_2.3.7       
+[17] xfun_0.39         fastmap_1.1.1     withr_2.5.0       knitr_1.43       
+[21] generics_0.1.3    vctrs_0.6.3       htmlwidgets_1.6.2 hms_1.1.3        
+[25] grid_4.2.2        tidyselect_1.2.0  glue_1.6.2        R6_2.5.1         
+[29] fansi_1.0.4       rmarkdown_2.23    tzdb_0.4.0        magrittr_2.0.3   
+[33] scales_1.2.1      htmltools_0.5.5   colorspace_2.1-0  utf8_1.2.3       
+[37] stringi_1.7.12    munsell_0.5.0    </code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

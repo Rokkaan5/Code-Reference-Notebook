@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Professor Abel Iyasele">
+
+<title>STAT 5000 Week April 10 - 14 2023</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Moments_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Moments_files/libs/quarto-html/quarto.js"></script>
+<script src="Moments_files/libs/quarto-html/popper.min.js"></script>
+<script src="Moments_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Moments_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Moments_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Moments_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Moments_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Moments_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Moments_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#using-r-to-find-moments-of-variables." id="toc-using-r-to-find-moments-of-variables." class="nav-link active" data-scroll-target="#using-r-to-find-moments-of-variables.">Using R to find moments of variables.</a></li>
+  <li><a href="#measures-of-central-tendency---mean-median-and-mode" id="toc-measures-of-central-tendency---mean-median-and-mode" class="nav-link" data-scroll-target="#measures-of-central-tendency---mean-median-and-mode">Measures of central tendency - mean, median, and mode</a>
+  <ul class="collapse">
+  <li><a href="#mean---average-value-of-variables-in-a-dataset" id="toc-mean---average-value-of-variables-in-a-dataset" class="nav-link" data-scroll-target="#mean---average-value-of-variables-in-a-dataset">Mean - average value of variables in a dataset</a>
+  <ul class="collapse">
+  <li><a href="#outliers" id="toc-outliers" class="nav-link" data-scroll-target="#outliers">Outliers</a></li>
+  </ul></li>
+  <li><a href="#median---the-middle-value-in-a-group-of-observations" id="toc-median---the-middle-value-in-a-group-of-observations" class="nav-link" data-scroll-target="#median---the-middle-value-in-a-group-of-observations">Median - the middle value in a group of observations</a></li>
+  <li><a href="#mode---the-value-that-occurs-most-frequently-for-a-variable" id="toc-mode---the-value-that-occurs-most-frequently-for-a-variable" class="nav-link" data-scroll-target="#mode---the-value-that-occurs-most-frequently-for-a-variable">Mode - the value that occurs most frequently for a variable</a>
+  <ul class="collapse">
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#measures-of-variation---variance-and-standard-deviation" id="toc-measures-of-variation---variance-and-standard-deviation" class="nav-link" data-scroll-target="#measures-of-variation---variance-and-standard-deviation">Measures of variation - variance and standard deviation</a>
+  <ul class="collapse">
+  <li><a href="#discussion-on-the-sample-variance-formula." id="toc-discussion-on-the-sample-variance-formula." class="nav-link" data-scroll-target="#discussion-on-the-sample-variance-formula.">Discussion on the sample variance formula.</a></li>
+  <li><a href="#variance-in-r" id="toc-variance-in-r" class="nav-link" data-scroll-target="#variance-in-r">Variance in R</a></li>
+  <li><a href="#standard-deviation-in-r" id="toc-standard-deviation-in-r" class="nav-link" data-scroll-target="#standard-deviation-in-r">Standard Deviation in R</a></li>
+  </ul></li>
+  <li><a href="#measures-of-data-symmetry---skewness-and-kurtosis" id="toc-measures-of-data-symmetry---skewness-and-kurtosis" class="nav-link" data-scroll-target="#measures-of-data-symmetry---skewness-and-kurtosis">Measures of data symmetry - skewness and kurtosis</a>
+  <ul class="collapse">
+  <li><a href="#skewness" id="toc-skewness" class="nav-link" data-scroll-target="#skewness">Skewness</a></li>
+  <li><a href="#kurtosis" id="toc-kurtosis" class="nav-link" data-scroll-target="#kurtosis">Kurtosis</a></li>
+  </ul></li>
+  <li><a href="#summarizing-a-dataframe" id="toc-summarizing-a-dataframe" class="nav-link" data-scroll-target="#summarizing-a-dataframe">Summarizing a dataframe</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">%Session Info%</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">STAT 5000 Week April 10 - 14 2023</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Professor Abel Iyasele </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Install MASS Package from Tools&gt;Install Packages&gt; MASS Install MASS Package from Tools&gt;Install Packages&gt; Tidyverse</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load MASS package</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Load Tidyverse</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#load dplyr</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#load ggplot2</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Check for dimensions of the <code>Cars93</code> dataset</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(Cars93)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 93 27</code></pre>
+</div>
+</div>
+<p>View the Cars93 dataset</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">edit</span>(Cars93)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Manufacturer          Model    Type Min.Price Price Max.Price MPG.city
+1          Acura        Integra   Small      12.9  15.9      18.8       25
+2          Acura         Legend Midsize      29.2  33.9      38.7       18
+3           Audi             90 Compact      25.9  29.1      32.3       20
+4           Audi            100 Midsize      30.8  37.7      44.6       19
+5            BMW           535i Midsize      23.7  30.0      36.2       22
+6          Buick        Century Midsize      14.2  15.7      17.3       22
+7          Buick        LeSabre   Large      19.9  20.8      21.7       19
+8          Buick     Roadmaster   Large      22.6  23.7      24.9       16
+9          Buick        Riviera Midsize      26.3  26.3      26.3       19
+10      Cadillac        DeVille   Large      33.0  34.7      36.3       16
+11      Cadillac        Seville Midsize      37.5  40.1      42.7       16
+12     Chevrolet       Cavalier Compact       8.5  13.4      18.3       25
+13     Chevrolet        Corsica Compact      11.4  11.4      11.4       25
+14     Chevrolet         Camaro  Sporty      13.4  15.1      16.8       19
+15     Chevrolet         Lumina Midsize      13.4  15.9      18.4       21
+16     Chevrolet     Lumina_APV     Van      14.7  16.3      18.0       18
+17     Chevrolet          Astro     Van      14.7  16.6      18.6       15
+18     Chevrolet        Caprice   Large      18.0  18.8      19.6       17
+19     Chevrolet       Corvette  Sporty      34.6  38.0      41.5       17
+20      Chrylser       Concorde   Large      18.4  18.4      18.4       20
+21      Chrysler        LeBaron Compact      14.5  15.8      17.1       23
+22      Chrysler       Imperial   Large      29.5  29.5      29.5       20
+23         Dodge           Colt   Small       7.9   9.2      10.6       29
+24         Dodge         Shadow   Small       8.4  11.3      14.2       23
+25         Dodge         Spirit Compact      11.9  13.3      14.7       22
+26         Dodge        Caravan     Van      13.6  19.0      24.4       17
+27         Dodge        Dynasty Midsize      14.8  15.6      16.4       21
+28         Dodge        Stealth  Sporty      18.5  25.8      33.1       18
+29         Eagle         Summit   Small       7.9  12.2      16.5       29
+30         Eagle         Vision   Large      17.5  19.3      21.2       20
+31          Ford        Festiva   Small       6.9   7.4       7.9       31
+32          Ford         Escort   Small       8.4  10.1      11.9       23
+33          Ford          Tempo Compact      10.4  11.3      12.2       22
+34          Ford        Mustang  Sporty      10.8  15.9      21.0       22
+35          Ford          Probe  Sporty      12.8  14.0      15.2       24
+36          Ford       Aerostar     Van      14.5  19.9      25.3       15
+37          Ford         Taurus Midsize      15.6  20.2      24.8       21
+38          Ford Crown_Victoria   Large      20.1  20.9      21.7       18
+39           Geo          Metro   Small       6.7   8.4      10.0       46
+40           Geo          Storm  Sporty      11.5  12.5      13.5       30
+41         Honda        Prelude  Sporty      17.0  19.8      22.7       24
+42         Honda          Civic   Small       8.4  12.1      15.8       42
+43         Honda         Accord Compact      13.8  17.5      21.2       24
+44       Hyundai          Excel   Small       6.8   8.0       9.2       29
+45       Hyundai        Elantra   Small       9.0  10.0      11.0       22
+46       Hyundai         Scoupe  Sporty       9.1  10.0      11.0       26
+47       Hyundai         Sonata Midsize      12.4  13.9      15.3       20
+48      Infiniti            Q45 Midsize      45.4  47.9      50.4       17
+49         Lexus          ES300 Midsize      27.5  28.0      28.4       18
+50         Lexus          SC300 Midsize      34.7  35.2      35.6       18
+51       Lincoln    Continental Midsize      33.3  34.3      35.3       17
+52       Lincoln       Town_Car   Large      34.4  36.1      37.8       18
+53         Mazda            323   Small       7.4   8.3       9.1       29
+54         Mazda        Protege   Small      10.9  11.6      12.3       28
+55         Mazda            626 Compact      14.3  16.5      18.7       26
+56         Mazda            MPV     Van      16.6  19.1      21.7       18
+57         Mazda           RX-7  Sporty      32.5  32.5      32.5       17
+58 Mercedes-Benz           190E Compact      29.0  31.9      34.9       20
+59 Mercedes-Benz           300E Midsize      43.8  61.9      80.0       19
+60       Mercury          Capri  Sporty      13.3  14.1      15.0       23
+61       Mercury         Cougar Midsize      14.9  14.9      14.9       19
+62    Mitsubishi         Mirage   Small       7.7  10.3      12.9       29
+63    Mitsubishi       Diamante Midsize      22.4  26.1      29.9       18
+64        Nissan         Sentra   Small       8.7  11.8      14.9       29
+65        Nissan         Altima Compact      13.0  15.7      18.3       24
+66        Nissan          Quest     Van      16.7  19.1      21.5       17
+67        Nissan         Maxima Midsize      21.0  21.5      22.0       21
+68    Oldsmobile        Achieva Compact      13.0  13.5      14.0       24
+69    Oldsmobile  Cutlass_Ciera Midsize      14.2  16.3      18.4       23
+70    Oldsmobile     Silhouette     Van      19.5  19.5      19.5       18
+71    Oldsmobile   Eighty-Eight   Large      19.5  20.7      21.9       19
+72      Plymouth          Laser  Sporty      11.4  14.4      17.4       23
+73       Pontiac         LeMans   Small       8.2   9.0       9.9       31
+74       Pontiac        Sunbird Compact       9.4  11.1      12.8       23
+75       Pontiac       Firebird  Sporty      14.0  17.7      21.4       19
+76       Pontiac     Grand_Prix Midsize      15.4  18.5      21.6       19
+77       Pontiac     Bonneville   Large      19.4  24.4      29.4       19
+78          Saab            900 Compact      20.3  28.7      37.1       20
+79        Saturn             SL   Small       9.2  11.1      12.9       28
+80        Subaru          Justy   Small       7.3   8.4       9.5       33
+81        Subaru         Loyale   Small      10.5  10.9      11.3       25
+82        Subaru         Legacy Compact      16.3  19.5      22.7       23
+83        Suzuki          Swift   Small       7.3   8.6      10.0       39
+84        Toyota         Tercel   Small       7.8   9.8      11.8       32
+85        Toyota         Celica  Sporty      14.2  18.4      22.6       25
+86        Toyota          Camry Midsize      15.2  18.2      21.2       22
+87        Toyota         Previa     Van      18.9  22.7      26.6       18
+88    Volkswagen            Fox   Small       8.7   9.1       9.5       25
+89    Volkswagen        Eurovan     Van      16.6  19.7      22.7       17
+90    Volkswagen         Passat Compact      17.6  20.0      22.4       21
+91    Volkswagen        Corrado  Sporty      22.9  23.3      23.7       18
+92         Volvo            240 Compact      21.8  22.7      23.5       21
+93         Volvo            850 Midsize      24.8  26.7      28.5       20
+   MPG.highway            AirBags DriveTrain Cylinders EngineSize Horsepower
+1           31               None      Front         4        1.8        140
+2           25 Driver &amp; Passenger      Front         6        3.2        200
+3           26        Driver only      Front         6        2.8        172
+4           26 Driver &amp; Passenger      Front         6        2.8        172
+5           30        Driver only       Rear         4        3.5        208
+6           31        Driver only      Front         4        2.2        110
+7           28        Driver only      Front         6        3.8        170
+8           25        Driver only       Rear         6        5.7        180
+9           27        Driver only      Front         6        3.8        170
+10          25        Driver only      Front         8        4.9        200
+11          25 Driver &amp; Passenger      Front         8        4.6        295
+12          36               None      Front         4        2.2        110
+13          34        Driver only      Front         4        2.2        110
+14          28 Driver &amp; Passenger       Rear         6        3.4        160
+15          29               None      Front         4        2.2        110
+16          23               None      Front         6        3.8        170
+17          20               None        4WD         6        4.3        165
+18          26        Driver only       Rear         8        5.0        170
+19          25        Driver only       Rear         8        5.7        300
+20          28 Driver &amp; Passenger      Front         6        3.3        153
+21          28 Driver &amp; Passenger      Front         4        3.0        141
+22          26        Driver only      Front         6        3.3        147
+23          33               None      Front         4        1.5         92
+24          29        Driver only      Front         4        2.2         93
+25          27        Driver only      Front         4        2.5        100
+26          21        Driver only        4WD         6        3.0        142
+27          27        Driver only      Front         4        2.5        100
+28          24        Driver only        4WD         6        3.0        300
+29          33               None      Front         4        1.5         92
+30          28 Driver &amp; Passenger      Front         6        3.5        214
+31          33               None      Front         4        1.3         63
+32          30               None      Front         4        1.8        127
+33          27               None      Front         4        2.3         96
+34          29        Driver only       Rear         4        2.3        105
+35          30        Driver only      Front         4        2.0        115
+36          20        Driver only        4WD         6        3.0        145
+37          30        Driver only      Front         6        3.0        140
+38          26        Driver only       Rear         8        4.6        190
+39          50               None      Front         3        1.0         55
+40          36        Driver only      Front         4        1.6         90
+41          31 Driver &amp; Passenger      Front         4        2.3        160
+42          46        Driver only      Front         4        1.5        102
+43          31 Driver &amp; Passenger      Front         4        2.2        140
+44          33               None      Front         4        1.5         81
+45          29               None      Front         4        1.8        124
+46          34               None      Front         4        1.5         92
+47          27               None      Front         4        2.0        128
+48          22        Driver only       Rear         8        4.5        278
+49          24        Driver only      Front         6        3.0        185
+50          23 Driver &amp; Passenger       Rear         6        3.0        225
+51          26 Driver &amp; Passenger      Front         6        3.8        160
+52          26 Driver &amp; Passenger       Rear         8        4.6        210
+53          37               None      Front         4        1.6         82
+54          36               None      Front         4        1.8        103
+55          34        Driver only      Front         4        2.5        164
+56          24               None        4WD         6        3.0        155
+57          25        Driver only       Rear    rotary        1.3        255
+58          29        Driver only       Rear         4        2.3        130
+59          25 Driver &amp; Passenger       Rear         6        3.2        217
+60          26        Driver only      Front         4        1.6        100
+61          26               None       Rear         6        3.8        140
+62          33               None      Front         4        1.5         92
+63          24        Driver only      Front         6        3.0        202
+64          33        Driver only      Front         4        1.6        110
+65          30        Driver only      Front         4        2.4        150
+66          23               None      Front         6        3.0        151
+67          26        Driver only      Front         6        3.0        160
+68          31               None      Front         4        2.3        155
+69          31        Driver only      Front         4        2.2        110
+70          23               None      Front         6        3.8        170
+71          28        Driver only      Front         6        3.8        170
+72          30               None        4WD         4        1.8         92
+73          41               None      Front         4        1.6         74
+74          31               None      Front         4        2.0        110
+75          28 Driver &amp; Passenger       Rear         6        3.4        160
+76          27               None      Front         6        3.4        200
+77          28 Driver &amp; Passenger      Front         6        3.8        170
+78          26        Driver only      Front         4        2.1        140
+79          38        Driver only      Front         4        1.9         85
+80          37               None        4WD         3        1.2         73
+81          30               None        4WD         4        1.8         90
+82          30        Driver only        4WD         4        2.2        130
+83          43               None      Front         3        1.3         70
+84          37        Driver only      Front         4        1.5         82
+85          32        Driver only      Front         4        2.2        135
+86          29        Driver only      Front         4        2.2        130
+87          22        Driver only        4WD         4        2.4        138
+88          33               None      Front         4        1.8         81
+89          21               None      Front         5        2.5        109
+90          30               None      Front         4        2.0        134
+91          25               None      Front         6        2.8        178
+92          28        Driver only       Rear         4        2.3        114
+93          28 Driver &amp; Passenger      Front         5        2.4        168
+    RPM Rev.per.mile Man.trans.avail Fuel.tank.capacity Passengers Length
+1  6300         2890             Yes               13.2          5    177
+2  5500         2335             Yes               18.0          5    195
+3  5500         2280             Yes               16.9          5    180
+4  5500         2535             Yes               21.1          6    193
+5  5700         2545             Yes               21.1          4    186
+6  5200         2565              No               16.4          6    189
+7  4800         1570              No               18.0          6    200
+8  4000         1320              No               23.0          6    216
+9  4800         1690              No               18.8          5    198
+10 4100         1510              No               18.0          6    206
+11 6000         1985              No               20.0          5    204
+12 5200         2380             Yes               15.2          5    182
+13 5200         2665             Yes               15.6          5    184
+14 4600         1805             Yes               15.5          4    193
+15 5200         2595              No               16.5          6    198
+16 4800         1690              No               20.0          7    178
+17 4000         1790              No               27.0          8    194
+18 4200         1350              No               23.0          6    214
+19 5000         1450             Yes               20.0          2    179
+20 5300         1990              No               18.0          6    203
+21 5000         2090              No               16.0          6    183
+22 4800         1785              No               16.0          6    203
+23 6000         3285             Yes               13.2          5    174
+24 4800         2595             Yes               14.0          5    172
+25 4800         2535             Yes               16.0          6    181
+26 5000         1970              No               20.0          7    175
+27 4800         2465              No               16.0          6    192
+28 6000         2120             Yes               19.8          4    180
+29 6000         2505             Yes               13.2          5    174
+30 5800         1980              No               18.0          6    202
+31 5000         3150             Yes               10.0          4    141
+32 6500         2410             Yes               13.2          5    171
+33 4200         2805             Yes               15.9          5    177
+34 4600         2285             Yes               15.4          4    180
+35 5500         2340             Yes               15.5          4    179
+36 4800         2080             Yes               21.0          7    176
+37 4800         1885              No               16.0          5    192
+38 4200         1415              No               20.0          6    212
+39 5700         3755             Yes               10.6          4    151
+40 5400         3250             Yes               12.4          4    164
+41 5800         2855             Yes               15.9          4    175
+42 5900         2650             Yes               11.9          4    173
+43 5600         2610             Yes               17.0          4    185
+44 5500         2710             Yes               11.9          5    168
+45 6000         2745             Yes               13.7          5    172
+46 5550         2540             Yes               11.9          4    166
+47 6000         2335             Yes               17.2          5    184
+48 6000         1955              No               22.5          5    200
+49 5200         2325             Yes               18.5          5    188
+50 6000         2510             Yes               20.6          4    191
+51 4400         1835              No               18.4          6    205
+52 4600         1840              No               20.0          6    219
+53 5000         2370             Yes               13.2          4    164
+54 5500         2220             Yes               14.5          5    172
+55 5600         2505             Yes               15.5          5    184
+56 5000         2240              No               19.6          7    190
+57 6500         2325             Yes               20.0          2    169
+58 5100         2425             Yes               14.5          5    175
+59 5500         2220              No               18.5          5    187
+60 5750         2475             Yes               11.1          4    166
+61 3800         1730              No               18.0          5    199
+62 6000         2505             Yes               13.2          5    172
+63 6000         2210              No               19.0          5    190
+64 6000         2435             Yes               13.2          5    170
+65 5600         2130             Yes               15.9          5    181
+66 4800         2065              No               20.0          7    190
+67 5200         2045              No               18.5          5    188
+68 6000         2380              No               15.2          5    188
+69 5200         2565              No               16.5          5    190
+70 4800         1690              No               20.0          7    194
+71 4800         1570              No               18.0          6    201
+72 5000         2360             Yes               15.9          4    173
+73 5600         3130             Yes               13.2          4    177
+74 5200         2665             Yes               15.2          5    181
+75 4600         1805             Yes               15.5          4    196
+76 5000         1890             Yes               16.5          5    195
+77 4800         1565              No               18.0          6    177
+78 6000         2910             Yes               18.0          5    184
+79 5000         2145             Yes               12.8          5    176
+80 5600         2875             Yes                9.2          4    146
+81 5200         3375             Yes               15.9          5    175
+82 5600         2330             Yes               15.9          5    179
+83 6000         3360             Yes               10.6          4    161
+84 5200         3505             Yes               11.9          5    162
+85 5400         2405             Yes               15.9          4    174
+86 5400         2340             Yes               18.5          5    188
+87 5000         2515             Yes               19.8          7    187
+88 5500         2550             Yes               12.4          4    163
+89 4500         2915             Yes               21.1          7    187
+90 5800         2685             Yes               18.5          5    180
+91 5800         2385             Yes               18.5          4    159
+92 5400         2215             Yes               15.8          5    190
+93 6200         2310             Yes               19.3          5    184
+   Wheelbase Width Turn.circle Rear.seat.room Luggage.room Weight  Origin
+1        102    68          37           26.5           11   2705 non-USA
+2        115    71          38           30.0           15   3560 non-USA
+3        102    67          37           28.0           14   3375 non-USA
+4        106    70          37           31.0           17   3405 non-USA
+5        109    69          39           27.0           13   3640 non-USA
+6        105    69          41           28.0           16   2880     USA
+7        111    74          42           30.5           17   3470     USA
+8        116    78          45           30.5           21   4105     USA
+9        108    73          41           26.5           14   3495     USA
+10       114    73          43           35.0           18   3620     USA
+11       111    74          44           31.0           14   3935     USA
+12       101    66          38           25.0           13   2490     USA
+13       103    68          39           26.0           14   2785     USA
+14       101    74          43           25.0           13   3240     USA
+15       108    71          40           28.5           16   3195     USA
+16       110    74          44           30.5           NA   3715     USA
+17       111    78          42           33.5           NA   4025     USA
+18       116    77          42           29.5           20   3910     USA
+19        96    74          43             NA           NA   3380     USA
+20       113    74          40           31.0           15   3515     USA
+21       104    68          41           30.5           14   3085     USA
+22       110    69          44           36.0           17   3570     USA
+23        98    66          32           26.5           11   2270     USA
+24        97    67          38           26.5           13   2670     USA
+25       104    68          39           30.5           14   2970     USA
+26       112    72          42           26.5           NA   3705     USA
+27       105    69          42           30.5           16   3080     USA
+28        97    72          40           20.0           11   3805     USA
+29        98    66          36           26.5           11   2295     USA
+30       113    74          40           30.0           15   3490     USA
+31        90    63          33           26.0           12   1845     USA
+32        98    67          36           28.0           12   2530     USA
+33       100    68          39           27.5           13   2690     USA
+34       101    68          40           24.0           12   2850     USA
+35       103    70          38           23.0           18   2710     USA
+36       119    72          45           30.0           NA   3735     USA
+37       106    71          40           27.5           18   3325     USA
+38       114    78          43           30.0           21   3950     USA
+39        93    63          34           27.5           10   1695 non-USA
+40        97    67          37           24.5           11   2475 non-USA
+41       100    70          39           23.5            8   2865 non-USA
+42       103    67          36           28.0           12   2350 non-USA
+43       107    67          41           28.0           14   3040 non-USA
+44        94    63          35           26.0           11   2345 non-USA
+45        98    66          36           28.0           12   2620 non-USA
+46        94    64          34           23.5            9   2285 non-USA
+47       104    69          41           31.0           14   2885 non-USA
+48       113    72          42           29.0           15   4000 non-USA
+49       103    70          40           27.5           14   3510 non-USA
+50       106    71          39           25.0            9   3515 non-USA
+51       109    73          42           30.0           19   3695     USA
+52       117    77          45           31.5           22   4055     USA
+53        97    66          34           27.0           16   2325 non-USA
+54        98    66          36           26.5           13   2440 non-USA
+55       103    69          40           29.5           14   2970 non-USA
+56       110    72          39           27.5           NA   3735 non-USA
+57        96    69          37             NA           NA   2895 non-USA
+58       105    67          34           26.0           12   2920 non-USA
+59       110    69          37           27.0           15   3525 non-USA
+60        95    65          36           19.0            6   2450     USA
+61       113    73          38           28.0           15   3610     USA
+62        98    67          36           26.0           11   2295 non-USA
+63       107    70          43           27.5           14   3730 non-USA
+64        96    66          33           26.0           12   2545 non-USA
+65       103    67          40           28.5           14   3050 non-USA
+66       112    74          41           27.0           NA   4100 non-USA
+67       104    69          41           28.5           14   3200 non-USA
+68       103    67          39           28.0           14   2910     USA
+69       105    70          42           28.0           16   2890     USA
+70       110    74          44           30.5           NA   3715     USA
+71       111    74          42           31.5           17   3470     USA
+72        97    67          39           24.5            8   2640     USA
+73        99    66          35           25.5           17   2350     USA
+74       101    66          39           25.0           13   2575     USA
+75       101    75          43           25.0           13   3240     USA
+76       108    72          41           28.5           16   3450     USA
+77       111    74          43           30.5           18   3495     USA
+78        99    67          37           26.5           14   2775 non-USA
+79       102    68          40           26.5           12   2495     USA
+80        90    60          32           23.5           10   2045 non-USA
+81        97    65          35           27.5           15   2490 non-USA
+82       102    67          37           27.0           14   3085 non-USA
+83        93    63          34           27.5           10   1965 non-USA
+84        94    65          36           24.0           11   2055 non-USA
+85        99    69          39           23.0           13   2950 non-USA
+86       103    70          38           28.5           15   3030 non-USA
+87       113    71          41           35.0           NA   3785 non-USA
+88        93    63          34           26.0           10   2240 non-USA
+89       115    72          38           34.0           NA   3960 non-USA
+90       103    67          35           31.5           14   2985 non-USA
+91        97    66          36           26.0           15   2810 non-USA
+92       104    67          37           29.5           14   2985 non-USA
+93       105    69          38           30.0           15   3245 non-USA
+                       Make
+1             Acura Integra
+2              Acura Legend
+3                   Audi 90
+4                  Audi 100
+5                  BMW 535i
+6             Buick Century
+7             Buick LeSabre
+8          Buick Roadmaster
+9             Buick Riviera
+10         Cadillac DeVille
+11         Cadillac Seville
+12       Chevrolet Cavalier
+13        Chevrolet Corsica
+14         Chevrolet Camaro
+15         Chevrolet Lumina
+16     Chevrolet Lumina_APV
+17          Chevrolet Astro
+18        Chevrolet Caprice
+19       Chevrolet Corvette
+20        Chrylser Concorde
+21         Chrysler LeBaron
+22        Chrysler Imperial
+23               Dodge Colt
+24             Dodge Shadow
+25             Dodge Spirit
+26            Dodge Caravan
+27            Dodge Dynasty
+28            Dodge Stealth
+29             Eagle Summit
+30             Eagle Vision
+31             Ford Festiva
+32              Ford Escort
+33               Ford Tempo
+34             Ford Mustang
+35               Ford Probe
+36            Ford Aerostar
+37              Ford Taurus
+38      Ford Crown_Victoria
+39                Geo Metro
+40                Geo Storm
+41            Honda Prelude
+42              Honda Civic
+43             Honda Accord
+44            Hyundai Excel
+45          Hyundai Elantra
+46           Hyundai Scoupe
+47           Hyundai Sonata
+48             Infiniti Q45
+49              Lexus ES300
+50              Lexus SC300
+51      Lincoln Continental
+52         Lincoln Town_Car
+53                Mazda 323
+54            Mazda Protege
+55                Mazda 626
+56                Mazda MPV
+57               Mazda RX-7
+58       Mercedes-Benz 190E
+59       Mercedes-Benz 300E
+60            Mercury Capri
+61           Mercury Cougar
+62        Mitsubishi Mirage
+63      Mitsubishi Diamante
+64            Nissan Sentra
+65            Nissan Altima
+66             Nissan Quest
+67            Nissan Maxima
+68       Oldsmobile Achieva
+69 Oldsmobile Cutlass_Ciera
+70    Oldsmobile Silhouette
+71  Oldsmobile Eighty-Eight
+72           Plymouth Laser
+73           Pontiac LeMans
+74          Pontiac Sunbird
+75         Pontiac Firebird
+76       Pontiac Grand_Prix
+77       Pontiac Bonneville
+78                 Saab 900
+79                Saturn SL
+80             Subaru Justy
+81            Subaru Loyale
+82            Subaru Legacy
+83             Suzuki Swift
+84            Toyota Tercel
+85            Toyota Celica
+86             Toyota Camry
+87            Toyota Previa
+88           Volkswagen Fox
+89       Volkswagen Eurovan
+90        Volkswagen Passat
+91       Volkswagen Corrado
+92                Volvo 240
+93                Volvo 850</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(Cars93)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(Cars93)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "data.frame"</code></pre>
+</div>
+</div>
+<p>Use <code>view</code> to bring up RStudio built-in data viewer</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(Cars93)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(Cars93)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 93
+Columns: 27
+$ Manufacturer       &lt;fct&gt; Acura, Acura, Audi, Audi, BMW, Buick, Buick, Buick,…
+$ Model              &lt;fct&gt; Integra, Legend, 90, 100, 535i, Century, LeSabre, R…
+$ Type               &lt;fct&gt; Small, Midsize, Compact, Midsize, Midsize, Midsize,…
+$ Min.Price          &lt;dbl&gt; 12.9, 29.2, 25.9, 30.8, 23.7, 14.2, 19.9, 22.6, 26.…
+$ Price              &lt;dbl&gt; 15.9, 33.9, 29.1, 37.7, 30.0, 15.7, 20.8, 23.7, 26.…
+$ Max.Price          &lt;dbl&gt; 18.8, 38.7, 32.3, 44.6, 36.2, 17.3, 21.7, 24.9, 26.…
+$ MPG.city           &lt;int&gt; 25, 18, 20, 19, 22, 22, 19, 16, 19, 16, 16, 25, 25,…
+$ MPG.highway        &lt;int&gt; 31, 25, 26, 26, 30, 31, 28, 25, 27, 25, 25, 36, 34,…
+$ AirBags            &lt;fct&gt; None, Driver &amp; Passenger, Driver only, Driver &amp; Pas…
+$ DriveTrain         &lt;fct&gt; Front, Front, Front, Front, Rear, Front, Front, Rea…
+$ Cylinders          &lt;fct&gt; 4, 6, 6, 6, 4, 4, 6, 6, 6, 8, 8, 4, 4, 6, 4, 6, 6, …
+$ EngineSize         &lt;dbl&gt; 1.8, 3.2, 2.8, 2.8, 3.5, 2.2, 3.8, 5.7, 3.8, 4.9, 4…
+$ Horsepower         &lt;int&gt; 140, 200, 172, 172, 208, 110, 170, 180, 170, 200, 2…
+$ RPM                &lt;int&gt; 6300, 5500, 5500, 5500, 5700, 5200, 4800, 4000, 480…
+$ Rev.per.mile       &lt;int&gt; 2890, 2335, 2280, 2535, 2545, 2565, 1570, 1320, 169…
+$ Man.trans.avail    &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, No, No, No, No, No, No, Ye…
+$ Fuel.tank.capacity &lt;dbl&gt; 13.2, 18.0, 16.9, 21.1, 21.1, 16.4, 18.0, 23.0, 18.…
+$ Passengers         &lt;int&gt; 5, 5, 5, 6, 4, 6, 6, 6, 5, 6, 5, 5, 5, 4, 6, 7, 8, …
+$ Length             &lt;int&gt; 177, 195, 180, 193, 186, 189, 200, 216, 198, 206, 2…
+$ Wheelbase          &lt;int&gt; 102, 115, 102, 106, 109, 105, 111, 116, 108, 114, 1…
+$ Width              &lt;int&gt; 68, 71, 67, 70, 69, 69, 74, 78, 73, 73, 74, 66, 68,…
+$ Turn.circle        &lt;int&gt; 37, 38, 37, 37, 39, 41, 42, 45, 41, 43, 44, 38, 39,…
+$ Rear.seat.room     &lt;dbl&gt; 26.5, 30.0, 28.0, 31.0, 27.0, 28.0, 30.5, 30.5, 26.…
+$ Luggage.room       &lt;int&gt; 11, 15, 14, 17, 13, 16, 17, 21, 14, 18, 14, 13, 14,…
+$ Weight             &lt;int&gt; 2705, 3560, 3375, 3405, 3640, 2880, 3470, 4105, 349…
+$ Origin             &lt;fct&gt; non-USA, non-USA, non-USA, non-USA, non-USA, USA, U…
+$ Make               &lt;fct&gt; Acura Integra, Acura Legend, Audi 90, Audi 100, BMW…</code></pre>
+</div>
+</div>
+<section id="using-r-to-find-moments-of-variables." class="level1">
+<h1>Using R to find moments of variables.</h1>
+<p>In statistics, moments are quantities that are related to the shape of a set of numbers. You use moments to describe the shape of data or a variable.</p>
+<p>Shape of data means the following:</p>
+<ol type="1">
+<li>Do the values (tend to) look alike - mean</li>
+<li>How spread out are the values - variance, standard deviation</li>
+<li>How symmetric is the distribution of the data?</li>
+</ol>
+</section>
+<section id="measures-of-central-tendency---mean-median-and-mode" class="level1">
+<h1>Measures of central tendency - mean, median, and mode</h1>
+<p>We start with measures of central tendency: mean, median and mode</p>
+<section id="mean---average-value-of-variables-in-a-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="mean---average-value-of-variables-in-a-dataset">Mean - average value of variables in a dataset</h2>
+<p>Discussion of mean, median and mode in class</p>
+<p>Create vector of heights</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>heights <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">36</span>,<span class="dv">42</span>,<span class="dv">43</span>,<span class="dv">37</span>,<span class="dv">40</span>,<span class="dv">45</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#View heights variable</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>heights</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 36 42 43 37 40 45</code></pre>
+</div>
+</div>
+<p>View variable type for hights variable</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(heights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+</div>
+<p>Use R to find mean of heights - and store in a variable <code>Mean_heights</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Mean_heights <span class="ot">&lt;-</span><span class="fu">mean</span>(heights)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Display value stored in Mean_heights</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>Mean_heights</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 40.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Just display the mean without storing it in a variable</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(heights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 40.5</code></pre>
+</div>
+</div>
+<p>Using the Cars93 dataset, suppose we are interested in the average horsepower of cars made in the USA and not in the USA</p>
+<p>Notice variable “Origin” in the Cars93 dataset</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Cars93</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Manufacturer          Model    Type Min.Price Price Max.Price MPG.city
+1          Acura        Integra   Small      12.9  15.9      18.8       25
+2          Acura         Legend Midsize      29.2  33.9      38.7       18
+3           Audi             90 Compact      25.9  29.1      32.3       20
+4           Audi            100 Midsize      30.8  37.7      44.6       19
+5            BMW           535i Midsize      23.7  30.0      36.2       22
+6          Buick        Century Midsize      14.2  15.7      17.3       22
+7          Buick        LeSabre   Large      19.9  20.8      21.7       19
+8          Buick     Roadmaster   Large      22.6  23.7      24.9       16
+9          Buick        Riviera Midsize      26.3  26.3      26.3       19
+10      Cadillac        DeVille   Large      33.0  34.7      36.3       16
+11      Cadillac        Seville Midsize      37.5  40.1      42.7       16
+12     Chevrolet       Cavalier Compact       8.5  13.4      18.3       25
+13     Chevrolet        Corsica Compact      11.4  11.4      11.4       25
+14     Chevrolet         Camaro  Sporty      13.4  15.1      16.8       19
+15     Chevrolet         Lumina Midsize      13.4  15.9      18.4       21
+16     Chevrolet     Lumina_APV     Van      14.7  16.3      18.0       18
+17     Chevrolet          Astro     Van      14.7  16.6      18.6       15
+18     Chevrolet        Caprice   Large      18.0  18.8      19.6       17
+19     Chevrolet       Corvette  Sporty      34.6  38.0      41.5       17
+20      Chrylser       Concorde   Large      18.4  18.4      18.4       20
+21      Chrysler        LeBaron Compact      14.5  15.8      17.1       23
+22      Chrysler       Imperial   Large      29.5  29.5      29.5       20
+23         Dodge           Colt   Small       7.9   9.2      10.6       29
+24         Dodge         Shadow   Small       8.4  11.3      14.2       23
+25         Dodge         Spirit Compact      11.9  13.3      14.7       22
+26         Dodge        Caravan     Van      13.6  19.0      24.4       17
+27         Dodge        Dynasty Midsize      14.8  15.6      16.4       21
+28         Dodge        Stealth  Sporty      18.5  25.8      33.1       18
+29         Eagle         Summit   Small       7.9  12.2      16.5       29
+30         Eagle         Vision   Large      17.5  19.3      21.2       20
+31          Ford        Festiva   Small       6.9   7.4       7.9       31
+32          Ford         Escort   Small       8.4  10.1      11.9       23
+33          Ford          Tempo Compact      10.4  11.3      12.2       22
+34          Ford        Mustang  Sporty      10.8  15.9      21.0       22
+35          Ford          Probe  Sporty      12.8  14.0      15.2       24
+36          Ford       Aerostar     Van      14.5  19.9      25.3       15
+37          Ford         Taurus Midsize      15.6  20.2      24.8       21
+38          Ford Crown_Victoria   Large      20.1  20.9      21.7       18
+39           Geo          Metro   Small       6.7   8.4      10.0       46
+40           Geo          Storm  Sporty      11.5  12.5      13.5       30
+41         Honda        Prelude  Sporty      17.0  19.8      22.7       24
+42         Honda          Civic   Small       8.4  12.1      15.8       42
+43         Honda         Accord Compact      13.8  17.5      21.2       24
+44       Hyundai          Excel   Small       6.8   8.0       9.2       29
+45       Hyundai        Elantra   Small       9.0  10.0      11.0       22
+46       Hyundai         Scoupe  Sporty       9.1  10.0      11.0       26
+47       Hyundai         Sonata Midsize      12.4  13.9      15.3       20
+48      Infiniti            Q45 Midsize      45.4  47.9      50.4       17
+49         Lexus          ES300 Midsize      27.5  28.0      28.4       18
+50         Lexus          SC300 Midsize      34.7  35.2      35.6       18
+51       Lincoln    Continental Midsize      33.3  34.3      35.3       17
+52       Lincoln       Town_Car   Large      34.4  36.1      37.8       18
+53         Mazda            323   Small       7.4   8.3       9.1       29
+54         Mazda        Protege   Small      10.9  11.6      12.3       28
+55         Mazda            626 Compact      14.3  16.5      18.7       26
+56         Mazda            MPV     Van      16.6  19.1      21.7       18
+57         Mazda           RX-7  Sporty      32.5  32.5      32.5       17
+58 Mercedes-Benz           190E Compact      29.0  31.9      34.9       20
+59 Mercedes-Benz           300E Midsize      43.8  61.9      80.0       19
+60       Mercury          Capri  Sporty      13.3  14.1      15.0       23
+61       Mercury         Cougar Midsize      14.9  14.9      14.9       19
+62    Mitsubishi         Mirage   Small       7.7  10.3      12.9       29
+63    Mitsubishi       Diamante Midsize      22.4  26.1      29.9       18
+64        Nissan         Sentra   Small       8.7  11.8      14.9       29
+65        Nissan         Altima Compact      13.0  15.7      18.3       24
+66        Nissan          Quest     Van      16.7  19.1      21.5       17
+67        Nissan         Maxima Midsize      21.0  21.5      22.0       21
+68    Oldsmobile        Achieva Compact      13.0  13.5      14.0       24
+69    Oldsmobile  Cutlass_Ciera Midsize      14.2  16.3      18.4       23
+70    Oldsmobile     Silhouette     Van      19.5  19.5      19.5       18
+71    Oldsmobile   Eighty-Eight   Large      19.5  20.7      21.9       19
+72      Plymouth          Laser  Sporty      11.4  14.4      17.4       23
+73       Pontiac         LeMans   Small       8.2   9.0       9.9       31
+74       Pontiac        Sunbird Compact       9.4  11.1      12.8       23
+75       Pontiac       Firebird  Sporty      14.0  17.7      21.4       19
+76       Pontiac     Grand_Prix Midsize      15.4  18.5      21.6       19
+77       Pontiac     Bonneville   Large      19.4  24.4      29.4       19
+78          Saab            900 Compact      20.3  28.7      37.1       20
+79        Saturn             SL   Small       9.2  11.1      12.9       28
+80        Subaru          Justy   Small       7.3   8.4       9.5       33
+81        Subaru         Loyale   Small      10.5  10.9      11.3       25
+82        Subaru         Legacy Compact      16.3  19.5      22.7       23
+83        Suzuki          Swift   Small       7.3   8.6      10.0       39
+84        Toyota         Tercel   Small       7.8   9.8      11.8       32
+85        Toyota         Celica  Sporty      14.2  18.4      22.6       25
+86        Toyota          Camry Midsize      15.2  18.2      21.2       22
+87        Toyota         Previa     Van      18.9  22.7      26.6       18
+88    Volkswagen            Fox   Small       8.7   9.1       9.5       25
+89    Volkswagen        Eurovan     Van      16.6  19.7      22.7       17
+90    Volkswagen         Passat Compact      17.6  20.0      22.4       21
+91    Volkswagen        Corrado  Sporty      22.9  23.3      23.7       18
+92         Volvo            240 Compact      21.8  22.7      23.5       21
+93         Volvo            850 Midsize      24.8  26.7      28.5       20
+   MPG.highway            AirBags DriveTrain Cylinders EngineSize Horsepower
+1           31               None      Front         4        1.8        140
+2           25 Driver &amp; Passenger      Front         6        3.2        200
+3           26        Driver only      Front         6        2.8        172
+4           26 Driver &amp; Passenger      Front         6        2.8        172
+5           30        Driver only       Rear         4        3.5        208
+6           31        Driver only      Front         4        2.2        110
+7           28        Driver only      Front         6        3.8        170
+8           25        Driver only       Rear         6        5.7        180
+9           27        Driver only      Front         6        3.8        170
+10          25        Driver only      Front         8        4.9        200
+11          25 Driver &amp; Passenger      Front         8        4.6        295
+12          36               None      Front         4        2.2        110
+13          34        Driver only      Front         4        2.2        110
+14          28 Driver &amp; Passenger       Rear         6        3.4        160
+15          29               None      Front         4        2.2        110
+16          23               None      Front         6        3.8        170
+17          20               None        4WD         6        4.3        165
+18          26        Driver only       Rear         8        5.0        170
+19          25        Driver only       Rear         8        5.7        300
+20          28 Driver &amp; Passenger      Front         6        3.3        153
+21          28 Driver &amp; Passenger      Front         4        3.0        141
+22          26        Driver only      Front         6        3.3        147
+23          33               None      Front         4        1.5         92
+24          29        Driver only      Front         4        2.2         93
+25          27        Driver only      Front         4        2.5        100
+26          21        Driver only        4WD         6        3.0        142
+27          27        Driver only      Front         4        2.5        100
+28          24        Driver only        4WD         6        3.0        300
+29          33               None      Front         4        1.5         92
+30          28 Driver &amp; Passenger      Front         6        3.5        214
+31          33               None      Front         4        1.3         63
+32          30               None      Front         4        1.8        127
+33          27               None      Front         4        2.3         96
+34          29        Driver only       Rear         4        2.3        105
+35          30        Driver only      Front         4        2.0        115
+36          20        Driver only        4WD         6        3.0        145
+37          30        Driver only      Front         6        3.0        140
+38          26        Driver only       Rear         8        4.6        190
+39          50               None      Front         3        1.0         55
+40          36        Driver only      Front         4        1.6         90
+41          31 Driver &amp; Passenger      Front         4        2.3        160
+42          46        Driver only      Front         4        1.5        102
+43          31 Driver &amp; Passenger      Front         4        2.2        140
+44          33               None      Front         4        1.5         81
+45          29               None      Front         4        1.8        124
+46          34               None      Front         4        1.5         92
+47          27               None      Front         4        2.0        128
+48          22        Driver only       Rear         8        4.5        278
+49          24        Driver only      Front         6        3.0        185
+50          23 Driver &amp; Passenger       Rear         6        3.0        225
+51          26 Driver &amp; Passenger      Front         6        3.8        160
+52          26 Driver &amp; Passenger       Rear         8        4.6        210
+53          37               None      Front         4        1.6         82
+54          36               None      Front         4        1.8        103
+55          34        Driver only      Front         4        2.5        164
+56          24               None        4WD         6        3.0        155
+57          25        Driver only       Rear    rotary        1.3        255
+58          29        Driver only       Rear         4        2.3        130
+59          25 Driver &amp; Passenger       Rear         6        3.2        217
+60          26        Driver only      Front         4        1.6        100
+61          26               None       Rear         6        3.8        140
+62          33               None      Front         4        1.5         92
+63          24        Driver only      Front         6        3.0        202
+64          33        Driver only      Front         4        1.6        110
+65          30        Driver only      Front         4        2.4        150
+66          23               None      Front         6        3.0        151
+67          26        Driver only      Front         6        3.0        160
+68          31               None      Front         4        2.3        155
+69          31        Driver only      Front         4        2.2        110
+70          23               None      Front         6        3.8        170
+71          28        Driver only      Front         6        3.8        170
+72          30               None        4WD         4        1.8         92
+73          41               None      Front         4        1.6         74
+74          31               None      Front         4        2.0        110
+75          28 Driver &amp; Passenger       Rear         6        3.4        160
+76          27               None      Front         6        3.4        200
+77          28 Driver &amp; Passenger      Front         6        3.8        170
+78          26        Driver only      Front         4        2.1        140
+79          38        Driver only      Front         4        1.9         85
+80          37               None        4WD         3        1.2         73
+81          30               None        4WD         4        1.8         90
+82          30        Driver only        4WD         4        2.2        130
+83          43               None      Front         3        1.3         70
+84          37        Driver only      Front         4        1.5         82
+85          32        Driver only      Front         4        2.2        135
+86          29        Driver only      Front         4        2.2        130
+87          22        Driver only        4WD         4        2.4        138
+88          33               None      Front         4        1.8         81
+89          21               None      Front         5        2.5        109
+90          30               None      Front         4        2.0        134
+91          25               None      Front         6        2.8        178
+92          28        Driver only       Rear         4        2.3        114
+93          28 Driver &amp; Passenger      Front         5        2.4        168
+    RPM Rev.per.mile Man.trans.avail Fuel.tank.capacity Passengers Length
+1  6300         2890             Yes               13.2          5    177
+2  5500         2335             Yes               18.0          5    195
+3  5500         2280             Yes               16.9          5    180
+4  5500         2535             Yes               21.1          6    193
+5  5700         2545             Yes               21.1          4    186
+6  5200         2565              No               16.4          6    189
+7  4800         1570              No               18.0          6    200
+8  4000         1320              No               23.0          6    216
+9  4800         1690              No               18.8          5    198
+10 4100         1510              No               18.0          6    206
+11 6000         1985              No               20.0          5    204
+12 5200         2380             Yes               15.2          5    182
+13 5200         2665             Yes               15.6          5    184
+14 4600         1805             Yes               15.5          4    193
+15 5200         2595              No               16.5          6    198
+16 4800         1690              No               20.0          7    178
+17 4000         1790              No               27.0          8    194
+18 4200         1350              No               23.0          6    214
+19 5000         1450             Yes               20.0          2    179
+20 5300         1990              No               18.0          6    203
+21 5000         2090              No               16.0          6    183
+22 4800         1785              No               16.0          6    203
+23 6000         3285             Yes               13.2          5    174
+24 4800         2595             Yes               14.0          5    172
+25 4800         2535             Yes               16.0          6    181
+26 5000         1970              No               20.0          7    175
+27 4800         2465              No               16.0          6    192
+28 6000         2120             Yes               19.8          4    180
+29 6000         2505             Yes               13.2          5    174
+30 5800         1980              No               18.0          6    202
+31 5000         3150             Yes               10.0          4    141
+32 6500         2410             Yes               13.2          5    171
+33 4200         2805             Yes               15.9          5    177
+34 4600         2285             Yes               15.4          4    180
+35 5500         2340             Yes               15.5          4    179
+36 4800         2080             Yes               21.0          7    176
+37 4800         1885              No               16.0          5    192
+38 4200         1415              No               20.0          6    212
+39 5700         3755             Yes               10.6          4    151
+40 5400         3250             Yes               12.4          4    164
+41 5800         2855             Yes               15.9          4    175
+42 5900         2650             Yes               11.9          4    173
+43 5600         2610             Yes               17.0          4    185
+44 5500         2710             Yes               11.9          5    168
+45 6000         2745             Yes               13.7          5    172
+46 5550         2540             Yes               11.9          4    166
+47 6000         2335             Yes               17.2          5    184
+48 6000         1955              No               22.5          5    200
+49 5200         2325             Yes               18.5          5    188
+50 6000         2510             Yes               20.6          4    191
+51 4400         1835              No               18.4          6    205
+52 4600         1840              No               20.0          6    219
+53 5000         2370             Yes               13.2          4    164
+54 5500         2220             Yes               14.5          5    172
+55 5600         2505             Yes               15.5          5    184
+56 5000         2240              No               19.6          7    190
+57 6500         2325             Yes               20.0          2    169
+58 5100         2425             Yes               14.5          5    175
+59 5500         2220              No               18.5          5    187
+60 5750         2475             Yes               11.1          4    166
+61 3800         1730              No               18.0          5    199
+62 6000         2505             Yes               13.2          5    172
+63 6000         2210              No               19.0          5    190
+64 6000         2435             Yes               13.2          5    170
+65 5600         2130             Yes               15.9          5    181
+66 4800         2065              No               20.0          7    190
+67 5200         2045              No               18.5          5    188
+68 6000         2380              No               15.2          5    188
+69 5200         2565              No               16.5          5    190
+70 4800         1690              No               20.0          7    194
+71 4800         1570              No               18.0          6    201
+72 5000         2360             Yes               15.9          4    173
+73 5600         3130             Yes               13.2          4    177
+74 5200         2665             Yes               15.2          5    181
+75 4600         1805             Yes               15.5          4    196
+76 5000         1890             Yes               16.5          5    195
+77 4800         1565              No               18.0          6    177
+78 6000         2910             Yes               18.0          5    184
+79 5000         2145             Yes               12.8          5    176
+80 5600         2875             Yes                9.2          4    146
+81 5200         3375             Yes               15.9          5    175
+82 5600         2330             Yes               15.9          5    179
+83 6000         3360             Yes               10.6          4    161
+84 5200         3505             Yes               11.9          5    162
+85 5400         2405             Yes               15.9          4    174
+86 5400         2340             Yes               18.5          5    188
+87 5000         2515             Yes               19.8          7    187
+88 5500         2550             Yes               12.4          4    163
+89 4500         2915             Yes               21.1          7    187
+90 5800         2685             Yes               18.5          5    180
+91 5800         2385             Yes               18.5          4    159
+92 5400         2215             Yes               15.8          5    190
+93 6200         2310             Yes               19.3          5    184
+   Wheelbase Width Turn.circle Rear.seat.room Luggage.room Weight  Origin
+1        102    68          37           26.5           11   2705 non-USA
+2        115    71          38           30.0           15   3560 non-USA
+3        102    67          37           28.0           14   3375 non-USA
+4        106    70          37           31.0           17   3405 non-USA
+5        109    69          39           27.0           13   3640 non-USA
+6        105    69          41           28.0           16   2880     USA
+7        111    74          42           30.5           17   3470     USA
+8        116    78          45           30.5           21   4105     USA
+9        108    73          41           26.5           14   3495     USA
+10       114    73          43           35.0           18   3620     USA
+11       111    74          44           31.0           14   3935     USA
+12       101    66          38           25.0           13   2490     USA
+13       103    68          39           26.0           14   2785     USA
+14       101    74          43           25.0           13   3240     USA
+15       108    71          40           28.5           16   3195     USA
+16       110    74          44           30.5           NA   3715     USA
+17       111    78          42           33.5           NA   4025     USA
+18       116    77          42           29.5           20   3910     USA
+19        96    74          43             NA           NA   3380     USA
+20       113    74          40           31.0           15   3515     USA
+21       104    68          41           30.5           14   3085     USA
+22       110    69          44           36.0           17   3570     USA
+23        98    66          32           26.5           11   2270     USA
+24        97    67          38           26.5           13   2670     USA
+25       104    68          39           30.5           14   2970     USA
+26       112    72          42           26.5           NA   3705     USA
+27       105    69          42           30.5           16   3080     USA
+28        97    72          40           20.0           11   3805     USA
+29        98    66          36           26.5           11   2295     USA
+30       113    74          40           30.0           15   3490     USA
+31        90    63          33           26.0           12   1845     USA
+32        98    67          36           28.0           12   2530     USA
+33       100    68          39           27.5           13   2690     USA
+34       101    68          40           24.0           12   2850     USA
+35       103    70          38           23.0           18   2710     USA
+36       119    72          45           30.0           NA   3735     USA
+37       106    71          40           27.5           18   3325     USA
+38       114    78          43           30.0           21   3950     USA
+39        93    63          34           27.5           10   1695 non-USA
+40        97    67          37           24.5           11   2475 non-USA
+41       100    70          39           23.5            8   2865 non-USA
+42       103    67          36           28.0           12   2350 non-USA
+43       107    67          41           28.0           14   3040 non-USA
+44        94    63          35           26.0           11   2345 non-USA
+45        98    66          36           28.0           12   2620 non-USA
+46        94    64          34           23.5            9   2285 non-USA
+47       104    69          41           31.0           14   2885 non-USA
+48       113    72          42           29.0           15   4000 non-USA
+49       103    70          40           27.5           14   3510 non-USA
+50       106    71          39           25.0            9   3515 non-USA
+51       109    73          42           30.0           19   3695     USA
+52       117    77          45           31.5           22   4055     USA
+53        97    66          34           27.0           16   2325 non-USA
+54        98    66          36           26.5           13   2440 non-USA
+55       103    69          40           29.5           14   2970 non-USA
+56       110    72          39           27.5           NA   3735 non-USA
+57        96    69          37             NA           NA   2895 non-USA
+58       105    67          34           26.0           12   2920 non-USA
+59       110    69          37           27.0           15   3525 non-USA
+60        95    65          36           19.0            6   2450     USA
+61       113    73          38           28.0           15   3610     USA
+62        98    67          36           26.0           11   2295 non-USA
+63       107    70          43           27.5           14   3730 non-USA
+64        96    66          33           26.0           12   2545 non-USA
+65       103    67          40           28.5           14   3050 non-USA
+66       112    74          41           27.0           NA   4100 non-USA
+67       104    69          41           28.5           14   3200 non-USA
+68       103    67          39           28.0           14   2910     USA
+69       105    70          42           28.0           16   2890     USA
+70       110    74          44           30.5           NA   3715     USA
+71       111    74          42           31.5           17   3470     USA
+72        97    67          39           24.5            8   2640     USA
+73        99    66          35           25.5           17   2350     USA
+74       101    66          39           25.0           13   2575     USA
+75       101    75          43           25.0           13   3240     USA
+76       108    72          41           28.5           16   3450     USA
+77       111    74          43           30.5           18   3495     USA
+78        99    67          37           26.5           14   2775 non-USA
+79       102    68          40           26.5           12   2495     USA
+80        90    60          32           23.5           10   2045 non-USA
+81        97    65          35           27.5           15   2490 non-USA
+82       102    67          37           27.0           14   3085 non-USA
+83        93    63          34           27.5           10   1965 non-USA
+84        94    65          36           24.0           11   2055 non-USA
+85        99    69          39           23.0           13   2950 non-USA
+86       103    70          38           28.5           15   3030 non-USA
+87       113    71          41           35.0           NA   3785 non-USA
+88        93    63          34           26.0           10   2240 non-USA
+89       115    72          38           34.0           NA   3960 non-USA
+90       103    67          35           31.5           14   2985 non-USA
+91        97    66          36           26.0           15   2810 non-USA
+92       104    67          37           29.5           14   2985 non-USA
+93       105    69          38           30.0           15   3245 non-USA
+                       Make
+1             Acura Integra
+2              Acura Legend
+3                   Audi 90
+4                  Audi 100
+5                  BMW 535i
+6             Buick Century
+7             Buick LeSabre
+8          Buick Roadmaster
+9             Buick Riviera
+10         Cadillac DeVille
+11         Cadillac Seville
+12       Chevrolet Cavalier
+13        Chevrolet Corsica
+14         Chevrolet Camaro
+15         Chevrolet Lumina
+16     Chevrolet Lumina_APV
+17          Chevrolet Astro
+18        Chevrolet Caprice
+19       Chevrolet Corvette
+20        Chrylser Concorde
+21         Chrysler LeBaron
+22        Chrysler Imperial
+23               Dodge Colt
+24             Dodge Shadow
+25             Dodge Spirit
+26            Dodge Caravan
+27            Dodge Dynasty
+28            Dodge Stealth
+29             Eagle Summit
+30             Eagle Vision
+31             Ford Festiva
+32              Ford Escort
+33               Ford Tempo
+34             Ford Mustang
+35               Ford Probe
+36            Ford Aerostar
+37              Ford Taurus
+38      Ford Crown_Victoria
+39                Geo Metro
+40                Geo Storm
+41            Honda Prelude
+42              Honda Civic
+43             Honda Accord
+44            Hyundai Excel
+45          Hyundai Elantra
+46           Hyundai Scoupe
+47           Hyundai Sonata
+48             Infiniti Q45
+49              Lexus ES300
+50              Lexus SC300
+51      Lincoln Continental
+52         Lincoln Town_Car
+53                Mazda 323
+54            Mazda Protege
+55                Mazda 626
+56                Mazda MPV
+57               Mazda RX-7
+58       Mercedes-Benz 190E
+59       Mercedes-Benz 300E
+60            Mercury Capri
+61           Mercury Cougar
+62        Mitsubishi Mirage
+63      Mitsubishi Diamante
+64            Nissan Sentra
+65            Nissan Altima
+66             Nissan Quest
+67            Nissan Maxima
+68       Oldsmobile Achieva
+69 Oldsmobile Cutlass_Ciera
+70    Oldsmobile Silhouette
+71  Oldsmobile Eighty-Eight
+72           Plymouth Laser
+73           Pontiac LeMans
+74          Pontiac Sunbird
+75         Pontiac Firebird
+76       Pontiac Grand_Prix
+77       Pontiac Bonneville
+78                 Saab 900
+79                Saturn SL
+80             Subaru Justy
+81            Subaru Loyale
+82            Subaru Legacy
+83             Suzuki Swift
+84            Toyota Tercel
+85            Toyota Celica
+86             Toyota Camry
+87            Toyota Previa
+88           Volkswagen Fox
+89       Volkswagen Eurovan
+90        Volkswagen Passat
+91       Volkswagen Corrado
+92                Volvo 240
+93                Volvo 850</code></pre>
+</div>
+</div>
+<p>First select Horsepower of cars made in the US into a vector</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>Horsepower.USA <span class="ot">&lt;-</span>Cars93<span class="sc">$</span>Horsepower[Cars93<span class="sc">$</span>Origin<span class="sc">==</span><span class="st">"USA"</span>]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>Horsepower.USA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 110 170 180 170 200 295 110 110 160 110 170 165 170 300 153 141 147  92  93
+[20] 100 142 100 300  92 214  63 127  96 105 115 145 140 190 160 210 100 140 155
+[39] 110 170 170  92  74 110 160 200 170  85</code></pre>
+</div>
+</div>
+<p>Find mean of Horsepower.USA</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Horsepower.USA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 147.5208</code></pre>
+</div>
+</div>
+<p>Filter out cars not made in the USA</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Horsepower.NonUSA <span class="ot">&lt;-</span>Cars93<span class="sc">$</span>Horsepower[Cars93<span class="sc">$</span>Origin <span class="sc">==</span> <span class="st">"non-USA"</span>]</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Horsepower.NonUSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 139.8889</code></pre>
+</div>
+</div>
+<section id="outliers" class="level3">
+<h3 class="anchored" data-anchor-id="outliers">Outliers</h3>
+<p>Means/averages are flawed because the original dataset can contain outliers</p>
+<p>Outliers are extreme values in a dataset or of a variable . Outiers can bias the estimate of an estimate of a population parameter. One way we address outliers is by trimming the mean - eliminating extreme values at the low end and the high end before calculating the mean.</p>
+<p>The amount of trim is a percentage e.g.&nbsp;the upper and lower 5% of values that represent the outliers in either direction</p>
+<p>To see the outliers in the Cars93 dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Cars93, <span class="fu">aes</span>(<span class="at">x=</span>Horsepower))<span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()<span class="sc">+</span><span class="fu">facet_wrap</span>(<span class="sc">~</span>Origin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Moments_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Cars93, <span class="fu">aes</span>(<span class="at">x=</span>Horsepower))<span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Moments_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="trim" class="level4">
+<h4 class="anchored" data-anchor-id="trim"><code>trim</code></h4>
+<p>Calculate trimmed mean - use the <code>trim</code> argument to trim the upper and lower 5% (0.05)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Horsepower.USA, <span class="at">trim=</span><span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 144.1818</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Horsepower.USA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 147.5208</code></pre>
+</div>
+</div>
+<p>We see the trimmed mean is slightly lower than the untrimmed mean</p>
+</section>
+</section>
+</section>
+<section id="median---the-middle-value-in-a-group-of-observations" class="level2">
+<h2 class="anchored" data-anchor-id="median---the-middle-value-in-a-group-of-observations">Median - the middle value in a group of observations</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(Horsepower.USA) <span class="co">#median horsepower for cars from the USA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 143.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(Horsepower.NonUSA) <span class="co">#median horsepower for cars from non-USA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 135</code></pre>
+</div>
+</div>
+</section>
+<section id="mode---the-value-that-occurs-most-frequently-for-a-variable" class="level2">
+<h2 class="anchored" data-anchor-id="mode---the-value-that-occurs-most-frequently-for-a-variable">Mode - the value that occurs most frequently for a variable</h2>
+<p>There can be more than one mode. If two values occur with same frequency you have bi-modal data. If all the values occur with the same frequency, you have no mode</p>
+<p>Base R does not provide a function for fining the mode. You need to load a package called <code>modeest</code> in your library to use a proper function called most frequent value (mfv) to calculate the mode for the particular variable</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Install modeest package: Tools&gt;Install Packages&gt;modeest</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("modeest")</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load modeest</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modeest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="examples" class="level3">
+<h3 class="anchored" data-anchor-id="examples">Examples</h3>
+<p>Create a variable <code>Scores</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Check for the mode for variable Scores - using the function <code>mfv()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mfv</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2 4</code></pre>
+</div>
+</div>
+<p><code>mfv</code> displays that there are two modes - so you have a bi-modal variable</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mfv</span>(Horsepower.USA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 170</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mfv</span>(Horsepower.NonUSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 130 140</code></pre>
+</div>
+</div>
+<p>We see that variable Horsepower for USA cars has only one mode. We see that variable Horsepower for non-USA cars has two modes.</p>
+</section>
+</section>
+</section>
+<section id="measures-of-variation---variance-and-standard-deviation" class="level1">
+<h1>Measures of variation - variance and standard deviation</h1>
+<p>Think about variation as the average of how much each number or observation of a variable differs from the mean/average value. The larger the measure of variation, the more the values differ from their mean.The smaller the measure of variation, the less they differ from their mean. Smaller variation means the values/observations look more like their mean</p>
+<p>Example: Create two variables for children heights in inches</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>children_heights_1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">48</span>,<span class="dv">48</span>,<span class="dv">48</span>,<span class="dv">48</span>,<span class="dv">48</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(children_heights_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 48</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>children_heights_2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">50</span>,<span class="dv">47</span>,<span class="dv">52</span>,<span class="dv">46</span>,<span class="dv">45</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(children_heights_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 48</code></pre>
+</div>
+</div>
+<p>Both variables have the same mean.</p>
+<p>Looking at the values tell you the second variable varies more than the first.</p>
+<p>The first values look alike - no deviation from their average. The second values vary from their average.</p>
+<section id="discussion-on-the-sample-variance-formula." class="level2">
+<h2 class="anchored" data-anchor-id="discussion-on-the-sample-variance-formula.">Discussion on the sample variance formula.</h2>
+<ul>
+<li>Use the N denominator if the sample you have is the total population.</li>
+<li>Use the N-1 denominator if the sample you have is drawn from a population.</li>
+</ul>
+<p>A good estimate of the population variance can be calculated by using N-1 as denominator rather than N</p>
+</section>
+<section id="variance-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="variance-in-r">Variance in R</h2>
+<p>Use the <code>var()</code> function in R - it calculates the variance with N-1 as denominator</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>children_heights_1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">48</span>,<span class="dv">48</span>,<span class="dv">48</span>,<span class="dv">48</span>,<span class="dv">48</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>children_heights_2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">50</span>,<span class="dv">47</span>,<span class="dv">52</span>,<span class="dv">46</span>,<span class="dv">45</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Calculate means of both variables</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(children_heights_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 48</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(children_heights_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 48</code></pre>
+</div>
+</div>
+<p>Calculate variances for both variables</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(children_heights_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(children_heights_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.5</code></pre>
+</div>
+</div>
+<p>Calculate means for USA and Non USA cars</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Horsepower.USA) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 147.5208</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Horsepower.NonUSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 139.8889</code></pre>
+</div>
+</div>
+<p>Calculate variances for USA and Non USA cars for Cars93 dataset</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(Horsepower.USA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2965.319</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(Horsepower.NonUSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2537.283</code></pre>
+</div>
+</div>
+</section>
+<section id="standard-deviation-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="standard-deviation-in-r">Standard Deviation in R</h2>
+<p><strong>Discussion of standard deviation formulas for population and sample:</strong></p>
+<ul>
+<li>The standard deviation of a population is the square root of the population variance</li>
+<li>The standard deviation of a sample - an estimate of the standard deviation of a population - is the square root of the sample variance</li>
+</ul>
+<p>R provides <code>sd()</code> - a function used to calculate sample standard deviation using N-1 as the denominator in computing the sample variance</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>children_heights_1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">48</span>,<span class="dv">48</span>,<span class="dv">48</span>,<span class="dv">48</span>,<span class="dv">48</span>)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>children_heights_2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">50</span>,<span class="dv">47</span>,<span class="dv">52</span>,<span class="dv">46</span>,<span class="dv">45</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(children_heights_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(children_heights_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.915476</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(Horsepower.USA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 54.45474</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(Horsepower.NonUSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 50.37145</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="measures-of-data-symmetry---skewness-and-kurtosis" class="level1">
+<h1>Measures of data symmetry - skewness and kurtosis</h1>
+<ul>
+<li><strong><em>Skewness</em></strong> measures how symmetric the data distribution is</li>
+<li><strong><em>Kurtosis</em></strong> measures how fat or thin the tails of the data distribution is</li>
+</ul>
+<section id="skewness" class="level2">
+<h2 class="anchored" data-anchor-id="skewness">Skewness</h2>
+<p>Discuss skewness formula:</p>
+<p>The closer skewness is to zero, the more symmetric (and well-behaved) the data is. The numerator of the formula needs to be zero in the formula for this to happen.</p>
+<p>Statisticians prefer non-skewed data more than they do skewed data (i.e.&nbsp;where variable skewness is 0).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Install "moments" package Tools&gt;Install Package&gt; moments</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("moments")</span></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load package moments</span></span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(moments)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Lets see the distribution of variable Horsepower for USA and non-USA cars. Lets use their probability density plots.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Cars93, <span class="fu">aes</span>(<span class="at">x=</span>Horsepower))<span class="sc">+</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()<span class="sc">+</span></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Origin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Moments_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The plot on the left (USA) has more skewness to the right than the non-USA plot</p>
+<p>Lets calculate the skewness for Horsepower for USA and non-USA cars</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skewness</span>(Horsepower.USA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.133031</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skewness</span>(Horsepower.NonUSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.642995</code></pre>
+</div>
+</div>
+<p>We see confirmation that the skewness for variable Horsepower for USA is higher/more positive than the skewness for non-USA.</p>
+<p>This is consistent with the density plots we saw earlier.</p>
+<p>This confirms that the Horsepower variable for USA is more right-skewed than the Horsepower variable for non-USA cars.</p>
+</section>
+<section id="kurtosis" class="level2">
+<h2 class="anchored" data-anchor-id="kurtosis">Kurtosis</h2>
+<p>In probability theory and statistics, kurtosis (meaning “curved, arching”) is a measure of the “tailedness” of the probability distribution of a real-valued random variable.</p>
+<p>Like skewness, kurtosis describes the shape of a probability distribution.</p>
+<p>Discuss the kurtosis formula - and statisticians preference for excess kurtosis</p>
+<ul>
+<li>subtracting 3 from what you get from the kurtosis calculation</li>
+<li>When Kurtosis is 3, then excess kurtosis is zero and the data looks more like a standard normal distribution</li>
+<li>Distributions with negative excess kurtosis (i.e.&nbsp;kurtosis &lt;3) are said to be platykurtic</li>
+<li>Distributions with positive excess kurtosis (i.e.&nbsp;kurtosis &gt;3) are said to be leptokurtic</li>
+</ul>
+<p>Statisticians prefer data distributions that are neither leptokurtic nor platykurtic; i.e.&nbsp;kurtosis = 3 (which implies excess kurtosis = 0)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kurtosis</span>(Horsepower.USA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.403952</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kurtosis</span>(Horsepower.NonUSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.097339</code></pre>
+</div>
+</div>
+<p>We see that the the kurtosis of the Horsepower variable for non-USA cars(3.09) is closer to 3.0 compared with the kurtosis of the Horsepower variable for USA cars (4.4)</p>
+<p>This shows that the shape of the Horsepower variable for non-USA looks more like a normally distributed variable (well-behaved) than the Horsepower USA variable</p>
+</section>
+</section>
+<section id="summarizing-a-dataframe" class="level1">
+<h1>Summarizing a dataframe</h1>
+<p>Use the <code>summary()</code> function to produce summary statistics information about numeric variables in a dataframe</p>
+<p>Example</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(Cars93)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 93
+Columns: 27
+$ Manufacturer       &lt;fct&gt; Acura, Acura, Audi, Audi, BMW, Buick, Buick, Buick,…
+$ Model              &lt;fct&gt; Integra, Legend, 90, 100, 535i, Century, LeSabre, R…
+$ Type               &lt;fct&gt; Small, Midsize, Compact, Midsize, Midsize, Midsize,…
+$ Min.Price          &lt;dbl&gt; 12.9, 29.2, 25.9, 30.8, 23.7, 14.2, 19.9, 22.6, 26.…
+$ Price              &lt;dbl&gt; 15.9, 33.9, 29.1, 37.7, 30.0, 15.7, 20.8, 23.7, 26.…
+$ Max.Price          &lt;dbl&gt; 18.8, 38.7, 32.3, 44.6, 36.2, 17.3, 21.7, 24.9, 26.…
+$ MPG.city           &lt;int&gt; 25, 18, 20, 19, 22, 22, 19, 16, 19, 16, 16, 25, 25,…
+$ MPG.highway        &lt;int&gt; 31, 25, 26, 26, 30, 31, 28, 25, 27, 25, 25, 36, 34,…
+$ AirBags            &lt;fct&gt; None, Driver &amp; Passenger, Driver only, Driver &amp; Pas…
+$ DriveTrain         &lt;fct&gt; Front, Front, Front, Front, Rear, Front, Front, Rea…
+$ Cylinders          &lt;fct&gt; 4, 6, 6, 6, 4, 4, 6, 6, 6, 8, 8, 4, 4, 6, 4, 6, 6, …
+$ EngineSize         &lt;dbl&gt; 1.8, 3.2, 2.8, 2.8, 3.5, 2.2, 3.8, 5.7, 3.8, 4.9, 4…
+$ Horsepower         &lt;int&gt; 140, 200, 172, 172, 208, 110, 170, 180, 170, 200, 2…
+$ RPM                &lt;int&gt; 6300, 5500, 5500, 5500, 5700, 5200, 4800, 4000, 480…
+$ Rev.per.mile       &lt;int&gt; 2890, 2335, 2280, 2535, 2545, 2565, 1570, 1320, 169…
+$ Man.trans.avail    &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, No, No, No, No, No, No, Ye…
+$ Fuel.tank.capacity &lt;dbl&gt; 13.2, 18.0, 16.9, 21.1, 21.1, 16.4, 18.0, 23.0, 18.…
+$ Passengers         &lt;int&gt; 5, 5, 5, 6, 4, 6, 6, 6, 5, 6, 5, 5, 5, 4, 6, 7, 8, …
+$ Length             &lt;int&gt; 177, 195, 180, 193, 186, 189, 200, 216, 198, 206, 2…
+$ Wheelbase          &lt;int&gt; 102, 115, 102, 106, 109, 105, 111, 116, 108, 114, 1…
+$ Width              &lt;int&gt; 68, 71, 67, 70, 69, 69, 74, 78, 73, 73, 74, 66, 68,…
+$ Turn.circle        &lt;int&gt; 37, 38, 37, 37, 39, 41, 42, 45, 41, 43, 44, 38, 39,…
+$ Rear.seat.room     &lt;dbl&gt; 26.5, 30.0, 28.0, 31.0, 27.0, 28.0, 30.5, 30.5, 26.…
+$ Luggage.room       &lt;int&gt; 11, 15, 14, 17, 13, 16, 17, 21, 14, 18, 14, 13, 14,…
+$ Weight             &lt;int&gt; 2705, 3560, 3375, 3405, 3640, 2880, 3470, 4105, 349…
+$ Origin             &lt;fct&gt; non-USA, non-USA, non-USA, non-USA, non-USA, USA, U…
+$ Make               &lt;fct&gt; Acura Integra, Acura Legend, Audi 90, Audi 100, BMW…</code></pre>
+</div>
+</div>
+<p>Summarize the <code>Weight</code> variable</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Cars93<span class="sc">$</span>Weight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1695    2620    3040    3073    3525    4105 </code></pre>
+</div>
+</div>
+<p>Summarize the <code>MPG.Price</code> variable</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(Cars93<span class="sc">$</span>MPG.city)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  15.00   18.00   21.00   22.37   25.00   46.00 </code></pre>
+</div>
+</div>
+<p>We can also summarise a set of variables.</p>
+<p>Use the <code>summary()</code> function to produce summary statistics information about a set of numeric variables in a dataframe</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create a subset of Cars93 and summarize</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>autos <span class="ot">&lt;-</span><span class="fu">subset</span>(Cars93, <span class="at">select=</span><span class="fu">c</span>(MPG.city,Price,Horsepower))</span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(autos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    MPG.city         Price         Horsepower   
+ Min.   :15.00   Min.   : 7.40   Min.   : 55.0  
+ 1st Qu.:18.00   1st Qu.:12.20   1st Qu.:103.0  
+ Median :21.00   Median :17.70   Median :140.0  
+ Mean   :22.37   Mean   :19.51   Mean   :143.8  
+ 3rd Qu.:25.00   3rd Qu.:23.30   3rd Qu.:170.0  
+ Max.   :46.00   Max.   :61.90   Max.   :300.0  </code></pre>
+</div>
+</div>
+</section>
+<section id="session-info" class="level1">
+<h1>%Session Info%</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 (2022-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] moments_0.14.1  modeest_2.4.0   lubridate_1.9.2 forcats_1.0.0  
+ [5] stringr_1.5.0   dplyr_1.1.2     purrr_1.0.1     readr_2.1.4    
+ [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0
+[13] MASS_7.3-58.1  
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.0    xfun_0.39           colorspace_2.1-0   
+ [4] vctrs_0.6.3         generics_0.1.3      htmltools_0.5.5    
+ [7] yaml_2.3.7          rmutil_1.1.10       utf8_1.2.3         
+[10] rlang_1.1.1         stable_1.1.6        pillar_1.9.0       
+[13] glue_1.6.2          withr_2.5.0         lifecycle_1.0.3    
+[16] timeDate_4022.108   munsell_0.5.0       fBasics_4022.94    
+[19] gtable_0.3.3        timeSeries_4030.106 htmlwidgets_1.6.2  
+[22] statip_0.2.3        evaluate_0.21       labeling_0.4.2     
+[25] knitr_1.43          tzdb_0.4.0          fastmap_1.1.1      
+[28] fansi_1.0.4         scales_1.2.1        jsonlite_1.8.4     
+[31] farver_2.1.1        hms_1.1.3           digest_0.6.33      
+[34] stringi_1.7.12      grid_4.2.2          clue_0.3-64        
+[37] stabledist_0.7-1    cli_3.6.1           tools_4.2.2        
+[40] magrittr_2.0.3      cluster_2.1.4       spatial_7.3-15     
+[43] pkgconfig_2.0.3     timechange_0.2.0    rmarkdown_2.23     
+[46] rstudioapi_0.15.0   rpart_4.1.19        R6_2.5.1           
+[49] compiler_4.2.2     </code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

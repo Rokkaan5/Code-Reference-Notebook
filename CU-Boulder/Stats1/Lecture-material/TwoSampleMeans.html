@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Two Sample Means Testing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="TwoSampleMeans_files/libs/clipboard/clipboard.min.js"></script>
+<script src="TwoSampleMeans_files/libs/quarto-html/quarto.js"></script>
+<script src="TwoSampleMeans_files/libs/quarto-html/popper.min.js"></script>
+<script src="TwoSampleMeans_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="TwoSampleMeans_files/libs/quarto-html/anchor.min.js"></script>
+<link href="TwoSampleMeans_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="TwoSampleMeans_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="TwoSampleMeans_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="TwoSampleMeans_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="TwoSampleMeans_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#two-sample-tests-for-means-in-r" id="toc-two-sample-tests-for-means-in-r" class="nav-link active" data-scroll-target="#two-sample-tests-for-means-in-r">Two sample tests for means in R</a></li>
+  <li><a href="#independent-means-t-test-unknown-population-variances-but-are-assumed-equal" id="toc-independent-means-t-test-unknown-population-variances-but-are-assumed-equal" class="nav-link" data-scroll-target="#independent-means-t-test-unknown-population-variances-but-are-assumed-equal">INDEPENDENT MEANS T-TEST: Unknown population variances but are assumed equal</a>
+  <ul class="collapse">
+  <li><a href="#example-1-working-with-samples-from-two-populations." id="toc-example-1-working-with-samples-from-two-populations." class="nav-link" data-scroll-target="#example-1-working-with-samples-from-two-populations.">Example 1: Working with samples from two populations.</a></li>
+  <li><a href="#example-2-working-with-a-data-frame.-assume-variances-are-equal" id="toc-example-2-working-with-a-data-frame.-assume-variances-are-equal" class="nav-link" data-scroll-target="#example-2-working-with-a-data-frame.-assume-variances-are-equal">Example 2: Working with a data frame. Assume variances are equal</a></li>
+  <li><a href="#example-3" id="toc-example-3" class="nav-link" data-scroll-target="#example-3">Example 3</a></li>
+  <li><a href="#example-4" id="toc-example-4" class="nav-link" data-scroll-target="#example-4">Example 4</a></li>
+  <li><a href="#example-6-one-sided-testone-tailed" id="toc-example-6-one-sided-testone-tailed" class="nav-link" data-scroll-target="#example-6-one-sided-testone-tailed">Example 6: One-sided test/one-tailed</a></li>
+  </ul></li>
+  <li><a href="#independent-means-t-test-unknown-population-variances-but-are-not-assumed-equal" id="toc-independent-means-t-test-unknown-population-variances-but-are-not-assumed-equal" class="nav-link" data-scroll-target="#independent-means-t-test-unknown-population-variances-but-are-not-assumed-equal">INDEPENDENT MEANS T-TEST: Unknown population variances but are NOT assumed equal</a>
+  <ul class="collapse">
+  <li><a href="#example-1-assume-unequal-population-variable-variances" id="toc-example-1-assume-unequal-population-variable-variances" class="nav-link" data-scroll-target="#example-1-assume-unequal-population-variable-variances">Example 1: Assume unequal population variable variances</a></li>
+  <li><a href="#example-2-difference-in-means-test-with-unknown-population-variances-that-are-assumed-equal" id="toc-example-2-difference-in-means-test-with-unknown-population-variances-that-are-assumed-equal" class="nav-link" data-scroll-target="#example-2-difference-in-means-test-with-unknown-population-variances-that-are-assumed-equal">Example 2: Difference in means test with unknown population variances that are assumed equal</a>
+  <ul class="collapse">
+  <li><a href="#question-1" id="toc-question-1" class="nav-link" data-scroll-target="#question-1">Question 1:</a></li>
+  <li><a href="#question-2" id="toc-question-2" class="nav-link" data-scroll-target="#question-2">Question 2</a></li>
+  <li><a href="#question-3" id="toc-question-3" class="nav-link" data-scroll-target="#question-3">Question 3</a></li>
+  <li><a href="#question-4" id="toc-question-4" class="nav-link" data-scroll-target="#question-4">Question 4</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#dependent-means-t-testpaired-samples-t-test" id="toc-dependent-means-t-testpaired-samples-t-test" class="nav-link" data-scroll-target="#dependent-means-t-testpaired-samples-t-test">DEPENDENT MEANS T-TEST/PAIRED SAMPLES T-TEST</a>
+  <ul class="collapse">
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example 1</a></li>
+  </ul></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">%Session Info%</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Two Sample Means Testing</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load Tidyverse</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#load dplyr</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#load ggplot2</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Today we discuss two-sample hypothesis testing for differences in population means. In a variety of fields, the need often arises to compare the behavior of one population with the behavior of another population. To do this, we draw two samples (one from each population). Hence the name “Two Sample Tests”.</p>
+<p>Sometimes the samples are independent, and sometimes they are matched in some way. Each sample comes from a separate population</p>
+<p>The objective is mostly to determine whether these populations are different from each other. Usually this involves tests of hypotheses about population means.</p>
+<p>We can also test hypotheses about population variances.</p>
+<p>In testing hypotheses with two samples (from two different populations). The null hypothesis (<span class="math inline">\(H_0\)</span>) here is that the two populations are similar</p>
+<p>i.e.&nbsp;the average behavior of (a variable) in the two populations are similar.</p>
+<p>i.e.&nbsp;any differences you see between the two samples are due to chance and not real.</p>
+<p>The alternative hypothesis (<span class="math inline">\(H_1\)</span>) is that the average behavior of (a variable) in the two populations is NOT similar/the same.</p>
+<p>We can have two-sided hypothesis testing for means:</p>
+<p><strong>null</strong> <span class="math inline">\(H_0\)</span>: mean 1 = mean 2 or mean 1 - mean 2 = 0 <strong>alternative</strong> <span class="math inline">\(H_1\)</span>: mean 1 <span class="math inline">\(\neq\)</span> mean2 or mean 1 - mean 2 <span class="math inline">\(\neq\)</span> 0</p>
+<p>We can also have one-sided or one-tailed tests here, where the</p>
+<p><strong>null</strong> <span class="math inline">\(H_0\)</span>: mean 1 - mean 2 = 0 and the <strong>alternative</strong>, <span class="math inline">\(H_1\)</span>: mean 1 - mean 2 &gt; 0</p>
+<p><strong>null</strong> <span class="math inline">\(H_0\)</span>: mean 1 - mean 2 = 0 and the <strong>alternative</strong>, <span class="math inline">\(H_1\)</span>: mean 1 - mean 2 &lt; 0</p>
+<p>The zero in these hypotheses is just the typical case. It is possible to test for any value - just substitute that value for zero e.g.</p>
+<p>where the <strong>null</strong> <span class="math inline">\(H_0\)</span>: mean 1- mean 2 = 5 and the <strong>alternative</strong>, <span class="math inline">\(H_1\)</span>: mean 1 - mean 2 <span class="math inline">\(\neq\)</span> to 5</p>
+<p><strong>To carry out the test follow these steps:</strong></p>
+<p>Step 1: Set significance level (select your alpha)</p>
+<p>Step 2: Write out the null and alternative hypotheses</p>
+<p>Step 3: Calculate the mean and standard deviation of each sample</p>
+<p>Step 4: Subtract one mean from the other</p>
+<p>Step 5: Use a formula to convert the result of Step 4 into a test statistic</p>
+<p>Step 6: Obtain the p-value corresponding to the statistic</p>
+<p>Step 7: Compare the p-value from Step 5 to your chosen alpha</p>
+<p>Step 8: If p-value &lt; = alpha reject null hypothesis otherwise fail to reject the null hypothesis</p>
+<p>Step 9: Write your results and conclusion about the test</p>
+<section id="two-sample-tests-for-means-in-r" class="level1">
+<h1>Two sample tests for means in R</h1>
+<p>There are two different t-tests:</p>
+<ol type="1">
+<li><strong><em>Independent-means t-test</em></strong>: also called the <em>independent-measures</em> or <em>independent-samples t-test</em> (assume equal or unequal variances)</li>
+<li><strong><em>Dependent-means t-test</em></strong>: also called <em>matched-pairs</em> or <em>paired-samples t-test</em></li>
+</ol>
+</section>
+<section id="independent-means-t-test-unknown-population-variances-but-are-assumed-equal" class="level1">
+<h1>INDEPENDENT MEANS T-TEST: Unknown population variances but are assumed equal</h1>
+<section id="example-1-working-with-samples-from-two-populations." class="level2">
+<h2 class="anchored" data-anchor-id="example-1-working-with-samples-from-two-populations.">Example 1: Working with samples from two populations.</h2>
+<p>Assume equal variances</p>
+<p>Using 2 samples from 2 populations. The variances of the population variables are not known but are assumed equal</p>
+<p>When you do not know a population variance, you use the sample variance to estimate it.</p>
+<p>When you have two samples, you average the two sample variances to arrive at the estimate (this is called pooling)</p>
+<p>Assume we have the following samples from populations we do not know variances for. Assume the variances are equal.</p>
+<p>The data are from production times for two machines (machine1 and machine2). The company is trying to determine if the average production time for both machines is the same (i.e.&nbsp;difference in population means for production time = 0)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>machine1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">24.58</span>,<span class="fl">22.09</span>,<span class="fl">23.70</span>, <span class="fl">18.89</span>, <span class="fl">22.02</span>,<span class="fl">28.71</span>,<span class="fl">24.44</span>,<span class="fl">20.91</span>,<span class="fl">23.83</span>,<span class="fl">20.83</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>machine2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">21.61</span>,<span class="fl">19.06</span>,<span class="fl">20.72</span>,<span class="fl">15.77</span>,<span class="dv">19</span>,<span class="fl">25.88</span>,<span class="fl">21.48</span>,<span class="fl">17.85</span>,<span class="fl">20.86</span>,<span class="fl">17.77</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To test the following hypotheses at 5% significance level(<span class="math inline">\(\alpha\)</span>):</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span> (null): true difference in means = 0</li>
+<li><span class="math inline">\(H_1\)</span> (alternative): true difference in means &lt;&gt; 0 (not equal to zero)</li>
+</ul>
+<p><strong>R Code to test <span class="math inline">\(H_0\)</span> versus <span class="math inline">\(H_1\)</span> above:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(machine1, machine2, <span class="at">var.equal=</span><span class="cn">TRUE</span>, <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">mu=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  machine1 and machine2
+t = 2.4396, df = 18, p-value = 0.02528
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.4164695 5.5835305
+sample estimates:
+mean of x mean of y 
+       23        20 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value (0.02528) is less than 5% significance setting (i.e.&nbsp;p-value <span class="math inline">\(&lt; \alpha\)</span>) so we reject the null hypothesis.</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since we reject the null, there is evidence that the true difference in means (i.e.&nbsp;the difference in the population variable means) is not equal to zero. This means that the two populations are different or behave differently.</p>
+</section>
+<section id="example-2-working-with-a-data-frame.-assume-variances-are-equal" class="level2">
+<h2 class="anchored" data-anchor-id="example-2-working-with-a-data-frame.-assume-variances-are-equal">Example 2: Working with a data frame. Assume variances are equal</h2>
+<p>We can work with a data frame that contains the two machine data as follows:</p>
+<p>Create data frame in long format. First create a vector for the 20 production times - machine1’s times first then machine2’s production times.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>prod.time <span class="ot">&lt;-</span><span class="fu">c</span>(machine1, machine2)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#create a vector of the two machine names</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>machine <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"machine1"</span>, <span class="st">"machine2"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Turn vector above into a vector of 10 repetitions of machine1 and machine2</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>machine <span class="ot">&lt;-</span><span class="fu">rep</span>(machine, <span class="at">times=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">10</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Create data frame</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>DF <span class="ot">&lt;-</span><span class="fu">data.frame</span>(machine, prod.time)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#display DF</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>DF</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    machine prod.time
+1  machine1     24.58
+2  machine1     22.09
+3  machine1     23.70
+4  machine1     18.89
+5  machine1     22.02
+6  machine1     28.71
+7  machine1     24.44
+8  machine1     20.91
+9  machine1     23.83
+10 machine1     20.83
+11 machine2     21.61
+12 machine2     19.06
+13 machine2     20.72
+14 machine2     15.77
+15 machine2     19.00
+16 machine2     25.88
+17 machine2     21.48
+18 machine2     17.85
+19 machine2     20.86
+20 machine2     17.77</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#or use the view function</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(DF)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can test the following at <span class="math inline">\(\alpha = 5\)</span>%</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: Mean production time across the two machines are similar/equal</li>
+<li><span class="math inline">\(H_1\)</span>: Mean production time across the two machines are not similar/equal</li>
+</ul>
+<p>We then conduct the t-test as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(DF, <span class="fu">t.test</span>(prod.time <span class="sc">~</span> machine, <span class="at">var.equal=</span><span class="cn">TRUE</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">mu=</span><span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  prod.time by machine
+t = 2.4396, df = 18, p-value = 0.02528
+alternative hypothesis: true difference in means between group machine1 and group machine2 is not equal to 0
+95 percent confidence interval:
+ 0.4164695 5.5835305
+sample estimates:
+mean in group machine1 mean in group machine2 
+                    23                     20 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/result:</em></strong></p>
+<p>the p-value (0.02) is &lt; alpha (0.05), so we reject the null hypothesis (<span class="math inline">\(H_0\)</span>)</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since we reject the null hypothesis, there is evidence in favor of the alternative (i.e.&nbsp;there is evidence that the mean production time for the two machines are not similar/equal)</p>
+<p>visualizing your findings/results in a Boxplot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(DF, <span class="fu">aes</span>(<span class="at">x=</span>machine, <span class="at">y=</span>prod.time))<span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_boxplot</span>(<span class="at">geom=</span><span class="st">"errorbar"</span>, <span class="at">width=</span>.<span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TwoSampleMeans_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="example-3" class="level2">
+<h2 class="anchored" data-anchor-id="example-3">Example 3</h2>
+<p>The data are from production times for two performance monitoring devices (fitbit1 and fitbit2). Suppose you are trying to determine if the devices are very similar in the population (i.e.&nbsp;difference in population means for heartbeat measurements = 0).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fitbit1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">65</span>,<span class="dv">120</span>,<span class="dv">45</span>, <span class="dv">46</span>, <span class="dv">47</span>,<span class="dv">49</span>,<span class="dv">51</span>,<span class="dv">70</span>,<span class="dv">44</span>,<span class="dv">69</span>, <span class="dv">85</span>,<span class="dv">81</span>, <span class="dv">80</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>fitbit2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">61</span>,<span class="dv">109</span>,<span class="dv">45</span>,<span class="dv">55</span>,<span class="dv">66</span>,<span class="dv">85</span>, <span class="dv">62</span>,<span class="dv">74</span>,<span class="dv">76</span>,<span class="dv">66</span>,<span class="dv">85</span>,<span class="dv">102</span>,<span class="dv">67</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To test the following hypotheses at 1% significance level(alpha):</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span> (null): true difference in means = 0</li>
+<li><span class="math inline">\(H_1\)</span> (alternative): true difference in means &lt;&gt; 0 (not equal to zero)</li>
+</ul>
+<p><strong>R Code to test <span class="math inline">\(H_0\)</span> versus <span class="math inline">\(H_1\)</span> above:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(fitbit1, fitbit2, <span class="at">var.equal=</span><span class="cn">TRUE</span>, <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">mu=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  fitbit1 and fitbit2
+t = -0.97714, df = 24, p-value = 0.3382
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -24.179230   8.640768
+sample estimates:
+mean of x mean of y 
+ 65.53846  73.30769 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value (0.3382) &gt; alpha (0.01). We fail to reject the null hypothesis</p>
+<p><strong><em>Conclusion</em></strong></p>
+<p>Since we fail to reject the null hypothesis, we conclude that there is evidence in favor of the alternative hypothesis.</p>
+</section>
+<section id="example-4" class="level2">
+<h2 class="anchored" data-anchor-id="example-4">Example 4</h2>
+<p>The data are from production times for two performance monitoring devices (fitbit1 and fitbit2). Suppose you are trying to determine if the devices are very similar in the population (i.e.&nbsp;difference in population means for heartbeat measurements = 5).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fitbit1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">65</span>,<span class="dv">120</span>,<span class="dv">45</span>, <span class="dv">46</span>, <span class="dv">47</span>,<span class="dv">49</span>,<span class="dv">51</span>,<span class="dv">70</span>,<span class="dv">44</span>,<span class="dv">69</span>, <span class="dv">85</span>,<span class="dv">81</span>, <span class="dv">80</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>fitbit2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">61</span>,<span class="dv">109</span>,<span class="dv">45</span>,<span class="dv">55</span>,<span class="dv">66</span>,<span class="dv">85</span>, <span class="dv">62</span>,<span class="dv">74</span>,<span class="dv">76</span>,<span class="dv">66</span>,<span class="dv">85</span>,<span class="dv">102</span>,<span class="dv">67</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To test the following hypotheses at 1% significance level(alpha):</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span> (null): true difference in means = 5</li>
+<li><span class="math inline">\(H_1\)</span> (alternative): true difference in means &lt;&gt; 5 (not equal to 5)</li>
+</ul>
+<p><strong>R Code to test <span class="math inline">\(H_0\)</span> versus <span class="math inline">\(H_1\)</span> above:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(fitbit1, fitbit2, <span class="at">var.equal=</span><span class="cn">TRUE</span>, <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">mu=</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  fitbit1 and fitbit2
+t = -1.606, df = 24, p-value = 0.1214
+alternative hypothesis: true difference in means is not equal to 5
+95 percent confidence interval:
+ -24.179230   8.640768
+sample estimates:
+mean of x mean of y 
+ 65.53846  73.30769 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value (0.1214) &gt; alpha (0.01). We fail to reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since we fail to reject the null hypothesis, there is evidence in favor of the alternative</p>
+</section>
+<section id="example-6-one-sided-testone-tailed" class="level2">
+<h2 class="anchored" data-anchor-id="example-6-one-sided-testone-tailed">Example 6: One-sided test/one-tailed</h2>
+<p>Suppose you have two samples from two groups of students that took the same test and you want to test which population did better on the test on average. Assume the population variances are equal for the test score variable.</p>
+<p>Conduct a significance test at 10% that first set of test takers (<code>test_t1</code>) are better test takers than the second set of test takers (<code>test_t2</code>)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>test_t1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">87</span>,<span class="dv">85</span>,<span class="dv">99</span>,<span class="dv">75</span>,<span class="dv">92</span>,<span class="dv">43</span>,<span class="dv">56</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>test_t2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">98</span>,<span class="dv">97</span>,<span class="dv">64</span>,<span class="dv">56</span>,<span class="dv">98</span>,<span class="dv">100</span>,<span class="dv">47</span>,<span class="dv">66</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: population mean for <code>test_t1</code> = population mean for <code>test_t2</code></li>
+<li><span class="math inline">\(H_1\)</span>: population mean for <code>test_t1</code> &gt; population mean for <code>test_t2</code></li>
+<li><span class="math inline">\(\alpha = 10\)</span>% = 0.1</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(test_t1, test_t2, <span class="at">var.equal=</span><span class="cn">TRUE</span>, <span class="at">alternative=</span><span class="st">"greater"</span>, <span class="at">mu=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  test_t1 and test_t2
+t = -0.13925, df = 13, p-value = 0.5543
+alternative hypothesis: true difference in means is greater than 0
+95 percent confidence interval:
+ -21.06633       Inf
+sample estimates:
+mean of x mean of y 
+ 76.71429  78.25000 </code></pre>
+</div>
+</div>
+<p><strong><em>Findings/results?</em></strong></p>
+<p><strong><em>Conclusion?</em></strong></p>
+</section>
+</section>
+<section id="independent-means-t-test-unknown-population-variances-but-are-not-assumed-equal" class="level1">
+<h1>INDEPENDENT MEANS T-TEST: Unknown population variances but are NOT assumed equal</h1>
+<section id="example-1-assume-unequal-population-variable-variances" class="level2">
+<h2 class="anchored" data-anchor-id="example-1-assume-unequal-population-variable-variances">Example 1: Assume unequal population variable variances</h2>
+<p>The data are from production times for two machines (machine1 and machine2). The company is trying to determine if the average production time for both machines is the same (i.e.&nbsp;difference in population means for production time = 0)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>machine1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">24.58</span>,<span class="fl">22.09</span>,<span class="fl">23.70</span>, <span class="fl">18.89</span>, <span class="fl">22.02</span>,<span class="fl">28.71</span>,<span class="fl">24.44</span>,<span class="fl">20.91</span>,<span class="fl">23.83</span>,<span class="fl">20.83</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>machine2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">21.61</span>,<span class="fl">19.06</span>,<span class="fl">20.72</span>,<span class="fl">15.77</span>,<span class="dv">19</span>,<span class="fl">25.88</span>,<span class="fl">21.48</span>,<span class="fl">17.85</span>,<span class="fl">20.86</span>,<span class="fl">17.77</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To test the following hypotheses at 5% significance level(alpha):</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span> (null): true difference in means = 0</li>
+<li><span class="math inline">\(H_1\)</span> (alternative): true difference in means &lt;&gt; 0 (not equal to zero)</li>
+</ul>
+<p><strong>R Code to test <span class="math inline">\(H_0\)</span> versus <span class="math inline">\(H_1\)</span> above:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(machine1, machine2, <span class="at">var.equal=</span><span class="cn">FALSE</span>, <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">mu=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  machine1 and machine2
+t = 2.4396, df = 17.985, p-value = 0.02529
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.4163193 5.5836807
+sample estimates:
+mean of x mean of y 
+       23        20 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value (0.02528) is less than 5% significance setting (i.e.&nbsp;p-value &lt; alpha) so we reject the null hypothesis.</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since we reject the null, there is evidence that the true difference in means (i.e.&nbsp;the difference in the population variable means) is not equal to zero. This means that the two populations are different or behave differently.</p>
+<p>Given that we reject the null for both significance tests (when we assume equal and unequal variances), we can conclude that the production times for both machines are different at the population level (i.e.&nbsp;their average behavior is different).</p>
+</section>
+<section id="example-2-difference-in-means-test-with-unknown-population-variances-that-are-assumed-equal" class="level2">
+<h2 class="anchored" data-anchor-id="example-2-difference-in-means-test-with-unknown-population-variances-that-are-assumed-equal">Example 2: Difference in means test with unknown population variances that are assumed equal</h2>
+<p>Suppose the Boulder Valley School District (BVSD) devised a questionnaire to measure the level of satisfaction for graduates of two competing state schools. Past history indicates that the variance in the metric for measuring satisfaction for both schools is equal.</p>
+<p>The statistic is randomly administered to 11 schools from the first school (School1) and 15 students from the second school (School2) as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>school1 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">69</span>,<span class="dv">75</span>,<span class="dv">76</span>,<span class="dv">80</span>,<span class="dv">81</span>,<span class="dv">82</span>,<span class="dv">86</span>,<span class="dv">89</span>,<span class="dv">91</span>,<span class="dv">92</span>,<span class="dv">97</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>school2 <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">59</span>,<span class="dv">62</span>,<span class="dv">66</span>,<span class="dv">70</span>,<span class="dv">70</span>,<span class="dv">75</span>,<span class="dv">75</span>,<span class="dv">77</span>,<span class="dv">78</span>,<span class="dv">79</span>,<span class="dv">81</span>,<span class="dv">84</span>,<span class="dv">84</span>,<span class="dv">86</span>,<span class="dv">94</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="question-1" class="level3">
+<h3 class="anchored" data-anchor-id="question-1">Question 1:</h3>
+<p>Conduct a test of significance at 10% to verify if the difference in mean population satisfaction levels is greater than zero. Assume the variances in satisfaction levels in the population are not known and are not known to be equal.</p>
+<p><strong><em>Question 1 Answer:</em></strong></p>
+<p>This is a one-sided test</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: Mean population satisfaction levels for school 1 is equal to mean population satisfaction levels for school 2 (implying that difference mean population satisfaction levels is less than or equal to zero).</li>
+<li><span class="math inline">\(H_1\)</span>: Mean population satisfaction levels for school 1 is greater than population satisfaction levels for school 2 (implying that difference mean population satisfaction levels is greater than zero).</li>
+<li><span class="math inline">\(\alpha = 0.1\)</span></li>
+</ul>
+<p><strong>R code for the test:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(school1, school2, <span class="at">var.equal=</span><span class="cn">FALSE</span>, <span class="at">alternative=</span><span class="st">"greater"</span>, <span class="at">mu=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  school1 and school2
+t = 2.1189, df = 23.007, p-value = 0.02255
+alternative hypothesis: true difference in means is greater than 0
+95 percent confidence interval:
+ 1.425016      Inf
+sample estimates:
+mean of x mean of y 
+ 83.45455  76.00000 </code></pre>
+</div>
+</div>
+<p><strong><em>Findings:</em></strong></p>
+<p>p-value &lt; 0.05.</p>
+<p>So we reject the null hypothesis</p>
+<p><strong><em>Conclusion</em></strong></p>
+<p>Since we reject the null hypothesis, there is evidence that the Mean population satisfaction levels for school 1 is greater than population satisfaction levels for school 2 (implying that difference mean population satisfaction levels is greater than zero).</p>
+</section>
+<section id="question-2" class="level3">
+<h3 class="anchored" data-anchor-id="question-2">Question 2</h3>
+<p>Conduct a test of significance at 5% to verify if the difference in mean population satisfaction levels is zero or not equal to zero. Assume the variances in satisfaction levels in the population are <strong>NOT</strong> known to be equal.</p>
+<p><strong><em>Question 2 Answer:</em></strong></p>
+<p>This is a two-sided test</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: Mean population satisfaction levels are equal (implying that difference mean population satisfaction levels is equal to zero)</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Mean population satisfaction levels are not equal (implying that difference mean population satisfaction levels is not equal to zero)</p></li>
+<li><p><span class="math inline">\(\alpha = 0.05\)</span></p></li>
+</ul>
+<p><strong>R code for the test:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(school1, school2, <span class="at">var.equal=</span><span class="cn">FALSE</span>, <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">mu=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  school1 and school2
+t = 2.1189, df = 23.007, p-value = 0.04511
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  0.1768823 14.7322086
+sample estimates:
+mean of x mean of y 
+ 83.45455  76.00000 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value &lt; 0.05</p>
+<p>So we reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since we reject the null hypothesis, there is evidence that Mean population satisfaction levels are not equal (implying that difference mean population satisfaction levels is not equal to zero)</p>
+<p>i.e.&nbsp;there is evidence in favor of the alternative</p>
+</section>
+<section id="question-3" class="level3">
+<h3 class="anchored" data-anchor-id="question-3">Question 3</h3>
+<p>Conduct a test of significance at 1% to verify if the difference in mean population satisfaction levels is zero or not equal to zero. In this question, assume historical variances are not known to be equal.</p>
+<p><strong><em>Question 3 Answer:</em></strong></p>
+<p>This is a two-sided test</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: Mean population satisfaction levels are equal (implying that difference mean population satisfaction levels is equal to zero)</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Mean population satisfaction levels are not equal (implying that difference mean population satisfaction levels is not equal to zero)</p></li>
+<li><p><span class="math inline">\(\alpha = 0.01\)</span></p></li>
+</ul>
+<p><strong>R code for the test:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(school1, school2, <span class="at">var.equal=</span><span class="cn">FALSE</span>, <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">mu=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  school1 and school2
+t = 2.1189, df = 23.007, p-value = 0.04511
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  0.1768823 14.7322086
+sample estimates:
+mean of x mean of y 
+ 83.45455  76.00000 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value &lt; alpha(0.05)</p>
+<p>So we reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since we reject the null hypothesis, there is evidence that Mean population satisfaction levels are not equal (implying that difference mean population satisfaction levels is not equal to zero)</p>
+</section>
+<section id="question-4" class="level3">
+<h3 class="anchored" data-anchor-id="question-4">Question 4</h3>
+<p>Conduct a test of significance at 1% to verify if the difference in mean population satisfaction levels is equal to or not equal to 70. In this question, assume historical variances are not known to be unequal.</p>
+<p><strong><em>Question 4 Answer:</em></strong></p>
+<p>This is a two-sided test</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: Mean population satisfaction levels are equal to 70 (implying that difference mean population satisfaction levels is equal to 70)</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: Mean population satisfaction levels is not equal to 70 (implying that difference mean population satisfaction levels is not equal to 70)</p></li>
+<li><p><span class="math inline">\(\alpha = 0.01\)</span></p></li>
+</ul>
+<p><strong>R code for the test:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(school1, school2, <span class="at">var.equal=</span><span class="cn">FALSE</span>, <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">mu=</span><span class="dv">70</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  school1 and school2
+t = -17.778, df = 23.007, p-value = 6.156e-15
+alternative hypothesis: true difference in means is not equal to 70
+95 percent confidence interval:
+  0.1768823 14.7322086
+sample estimates:
+mean of x mean of y 
+ 83.45455  76.00000 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value (6.156e-15) &lt; alpha (0.05)</p>
+<p>So we reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since we reject the null hypothesis, there is evidence that the mean population satisfaction levels is not equal to 70 (implying that difference mean population satisfaction levels is not equal to 70)</p>
+<p>i.e.&nbsp;there is evidence in favor of the alternative</p>
+</section>
+</section>
+</section>
+<section id="dependent-means-t-testpaired-samples-t-test" class="level1">
+<h1>DEPENDENT MEANS T-TEST/PAIRED SAMPLES T-TEST</h1>
+<p>Independent means t-test uses samples that are not dependent on each other (i.e.&nbsp;choosing a member of one sample has no bearing on choosing a member for the other sample)</p>
+<p>Dependent means t-tests use samples that are dependent or matched in one way or another</p>
+<p>e.g.&nbsp;in a before-and-after study, members of one sample (before) are the same members that are selected for the other sample(after).</p>
+<p>For example, a weight-loss before/after study would draw a sample from a population but effectively reuse the members of one sample in the other sample.</p>
+<section id="example-1" class="level2">
+<h2 class="anchored" data-anchor-id="example-1">Example 1</h2>
+<p>A pharmaceutical company is running a weight-loss program. The belief of a skeptical newspaper is that the program does not deliver any benefits to members of a community.</p>
+<p>To prove their point, the newspaper hires a research student to gather the following weight data from participants in the program:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>before <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">198</span>,<span class="dv">201</span>,<span class="dv">210</span>,<span class="dv">185</span>,<span class="dv">204</span>,<span class="dv">156</span>,<span class="dv">167</span>,<span class="dv">197</span>,<span class="dv">220</span>,<span class="dv">186</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>after <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">194</span>,<span class="dv">203</span>,<span class="dv">200</span>,<span class="dv">183</span>,<span class="dv">200</span>,<span class="dv">153</span>,<span class="dv">166</span>,<span class="dv">197</span>,<span class="dv">215</span>,<span class="dv">184</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The newspaper asks the student to test the following hypotheses:</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: mean population weight before is equal to mean population weight after participating in program</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: mean population weight before is not equal to mean population weight after participating in program</p></li>
+<li><p><span class="math inline">\(\alpha = 5\)</span>% (0.05)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(before, after, <span class="at">alternative=</span><span class="st">"two.sided"</span>, <span class="at">paired=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Paired t-test
+
+data:  before and after
+t = 2.8241, df = 9, p-value = 0.01991
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+ 0.577078 5.222922
+sample estimates:
+mean difference 
+            2.9 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value &lt; alpha, implying that we reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>Since we reject the null hypothesis, we conclude that there is evidence in favor of the alternative hypothesis.</p>
+<p>i.e.&nbsp;there is evidence that the mean population weight before participating in the weight-loss program is not equal to the mean population weight after participating in the weight-loss program.</p>
+<p>We can also do a one-sided, paired sample t-test using the same data as follows:</p>
+<ul>
+<li><p><span class="math inline">\(H_0\)</span>: mean population weight before is less than or equal to mean population weight after participating in program</p></li>
+<li><p><span class="math inline">\(H_1\)</span>: mean population weight before is greater than mean population weight after participating in program</p></li>
+<li><p><span class="math inline">\(\alpha = 5\)</span>% (0.05)</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(before, after, <span class="at">alternative=</span><span class="st">"greater"</span>, <span class="at">paired=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Paired t-test
+
+data:  before and after
+t = 2.8241, df = 9, p-value = 0.009956
+alternative hypothesis: true mean difference is greater than 0
+95 percent confidence interval:
+ 1.017647      Inf
+sample estimates:
+mean difference 
+            2.9 </code></pre>
+</div>
+</div>
+<p><strong><em>Finding/Result:</em></strong></p>
+<p>p-value &lt; alpha, implying that we reject the null hypothesis</p>
+<p><strong><em>Conclusion:</em></strong></p>
+<p>There is evidence that the mean population weight before participating in the weight-loss program is greater than the mean population weight after participating in the weight-loss program</p>
+</section>
+</section>
+<section id="session-info" class="level1">
+<h1>%Session Info%</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.2 (2022-10-31 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0   dplyr_1.1.2    
+ [5] purrr_1.0.1     readr_2.1.4     tidyr_1.3.0     tibble_3.2.1   
+ [9] ggplot2_3.4.2   tidyverse_2.0.0
+
+loaded via a namespace (and not attached):
+ [1] compiler_4.2.2    pillar_1.9.0      tools_4.2.2       digest_0.6.33    
+ [5] timechange_0.2.0  jsonlite_1.8.4    evaluate_0.21     lifecycle_1.0.3  
+ [9] gtable_0.3.3      pkgconfig_2.0.3   rlang_1.1.1       cli_3.6.1        
+[13] rstudioapi_0.15.0 yaml_2.3.7        xfun_0.39         fastmap_1.1.1    
+[17] withr_2.5.0       knitr_1.43        generics_0.1.3    vctrs_0.6.3      
+[21] htmlwidgets_1.6.2 hms_1.1.3         grid_4.2.2        tidyselect_1.2.0 
+[25] glue_1.6.2        R6_2.5.1          fansi_1.0.4       rmarkdown_2.23   
+[29] farver_2.1.1      tzdb_0.4.0        magrittr_2.0.3    scales_1.2.1     
+[33] htmltools_0.5.5   colorspace_2.1-0  labeling_0.4.2    utf8_1.2.3       
+[37] stringi_1.7.12    munsell_0.5.0    </code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
