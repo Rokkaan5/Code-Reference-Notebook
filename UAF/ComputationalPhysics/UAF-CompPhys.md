@@ -3,7 +3,10 @@ layout: page
 title: "PHYS 220: Intro to Computational Physics"
 permalink: /UAF/CompPhys
 ---
+
 [Spring 2020] ***Intro to Computational Physics*** with Dr. Peter Delamere at [UAF](../../UAF.qmd)
+
+---
 
 # Labs
 The following are all *my* submissions to the lab assignments when I was taking the class in Spring 2020. But many are incomplete, incorrect, or the code could just generally be more improved/efficient/DRY; so it would be cool to try to go back and finish/fix/improve/generally try them again.
@@ -84,7 +87,7 @@ Check GitHub repo for python code files for my Wilberforce pendulum animation pr
 
 Includes example uses of RK4 and matplotlib.animation
 
-[Wilberforce Pendulum Project](WilberforceProject.md)
+[Wilberforce Pendulum Project raw code](WilberforceProject.md)
 Check GitHub repo for python code files for my Wilberforce pendulum animation project
 
 Includes example uses of RK4 and matplotlib.animation
