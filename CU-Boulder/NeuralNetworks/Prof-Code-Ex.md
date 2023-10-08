@@ -19,7 +19,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 - Simple NN using just Sklearn ([Raw code](raw_code/NN_Just_sklearn_Gates.html); [Markdown](mrkdwn/NN_Just_sklearn_Gates.html))
 - Logistic Regression ([Raw code](raw_code/LogReg_gates.html); [Markdown](mrkdwn/LogReg_gates.html))
     - Using gradient descent
-    - Updating $\mathbf{w}$ and with GD and LR
+    - Updating **w** and with GD and LR
     - Using the Loss Function LCE: Cross Entropy
     - Using the Sigmoid as the logistic activation
     - Vis
