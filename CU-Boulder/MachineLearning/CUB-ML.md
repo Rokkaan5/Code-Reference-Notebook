@@ -1,8 +1,10 @@
 ---
+layout: page
 title: "CSCI 5622: Machine Learning (CU)"
+permalink: /CUB/MachineLearning
 ---
 
-[Spring 2023] ***Machine Learning*** with Dr. Ami Gates at [CU Boulder](../../CUB.qmd)
+[Spring 2023] ***Machine Learning*** with Dr. Ami Gates at [CU Boulder](../../CUB.md)
 
 ---
 
