@@ -1,14 +1,17 @@
 ---
 layout: page
-title: "UAF ML-Module"
-permalink: /UAF-ML-Module
+title: "PHYS 472Z: Machine Learning (UAF)"
+permalink: /UAF/ML-Module
 ---
 
-# Intro to Machine Learning
 
-Lecture Workbooks
+[Spring 2021] ***Machine Learning (Physics Module)*** with Dr. Doga Ozturk at [UAF](../../UAF.qmd)
 
-## Basic Packages
+---
+
+**Lecture Workbooks**
+
+# Basic Packages
 [Numpy Workbook](UAF/MachineLearning/NumPy%20Workbook.html)
 
 [Matplotlib Workbook](UAF/MachineLearning/Matplotlib%20Workbook.html)
@@ -19,7 +22,7 @@ Lecture Workbooks
 
 [Sklearn Workbook](UAF/MachineLearning/Sklearn%20Workbook.html)
 
-## Machine Learning
+# Machine Learning
 [Regression Workbook](UAF/MachineLearning/Regression%20Workbook.html)
 
 [Decision Tree Workbook](UAF/MachineLearning/Decision%20Tree%20Workbook.html)
@@ -30,7 +33,7 @@ Lecture Workbooks
 
 [Neural Network Workbook](UAF/MachineLearning/Neural%20Network%20Workbook.html)
 
-## General DS Process
+# General DS Process
 [Data Preparation Workbook](UAF/MachineLearning/Data%20Preparation%20Workbook.html)
 
 [Model Training Workbook](UAF/MachineLearning/Model%20Training%20Workbook.html)
