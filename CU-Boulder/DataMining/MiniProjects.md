@@ -51,9 +51,25 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
 - Confusion matrices
 
 [Do Left-handed People Really Die Young?](CU-Boulder/DataMining/Mini-Projects/LeftHand/LHDieYoung.html)
-- 
 
 - (Naive) Bayes rule and theorem
 - Manually building functions to calculate probabilities (for naive bayes; specific to this data though)
     - Conditional probabilities
     - Probablities
+
+[Predict Blood Donations](Mini-Projects/BloodDonations/Blood.html)
+
+- TPOTClassifier application example 
+    - Model selection using TPOT pipelines
+- Log normalization
+- `operator.itemgetter`
+
+[Predicting Credit Card Approvals](Mini-Projects/PredictCCapproval/notebook.html)
+
+- Logistic regression 
+- `GridSearchCV`
+
+[Dr. Semmelwels and the Discovery of Handwashing](Mini-Projects/Handwashing/Handwashing.html)
+
+- `ax = pd.plot() pd.plot()`
+- confidence interval (quantiles)
