@@ -1,0 +1,4219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Error Analysis Workbook</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Error Analysis Workbook_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Error Analysis Workbook_files/libs/quarto-html/quarto.js"></script>
+<script src="Error Analysis Workbook_files/libs/quarto-html/popper.min.js"></script>
+<script src="Error Analysis Workbook_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Error Analysis Workbook_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Error Analysis Workbook_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Error Analysis Workbook_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Error Analysis Workbook_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Error Analysis Workbook_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Error Analysis Workbook_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#preparing-the-data" id="toc-preparing-the-data" class="nav-link active" data-scroll-target="#preparing-the-data">1. Preparing the data</a>
+  <ul class="collapse">
+  <li><a href="#preparing-the-pipeline" id="toc-preparing-the-pipeline" class="nav-link" data-scroll-target="#preparing-the-pipeline">Preparing the Pipeline</a></li>
+  <li><a href="#prepating-the-hyperparameter-grid" id="toc-prepating-the-hyperparameter-grid" class="nav-link" data-scroll-target="#prepating-the-hyperparameter-grid">Prepating the Hyperparameter Grid</a></li>
+  </ul></li>
+  <li><a href="#cross-validation-k-fold" id="toc-cross-validation-k-fold" class="nav-link" data-scroll-target="#cross-validation-k-fold">2. Cross Validation: K-Fold</a></li>
+  <li><a href="#cross-validation-with-multiple-metrics" id="toc-cross-validation-with-multiple-metrics" class="nav-link" data-scroll-target="#cross-validation-with-multiple-metrics">3. Cross Validation with Multiple Metrics</a></li>
+  <li><a href="#gridsearchcv-with-emphasis-on-cv" id="toc-gridsearchcv-with-emphasis-on-cv" class="nav-link" data-scroll-target="#gridsearchcv-with-emphasis-on-cv">4. GridSearchCV with Emphasis on CV</a></li>
+  <li><a href="#plotting-results" id="toc-plotting-results" class="nav-link" data-scroll-target="#plotting-results">5. Plotting Results</a>
+  <ul class="collapse">
+  <li><a href="#visualizing-the-prediction-results-from-multiple-regression-models" id="toc-visualizing-the-prediction-results-from-multiple-regression-models" class="nav-link" data-scroll-target="#visualizing-the-prediction-results-from-multiple-regression-models">Visualizing the prediction results from multiple regression models</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Error Analysis Workbook</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Welcome to the Error Analysis Workbook. As usual, let’s start with importing the libraries we will need.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importing the libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.max_columns'</span>, <span class="dv">50</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">'darkgrid'</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.exceptions <span class="im">import</span> ConvergenceWarning</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>warnings.simplefilter(action<span class="op">=</span><span class="st">'ignore'</span>, category<span class="op">=</span>ConvergenceWarning)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="preparing-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="preparing-the-data">1. Preparing the data</h2>
+<p>Let’s start with reading in the base_df which is the cleared house_df from the last class.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>base_df <span class="op">=</span> pd.read_csv(<span class="st">'./base_df.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, we can proceed to select features and target.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create separate object for target variable</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> base_df.tx_price</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create separate object for input features</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> base_df.drop(<span class="st">'tx_price'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We should import libraries we will use for ML task.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for splitting training and test set</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># For standardization</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Import Regularized Regression algorithms</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Lasso, Ridge, ElasticNet</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Import Tree Ensemble algorithms</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Many resources will tell you, you don’t need to split your data into test and training, but if you have enough data it is always better to split it.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split X and y into train and test sets</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                                   test_size<span class="op">=</span><span class="fl">0.2</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                                                   random_state<span class="op">=</span><span class="dv">1234</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="preparing-the-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="preparing-the-pipeline">Preparing the Pipeline</h3>
+<p>Redoing some of the pipeline work we did before.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for creating model pipelines</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Creating pipelines for the four ML algorithm we will be using.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create pipelines dictionary</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pipelines <span class="op">=</span> {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'lasso'</span> : make_pipeline(StandardScaler(), Lasso(random_state<span class="op">=</span><span class="dv">123</span>)),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ridge'</span> : make_pipeline(StandardScaler(), Ridge(random_state<span class="op">=</span><span class="dv">123</span>)),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'enet'</span>  : make_pipeline(StandardScaler(), ElasticNet(random_state<span class="op">=</span><span class="dv">123</span>)),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'rf'</span>    : make_pipeline(StandardScaler(), RandomForestRegressor(random_state<span class="op">=</span><span class="dv">123</span>))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="prepating-the-hyperparameter-grid" class="level3">
+<h3 class="anchored" data-anchor-id="prepating-the-hyperparameter-grid">Prepating the Hyperparameter Grid</h3>
+<p>Similarly, we prepare the hyperparameter grid again.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lasso hyperparameters</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>lasso_hyperparameters <span class="op">=</span> { </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'lasso__alpha'</span> : [<span class="fl">0.001</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>] </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ridge hyperparameters</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>ridge_hyperparameters <span class="op">=</span> { </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ridge__alpha'</span>: [<span class="fl">0.001</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>]  </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Elastic Net hyperparameters</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>enet_hyperparameters <span class="op">=</span> { </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'elasticnet__alpha'</span>: [<span class="fl">0.001</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>],                        </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'elasticnet__l1_ratio'</span> : [<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.9</span>]  </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Random forest hyperparameters</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>rf_hyperparameters <span class="op">=</span> { </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">'randomforestregressor__n_estimators'</span> : [<span class="dv">100</span>, <span class="dv">200</span>],</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">'randomforestregressor__max_depth'</span>: [<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>] </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create hyperparameters dictionary</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>hyperparameters <span class="op">=</span> {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'rf'</span> : rf_hyperparameters,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'lasso'</span> : lasso_hyperparameters,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ridge'</span> : ridge_hyperparameters,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'enet'</span> : enet_hyperparameters</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="cross-validation-k-fold" class="level2">
+<h2 class="anchored" data-anchor-id="cross-validation-k-fold">2. Cross Validation: K-Fold</h2>
+<p>Now we can explore cross validation in depth. First, we import the cross_val_score.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Remember how we trained the fitted_models with a for loop? We will do the same but for scores.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create empty dictionary called fitted_models</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>fitted_model_scores_1 <span class="op">=</span> {}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through model pipelines, tuning each one and saving it to fitted_models</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, pipeline <span class="kw">in</span> pipelines.items():</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> cross_val_score(pipeline, X_train, y_train, cv<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store model in fitted_models[name] </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    fitted_model_scores_1[name] <span class="op">=</span> scores</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print '{name} has been fitted'</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="st">'has been fitted.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lasso has been fitted.
+ridge has been fitted.
+enet has been fitted.
+rf has been fitted.</code></pre>
+</div>
+</div>
+<p>Let’s print out the scores and have a look.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fitted_model_scores_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>{'lasso': array([0.15975254, 0.48001185, 0.39938846, 0.47292976, 0.48761669]),
+ 'ridge': array([0.16610518, 0.48022396, 0.40262017, 0.47286842, 0.48850554]),
+ 'enet': array([0.34223388, 0.44537574, 0.44792471, 0.43065937, 0.4702253 ]),
+ 'rf': array([0.78695297, 0.77012498, 0.83166131, 0.85343169, 0.82879723])}</code></pre>
+</div>
+</div>
+<p>Let’s see how each fold looks like for different models.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> pipelines.items():</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    plt.hist(fitted_model_scores_1[name[<span class="dv">0</span>]])</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    plt.title(name[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-15-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-15-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Let’s learn how to increase the k-fold.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create empty dictionary called fitted_models</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>fitted_model_scores_2 <span class="op">=</span> {}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through model pipelines, tuning each one and saving it to fitted_models</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, pipeline <span class="kw">in</span> pipelines.items():</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> cross_val_score(pipeline, X_train, y_train, cv<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store model in fitted_models[name] </span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    fitted_model_scores_2[name] <span class="op">=</span> scores</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print '{name} has been fitted'</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="st">'has been fitted.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lasso has been fitted.
+ridge has been fitted.
+enet has been fitted.
+rf has been fitted.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> pipelines.items():</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    plt.hist(fitted_model_scores_2[name[<span class="dv">0</span>]])</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    plt.title(name[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-18-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-18-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-18-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fitted_model_scores_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>{'lasso': array([ 0.54631978, -0.26425775,  0.42548032,  0.55673797,  0.46628121,
+         0.38466995,  0.43394662,  0.51951401,  0.44292146,  0.54918932]),
+ 'ridge': array([ 0.54633541, -0.25561986,  0.42549255,  0.55672907,  0.46779768,
+         0.38571837,  0.43367191,  0.52016423,  0.44298798,  0.55072031]),
+ 'enet': array([0.49322344, 0.14822993, 0.41462816, 0.48855748, 0.48695942,
+        0.41520358, 0.40693787, 0.46485891, 0.43773549, 0.5192369 ]),
+ 'rf': array([0.82478487, 0.75625198, 0.70936966, 0.84524761, 0.87465912,
+        0.80344629, 0.88981295, 0.82766739, 0.83067983, 0.83648088])}</code></pre>
+</div>
+</div>
+</section>
+<section id="cross-validation-with-multiple-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="cross-validation-with-multiple-metrics">3. Cross Validation with Multiple Metrics</h2>
+<p>We can also pass different or multiple metrics to Cross Validation. We do this by importing cross_validate function.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_validate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s define what scoring metric we want to cross validate the model with.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>scoring <span class="op">=</span> [<span class="st">'neg_mean_absolute_error'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create empty dictionary called fitted_models</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>fitted_model_scores_3 <span class="op">=</span> {}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through model pipelines, tuning each one and saving it to fitted_models</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, pipeline <span class="kw">in</span> pipelines.items():</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> cross_validate(pipeline, X_train, y_train, scoring<span class="op">=</span>scoring, cv<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store model in fitted_models[name] </span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    fitted_model_scores_3[name] <span class="op">=</span> scores</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print '{name} has been fitted'</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="st">'has been fitted.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lasso has been fitted.
+ridge has been fitted.
+enet has been fitted.
+rf has been fitted.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fitted_model_scores_3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>{'lasso': {'fit_time': array([0.04013705, 0.03944993, 0.03939509]),
+  'score_time': array([0.00283194, 0.00327826, 0.003088  ]),
+  'test_neg_mean_absolute_error': array([-88413.07217754, -90007.89574623, -92387.82389343])},
+ 'ridge': {'fit_time': array([0.00876427, 0.00746608, 0.0073452 ]),
+  'score_time': array([0.0032568 , 0.00270581, 0.00319886]),
+  'test_neg_mean_absolute_error': array([-88224.08978475, -89961.95976848, -92208.47454546])},
+ 'enet': {'fit_time': array([0.00907493, 0.00724626, 0.00798297]),
+  'score_time': array([0.00274611, 0.0026648 , 0.002882  ]),
+  'test_neg_mean_absolute_error': array([-88020.82230937, -89883.49033678, -94598.97775979])},
+ 'rf': {'fit_time': array([0.85999203, 0.81158781, 0.84143686]),
+  'score_time': array([0.0178318 , 0.01601195, 0.01247787]),
+  'test_neg_mean_absolute_error': array([-51592.72839034, -44965.49754527, -50713.87923387])}}</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> pipelines.items():</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    plt.hist((fitted_model_scores_3[name[<span class="dv">0</span>]][<span class="st">'test_neg_mean_absolute_error'</span>]))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    plt.title(name[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-25-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-25-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-25-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-25-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Here is a sample with multiple metrics.</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>scoring <span class="op">=</span> [<span class="st">'neg_mean_absolute_error'</span>, <span class="st">'neg_mean_squared_error'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create empty dictionary called fitted_models</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>fitted_model_scores_4 <span class="op">=</span> {}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through model pipelines, tuning each one and saving it to fitted_models</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, pipeline <span class="kw">in</span> pipelines.items():</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> cross_validate(pipeline, X_train, y_train, scoring<span class="op">=</span>scoring, cv<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store model in fitted_models[name] </span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    fitted_model_scores_4[name] <span class="op">=</span> scores</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print '{name} has been fitted'</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="st">'has been fitted.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lasso has been fitted.
+ridge has been fitted.
+enet has been fitted.
+rf has been fitted.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>fitted_model_scores_4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>{'lasso': {'fit_time': array([0.03495312, 0.03885889, 0.03664207]),
+  'score_time': array([0.00305605, 0.00346708, 0.0034399 ]),
+  'test_neg_mean_absolute_error': array([-88413.07217754, -90007.89574623, -92387.82389343]),
+  'test_neg_mean_squared_error': array([-1.68605738e+10, -1.28043719e+10, -1.35176446e+10])},
+ 'ridge': {'fit_time': array([0.00812507, 0.00675607, 0.00666809]),
+  'score_time': array([0.0029521 , 0.00297093, 0.00297093]),
+  'test_neg_mean_absolute_error': array([-88224.08978475, -89961.95976848, -92208.47454546]),
+  'test_neg_mean_squared_error': array([-1.66621655e+10, -1.27788700e+10, -1.34733543e+10])},
+ 'enet': {'fit_time': array([0.00879383, 0.00821614, 0.00784707]),
+  'score_time': array([0.00306726, 0.00332284, 0.00333881]),
+  'test_neg_mean_absolute_error': array([-88020.82230937, -89883.49033678, -94598.97775979]),
+  'test_neg_mean_squared_error': array([-1.37464994e+10, -1.26501721e+10, -1.40769198e+10])},
+ 'rf': {'fit_time': array([0.82082033, 0.7161181 , 0.70017934]),
+  'score_time': array([0.01328492, 0.01253295, 0.01866484]),
+  'test_neg_mean_absolute_error': array([-51592.72839034, -44965.49754527, -50713.87923387]),
+  'test_neg_mean_squared_error': array([-5.71101122e+09, -3.61151232e+09, -4.63051093e+09])}}</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> pipelines.items():</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    plt.hist(fitted_model_scores_4[name[<span class="dv">0</span>]][<span class="st">'test_neg_mean_absolute_error'</span>])</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    plt.title(name[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-30-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-30-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-30-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-30-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name <span class="kw">in</span> pipelines.items():</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    plt.hist(fitted_model_scores_4[name[<span class="dv">0</span>]][<span class="st">'test_neg_mean_squared_error'</span>])</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    plt.title(name[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-31-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-31-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-31-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-31-output-4.png" class="img-fluid"></p>
+</div>
+</div>
+<p>You can view the full list of scorers as follows.</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(sklearn.metrics.SCORERS.keys())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>['accuracy',
+ 'adjusted_mutual_info_score',
+ 'adjusted_rand_score',
+ 'average_precision',
+ 'balanced_accuracy',
+ 'completeness_score',
+ 'explained_variance',
+ 'f1',
+ 'f1_macro',
+ 'f1_micro',
+ 'f1_samples',
+ 'f1_weighted',
+ 'fowlkes_mallows_score',
+ 'homogeneity_score',
+ 'jaccard',
+ 'jaccard_macro',
+ 'jaccard_micro',
+ 'jaccard_samples',
+ 'jaccard_weighted',
+ 'max_error',
+ 'mutual_info_score',
+ 'neg_brier_score',
+ 'neg_log_loss',
+ 'neg_mean_absolute_error',
+ 'neg_mean_gamma_deviance',
+ 'neg_mean_poisson_deviance',
+ 'neg_mean_squared_error',
+ 'neg_mean_squared_log_error',
+ 'neg_median_absolute_error',
+ 'neg_root_mean_squared_error',
+ 'normalized_mutual_info_score',
+ 'precision',
+ 'precision_macro',
+ 'precision_micro',
+ 'precision_samples',
+ 'precision_weighted',
+ 'r2',
+ 'recall',
+ 'recall_macro',
+ 'recall_micro',
+ 'recall_samples',
+ 'recall_weighted',
+ 'roc_auc',
+ 'roc_auc_ovo',
+ 'roc_auc_ovo_weighted',
+ 'roc_auc_ovr',
+ 'roc_auc_ovr_weighted',
+ 'v_measure_score']</code></pre>
+</div>
+</div>
+</section>
+<section id="gridsearchcv-with-emphasis-on-cv" class="level2">
+<h2 class="anchored" data-anchor-id="gridsearchcv-with-emphasis-on-cv">4. GridSearchCV with Emphasis on CV</h2>
+<p>Now that we understand CV better, let’s revisit GridSearchCV and see what else we can work on.</p>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Helper for cross-validation</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Just a reminder on how the GridSearchCV works.</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create empty dictionary called fitted_models</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>fitted_models_1 <span class="op">=</span> {}</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>fitted_models_scores_1 <span class="op">=</span> {}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through model pipelines, tuning each one and saving it to fitted_models</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, pipeline <span class="kw">in</span> pipelines.items():</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> GridSearchCV(pipeline, hyperparameters[name], cv<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit model on X_train, y_train</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    model.fit(X_train, y_train)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store model in fitted_models[name] </span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    fitted_models_1[name] <span class="op">=</span> model</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    fitted_models_scores_1[name] <span class="op">=</span> model.cv_results_</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print '{name} has been fitted'</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="st">'has been fitted.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lasso has been fitted.
+ridge has been fitted.
+enet has been fitted.
+rf has been fitted.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>fitted_models_scores_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>{'lasso': {'mean_fit_time': array([0.03800941, 0.03439872, 0.03481212, 0.03497357, 0.03516381,
+         0.03406255, 0.03560195, 0.03648181, 0.03481658]),
+  'std_fit_time': array([0.0023328 , 0.00225269, 0.00193523, 0.00170912, 0.00118601,
+         0.00053835, 0.00196446, 0.00169489, 0.001596  ]),
+  'mean_score_time': array([0.00224223, 0.00204132, 0.00210767, 0.00221045, 0.00217035,
+         0.0020051 , 0.0021209 , 0.00236652, 0.00205884]),
+  'std_score_time': array([1.81440461e-04, 1.67702668e-04, 2.38907570e-04, 3.60275640e-04,
+         2.13054248e-04, 7.47363719e-05, 1.28336761e-04, 2.77823646e-04,
+         9.22713291e-05]),
+  'param_lasso__alpha': masked_array(data=[0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10],
+               mask=[False, False, False, False, False, False, False, False,
+                     False],
+         fill_value='?',
+              dtype=object),
+  'params': [{'lasso__alpha': 0.001},
+   {'lasso__alpha': 0.005},
+   {'lasso__alpha': 0.01},
+   {'lasso__alpha': 0.05},
+   {'lasso__alpha': 0.1},
+   {'lasso__alpha': 0.5},
+   {'lasso__alpha': 1},
+   {'lasso__alpha': 5},
+   {'lasso__alpha': 10}],
+  'split0_test_score': array([0.54630822, 0.54630827, 0.54630833, 0.54630879, 0.54630938,
+         0.54631401, 0.54631978, 0.54635223, 0.54639255]),
+  'split1_test_score': array([-0.26441629, -0.26441563, -0.2644148 , -0.26440818, -0.2643999 ,
+         -0.26433368, -0.26425775, -0.26361119, -0.26279012]),
+  'split2_test_score': array([0.42545917, 0.42545926, 0.42545936, 0.42546021, 0.42546127,
+         0.42546974, 0.42548032, 0.42555981, 0.42564838]),
+  'split3_test_score': array([0.55672026, 0.55672033, 0.55672042, 0.55672113, 0.55672201,
+         0.55672911, 0.55673797, 0.55680704, 0.55689141]),
+  'split4_test_score': array([0.46622306, 0.4662233 , 0.46622359, 0.46622592, 0.46622883,
+         0.46625212, 0.46628121, 0.46651277, 0.46680773]),
+  'split5_test_score': array([0.38462414, 0.38462433, 0.38462456, 0.38462639, 0.38462869,
+         0.38464704, 0.38466995, 0.38485163, 0.38507585]),
+  'split6_test_score': array([0.43397518, 0.43397507, 0.43397492, 0.43397378, 0.43397235,
+         0.43396092, 0.43394662, 0.43384325, 0.4337155 ]),
+  'split7_test_score': array([0.51945938, 0.5194596 , 0.51945988, 0.51946207, 0.5194648 ,
+         0.51948668, 0.51951401, 0.51972736, 0.51996082]),
+  'split8_test_score': array([0.44289871, 0.4428988 , 0.44289892, 0.44289983, 0.44290097,
+         0.44291008, 0.44292146, 0.44300279, 0.44310555]),
+  'split9_test_score': array([0.5491232 , 0.54912347, 0.54912379, 0.54912642, 0.5491297 ,
+         0.54915596, 0.54918932, 0.54945347, 0.54978502]),
+  'mean_test_score': array([0.4060375 , 0.40603768, 0.4060379 , 0.40603964, 0.40604181,
+         0.4060592 , 0.40608029, 0.40624991, 0.40645927]),
+  'std_test_score': array([0.23061327, 0.23061312, 0.23061292, 0.2306114 , 0.23060949,
+         0.2305942 , 0.23057712, 0.23042763, 0.23023554]),
+  'rank_test_score': array([9, 8, 7, 6, 5, 4, 3, 2, 1], dtype=int32)},
+ 'ridge': {'mean_fit_time': array([0.00638502, 0.00710256, 0.00724015, 0.00731859, 0.00739005,
+         0.00677478, 0.00737693, 0.00711024, 0.00713401]),
+  'std_fit_time': array([0.0006272 , 0.00052595, 0.00060638, 0.0003965 , 0.00057467,
+         0.00053858, 0.00067487, 0.00057799, 0.00055242]),
+  'mean_score_time': array([0.00250669, 0.00264394, 0.00273156, 0.00280352, 0.00290911,
+         0.00274098, 0.00285964, 0.00270171, 0.00276947]),
+  'std_score_time': array([0.00022101, 0.00024724, 0.00020752, 0.00013919, 0.0001473 ,
+         0.00015811, 0.00017399, 0.0002071 , 0.00026444]),
+  'param_ridge__alpha': masked_array(data=[0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10],
+               mask=[False, False, False, False, False, False, False, False,
+                     False],
+         fill_value='?',
+              dtype=object),
+  'params': [{'ridge__alpha': 0.001},
+   {'ridge__alpha': 0.005},
+   {'ridge__alpha': 0.01},
+   {'ridge__alpha': 0.05},
+   {'ridge__alpha': 0.1},
+   {'ridge__alpha': 0.5},
+   {'ridge__alpha': 1},
+   {'ridge__alpha': 5},
+   {'ridge__alpha': 10}],
+  'split0_test_score': array([0.54630807, 0.54630829, 0.54630857, 0.5463107 , 0.54631321,
+         0.54632779, 0.54633541, 0.54624394, 0.54606067]),
+  'split1_test_score': array([-0.26440606, -0.26436676, -0.26431769, -0.26392723, -0.26344435,
+         -0.25977577, -0.25561986, -0.23266332, -0.21553776]),
+  'split2_test_score': array([0.42545932, 0.42545947, 0.42545965, 0.42546108, 0.42546286,
+         0.42547643, 0.42549255, 0.42563765, 0.42586877]),
+  'split3_test_score': array([0.55672001, 0.5567202 , 0.55672044, 0.55672225, 0.55672431,
+         0.55673313, 0.55672907, 0.55645694, 0.55598618]),
+  'split4_test_score': array([0.46622353, 0.46623089, 0.46624008, 0.46631304, 0.46640285,
+         0.46707063, 0.46779768, 0.47135688, 0.47365515]),
+  'split5_test_score': array([0.38462491, 0.38462989, 0.3846361 , 0.38468547, 0.38474641,
+         0.38520544, 0.38571837, 0.38851372, 0.39070018]),
+  'split6_test_score': array([0.43397534, 0.4339739 , 0.4339721 , 0.43395781, 0.43394024,
+         0.4338105 , 0.43367191, 0.4330973 , 0.43292558]),
+  'split7_test_score': array([0.5194588 , 0.51946224, 0.51946655, 0.51950063, 0.51954241,
+         0.51984664, 0.52016423, 0.52145777, 0.52196299]),
+  'split8_test_score': array([0.4428989 , 0.44289931, 0.44289983, 0.44290394, 0.44290899,
+         0.44294652, 0.44298798, 0.44325255, 0.44357758]),
+  'split9_test_score': array([0.54912324, 0.54913073, 0.54914008, 0.54921426, 0.54930558,
+         0.54998393, 0.55072031, 0.55421412, 0.55621993]),
+  'mean_test_score': array([0.40603861, 0.40604482, 0.40605257, 0.4061142 , 0.40619025,
+         0.40676252, 0.40739977, 0.41075676, 0.41314193]),
+  'std_test_score': array([0.23061025, 0.23059962, 0.23058635, 0.23048072, 0.23035002,
+         0.22935479, 0.22822271, 0.22189031, 0.2170872 ]),
+  'rank_test_score': array([9, 8, 7, 6, 5, 4, 3, 2, 1], dtype=int32)},
+ 'enet': {'mean_fit_time': array([0.03646719, 0.03478115, 0.03568556, 0.0371171 , 0.03639307,
+         0.03948061, 0.03729475, 0.03497593, 0.03339403, 0.03409812,
+         0.03535633, 0.03849101, 0.03700299, 0.03718309, 0.03336246,
+         0.011272  , 0.01244626, 0.01521165, 0.02101507, 0.04001877,
+         0.0086132 , 0.0086736 , 0.0095576 , 0.01293349, 0.02494125,
+         0.00666144, 0.00655169, 0.00684302, 0.00736504, 0.00857484,
+         0.00597348, 0.00642853, 0.00715697, 0.00701458, 0.00774856,
+         0.00566113, 0.00567534, 0.00570924, 0.00579934, 0.00625815,
+         0.00551906, 0.00565634, 0.00552769, 0.00556307, 0.00601642]),
+  'std_fit_time': array([4.95867641e-03, 2.52260045e-03, 2.18364826e-03, 1.98579753e-03,
+         1.78210269e-03, 1.40618020e-03, 1.87883411e-03, 9.41074924e-04,
+         6.99019578e-04, 1.43605512e-03, 8.02391788e-04, 1.54936693e-03,
+         5.24674564e-04, 1.75819622e-03, 1.38031433e-03, 1.31244731e-04,
+         6.71147387e-04, 1.43883229e-03, 2.25675948e-03, 2.20529474e-03,
+         2.29316616e-04, 1.44438928e-04, 2.02214919e-04, 6.33614749e-04,
+         1.28871732e-03, 1.91803811e-04, 1.47517103e-04, 1.19280129e-04,
+         3.09550270e-04, 2.04041574e-04, 1.56103523e-04, 4.18589019e-04,
+         5.85608801e-04, 2.76415740e-04, 4.29491450e-04, 8.71316183e-05,
+         1.39934624e-04, 1.57394081e-04, 9.01879091e-05, 1.65511414e-04,
+         1.39951552e-04, 2.19610282e-04, 7.17398137e-05, 8.15638845e-05,
+         3.07326136e-04]),
+  'mean_score_time': array([0.00234451, 0.00226562, 0.0023658 , 0.00226302, 0.00219789,
+         0.00221739, 0.00228033, 0.00210705, 0.00205786, 0.00216577,
+         0.00214691, 0.00209053, 0.00202637, 0.00222304, 0.00216799,
+         0.00206957, 0.00216198, 0.00230117, 0.00235052, 0.0022845 ,
+         0.0020056 , 0.00203946, 0.0020129 , 0.00229805, 0.0021863 ,
+         0.00197258, 0.00198717, 0.00199757, 0.00203815, 0.00202718,
+         0.00198507, 0.0021594 , 0.00224247, 0.00204515, 0.00206258,
+         0.00200415, 0.00197446, 0.00198302, 0.00200138, 0.00200312,
+         0.00196807, 0.00201983, 0.00198147, 0.00197453, 0.00206366]),
+  'std_score_time': array([2.26201521e-04, 1.62478826e-04, 2.17418776e-04, 2.34601187e-04,
+         1.89940174e-04, 2.31012919e-04, 2.93932771e-04, 2.12389640e-04,
+         1.00545050e-04, 1.27932150e-04, 1.18497526e-04, 1.48702990e-04,
+         7.12541197e-05, 2.83499109e-04, 1.64263335e-04, 9.74362333e-05,
+         2.33083398e-04, 3.75975982e-04, 4.55619087e-04, 2.19052354e-04,
+         6.04459939e-05, 6.54382736e-05, 3.56184989e-05, 1.82384636e-04,
+         2.26595305e-04, 3.85050360e-05, 8.95907611e-05, 6.62213516e-05,
+         8.97120801e-05, 9.34510932e-05, 5.71192402e-05, 2.76843720e-04,
+         1.40220783e-04, 1.23248985e-04, 6.96168738e-05, 4.73815163e-05,
+         2.95495279e-05, 4.03314044e-05, 6.08788852e-05, 4.65018982e-05,
+         3.22168790e-05, 6.91261604e-05, 2.44760681e-05, 3.64432449e-05,
+         2.11387516e-04]),
+  'param_elasticnet__alpha': masked_array(data=[0.001, 0.001, 0.001, 0.001, 0.001, 0.005, 0.005, 0.005,
+                     0.005, 0.005, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05,
+                     0.05, 0.05, 0.05, 0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 0.5,
+                     0.5, 0.5, 0.5, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 10, 10,
+                     10, 10, 10],
+               mask=[False, False, False, False, False, False, False, False,
+                     False, False, False, False, False, False, False, False,
+                     False, False, False, False, False, False, False, False,
+                     False, False, False, False, False, False, False, False,
+                     False, False, False, False, False, False, False, False,
+                     False, False, False, False, False],
+         fill_value='?',
+              dtype=object),
+  'param_elasticnet__l1_ratio': masked_array(data=[0.1, 0.3, 0.5, 0.7, 0.9, 0.1, 0.3, 0.5, 0.7, 0.9, 0.1,
+                     0.3, 0.5, 0.7, 0.9, 0.1, 0.3, 0.5, 0.7, 0.9, 0.1, 0.3,
+                     0.5, 0.7, 0.9, 0.1, 0.3, 0.5, 0.7, 0.9, 0.1, 0.3, 0.5,
+                     0.7, 0.9, 0.1, 0.3, 0.5, 0.7, 0.9, 0.1, 0.3, 0.5, 0.7,
+                     0.9],
+               mask=[False, False, False, False, False, False, False, False,
+                     False, False, False, False, False, False, False, False,
+                     False, False, False, False, False, False, False, False,
+                     False, False, False, False, False, False, False, False,
+                     False, False, False, False, False, False, False, False,
+                     False, False, False, False, False],
+         fill_value='?',
+              dtype=object),
+  'params': [{'elasticnet__alpha': 0.001, 'elasticnet__l1_ratio': 0.1},
+   {'elasticnet__alpha': 0.001, 'elasticnet__l1_ratio': 0.3},
+   {'elasticnet__alpha': 0.001, 'elasticnet__l1_ratio': 0.5},
+   {'elasticnet__alpha': 0.001, 'elasticnet__l1_ratio': 0.7},
+   {'elasticnet__alpha': 0.001, 'elasticnet__l1_ratio': 0.9},
+   {'elasticnet__alpha': 0.005, 'elasticnet__l1_ratio': 0.1},
+   {'elasticnet__alpha': 0.005, 'elasticnet__l1_ratio': 0.3},
+   {'elasticnet__alpha': 0.005, 'elasticnet__l1_ratio': 0.5},
+   {'elasticnet__alpha': 0.005, 'elasticnet__l1_ratio': 0.7},
+   {'elasticnet__alpha': 0.005, 'elasticnet__l1_ratio': 0.9},
+   {'elasticnet__alpha': 0.01, 'elasticnet__l1_ratio': 0.1},
+   {'elasticnet__alpha': 0.01, 'elasticnet__l1_ratio': 0.3},
+   {'elasticnet__alpha': 0.01, 'elasticnet__l1_ratio': 0.5},
+   {'elasticnet__alpha': 0.01, 'elasticnet__l1_ratio': 0.7},
+   {'elasticnet__alpha': 0.01, 'elasticnet__l1_ratio': 0.9},
+   {'elasticnet__alpha': 0.05, 'elasticnet__l1_ratio': 0.1},
+   {'elasticnet__alpha': 0.05, 'elasticnet__l1_ratio': 0.3},
+   {'elasticnet__alpha': 0.05, 'elasticnet__l1_ratio': 0.5},
+   {'elasticnet__alpha': 0.05, 'elasticnet__l1_ratio': 0.7},
+   {'elasticnet__alpha': 0.05, 'elasticnet__l1_ratio': 0.9},
+   {'elasticnet__alpha': 0.1, 'elasticnet__l1_ratio': 0.1},
+   {'elasticnet__alpha': 0.1, 'elasticnet__l1_ratio': 0.3},
+   {'elasticnet__alpha': 0.1, 'elasticnet__l1_ratio': 0.5},
+   {'elasticnet__alpha': 0.1, 'elasticnet__l1_ratio': 0.7},
+   {'elasticnet__alpha': 0.1, 'elasticnet__l1_ratio': 0.9},
+   {'elasticnet__alpha': 0.5, 'elasticnet__l1_ratio': 0.1},
+   {'elasticnet__alpha': 0.5, 'elasticnet__l1_ratio': 0.3},
+   {'elasticnet__alpha': 0.5, 'elasticnet__l1_ratio': 0.5},
+   {'elasticnet__alpha': 0.5, 'elasticnet__l1_ratio': 0.7},
+   {'elasticnet__alpha': 0.5, 'elasticnet__l1_ratio': 0.9},
+   {'elasticnet__alpha': 1, 'elasticnet__l1_ratio': 0.1},
+   {'elasticnet__alpha': 1, 'elasticnet__l1_ratio': 0.3},
+   {'elasticnet__alpha': 1, 'elasticnet__l1_ratio': 0.5},
+   {'elasticnet__alpha': 1, 'elasticnet__l1_ratio': 0.7},
+   {'elasticnet__alpha': 1, 'elasticnet__l1_ratio': 0.9},
+   {'elasticnet__alpha': 5, 'elasticnet__l1_ratio': 0.1},
+   {'elasticnet__alpha': 5, 'elasticnet__l1_ratio': 0.3},
+   {'elasticnet__alpha': 5, 'elasticnet__l1_ratio': 0.5},
+   {'elasticnet__alpha': 5, 'elasticnet__l1_ratio': 0.7},
+   {'elasticnet__alpha': 5, 'elasticnet__l1_ratio': 0.9},
+   {'elasticnet__alpha': 10, 'elasticnet__l1_ratio': 0.1},
+   {'elasticnet__alpha': 10, 'elasticnet__l1_ratio': 0.3},
+   {'elasticnet__alpha': 10, 'elasticnet__l1_ratio': 0.5},
+   {'elasticnet__alpha': 10, 'elasticnet__l1_ratio': 0.7},
+   {'elasticnet__alpha': 10, 'elasticnet__l1_ratio': 0.9}],
+  'split0_test_score': array([0.54633651, 0.54633553, 0.54633208, 0.54632556, 0.54631517,
+         0.54620743, 0.54625444, 0.54629717, 0.54632909, 0.54633211,
+         0.54598196, 0.54608374, 0.54618314, 0.54627658, 0.54633632,
+         0.54353881, 0.54432853, 0.54504084, 0.54565866, 0.5461831 ,
+         0.53935878, 0.54131671, 0.54311971, 0.54469536, 0.54593021,
+         0.49866154, 0.50989165, 0.52145395, 0.53293279, 0.54311888,
+         0.45446971, 0.47280781, 0.49322344, 0.5156474 , 0.53833674,
+         0.2856366 , 0.3161537 , 0.35539737, 0.40940608, 0.49321169,
+         0.20118505, 0.23131546, 0.27266512, 0.33440402, 0.44597235]),
+  'split1_test_score': array([-0.25400704, -0.25608994, -0.25829163, -0.26062632, -0.26311112,
+         -0.2284623 , -0.23400238, -0.24049852, -0.24836206, -0.25829109,
+         -0.21007579, -0.21729176, -0.22596552, -0.23710993, -0.25300661,
+         -0.13719982, -0.15326837, -0.17132338, -0.19301564, -0.22596617,
+         -0.07841134, -0.10240118, -0.12970454, -0.16198716, -0.20684527,
+          0.13357155,  0.09764331,  0.04916452, -0.01998892, -0.12971423,
+          0.22087045,  0.19216607,  0.14822993,  0.07534165, -0.0674212 ,
+          0.26855529,  0.27845556,  0.28174378,  0.26392445,  0.14819005,
+          0.21587764,  0.23829553,  0.26267557,  0.28141795,  0.23152264]),
+  'split2_test_score': array([0.42549768, 0.42548888, 0.42548015, 0.42547152, 0.42546316,
+         0.42568216, 0.42562494, 0.42557229, 0.42552459, 0.42548023,
+         0.4259713 , 0.42583884, 0.42571223, 0.42559807, 0.42550226,
+         0.42787693, 0.42747127, 0.42697138, 0.42637016, 0.42571254,
+         0.42880881, 0.42855039, 0.42804825, 0.42723409, 0.42603889,
+         0.4171682 , 0.42193095, 0.4259542 , 0.42854071, 0.4280502 ,
+         0.39327567, 0.40401053, 0.41462816, 0.42406724, 0.42886552,
+         0.261989  , 0.28870895, 0.32161511, 0.36314142, 0.41462236,
+         0.1850773 , 0.21283809, 0.25039612, 0.30423334, 0.38796135]),
+  'split3_test_score': array([0.55672378, 0.55673044, 0.55673354, 0.55673231, 0.55672583,
+         0.55636278, 0.5564841 , 0.55659611, 0.556688  , 0.5567336 ,
+         0.5557873 , 0.55604506, 0.55630032, 0.55654179, 0.55671943,
+         0.55113884, 0.55244898, 0.55373916, 0.55501731, 0.55630059,
+         0.54500562, 0.54777419, 0.55047601, 0.55309656, 0.55565888,
+         0.49489162, 0.5081371 , 0.52208483, 0.53646273, 0.55047765,
+         0.44446872, 0.46512923, 0.48855748, 0.51503204, 0.54360274,
+         0.2651266 , 0.29645699, 0.33731113, 0.39489636, 0.48854935,
+         0.17971026, 0.21002305, 0.25189915, 0.31536453, 0.43501302]),
+  'split4_test_score': array([0.4680661 , 0.46771022, 0.46732667, 0.46691198, 0.4664623 ,
+         0.47194258, 0.4711666 , 0.47021652, 0.46899684, 0.46732688,
+         0.47434527, 0.4734297 , 0.47228348, 0.47071817, 0.46823507,
+         0.48213461, 0.48062638, 0.47879711, 0.47639693, 0.47228473,
+         0.48679645, 0.48504983, 0.48280236, 0.47976237, 0.47474693,
+         0.48856343, 0.49100048, 0.49189115, 0.49012397, 0.48280556,
+         0.46966874, 0.47898323, 0.48695942, 0.49169219, 0.4875329 ,
+         0.32498445, 0.35668845, 0.39469783, 0.44004642, 0.48696359,
+         0.23129665, 0.26541662, 0.31106186, 0.37479591, 0.46476017]),
+  'split5_test_score': array([0.38591276, 0.38565712, 0.38538563, 0.38509634, 0.38478704,
+         0.38903614, 0.38834864, 0.38755495, 0.386601  , 0.3853858 ,
+         0.3914332 , 0.39046869, 0.3893505 , 0.38796789, 0.38603554,
+         0.40172946, 0.39953202, 0.39696289, 0.3938243 , 0.38935099,
+         0.40881617, 0.40611693, 0.40271995, 0.39830288, 0.3918766 ,
+         0.41643179, 0.41803807, 0.41782288, 0.41416891, 0.40272362,
+         0.4010908 , 0.40874695, 0.41520358, 0.41822785, 0.40995954,
+         0.28550901, 0.31095718, 0.34112991, 0.3771101 , 0.41517587,
+         0.20792482, 0.23663705, 0.27421592, 0.32535631, 0.39704403]),
+  'split6_test_score': array([0.43362532, 0.4336925 , 0.43376563, 0.43384493, 0.43393034,
+         0.4330331 , 0.43312076, 0.43325371, 0.43345543, 0.43376554,
+         0.4329207 , 0.43293214, 0.43300161, 0.43318035, 0.43359368,
+         0.43381962, 0.43362514, 0.43334899, 0.43303622, 0.43300132,
+         0.43369265, 0.43393484, 0.43388438, 0.43349651, 0.43292829,
+         0.41085432, 0.41859294, 0.42583867, 0.43168164, 0.43388697,
+         0.37710851, 0.391562  , 0.40693787, 0.42231633, 0.43348099,
+         0.23389635, 0.2602071 , 0.29403343, 0.34003082, 0.40692439,
+         0.16174863, 0.18733412, 0.22273112, 0.27594226, 0.37025543]),
+  'split7_test_score': array([0.52027711, 0.52012632, 0.51995977, 0.51977528, 0.51957036,
+         0.52161683, 0.5214022 , 0.52109861, 0.52065296, 0.51995997,
+         0.52204496, 0.52192865, 0.52170058, 0.5212642 , 0.52034756,
+         0.52001905, 0.52088621, 0.52160796, 0.5220625 , 0.52170132,
+         0.51524056, 0.51748901, 0.51954806, 0.52127054, 0.52207701,
+         0.47058022, 0.48254926, 0.49512353, 0.50791882, 0.51955107,
+         0.42519928, 0.44374615, 0.46485891, 0.48877439, 0.5140717 ,
+         0.26461284, 0.29283867, 0.32947569, 0.38089376, 0.46484882,
+         0.18715913, 0.21471173, 0.25265881, 0.30981146, 0.41672284]),
+  'split8_test_score': array([0.44300209, 0.44298105, 0.44295896, 0.44293571, 0.4429113 ,
+         0.44331817, 0.44323321, 0.44314849, 0.44306038, 0.44295904,
+         0.44371725, 0.44353673, 0.4433612 , 0.44319103, 0.44301242,
+         0.44677338, 0.44601483, 0.44517632, 0.44427179, 0.44336177,
+         0.44921401, 0.44831672, 0.4471224 , 0.44560574, 0.44381005,
+         0.44050405, 0.4454812 , 0.44917253, 0.45045077, 0.44712671,
+         0.41355418, 0.42580615, 0.43773549, 0.44754251, 0.44956836,
+         0.2703605 , 0.29845271, 0.33366916, 0.37940179, 0.43773626,
+         0.19104144, 0.21948914, 0.25828741, 0.31497907, 0.40750687]),
+  'split9_test_score': array([0.55099048, 0.55063107, 0.5502428 , 0.54982232, 0.54936599,
+         0.55475291, 0.55403588, 0.5531267 , 0.55192448, 0.55024304,
+         0.55675405, 0.55603771, 0.55505887, 0.55361048, 0.55116082,
+         0.55980087, 0.5596649 , 0.55919734, 0.55810531, 0.55506023,
+         0.55842136, 0.55932074, 0.55978373, 0.5594844 , 0.55704787,
+         0.52440593, 0.53482466, 0.54505149, 0.55425975, 0.55978612,
+         0.48092519, 0.49933103, 0.5192369 , 0.53999193, 0.55785125,
+         0.30085746, 0.33399775, 0.37651485, 0.43421901, 0.51920067,
+         0.20983436, 0.24211376, 0.28677668, 0.35378472, 0.47222184]),
+  'mean_test_score': array([0.40764248, 0.40732632, 0.40698936, 0.40662896, 0.40624204,
+         0.41134898, 0.41056684, 0.4096366 , 0.40848707, 0.40698951,
+         0.41388802, 0.41290095, 0.41169864, 0.41012386, 0.40779365,
+         0.42296317, 0.42113299, 0.41895186, 0.41617275, 0.41169904,
+         0.42869431, 0.42654682, 0.42378003, 0.42009613, 0.41432695,
+         0.42956326, 0.43280896, 0.43435577, 0.43265512, 0.42378126,
+         0.40806313, 0.41822891, 0.42755712, 0.43386335, 0.42958485,
+         0.27615281, 0.30329171, 0.33655883, 0.37830702, 0.4275423 ,
+         0.19708553, 0.22581746, 0.26433678, 0.31900896, 0.40289806]),
+  'std_test_score': array([0.22778147, 0.22835027, 0.22895029, 0.22958524, 0.23025959,
+         0.22071816, 0.22226308, 0.22406569, 0.22623431, 0.22895017,
+         0.21554141, 0.21758218, 0.22001967, 0.22312664, 0.22750794,
+         0.19430788, 0.19907816, 0.20438255, 0.21066958, 0.22002004,
+         0.17648442, 0.18382766, 0.19206766, 0.20164738, 0.21462419,
+         0.10564459, 0.11870924, 0.13547965, 0.15816116, 0.19207096,
+         0.07012377, 0.0826216 , 0.10011521, 0.12652998, 0.17308684,
+         0.02346183, 0.0262363 , 0.03232323, 0.04792496, 0.10012232,
+         0.01910558, 0.02049131, 0.02260429, 0.02863406, 0.06513393]),
+  'rank_test_score': array([31, 32, 34, 35, 36, 24, 25, 27, 28, 33, 20, 21, 23, 26, 30, 13, 14,
+         16, 18, 22,  7, 10, 12, 15, 19,  6,  3,  1,  4, 11, 29, 17,  8,  2,
+          5, 42, 41, 39, 38,  9, 45, 44, 43, 40, 37], dtype=int32)},
+ 'rf': {'mean_fit_time': array([0.46679814, 0.90723429, 0.80467272, 1.56896925, 0.99712422,
+         1.97579694]),
+  'std_fit_time': array([0.03012783, 0.06834149, 0.02444856, 0.04253559, 0.06072481,
+         0.06497377]),
+  'mean_score_time': array([0.00953147, 0.01507022, 0.00987225, 0.01676309, 0.01073267,
+         0.01945834]),
+  'std_score_time': array([0.00187331, 0.00189866, 0.00070007, 0.00218883, 0.00127535,
+         0.00297917]),
+  'param_randomforestregressor__max_depth': masked_array(data=[5, 5, 10, 10, 20, 20],
+               mask=[False, False, False, False, False, False],
+         fill_value='?',
+              dtype=object),
+  'param_randomforestregressor__n_estimators': masked_array(data=[100, 200, 100, 200, 100, 200],
+               mask=[False, False, False, False, False, False],
+         fill_value='?',
+              dtype=object),
+  'params': [{'randomforestregressor__max_depth': 5,
+    'randomforestregressor__n_estimators': 100},
+   {'randomforestregressor__max_depth': 5,
+    'randomforestregressor__n_estimators': 200},
+   {'randomforestregressor__max_depth': 10,
+    'randomforestregressor__n_estimators': 100},
+   {'randomforestregressor__max_depth': 10,
+    'randomforestregressor__n_estimators': 200},
+   {'randomforestregressor__max_depth': 20,
+    'randomforestregressor__n_estimators': 100},
+   {'randomforestregressor__max_depth': 20,
+    'randomforestregressor__n_estimators': 200}],
+  'split0_test_score': array([0.81193617, 0.81450747, 0.82858192, 0.8305018 , 0.82554376,
+         0.82835974]),
+  'split1_test_score': array([0.71436807, 0.71136195, 0.74905307, 0.75168977, 0.75182035,
+         0.75379145]),
+  'split2_test_score': array([0.68674655, 0.68792878, 0.70729465, 0.70763675, 0.70947241,
+         0.70916032]),
+  'split3_test_score': array([0.83256539, 0.83339716, 0.8483371 , 0.84938511, 0.84686605,
+         0.84851692]),
+  'split4_test_score': array([0.86555333, 0.86542714, 0.87251225, 0.8712882 , 0.87230204,
+         0.87157136]),
+  'split5_test_score': array([0.78099249, 0.78240959, 0.80249698, 0.80151194, 0.80213089,
+         0.80153879]),
+  'split6_test_score': array([0.86743515, 0.86699585, 0.88731096, 0.88925594, 0.88986804,
+         0.89011102]),
+  'split7_test_score': array([0.80533037, 0.80139625, 0.83420999, 0.82671912, 0.82882588,
+         0.82499113]),
+  'split8_test_score': array([0.81336564, 0.81194586, 0.8295595 , 0.83016747, 0.83201917,
+         0.83102147]),
+  'split9_test_score': array([0.82248165, 0.82048226, 0.83780186, 0.83737206, 0.83970103,
+         0.83989856]),
+  'mean_test_score': array([0.80007748, 0.79958523, 0.81971583, 0.81955282, 0.81985496,
+         0.81989608]),
+  'std_test_score': array([0.05592905, 0.05602101, 0.05178481, 0.0514612 , 0.05115072,
+         0.05100031]),
+  'rank_test_score': array([5, 6, 3, 4, 2, 1], dtype=int32)}}</code></pre>
+</div>
+</div>
+<p>Let’s try adding more than one evaluation metric to the GridSearchCV.</p>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>scoring <span class="op">=</span> [<span class="st">'neg_mean_absolute_error'</span>, <span class="st">'neg_mean_squared_error'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create empty dictionary called fitted_models</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>fitted_models_2 <span class="op">=</span> {}</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>fitted_models_scores_2 <span class="op">=</span> {}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through model pipelines, tuning each one and saving it to fitted_models</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, pipeline <span class="kw">in</span> pipelines.items():</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> GridSearchCV(pipeline, hyperparameters[name], refit<span class="op">=</span><span class="va">False</span>, scoring<span class="op">=</span>scoring, cv<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit model on X_train, y_train</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    model.fit(X_train, y_train)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store model in fitted_models[name] </span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>    fitted_models_2[name] <span class="op">=</span> model</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>    fitted_models_scores_2[name] <span class="op">=</span> model.cv_results_</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print '{name} has been fitted'</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="st">'has been fitted.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lasso has been fitted.
+ridge has been fitted.
+enet has been fitted.
+rf has been fitted.</code></pre>
+</div>
+</div>
+<p>Let’s see what the GridSearchCV will return.</p>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> fitted_models_scores_2[<span class="st">'lasso'</span>]<span class="co">#.mean_test_neg_mean_absolute_error</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>model[<span class="st">'mean_test_neg_mean_absolute_error'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>array([-90272.51506521, -90272.50329633, -90272.48858522, -90272.37089634,
+       -90272.22378523, -90271.05901522, -90269.5972724 , -90258.48704832,
+       -90244.97317376])</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> fitted_models_scores_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plotting-results" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-results">5. Plotting Results</h2>
+<p>Let’s see how to best visualize our results. First, let’s start how to narrow down our initial data set. As we have learnt, correlation was a good way to start.</p>
+<div class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>correlations <span class="op">=</span> base_df.corr()<span class="op">*</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">10</span>))</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>sns.heatmap(correlations, vmin<span class="op">=-</span><span class="dv">100</span>, annot<span class="op">=</span><span class="va">True</span>, fmt <span class="op">=</span> <span class="st">'0.0f'</span>, cmap<span class="op">=</span><span class="st">'RdBu_r'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<pre><code>&lt;AxesSubplot:&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Error%20Analysis%20Workbook_files/figure-html/cell-44-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>This is large set with not much dependency, let’s remember what we have learnt from dimensionality reduction.</p>
+<div class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>correlations.sort_values(by<span class="op">=</span><span class="st">'tx_price'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="45">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">tx_price</th>
+<th data-quarto-table-cell-role="th">beds</th>
+<th data-quarto-table-cell-role="th">baths</th>
+<th data-quarto-table-cell-role="th">sqft</th>
+<th data-quarto-table-cell-role="th">year_built</th>
+<th data-quarto-table-cell-role="th">lot_size</th>
+<th data-quarto-table-cell-role="th">basement</th>
+<th data-quarto-table-cell-role="th">restaurants</th>
+<th data-quarto-table-cell-role="th">groceries</th>
+<th data-quarto-table-cell-role="th">nightlife</th>
+<th data-quarto-table-cell-role="th">cafes</th>
+<th data-quarto-table-cell-role="th">shopping</th>
+<th data-quarto-table-cell-role="th">arts_entertainment</th>
+<th data-quarto-table-cell-role="th">beauty_spas</th>
+<th data-quarto-table-cell-role="th">active_life</th>
+<th data-quarto-table-cell-role="th">median_age</th>
+<th data-quarto-table-cell-role="th">married</th>
+<th data-quarto-table-cell-role="th">college_grad</th>
+<th data-quarto-table-cell-role="th">property_tax</th>
+<th data-quarto-table-cell-role="th">insurance</th>
+<th data-quarto-table-cell-role="th">median_school</th>
+<th data-quarto-table-cell-role="th">num_schools</th>
+<th data-quarto-table-cell-role="th">tx_year</th>
+<th data-quarto-table-cell-role="th">two_and_one</th>
+<th data-quarto-table-cell-role="th">newer_house</th>
+<th data-quarto-table-cell-role="th">school_score</th>
+<th data-quarto-table-cell-role="th">property_age</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Brick</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Brick veneer</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Combination</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Metal</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Missing</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Other</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Siding (Alum/Vinyl)</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Wood</th>
+<th data-quarto-table-cell-role="th">roof_Asphalt</th>
+<th data-quarto-table-cell-role="th">roof_Composition Shingle</th>
+<th data-quarto-table-cell-role="th">roof_Missing</th>
+<th data-quarto-table-cell-role="th">roof_Other</th>
+<th data-quarto-table-cell-role="th">roof_Shake Shingle</th>
+<th data-quarto-table-cell-role="th">property_type_Apartment / Condo / Townhouse</th>
+<th data-quarto-table-cell-role="th">property_type_Single-Family</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">tx_price</td>
+<td>100.000000</td>
+<td>38.768200</td>
+<td>39.861521</td>
+<td>48.685769</td>
+<td>3.415854</td>
+<td>18.524405</td>
+<td>10.914417</td>
+<td>-3.804467</td>
+<td>-9.381267</td>
+<td>0.922490</td>
+<td>-0.168902</td>
+<td>-3.952982</td>
+<td>-1.989786</td>
+<td>-5.435486</td>
+<td>-0.139341</td>
+<td>12.759898</td>
+<td>19.915406</td>
+<td>26.865475</td>
+<td>55.826613</td>
+<td>55.458276</td>
+<td>17.198876</td>
+<td>-1.498455</td>
+<td>11.068008</td>
+<td>-15.976537</td>
+<td>6.847192</td>
+<td>14.864131</td>
+<td>-0.542765</td>
+<td>-2.701546</td>
+<td>16.105963</td>
+<td>2.336987</td>
+<td>3.628351</td>
+<td>-2.289098</td>
+<td>-0.940938</td>
+<td>-5.055719</td>
+<td>1.896003</td>
+<td>1.001428</td>
+<td>8.918048</td>
+<td>-11.466899</td>
+<td>-2.059901</td>
+<td>2.602652</td>
+<td>-32.264149</td>
+<td>32.264149</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">property_tax</td>
+<td>55.826613</td>
+<td>54.489816</td>
+<td>50.786119</td>
+<td>64.039269</td>
+<td>-8.093367</td>
+<td>21.807582</td>
+<td>18.270137</td>
+<td>-9.414464</td>
+<td>-15.580291</td>
+<td>-4.682106</td>
+<td>-3.730839</td>
+<td>-3.449466</td>
+<td>-5.627807</td>
+<td>-5.174211</td>
+<td>-4.815731</td>
+<td>22.070725</td>
+<td>30.836109</td>
+<td>28.418250</td>
+<td>100.000000</td>
+<td>98.343043</td>
+<td>22.879475</td>
+<td>2.794810</td>
+<td>-26.524295</td>
+<td>-18.856321</td>
+<td>1.783517</td>
+<td>22.552138</td>
+<td>1.211880</td>
+<td>-0.781606</td>
+<td>17.588819</td>
+<td>0.103968</td>
+<td>5.120360</td>
+<td>1.567896</td>
+<td>0.609437</td>
+<td>-7.410540</td>
+<td>-4.192918</td>
+<td>3.273532</td>
+<td>13.213903</td>
+<td>-21.211074</td>
+<td>2.750041</td>
+<td>2.658554</td>
+<td>-44.937201</td>
+<td>44.937201</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">insurance</td>
+<td>55.458276</td>
+<td>47.939893</td>
+<td>45.417799</td>
+<td>56.949728</td>
+<td>-14.570961</td>
+<td>18.873090</td>
+<td>13.513540</td>
+<td>-0.960205</td>
+<td>-8.723509</td>
+<td>3.545252</td>
+<td>4.696217</td>
+<td>2.752236</td>
+<td>2.880272</td>
+<td>1.970053</td>
+<td>4.411942</td>
+<td>23.779182</td>
+<td>23.291394</td>
+<td>32.384314</td>
+<td>98.343043</td>
+<td>100.000000</td>
+<td>22.617764</td>
+<td>4.876223</td>
+<td>-26.187545</td>
+<td>-16.439545</td>
+<td>-0.159974</td>
+<td>23.549623</td>
+<td>7.505379</td>
+<td>4.019010</td>
+<td>24.196319</td>
+<td>-2.222247</td>
+<td>5.504490</td>
+<td>-9.170190</td>
+<td>2.045347</td>
+<td>-8.232567</td>
+<td>-1.524987</td>
+<td>2.256283</td>
+<td>10.533637</td>
+<td>-18.066080</td>
+<td>3.569905</td>
+<td>3.338014</td>
+<td>-41.013453</td>
+<td>41.013453</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">sqft</td>
+<td>48.685769</td>
+<td>68.863433</td>
+<td>66.907007</td>
+<td>100.000000</td>
+<td>23.488189</td>
+<td>32.583198</td>
+<td>27.017512</td>
+<td>-35.630572</td>
+<td>-37.410351</td>
+<td>-28.213486</td>
+<td>-30.280876</td>
+<td>-27.746691</td>
+<td>-29.164351</td>
+<td>-31.304191</td>
+<td>-33.244139</td>
+<td>11.028522</td>
+<td>48.786666</td>
+<td>5.419810</td>
+<td>64.039269</td>
+<td>56.949728</td>
+<td>21.406966</td>
+<td>-11.643283</td>
+<td>-24.107270</td>
+<td>-19.835366</td>
+<td>9.351319</td>
+<td>12.876604</td>
+<td>-28.470173</td>
+<td>-22.117430</td>
+<td>3.472529</td>
+<td>24.643136</td>
+<td>5.744764</td>
+<td>17.573044</td>
+<td>-6.457749</td>
+<td>3.284626</td>
+<td>-11.952945</td>
+<td>6.860890</td>
+<td>9.324665</td>
+<td>-12.955524</td>
+<td>-3.951918</td>
+<td>-1.285012</td>
+<td>-52.569940</td>
+<td>52.569940</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">baths</td>
+<td>39.861521</td>
+<td>64.016793</td>
+<td>100.000000</td>
+<td>66.907007</td>
+<td>18.845579</td>
+<td>18.649362</td>
+<td>34.405215</td>
+<td>-35.195857</td>
+<td>-34.084745</td>
+<td>-30.761340</td>
+<td>-31.987006</td>
+<td>-26.206117</td>
+<td>-30.298912</td>
+<td>-28.318516</td>
+<td>-32.814528</td>
+<td>9.589945</td>
+<td>44.674772</td>
+<td>0.873530</td>
+<td>50.786119</td>
+<td>45.417799</td>
+<td>15.632205</td>
+<td>-9.815790</td>
+<td>-13.290316</td>
+<td>-34.019960</td>
+<td>4.420348</td>
+<td>8.926370</td>
+<td>-21.348888</td>
+<td>-16.410433</td>
+<td>5.809466</td>
+<td>16.770944</td>
+<td>4.781206</td>
+<td>8.879169</td>
+<td>-9.562007</td>
+<td>8.133553</td>
+<td>-11.176424</td>
+<td>6.950624</td>
+<td>11.893119</td>
+<td>-22.089618</td>
+<td>-6.456185</td>
+<td>15.421941</td>
+<td>-33.910858</td>
+<td>33.910858</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">beds</td>
+<td>38.768200</td>
+<td>100.000000</td>
+<td>64.016793</td>
+<td>68.863433</td>
+<td>-2.820883</td>
+<td>22.875672</td>
+<td>41.308164</td>
+<td>-49.649739</td>
+<td>-42.165791</td>
+<td>-44.029714</td>
+<td>-46.477768</td>
+<td>-38.946148</td>
+<td>-44.061681</td>
+<td>-42.102480</td>
+<td>-48.598011</td>
+<td>13.346155</td>
+<td>64.627631</td>
+<td>-8.880031</td>
+<td>54.489816</td>
+<td>47.939893</td>
+<td>13.308375</td>
+<td>-13.050665</td>
+<td>-17.432885</td>
+<td>-26.722499</td>
+<td>2.112146</td>
+<td>4.867110</td>
+<td>-1.598851</td>
+<td>-18.516518</td>
+<td>2.662222</td>
+<td>16.896450</td>
+<td>4.911441</td>
+<td>9.833287</td>
+<td>-9.584948</td>
+<td>13.472574</td>
+<td>-16.077714</td>
+<td>6.660932</td>
+<td>23.357559</td>
+<td>-27.940251</td>
+<td>-11.109265</td>
+<td>3.992030</td>
+<td>-65.872890</td>
+<td>65.872890</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">property_type_Single-Family</td>
+<td>32.264149</td>
+<td>65.872890</td>
+<td>33.910858</td>
+<td>52.569940</td>
+<td>-26.951397</td>
+<td>25.053371</td>
+<td>25.329884</td>
+<td>-33.389891</td>
+<td>-26.988569</td>
+<td>-28.140625</td>
+<td>-30.898506</td>
+<td>-27.050573</td>
+<td>-26.193193</td>
+<td>-28.981873</td>
+<td>-31.831418</td>
+<td>18.325031</td>
+<td>50.857739</td>
+<td>-6.684907</td>
+<td>44.937201</td>
+<td>41.013453</td>
+<td>4.929324</td>
+<td>-6.846316</td>
+<td>-13.656081</td>
+<td>-14.847132</td>
+<td>-4.389083</td>
+<td>0.557217</td>
+<td>22.468509</td>
+<td>-19.444605</td>
+<td>8.664848</td>
+<td>17.143013</td>
+<td>2.057243</td>
+<td>1.194030</td>
+<td>-2.420394</td>
+<td>13.617900</td>
+<td>-9.851285</td>
+<td>10.229177</td>
+<td>11.781749</td>
+<td>-17.299058</td>
+<td>-6.979223</td>
+<td>0.865935</td>
+<td>-100.000000</td>
+<td>100.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">college_grad</td>
+<td>26.865475</td>
+<td>-8.880031</td>
+<td>0.873530</td>
+<td>5.419810</td>
+<td>-1.461140</td>
+<td>-7.145830</td>
+<td>-13.893247</td>
+<td>21.913691</td>
+<td>-0.346135</td>
+<td>25.748173</td>
+<td>27.069959</td>
+<td>18.151567</td>
+<td>24.103772</td>
+<td>18.116348</td>
+<td>32.711267</td>
+<td>16.959403</td>
+<td>-14.909466</td>
+<td>100.000000</td>
+<td>28.418250</td>
+<td>32.384314</td>
+<td>39.515917</td>
+<td>4.555040</td>
+<td>-19.366643</td>
+<td>5.492820</td>
+<td>-10.492670</td>
+<td>38.632548</td>
+<td>-3.379854</td>
+<td>11.774320</td>
+<td>13.286274</td>
+<td>-14.712534</td>
+<td>3.950539</td>
+<td>-1.543959</td>
+<td>4.807601</td>
+<td>-17.896693</td>
+<td>8.798029</td>
+<td>-6.549624</td>
+<td>3.625188</td>
+<td>-4.199882</td>
+<td>4.851116</td>
+<td>2.543127</td>
+<td>6.684907</td>
+<td>-6.684907</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">married</td>
+<td>19.915406</td>
+<td>64.627631</td>
+<td>44.674772</td>
+<td>48.786666</td>
+<td>3.541103</td>
+<td>18.534820</td>
+<td>44.717564</td>
+<td>-61.679836</td>
+<td>-50.828402</td>
+<td>-57.021120</td>
+<td>-58.357313</td>
+<td>-45.620023</td>
+<td>-55.540608</td>
+<td>-51.175528</td>
+<td>-63.358173</td>
+<td>4.191695</td>
+<td>100.000000</td>
+<td>-14.909466</td>
+<td>30.836109</td>
+<td>23.291394</td>
+<td>16.499294</td>
+<td>-21.574783</td>
+<td>-13.286258</td>
+<td>-23.456405</td>
+<td>0.186791</td>
+<td>2.325421</td>
+<td>-6.674775</td>
+<td>-25.391671</td>
+<td>-2.641664</td>
+<td>14.963761</td>
+<td>8.674426</td>
+<td>16.221649</td>
+<td>-13.359566</td>
+<td>17.863247</td>
+<td>-14.587208</td>
+<td>6.296620</td>
+<td>27.372947</td>
+<td>-31.718020</td>
+<td>-12.188694</td>
+<td>3.487084</td>
+<td>-50.857739</td>
+<td>50.857739</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">lot_size</td>
+<td>18.524405</td>
+<td>22.875672</td>
+<td>18.649362</td>
+<td>32.583198</td>
+<td>2.289983</td>
+<td>100.000000</td>
+<td>6.193354</td>
+<td>-15.082555</td>
+<td>-17.435020</td>
+<td>-10.245282</td>
+<td>-12.902829</td>
+<td>-14.546418</td>
+<td>-14.001166</td>
+<td>-16.444254</td>
+<td>-14.408827</td>
+<td>13.875365</td>
+<td>18.534820</td>
+<td>-7.145830</td>
+<td>21.807582</td>
+<td>18.873090</td>
+<td>12.034348</td>
+<td>-5.089225</td>
+<td>-8.212182</td>
+<td>-5.938640</td>
+<td>1.122427</td>
+<td>7.704260</td>
+<td>-4.222716</td>
+<td>-8.080172</td>
+<td>-2.140445</td>
+<td>14.275599</td>
+<td>0.764752</td>
+<td>0.365089</td>
+<td>-1.625286</td>
+<td>0.415493</td>
+<td>2.981861</td>
+<td>1.835292</td>
+<td>-5.229114</td>
+<td>6.933220</td>
+<td>-0.954415</td>
+<td>-2.621634</td>
+<td>-25.053371</td>
+<td>25.053371</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">median_school</td>
+<td>17.198876</td>
+<td>13.308375</td>
+<td>15.632205</td>
+<td>21.406966</td>
+<td>15.410444</td>
+<td>12.034348</td>
+<td>0.333643</td>
+<td>-6.560660</td>
+<td>-35.352375</td>
+<td>-3.541564</td>
+<td>-2.630134</td>
+<td>-4.731472</td>
+<td>-13.771509</td>
+<td>-9.801907</td>
+<td>0.914408</td>
+<td>-0.487633</td>
+<td>16.499294</td>
+<td>39.515917</td>
+<td>22.879475</td>
+<td>22.617764</td>
+<td>100.000000</td>
+<td>-14.995397</td>
+<td>-16.868295</td>
+<td>-6.971300</td>
+<td>1.978519</td>
+<td>81.329038</td>
+<td>-18.938700</td>
+<td>-10.130883</td>
+<td>10.752632</td>
+<td>5.347001</td>
+<td>7.083338</td>
+<td>3.323812</td>
+<td>1.706292</td>
+<td>-6.120598</td>
+<td>6.103916</td>
+<td>-11.284716</td>
+<td>9.582187</td>
+<td>-4.818784</td>
+<td>0.223297</td>
+<td>1.039417</td>
+<td>-4.929324</td>
+<td>4.929324</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">exterior_walls_Brick veneer</td>
+<td>16.105963</td>
+<td>2.662222</td>
+<td>5.809466</td>
+<td>3.472529</td>
+<td>-22.435981</td>
+<td>-2.140445</td>
+<td>0.828742</td>
+<td>11.001882</td>
+<td>9.353894</td>
+<td>10.650402</td>
+<td>9.953714</td>
+<td>6.716290</td>
+<td>14.437177</td>
+<td>6.462545</td>
+<td>18.067593</td>
+<td>3.315075</td>
+<td>-2.641664</td>
+<td>13.286274</td>
+<td>17.588819</td>
+<td>24.196319</td>
+<td>10.752632</td>
+<td>6.678094</td>
+<td>-4.400200</td>
+<td>-3.284106</td>
+<td>-0.964380</td>
+<td>13.723454</td>
+<td>20.424213</td>
+<td>-12.358038</td>
+<td>100.000000</td>
+<td>-3.994380</td>
+<td>-4.267016</td>
+<td>-5.981423</td>
+<td>-3.140990</td>
+<td>-9.795777</td>
+<td>-4.304898</td>
+<td>-1.958816</td>
+<td>2.871375</td>
+<td>-7.849128</td>
+<td>1.459918</td>
+<td>10.601810</td>
+<td>-8.664848</td>
+<td>8.664848</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">school_score</td>
+<td>14.864131</td>
+<td>4.867110</td>
+<td>8.926370</td>
+<td>12.876604</td>
+<td>3.254301</td>
+<td>7.704260</td>
+<td>-6.010726</td>
+<td>8.520684</td>
+<td>-16.902887</td>
+<td>8.179904</td>
+<td>10.391307</td>
+<td>8.819186</td>
+<td>-0.589537</td>
+<td>6.187029</td>
+<td>14.253535</td>
+<td>3.845092</td>
+<td>2.325421</td>
+<td>38.632548</td>
+<td>22.552138</td>
+<td>23.549623</td>
+<td>81.329038</td>
+<td>44.509596</td>
+<td>-14.825764</td>
+<td>-3.327383</td>
+<td>1.051739</td>
+<td>100.000000</td>
+<td>-6.779836</td>
+<td>-2.935437</td>
+<td>13.723454</td>
+<td>2.108646</td>
+<td>4.332019</td>
+<td>0.969226</td>
+<td>5.001774</td>
+<td>-14.156601</td>
+<td>10.912992</td>
+<td>-11.609053</td>
+<td>7.419572</td>
+<td>-4.390177</td>
+<td>3.070167</td>
+<td>2.561354</td>
+<td>-0.557217</td>
+<td>0.557217</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">median_age</td>
+<td>12.759898</td>
+<td>13.346155</td>
+<td>9.589945</td>
+<td>11.028522</td>
+<td>-24.104308</td>
+<td>13.875365</td>
+<td>11.110528</td>
+<td>-6.147347</td>
+<td>-1.977023</td>
+<td>-2.701316</td>
+<td>2.891002</td>
+<td>3.466803</td>
+<td>-1.271465</td>
+<td>-0.024657</td>
+<td>-7.965148</td>
+<td>100.000000</td>
+<td>4.191695</td>
+<td>16.959403</td>
+<td>22.070725</td>
+<td>23.779182</td>
+<td>-0.487633</td>
+<td>7.226658</td>
+<td>-11.839564</td>
+<td>-3.128884</td>
+<td>-6.842933</td>
+<td>3.845092</td>
+<td>20.187285</td>
+<td>15.011435</td>
+<td>3.315075</td>
+<td>1.079204</td>
+<td>3.274726</td>
+<td>-18.812947</td>
+<td>-0.368708</td>
+<td>-6.066574</td>
+<td>0.139268</td>
+<td>0.801571</td>
+<td>1.859326</td>
+<td>-13.702973</td>
+<td>14.859419</td>
+<td>3.938440</td>
+<td>-18.325031</td>
+<td>18.325031</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">tx_year</td>
+<td>11.068008</td>
+<td>-17.432885</td>
+<td>-13.290316</td>
+<td>-24.107270</td>
+<td>-4.197593</td>
+<td>-8.212182</td>
+<td>-6.798499</td>
+<td>4.359925</td>
+<td>11.384649</td>
+<td>2.626438</td>
+<td>1.179744</td>
+<td>-0.147929</td>
+<td>3.049000</td>
+<td>0.519985</td>
+<td>2.617233</td>
+<td>-11.839564</td>
+<td>-13.286258</td>
+<td>-19.366643</td>
+<td>-26.524295</td>
+<td>-26.187545</td>
+<td>-16.868295</td>
+<td>0.736063</td>
+<td>100.000000</td>
+<td>4.863644</td>
+<td>15.989556</td>
+<td>-14.825764</td>
+<td>28.709742</td>
+<td>-0.673113</td>
+<td>-4.400200</td>
+<td>-1.751914</td>
+<td>-6.259272</td>
+<td>0.259195</td>
+<td>3.888337</td>
+<td>2.385509</td>
+<td>4.452380</td>
+<td>-2.372612</td>
+<td>-3.618009</td>
+<td>7.140152</td>
+<td>-0.231217</td>
+<td>-2.230588</td>
+<td>13.656081</td>
+<td>-13.656081</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">basement</td>
+<td>10.914417</td>
+<td>41.308164</td>
+<td>34.405215</td>
+<td>27.017512</td>
+<td>0.177950</td>
+<td>6.193354</td>
+<td>100.000000</td>
+<td>-45.682587</td>
+<td>-26.902473</td>
+<td>-51.602127</td>
+<td>-41.926789</td>
+<td>-27.161334</td>
+<td>-46.759745</td>
+<td>-33.718864</td>
+<td>-53.184761</td>
+<td>11.110528</td>
+<td>44.717564</td>
+<td>-13.893247</td>
+<td>18.270137</td>
+<td>13.513540</td>
+<td>0.333643</td>
+<td>-11.646951</td>
+<td>-6.798499</td>
+<td>-24.775087</td>
+<td>-2.840752</td>
+<td>-6.010726</td>
+<td>-1.848840</td>
+<td>-9.106787</td>
+<td>0.828742</td>
+<td>4.836800</td>
+<td>9.724701</td>
+<td>-8.230722</td>
+<td>0.081200</td>
+<td>18.225458</td>
+<td>-18.821104</td>
+<td>3.435251</td>
+<td>34.777087</td>
+<td>-49.016465</td>
+<td>4.030680</td>
+<td>3.880681</td>
+<td>-25.329884</td>
+<td>25.329884</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">roof_Composition Shingle</td>
+<td>8.918048</td>
+<td>23.357559</td>
+<td>11.893119</td>
+<td>9.324665</td>
+<td>-0.099004</td>
+<td>-5.229114</td>
+<td>34.777087</td>
+<td>-26.912230</td>
+<td>-16.960121</td>
+<td>-32.531990</td>
+<td>-27.471250</td>
+<td>-17.813281</td>
+<td>-32.508304</td>
+<td>-23.860810</td>
+<td>-32.370510</td>
+<td>1.859326</td>
+<td>27.372947</td>
+<td>3.625188</td>
+<td>13.213903</td>
+<td>10.533637</td>
+<td>9.582187</td>
+<td>-4.394382</td>
+<td>-3.618009</td>
+<td>-12.750648</td>
+<td>-6.709420</td>
+<td>7.419572</td>
+<td>-0.798197</td>
+<td>-7.137277</td>
+<td>2.871375</td>
+<td>-13.233498</td>
+<td>11.714030</td>
+<td>11.037662</td>
+<td>-4.331929</td>
+<td>5.391716</td>
+<td>-8.000899</td>
+<td>-37.797737</td>
+<td>100.000000</td>
+<td>-65.010216</td>
+<td>-34.547825</td>
+<td>-24.358484</td>
+<td>-11.781749</td>
+<td>11.781749</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">newer_house</td>
+<td>6.847192</td>
+<td>2.112146</td>
+<td>4.420348</td>
+<td>9.351319</td>
+<td>25.447899</td>
+<td>1.122427</td>
+<td>-2.840752</td>
+<td>-4.445822</td>
+<td>-3.565816</td>
+<td>-2.140302</td>
+<td>-3.441461</td>
+<td>-5.840536</td>
+<td>-1.418934</td>
+<td>-4.653574</td>
+<td>-3.383529</td>
+<td>-6.842933</td>
+<td>0.186791</td>
+<td>-10.492670</td>
+<td>1.783517</td>
+<td>-0.159974</td>
+<td>1.978519</td>
+<td>-1.779773</td>
+<td>15.989556</td>
+<td>-0.434333</td>
+<td>100.000000</td>
+<td>1.051739</td>
+<td>-20.451009</td>
+<td>-7.206369</td>
+<td>-0.964380</td>
+<td>2.268071</td>
+<td>-4.703459</td>
+<td>10.578032</td>
+<td>4.837007</td>
+<td>0.390351</td>
+<td>-0.997193</td>
+<td>3.286184</td>
+<td>-6.709420</td>
+<td>7.927714</td>
+<td>-0.745167</td>
+<td>-3.241777</td>
+<td>4.389083</td>
+<td>-4.389083</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">exterior_walls_Metal</td>
+<td>3.628351</td>
+<td>4.911441</td>
+<td>4.781206</td>
+<td>5.744764</td>
+<td>4.150649</td>
+<td>0.764752</td>
+<td>9.724701</td>
+<td>-7.152755</td>
+<td>-6.311906</td>
+<td>-7.644286</td>
+<td>-7.482312</td>
+<td>-7.408195</td>
+<td>-8.729799</td>
+<td>-6.837351</td>
+<td>-8.891518</td>
+<td>3.274726</td>
+<td>8.674426</td>
+<td>3.950539</td>
+<td>5.120360</td>
+<td>5.504490</td>
+<td>7.083338</td>
+<td>-4.745942</td>
+<td>-6.259272</td>
+<td>-3.044991</td>
+<td>-4.703459</td>
+<td>4.332019</td>
+<td>-5.524541</td>
+<td>-19.939266</td>
+<td>-4.267016</td>
+<td>-6.444793</td>
+<td>100.000000</td>
+<td>-9.650818</td>
+<td>-5.067878</td>
+<td>-15.805146</td>
+<td>-6.945803</td>
+<td>0.201675</td>
+<td>11.714030</td>
+<td>-12.664295</td>
+<td>-4.004397</td>
+<td>1.497938</td>
+<td>-2.057243</td>
+<td>2.057243</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">year_built</td>
+<td>3.415854</td>
+<td>-2.820883</td>
+<td>18.845579</td>
+<td>23.488189</td>
+<td>100.000000</td>
+<td>2.289983</td>
+<td>0.177950</td>
+<td>-10.369706</td>
+<td>-22.036536</td>
+<td>-7.588996</td>
+<td>-9.894359</td>
+<td>-11.984802</td>
+<td>-18.965278</td>
+<td>-16.270634</td>
+<td>-12.967379</td>
+<td>-24.104308</td>
+<td>3.541103</td>
+<td>-1.461140</td>
+<td>-8.093367</td>
+<td>-14.570961</td>
+<td>15.410444</td>
+<td>-19.352583</td>
+<td>-4.197593</td>
+<td>-14.240803</td>
+<td>25.447899</td>
+<td>3.254301</td>
+<td>-96.910830</td>
+<td>-26.998434</td>
+<td>-22.435981</td>
+<td>14.224126</td>
+<td>4.150649</td>
+<td>25.207940</td>
+<td>-2.555662</td>
+<td>8.431115</td>
+<td>3.351964</td>
+<td>-4.469493</td>
+<td>-0.099004</td>
+<td>10.316940</td>
+<td>-6.948685</td>
+<td>-6.603262</td>
+<td>26.951397</td>
+<td>-26.951397</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">roof_Shake Shingle</td>
+<td>2.602652</td>
+<td>3.992030</td>
+<td>15.421941</td>
+<td>-1.285012</td>
+<td>-6.603262</td>
+<td>-2.621634</td>
+<td>3.880681</td>
+<td>-1.967211</td>
+<td>-0.710734</td>
+<td>-2.739461</td>
+<td>-3.224662</td>
+<td>-2.510229</td>
+<td>-0.260969</td>
+<td>-1.642257</td>
+<td>-0.862959</td>
+<td>3.938440</td>
+<td>3.487084</td>
+<td>2.543127</td>
+<td>2.658554</td>
+<td>3.338014</td>
+<td>1.039417</td>
+<td>2.591387</td>
+<td>-2.230588</td>
+<td>-3.652100</td>
+<td>-3.241777</td>
+<td>2.561354</td>
+<td>5.780226</td>
+<td>-1.017099</td>
+<td>10.601810</td>
+<td>-0.472322</td>
+<td>1.497938</td>
+<td>-3.813353</td>
+<td>-1.846764</td>
+<td>2.282988</td>
+<td>-3.548223</td>
+<td>-5.074941</td>
+<td>-24.358484</td>
+<td>-8.728645</td>
+<td>-4.638590</td>
+<td>100.000000</td>
+<td>-0.865935</td>
+<td>0.865935</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">exterior_walls_Combination</td>
+<td>2.336987</td>
+<td>16.896450</td>
+<td>16.770944</td>
+<td>24.643136</td>
+<td>14.224126</td>
+<td>14.275599</td>
+<td>4.836800</td>
+<td>-12.517755</td>
+<td>-13.732175</td>
+<td>-9.916542</td>
+<td>-11.210355</td>
+<td>-11.392205</td>
+<td>-11.532048</td>
+<td>-11.529370</td>
+<td>-13.626262</td>
+<td>1.079204</td>
+<td>14.963761</td>
+<td>-14.712534</td>
+<td>0.103968</td>
+<td>-2.222247</td>
+<td>5.347001</td>
+<td>-4.534084</td>
+<td>-1.751914</td>
+<td>-4.960232</td>
+<td>2.268071</td>
+<td>2.108646</td>
+<td>-14.069795</td>
+<td>-18.665271</td>
+<td>-3.994380</td>
+<td>100.000000</td>
+<td>-6.444793</td>
+<td>-9.034191</td>
+<td>-4.744072</td>
+<td>-14.795295</td>
+<td>-6.502009</td>
+<td>-2.438939</td>
+<td>-13.233498</td>
+<td>20.109104</td>
+<td>-3.411546</td>
+<td>-0.472322</td>
+<td>-17.143013</td>
+<td>17.143013</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">exterior_walls_Wood</td>
+<td>1.896003</td>
+<td>-16.077714</td>
+<td>-11.176424</td>
+<td>-11.952945</td>
+<td>3.351964</td>
+<td>2.981861</td>
+<td>-18.821104</td>
+<td>14.377424</td>
+<td>4.342924</td>
+<td>17.225975</td>
+<td>11.399422</td>
+<td>4.422652</td>
+<td>14.914228</td>
+<td>8.554369</td>
+<td>21.142784</td>
+<td>0.139268</td>
+<td>-14.587208</td>
+<td>8.798029</td>
+<td>-4.192918</td>
+<td>-1.524987</td>
+<td>6.103916</td>
+<td>9.159207</td>
+<td>4.452380</td>
+<td>2.482037</td>
+<td>-0.997193</td>
+<td>10.912992</td>
+<td>-2.114600</td>
+<td>-20.116284</td>
+<td>-4.304898</td>
+<td>-6.502009</td>
+<td>-6.945803</td>
+<td>-9.736497</td>
+<td>-5.112870</td>
+<td>-15.945462</td>
+<td>100.000000</td>
+<td>-4.092147</td>
+<td>-8.000899</td>
+<td>10.503074</td>
+<td>5.832573</td>
+<td>-3.548223</td>
+<td>9.851285</td>
+<td>-9.851285</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">roof_Asphalt</td>
+<td>1.001428</td>
+<td>6.660932</td>
+<td>6.950624</td>
+<td>6.860890</td>
+<td>-4.469493</td>
+<td>1.835292</td>
+<td>3.435251</td>
+<td>-3.251219</td>
+<td>-1.245090</td>
+<td>-1.862841</td>
+<td>-3.039923</td>
+<td>-1.258824</td>
+<td>3.362608</td>
+<td>-0.704129</td>
+<td>-1.501115</td>
+<td>0.801571</td>
+<td>6.296620</td>
+<td>-6.549624</td>
+<td>3.273532</td>
+<td>2.256283</td>
+<td>-11.284716</td>
+<td>-1.495501</td>
+<td>-2.372612</td>
+<td>-2.476772</td>
+<td>3.286184</td>
+<td>-11.609053</td>
+<td>3.699423</td>
+<td>-1.193489</td>
+<td>-1.958816</td>
+<td>-2.438939</td>
+<td>0.201675</td>
+<td>4.326975</td>
+<td>-3.203761</td>
+<td>3.637527</td>
+<td>-4.092147</td>
+<td>100.000000</td>
+<td>-37.797737</td>
+<td>-13.544482</td>
+<td>-7.197828</td>
+<td>-5.074941</td>
+<td>-10.229177</td>
+<td>10.229177</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">nightlife</td>
+<td>0.922490</td>
+<td>-44.029714</td>
+<td>-30.761340</td>
+<td>-28.213486</td>
+<td>-7.588996</td>
+<td>-10.245282</td>
+<td>-51.602127</td>
+<td>92.685489</td>
+<td>56.475860</td>
+<td>100.000000</td>
+<td>92.416545</td>
+<td>74.332511</td>
+<td>70.355584</td>
+<td>77.811929</td>
+<td>85.891952</td>
+<td>-2.701316</td>
+<td>-57.021120</td>
+<td>25.748173</td>
+<td>-4.682106</td>
+<td>3.545252</td>
+<td>-3.541564</td>
+<td>19.778383</td>
+<td>2.626438</td>
+<td>16.654462</td>
+<td>-2.140302</td>
+<td>8.179904</td>
+<td>7.924267</td>
+<td>18.764461</td>
+<td>10.650402</td>
+<td>-9.916542</td>
+<td>-7.644286</td>
+<td>-14.180898</td>
+<td>9.505993</td>
+<td>-18.077700</td>
+<td>17.225975</td>
+<td>-1.862841</td>
+<td>-32.531990</td>
+<td>38.101333</td>
+<td>6.728987</td>
+<td>-2.739461</td>
+<td>28.140625</td>
+<td>-28.140625</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">active_life</td>
+<td>-0.139341</td>
+<td>-48.598011</td>
+<td>-32.814528</td>
+<td>-33.244139</td>
+<td>-12.967379</td>
+<td>-14.408827</td>
+<td>-53.184761</td>
+<td>88.223062</td>
+<td>57.365593</td>
+<td>85.891952</td>
+<td>82.700042</td>
+<td>67.869530</td>
+<td>80.066746</td>
+<td>78.641095</td>
+<td>100.000000</td>
+<td>-7.965148</td>
+<td>-63.358173</td>
+<td>32.711267</td>
+<td>-4.815731</td>
+<td>4.411942</td>
+<td>0.914408</td>
+<td>23.692958</td>
+<td>2.617233</td>
+<td>19.773279</td>
+<td>-3.383529</td>
+<td>14.253535</td>
+<td>13.078500</td>
+<td>17.478872</td>
+<td>18.067593</td>
+<td>-13.626262</td>
+<td>-8.891518</td>
+<td>-13.370442</td>
+<td>13.160314</td>
+<td>-21.024028</td>
+<td>21.142784</td>
+<td>-1.501115</td>
+<td>-32.370510</td>
+<td>35.459751</td>
+<td>8.948231</td>
+<td>-0.862959</td>
+<td>31.831418</td>
+<td>-31.831418</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">cafes</td>
+<td>-0.168902</td>
+<td>-46.477768</td>
+<td>-31.987006</td>
+<td>-30.280876</td>
+<td>-9.894359</td>
+<td>-12.902829</td>
+<td>-41.926789</td>
+<td>93.785708</td>
+<td>60.243995</td>
+<td>92.416545</td>
+<td>100.000000</td>
+<td>83.689855</td>
+<td>69.576702</td>
+<td>82.316249</td>
+<td>82.700042</td>
+<td>2.891002</td>
+<td>-58.357313</td>
+<td>27.069959</td>
+<td>-3.730839</td>
+<td>4.696217</td>
+<td>-2.630134</td>
+<td>22.558013</td>
+<td>1.179744</td>
+<td>15.524500</td>
+<td>-3.441461</td>
+<td>10.391307</td>
+<td>9.777404</td>
+<td>23.243450</td>
+<td>9.953714</td>
+<td>-11.210355</td>
+<td>-7.482312</td>
+<td>-17.377558</td>
+<td>14.237729</td>
+<td>-18.510641</td>
+<td>11.399422</td>
+<td>-3.039923</td>
+<td>-27.471250</td>
+<td>29.602560</td>
+<td>12.114027</td>
+<td>-3.224662</td>
+<td>30.898506</td>
+<td>-30.898506</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">property_age</td>
+<td>-0.542765</td>
+<td>-1.598851</td>
+<td>-21.348888</td>
+<td>-28.470173</td>
+<td>-96.910830</td>
+<td>-4.222716</td>
+<td>-1.848840</td>
+<td>11.018180</td>
+<td>23.937787</td>
+<td>7.924267</td>
+<td>9.777404</td>
+<td>11.453869</td>
+<td>18.935548</td>
+<td>15.727772</td>
+<td>13.078500</td>
+<td>20.187285</td>
+<td>-6.674775</td>
+<td>-3.379854</td>
+<td>1.211880</td>
+<td>7.505379</td>
+<td>-18.938700</td>
+<td>18.735919</td>
+<td>28.709742</td>
+<td>14.853924</td>
+<td>-20.451009</td>
+<td>-6.779836</td>
+<td>100.000000</td>
+<td>25.718491</td>
+<td>20.424213</td>
+<td>-14.069795</td>
+<td>-5.524541</td>
+<td>-24.104039</td>
+<td>3.410080</td>
+<td>-7.494431</td>
+<td>-2.114600</td>
+<td>3.699423</td>
+<td>-0.798197</td>
+<td>-8.128760</td>
+<td>6.604951</td>
+<td>5.780226</td>
+<td>-22.468509</td>
+<td>22.468509</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">exterior_walls_Other</td>
+<td>-0.940938</td>
+<td>-9.584948</td>
+<td>-9.562007</td>
+<td>-6.457749</td>
+<td>-2.555662</td>
+<td>-1.625286</td>
+<td>0.081200</td>
+<td>12.955425</td>
+<td>10.982708</td>
+<td>9.505993</td>
+<td>14.237729</td>
+<td>13.391123</td>
+<td>9.114390</td>
+<td>12.185886</td>
+<td>13.160314</td>
+<td>-0.368708</td>
+<td>-13.359566</td>
+<td>4.807601</td>
+<td>0.609437</td>
+<td>2.045347</td>
+<td>1.706292</td>
+<td>6.226257</td>
+<td>3.888337</td>
+<td>0.556643</td>
+<td>4.837007</td>
+<td>5.001774</td>
+<td>3.410080</td>
+<td>-14.677479</td>
+<td>-3.140990</td>
+<td>-4.744072</td>
+<td>-5.067878</td>
+<td>-7.104057</td>
+<td>100.000000</td>
+<td>-11.634315</td>
+<td>-5.112870</td>
+<td>-3.203761</td>
+<td>-4.331929</td>
+<td>-1.221813</td>
+<td>15.409387</td>
+<td>-1.846764</td>
+<td>2.420394</td>
+<td>-2.420394</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">num_schools</td>
+<td>-1.498455</td>
+<td>-13.050665</td>
+<td>-9.815790</td>
+<td>-11.643283</td>
+<td>-19.352583</td>
+<td>-5.089225</td>
+<td>-11.646951</td>
+<td>25.294489</td>
+<td>27.521234</td>
+<td>19.778383</td>
+<td>22.558013</td>
+<td>23.036450</td>
+<td>21.594362</td>
+<td>26.453326</td>
+<td>23.692958</td>
+<td>7.226658</td>
+<td>-21.574783</td>
+<td>4.555040</td>
+<td>2.794810</td>
+<td>4.876223</td>
+<td>-14.995397</td>
+<td>100.000000</td>
+<td>0.736063</td>
+<td>5.565572</td>
+<td>-1.779773</td>
+<td>44.509596</td>
+<td>18.735919</td>
+<td>11.213062</td>
+<td>6.678094</td>
+<td>-4.534084</td>
+<td>-4.745942</td>
+<td>-2.536624</td>
+<td>6.226257</td>
+<td>-15.492809</td>
+<td>9.159207</td>
+<td>-1.495501</td>
+<td>-4.394382</td>
+<td>1.976279</td>
+<td>5.255597</td>
+<td>2.591387</td>
+<td>6.846316</td>
+<td>-6.846316</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">arts_entertainment</td>
+<td>-1.989786</td>
+<td>-44.061681</td>
+<td>-30.298912</td>
+<td>-29.164351</td>
+<td>-18.965278</td>
+<td>-14.001166</td>
+<td>-46.759745</td>
+<td>72.800622</td>
+<td>50.180661</td>
+<td>70.355584</td>
+<td>69.576702</td>
+<td>65.549173</td>
+<td>100.000000</td>
+<td>75.889666</td>
+<td>80.066746</td>
+<td>-1.271465</td>
+<td>-55.540608</td>
+<td>24.103772</td>
+<td>-5.627807</td>
+<td>2.880272</td>
+<td>-13.771509</td>
+<td>21.594362</td>
+<td>3.049000</td>
+<td>21.657250</td>
+<td>-1.418934</td>
+<td>-0.589537</td>
+<td>18.935548</td>
+<td>21.091871</td>
+<td>14.437177</td>
+<td>-11.532048</td>
+<td>-8.729799</td>
+<td>-15.436794</td>
+<td>9.114390</td>
+<td>-18.142740</td>
+<td>14.914228</td>
+<td>3.362608</td>
+<td>-32.508304</td>
+<td>30.393530</td>
+<td>11.767679</td>
+<td>-0.260969</td>
+<td>26.193193</td>
+<td>-26.193193</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">roof_Other</td>
+<td>-2.059901</td>
+<td>-11.109265</td>
+<td>-6.456185</td>
+<td>-3.951918</td>
+<td>-6.948685</td>
+<td>-0.954415</td>
+<td>4.030680</td>
+<td>9.397851</td>
+<td>8.112665</td>
+<td>6.728987</td>
+<td>12.114027</td>
+<td>13.394999</td>
+<td>11.767679</td>
+<td>14.088461</td>
+<td>8.948231</td>
+<td>14.859419</td>
+<td>-12.188694</td>
+<td>4.851116</td>
+<td>2.750041</td>
+<td>3.569905</td>
+<td>0.223297</td>
+<td>5.255597</td>
+<td>-0.231217</td>
+<td>-0.581841</td>
+<td>-0.745167</td>
+<td>3.070167</td>
+<td>6.604951</td>
+<td>4.584220</td>
+<td>1.459918</td>
+<td>-3.411546</td>
+<td>-4.004397</td>
+<td>-4.615059</td>
+<td>15.409387</td>
+<td>-7.880860</td>
+<td>5.832573</td>
+<td>-7.197828</td>
+<td>-34.547825</td>
+<td>-12.379905</td>
+<td>100.000000</td>
+<td>-4.638590</td>
+<td>6.979223</td>
+<td>-6.979223</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">exterior_walls_Missing</td>
+<td>-2.289098</td>
+<td>9.833287</td>
+<td>8.879169</td>
+<td>17.573044</td>
+<td>25.207940</td>
+<td>0.365089</td>
+<td>-8.230722</td>
+<td>-17.472498</td>
+<td>-22.293821</td>
+<td>-14.180898</td>
+<td>-17.377558</td>
+<td>-14.379575</td>
+<td>-15.436794</td>
+<td>-15.561152</td>
+<td>-13.370442</td>
+<td>-18.812947</td>
+<td>16.221649</td>
+<td>-1.543959</td>
+<td>1.567896</td>
+<td>-9.170190</td>
+<td>3.323812</td>
+<td>-2.536624</td>
+<td>0.259195</td>
+<td>-4.012248</td>
+<td>10.578032</td>
+<td>0.969226</td>
+<td>-24.104039</td>
+<td>-27.950491</td>
+<td>-5.981423</td>
+<td>-9.034191</td>
+<td>-9.650818</td>
+<td>100.000000</td>
+<td>-7.104057</td>
+<td>-22.155358</td>
+<td>-9.736497</td>
+<td>4.326975</td>
+<td>11.037662</td>
+<td>-11.827324</td>
+<td>-4.615059</td>
+<td>-3.813353</td>
+<td>-1.194030</td>
+<td>1.194030</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">exterior_walls_Brick</td>
+<td>-2.701546</td>
+<td>-18.516518</td>
+<td>-16.410433</td>
+<td>-22.117430</td>
+<td>-26.998434</td>
+<td>-8.080172</td>
+<td>-9.106787</td>
+<td>21.079861</td>
+<td>25.830983</td>
+<td>18.764461</td>
+<td>23.243450</td>
+<td>22.528520</td>
+<td>21.091871</td>
+<td>22.376703</td>
+<td>17.478872</td>
+<td>15.011435</td>
+<td>-25.391671</td>
+<td>11.774320</td>
+<td>-0.781606</td>
+<td>4.019010</td>
+<td>-10.130883</td>
+<td>11.213062</td>
+<td>-0.673113</td>
+<td>13.366702</td>
+<td>-7.206369</td>
+<td>-2.935437</td>
+<td>25.718491</td>
+<td>100.000000</td>
+<td>-12.358038</td>
+<td>-18.665271</td>
+<td>-19.939266</td>
+<td>-27.950491</td>
+<td>-14.677479</td>
+<td>-45.774522</td>
+<td>-20.116284</td>
+<td>-1.193489</td>
+<td>-7.137277</td>
+<td>7.156120</td>
+<td>4.584220</td>
+<td>-1.017099</td>
+<td>19.444605</td>
+<td>-19.444605</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">restaurants</td>
+<td>-3.804467</td>
+<td>-49.649739</td>
+<td>-35.195857</td>
+<td>-35.630572</td>
+<td>-10.369706</td>
+<td>-15.082555</td>
+<td>-45.682587</td>
+<td>100.000000</td>
+<td>70.082901</td>
+<td>92.685489</td>
+<td>93.785708</td>
+<td>81.867598</td>
+<td>72.800622</td>
+<td>86.830970</td>
+<td>88.223062</td>
+<td>-6.147347</td>
+<td>-61.679836</td>
+<td>21.913691</td>
+<td>-9.414464</td>
+<td>-0.960205</td>
+<td>-6.560660</td>
+<td>25.294489</td>
+<td>4.359925</td>
+<td>16.208406</td>
+<td>-4.445822</td>
+<td>8.520684</td>
+<td>11.018180</td>
+<td>21.079861</td>
+<td>11.001882</td>
+<td>-12.517755</td>
+<td>-7.152755</td>
+<td>-17.472498</td>
+<td>12.955425</td>
+<td>-17.083059</td>
+<td>14.377424</td>
+<td>-3.251219</td>
+<td>-26.912230</td>
+<td>30.166819</td>
+<td>9.397851</td>
+<td>-1.967211</td>
+<td>33.389891</td>
+<td>-33.389891</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">shopping</td>
+<td>-3.952982</td>
+<td>-38.946148</td>
+<td>-26.206117</td>
+<td>-27.746691</td>
+<td>-11.984802</td>
+<td>-14.546418</td>
+<td>-27.161334</td>
+<td>81.867598</td>
+<td>52.580472</td>
+<td>74.332511</td>
+<td>83.689855</td>
+<td>100.000000</td>
+<td>65.549173</td>
+<td>86.125726</td>
+<td>67.869530</td>
+<td>3.466803</td>
+<td>-45.620023</td>
+<td>18.151567</td>
+<td>-3.449466</td>
+<td>2.752236</td>
+<td>-4.731472</td>
+<td>23.036450</td>
+<td>-0.147929</td>
+<td>12.723382</td>
+<td>-5.840536</td>
+<td>8.819186</td>
+<td>11.453869</td>
+<td>22.528520</td>
+<td>6.716290</td>
+<td>-11.392205</td>
+<td>-7.408195</td>
+<td>-14.379575</td>
+<td>13.391123</td>
+<td>-14.452807</td>
+<td>4.422652</td>
+<td>-1.258824</td>
+<td>-17.813281</td>
+<td>15.503693</td>
+<td>13.394999</td>
+<td>-2.510229</td>
+<td>27.050573</td>
+<td>-27.050573</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">exterior_walls_Siding (Alum/Vinyl)</td>
+<td>-5.055719</td>
+<td>13.472574</td>
+<td>8.133553</td>
+<td>3.284626</td>
+<td>8.431115</td>
+<td>0.415493</td>
+<td>18.225458</td>
+<td>-17.083059</td>
+<td>-11.519787</td>
+<td>-18.077700</td>
+<td>-18.510641</td>
+<td>-14.452807</td>
+<td>-18.142740</td>
+<td>-15.380230</td>
+<td>-21.024028</td>
+<td>-6.066574</td>
+<td>17.863247</td>
+<td>-17.896693</td>
+<td>-7.410540</td>
+<td>-8.232567</td>
+<td>-6.120598</td>
+<td>-15.492809</td>
+<td>2.385509</td>
+<td>-7.783174</td>
+<td>0.390351</td>
+<td>-14.156601</td>
+<td>-7.494431</td>
+<td>-45.774522</td>
+<td>-9.795777</td>
+<td>-14.795295</td>
+<td>-15.805146</td>
+<td>-22.155358</td>
+<td>-11.634315</td>
+<td>100.000000</td>
+<td>-15.945462</td>
+<td>3.637527</td>
+<td>5.391716</td>
+<td>-5.185658</td>
+<td>-7.880860</td>
+<td>2.282988</td>
+<td>-13.617900</td>
+<td>13.617900</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">beauty_spas</td>
+<td>-5.435486</td>
+<td>-42.102480</td>
+<td>-28.318516</td>
+<td>-31.304191</td>
+<td>-16.270634</td>
+<td>-16.444254</td>
+<td>-33.718864</td>
+<td>86.830970</td>
+<td>62.646019</td>
+<td>77.811929</td>
+<td>82.316249</td>
+<td>86.125726</td>
+<td>75.889666</td>
+<td>100.000000</td>
+<td>78.641095</td>
+<td>-0.024657</td>
+<td>-51.175528</td>
+<td>18.116348</td>
+<td>-5.174211</td>
+<td>1.970053</td>
+<td>-9.801907</td>
+<td>26.453326</td>
+<td>0.519985</td>
+<td>15.851595</td>
+<td>-4.653574</td>
+<td>6.187029</td>
+<td>15.727772</td>
+<td>22.376703</td>
+<td>6.462545</td>
+<td>-11.529370</td>
+<td>-6.837351</td>
+<td>-15.561152</td>
+<td>12.185886</td>
+<td>-15.380230</td>
+<td>8.554369</td>
+<td>-0.704129</td>
+<td>-23.860810</td>
+<td>21.714402</td>
+<td>14.088461</td>
+<td>-1.642257</td>
+<td>28.981873</td>
+<td>-28.981873</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">groceries</td>
+<td>-9.381267</td>
+<td>-42.165791</td>
+<td>-34.084745</td>
+<td>-37.410351</td>
+<td>-22.036536</td>
+<td>-17.435020</td>
+<td>-26.902473</td>
+<td>70.082901</td>
+<td>100.000000</td>
+<td>56.475860</td>
+<td>60.243995</td>
+<td>52.580472</td>
+<td>50.180661</td>
+<td>62.646019</td>
+<td>57.365593</td>
+<td>-1.977023</td>
+<td>-50.828402</td>
+<td>-0.346135</td>
+<td>-15.580291</td>
+<td>-8.723509</td>
+<td>-35.352375</td>
+<td>27.521234</td>
+<td>11.384649</td>
+<td>15.328557</td>
+<td>-3.565816</td>
+<td>-16.902887</td>
+<td>23.937787</td>
+<td>25.830983</td>
+<td>9.353894</td>
+<td>-13.732175</td>
+<td>-6.311906</td>
+<td>-22.293821</td>
+<td>10.982708</td>
+<td>-11.519787</td>
+<td>4.342924</td>
+<td>-1.245090</td>
+<td>-16.960121</td>
+<td>16.893917</td>
+<td>8.112665</td>
+<td>-0.710734</td>
+<td>26.988569</td>
+<td>-26.988569</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">roof_Missing</td>
+<td>-11.466899</td>
+<td>-27.940251</td>
+<td>-22.089618</td>
+<td>-12.955524</td>
+<td>10.316940</td>
+<td>6.933220</td>
+<td>-49.016465</td>
+<td>30.166819</td>
+<td>16.893917</td>
+<td>38.101333</td>
+<td>29.602560</td>
+<td>15.503693</td>
+<td>30.393530</td>
+<td>21.714402</td>
+<td>35.459751</td>
+<td>-13.702973</td>
+<td>-31.718020</td>
+<td>-4.199882</td>
+<td>-21.211074</td>
+<td>-18.066080</td>
+<td>-4.818784</td>
+<td>1.976279</td>
+<td>7.140152</td>
+<td>19.226715</td>
+<td>7.927714</td>
+<td>-4.390177</td>
+<td>-8.128760</td>
+<td>7.156120</td>
+<td>-7.849128</td>
+<td>20.109104</td>
+<td>-12.664295</td>
+<td>-11.827324</td>
+<td>-1.221813</td>
+<td>-5.185658</td>
+<td>10.503074</td>
+<td>-13.544482</td>
+<td>-65.010216</td>
+<td>100.000000</td>
+<td>-12.379905</td>
+<td>-8.728645</td>
+<td>17.299058</td>
+<td>-17.299058</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">two_and_one</td>
+<td>-15.976537</td>
+<td>-26.722499</td>
+<td>-34.019960</td>
+<td>-19.835366</td>
+<td>-14.240803</td>
+<td>-5.938640</td>
+<td>-24.775087</td>
+<td>16.208406</td>
+<td>15.328557</td>
+<td>16.654462</td>
+<td>15.524500</td>
+<td>12.723382</td>
+<td>21.657250</td>
+<td>15.851595</td>
+<td>19.773279</td>
+<td>-3.128884</td>
+<td>-23.456405</td>
+<td>5.492820</td>
+<td>-18.856321</td>
+<td>-16.439545</td>
+<td>-6.971300</td>
+<td>5.565572</td>
+<td>4.863644</td>
+<td>100.000000</td>
+<td>-0.434333</td>
+<td>-3.327383</td>
+<td>14.853924</td>
+<td>13.366702</td>
+<td>-3.284106</td>
+<td>-4.960232</td>
+<td>-3.044991</td>
+<td>-4.012248</td>
+<td>0.556643</td>
+<td>-7.783174</td>
+<td>2.482037</td>
+<td>-2.476772</td>
+<td>-12.750648</td>
+<td>19.226715</td>
+<td>-0.581841</td>
+<td>-3.652100</td>
+<td>14.847132</td>
+<td>-14.847132</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">property_type_Apartment / Condo / Townhouse</td>
+<td>-32.264149</td>
+<td>-65.872890</td>
+<td>-33.910858</td>
+<td>-52.569940</td>
+<td>26.951397</td>
+<td>-25.053371</td>
+<td>-25.329884</td>
+<td>33.389891</td>
+<td>26.988569</td>
+<td>28.140625</td>
+<td>30.898506</td>
+<td>27.050573</td>
+<td>26.193193</td>
+<td>28.981873</td>
+<td>31.831418</td>
+<td>-18.325031</td>
+<td>-50.857739</td>
+<td>6.684907</td>
+<td>-44.937201</td>
+<td>-41.013453</td>
+<td>-4.929324</td>
+<td>6.846316</td>
+<td>13.656081</td>
+<td>14.847132</td>
+<td>4.389083</td>
+<td>-0.557217</td>
+<td>-22.468509</td>
+<td>19.444605</td>
+<td>-8.664848</td>
+<td>-17.143013</td>
+<td>-2.057243</td>
+<td>-1.194030</td>
+<td>2.420394</td>
+<td>-13.617900</td>
+<td>9.851285</td>
+<td>-10.229177</td>
+<td>-11.781749</td>
+<td>17.299058</td>
+<td>6.979223</td>
+<td>-0.865935</td>
+<td>100.000000</td>
+<td>-100.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>correlations.sort_values(by<span class="op">=</span><span class="st">'tx_price'</span>, ascending<span class="op">=</span><span class="va">False</span>)[<span class="dv">0</span>:<span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="46">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">tx_price</th>
+<th data-quarto-table-cell-role="th">beds</th>
+<th data-quarto-table-cell-role="th">baths</th>
+<th data-quarto-table-cell-role="th">sqft</th>
+<th data-quarto-table-cell-role="th">year_built</th>
+<th data-quarto-table-cell-role="th">lot_size</th>
+<th data-quarto-table-cell-role="th">basement</th>
+<th data-quarto-table-cell-role="th">restaurants</th>
+<th data-quarto-table-cell-role="th">groceries</th>
+<th data-quarto-table-cell-role="th">nightlife</th>
+<th data-quarto-table-cell-role="th">cafes</th>
+<th data-quarto-table-cell-role="th">shopping</th>
+<th data-quarto-table-cell-role="th">arts_entertainment</th>
+<th data-quarto-table-cell-role="th">beauty_spas</th>
+<th data-quarto-table-cell-role="th">active_life</th>
+<th data-quarto-table-cell-role="th">median_age</th>
+<th data-quarto-table-cell-role="th">married</th>
+<th data-quarto-table-cell-role="th">college_grad</th>
+<th data-quarto-table-cell-role="th">property_tax</th>
+<th data-quarto-table-cell-role="th">insurance</th>
+<th data-quarto-table-cell-role="th">median_school</th>
+<th data-quarto-table-cell-role="th">num_schools</th>
+<th data-quarto-table-cell-role="th">tx_year</th>
+<th data-quarto-table-cell-role="th">two_and_one</th>
+<th data-quarto-table-cell-role="th">newer_house</th>
+<th data-quarto-table-cell-role="th">school_score</th>
+<th data-quarto-table-cell-role="th">property_age</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Brick</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Brick veneer</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Combination</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Metal</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Missing</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Other</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Siding (Alum/Vinyl)</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Wood</th>
+<th data-quarto-table-cell-role="th">roof_Asphalt</th>
+<th data-quarto-table-cell-role="th">roof_Composition Shingle</th>
+<th data-quarto-table-cell-role="th">roof_Missing</th>
+<th data-quarto-table-cell-role="th">roof_Other</th>
+<th data-quarto-table-cell-role="th">roof_Shake Shingle</th>
+<th data-quarto-table-cell-role="th">property_type_Apartment / Condo / Townhouse</th>
+<th data-quarto-table-cell-role="th">property_type_Single-Family</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">tx_price</td>
+<td>100.000000</td>
+<td>38.768200</td>
+<td>39.861521</td>
+<td>48.685769</td>
+<td>3.415854</td>
+<td>18.524405</td>
+<td>10.914417</td>
+<td>-3.804467</td>
+<td>-9.381267</td>
+<td>0.922490</td>
+<td>-0.168902</td>
+<td>-3.952982</td>
+<td>-1.989786</td>
+<td>-5.435486</td>
+<td>-0.139341</td>
+<td>12.759898</td>
+<td>19.915406</td>
+<td>26.865475</td>
+<td>55.826613</td>
+<td>55.458276</td>
+<td>17.198876</td>
+<td>-1.498455</td>
+<td>11.068008</td>
+<td>-15.976537</td>
+<td>6.847192</td>
+<td>14.864131</td>
+<td>-0.542765</td>
+<td>-2.701546</td>
+<td>16.105963</td>
+<td>2.336987</td>
+<td>3.628351</td>
+<td>-2.289098</td>
+<td>-0.940938</td>
+<td>-5.055719</td>
+<td>1.896003</td>
+<td>1.001428</td>
+<td>8.918048</td>
+<td>-11.466899</td>
+<td>-2.059901</td>
+<td>2.602652</td>
+<td>-32.264149</td>
+<td>32.264149</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">property_tax</td>
+<td>55.826613</td>
+<td>54.489816</td>
+<td>50.786119</td>
+<td>64.039269</td>
+<td>-8.093367</td>
+<td>21.807582</td>
+<td>18.270137</td>
+<td>-9.414464</td>
+<td>-15.580291</td>
+<td>-4.682106</td>
+<td>-3.730839</td>
+<td>-3.449466</td>
+<td>-5.627807</td>
+<td>-5.174211</td>
+<td>-4.815731</td>
+<td>22.070725</td>
+<td>30.836109</td>
+<td>28.418250</td>
+<td>100.000000</td>
+<td>98.343043</td>
+<td>22.879475</td>
+<td>2.794810</td>
+<td>-26.524295</td>
+<td>-18.856321</td>
+<td>1.783517</td>
+<td>22.552138</td>
+<td>1.211880</td>
+<td>-0.781606</td>
+<td>17.588819</td>
+<td>0.103968</td>
+<td>5.120360</td>
+<td>1.567896</td>
+<td>0.609437</td>
+<td>-7.410540</td>
+<td>-4.192918</td>
+<td>3.273532</td>
+<td>13.213903</td>
+<td>-21.211074</td>
+<td>2.750041</td>
+<td>2.658554</td>
+<td>-44.937201</td>
+<td>44.937201</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">insurance</td>
+<td>55.458276</td>
+<td>47.939893</td>
+<td>45.417799</td>
+<td>56.949728</td>
+<td>-14.570961</td>
+<td>18.873090</td>
+<td>13.513540</td>
+<td>-0.960205</td>
+<td>-8.723509</td>
+<td>3.545252</td>
+<td>4.696217</td>
+<td>2.752236</td>
+<td>2.880272</td>
+<td>1.970053</td>
+<td>4.411942</td>
+<td>23.779182</td>
+<td>23.291394</td>
+<td>32.384314</td>
+<td>98.343043</td>
+<td>100.000000</td>
+<td>22.617764</td>
+<td>4.876223</td>
+<td>-26.187545</td>
+<td>-16.439545</td>
+<td>-0.159974</td>
+<td>23.549623</td>
+<td>7.505379</td>
+<td>4.019010</td>
+<td>24.196319</td>
+<td>-2.222247</td>
+<td>5.504490</td>
+<td>-9.170190</td>
+<td>2.045347</td>
+<td>-8.232567</td>
+<td>-1.524987</td>
+<td>2.256283</td>
+<td>10.533637</td>
+<td>-18.066080</td>
+<td>3.569905</td>
+<td>3.338014</td>
+<td>-41.013453</td>
+<td>41.013453</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">sqft</td>
+<td>48.685769</td>
+<td>68.863433</td>
+<td>66.907007</td>
+<td>100.000000</td>
+<td>23.488189</td>
+<td>32.583198</td>
+<td>27.017512</td>
+<td>-35.630572</td>
+<td>-37.410351</td>
+<td>-28.213486</td>
+<td>-30.280876</td>
+<td>-27.746691</td>
+<td>-29.164351</td>
+<td>-31.304191</td>
+<td>-33.244139</td>
+<td>11.028522</td>
+<td>48.786666</td>
+<td>5.419810</td>
+<td>64.039269</td>
+<td>56.949728</td>
+<td>21.406966</td>
+<td>-11.643283</td>
+<td>-24.107270</td>
+<td>-19.835366</td>
+<td>9.351319</td>
+<td>12.876604</td>
+<td>-28.470173</td>
+<td>-22.117430</td>
+<td>3.472529</td>
+<td>24.643136</td>
+<td>5.744764</td>
+<td>17.573044</td>
+<td>-6.457749</td>
+<td>3.284626</td>
+<td>-11.952945</td>
+<td>6.860890</td>
+<td>9.324665</td>
+<td>-12.955524</td>
+<td>-3.951918</td>
+<td>-1.285012</td>
+<td>-52.569940</td>
+<td>52.569940</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">baths</td>
+<td>39.861521</td>
+<td>64.016793</td>
+<td>100.000000</td>
+<td>66.907007</td>
+<td>18.845579</td>
+<td>18.649362</td>
+<td>34.405215</td>
+<td>-35.195857</td>
+<td>-34.084745</td>
+<td>-30.761340</td>
+<td>-31.987006</td>
+<td>-26.206117</td>
+<td>-30.298912</td>
+<td>-28.318516</td>
+<td>-32.814528</td>
+<td>9.589945</td>
+<td>44.674772</td>
+<td>0.873530</td>
+<td>50.786119</td>
+<td>45.417799</td>
+<td>15.632205</td>
+<td>-9.815790</td>
+<td>-13.290316</td>
+<td>-34.019960</td>
+<td>4.420348</td>
+<td>8.926370</td>
+<td>-21.348888</td>
+<td>-16.410433</td>
+<td>5.809466</td>
+<td>16.770944</td>
+<td>4.781206</td>
+<td>8.879169</td>
+<td>-9.562007</td>
+<td>8.133553</td>
+<td>-11.176424</td>
+<td>6.950624</td>
+<td>11.893119</td>
+<td>-22.089618</td>
+<td>-6.456185</td>
+<td>15.421941</td>
+<td>-33.910858</td>
+<td>33.910858</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">beds</td>
+<td>38.768200</td>
+<td>100.000000</td>
+<td>64.016793</td>
+<td>68.863433</td>
+<td>-2.820883</td>
+<td>22.875672</td>
+<td>41.308164</td>
+<td>-49.649739</td>
+<td>-42.165791</td>
+<td>-44.029714</td>
+<td>-46.477768</td>
+<td>-38.946148</td>
+<td>-44.061681</td>
+<td>-42.102480</td>
+<td>-48.598011</td>
+<td>13.346155</td>
+<td>64.627631</td>
+<td>-8.880031</td>
+<td>54.489816</td>
+<td>47.939893</td>
+<td>13.308375</td>
+<td>-13.050665</td>
+<td>-17.432885</td>
+<td>-26.722499</td>
+<td>2.112146</td>
+<td>4.867110</td>
+<td>-1.598851</td>
+<td>-18.516518</td>
+<td>2.662222</td>
+<td>16.896450</td>
+<td>4.911441</td>
+<td>9.833287</td>
+<td>-9.584948</td>
+<td>13.472574</td>
+<td>-16.077714</td>
+<td>6.660932</td>
+<td>23.357559</td>
+<td>-27.940251</td>
+<td>-11.109265</td>
+<td>3.992030</td>
+<td>-65.872890</td>
+<td>65.872890</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">property_type_Single-Family</td>
+<td>32.264149</td>
+<td>65.872890</td>
+<td>33.910858</td>
+<td>52.569940</td>
+<td>-26.951397</td>
+<td>25.053371</td>
+<td>25.329884</td>
+<td>-33.389891</td>
+<td>-26.988569</td>
+<td>-28.140625</td>
+<td>-30.898506</td>
+<td>-27.050573</td>
+<td>-26.193193</td>
+<td>-28.981873</td>
+<td>-31.831418</td>
+<td>18.325031</td>
+<td>50.857739</td>
+<td>-6.684907</td>
+<td>44.937201</td>
+<td>41.013453</td>
+<td>4.929324</td>
+<td>-6.846316</td>
+<td>-13.656081</td>
+<td>-14.847132</td>
+<td>-4.389083</td>
+<td>0.557217</td>
+<td>22.468509</td>
+<td>-19.444605</td>
+<td>8.664848</td>
+<td>17.143013</td>
+<td>2.057243</td>
+<td>1.194030</td>
+<td>-2.420394</td>
+<td>13.617900</td>
+<td>-9.851285</td>
+<td>10.229177</td>
+<td>11.781749</td>
+<td>-17.299058</td>
+<td>-6.979223</td>
+<td>0.865935</td>
+<td>-100.000000</td>
+<td>100.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">college_grad</td>
+<td>26.865475</td>
+<td>-8.880031</td>
+<td>0.873530</td>
+<td>5.419810</td>
+<td>-1.461140</td>
+<td>-7.145830</td>
+<td>-13.893247</td>
+<td>21.913691</td>
+<td>-0.346135</td>
+<td>25.748173</td>
+<td>27.069959</td>
+<td>18.151567</td>
+<td>24.103772</td>
+<td>18.116348</td>
+<td>32.711267</td>
+<td>16.959403</td>
+<td>-14.909466</td>
+<td>100.000000</td>
+<td>28.418250</td>
+<td>32.384314</td>
+<td>39.515917</td>
+<td>4.555040</td>
+<td>-19.366643</td>
+<td>5.492820</td>
+<td>-10.492670</td>
+<td>38.632548</td>
+<td>-3.379854</td>
+<td>11.774320</td>
+<td>13.286274</td>
+<td>-14.712534</td>
+<td>3.950539</td>
+<td>-1.543959</td>
+<td>4.807601</td>
+<td>-17.896693</td>
+<td>8.798029</td>
+<td>-6.549624</td>
+<td>3.625188</td>
+<td>-4.199882</td>
+<td>4.851116</td>
+<td>2.543127</td>
+<td>6.684907</td>
+<td>-6.684907</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">married</td>
+<td>19.915406</td>
+<td>64.627631</td>
+<td>44.674772</td>
+<td>48.786666</td>
+<td>3.541103</td>
+<td>18.534820</td>
+<td>44.717564</td>
+<td>-61.679836</td>
+<td>-50.828402</td>
+<td>-57.021120</td>
+<td>-58.357313</td>
+<td>-45.620023</td>
+<td>-55.540608</td>
+<td>-51.175528</td>
+<td>-63.358173</td>
+<td>4.191695</td>
+<td>100.000000</td>
+<td>-14.909466</td>
+<td>30.836109</td>
+<td>23.291394</td>
+<td>16.499294</td>
+<td>-21.574783</td>
+<td>-13.286258</td>
+<td>-23.456405</td>
+<td>0.186791</td>
+<td>2.325421</td>
+<td>-6.674775</td>
+<td>-25.391671</td>
+<td>-2.641664</td>
+<td>14.963761</td>
+<td>8.674426</td>
+<td>16.221649</td>
+<td>-13.359566</td>
+<td>17.863247</td>
+<td>-14.587208</td>
+<td>6.296620</td>
+<td>27.372947</td>
+<td>-31.718020</td>
+<td>-12.188694</td>
+<td>3.487084</td>
+<td>-50.857739</td>
+<td>50.857739</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>correlations.sort_values(by<span class="op">=</span><span class="st">'tx_price'</span>, ascending<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>:<span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">tx_price</th>
+<th data-quarto-table-cell-role="th">beds</th>
+<th data-quarto-table-cell-role="th">baths</th>
+<th data-quarto-table-cell-role="th">sqft</th>
+<th data-quarto-table-cell-role="th">year_built</th>
+<th data-quarto-table-cell-role="th">lot_size</th>
+<th data-quarto-table-cell-role="th">basement</th>
+<th data-quarto-table-cell-role="th">restaurants</th>
+<th data-quarto-table-cell-role="th">groceries</th>
+<th data-quarto-table-cell-role="th">nightlife</th>
+<th data-quarto-table-cell-role="th">cafes</th>
+<th data-quarto-table-cell-role="th">shopping</th>
+<th data-quarto-table-cell-role="th">arts_entertainment</th>
+<th data-quarto-table-cell-role="th">beauty_spas</th>
+<th data-quarto-table-cell-role="th">active_life</th>
+<th data-quarto-table-cell-role="th">median_age</th>
+<th data-quarto-table-cell-role="th">married</th>
+<th data-quarto-table-cell-role="th">college_grad</th>
+<th data-quarto-table-cell-role="th">property_tax</th>
+<th data-quarto-table-cell-role="th">insurance</th>
+<th data-quarto-table-cell-role="th">median_school</th>
+<th data-quarto-table-cell-role="th">num_schools</th>
+<th data-quarto-table-cell-role="th">tx_year</th>
+<th data-quarto-table-cell-role="th">two_and_one</th>
+<th data-quarto-table-cell-role="th">newer_house</th>
+<th data-quarto-table-cell-role="th">school_score</th>
+<th data-quarto-table-cell-role="th">property_age</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Brick</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Brick veneer</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Combination</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Metal</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Missing</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Other</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Siding (Alum/Vinyl)</th>
+<th data-quarto-table-cell-role="th">exterior_walls_Wood</th>
+<th data-quarto-table-cell-role="th">roof_Asphalt</th>
+<th data-quarto-table-cell-role="th">roof_Composition Shingle</th>
+<th data-quarto-table-cell-role="th">roof_Missing</th>
+<th data-quarto-table-cell-role="th">roof_Other</th>
+<th data-quarto-table-cell-role="th">roof_Shake Shingle</th>
+<th data-quarto-table-cell-role="th">property_type_Apartment / Condo / Townhouse</th>
+<th data-quarto-table-cell-role="th">property_type_Single-Family</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">property_type_Apartment / Condo / Townhouse</td>
+<td>-32.264149</td>
+<td>-65.872890</td>
+<td>-33.910858</td>
+<td>-52.569940</td>
+<td>26.951397</td>
+<td>-25.053371</td>
+<td>-25.329884</td>
+<td>33.389891</td>
+<td>26.988569</td>
+<td>28.140625</td>
+<td>30.898506</td>
+<td>27.050573</td>
+<td>26.193193</td>
+<td>28.981873</td>
+<td>31.831418</td>
+<td>-18.325031</td>
+<td>-50.857739</td>
+<td>6.684907</td>
+<td>-44.937201</td>
+<td>-41.013453</td>
+<td>-4.929324</td>
+<td>6.846316</td>
+<td>13.656081</td>
+<td>14.847132</td>
+<td>4.389083</td>
+<td>-0.557217</td>
+<td>-22.468509</td>
+<td>19.444605</td>
+<td>-8.664848</td>
+<td>-17.143013</td>
+<td>-2.057243</td>
+<td>-1.194030</td>
+<td>2.420394</td>
+<td>-13.617900</td>
+<td>9.851285</td>
+<td>-10.229177</td>
+<td>-11.781749</td>
+<td>17.299058</td>
+<td>6.979223</td>
+<td>-0.865935</td>
+<td>100.000000</td>
+<td>-100.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">two_and_one</td>
+<td>-15.976537</td>
+<td>-26.722499</td>
+<td>-34.019960</td>
+<td>-19.835366</td>
+<td>-14.240803</td>
+<td>-5.938640</td>
+<td>-24.775087</td>
+<td>16.208406</td>
+<td>15.328557</td>
+<td>16.654462</td>
+<td>15.524500</td>
+<td>12.723382</td>
+<td>21.657250</td>
+<td>15.851595</td>
+<td>19.773279</td>
+<td>-3.128884</td>
+<td>-23.456405</td>
+<td>5.492820</td>
+<td>-18.856321</td>
+<td>-16.439545</td>
+<td>-6.971300</td>
+<td>5.565572</td>
+<td>4.863644</td>
+<td>100.000000</td>
+<td>-0.434333</td>
+<td>-3.327383</td>
+<td>14.853924</td>
+<td>13.366702</td>
+<td>-3.284106</td>
+<td>-4.960232</td>
+<td>-3.044991</td>
+<td>-4.012248</td>
+<td>0.556643</td>
+<td>-7.783174</td>
+<td>2.482037</td>
+<td>-2.476772</td>
+<td>-12.750648</td>
+<td>19.226715</td>
+<td>-0.581841</td>
+<td>-3.652100</td>
+<td>14.847132</td>
+<td>-14.847132</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">roof_Missing</td>
+<td>-11.466899</td>
+<td>-27.940251</td>
+<td>-22.089618</td>
+<td>-12.955524</td>
+<td>10.316940</td>
+<td>6.933220</td>
+<td>-49.016465</td>
+<td>30.166819</td>
+<td>16.893917</td>
+<td>38.101333</td>
+<td>29.602560</td>
+<td>15.503693</td>
+<td>30.393530</td>
+<td>21.714402</td>
+<td>35.459751</td>
+<td>-13.702973</td>
+<td>-31.718020</td>
+<td>-4.199882</td>
+<td>-21.211074</td>
+<td>-18.066080</td>
+<td>-4.818784</td>
+<td>1.976279</td>
+<td>7.140152</td>
+<td>19.226715</td>
+<td>7.927714</td>
+<td>-4.390177</td>
+<td>-8.128760</td>
+<td>7.156120</td>
+<td>-7.849128</td>
+<td>20.109104</td>
+<td>-12.664295</td>
+<td>-11.827324</td>
+<td>-1.221813</td>
+<td>-5.185658</td>
+<td>10.503074</td>
+<td>-13.544482</td>
+<td>-65.010216</td>
+<td>100.000000</td>
+<td>-12.379905</td>
+<td>-8.728645</td>
+<td>17.299058</td>
+<td>-17.299058</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">groceries</td>
+<td>-9.381267</td>
+<td>-42.165791</td>
+<td>-34.084745</td>
+<td>-37.410351</td>
+<td>-22.036536</td>
+<td>-17.435020</td>
+<td>-26.902473</td>
+<td>70.082901</td>
+<td>100.000000</td>
+<td>56.475860</td>
+<td>60.243995</td>
+<td>52.580472</td>
+<td>50.180661</td>
+<td>62.646019</td>
+<td>57.365593</td>
+<td>-1.977023</td>
+<td>-50.828402</td>
+<td>-0.346135</td>
+<td>-15.580291</td>
+<td>-8.723509</td>
+<td>-35.352375</td>
+<td>27.521234</td>
+<td>11.384649</td>
+<td>15.328557</td>
+<td>-3.565816</td>
+<td>-16.902887</td>
+<td>23.937787</td>
+<td>25.830983</td>
+<td>9.353894</td>
+<td>-13.732175</td>
+<td>-6.311906</td>
+<td>-22.293821</td>
+<td>10.982708</td>
+<td>-11.519787</td>
+<td>4.342924</td>
+<td>-1.245090</td>
+<td>-16.960121</td>
+<td>16.893917</td>
+<td>8.112665</td>
+<td>-0.710734</td>
+<td>26.988569</td>
+<td>-26.988569</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">beauty_spas</td>
+<td>-5.435486</td>
+<td>-42.102480</td>
+<td>-28.318516</td>
+<td>-31.304191</td>
+<td>-16.270634</td>
+<td>-16.444254</td>
+<td>-33.718864</td>
+<td>86.830970</td>
+<td>62.646019</td>
+<td>77.811929</td>
+<td>82.316249</td>
+<td>86.125726</td>
+<td>75.889666</td>
+<td>100.000000</td>
+<td>78.641095</td>
+<td>-0.024657</td>
+<td>-51.175528</td>
+<td>18.116348</td>
+<td>-5.174211</td>
+<td>1.970053</td>
+<td>-9.801907</td>
+<td>26.453326</td>
+<td>0.519985</td>
+<td>15.851595</td>
+<td>-4.653574</td>
+<td>6.187029</td>
+<td>15.727772</td>
+<td>22.376703</td>
+<td>6.462545</td>
+<td>-11.529370</td>
+<td>-6.837351</td>
+<td>-15.561152</td>
+<td>12.185886</td>
+<td>-15.380230</td>
+<td>8.554369</td>
+<td>-0.704129</td>
+<td>-23.860810</td>
+<td>21.714402</td>
+<td>14.088461</td>
+<td>-1.642257</td>
+<td>28.981873</td>
+<td>-28.981873</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">exterior_walls_Siding (Alum/Vinyl)</td>
+<td>-5.055719</td>
+<td>13.472574</td>
+<td>8.133553</td>
+<td>3.284626</td>
+<td>8.431115</td>
+<td>0.415493</td>
+<td>18.225458</td>
+<td>-17.083059</td>
+<td>-11.519787</td>
+<td>-18.077700</td>
+<td>-18.510641</td>
+<td>-14.452807</td>
+<td>-18.142740</td>
+<td>-15.380230</td>
+<td>-21.024028</td>
+<td>-6.066574</td>
+<td>17.863247</td>
+<td>-17.896693</td>
+<td>-7.410540</td>
+<td>-8.232567</td>
+<td>-6.120598</td>
+<td>-15.492809</td>
+<td>2.385509</td>
+<td>-7.783174</td>
+<td>0.390351</td>
+<td>-14.156601</td>
+<td>-7.494431</td>
+<td>-45.774522</td>
+<td>-9.795777</td>
+<td>-14.795295</td>
+<td>-15.805146</td>
+<td>-22.155358</td>
+<td>-11.634315</td>
+<td>100.000000</td>
+<td>-15.945462</td>
+<td>3.637527</td>
+<td>5.391716</td>
+<td>-5.185658</td>
+<td>-7.880860</td>
+<td>2.282988</td>
+<td>-13.617900</td>
+<td>13.617900</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">shopping</td>
+<td>-3.952982</td>
+<td>-38.946148</td>
+<td>-26.206117</td>
+<td>-27.746691</td>
+<td>-11.984802</td>
+<td>-14.546418</td>
+<td>-27.161334</td>
+<td>81.867598</td>
+<td>52.580472</td>
+<td>74.332511</td>
+<td>83.689855</td>
+<td>100.000000</td>
+<td>65.549173</td>
+<td>86.125726</td>
+<td>67.869530</td>
+<td>3.466803</td>
+<td>-45.620023</td>
+<td>18.151567</td>
+<td>-3.449466</td>
+<td>2.752236</td>
+<td>-4.731472</td>
+<td>23.036450</td>
+<td>-0.147929</td>
+<td>12.723382</td>
+<td>-5.840536</td>
+<td>8.819186</td>
+<td>11.453869</td>
+<td>22.528520</td>
+<td>6.716290</td>
+<td>-11.392205</td>
+<td>-7.408195</td>
+<td>-14.379575</td>
+<td>13.391123</td>
+<td>-14.452807</td>
+<td>4.422652</td>
+<td>-1.258824</td>
+<td>-17.813281</td>
+<td>15.503693</td>
+<td>13.394999</td>
+<td>-2.510229</td>
+<td>27.050573</td>
+<td>-27.050573</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">restaurants</td>
+<td>-3.804467</td>
+<td>-49.649739</td>
+<td>-35.195857</td>
+<td>-35.630572</td>
+<td>-10.369706</td>
+<td>-15.082555</td>
+<td>-45.682587</td>
+<td>100.000000</td>
+<td>70.082901</td>
+<td>92.685489</td>
+<td>93.785708</td>
+<td>81.867598</td>
+<td>72.800622</td>
+<td>86.830970</td>
+<td>88.223062</td>
+<td>-6.147347</td>
+<td>-61.679836</td>
+<td>21.913691</td>
+<td>-9.414464</td>
+<td>-0.960205</td>
+<td>-6.560660</td>
+<td>25.294489</td>
+<td>4.359925</td>
+<td>16.208406</td>
+<td>-4.445822</td>
+<td>8.520684</td>
+<td>11.018180</td>
+<td>21.079861</td>
+<td>11.001882</td>
+<td>-12.517755</td>
+<td>-7.152755</td>
+<td>-17.472498</td>
+<td>12.955425</td>
+<td>-17.083059</td>
+<td>14.377424</td>
+<td>-3.251219</td>
+<td>-26.912230</td>
+<td>30.166819</td>
+<td>9.397851</td>
+<td>-1.967211</td>
+<td>33.389891</td>
+<td>-33.389891</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">exterior_walls_Brick</td>
+<td>-2.701546</td>
+<td>-18.516518</td>
+<td>-16.410433</td>
+<td>-22.117430</td>
+<td>-26.998434</td>
+<td>-8.080172</td>
+<td>-9.106787</td>
+<td>21.079861</td>
+<td>25.830983</td>
+<td>18.764461</td>
+<td>23.243450</td>
+<td>22.528520</td>
+<td>21.091871</td>
+<td>22.376703</td>
+<td>17.478872</td>
+<td>15.011435</td>
+<td>-25.391671</td>
+<td>11.774320</td>
+<td>-0.781606</td>
+<td>4.019010</td>
+<td>-10.130883</td>
+<td>11.213062</td>
+<td>-0.673113</td>
+<td>13.366702</td>
+<td>-7.206369</td>
+<td>-2.935437</td>
+<td>25.718491</td>
+<td>100.000000</td>
+<td>-12.358038</td>
+<td>-18.665271</td>
+<td>-19.939266</td>
+<td>-27.950491</td>
+<td>-14.677479</td>
+<td>-45.774522</td>
+<td>-20.116284</td>
+<td>-1.193489</td>
+<td>-7.137277</td>
+<td>7.156120</td>
+<td>4.584220</td>
+<td>-1.017099</td>
+<td>19.444605</td>
+<td>-19.444605</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>corr_df <span class="op">=</span> base_df[[<span class="st">'tx_price'</span>, <span class="st">'property_tax'</span>, <span class="st">'insurance'</span>, <span class="st">'sqft'</span>, <span class="st">'baths'</span>, <span class="st">'beds'</span>, <span class="st">'property_type_Single-Family'</span>]].copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can now get a better behavioural insight from this data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">10</span>))</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.PairGrid(corr_df, diag_sharey<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>g.map_upper(sns.scatterplot, s<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>g.map_lower(sns.kdeplot)</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>g.map_diag(sns.kdeplot, lw<span class="op">=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="visualizing-the-prediction-results-from-multiple-regression-models" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-the-prediction-results-from-multiple-regression-models">Visualizing the prediction results from multiple regression models</h3>
+<p>In your class project, you would need to visualize the prediction results from multiple models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_predict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is a simplified function from sklearn.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_regression_results(ax, y_true, y_pred, title, scores):</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Scatter plot of the predicted vs true targets."""</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>    ax.plot([y_true.<span class="bu">min</span>(), y_true.<span class="bu">max</span>()],</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>            [y_true.<span class="bu">min</span>(), y_true.<span class="bu">max</span>()],</span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">'--r'</span>, linewidth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>    ax.scatter(y_true, y_pred, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'top'</span>].set_visible(<span class="va">False</span>)</span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'right'</span>].set_visible(<span class="va">False</span>)</span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a>    ax.get_xaxis().tick_bottom()</span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a>    ax.get_yaxis().tick_left()</span>
+<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'left'</span>].set_position((<span class="st">'outward'</span>, <span class="dv">10</span>))</span>
+<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'bottom'</span>].set_position((<span class="st">'outward'</span>, <span class="dv">10</span>))</span>
+<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim([y_true.<span class="bu">min</span>(), y_true.<span class="bu">max</span>()])</span>
+<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim([y_true.<span class="bu">min</span>(), y_true.<span class="bu">max</span>()])</span>
+<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'Measured'</span>)</span>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Predicted'</span>)</span>
+<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a>    extra <span class="op">=</span> plt.Rectangle((<span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">0</span>, <span class="dv">0</span>, fc<span class="op">=</span><span class="st">"w"</span>, fill<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a>                          edgecolor<span class="op">=</span><span class="st">'none'</span>, linewidth<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a>    ax.legend([extra], [scores], loc<span class="op">=</span><span class="st">'upper left'</span>)</span>
+<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a>    title <span class="op">=</span> title</span>
+<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a>    ax.set_title(title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We need to create a list of estimators compatible with this function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>estimators <span class="op">=</span> []</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, pipeline <span class="kw">in</span> pipelines.items():</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>    estimators.append((name , pipeline))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>estimators</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can create an easy to interpret plot to analyze the results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">7</span>))</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>axs <span class="op">=</span> np.ravel(axs)</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (name, est) <span class="kw">in</span> <span class="bu">zip</span>(axs, estimators):</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    score <span class="op">=</span> cross_validate(est, X, y,</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>                           scoring<span class="op">=</span>[<span class="st">'r2'</span>, <span class="st">'neg_mean_absolute_error'</span>],</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>                           n_jobs<span class="op">=-</span><span class="dv">1</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> cross_val_predict(est, X, y, n_jobs<span class="op">=-</span><span class="dv">1</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>    plot_regression_results(</span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>        ax, y, y_pred,</span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>        name,</span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>        (<span class="vs">r'$R^2=</span><span class="sc">{:.2f}</span><span class="vs"> \pm </span><span class="sc">{:.2f}</span><span class="vs">$'</span> <span class="op">+</span> <span class="st">'</span><span class="ch">\n</span><span class="st">'</span> <span class="op">+</span> <span class="vs">r'$MAE=</span><span class="sc">{:.2f}</span><span class="vs"> \pm </span><span class="sc">{:.2f}</span><span class="vs">$'</span>)</span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">format</span>(np.mean(score[<span class="st">'test_r2'</span>]),</span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a>                np.std(score[<span class="st">'test_r2'</span>]),</span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>                <span class="op">-</span>np.mean(score[<span class="st">'test_neg_mean_absolute_error'</span>]),</span>
+<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a>                np.std(score[<span class="st">'test_neg_mean_absolute_error'</span>])))</span>
+<span id="cb67-19"><a href="#cb67-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-20"><a href="#cb67-20" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">'Predictors'</span>)</span>
+<span id="cb67-21"><a href="#cb67-21" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb67-22"><a href="#cb67-22" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(top<span class="op">=</span><span class="fl">0.9</span>)</span>
+<span id="cb67-23"><a href="#cb67-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>👏 Congratulations, you have completed the Error Analysis Workbook!</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
