@@ -4,7 +4,7 @@ title: "PHYS 220: Intro to Computational Physics"
 permalink: /UAF/CompPhys
 ---
 
-[Spring 2020] ***Intro to Computational Physics*** with Dr. Peter Delamere at [UAF](../../UAF.qmd)
+[Spring 2020] ***Intro to Computational Physics*** with Dr. Peter Delamere at [UAF](../../UAF.md)
 
 ---
 

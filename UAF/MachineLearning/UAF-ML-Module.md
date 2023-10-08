@@ -5,7 +5,7 @@ permalink: /UAF/ML-Module
 ---
 
 
-[Spring 2021] ***Machine Learning (Physics Module)*** with Dr. Doga Ozturk at [UAF](../../UAF.qmd)
+[Spring 2021] ***Machine Learning (Physics Module)*** with Dr. Doga Ozturk at [UAF](../../UAF.md)
 
 ---
 
