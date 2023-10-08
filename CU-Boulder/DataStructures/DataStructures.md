@@ -9,32 +9,32 @@ permalink: /CUB/DataStructures
 ## Homeworks
 
 1. (Written HW)
-2. [Simulation of a Coin Flip](HW/JasmineKobayashiA02a.ipynb)
+2. [Simulation of a Coin Flip](HW/JasmineKobayashiA02a.html)
     - `random.randint()`
     - monte carlo practice
-3. [Student classes](HW/JasmineKobayashiA03b.ipynb)
+3. [Student classes](HW/JasmineKobayashiA03b.html)
     - Python class objects
         - abstract classes
-4. [Greedy and Binary search](HW/JasmineKobayashiA04.ipynb)
-5. [Insertion, selection, and bubble sort](HW/JasmineKobayashiA05a.ipynb)
-6. [Recursion, Dynamic Programming](HW/JasmineKobayashiA06.ipynb)
+4. [Greedy and Binary search](HW/JasmineKobayashiA04.html)
+5. [Insertion, selection, and bubble sort](HW/JasmineKobayashiA05a.html)
+6. [Recursion, Dynamic Programming](HW/JasmineKobayashiA06.html)
     - Merge and Quick sort
     - Fibonacci Series and Recursion
-7. [Sorting Functions](HW/JasmineKobayashiA07.ipynb)
+7. [Sorting Functions](HW/JasmineKobayashiA07.html)
     - Insertion and Binary Insertion Sort
     - Merge Sort
     - Monte Carlo
 8. Strings
-    - [Part A](HW/JasmineKobayashiA08a.ipynb)
+    - [Part A](HW/JasmineKobayashiA08a.html)
         - creation
         - concatenation
         - splitting
         - slicing
         - traverse
-    - [Part B](HW/JasmineKobayashiA08b.ipynb)
+    - [Part B](HW/JasmineKobayashiA08b.html)
         - Caesar encoding, decoding, and breaker
 9. (there wasn't a notebook when I downloaded these files)
-10. [Numpy and Pandas](HW/JasmineKobayashiA10.ipynb)
+10. [Numpy and Pandas](HW/JasmineKobayashiA10.html)
     - Arrays
     - Dataframes
 
