@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "CUB-DataMining"
-permalink: /CUB-DataMining
+permalink: /CUB/DataMining
 ---
 # Data Mining
 

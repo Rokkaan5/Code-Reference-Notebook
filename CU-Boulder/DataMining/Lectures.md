@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "DataMining Lectures"
-permalink: /CUB-DataMining-Lectures
+permalink: /CUB/DataMining/Lectures
 ---
 
 # [Data Mining](DataMining.md) - Lecture Tutorial Notebooks

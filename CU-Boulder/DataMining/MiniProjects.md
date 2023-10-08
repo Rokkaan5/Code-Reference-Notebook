@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "CUB-DataMining-MiniProjects"
-permalink: /CUB-DataMining-MiniProjects
+permalink: /CUB/DataMining/MiniProjects
 ---
 
 # [Data Mining](DataMining.md)- Mini Projects
