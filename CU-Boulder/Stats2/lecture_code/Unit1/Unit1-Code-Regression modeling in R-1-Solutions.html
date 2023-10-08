@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Osita Onyejekwe">
+
+<title>Regression Modeling in R - Part 1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/quarto-html/quarto.js"></script>
+<script src="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/quarto-html/popper.min.js"></script>
+<script src="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Unit1-Code-Regression modeling in R-1-Solutions_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#regression-modeling-in-r---a-first-pass" id="toc-regression-modeling-in-r---a-first-pass" class="nav-link active" data-scroll-target="#regression-modeling-in-r---a-first-pass">Regression modeling in R - a first pass</a>
+  <ul class="collapse">
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">Exploratory data analysis</a>
+  <ul class="collapse">
+  <li><a href="#missing-data-and-univariate-explorations" id="toc-missing-data-and-univariate-explorations" class="nav-link" data-scroll-target="#missing-data-and-univariate-explorations">Missing data and univariate explorations</a></li>
+  <li><a href="#bivariate-explorations" id="toc-bivariate-explorations" class="nav-link" data-scroll-target="#bivariate-explorations">Bivariate explorations</a></li>
+  </ul></li>
+  <li><a href="#linear-regression-modeling" id="toc-linear-regression-modeling" class="nav-link" data-scroll-target="#linear-regression-modeling">Linear regression modeling</a>
+  <ul class="collapse">
+  <li><a href="#the-lm-function" id="toc-the-lm-function" class="nav-link" data-scroll-target="#the-lm-function">The <code>lm()</code> function</a></li>
+  </ul></li>
+  <li><a href="#visualizing-the-regression-model" id="toc-visualizing-the-regression-model" class="nav-link" data-scroll-target="#visualizing-the-regression-model">Visualizing the regression model</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Regression Modeling in R - Part 1</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr.&nbsp;Osita Onyejekwe </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="regression-modeling-in-r---a-first-pass" class="level1">
+<h1>Regression modeling in R - a first pass</h1>
+<p>The following dataset contains observational measurements related to the impact of three advertising medias on sales of a product, <span class="math inline">\(P\)</span>. The variables are:</p>
+<ul>
+<li><p><code>youtube</code>: the advertising budget allocated to YouTube. Measured in thousands of dollars;</p></li>
+<li><p><code>facebook</code>: the advertising budget allocated to Facebook. Measured in thousands of dollars; and</p></li>
+<li><p><code>newspaper</code>: the advertising budget allocated to a local newspaper. Measured in thousands of dollars.</p></li>
+<li><p><code>sales</code>: the value in the <span class="math inline">\(i^{th}\)</span> row of the sales column is a measurement of the sales (in thousands of units) for product <span class="math inline">\(P\)</span> for company <span class="math inline">\(i\)</span>.</p></li>
+</ul>
+<p>The advertising data treat “a company selling product <span class="math inline">\(P\)</span>” as the statistical unit, and “all companies selling product <span class="math inline">\(P\)</span>” as the population. We assume that the <span class="math inline">\(n = 200\)</span> companies in the dataset were chosen at random from the population (a strong assumption!).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(testthat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>marketing <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/marketing.txt"</span>), <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(marketing, <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   youtube facebook newspaper sales
+1   276.12    45.36     83.04 26.52
+2    53.40    47.16     54.12 12.48
+3    20.64    55.08     83.16 11.16
+4   181.80    49.56     70.20 22.20
+5   216.96    12.96     70.08 15.48
+6    10.44    58.68     90.00  8.64
+7    69.00    39.36     28.20 14.16
+8   144.24    23.52     13.92 15.84
+9    10.32     2.52      1.20  5.76
+10  239.76     3.12     25.44 12.72
+11   79.32     6.96     29.04 10.32
+12  257.64    28.80      4.80 20.88
+13   28.56    42.12     79.08 11.04
+14  117.00     9.12      8.64 11.64
+15  244.92    39.48     55.20 22.80</code></pre>
+</div>
+</div>
+<section id="exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory data analysis</h2>
+<p>Before we model the data, let’s first explore the data. We’ll first check to see whether there are any missing values in the dataset. Then, we’ll take a look at some univariate and bivariate summaries of the data.</p>
+<p><em>Note that, in an earlier lesson, we discussed the importance of randomly partitioning the data, and using one subset of the data for exploratory data analysis, another for fitting the model, and then possibly a third for model validation. However, for this dataset, there are only <span class="math inline">\(n = 200\)</span> units in the sample, and so there is not enough data for three robust subsets. So, we’ll proceed to perform EDA on the entire dataset, but noting that our conclusions may be less certain because of the possibility of error due to “double dipping”.</em></p>
+<section id="missing-data-and-univariate-explorations" class="level3">
+<h3 class="anchored" data-anchor-id="missing-data-and-univariate-explorations">Missing data and univariate explorations</h3>
+<p>Are there any missing values coded as <code>NA</code>? Or, are there any odd values for variables, e.g., <code>9999</code> or <code>0</code> possibly standing in for a missing value?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(marketing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 200   4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"There are"</span>, <span class="fu">sum</span>(<span class="fu">is.na</span>(marketing)), <span class="st">"missing data values."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 0 missing data values.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(marketing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    youtube          facebook       newspaper          sales      
+ Min.   :  0.84   Min.   : 0.00   Min.   :  0.36   Min.   : 1.92  
+ 1st Qu.: 89.25   1st Qu.:11.97   1st Qu.: 15.30   1st Qu.:12.45  
+ Median :179.70   Median :27.48   Median : 30.90   Median :15.48  
+ Mean   :176.45   Mean   :27.92   Mean   : 36.66   Mean   :16.83  
+ 3rd Qu.:262.59   3rd Qu.:43.83   3rd Qu.: 54.12   3rd Qu.:20.88  
+ Max.   :355.68   Max.   :59.52   Max.   :136.80   Max.   :32.40  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>marketing<span class="sc">$</span>facebook[<span class="fu">order</span>(marketing<span class="sc">$</span>facebook)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.00 0.36 0.48 0.96 1.56</code></pre>
+</div>
+</div>
+<p>There are no values coded as <code>NA</code>. <code>facebook</code> does have <code>0</code> as a value, but it’s not clear that this is a missing value. It’s plausible that some company simply does not have a Facebook marketing budget. There don’t appear to be any values like <code>9999</code> indicating missing values. So, we’ll proceed under the assumption that we have all the data!</p>
+<p>Construct a histogram of each of the variables and comment on their distributions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>marketing <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">keep</span>(is.numeric) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(value)) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> key, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">12</span>, <span class="at">color=</span><span class="st">"black"</span>, <span class="at">fill =</span><span class="st">"#CFB87C"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Unit1-Code-Regression-modeling-in-R-1-Solutions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The histograms of each variable provide insight into the distributions of the variables. None look normal; however, there is no requirement that the predictors (<code>facebook</code>, <code>youtube</code>, <code>newspaper</code>) come from a normal distribution. The response, <code>sales</code> does not look all that normal, but as we’ll see, some regression analyses can be fairly robust to deviations in the normality assumption.</p>
+<p>As you may have noticed from the histogram of <code>newspaper</code>, there may be a few outliers. Let’s look at some boxplots to see in further detail. Note that R classifies potential outliers by the “IQR criterion”. This criterion means that all observations above <span class="math inline">\(q_{0.75}+1.5\times IQR\)</span> or below <span class="math inline">\(q_{0.25}-1.5\times IQR\)</span> are classified as outliers, where</p>
+<ul>
+<li><span class="math inline">\(q_{0.25}\)</span> is the first quartile;</li>
+<li><span class="math inline">\(q_{0.75}\)</span> is the third quartile.</li>
+<li>IQR is the interquartile range, defined as the difference between the third and first quartile.</li>
+</ul>
+<p>A boxplot will “flag” the outliers. Construct a boxplot for each variable and comment on the existence of potential outliers.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(marketing<span class="sc">$</span>sales, <span class="at">main=</span><span class="st">'Sales'</span>,<span class="at">col=</span><span class="st">"#CFB87C"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(marketing<span class="sc">$</span>youtube, <span class="at">main=</span><span class="st">'YouTube'</span>,<span class="at">col=</span><span class="st">"#CFB87C"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(marketing<span class="sc">$</span>facebook, <span class="at">main=</span><span class="st">'Facebook'</span>,<span class="at">col=</span><span class="st">"#CFB87C"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(marketing<span class="sc">$</span>newspaper, <span class="at">main=</span><span class="st">'Newspaper'</span>,<span class="at">col=</span><span class="st">"#CFB87C"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Unit1-Code-Regression-modeling-in-R-1-Solutions_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The outliers for the Newspaper variable are "</span>, <span class="fu">boxplot.stats</span>(marketing<span class="sc">$</span>newspaper)<span class="sc">$</span>out[<span class="dv">1</span>],</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">" and "</span>,<span class="fu">boxplot.stats</span>(marketing<span class="sc">$</span>newspaper)<span class="sc">$</span>out[<span class="dv">2</span>], <span class="st">"."</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The outliers for the Newspaper variable are  136.8  and  121.08 .</code></pre>
+</div>
+</div>
+<p>The outliers for the Newspaper variable are 136.8 and 121.08 .</p>
+<p>Using the interquartile range criterion, we see that <code>newspaper</code> has two potential outliers. We simply note this for now, and note that outliers can impact the fit of a regression.</p>
+</section>
+<section id="bivariate-explorations" class="level3">
+<h3 class="anchored" data-anchor-id="bivariate-explorations">Bivariate explorations</h3>
+<p>Let’s now explore how the variables may or may not relate to each other. First, calculate the correlations between variables. Correlations can help us meaasure the strength of the linear relationship between variables. The bland way to do this is with to <code>cor()</code> function. But try the <code>corrplot()</code> function in the <code>corrplot</code> library (which you’ll need to install in your R environment in Anaconda). Comment on the correlations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="do">### </span><span class="re">BEGIN</span><span class="do"> SOLUTION HERE</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>col4 <span class="ot">=</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"darkgrey"</span>, <span class="st">"grey"</span>,<span class="st">"#CFB87C"</span>))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(marketing), <span class="at">method =</span> <span class="st">"ellipse"</span>, </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">col4</span>(<span class="dv">100</span>),  <span class="at">addCoef.col =</span> <span class="st">"black"</span>, <span class="at">tl.col =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Unit1-Code-Regression-modeling-in-R-1-Solutions_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">### </span><span class="re">END</span><span class="do"> SOLUTION HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that there’s a relatively strong correlation between <code>sales</code> and <code>youtube</code>, and <code>sales</code> and <code>facebook</code>.</p>
+<p>However, knowing correlations alone isn’t enough; the correlation coefficient can be misleading if there are nonlinear relationships, and so we should explore the relationships further.</p>
+<p>To do so, we’ll look at pairwise scatter plots, i.e., a scatter plot of each variable with each other variable. We should be looking for:</p>
+<ul>
+<li>Relationships between the response and each predictor.</li>
+<li>Relationships between predictor variables. Such relationships are undesirable.</li>
+</ul>
+<p>Create all possible pairwise scatter plots of the data (the <code>pairs()</code> function may help). Comment on the observed relationships.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(marketing, <span class="at">main =</span> <span class="st">"Marketing Data"</span>, <span class="at">pch =</span> <span class="dv">21</span>, </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">bg =</span> <span class="fu">c</span>(<span class="st">"#CFB87C"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Unit1-Code-Regression-modeling-in-R-1-Solutions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Here are some notes on the relationships:</p>
+<ul>
+<li><p>The relationship between <code>sales</code> and <code>youtube</code> appears nonlinear, with a sharp increase in sales for a small increase in YouTube advertising in the lower range of <code>youtube</code>. As more money is spent on YouTube advertising, however, the increase in sales is less prevalent.</p></li>
+<li><p>It’s also worth noting that, as <code>youtube</code> increases, the variability in sales also increases.</p></li>
+<li><p>There appears to be a linear relationship between <code>sales</code> and <code>facebook</code>, too, but with a lot of variability, especially for high vales of <code>facebook</code> and low <code>sales</code>.</p></li>
+<li><p>There doesn’t appear to be a relationship between <code>sales</code> and <code>newspaper</code>.</p></li>
+<li><p>There aren’t any other strong trends in the data.</p></li>
+</ul>
+</section>
+</section>
+<section id="linear-regression-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="linear-regression-modeling">Linear regression modeling</h2>
+<p>First, let’s randomly split the data into a “training set” and “testing set”. We do this so that we can train/fit the linear model on the training set, and then, if necessary, see how well the model fits (e.g., does it make reasonable predictions?) in the testing set. In this lesson, we will only briefly look at fit metrics on the testing set; but, it’s good practice to split the data in this (or a similar) way when wanting to assess the fit or predictive power of the model.</p>
+<p>Write code to randomly select <span class="math inline">\(80\%\)</span> of the rows from the <code>marketing</code> dataframe. Store these rows in a dataframe <code>train</code>. Then, store the remaining rows in a dataframe called <code>test</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">11</span>) <span class="co">#set the random number generator seed.</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="do">### </span><span class="re">BEGIN</span><span class="do"> SOLUTION HERE</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">floor</span>(<span class="fl">0.8</span> <span class="sc">*</span> <span class="fu">nrow</span>(marketing)) <span class="co">#find the number corresponding to 80% of the data</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>index <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(marketing)), <span class="at">size =</span> n) <span class="co">#randomly sample indicies to be included in the training set</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>train <span class="ot">=</span> marketing[index, ] <span class="co">#set the training set to be the randomly sampled rows of the dataframe</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>test <span class="ot">=</span> marketing[<span class="sc">-</span>index, ] <span class="co">#set the testing set to be the remaining rows</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"There are"</span>, <span class="fu">dim</span>(train)[<span class="dv">1</span>], <span class="st">"rows and"</span>,<span class="fu">dim</span>(train)[<span class="dv">2</span>],<span class="st">"columns in the training set. "</span>)  <span class="co">#check the dimensions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 160 rows and 4 columns in the training set. </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"There are"</span>, <span class="fu">dim</span>(test)[<span class="dv">1</span>], <span class="st">"rows and"</span>,<span class="fu">dim</span>(test)[<span class="dv">2</span>],<span class="st">"columns in the testing set."</span>)  <span class="co">#check the dimensions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 40 rows and 4 columns in the testing set.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">### </span><span class="re">END</span><span class="do"> SOLUTION HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are 160 rows and 4 columns in the training set. There are 40 rows and 4 columns in the testing set.</p>
+<section id="the-lm-function" class="level3">
+<h3 class="anchored" data-anchor-id="the-lm-function">The <code>lm()</code> function</h3>
+<p><code>R</code> has a great function for fitting and summarizing linear regression models: the <code>lm()</code> function. <code>lm()</code> will fit a linear regression model to data using least squares (or other methods, when specified), and provide many summary statistics. Let’s look at some basics of <code>lm()</code>. As we progress through the course, we’ll learn to work with more and more of the output of the <code>lm()</code> function.</p>
+<p>The <code>lm()</code> function may take in several arguments, but only a small number of them are required. The first required argument is the <code>formula</code>: it should be in the following format: <code>response ~ predictor1 + predictor2 + ... + predictorP</code>. If your data are stored in a dataframe (which will often be the case), then the simplest thing to do is specify a second argument, namely <code>data = NameOfDataFrame</code>. Let’s use <code>lm()</code> on the training subset of the marketing data, with just <code>facebook</code> as a predictor. <strong>Be sure to use the training data (not the entire marketing data). Store your <code>lm()</code> object in the variable <code>lm_marketing</code>.</strong></p>
+<p>After you’ve fit the model using <code>lm()</code>, clearly write out the fitted model and interpret the parameter estimates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>lm_marketing <span class="ot">=</span> <span class="fu">lm</span>(sales <span class="sc">~</span> facebook, <span class="at">data =</span> train)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_marketing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = sales ~ facebook, data = train)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-18.573  -2.535   1.069   3.422  10.160 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 11.32793    0.82030  13.810  &lt; 2e-16 ***
+facebook     0.19287    0.02396   8.049 1.88e-13 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.387 on 158 degrees of freedom
+Multiple R-squared:  0.2908,    Adjusted R-squared:  0.2863 
+F-statistic: 64.79 on 1 and 158 DF,  p-value: 1.881e-13</code></pre>
+</div>
+</div>
+<p>The <code>summary()</code> function applied to an <code>lm()</code> object gives is plenty of output:</p>
+<ul>
+<li><p>First, the summary function reminds us of the formula for the model, i.e., that <code>sales</code> is the response and <code>facebook</code> the predictor.</p></li>
+<li><p>Next, we have summary statistics for the residuals of the model. Recall that the residuals are defined as <span class="math inline">\(\varepsilon_i = y_i - \widehat{y_i}\)</span>, where <span class="math inline">\(\widehat{y_i} = \widehat\beta_0 + \widehat\beta_1facebook_i, \,\, i = 1,...,n\)</span> are the fitted values of the model. If the model fits well, the residuals will look <em>roughly</em> normal/random scatter around zero.</p></li>
+<li><p>Next, we see a table of, among other things, the least squares estimates for the model. In the last module, we learned how to interpret these estimates:</p>
+<ul>
+<li><p>If the model is correct, then if a company spend zero dollars on Facebook advertising, they can expect to sell roughly <span class="math inline">\(\widehat\beta_0 \times 1000 = 11.33 \times 1,000 = 11,330\)</span> units, on average.</p></li>
+<li><p>If the model is correct, then, for a <span class="math inline">\(\$1,000\)</span> increase in the Facebook advertising budget, the company can expect to sell roughly <span class="math inline">\(\widehat\beta_1 \times 1000 = 0.19 \times 1,000 = 190\)</span> more units, on average.</p></li>
+</ul></li>
+<li><p>We’ll ignore the remaining components of the coefficient table for now, but will return to them soon!</p></li>
+<li><p>We’ll also ignore the residual standard error, <span class="math inline">\(R^2\)</span>, and F-statistic information. We’ll return to this when we discuss regression inference.</p></li>
+</ul>
+<section id="computing-regression-quantities-by-hand" class="level4">
+<h4 class="anchored" data-anchor-id="computing-regression-quantities-by-hand">Computing regression quantities “by hand”</h4>
+<p>Let’s connect the <code>lm()</code> function output to the computations that we learned about in class. First, let’s construct the “design matrix”, <span class="math inline">\(X\)</span>, i.e., the matrix with a column of <code>1's</code>, and then columns for each predictor.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> <span class="fu">cbind</span>(<span class="dv">1</span>, train<span class="sc">$</span>facebook) </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#another way to do this:</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#X1 = model.matrix(lm_marketing)</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">#sum(X-X1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Recall that the least squares solution is: <span class="math inline">\(\boldsymbol{\widehat\beta} = \left(X^TX \right)^{-1}X^T\mathbf{y}\)</span>. To compute this “by hand” in <code>R</code>, we’ll need the transpose function, <code>t()</code>, the operator for matrix multiplication, <code>%*%</code>, and the function for finding the inverse of a matrix, <code>solve()</code>. Use these functions to compute the least squares solution without using the <code>lm()</code> function. Store your result in the variable <code>b</code>, which should end up being a column vector. <em>Be sure to use the training set for this answer. <code>b</code> should match the estimate column from <code>lm()</code>.</em></p>
+<p>(Imoprtantly, this is <em>not</em> how <code>lm()</code> in <code>R</code> (or other software packates, like <code>Python</code>) actually computes the least squares estimates. Instead, they use methods that are less computationally expensive. We are computing the least squares estimates in this way to show that the theory from class matches the values from <code>R</code>. The theory will be important for our understanding and interpretation of linear regression.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> train<span class="sc">$</span>sales</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> <span class="fu">solve</span>(<span class="fu">t</span>(X)<span class="sc">%*%</span>X)<span class="sc">%*%</span><span class="fu">t</span>(X)<span class="sc">%*%</span>y</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]
+[1,] 11.3279292
+[2,]  0.1928711</code></pre>
+</div>
+</div>
+<p>Now compute the fitted values and residuals of the model. Store them in the variables <code>yhat</code> and <code>r</code>, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">=</span> X<span class="sc">%*%</span>b </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">#note that these are the same as the fitted values from the lm() function:</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(yhat <span class="sc">-</span> <span class="fu">fitted</span>(lm_marketing)) <span class="co">#machine zero</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.062617e-13</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> y <span class="sc">-</span> yhat</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">#note that these are the same as the residuals from the lm() function:</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(r <span class="sc">-</span> <span class="fu">residuals</span>(lm_marketing)) <span class="co">#machine zero</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -5.148659e-13</code></pre>
+</div>
+</div>
+<p>2.00728322852228e-13</p>
+<p>-2.05949840514918e-13</p>
+</section>
+</section>
+</section>
+<section id="visualizing-the-regression-model" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-the-regression-model">Visualizing the regression model</h2>
+<p>We will learn a few important visualizations of the linear regression model in the modules to come. For now, let’s just visualize our data with the regression model imposed on it.</p>
+<p>Construct a scatter plot of <code>sales</code> (<span class="math inline">\(y\)</span>) against <code>facebook</code> (<span class="math inline">\(x\)</span>) <em>from the training data</em>, and plot the fitted line over the data. You can use “base R” functions like <code>plot()</code> and <code>abline()</code>, or be fancy and use <code>ggplot()</code>!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(train, <span class="fu">aes</span>(<span class="at">x =</span> facebook, <span class="at">y =</span> sales)) <span class="sc">+</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">col =</span> <span class="st">"#CFB87C"</span>, <span class="at">se =</span> F) <span class="sc">+</span> </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Facebook Advertising Budget"</span>) <span class="sc">+</span> </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Sales"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Unit1-Code-Regression-modeling-in-R-1-Solutions_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Note that the fit looks OK, but that there is a lot of variability in <code>sales</code>, especially for higher values of <code>facebook</code>. Imagine making a prediction for <code>sales</code> for <code>facebook = 60</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>yhat_60 <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">round</span>(<span class="fu">coef</span>(lm_marketing)[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">coef</span>(lm_marketing)[<span class="dv">2</span>]<span class="sc">*</span><span class="dv">60</span>, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The model predicts <code>sales = 22.9</code>: that is, the model predicts that a company with a facebook marketing budget of <span class="math inline">\(\$60,000\)</span> will sell <span class="math inline">\(22,900\)</span> units of product <span class="math inline">\(P\)</span>, on average. But look at other measurements near <span class="math inline">\(\$60,000\)</span>; based on the data, sales could be as low as <span class="math inline">\(9,000\)</span> units or over <span class="math inline">\(30,000\)</span> units.</p>
+<p>Finally, let’s take a look at how the plot would look using the testing data instead of the training data. Ideally, we would want the the model to fit well for the testing data too.</p>
+<p>Construct a scatter plot of <code>sales</code> (<span class="math inline">\(y\)</span>) against <code>facebook</code> (<span class="math inline">\(x\)</span>) <em>from the test data</em> and plot the fitted line over the data. You can use “base R” functions like <code>plot()</code> and <code>abline()</code>, or be fancy and use <code>ggplot()</code>!</p>
+<p>Note that overlaying the regression line on a scatterplot of the data is not a rigorous way of assessing the fit of the model; later on in the course, we will learn better goodness of fit metrics for linear regression.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(test, <span class="fu">aes</span>(<span class="at">x =</span> facebook, <span class="at">y =</span> sales)) <span class="sc">+</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="fu">coef</span>(lm_marketing)[<span class="dv">1</span>], <span class="at">slope =</span> <span class="fu">coef</span>(lm_marketing)[<span class="dv">2</span>], <span class="at">col =</span> <span class="st">"#CFB87C"</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#geom_smooth(method = "lm", col = "#CFB87C", se = F) + </span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">"Facebook Advertising Budget"</span>) <span class="sc">+</span> </span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Sales"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Unit1-Code-Regression-modeling-in-R-1-Solutions_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

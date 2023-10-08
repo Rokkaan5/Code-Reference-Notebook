@@ -1,15 +1,15 @@
 ---
 layout: page
 title: "STAT 5010: Statistical Methods & Applications II"
-permalink: /StatII
+permalink: /CUB/StatII
 ---
 
-[Fall 2023] ***Stat Methods & App. II*** with Dr. Osita Onyejekwe (Dr. O) at [CU Boulder](../../CUB.qmd)
+[Fall 2023] ***Stat Methods & App. II*** with Dr. Osita Onyejekwe (Dr. O) at [CU Boulder](../../CUB.md)
 
 # Subpages
 
-- [Lecture codes](class_code.qmd)
-- [Homeworks](homeworks.qmd)
+- [Lecture codes](class_code.md)
+- [Homeworks](homeworks.md)
 
 # Unit 0: R, R-Markdown, Linear Algebra
 ## Topics:

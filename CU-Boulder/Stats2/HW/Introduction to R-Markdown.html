@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>Introduction to R-Markdown</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Introduction to R-Markdown_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Introduction to R-Markdown_files/libs/quarto-html/quarto.js"></script>
+<script src="Introduction to R-Markdown_files/libs/quarto-html/popper.min.js"></script>
+<script src="Introduction to R-Markdown_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Introduction to R-Markdown_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Introduction to R-Markdown_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Introduction to R-Markdown_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Introduction to R-Markdown_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Introduction to R-Markdown_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Introduction to R-Markdown_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-wrangling-and-tidy-data" id="toc-data-wrangling-and-tidy-data" class="nav-link active" data-scroll-target="#data-wrangling-and-tidy-data">Data Wrangling and Tidy Data</a>
+  <ul class="collapse">
+  <li><a href="#question-1-importing-data" id="toc-question-1-importing-data" class="nav-link" data-scroll-target="#question-1-importing-data">Question 1: Importing Data</a></li>
+  <li><a href="#question-2-check-out-the-data" id="toc-question-2-check-out-the-data" class="nav-link" data-scroll-target="#question-2-check-out-the-data">Question 2: Check out the Data</a></li>
+  <li><a href="#question-3-subset-rows-and-columns" id="toc-question-3-subset-rows-and-columns" class="nav-link" data-scroll-target="#question-3-subset-rows-and-columns">Question 3: Subset Rows and Columns</a></li>
+  <li><a href="#question-4-tidy-the-data" id="toc-question-4-tidy-the-data" class="nav-link" data-scroll-target="#question-4-tidy-the-data">Question 4: Tidy the Data</a></li>
+  <li><a href="#question-5-calculate-by-groups" id="toc-question-5-calculate-by-groups" class="nav-link" data-scroll-target="#question-5-calculate-by-groups">Question 5: Calculate By Groups</a></li>
+  <li><a href="#final-questions" id="toc-final-questions" class="nav-link" data-scroll-target="#final-questions">Final Questions:</a>
+  <ul class="collapse">
+  <li><a href="#knit-the-file-to-html-and-submit" id="toc-knit-the-file-to-html-and-submit" class="nav-link" data-scroll-target="#knit-the-file-to-html-and-submit">Knit the File to HTML and Submit!!</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction to R-Markdown</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="data-wrangling-and-tidy-data" class="level1">
+<h1>Data Wrangling and Tidy Data</h1>
+<p>We will focus on data wrangling, including importing data, changing data types, sub-setting variables and observations, and calculating basic functions.</p>
+<section id="question-1-importing-data" class="level2">
+<h2 class="anchored" data-anchor-id="question-1-importing-data">Question 1: Importing Data</h2>
+<p>Download the California foreclosure auctions dataset and save it to a folder on your desktop. Then load the data into R and save it as a data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))  # set working directory to current file directory</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"California Foreclosure Auctions_updated.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="question-2-check-out-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="question-2-check-out-the-data">Question 2: Check out the Data</h2>
+<p>What is the observational unit of this data? Is the data in tidy format? What needs to be cleaned up about this data?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">head</span>(data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   RadarID       County              Address      City State   Zip
+1 P10B875B  SAN JOAQUIN       4315 LEGACY CT  STOCKTON    CA 95219
+2 P10C21B8  SAN JOAQUIN 2126 BARTRAM RUN WAY  STOCKTON    CA 95212
+3 P118636F    SAN MATEO     91 EL PORTAL WAY DALY CITY    CA 94015
+4 P119F4E3  SAN JOAQUIN       2564 KEYSER DR  STOCKTON    CA 95212
+5 P1208C6F CONTRA COSTA       4003 ROLAND DR   CONCORD    CA 94521
+6 P12524CA  SAN JOAQUIN      3022 STEFANO DR  STOCKTON    CA 95212
+                   Owner OwnerFirstName OwnerLastName PropertyType Units SqFt
+1 MAGALI,MYLO C &amp; CHARIS           MYLO        MAGALI          SFR     1 1408
+2     REYNOLDS,CLAUDE JR         CLAUDE      REYNOLDS          SFR     0 2452
+3         TARAKANOV,MARK           MARK     TARAKANOV          SFR     1 1900
+4 YANG,XUGUANG &amp; RUILING        XUGUANG          YANG          SFR     1 2398
+5     HAWKINS,EDITH M TR          EDITH       HAWKINS          SFR     1 1308
+6                KY,DOUK           DOUK            KY          SFR     1 2632
+  YearBuilt Beds Baths LotSize Pool Stories EstimatedValue
+1      2000    3     3    4430    0       2   $300,143.00 
+2      2006    4     3    5754    0       2   $336,965.00 
+3      1962    4     3    3610    0       1 $1,223,282.00 
+4      2004    4     3    6110    0       2   $301,294.00 
+5      1958    3     2    6660    0       1   $435,610.00 
+6      2004    4     3    6000    0       2   $347,707.00 
+              FirstLoanLender FirstLoanDate FirstLoanAmount     TransferType
+1                   IMORTGAGE     8/24/2016          229000 TrusteesDeed-3rd
+2       PROSPECT MORTGAGE INC    11/30/2009          153750 TrusteesDeed-3rd
+3          SIERRA PACIFIC MTG     5/27/2015          567000 TrusteesDeed-3rd
+4            PARKSIDE LENDING      1/4/2013          130000 TrusteesDeed-3rd
+5                RPM MORTGAGE     3/27/2013          249300 TrusteesDeed-3rd
+6 PLATINUM HOME MORTGAGE CORP     5/28/2010          216015 TrusteesDeed-3rd
+  TransferDate TransferAmount               TransferBuyer
+1     9/8/2009   $132,862.00          FORTIFIED FINANCIAL
+2    9/25/2009   $128,637.00  LENDERS FINANCIAL GROUP LLC
+3    5/17/2010   $592,100.00          DASH STRATEGIES LLC
+4     8/5/2009   $129,000.00          LA-SAC HOLDINGS LLC
+5   10/15/2010   $226,500.00               DECK,RANDALL W
+6     9/8/2009   $142,000.00         ELECTRONIC MTG SVCNG
+              TransferSeller TransferDownPaymentPercent CartelCompany
+1  QUALITY LOAN SERVICE CORP                         NA             1
+2              NDEX WEST LLC                         NA             1
+3              NDEX WEST LLC                         NA             1
+4 CALIFORNIA RECONVEYANCE CO                         NA             1
+5  QUALITY LOAN SERVICE CORP                         NA             1
+6 CALIFORNIA RECONVEYANCE CO                         NA             1
+  DaysToSale
+1       1914
+2          0
+3        270
+4        261
+5         89
+6        262</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">colnames</span>(data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "RadarID"                    "County"                    
+ [3] "Address"                    "City"                      
+ [5] "State"                      "Zip"                       
+ [7] "Owner"                      "OwnerFirstName"            
+ [9] "OwnerLastName"              "PropertyType"              
+[11] "Units"                      "SqFt"                      
+[13] "YearBuilt"                  "Beds"                      
+[15] "Baths"                      "LotSize"                   
+[17] "Pool"                       "Stories"                   
+[19] "EstimatedValue"             "FirstLoanLender"           
+[21] "FirstLoanDate"              "FirstLoanAmount"           
+[23] "TransferType"               "TransferDate"              
+[25] "TransferAmount"             "TransferBuyer"             
+[27] "TransferSeller"             "TransferDownPaymentPercent"
+[29] "CartelCompany"              "DaysToSale"                </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">summary</span>(data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   RadarID             County            Address              City          
+ Length:16677       Length:16677       Length:16677       Length:16677      
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+    State                Zip           Owner           OwnerFirstName    
+ Length:16677       Min.   :94002   Length:16677       Length:16677      
+ Class :character   1st Qu.:94531   Class :character   Class :character  
+ Mode  :character   Median :94583   Mode  :character   Mode  :character  
+                    Mean   :94758                                        
+                    3rd Qu.:95206                                        
+                    Max.   :95632                                        
+                    NA's   :2                                            
+ OwnerLastName      PropertyType           Units              SqFt     
+ Length:16677       Length:16677       Min.   :  0.000   Min.   : 410  
+ Class :character   Class :character   1st Qu.:  1.000   1st Qu.:1154  
+ Mode  :character   Mode  :character   Median :  1.000   Median :1500  
+                                       Mean   :  1.257   Mean   :1687  
+                                       3rd Qu.:  1.000   3rd Qu.:2040  
+                                       Max.   :585.000   Max.   :9327  
+                                       NA's   :2         NA's   :2     
+   YearBuilt         Beds            Baths           LotSize         
+ Min.   :   0   Min.   : 0.000   Min.   : 0.000   Min.   :        0  
+ 1st Qu.:1951   1st Qu.: 3.000   1st Qu.: 2.000   1st Qu.:     4876  
+ Median :1972   Median : 3.000   Median : 2.000   Median :     5920  
+ Mean   :1969   Mean   : 3.322   Mean   : 2.145   Mean   :    41010  
+ 3rd Qu.:1994   3rd Qu.: 4.000   3rd Qu.: 3.000   3rd Qu.:     7315  
+ Max.   :2015   Max.   :12.000   Max.   :12.000   Max.   :121445280  
+ NA's   :2      NA's   :2        NA's   :2        NA's   :2          
+      Pool           Stories       EstimatedValue     FirstLoanLender   
+ Min.   :0.0000   Min.   : 0.000   Length:16677       Length:16677      
+ 1st Qu.:0.0000   1st Qu.: 1.000   Class :character   Class :character  
+ Median :0.0000   Median : 1.000   Mode  :character   Mode  :character  
+ Mean   :0.1008   Mean   : 1.339                                        
+ 3rd Qu.:0.0000   3rd Qu.: 2.000                                        
+ Max.   :1.0000   Max.   :30.000                                        
+ NA's   :2        NA's   :2                                             
+ FirstLoanDate      FirstLoanAmount     TransferType       TransferDate      
+ Length:16677       Min.   :0.000e+00   Length:16677       Length:16677      
+ Class :character   1st Qu.:1.776e+05   Class :character   Class :character  
+ Mode  :character   Median :2.686e+05   Mode  :character   Mode  :character  
+                    Mean   :2.023e+06                                        
+                    3rd Qu.:3.858e+05                                        
+                    Max.   :1.194e+09                                        
+                    NA's   :2536                                             
+ TransferAmount     TransferBuyer      TransferSeller    
+ Length:16677       Length:16677       Length:16677      
+ Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character  
+                                                         
+                                                         
+                                                         
+                                                         
+ TransferDownPaymentPercent CartelCompany       DaysToSale     
+ Min.   :0.000              Min.   :0.00000   Min.   :   0.00  
+ 1st Qu.:0.025              1st Qu.:0.00000   1st Qu.:   0.00  
+ Median :0.200              Median :0.00000   Median :  53.00  
+ Mean   :0.305              Mean   :0.09061   Mean   :  87.59  
+ 3rd Qu.:0.350              3rd Qu.:0.00000   3rd Qu.: 126.00  
+ Max.   :1.000              Max.   :1.00000   Max.   :2397.00  
+ NA's   :10063              NA's   :2         NA's   :6616     </code></pre>
+</div>
+</div>
+<p><strong>JK answer:</strong> From what I understand about what’s considered “tidy”, I don’t believe this is “tidy”. What I understand is what’s considered “tidy” in R (as opposed to “clean data” in other senses), the data has rows for each entry of data and columns for all potential variables; in that sense, this data qualifies for all of those. But need to also have entries in all cells and there are definitely some missing data.</p>
+</section>
+<section id="question-3-subset-rows-and-columns" class="level2">
+<h2 class="anchored" data-anchor-id="question-3-subset-rows-and-columns">Question 3: Subset Rows and Columns</h2>
+<p>Create a new data frame that contains only the auctions that are “TrusteesDeed-3rd” type, and only the variables required to uniquely identify each observation, along with “TransferAmount”. (Bonus: make a scatter plot of the estimated value vs the final sale price and color code it by County - make some interpretations)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># new dataframe of TransferType</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (I'm guessing "uniquely identify each observation" is implying the index of the data)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>td3 <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(TransferType<span class="sc">==</span><span class="st">"TrusteesDeed-3rd"</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(TransferType,TransferAmount)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(td3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      TransferType TransferAmount
+1 TrusteesDeed-3rd   $132,862.00 
+2 TrusteesDeed-3rd   $128,637.00 
+3 TrusteesDeed-3rd   $592,100.00 
+4 TrusteesDeed-3rd   $129,000.00 
+5 TrusteesDeed-3rd   $226,500.00 
+6 TrusteesDeed-3rd   $142,000.00 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bonus scatter plot (Estimated value vs Final Price; color coded by county)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># parse_number() (from readr) apparently converts to numeric while ignoring "$"s &amp; commas</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>TransferAmount <span class="ot">&lt;-</span> <span class="fu">parse_number</span>(data<span class="sc">$</span>TransferAmount)  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>EstimatedValue <span class="ot">&lt;-</span> <span class="fu">parse_number</span>(data<span class="sc">$</span>EstimatedValue)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># scatter plot</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(TransferType<span class="sc">==</span><span class="st">"TrusteesDeed-3rd"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>          <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>TransferAmount,<span class="at">y=</span>EstimatedValue,<span class="at">col=</span>County)) <span class="sc">+</span> </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">geom_point</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Introduction-to-R-Markdown_files/figure-html/Bonus-scatter_plot-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="question-4-tidy-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="question-4-tidy-the-data">Question 4: Tidy the Data</h2>
+<p>If we wish to treat the County as the observational unit, then we must tidy the data. We can do this by averaging across all observations within the new observational unit. Create a new data.frame that contains the County variable along with average transfer price.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tidy_county <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                <span class="fu">group_by</span>(County) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">avg_transfer =</span> <span class="fu">mean</span>(TransferAmount,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span>   </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">select</span>(County,avg_transfer)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(tidy_county)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+# Groups:   County [3]
+  County       avg_transfer
+  &lt;chr&gt;               &lt;dbl&gt;
+1 SAN JOAQUIN       166472.
+2 SAN JOAQUIN       166472.
+3 SAN MATEO         475335.
+4 SAN JOAQUIN       166472.
+5 CONTRA COSTA      263496.
+6 SAN JOAQUIN       166472.</code></pre>
+</div>
+</div>
+</section>
+<section id="question-5-calculate-by-groups" class="level2">
+<h2 class="anchored" data-anchor-id="question-5-calculate-by-groups">Question 5: Calculate By Groups</h2>
+<p>What is the average sale price for “TrusteesDeed-3rd” transfers for each county? Which county is the most expensive?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tidy_county_td3 <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">filter</span>(TransferType<span class="sc">==</span><span class="st">"TrusteesDeed-3rd"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">group_by</span>(County) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">avg_transfer =</span> <span class="fu">mean</span>(TransferAmount,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">select</span>(County,avg_transfer)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">distinct</span>(tidy_county_td3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+# Groups:   County [5]
+  County        avg_transfer
+  &lt;chr&gt;                &lt;dbl&gt;
+1 SAN JOAQUIN        144512.
+2 SAN MATEO          405744.
+3 CONTRA COSTA       226612.
+4 ALAMEDA            259352.
+5 SAN FRANCISCO      514141.</code></pre>
+</div>
+</div>
+</section>
+<section id="final-questions" class="level2">
+<h2 class="anchored" data-anchor-id="final-questions">Final Questions:</h2>
+<ol type="1">
+<li>What was the main point of today’s content?</li>
+</ol>
+<p>To review relatively basic data reading, EDA, and tidying in R.</p>
+<ol start="2" type="1">
+<li>What is the muddiest point of the class so far?</li>
+</ol>
+<p>I use more Python than R, so I often need to remind myself of many coding syntax in R. (But fortunately I love linear algebra so at least I don’t have to worry about that aspect as much! :D)</p>
+<section id="knit-the-file-to-html-and-submit" class="level3">
+<h3 class="anchored" data-anchor-id="knit-the-file-to-html-and-submit">Knit the File to HTML and Submit!!</h3>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

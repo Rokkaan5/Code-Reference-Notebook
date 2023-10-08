@@ -1,8 +1,10 @@
 ---
+layout: page
 title: "STAT II: HW Submissions and Solutions"
+permalink: /CUB/HW
 ---
 
-All homework submission (by me) and posted solutions for [STAT II](Stats2.qmd) at [CU Boulder](../../CUB.qmd) (Fall 2023)
+All homework submission (by me) and posted solutions for [STAT II](Stats2.md) at [CU Boulder](../../CUB.md) (Fall 2023)
 
 # Unit 0: R, R-Markdown, Linear Algebra
 
