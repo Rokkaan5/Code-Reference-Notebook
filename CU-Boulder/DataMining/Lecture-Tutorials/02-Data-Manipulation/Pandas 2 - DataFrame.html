@@ -1,0 +1,2557 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Pandas 2 - DataFrame</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Pandas 2 - DataFrame_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Pandas 2 - DataFrame_files/libs/quarto-html/quarto.js"></script>
+<script src="Pandas 2 - DataFrame_files/libs/quarto-html/popper.min.js"></script>
+<script src="Pandas 2 - DataFrame_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Pandas 2 - DataFrame_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Pandas 2 - DataFrame_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Pandas 2 - DataFrame_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Pandas 2 - DataFrame_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Pandas 2 - DataFrame_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Pandas 2 - DataFrame_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#pandas-dataframe" id="toc-pandas-dataframe" class="nav-link active" data-scroll-target="#pandas-dataframe">pandas DataFrame</a>
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#creation" id="toc-creation" class="nav-link" data-scroll-target="#creation">Creation</a>
+  <ul class="collapse">
+  <li><a href="#create-simple-dataframe" id="toc-create-simple-dataframe" class="nav-link" data-scroll-target="#create-simple-dataframe">Create Simple DataFrame</a></li>
+  <li><a href="#create-dataframe-using-series-as-rows" id="toc-create-dataframe-using-series-as-rows" class="nav-link" data-scroll-target="#create-dataframe-using-series-as-rows">Create DataFrame using Series as Rows</a></li>
+  <li><a href="#create-dataframe-using-concat" id="toc-create-dataframe-using-concat" class="nav-link" data-scroll-target="#create-dataframe-using-concat">Create DataFrame using concat()</a></li>
+  <li><a href="#create-dataframe-from-csv" id="toc-create-dataframe-from-csv" class="nav-link" data-scroll-target="#create-dataframe-from-csv">Create DataFrame from CSV</a></li>
+  </ul></li>
+  <li><a href="#properties" id="toc-properties" class="nav-link" data-scroll-target="#properties">Properties</a>
+  <ul class="collapse">
+  <li><a href="#column-names-and-row-index" id="toc-column-names-and-row-index" class="nav-link" data-scroll-target="#column-names-and-row-index">Column Names and Row index</a></li>
+  <li><a href="#shape" id="toc-shape" class="nav-link" data-scroll-target="#shape">Shape</a></li>
+  <li><a href="#number-of-columns-and-rows" id="toc-number-of-columns-and-rows" class="nav-link" data-scroll-target="#number-of-columns-and-rows">Number of Columns and Rows</a></li>
+  </ul></li>
+  <li><a href="#access" id="toc-access" class="nav-link" data-scroll-target="#access">Access</a>
+  <ul class="collapse">
+  <li><a href="#head-and-tail" id="toc-head-and-tail" class="nav-link" data-scroll-target="#head-and-tail">head() and tail()</a></li>
+  <li><a href="#accessing-columns" id="toc-accessing-columns" class="nav-link" data-scroll-target="#accessing-columns">Accessing Columns</a></li>
+  <li><a href="#accessing-rows" id="toc-accessing-rows" class="nav-link" data-scroll-target="#accessing-rows">Accessing Rows</a></li>
+  <li><a href="#combining-row-and-column-selection" id="toc-combining-row-and-column-selection" class="nav-link" data-scroll-target="#combining-row-and-column-selection">Combining Row and Column Selection</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Pandas 2 - DataFrame</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="pandas-dataframe" class="level1">
+<h1>pandas DataFrame</h1>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell" data-cell_id="72771059bd88461ea294026529a75bbe" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:13}" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1666898371804" data-source_hash="b7dcc9c8" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="creation" class="level2">
+<h2 class="anchored" data-anchor-id="creation">Creation</h2>
+<section id="create-simple-dataframe" class="level3">
+<h3 class="anchored" data-anchor-id="create-simple-dataframe">Create Simple DataFrame</h3>
+<div class="cell" data-cell_id="b6694dc180fd4abf91e4a5277b66329b" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:31}" data-deepnote_cell_type="code" data-execution_millis="832" data-execution_start="1666898371808" data-source_hash="47d1a65d" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mda <span class="op">=</span> np.array([</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>        [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>],</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>],</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        [<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pd.DataFrame(mda)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>df1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">1</th>
+<th data-quarto-table-cell-role="th">2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="c504ca7809874d06a83d8db5e4e320cb" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:37}" data-deepnote_cell_type="code" data-execution_millis="775" data-execution_start="1666898371866" data-scrolled="true" data-source_hash="54de600f" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df1.columns<span class="op">=</span>[<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">A</th>
+<th data-quarto-table-cell-role="th">B</th>
+<th data-quarto-table-cell-role="th">C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="6c8c2a5329804ecab340abe4b68da037" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:43}" data-deepnote_cell_type="code" data-execution_millis="774" data-execution_start="1666898371867" data-source_hash="efcd3f65" data-tags="[]" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df1.index<span class="op">=</span>np.arange(<span class="dv">1</span>,<span class="bu">len</span>(df1)<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">A</th>
+<th data-quarto-table-cell-role="th">B</th>
+<th data-quarto-table-cell-role="th">C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="c9fad40059eb4148bc44aa4f132d2f4c" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:49}" data-deepnote_cell_type="code" data-execution_millis="737" data-execution_start="1666898371905" data-source_hash="4280cd22" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(mda, columns<span class="op">=</span>[<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>], index<span class="op">=</span>np.arange(<span class="dv">1</span>,<span class="bu">len</span>(mda)<span class="op">+</span><span class="dv">1</span>) )</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">A</th>
+<th data-quarto-table-cell-role="th">B</th>
+<th data-quarto-table-cell-role="th">C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="create-dataframe-using-series-as-rows" class="level3">
+<h3 class="anchored" data-anchor-id="create-dataframe-using-series-as-rows">Create DataFrame using Series as Rows</h3>
+<div class="cell" data-cell_id="88f544a026d1429a9573fdfd3582d293" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:61}" data-deepnote_cell_type="code" data-execution_millis="1242" data-execution_start="1666898899977" data-source_hash="30264a6f" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>people <span class="op">=</span> pd.Series([<span class="st">'Aaron'</span>,<span class="st">'Brian'</span>,<span class="st">'Christine'</span>,<span class="st">'Di'</span>], index<span class="op">=</span>[<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>,<span class="st">'D'</span>])</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>places <span class="op">=</span> pd.Series([<span class="st">'Alington'</span>,<span class="st">'Boston'</span>,<span class="st">'Cleveland'</span>], index<span class="op">=</span>[<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>things <span class="op">=</span> pd.Series([<span class="st">'Apple'</span>,<span class="st">'Banana'</span>,<span class="st">'Car'</span>], index<span class="op">=</span>[<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>])</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>df3 <span class="op">=</span> pd.DataFrame([people, places, things])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>df3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: __init__() got an unexpected keyword argument 'axis'</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="f131f09366b24f40b24173b35c45c3c9" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:67}" data-deepnote_cell_type="code" data-execution_millis="728" data-execution_start="1666898371916" data-source_hash="fcdcd1f2" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df4 <span class="op">=</span> pd.DataFrame([people, places, things],</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                  index <span class="op">=</span> [<span class="st">'People'</span>,<span class="st">'Place'</span>,<span class="st">'Thing'</span>],</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                  columns <span class="op">=</span> [<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'D'</span>])</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>df4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">A</th>
+<th data-quarto-table-cell-role="th">B</th>
+<th data-quarto-table-cell-role="th">D</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">People</td>
+<td>Aaron</td>
+<td>Brian</td>
+<td>Di</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Place</td>
+<td>Alington</td>
+<td>Boston</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Thing</td>
+<td>Apple</td>
+<td>Banana</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="create-dataframe-using-concat" class="level3">
+<h3 class="anchored" data-anchor-id="create-dataframe-using-concat">Create DataFrame using concat()</h3>
+<div class="cell" data-cell_id="8558f1ddcb0b43aa9eaf3f5badc71ea8" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:79}" data-deepnote_cell_type="code" data-deepnote_table_state="{&quot;filters&quot;:[],&quot;pageIndex&quot;:7,&quot;pageSize&quot;:10,&quot;sortBy&quot;:[]}" data-execution_millis="643" data-execution_start="1666898372004" data-source_hash="88b28732" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ar1 <span class="op">=</span> np.random.choice([<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>,<span class="st">'D'</span>,<span class="st">'F'</span>], <span class="dv">100</span>, p<span class="op">=</span>[<span class="fl">.2</span>,<span class="fl">.4</span>,<span class="fl">.3</span>,<span class="fl">.08</span>,<span class="fl">.02</span>])</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ar2 <span class="op">=</span> np.random.choice([<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>,<span class="st">'D'</span>,<span class="st">'F'</span>], <span class="dv">50</span>, p<span class="op">=</span>[<span class="fl">.3</span>,<span class="fl">.4</span>,<span class="fl">.2</span>,<span class="fl">.1</span>,<span class="dv">0</span>])</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>ar3 <span class="op">=</span> np.random.choice([<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>,<span class="st">'d'</span>,<span class="st">'f'</span>], <span class="dv">200</span>, p<span class="op">=</span>[<span class="fl">.15</span>,<span class="fl">.45</span>,<span class="fl">.25</span>,<span class="fl">.13</span>,<span class="fl">.02</span>])</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>s1 <span class="op">=</span> pd.Series(ar1)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>s2 <span class="op">=</span> pd.Series(ar2)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>s3 <span class="op">=</span> pd.Series(ar3)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>df5 <span class="op">=</span> pd.concat([s1,s2,s3], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>df5.columns<span class="op">=</span>[<span class="st">'grades1'</span>,<span class="st">'grades2'</span>,<span class="st">'grades3'</span>]</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>df5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">grades1</th>
+<th data-quarto-table-cell-role="th">grades2</th>
+<th data-quarto-table-cell-role="th">grades3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>B</td>
+<td>B</td>
+<td>a</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>C</td>
+<td>B</td>
+<td>d</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>A</td>
+<td>C</td>
+<td>b</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>B</td>
+<td>B</td>
+<td>b</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>A</td>
+<td>D</td>
+<td>b</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">195</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>c</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">196</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>c</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">197</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>c</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">198</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>c</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">199</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>a</td>
+</tr>
+</tbody>
+</table>
+
+<p>200 rows × 3 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="create-dataframe-from-csv" class="level3">
+<h3 class="anchored" data-anchor-id="create-dataframe-from-csv">Create DataFrame from CSV</h3>
+<div class="cell" data-cell_id="a4d94137aca34107ab25fef7e65c025f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:91}" data-deepnote_cell_type="code" data-execution_millis="643" data-execution_start="1666898372005" data-source_hash="c2a1bee3" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'/work/ds_salaries.csv'</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">experience_level</th>
+<th data-quarto-table-cell-role="th">employment_type</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_currency</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">employee_residence</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">company_location</th>
+<th data-quarto-table-cell-role="th">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>70000</td>
+<td>EUR</td>
+<td>79833</td>
+<td>DE</td>
+<td>0</td>
+<td>DE</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Scientist</td>
+<td>260000</td>
+<td>USD</td>
+<td>260000</td>
+<td>JP</td>
+<td>0</td>
+<td>JP</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Big Data Engineer</td>
+<td>85000</td>
+<td>GBP</td>
+<td>109024</td>
+<td>GB</td>
+<td>50</td>
+<td>GB</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>3</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Product Data Analyst</td>
+<td>20000</td>
+<td>USD</td>
+<td>20000</td>
+<td>HN</td>
+<td>0</td>
+<td>HN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>4</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Engineer</td>
+<td>150000</td>
+<td>USD</td>
+<td>150000</td>
+<td>US</td>
+<td>50</td>
+<td>US</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">602</td>
+<td>602</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Engineer</td>
+<td>154000</td>
+<td>USD</td>
+<td>154000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">603</td>
+<td>603</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Engineer</td>
+<td>126000</td>
+<td>USD</td>
+<td>126000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">604</td>
+<td>604</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>129000</td>
+<td>USD</td>
+<td>129000</td>
+<td>US</td>
+<td>0</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">605</td>
+<td>605</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>150000</td>
+<td>USD</td>
+<td>150000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">606</td>
+<td>606</td>
+<td>2022</td>
+<td>MI</td>
+<td>FT</td>
+<td>AI Scientist</td>
+<td>200000</td>
+<td>USD</td>
+<td>200000</td>
+<td>IN</td>
+<td>100</td>
+<td>US</td>
+<td>L</td>
+</tr>
+</tbody>
+</table>
+
+<p>607 rows × 12 columns</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="properties" class="level2">
+<h2 class="anchored" data-anchor-id="properties">Properties</h2>
+<section id="column-names-and-row-index" class="level3">
+<h3 class="anchored" data-anchor-id="column-names-and-row-index">Column Names and Row index</h3>
+<div class="cell" data-cell_id="7cf2b61dd80c457f9ecebe573ccfb4d2" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:109}" data-deepnote_cell_type="code" data-execution_millis="641" data-execution_start="1666898372008" data-source_hash="25d43fa0" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>Index(['Unnamed: 0', 'work_year', 'experience_level', 'employment_type',
+       'job_title', 'salary', 'salary_currency', 'salary_in_usd',
+       'employee_residence', 'remote_ratio', 'company_location',
+       'company_size'],
+      dtype='object')</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="a06f58c7e296413681d8d2c9a5f261dd" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:115}" data-deepnote_cell_type="code" data-execution_millis="598" data-execution_start="1666898372052" data-scrolled="true" data-source_hash="651ad380" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df.index</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>RangeIndex(start=0, stop=607, step=1)</code></pre>
+</div>
+</div>
+</section>
+<section id="shape" class="level3">
+<h3 class="anchored" data-anchor-id="shape">Shape</h3>
+<div class="cell" data-cell_id="8e0f2fed58094c44bd03a78cab90b473" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:127}" data-deepnote_cell_type="code" data-execution_millis="598" data-execution_start="1666898372053" data-source_hash="14f60b8f" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>(607, 12)</code></pre>
+</div>
+</div>
+</section>
+<section id="number-of-columns-and-rows" class="level3">
+<h3 class="anchored" data-anchor-id="number-of-columns-and-rows">Number of Columns and Rows</h3>
+<div class="cell" data-cell_id="b224093bb3d84f0b84f67484f86740b3" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:139}" data-deepnote_cell_type="code" data-execution_millis="596" data-execution_start="1666898372055" data-source_hash="cbd7a580" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>num_rows <span class="op">=</span> <span class="bu">len</span>(df)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>num_cols <span class="op">=</span> <span class="bu">len</span>(df.columns)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>num_rows, num_cols</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>(607, 12)</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="access" class="level2">
+<h2 class="anchored" data-anchor-id="access">Access</h2>
+<section id="head-and-tail" class="level3">
+<h3 class="anchored" data-anchor-id="head-and-tail">head() and tail()</h3>
+<div class="cell" data-cell_id="72bfaba3e2aa4b21bdb83d2da9e07c02" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:157}" data-deepnote_cell_type="code" data-execution_millis="564" data-execution_start="1666898372088" data-source_hash="c085b6ba" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">experience_level</th>
+<th data-quarto-table-cell-role="th">employment_type</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_currency</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">employee_residence</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">company_location</th>
+<th data-quarto-table-cell-role="th">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>70000</td>
+<td>EUR</td>
+<td>79833</td>
+<td>DE</td>
+<td>0</td>
+<td>DE</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Scientist</td>
+<td>260000</td>
+<td>USD</td>
+<td>260000</td>
+<td>JP</td>
+<td>0</td>
+<td>JP</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Big Data Engineer</td>
+<td>85000</td>
+<td>GBP</td>
+<td>109024</td>
+<td>GB</td>
+<td>50</td>
+<td>GB</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>3</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Product Data Analyst</td>
+<td>20000</td>
+<td>USD</td>
+<td>20000</td>
+<td>HN</td>
+<td>0</td>
+<td>HN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>4</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Engineer</td>
+<td>150000</td>
+<td>USD</td>
+<td>150000</td>
+<td>US</td>
+<td>50</td>
+<td>US</td>
+<td>L</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="c1ff03641a9b4266969cd8f6c57fadf4" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:163}" data-deepnote_cell_type="code" data-execution_millis="561" data-execution_start="1666898372092" data-scrolled="true" data-source_hash="838c0c28" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">experience_level</th>
+<th data-quarto-table-cell-role="th">employment_type</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_currency</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">employee_residence</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">company_location</th>
+<th data-quarto-table-cell-role="th">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">602</td>
+<td>602</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Engineer</td>
+<td>154000</td>
+<td>USD</td>
+<td>154000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">603</td>
+<td>603</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Engineer</td>
+<td>126000</td>
+<td>USD</td>
+<td>126000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">604</td>
+<td>604</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>129000</td>
+<td>USD</td>
+<td>129000</td>
+<td>US</td>
+<td>0</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">605</td>
+<td>605</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>150000</td>
+<td>USD</td>
+<td>150000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">606</td>
+<td>606</td>
+<td>2022</td>
+<td>MI</td>
+<td>FT</td>
+<td>AI Scientist</td>
+<td>200000</td>
+<td>USD</td>
+<td>200000</td>
+<td>IN</td>
+<td>100</td>
+<td>US</td>
+<td>L</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="3c074c9e7a184110b3e29059fa6189c4" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:169}" data-deepnote_cell_type="code" data-execution_millis="57" data-execution_start="1666899367098" data-source_hash="cdee9e9d" data-tags="[]" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df.tail(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">experience_level</th>
+<th data-quarto-table-cell-role="th">employment_type</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_currency</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">employee_residence</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">company_location</th>
+<th data-quarto-table-cell-role="th">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID697</td>
+<td>597</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>170000</td>
+<td>USD</td>
+<td>170000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID698</td>
+<td>598</td>
+<td>2022</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>160000</td>
+<td>USD</td>
+<td>160000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID699</td>
+<td>599</td>
+<td>2022</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>130000</td>
+<td>USD</td>
+<td>130000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID700</td>
+<td>600</td>
+<td>2022</td>
+<td>EN</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>67000</td>
+<td>USD</td>
+<td>67000</td>
+<td>CA</td>
+<td>0</td>
+<td>CA</td>
+<td>M</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID701</td>
+<td>601</td>
+<td>2022</td>
+<td>EN</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>52000</td>
+<td>USD</td>
+<td>52000</td>
+<td>CA</td>
+<td>0</td>
+<td>CA</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID702</td>
+<td>602</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Engineer</td>
+<td>154000</td>
+<td>USD</td>
+<td>154000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID703</td>
+<td>603</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Engineer</td>
+<td>126000</td>
+<td>USD</td>
+<td>126000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID704</td>
+<td>604</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>129000</td>
+<td>USD</td>
+<td>129000</td>
+<td>US</td>
+<td>0</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID705</td>
+<td>605</td>
+<td>2022</td>
+<td>SE</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>150000</td>
+<td>USD</td>
+<td>150000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID706</td>
+<td>606</td>
+<td>2022</td>
+<td>MI</td>
+<td>FT</td>
+<td>AI Scientist</td>
+<td>200000</td>
+<td>USD</td>
+<td>200000</td>
+<td>IN</td>
+<td>100</td>
+<td>US</td>
+<td>L</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="1bf59fd6538d4759ba0701765ef2f7b1" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:175}" data-deepnote_cell_type="code" data-execution_millis="538" data-execution_start="1666898372116" data-source_hash="f88152d9" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>607.000000</td>
+<td>607.000000</td>
+<td>6.070000e+02</td>
+<td>607.000000</td>
+<td>607.00000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>303.000000</td>
+<td>2021.405272</td>
+<td>3.240001e+05</td>
+<td>112297.869852</td>
+<td>70.92257</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>175.370085</td>
+<td>0.692133</td>
+<td>1.544357e+06</td>
+<td>70957.259411</td>
+<td>40.70913</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>0.000000</td>
+<td>2020.000000</td>
+<td>4.000000e+03</td>
+<td>2859.000000</td>
+<td>0.00000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>151.500000</td>
+<td>2021.000000</td>
+<td>7.000000e+04</td>
+<td>62726.000000</td>
+<td>50.00000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>303.000000</td>
+<td>2022.000000</td>
+<td>1.150000e+05</td>
+<td>101570.000000</td>
+<td>100.00000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>454.500000</td>
+<td>2022.000000</td>
+<td>1.650000e+05</td>
+<td>150000.000000</td>
+<td>100.00000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>606.000000</td>
+<td>2022.000000</td>
+<td>3.040000e+07</td>
+<td>600000.000000</td>
+<td>100.00000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="4083a891a3324524a009e731bd242326" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:181}" data-deepnote_cell_type="code" data-execution_millis="5" data-execution_start="1666899435006" data-source_hash="de1e323c" data-tags="[]" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Index: 607 entries, EID100 to EID706
+Data columns (total 12 columns):
+ #   Column              Non-Null Count  Dtype 
+---  ------              --------------  ----- 
+ 0   Unnamed: 0          607 non-null    int64 
+ 1   work_year           607 non-null    int64 
+ 2   experience_level    607 non-null    object
+ 3   employment_type     607 non-null    object
+ 4   job_title           607 non-null    object
+ 5   salary              607 non-null    int64 
+ 6   salary_currency     607 non-null    object
+ 7   salary_in_usd       607 non-null    int64 
+ 8   employee_residence  607 non-null    object
+ 9   remote_ratio        607 non-null    int64 
+ 10  company_location    607 non-null    object
+ 11  company_size        607 non-null    object
+dtypes: int64(5), object(7)
+memory usage: 77.8+ KB</code></pre>
+</div>
+</div>
+</section>
+<section id="accessing-columns" class="level3">
+<h3 class="anchored" data-anchor-id="accessing-columns">Accessing Columns</h3>
+<div class="cell" data-cell_id="728c3ae6fad2465fb7d2de537b9d3191" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:193}" data-deepnote_cell_type="code" data-execution_millis="475" data-execution_start="1666898372180" data-scrolled="true" data-source_hash="26a38fd5" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'salary'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>0       70000
+1      260000
+2       85000
+3       20000
+4      150000
+        ...  
+602    154000
+603    126000
+604    129000
+605    150000
+606    200000
+Name: salary, Length: 607, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="8823955b7bd94e3f9060326e54b89bbb" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:199}" data-deepnote_cell_type="code" data-execution_millis="452" data-execution_start="1666898372204" data-source_hash="3ec8021b" data-tags="[]" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(df[<span class="st">'salary'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>pandas.core.series.Series</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="4490a07d849c4ef5b90f47aa630a1a3f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:205}" data-deepnote_cell_type="code" data-execution_millis="451" data-execution_start="1666898372205" data-source_hash="50687b07" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df.salary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>0       70000
+1      260000
+2       85000
+3       20000
+4      150000
+        ...  
+602    154000
+603    126000
+604    129000
+605    150000
+606    200000
+Name: salary, Length: 607, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="0beda576588c455d91735b3b8f09be44" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:211}" data-deepnote_cell_type="code" data-execution_millis="450" data-execution_start="1666898372207" data-source_hash="f24b04b4" data-tags="[]" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(df.salary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>pandas.core.series.Series</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="0a88dec14e754695b640def0de7034c4" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:217}" data-deepnote_cell_type="code" data-execution_millis="449" data-execution_start="1666898372209" data-scrolled="true" data-source_hash="667a4618" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'salary'</span>,<span class="st">'remote_ratio'</span>,<span class="st">'job_title'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>70000</td>
+<td>0</td>
+<td>Data Scientist</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>260000</td>
+<td>0</td>
+<td>Machine Learning Scientist</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>85000</td>
+<td>50</td>
+<td>Big Data Engineer</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>20000</td>
+<td>0</td>
+<td>Product Data Analyst</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>150000</td>
+<td>50</td>
+<td>Machine Learning Engineer</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">602</td>
+<td>154000</td>
+<td>100</td>
+<td>Data Engineer</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">603</td>
+<td>126000</td>
+<td>100</td>
+<td>Data Engineer</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">604</td>
+<td>129000</td>
+<td>0</td>
+<td>Data Analyst</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">605</td>
+<td>150000</td>
+<td>100</td>
+<td>Data Analyst</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">606</td>
+<td>200000</td>
+<td>100</td>
+<td>AI Scientist</td>
+</tr>
+</tbody>
+</table>
+
+<p>607 rows × 3 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="9ada5c02faf1491495107772ecaba487" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:223}" data-deepnote_cell_type="code" data-execution_millis="395" data-execution_start="1666898372264" data-source_hash="43a403fe" data-tags="[]" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(df[[<span class="st">'salary'</span>,<span class="st">'remote_ratio'</span>,<span class="st">'job_title'</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>pandas.core.frame.DataFrame</code></pre>
+</div>
+</div>
+</section>
+<section id="accessing-rows" class="level3">
+<h3 class="anchored" data-anchor-id="accessing-rows">Accessing Rows</h3>
+<div class="cell" data-cell_id="fcaa601867844c62bb279728409bde8f" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:235}" data-deepnote_cell_type="code" data-execution_millis="393" data-execution_start="1666898372266" data-source_hash="52644606" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>Unnamed: 0                         0
+work_year                       2020
+experience_level                  MI
+employment_type                   FT
+job_title             Data Scientist
+salary                         70000
+salary_currency                  EUR
+salary_in_usd                  79833
+employee_residence                DE
+remote_ratio                       0
+company_location                  DE
+company_size                       L
+Name: 0, dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="9b0f6202014042a88b2537a6126eabf6" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:241}" data-deepnote_cell_type="code" data-execution_millis="393" data-execution_start="1666898372267" data-source_hash="232ee04b" data-tags="[]" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(df.loc[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>pandas.core.series.Series</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="dda0cbb24f3342368c84cc3b35542db4" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:247}" data-deepnote_cell_type="code" data-execution_millis="392" data-execution_start="1666898372269" data-scrolled="true" data-source_hash="95a6efc6" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>df.loc[[<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">experience_level</th>
+<th data-quarto-table-cell-role="th">employment_type</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_currency</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">employee_residence</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">company_location</th>
+<th data-quarto-table-cell-role="th">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>70000</td>
+<td>EUR</td>
+<td>79833</td>
+<td>DE</td>
+<td>0</td>
+<td>DE</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>10</td>
+<td>2020</td>
+<td>EN</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>45000</td>
+<td>EUR</td>
+<td>51321</td>
+<td>FR</td>
+<td>0</td>
+<td>FR</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>20</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Machine Learning Engineer</td>
+<td>299000</td>
+<td>CNY</td>
+<td>43331</td>
+<td>CN</td>
+<td>0</td>
+<td>CN</td>
+<td>M</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="18f5e286a45047b4b256bdc432eb0bb6" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:253}" data-deepnote_cell_type="code" data-execution_millis="372" data-execution_start="1666898372290" data-source_hash="8e31dba0" data-tags="[]" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(df.loc[[<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>pandas.core.frame.DataFrame</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="75e5de48dba54039b871ae66f49cce3c" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:259}" data-deepnote_cell_type="code" data-execution_millis="324" data-execution_start="1666898372338" data-scrolled="true" data-source_hash="d70c5d93" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="dv">0</span>:<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">experience_level</th>
+<th data-quarto-table-cell-role="th">employment_type</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_currency</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">employee_residence</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">company_location</th>
+<th data-quarto-table-cell-role="th">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>70000</td>
+<td>EUR</td>
+<td>79833</td>
+<td>DE</td>
+<td>0</td>
+<td>DE</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Scientist</td>
+<td>260000</td>
+<td>USD</td>
+<td>260000</td>
+<td>JP</td>
+<td>0</td>
+<td>JP</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Big Data Engineer</td>
+<td>85000</td>
+<td>GBP</td>
+<td>109024</td>
+<td>GB</td>
+<td>50</td>
+<td>GB</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>3</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Product Data Analyst</td>
+<td>20000</td>
+<td>USD</td>
+<td>20000</td>
+<td>HN</td>
+<td>0</td>
+<td>HN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>4</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Engineer</td>
+<td>150000</td>
+<td>USD</td>
+<td>150000</td>
+<td>US</td>
+<td>50</td>
+<td>US</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>5</td>
+<td>2020</td>
+<td>EN</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>72000</td>
+<td>USD</td>
+<td>72000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>L</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>6</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Lead Data Scientist</td>
+<td>190000</td>
+<td>USD</td>
+<td>190000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>S</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>7</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>11000000</td>
+<td>HUF</td>
+<td>35735</td>
+<td>HU</td>
+<td>50</td>
+<td>HU</td>
+<td>L</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>8</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Business Data Analyst</td>
+<td>135000</td>
+<td>USD</td>
+<td>135000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>9</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Lead Data Engineer</td>
+<td>125000</td>
+<td>USD</td>
+<td>125000</td>
+<td>NZ</td>
+<td>50</td>
+<td>NZ</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>10</td>
+<td>2020</td>
+<td>EN</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>45000</td>
+<td>EUR</td>
+<td>51321</td>
+<td>FR</td>
+<td>0</td>
+<td>FR</td>
+<td>S</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="9b89844c927d48aeafbe7e9ef3602bfe" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:265}" data-deepnote_cell_type="code" data-execution_millis="309" data-execution_start="1666898372354" data-source_hash="4911d67d" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>df.iloc[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>Unnamed: 0                         0
+work_year                       2020
+experience_level                  MI
+employment_type                   FT
+job_title             Data Scientist
+salary                         70000
+salary_currency                  EUR
+salary_in_usd                  79833
+employee_residence                DE
+remote_ratio                       0
+company_location                  DE
+company_size                       L
+Name: 0, dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="741ca2ed6e2142bcaaf86d192c3f7288" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:271}" data-deepnote_cell_type="code" data-execution_millis="287" data-execution_start="1666898372377" data-scrolled="true" data-source_hash="9110a4a4" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df.iloc[[<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">experience_level</th>
+<th data-quarto-table-cell-role="th">employment_type</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_currency</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">employee_residence</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">company_location</th>
+<th data-quarto-table-cell-role="th">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>70000</td>
+<td>EUR</td>
+<td>79833</td>
+<td>DE</td>
+<td>0</td>
+<td>DE</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>10</td>
+<td>2020</td>
+<td>EN</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>45000</td>
+<td>EUR</td>
+<td>51321</td>
+<td>FR</td>
+<td>0</td>
+<td>FR</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>20</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Machine Learning Engineer</td>
+<td>299000</td>
+<td>CNY</td>
+<td>43331</td>
+<td>CN</td>
+<td>0</td>
+<td>CN</td>
+<td>M</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="6b09ebfae91d4e3eaa21a3c7938576dd" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:277}" data-deepnote_cell_type="code" data-execution_millis="283" data-execution_start="1666898372382" data-scrolled="true" data-source_hash="fb752372" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>df.iloc[<span class="dv">0</span>:<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">experience_level</th>
+<th data-quarto-table-cell-role="th">employment_type</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_currency</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">employee_residence</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">company_location</th>
+<th data-quarto-table-cell-role="th">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>70000</td>
+<td>EUR</td>
+<td>79833</td>
+<td>DE</td>
+<td>0</td>
+<td>DE</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Scientist</td>
+<td>260000</td>
+<td>USD</td>
+<td>260000</td>
+<td>JP</td>
+<td>0</td>
+<td>JP</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Big Data Engineer</td>
+<td>85000</td>
+<td>GBP</td>
+<td>109024</td>
+<td>GB</td>
+<td>50</td>
+<td>GB</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>3</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Product Data Analyst</td>
+<td>20000</td>
+<td>USD</td>
+<td>20000</td>
+<td>HN</td>
+<td>0</td>
+<td>HN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>4</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Engineer</td>
+<td>150000</td>
+<td>USD</td>
+<td>150000</td>
+<td>US</td>
+<td>50</td>
+<td>US</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>5</td>
+<td>2020</td>
+<td>EN</td>
+<td>FT</td>
+<td>Data Analyst</td>
+<td>72000</td>
+<td>USD</td>
+<td>72000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>L</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>6</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Lead Data Scientist</td>
+<td>190000</td>
+<td>USD</td>
+<td>190000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>S</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>7</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>11000000</td>
+<td>HUF</td>
+<td>35735</td>
+<td>HU</td>
+<td>50</td>
+<td>HU</td>
+<td>L</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>8</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Business Data Analyst</td>
+<td>135000</td>
+<td>USD</td>
+<td>135000</td>
+<td>US</td>
+<td>100</td>
+<td>US</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>9</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Lead Data Engineer</td>
+<td>125000</td>
+<td>USD</td>
+<td>125000</td>
+<td>NZ</td>
+<td>50</td>
+<td>NZ</td>
+<td>S</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="3d696469b575457f80cf669c14b44ff9" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:283}" data-deepnote_cell_type="code" data-execution_millis="212" data-execution_start="1666898372454" data-source_hash="e971c9bc" data-tags="[]" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>EID <span class="op">=</span> [<span class="st">'EID'</span> <span class="op">+</span> <span class="bu">str</span>(i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>, <span class="bu">len</span>(df) <span class="op">+</span> <span class="dv">100</span>)]</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>df.index <span class="op">=</span> EID</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Unnamed: 0</th>
+<th data-quarto-table-cell-role="th">work_year</th>
+<th data-quarto-table-cell-role="th">experience_level</th>
+<th data-quarto-table-cell-role="th">employment_type</th>
+<th data-quarto-table-cell-role="th">job_title</th>
+<th data-quarto-table-cell-role="th">salary</th>
+<th data-quarto-table-cell-role="th">salary_currency</th>
+<th data-quarto-table-cell-role="th">salary_in_usd</th>
+<th data-quarto-table-cell-role="th">employee_residence</th>
+<th data-quarto-table-cell-role="th">remote_ratio</th>
+<th data-quarto-table-cell-role="th">company_location</th>
+<th data-quarto-table-cell-role="th">company_size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID100</td>
+<td>0</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Data Scientist</td>
+<td>70000</td>
+<td>EUR</td>
+<td>79833</td>
+<td>DE</td>
+<td>0</td>
+<td>DE</td>
+<td>L</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID101</td>
+<td>1</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Scientist</td>
+<td>260000</td>
+<td>USD</td>
+<td>260000</td>
+<td>JP</td>
+<td>0</td>
+<td>JP</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID102</td>
+<td>2</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Big Data Engineer</td>
+<td>85000</td>
+<td>GBP</td>
+<td>109024</td>
+<td>GB</td>
+<td>50</td>
+<td>GB</td>
+<td>M</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID103</td>
+<td>3</td>
+<td>2020</td>
+<td>MI</td>
+<td>FT</td>
+<td>Product Data Analyst</td>
+<td>20000</td>
+<td>USD</td>
+<td>20000</td>
+<td>HN</td>
+<td>0</td>
+<td>HN</td>
+<td>S</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID104</td>
+<td>4</td>
+<td>2020</td>
+<td>SE</td>
+<td>FT</td>
+<td>Machine Learning Engineer</td>
+<td>150000</td>
+<td>USD</td>
+<td>150000</td>
+<td>US</td>
+<td>50</td>
+<td>US</td>
+<td>L</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="f76622f01b0e47e0869e0ce1dea1738e" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:289}" data-deepnote_cell_type="code" data-execution_millis="190" data-execution_start="1666898372477" data-source_hash="165a99bd" data-tags="[]" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="st">'EID555'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>Unnamed: 0                     455
+work_year                     2022
+experience_level                MI
+employment_type                 FT
+job_title             NLP Engineer
+salary                      240000
+salary_currency                CNY
+salary_in_usd                37236
+employee_residence              US
+remote_ratio                    50
+company_location                US
+company_size                     L
+Name: EID555, dtype: object</code></pre>
+</div>
+</div>
+</section>
+<section id="combining-row-and-column-selection" class="level3">
+<h3 class="anchored" data-anchor-id="combining-row-and-column-selection">Combining Row and Column Selection</h3>
+<div class="cell" data-cell_id="42b905bcf1a543ea9adfdec7787f3cea" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:301}" data-deepnote_cell_type="code" data-execution_millis="189" data-execution_start="1666898372479" data-source_hash="e09d272" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>first5rows <span class="op">=</span> df.iloc[:<span class="dv">5</span>]</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(first5rows)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<pre><code>pandas.core.frame.DataFrame</code></pre>
+</div>
+</div>
+<section id="two-steps---rows-first" class="level4">
+<h4 class="anchored" data-anchor-id="two-steps---rows-first">Two Steps - Rows First</h4>
+<div class="cell" data-cell_id="5a273d0f7ea24bc5a28a721518710af3" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:313}" data-deepnote_cell_type="code" data-execution_millis="188" data-execution_start="1666898372480" data-source_hash="e06c3a82" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>first5rows <span class="op">=</span> df.iloc[:<span class="dv">5</span>]</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>first5rows[[<span class="st">'salary'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">salary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID100</td>
+<td>70000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID101</td>
+<td>260000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID102</td>
+<td>85000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID103</td>
+<td>20000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID104</td>
+<td>150000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="two-steps---columns-first" class="level4">
+<h4 class="anchored" data-anchor-id="two-steps---columns-first">Two Steps - Columns First</h4>
+<div class="cell" data-cell_id="2b1d78fc3d38487bba59308c3d64ed62" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:325}" data-deepnote_cell_type="code" data-execution_millis="161" data-execution_start="1666898372508" data-source_hash="44db7cb3" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>salary <span class="op">=</span> df[[<span class="st">'salary'</span>]]</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>salary.iloc[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">salary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID100</td>
+<td>70000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID101</td>
+<td>260000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID102</td>
+<td>85000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID103</td>
+<td>20000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID104</td>
+<td>150000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-cell_id="eb4b96d9f3974e17b2e9040fe0d216b9" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:331}" data-deepnote_cell_type="code" data-execution_millis="160" data-execution_start="1666898372510" data-source_hash="785e730a" data-tags="[]" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>s1 <span class="op">=</span> df[<span class="st">'salary'</span>]</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>s2 <span class="op">=</span> df[[<span class="st">'salary'</span>]]</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(s1), <span class="bu">type</span>(s2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>(pandas.core.series.Series, pandas.core.frame.DataFrame)</code></pre>
+</div>
+</div>
+</section>
+<section id="one-step---rows-first" class="level4">
+<h4 class="anchored" data-anchor-id="one-step---rows-first">One Step - Rows First</h4>
+<div class="cell" data-cell_id="8533898d51af416992e68acb6fa1dc34" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:343}" data-deepnote_cell_type="code" data-execution_millis="161" data-execution_start="1666898372512" data-source_hash="6642c6f2" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>df.iloc[:<span class="dv">5</span>][[<span class="st">'salary'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">salary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID100</td>
+<td>70000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID101</td>
+<td>260000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID102</td>
+<td>85000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID103</td>
+<td>20000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID104</td>
+<td>150000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="one-step---columns-first" class="level4">
+<h4 class="anchored" data-anchor-id="one-step---columns-first">One Step - Columns First</h4>
+<div class="cell" data-cell_id="3456edd84a27460abd44e35595f098a1" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:355}" data-deepnote_cell_type="code" data-execution_millis="116" data-execution_start="1666898372558" data-scrolled="true" data-source_hash="40a1267b" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">'salary'</span>]].iloc[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">salary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID100</td>
+<td>70000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID101</td>
+<td>260000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID102</td>
+<td>85000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">EID103</td>
+<td>20000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">EID104</td>
+<td>150000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="getting-a-series" class="level4">
+<h4 class="anchored" data-anchor-id="getting-a-series">Getting a Series</h4>
+<div class="cell" data-cell_id="3dde6f010b04480eae8b97eff636bf85" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:367}" data-deepnote_cell_type="code" data-execution_millis="108" data-execution_start="1666898372567" data-scrolled="true" data-source_hash="9ada8261" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>df.iloc[:<span class="dv">5</span>][<span class="st">'salary'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>EID100     70000
+EID101    260000
+EID102     85000
+EID103     20000
+EID104    150000
+Name: salary, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="0b577ecbe1fb4f62b35e511993de3eb2" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:373}" data-deepnote_cell_type="code" data-execution_millis="104" data-execution_start="1666898372572" data-source_hash="f3dbad22" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>df.iloc[:<span class="dv">5</span>].salary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>EID100     70000
+EID101    260000
+EID102     85000
+EID103     20000
+EID104    150000
+Name: salary, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="a345845b56064a84aa4660b773be4aee" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:379}" data-deepnote_cell_type="code" data-execution_millis="55" data-execution_start="1666898372622" data-scrolled="true" data-source_hash="680e90a1" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'salary'</span>].iloc[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>EID100     70000
+EID101    260000
+EID102     85000
+EID103     20000
+EID104    150000
+Name: salary, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="b11bb76e3a4441dfbeaff372a82f0ea8" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:385}" data-deepnote_cell_type="code" data-execution_millis="54" data-execution_start="1666898372624" data-scrolled="true" data-source_hash="bc504060" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>df.salary.iloc[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<pre><code>EID100     70000
+EID101    260000
+EID102     85000
+EID103     20000
+EID104    150000
+Name: salary, dtype: int64</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
