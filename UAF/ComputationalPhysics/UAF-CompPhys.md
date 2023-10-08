@@ -81,13 +81,12 @@ The following are all *my* submissions to the lab assignments when I was taking 
 
 # Wilberforce Pendulum Project
 
-- [Code-1](Wilberforce/Wilberforce.html)
 
-Check GitHub repo for python code files for my Wilberforce pendulum animation project
+Code file 1:
 
-Includes example uses of RK4 and matplotlib.animation
+- [Jupyter Run-Through](Wilberforce/Wilberforce.html)
+- [Raw Code](WilberforceProject.md)
 
-[Wilberforce Pendulum Project raw code](WilberforceProject.md)
 Check GitHub repo for python code files for my Wilberforce pendulum animation project
 
 Includes example uses of RK4 and matplotlib.animation
