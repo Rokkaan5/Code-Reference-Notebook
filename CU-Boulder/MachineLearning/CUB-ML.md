@@ -43,7 +43,7 @@ Most (if not all) code made availabe through [Professor Gates' website](https://
 - Code 1: Clustering with data obtained from API
 - Code 2: Clustering using various data types (corpus directory, and csv's)
 
-## [Association Rule Mining](ARM/CUB-ML_ARM.qmd)
+## [Association Rule Mining](ARM/CUB-ML_ARM.md)
 
 (only one code - in R)
 

@@ -3,7 +3,8 @@ layout: page
 title: "CUB-ML Clustering"
 permalink: /CUB-ML/Clustering
 ---
-## [CU Boulder: Machine Learning](../CUB-ML.qmd) - Clustering
+
+# [CU Boulder](../../../CUB.md): [Machine Learning](../CUB-ML.md) - Clustering
 Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/)
 
 - Reference: Professor Ami Gates, Dept. Applied Math, Data Science, University of Colorado
@@ -12,7 +13,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 ---
 
-### in R
+## in R
 (Raw code files in GitHub Repo)
 
 **Clustering-ex1.R** ([Markdown](Markdown/clust-ex1-mkdn.qmd),[Raw](Raw/R-Clustering-Ex1-Raw.qmd)): Comprehensive Clustering Tutorial
@@ -23,7 +24,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 **Clustering-ex3.R** (Markdown,[Raw](Raw/R-Clustering-Ex3-Raw.qmd)) = Text Mining and NLP Tutorial
 
-### Python
+## Python
 
 GatesClustering1.py (Markdown, [Raw](Raw/R-Clustering-Ex1-Raw.qmd)) = Clustering with data obtained from API
 
