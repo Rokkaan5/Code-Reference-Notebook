@@ -3,7 +3,7 @@ layout: page
 title: "CUB-ML Support Vector Machines"
 permalink: /CUB/ML/SVM
 ---
-## [CU Boulder: Machine Learning](../CUB-ML.md) - 
+# [CU Boulder](../../../CUB.md): [Machine Learning](../CUB-ML.md) - Support Vector Machines (SVM)
 Most (if not all) code made availabe through her own [website](https://gatesboltonanalytics.com/)
 
 - Reference: Professor Ami Gates, Dept. Applied Math, Data Science, University of Colorado
