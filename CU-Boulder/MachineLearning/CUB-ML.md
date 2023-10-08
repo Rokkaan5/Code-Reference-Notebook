@@ -30,7 +30,7 @@ Most (if not all) code made availabe through [Professor Gates' website](https://
     - in Python
     - in R
 
-## [Clustering](Clustering/CUB-ML_Clustering.qmd)
+## [Clustering](Clustering/CUB-ML_Clustering.md)
 
 ### in R
 
