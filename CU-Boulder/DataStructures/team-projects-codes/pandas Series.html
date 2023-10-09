@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="DSA - Team ??">
+
+<title>Pandas Series</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="pandas Series_files/libs/clipboard/clipboard.min.js"></script>
+<script src="pandas Series_files/libs/quarto-html/quarto.js"></script>
+<script src="pandas Series_files/libs/quarto-html/popper.min.js"></script>
+<script src="pandas Series_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="pandas Series_files/libs/quarto-html/anchor.min.js"></script>
+<link href="pandas Series_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="pandas Series_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="pandas Series_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="pandas Series_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="pandas Series_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#pandas-series" id="toc-pandas-series" class="nav-link active" data-scroll-target="#pandas-series">pandas Series</a>
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#creation" id="toc-creation" class="nav-link" data-scroll-target="#creation">Creation</a>
+  <ul class="collapse">
+  <li><a href="#create-series-from-ndarray" id="toc-create-series-from-ndarray" class="nav-link" data-scroll-target="#create-series-from-ndarray">Create Series from ndarray</a></li>
+  <li><a href="#create-series-with-index" id="toc-create-series-with-index" class="nav-link" data-scroll-target="#create-series-with-index">Create Series with index</a></li>
+  <li><a href="#assign-index-to-existing-series" id="toc-assign-index-to-existing-series" class="nav-link" data-scroll-target="#assign-index-to-existing-series">Assign index to Existing Series</a></li>
+  <li><a href="#create-one-item-series-from-scalar" id="toc-create-one-item-series-from-scalar" class="nav-link" data-scroll-target="#create-one-item-series-from-scalar">Create One-Item Series from Scalar</a></li>
+  <li><a href="#create-series-from-list" id="toc-create-series-from-list" class="nav-link" data-scroll-target="#create-series-from-list">Create Series from list</a></li>
+  <li><a href="#create-series-from-dict" id="toc-create-series-from-dict" class="nav-link" data-scroll-target="#create-series-from-dict">Create Series from dict</a></li>
+  <li><a href="#the-index-and-values-properties" id="toc-the-index-and-values-properties" class="nav-link" data-scroll-target="#the-index-and-values-properties">The index and values Properties</a></li>
+  </ul></li>
+  <li><a href="#access" id="toc-access" class="nav-link" data-scroll-target="#access">Access</a>
+  <ul class="collapse">
+  <li><a href="#loc-and-iloc" id="toc-loc-and-iloc" class="nav-link" data-scroll-target="#loc-and-iloc">loc[] and iloc[]</a></li>
+  </ul></li>
+  <li><a href="#manipulation" id="toc-manipulation" class="nav-link" data-scroll-target="#manipulation">Manipulation</a>
+  <ul class="collapse">
+  <li><a href="#alignment" id="toc-alignment" class="nav-link" data-scroll-target="#alignment">Alignment</a></li>
+  <li><a href="#comparing-series" id="toc-comparing-series" class="nav-link" data-scroll-target="#comparing-series">Comparing Series</a></li>
+  <li><a href="#element-wise-operations" id="toc-element-wise-operations" class="nav-link" data-scroll-target="#element-wise-operations">Element-wise Operations</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Pandas Series</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>DSA - Team ?? </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="pandas-series" class="level1">
+<h1>pandas Series</h1>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell" data-cell_id="c9c04cda541b4c9b8e72b781e2638e81" data-deepnote_cell_type="code" data-execution_millis="14723999" data-execution_start="1666844843240" data-source_hash="b7dcc9c8" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="creation" class="level2">
+<h2 class="anchored" data-anchor-id="creation">Creation</h2>
+<section id="create-series-from-ndarray" class="level3">
+<h3 class="anchored" data-anchor-id="create-series-from-ndarray">Create Series from ndarray</h3>
+<div class="cell" data-cell_id="5d74922bc41a4fef88ede2eb3d5c26e1" data-deepnote_cell_type="code" data-execution_start="1666844843241" data-source_hash="2f7d3157" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>s1 <span class="op">=</span> pd.Series(np.arange(<span class="dv">0</span>,<span class="dv">5</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>s1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>0    0
+1    1
+2    2
+3    3
+4    4
+dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="create-series-with-index" class="level3">
+<h3 class="anchored" data-anchor-id="create-series-with-index">Create Series with index</h3>
+<div class="cell" data-cell_id="575a0ad058244d5c9dffa22e59758b1e" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1666844843242" data-scrolled="true" data-source_hash="840fc803" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>s2 <span class="op">=</span> pd.Series(np.arange(<span class="dv">0</span>,<span class="dv">5</span>), index<span class="op">=</span>[<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>,<span class="st">'d'</span>,<span class="st">'e'</span>])</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>s2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>a    0
+b    1
+c    2
+d    3
+e    4
+dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="assign-index-to-existing-series" class="level3">
+<h3 class="anchored" data-anchor-id="assign-index-to-existing-series">Assign index to Existing Series</h3>
+<div class="cell" data-cell_id="83b43f6669ad42708ec5960c27705484" data-deepnote_cell_type="code" data-execution_millis="5" data-execution_start="1666844843246" data-scrolled="true" data-source_hash="b07cc846" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>s2.index <span class="op">=</span> [<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>,<span class="st">'D'</span>,<span class="st">'E'</span>]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>s2 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>A    0
+B    1
+C    2
+D    3
+E    4
+dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="create-one-item-series-from-scalar" class="level3">
+<h3 class="anchored" data-anchor-id="create-one-item-series-from-scalar">Create One-Item Series from Scalar</h3>
+<div class="cell" data-cell_id="24e21e2e674c49468e9ffb82ae80c4c8" data-deepnote_cell_type="code" data-execution_millis="6" data-execution_start="1666844843267" data-source_hash="c52a7a93" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>s3 <span class="op">=</span> pd.Series(<span class="dv">5</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>s3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>0    5
+dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="create-series-from-list" class="level3">
+<h3 class="anchored" data-anchor-id="create-series-from-list">Create Series from list</h3>
+<div class="cell" data-cell_id="4bf8057f71054fc4805756b7fe1be6d2" data-deepnote_cell_type="code" data-execution_millis="5" data-execution_start="1666844843268" data-source_hash="5b41439b" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>s4 <span class="op">=</span> pd.Series([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>])</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>s4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>0    1
+1    2
+2    3
+3    4
+4    5
+dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="create-series-from-dict" class="level3">
+<h3 class="anchored" data-anchor-id="create-series-from-dict">Create Series from dict</h3>
+<div class="cell" data-cell_id="6701ef0621594d3d976d370e2f30e02d" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1666844959128" data-scrolled="true" data-source_hash="47fcba6" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> date</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>bdays <span class="op">=</span> {</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Aaron'</span>: date(<span class="dv">2001</span>, <span class="dv">10</span>, <span class="dv">10</span>),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Brian'</span>: date(<span class="dv">2002</span>, <span class="dv">6</span>, <span class="dv">6</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Christine'</span>: date(<span class="dv">2003</span>, <span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Di'</span>: date(<span class="dv">2004</span>, <span class="dv">9</span>, <span class="dv">9</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>s5 <span class="op">=</span> pd.Series(bdays)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>s5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>Aaron        2001-10-10
+Brian        2002-06-06
+Christine    2003-02-02
+Di           2004-09-09
+dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="bb23554ca76e4ec882ee1b06172e87b3" data-deepnote_cell_type="code" data-execution_millis="51" data-execution_start="1666844967938" data-source_hash="a63c90f9" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ar <span class="op">=</span> np.array([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,np.nan,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,np.nan,<span class="dv">9</span>,<span class="dv">10</span>])</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>ar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>array([ 1.,  2.,  3., nan,  5.,  6.,  7., nan,  9., 10.])</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="4b2efc1ff0004434811a805b091355bf" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1666844843277" data-source_hash="eeb44c9c" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ar.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>nan</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="850c6b5976c44f13974eb05e54b34fe7" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1666844843294" data-source_hash="59af951b" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>s6 <span class="op">=</span> pd.Series(ar)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>s6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>0     1.0
+1     2.0
+2     3.0
+3     NaN
+4     5.0
+5     6.0
+6     7.0
+7     NaN
+8     9.0
+9    10.0
+dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="9acddc127734498fa4afdaeedf11ca97" data-deepnote_cell_type="code" data-execution_millis="3" data-execution_start="1666844843295" data-source_hash="c8b042fc" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>s6.mean(), <span class="bu">sum</span>([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">10</span>])<span class="op">/</span><span class="dv">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>(5.375, 5.375)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="0b355fa8c0dc42cba8e2a2c2f53084b3" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1666844843296" data-scrolled="true" data-source_hash="194bd5d" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>s6.mean(skipna<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>nan</code></pre>
+</div>
+</div>
+</section>
+<section id="the-index-and-values-properties" class="level3">
+<h3 class="anchored" data-anchor-id="the-index-and-values-properties">The index and values Properties</h3>
+<div class="cell" data-cell_id="ea50c79761924d85838264d4f6e6b71c" data-deepnote_cell_type="code" data-execution_millis="3" data-execution_start="1666844976186" data-scrolled="true" data-source_hash="af1d6a64" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>s5.index</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<pre><code>Index(['Aaron', 'Brian', 'Christine', 'Di'], dtype='object')</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="0528df76b1814cfd9aba94232fe0b74f" data-deepnote_cell_type="code" data-execution_millis="772" data-execution_start="1666844980537" data-scrolled="true" data-source_hash="78e0d966" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>s5.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<pre><code>array([datetime.date(2001, 10, 10), datetime.date(2002, 6, 6),
+       datetime.date(2003, 2, 2), datetime.date(2004, 9, 9)], dtype=object)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="e4624f91a4fe409093285116877b4ae3" data-deepnote_cell_type="code" data-execution_millis="383" data-execution_start="1666844993534" data-source_hash="4bdf2078" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(s5.values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>numpy.ndarray</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="access" class="level2">
+<h2 class="anchored" data-anchor-id="access">Access</h2>
+<section id="loc-and-iloc" class="level3">
+<h3 class="anchored" data-anchor-id="loc-and-iloc">loc[] and iloc[]</h3>
+<div class="cell" data-cell_id="c5319276be6f4c59bc10bf370edc195a" data-deepnote_cell_type="code" data-execution_millis="3" data-execution_start="1666844843362" data-source_hash="165cf498" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>s7 <span class="op">=</span> pd.Series(np.random.sample(<span class="dv">5</span>), index<span class="op">=</span>[<span class="st">'a'</span>,<span class="st">'b'</span>,<span class="st">'c'</span>,<span class="st">'d'</span>,<span class="st">'e'</span>])</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>s7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>a    0.299203
+b    0.664901
+c    0.047260
+d    0.395740
+e    0.820036
+dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="5817115bc2074a7688b6cfb4a00a39bb" data-deepnote_cell_type="code" data-execution_millis="1" data-execution_start="1666844843363" data-source_hash="53b3f45a" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>s7.loc[<span class="st">'a'</span>], s7.iloc[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>(0.299202993169179, 0.299202993169179)</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="73a7de4593b24601b908b7662c647bd8" data-deepnote_cell_type="code" data-execution_millis="5" data-execution_start="1666844843364" data-scrolled="true" data-source_hash="98cd219c" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>s7.loc[<span class="st">'b'</span>:<span class="st">'d'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>b    0.664901
+c    0.047260
+d    0.395740
+dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="0038d9b098ae45de92f63fdcf27eaf8f" data-deepnote_cell_type="code" data-execution_millis="3" data-execution_start="1666844843370" data-source_hash="3f52fcaf" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>s7.iloc[<span class="dv">1</span>:<span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>b    0.664901
+c    0.047260
+d    0.395740
+dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="6eba3f7c6ac24e2ba7e76547fe495d53" data-deepnote_cell_type="code" data-execution_millis="7" data-execution_start="1666844843389" data-source_hash="b32f69e9" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>s7.loc[[<span class="st">'a'</span>,<span class="st">'c'</span>,<span class="st">'d'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>a    0.299203
+c    0.047260
+d    0.395740
+dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="e53e54be96224f8a98c83a6afb58d84c" data-deepnote_cell_type="code" data-execution_millis="6" data-execution_start="1666844843390" data-source_hash="c652ca16" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>s7.iloc[[<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">4</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>a    0.299203
+c    0.047260
+e    0.820036
+dtype: float64</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="manipulation" class="level2">
+<h2 class="anchored" data-anchor-id="manipulation">Manipulation</h2>
+<section id="alignment" class="level3">
+<h3 class="anchored" data-anchor-id="alignment">Alignment</h3>
+<div class="cell" data-cell_id="3a33ff429f7141f0861429eeb7a64481" data-deepnote_cell_type="code" data-execution_millis="1" data-execution_start="1666844843390" data-source_hash="f46b86dd" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>grades1 <span class="op">=</span> pd.Series([<span class="dv">17</span>, <span class="dv">44</span>, <span class="dv">28</span>, <span class="dv">8</span>, <span class="dv">3</span>], index<span class="op">=</span>[<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>,<span class="st">'D'</span>,<span class="st">'F'</span>])</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>grades2 <span class="op">=</span> pd.Series([<span class="dv">76</span>, <span class="dv">122</span>, <span class="dv">151</span>, <span class="dv">21</span>, <span class="dv">0</span>], index<span class="op">=</span>[<span class="st">'D'</span>,<span class="st">'C'</span>,<span class="st">'B'</span>,<span class="st">'A'</span>,<span class="st">'F'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="dcb5cb590f2a42febfa00be995ce13ef" data-deepnote_cell_type="code" data-execution_millis="8" data-execution_start="1666844843391" data-scrolled="true" data-source_hash="b0e8a022" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>grades1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>A    17
+B    44
+C    28
+D     8
+F     3
+dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="f7aefbe8160a4d299a63d30a187ea498" data-deepnote_cell_type="code" data-execution_millis="2" data-execution_start="1666844843398" data-scrolled="true" data-source_hash="a35fed2d" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>grades2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>D     76
+C    122
+B    151
+A     21
+F      0
+dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="ba7dcdbdaf12472b95fc970ecca16f2a" data-deepnote_cell_type="code" data-execution_millis="5" data-execution_start="1666844843400" data-scrolled="true" data-source_hash="af8a0d86" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>grades_all <span class="op">=</span> grades1 <span class="op">+</span> grades2</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>grades_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>A     38
+B    195
+C    150
+D     84
+F      3
+dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="bd65df4fcda04e3cbaea19449190ea1c" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1666844843462" data-source_hash="daad88ea" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>grades1 <span class="op">=</span> pd.Series([<span class="dv">17</span>, <span class="dv">44</span>, <span class="dv">28</span>, <span class="dv">8</span>, <span class="dv">3</span>], index<span class="op">=</span>[<span class="st">'A'</span>,<span class="st">'B'</span>,<span class="st">'C'</span>,<span class="st">'D'</span>,<span class="st">'F'</span>])</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>grades2 <span class="op">=</span> pd.Series([<span class="dv">76</span>, <span class="dv">122</span>, <span class="dv">151</span>, <span class="dv">21</span>], index<span class="op">=</span>[<span class="st">'D'</span>,<span class="st">'C'</span>,<span class="st">'B'</span>,<span class="st">'A'</span>])</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>grades_all <span class="op">=</span> grades1 <span class="op">+</span> grades2</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>grades_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>A     38.0
+B    195.0
+C    150.0
+D     84.0
+F      NaN
+dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="1e2d749f3ab94461bff6e2a744df5bfc" data-deepnote_cell_type="code" data-execution_millis="3" data-execution_start="1666844843463" data-source_hash="f9c19afa" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>grades_all <span class="op">=</span> grades1.add(grades2, fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>grades_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>A     38.0
+B    195.0
+C    150.0
+D     84.0
+F      3.0
+dtype: float64</code></pre>
+</div>
+</div>
+</section>
+<section id="comparing-series" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-series">Comparing Series</h3>
+<div class="cell" data-cell_id="786fb20b37b742b599ad23fdea7d0e4b" data-deepnote_cell_type="code" data-execution_millis="1052" data-execution_start="1666845909263" data-source_hash="8fcc15e5" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>dies1 <span class="op">=</span> pd.Series(np.random.randint(<span class="dv">1</span>, <span class="dv">7</span>, (<span class="dv">100</span>,)))</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>dies2 <span class="op">=</span> pd.Series(np.random.randint(<span class="dv">1</span>, <span class="dv">7</span>, (<span class="dv">100</span>,)))</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>dies1 <span class="op">==</span> dies2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="49">
+<pre><code>0      True
+1     False
+2      True
+3     False
+4     False
+      ...  
+95    False
+96    False
+97    False
+98    False
+99    False
+Length: 100, dtype: bool</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="80cfb953844b46459ce9e4cae74e6d71" data-deepnote_cell_type="code" data-execution_millis="4" data-execution_start="1666845942376" data-source_hash="60a0dfd6" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>dies1[dies1 <span class="op">==</span> dies2]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="50">
+<pre><code>0     4
+2     5
+17    6
+20    5
+21    4
+34    3
+59    4
+63    1
+66    1
+70    5
+72    3
+78    6
+82    3
+91    1
+94    5
+dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="element-wise-operations" class="level3">
+<h3 class="anchored" data-anchor-id="element-wise-operations">Element-wise Operations</h3>
+<div class="cell" data-cell_id="86195f7d40664feb9492fbf743561ecd" data-deepnote_cell_type="code" data-execution_millis="16" data-execution_start="1666844843488" data-source_hash="26d8c200" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>exam_grades <span class="op">=</span> pd.Series(np.random.randint(<span class="dv">60</span>,<span class="dv">101</span>,<span class="dv">100</span>))</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>exam_grades</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>0     97
+1     72
+2     68
+3     69
+4     71
+      ..
+95    87
+96    81
+97    71
+98    67
+99    73
+Length: 100, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="cce80895eaed4750aa167455ca9acc4e" data-deepnote_cell_type="code" data-execution_millis="17" data-execution_start="1666844843488" data-source_hash="5500e301" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>curved_grades <span class="op">=</span> exam_grades.multiply(<span class="fl">1.05</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>curved_grades</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>0     101.85
+1      75.60
+2      71.40
+3      72.45
+4      74.55
+       ...  
+95     91.35
+96     85.05
+97     74.55
+98     70.35
+99     76.65
+Length: 100, dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="692fc6bf58af4734be257ca247e5584d" data-deepnote_cell_type="code" data-execution_start="1666844843489" data-source_hash="277652ad" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> convert_to_letter(grade):</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> grade <span class="op">&gt;=</span> <span class="dv">90</span>:</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'A'</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> grade <span class="op">&gt;=</span> <span class="dv">80</span>:</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'B'</span></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> grade <span class="op">&gt;=</span> <span class="dv">70</span>:</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'C'</span></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> grade <span class="op">&gt;=</span> <span class="dv">65</span>:</span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'D'</span></span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">'F'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="37e367238e644e678700cdf06e01d486" data-deepnote_cell_type="code" data-execution_millis="703" data-execution_start="1666846180608" data-scrolled="true" data-source_hash="ff791357" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>letter_grades <span class="op">=</span> [(i, convert_to_letter(g)) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(curved_grades)) <span class="cf">for</span> g <span class="kw">in</span> curved_grades]</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>letter_grades</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="58">
+<pre><code>[(0, 'A'),
+ (0, 'C'),
+ (0, 'C'),
+ (0, 'C'),
+ (0, 'C'),
+ (0, 'D'),
+ (0, 'C'),
+ (0, 'F'),
+ (0, 'C'),
+ (0, 'F'),
+ (0, 'C'),
+ (0, 'C'),
+ (0, 'D'),
+ (0, 'B'),
+ (0, 'B'),
+ (0, 'A'),
+ (0, 'B'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'A'),
+ (0, 'A'),
+ (0, 'C'),
+ (0, 'D'),
+ (0, 'B'),
+ (0, 'B'),
+ (0, 'A'),
+ (0, 'A'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'C'),
+ (0, 'C'),
+ (0, 'B'),
+ (0, 'F'),
+ (0, 'F'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'C'),
+ (0, 'A'),
+ (0, 'C'),
+ (0, 'D'),
+ (0, 'D'),
+ (0, 'B'),
+ (0, 'D'),
+ (0, 'D'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'A'),
+ (0, 'C'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'F'),
+ (0, 'D'),
+ (0, 'B'),
+ (0, 'A'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'A'),
+ (0, 'B'),
+ (0, 'A'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'D'),
+ (0, 'A'),
+ (0, 'B'),
+ (0, 'A'),
+ (0, 'A'),
+ (0, 'A'),
+ (0, 'B'),
+ (0, 'A'),
+ (0, 'C'),
+ (0, 'A'),
+ (0, 'A'),
+ (0, 'C'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'B'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'A'),
+ (0, 'C'),
+ (0, 'A'),
+ (0, 'B'),
+ (0, 'B'),
+ (0, 'F'),
+ (0, 'C'),
+ (0, 'D'),
+ (0, 'F'),
+ (0, 'C'),
+ (0, 'D'),
+ (0, 'B'),
+ (0, 'D'),
+ (0, 'D'),
+ (0, 'C'),
+ (0, 'A'),
+ (0, 'B'),
+ (0, 'C'),
+ (0, 'C'),
+ (0, 'C'),
+ (1, 'A'),
+ (1, 'C'),
+ (1, 'C'),
+ (1, 'C'),
+ (1, 'C'),
+ (1, 'D'),
+ (1, 'C'),
+ (1, 'F'),
+ (1, 'C'),
+ (1, 'F'),
+ (1, 'C'),
+ (1, 'C'),
+ (1, 'D'),
+ (1, 'B'),
+ (1, 'B'),
+ (1, 'A'),
+ (1, 'B'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'A'),
+ (1, 'A'),
+ (1, 'C'),
+ (1, 'D'),
+ (1, 'B'),
+ (1, 'B'),
+ (1, 'A'),
+ (1, 'A'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'C'),
+ (1, 'C'),
+ (1, 'B'),
+ (1, 'F'),
+ (1, 'F'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'C'),
+ (1, 'A'),
+ (1, 'C'),
+ (1, 'D'),
+ (1, 'D'),
+ (1, 'B'),
+ (1, 'D'),
+ (1, 'D'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'A'),
+ (1, 'C'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'F'),
+ (1, 'D'),
+ (1, 'B'),
+ (1, 'A'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'A'),
+ (1, 'B'),
+ (1, 'A'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'D'),
+ (1, 'A'),
+ (1, 'B'),
+ (1, 'A'),
+ (1, 'A'),
+ (1, 'A'),
+ (1, 'B'),
+ (1, 'A'),
+ (1, 'C'),
+ (1, 'A'),
+ (1, 'A'),
+ (1, 'C'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'B'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'A'),
+ (1, 'C'),
+ (1, 'A'),
+ (1, 'B'),
+ (1, 'B'),
+ (1, 'F'),
+ (1, 'C'),
+ (1, 'D'),
+ (1, 'F'),
+ (1, 'C'),
+ (1, 'D'),
+ (1, 'B'),
+ (1, 'D'),
+ (1, 'D'),
+ (1, 'C'),
+ (1, 'A'),
+ (1, 'B'),
+ (1, 'C'),
+ (1, 'C'),
+ (1, 'C'),
+ (2, 'A'),
+ (2, 'C'),
+ (2, 'C'),
+ (2, 'C'),
+ (2, 'C'),
+ (2, 'D'),
+ (2, 'C'),
+ (2, 'F'),
+ (2, 'C'),
+ (2, 'F'),
+ (2, 'C'),
+ (2, 'C'),
+ (2, 'D'),
+ (2, 'B'),
+ (2, 'B'),
+ (2, 'A'),
+ (2, 'B'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'A'),
+ (2, 'A'),
+ (2, 'C'),
+ (2, 'D'),
+ (2, 'B'),
+ (2, 'B'),
+ (2, 'A'),
+ (2, 'A'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'C'),
+ (2, 'C'),
+ (2, 'B'),
+ (2, 'F'),
+ (2, 'F'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'C'),
+ (2, 'A'),
+ (2, 'C'),
+ (2, 'D'),
+ (2, 'D'),
+ (2, 'B'),
+ (2, 'D'),
+ (2, 'D'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'A'),
+ (2, 'C'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'F'),
+ (2, 'D'),
+ (2, 'B'),
+ (2, 'A'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'A'),
+ (2, 'B'),
+ (2, 'A'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'D'),
+ (2, 'A'),
+ (2, 'B'),
+ (2, 'A'),
+ (2, 'A'),
+ (2, 'A'),
+ (2, 'B'),
+ (2, 'A'),
+ (2, 'C'),
+ (2, 'A'),
+ (2, 'A'),
+ (2, 'C'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'B'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'A'),
+ (2, 'C'),
+ (2, 'A'),
+ (2, 'B'),
+ (2, 'B'),
+ (2, 'F'),
+ (2, 'C'),
+ (2, 'D'),
+ (2, 'F'),
+ (2, 'C'),
+ (2, 'D'),
+ (2, 'B'),
+ (2, 'D'),
+ (2, 'D'),
+ (2, 'C'),
+ (2, 'A'),
+ (2, 'B'),
+ (2, 'C'),
+ (2, 'C'),
+ (2, 'C'),
+ (3, 'A'),
+ (3, 'C'),
+ (3, 'C'),
+ (3, 'C'),
+ (3, 'C'),
+ (3, 'D'),
+ (3, 'C'),
+ (3, 'F'),
+ (3, 'C'),
+ (3, 'F'),
+ (3, 'C'),
+ (3, 'C'),
+ (3, 'D'),
+ (3, 'B'),
+ (3, 'B'),
+ (3, 'A'),
+ (3, 'B'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'A'),
+ (3, 'A'),
+ (3, 'C'),
+ (3, 'D'),
+ (3, 'B'),
+ (3, 'B'),
+ (3, 'A'),
+ (3, 'A'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'C'),
+ (3, 'C'),
+ (3, 'B'),
+ (3, 'F'),
+ (3, 'F'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'C'),
+ (3, 'A'),
+ (3, 'C'),
+ (3, 'D'),
+ (3, 'D'),
+ (3, 'B'),
+ (3, 'D'),
+ (3, 'D'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'A'),
+ (3, 'C'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'F'),
+ (3, 'D'),
+ (3, 'B'),
+ (3, 'A'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'A'),
+ (3, 'B'),
+ (3, 'A'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'D'),
+ (3, 'A'),
+ (3, 'B'),
+ (3, 'A'),
+ (3, 'A'),
+ (3, 'A'),
+ (3, 'B'),
+ (3, 'A'),
+ (3, 'C'),
+ (3, 'A'),
+ (3, 'A'),
+ (3, 'C'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'B'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'A'),
+ (3, 'C'),
+ (3, 'A'),
+ (3, 'B'),
+ (3, 'B'),
+ (3, 'F'),
+ (3, 'C'),
+ (3, 'D'),
+ (3, 'F'),
+ (3, 'C'),
+ (3, 'D'),
+ (3, 'B'),
+ (3, 'D'),
+ (3, 'D'),
+ (3, 'C'),
+ (3, 'A'),
+ (3, 'B'),
+ (3, 'C'),
+ (3, 'C'),
+ (3, 'C'),
+ (4, 'A'),
+ (4, 'C'),
+ (4, 'C'),
+ (4, 'C'),
+ (4, 'C'),
+ (4, 'D'),
+ (4, 'C'),
+ (4, 'F'),
+ (4, 'C'),
+ (4, 'F'),
+ (4, 'C'),
+ (4, 'C'),
+ (4, 'D'),
+ (4, 'B'),
+ (4, 'B'),
+ (4, 'A'),
+ (4, 'B'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'A'),
+ (4, 'A'),
+ (4, 'C'),
+ (4, 'D'),
+ (4, 'B'),
+ (4, 'B'),
+ (4, 'A'),
+ (4, 'A'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'C'),
+ (4, 'C'),
+ (4, 'B'),
+ (4, 'F'),
+ (4, 'F'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'C'),
+ (4, 'A'),
+ (4, 'C'),
+ (4, 'D'),
+ (4, 'D'),
+ (4, 'B'),
+ (4, 'D'),
+ (4, 'D'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'A'),
+ (4, 'C'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'F'),
+ (4, 'D'),
+ (4, 'B'),
+ (4, 'A'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'A'),
+ (4, 'B'),
+ (4, 'A'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'D'),
+ (4, 'A'),
+ (4, 'B'),
+ (4, 'A'),
+ (4, 'A'),
+ (4, 'A'),
+ (4, 'B'),
+ (4, 'A'),
+ (4, 'C'),
+ (4, 'A'),
+ (4, 'A'),
+ (4, 'C'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'B'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'A'),
+ (4, 'C'),
+ (4, 'A'),
+ (4, 'B'),
+ (4, 'B'),
+ (4, 'F'),
+ (4, 'C'),
+ (4, 'D'),
+ (4, 'F'),
+ (4, 'C'),
+ (4, 'D'),
+ (4, 'B'),
+ (4, 'D'),
+ (4, 'D'),
+ (4, 'C'),
+ (4, 'A'),
+ (4, 'B'),
+ (4, 'C'),
+ (4, 'C'),
+ (4, 'C'),
+ (5, 'A'),
+ (5, 'C'),
+ (5, 'C'),
+ (5, 'C'),
+ (5, 'C'),
+ (5, 'D'),
+ (5, 'C'),
+ (5, 'F'),
+ (5, 'C'),
+ (5, 'F'),
+ (5, 'C'),
+ (5, 'C'),
+ (5, 'D'),
+ (5, 'B'),
+ (5, 'B'),
+ (5, 'A'),
+ (5, 'B'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'A'),
+ (5, 'A'),
+ (5, 'C'),
+ (5, 'D'),
+ (5, 'B'),
+ (5, 'B'),
+ (5, 'A'),
+ (5, 'A'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'C'),
+ (5, 'C'),
+ (5, 'B'),
+ (5, 'F'),
+ (5, 'F'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'C'),
+ (5, 'A'),
+ (5, 'C'),
+ (5, 'D'),
+ (5, 'D'),
+ (5, 'B'),
+ (5, 'D'),
+ (5, 'D'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'A'),
+ (5, 'C'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'F'),
+ (5, 'D'),
+ (5, 'B'),
+ (5, 'A'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'A'),
+ (5, 'B'),
+ (5, 'A'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'D'),
+ (5, 'A'),
+ (5, 'B'),
+ (5, 'A'),
+ (5, 'A'),
+ (5, 'A'),
+ (5, 'B'),
+ (5, 'A'),
+ (5, 'C'),
+ (5, 'A'),
+ (5, 'A'),
+ (5, 'C'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'B'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'A'),
+ (5, 'C'),
+ (5, 'A'),
+ (5, 'B'),
+ (5, 'B'),
+ (5, 'F'),
+ (5, 'C'),
+ (5, 'D'),
+ (5, 'F'),
+ (5, 'C'),
+ (5, 'D'),
+ (5, 'B'),
+ (5, 'D'),
+ (5, 'D'),
+ (5, 'C'),
+ (5, 'A'),
+ (5, 'B'),
+ (5, 'C'),
+ (5, 'C'),
+ (5, 'C'),
+ (6, 'A'),
+ (6, 'C'),
+ (6, 'C'),
+ (6, 'C'),
+ (6, 'C'),
+ (6, 'D'),
+ (6, 'C'),
+ (6, 'F'),
+ (6, 'C'),
+ (6, 'F'),
+ (6, 'C'),
+ (6, 'C'),
+ (6, 'D'),
+ (6, 'B'),
+ (6, 'B'),
+ (6, 'A'),
+ (6, 'B'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'A'),
+ (6, 'A'),
+ (6, 'C'),
+ (6, 'D'),
+ (6, 'B'),
+ (6, 'B'),
+ (6, 'A'),
+ (6, 'A'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'C'),
+ (6, 'C'),
+ (6, 'B'),
+ (6, 'F'),
+ (6, 'F'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'C'),
+ (6, 'A'),
+ (6, 'C'),
+ (6, 'D'),
+ (6, 'D'),
+ (6, 'B'),
+ (6, 'D'),
+ (6, 'D'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'A'),
+ (6, 'C'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'F'),
+ (6, 'D'),
+ (6, 'B'),
+ (6, 'A'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'A'),
+ (6, 'B'),
+ (6, 'A'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'D'),
+ (6, 'A'),
+ (6, 'B'),
+ (6, 'A'),
+ (6, 'A'),
+ (6, 'A'),
+ (6, 'B'),
+ (6, 'A'),
+ (6, 'C'),
+ (6, 'A'),
+ (6, 'A'),
+ (6, 'C'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'B'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'A'),
+ (6, 'C'),
+ (6, 'A'),
+ (6, 'B'),
+ (6, 'B'),
+ (6, 'F'),
+ (6, 'C'),
+ (6, 'D'),
+ (6, 'F'),
+ (6, 'C'),
+ (6, 'D'),
+ (6, 'B'),
+ (6, 'D'),
+ (6, 'D'),
+ (6, 'C'),
+ (6, 'A'),
+ (6, 'B'),
+ (6, 'C'),
+ (6, 'C'),
+ (6, 'C'),
+ (7, 'A'),
+ (7, 'C'),
+ (7, 'C'),
+ (7, 'C'),
+ (7, 'C'),
+ (7, 'D'),
+ (7, 'C'),
+ (7, 'F'),
+ (7, 'C'),
+ (7, 'F'),
+ (7, 'C'),
+ (7, 'C'),
+ (7, 'D'),
+ (7, 'B'),
+ (7, 'B'),
+ (7, 'A'),
+ (7, 'B'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'A'),
+ (7, 'A'),
+ (7, 'C'),
+ (7, 'D'),
+ (7, 'B'),
+ (7, 'B'),
+ (7, 'A'),
+ (7, 'A'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'C'),
+ (7, 'C'),
+ (7, 'B'),
+ (7, 'F'),
+ (7, 'F'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'C'),
+ (7, 'A'),
+ (7, 'C'),
+ (7, 'D'),
+ (7, 'D'),
+ (7, 'B'),
+ (7, 'D'),
+ (7, 'D'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'A'),
+ (7, 'C'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'F'),
+ (7, 'D'),
+ (7, 'B'),
+ (7, 'A'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'A'),
+ (7, 'B'),
+ (7, 'A'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'D'),
+ (7, 'A'),
+ (7, 'B'),
+ (7, 'A'),
+ (7, 'A'),
+ (7, 'A'),
+ (7, 'B'),
+ (7, 'A'),
+ (7, 'C'),
+ (7, 'A'),
+ (7, 'A'),
+ (7, 'C'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'B'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'A'),
+ (7, 'C'),
+ (7, 'A'),
+ (7, 'B'),
+ (7, 'B'),
+ (7, 'F'),
+ (7, 'C'),
+ (7, 'D'),
+ (7, 'F'),
+ (7, 'C'),
+ (7, 'D'),
+ (7, 'B'),
+ (7, 'D'),
+ (7, 'D'),
+ (7, 'C'),
+ (7, 'A'),
+ (7, 'B'),
+ (7, 'C'),
+ (7, 'C'),
+ (7, 'C'),
+ (8, 'A'),
+ (8, 'C'),
+ (8, 'C'),
+ (8, 'C'),
+ (8, 'C'),
+ (8, 'D'),
+ (8, 'C'),
+ (8, 'F'),
+ (8, 'C'),
+ (8, 'F'),
+ (8, 'C'),
+ (8, 'C'),
+ (8, 'D'),
+ (8, 'B'),
+ (8, 'B'),
+ (8, 'A'),
+ (8, 'B'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'A'),
+ (8, 'A'),
+ (8, 'C'),
+ (8, 'D'),
+ (8, 'B'),
+ (8, 'B'),
+ (8, 'A'),
+ (8, 'A'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'C'),
+ (8, 'C'),
+ (8, 'B'),
+ (8, 'F'),
+ (8, 'F'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'C'),
+ (8, 'A'),
+ (8, 'C'),
+ (8, 'D'),
+ (8, 'D'),
+ (8, 'B'),
+ (8, 'D'),
+ (8, 'D'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'A'),
+ (8, 'C'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'F'),
+ (8, 'D'),
+ (8, 'B'),
+ (8, 'A'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'A'),
+ (8, 'B'),
+ (8, 'A'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'D'),
+ (8, 'A'),
+ (8, 'B'),
+ (8, 'A'),
+ (8, 'A'),
+ (8, 'A'),
+ (8, 'B'),
+ (8, 'A'),
+ (8, 'C'),
+ (8, 'A'),
+ (8, 'A'),
+ (8, 'C'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'B'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'A'),
+ (8, 'C'),
+ (8, 'A'),
+ (8, 'B'),
+ (8, 'B'),
+ (8, 'F'),
+ (8, 'C'),
+ (8, 'D'),
+ (8, 'F'),
+ (8, 'C'),
+ (8, 'D'),
+ (8, 'B'),
+ (8, 'D'),
+ (8, 'D'),
+ (8, 'C'),
+ (8, 'A'),
+ (8, 'B'),
+ (8, 'C'),
+ (8, 'C'),
+ (8, 'C'),
+ (9, 'A'),
+ (9, 'C'),
+ (9, 'C'),
+ (9, 'C'),
+ (9, 'C'),
+ (9, 'D'),
+ (9, 'C'),
+ (9, 'F'),
+ (9, 'C'),
+ (9, 'F'),
+ (9, 'C'),
+ (9, 'C'),
+ (9, 'D'),
+ (9, 'B'),
+ (9, 'B'),
+ (9, 'A'),
+ (9, 'B'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'A'),
+ (9, 'A'),
+ (9, 'C'),
+ (9, 'D'),
+ (9, 'B'),
+ (9, 'B'),
+ (9, 'A'),
+ (9, 'A'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'C'),
+ (9, 'C'),
+ (9, 'B'),
+ (9, 'F'),
+ (9, 'F'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'C'),
+ (9, 'A'),
+ (9, 'C'),
+ (9, 'D'),
+ (9, 'D'),
+ (9, 'B'),
+ (9, 'D'),
+ (9, 'D'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'A'),
+ (9, 'C'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'F'),
+ (9, 'D'),
+ (9, 'B'),
+ (9, 'A'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'A'),
+ (9, 'B'),
+ (9, 'A'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'D'),
+ (9, 'A'),
+ (9, 'B'),
+ (9, 'A'),
+ (9, 'A'),
+ (9, 'A'),
+ (9, 'B'),
+ (9, 'A'),
+ (9, 'C'),
+ (9, 'A'),
+ (9, 'A'),
+ (9, 'C'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'B'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'A'),
+ (9, 'C'),
+ (9, 'A'),
+ (9, 'B'),
+ (9, 'B'),
+ (9, 'F'),
+ (9, 'C'),
+ (9, 'D'),
+ (9, 'F'),
+ (9, 'C'),
+ (9, 'D'),
+ (9, 'B'),
+ (9, 'D'),
+ (9, 'D'),
+ (9, 'C'),
+ (9, 'A'),
+ (9, 'B'),
+ (9, 'C'),
+ (9, 'C'),
+ (9, 'C'),
+ ...]</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="ccb74b6286c34e5d8818245b6a448879" data-deepnote_cell_type="code" data-execution_millis="3" data-execution_start="1666846019594" data-source_hash="38543182" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>letter_grades <span class="op">=</span> curved_grades.<span class="bu">apply</span>(convert_to_letter)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>letter_grades</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="51">
+<pre><code>0     A
+1     C
+2     C
+3     C
+4     C
+     ..
+95    A
+96    B
+97    C
+98    C
+99    C
+Length: 100, dtype: object</code></pre>
+</div>
+</div>
+<p><a style="text-decoration:none;line-height:16px;display:flex;color:#5B5B62;padding:10px;justify-content:end;" href="https://deepnote.com?utm_source=created-in-deepnote-cell&amp;projectId=60e83195-1c6d-4dea-988d-720f1e421976" target="_blank"> <img alt="Created in deepnote.com" style="display:inline;max-height:16px;margin:0px;margin-right:7.5px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iODBweCIgaGVpZ2h0PSI4MHB4IiB2aWV3Qm94PSIwIDAgODAgODAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDU0LjEgKDc2NDkwKSAtIGh0dHBzOi8vc2tldGNoYXBwLmNvbSAtLT4KICAgIDx0aXRsZT5Hcm91cCAzPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGcgaWQ9IkxhbmRpbmciIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJBcnRib2FyZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTEyMzUuMDAwMDAwLCAtNzkuMDAwMDAwKSI+CiAgICAgICAgICAgIDxnIGlkPSJHcm91cC0zIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjM1LjAwMDAwMCwgNzkuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICA8cG9seWdvbiBpZD0iUGF0aC0yMCIgZmlsbD0iIzAyNjVCNCIgcG9pbnRzPSIyLjM3NjIzNzYyIDgwIDM4LjA0NzY2NjcgODAgNTcuODIxNzgyMiA3My44MDU3NTkyIDU3LjgyMTc4MjIgMzIuNzU5MjczOSAzOS4xNDAyMjc4IDMxLjY4MzE2ODMiPjwvcG9seWdvbj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0zNS4wMDc3MTgsODAgQzQyLjkwNjIwMDcsNzYuNDU0OTM1OCA0Ny41NjQ5MTY3LDcxLjU0MjI2NzEgNDguOTgzODY2LDY1LjI2MTk5MzkgQzUxLjExMjI4OTksNTUuODQxNTg0MiA0MS42NzcxNzk1LDQ5LjIxMjIyODQgMjUuNjIzOTg0Niw0OS4yMTIyMjg0IEMyNS40ODQ5Mjg5LDQ5LjEyNjg0NDggMjkuODI2MTI5Niw0My4yODM4MjQ4IDM4LjY0NzU4NjksMzEuNjgzMTY4MyBMNzIuODcxMjg3MSwzMi41NTQ0MjUgTDY1LjI4MDk3Myw2Ny42NzYzNDIxIEw1MS4xMTIyODk5LDc3LjM3NjE0NCBMMzUuMDA3NzE4LDgwIFoiIGlkPSJQYXRoLTIyIiBmaWxsPSIjMDAyODY4Ij48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMCwzNy43MzA0NDA1IEwyNy4xMTQ1MzcsMC4yNTcxMTE0MzYgQzYyLjM3MTUxMjMsLTEuOTkwNzE3MDEgODAsMTAuNTAwMzkyNyA4MCwzNy43MzA0NDA1IEM4MCw2NC45NjA0ODgyIDY0Ljc3NjUwMzgsNzkuMDUwMzQxNCAzNC4zMjk1MTEzLDgwIEM0Ny4wNTUzNDg5LDc3LjU2NzA4MDggNTMuNDE4MjY3Nyw3MC4zMTM2MTAzIDUzLjQxODI2NzcsNTguMjM5NTg4NSBDNTMuNDE4MjY3Nyw0MC4xMjg1NTU3IDM2LjMwMzk1NDQsMzcuNzMwNDQwNSAyNS4yMjc0MTcsMzcuNzMwNDQwNSBDMTcuODQzMDU4NiwzNy43MzA0NDA1IDkuNDMzOTE5NjYsMzcuNzMwNDQwNSAwLDM3LjczMDQ0MDUgWiIgaWQ9IlBhdGgtMTkiIGZpbGw9IiMzNzkzRUYiPjwvcGF0aD4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+">  Created in <span style="font-weight:600;margin-left:4px;">Deepnote</span></a></p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
