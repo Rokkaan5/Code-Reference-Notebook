@@ -44,6 +44,10 @@ permalink: /CUB/DataStructures
 
 [Team 4 Example code here](team-projects-codes/Strings_python.html)
 
+**Team ??**: Pandas Series
+
+[Team ? Example code here](team-projects-codes/pandas%20Series.html)
+
 **Team 8** (Vamsi Gontu, Sanyuta Nair, and me): ***general intro to tree structures***
 
 - General intro to trees
