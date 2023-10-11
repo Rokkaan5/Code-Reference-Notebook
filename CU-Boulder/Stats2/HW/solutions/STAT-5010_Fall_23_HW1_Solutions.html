@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Osita Onyejekwe">
+
+<title>Regression Modeling in R - Part 1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="STAT-5010_Fall_23_HW1_Solutions_files/libs/clipboard/clipboard.min.js"></script>
+<script src="STAT-5010_Fall_23_HW1_Solutions_files/libs/quarto-html/quarto.js"></script>
+<script src="STAT-5010_Fall_23_HW1_Solutions_files/libs/quarto-html/popper.min.js"></script>
+<script src="STAT-5010_Fall_23_HW1_Solutions_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="STAT-5010_Fall_23_HW1_Solutions_files/libs/quarto-html/anchor.min.js"></script>
+<link href="STAT-5010_Fall_23_HW1_Solutions_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="STAT-5010_Fall_23_HW1_Solutions_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="STAT-5010_Fall_23_HW1_Solutions_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="STAT-5010_Fall_23_HW1_Solutions_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="STAT-5010_Fall_23_HW1_Solutions_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Regression Modeling in R - Part 1</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr.&nbsp;Osita Onyejekwe </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="homework-1---solutions" class="level1">
+<h1>Homework #1 - Solutions</h1>
+<p><strong>See Canvas for the due date of this assignment</strong>. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don’t know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems, but please see the class <a href="https://docs.google.com/document/d/1d_7PJvTGtMGtHWq8BezaTzYI5aYZkFgmchV_hTId6Ks/edit?usp=sharing">scanning policy</a>. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work.</p>
+<section id="a.-theoretical-problems" class="level2">
+<h2 class="anchored" data-anchor-id="a.-theoretical-problems">A. Theoretical Problems</h2>
+<section id="a.1-connections-between-linear-algebra-and-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="a.1-connections-between-linear-algebra-and-statistics">A.1: Connections between linear algebra and statistics</h3>
+<p>Let <span class="math inline">\(\mathbf{a} = (a_1,...,a_n)^T\)</span> and <span class="math inline">\(\mathbf{y} = (y_1,...,y_n)^T\)</span> be two vectors. Define the <em>inner product</em> of <span class="math inline">\(\mathbf{a}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> to be <span class="math inline">\(\mathbf{a}^T\mathbf{y} = a_1y_1 + a_2y_2 + ... + a_ny_n\)</span>.</p>
+<p><strong>A.1 (a) [5 points] Interpret</strong> <span class="math inline">\(\mathbf{y}\)</span> as a set of observations of a variable. Find <span class="math inline">\(\mathbf{a}\)</span> such that <span class="math inline">\(\mathbf{a}^T\mathbf{y}\)</span> is equal to the sample mean of <span class="math inline">\(\mathbf{y}\)</span>, i.e., <span class="math inline">\(\bar{y}\)</span>.</p>
+<p>Let <span class="math inline">\(\mathbf{a} = (1/n, ..., 1/n)^T\)</span>. Then <span class="math inline">\(\mathbf{a}^T\mathbf{y} = (1/n)y_1 + (1/n)y_2 + ... + (1/n)y_n = \frac{1}{n}\sum^n_{i=1}y_i\)</span>.</p>
+<p><strong>A.1 (b) [7 points] Define</strong> <span class="math inline">\(\mathbf{\bar{y}} = (\bar{y},..., \bar{y})^T\)</span> (that is, <span class="math inline">\(\mathbf{\bar{y}}\)</span> is a vector where every entry is the sample mean of <span class="math inline">\(\mathbf{y}\)</span>). Write <span class="math inline">\(\displaystyle \sum^n_{i=1}(y_i - \bar{y})^2\)</span> as an inner product of two vectors.</p>
+<p>First, note that <span class="math inline">\(\mathbf{y} - \mathbf{\bar{y}} = (y_1 - \bar{y} , \, y_2 - \bar{y} \, ,..., \, y_n - \bar{y})^T\)</span>. So,</p>
+<p><span class="math display">\[(\mathbf{y} - \mathbf{\bar{y}})^T(\mathbf{y} - \mathbf{\bar{y}}) = (y_1 - \bar{y} , \, y_2 - \bar{y} \, ,..., \, y_n - \bar{y})\begin{pmatrix}
+           y_1 - \bar{y} \\
+           y_2 - \bar{y} \\
+           \vdots \\
+           y_n - \bar{y}
+         \end{pmatrix} = (y_1 - \bar{y})^2 + (y_2 - \bar{y})^2 + ... + (y_2 - \bar{y})^2 = \sum^n_{i=1}\left(y_i - \bar{y} \right)^2.\]</span></p>
+</section>
+<section id="a.2-linear-regression-with-matrices-and-vectors" class="level3">
+<h3 class="anchored" data-anchor-id="a.2-linear-regression-with-matrices-and-vectors">A.2 Linear regression with matrices and vectors</h3>
+<p><strong>This problem might require some outside-of-class research if you haven’t taken a linear algebra/matrix methods course.</strong></p>
+<p>Matrices and vectors will play an important role for us in linear regression. Let’s review some matrix theory as it might relate to linear regression.</p>
+<p>Consider the system of linear equations</p>
+<p><span class="math display">\[Y_i = \beta_0 + \sum^p_{j=1}\beta_j x_{i,j} + \varepsilon_i,\]</span></p>
+<p>for <span class="math inline">\(i = 1,...,n\)</span>, where <span class="math inline">\(n\)</span> is the number of data points (measurements in the sample), and <span class="math inline">\(j = 1,...,p\)</span>, where</p>
+<ol type="1">
+<li><span class="math inline">\(p+1\)</span> is the number of parameters in the model.</li>
+<li><span class="math inline">\(Y_i\)</span> is the <span class="math inline">\(i^{th}\)</span> measurement of the <em>response variable</em>.</li>
+<li><span class="math inline">\(x_{i,j}\)</span> is the <span class="math inline">\(i^{th}\)</span> measurement of the <span class="math inline">\(j^{th}\)</span> <em>predictor variable</em>.</li>
+<li><span class="math inline">\(\varepsilon_i\)</span> is the <span class="math inline">\(i^{th}\)</span> <em>error term</em> and is a random variable, often assumed to be <span class="math inline">\(N(0, \sigma^2)\)</span>.</li>
+<li><span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(j = 0,...,p\)</span> are <em>unknown parameters</em> of the model. We hope to estimate these, which would help us characterize the relationship between the predictors and response.</li>
+</ol>
+<p><strong>A.2.(a) [5 points] Write the equation above in matrix vector form. Call the matrix including the predictors</strong> <span class="math inline">\(X\)</span>, the vector of <span class="math inline">\(Y_i\)</span>s <span class="math inline">\(\mathbf{Y}\)</span>, the vector of parameters <span class="math inline">\(\mathbf{\beta}\)</span>, and the vector of error terms <span class="math inline">\(\mathbf{\varepsilon}\)</span>. (This is more LaTeX practice than anything else…)</p>
+<p><span class="math display">\[\mathbf{Y} = X\mathbf{\beta} + \mathbf{\varepsilon},\]</span></p>
+<p>where <span class="math inline">\(\mathbf{Y} = (Y_1,...,Y_n)^T\)</span>, <span class="math inline">\(X =\)</span></p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1 &amp; X_{1,1} &amp; X_{1,2} &amp; ... &amp; X_{1,p}\\
+1 &amp; X_{2,1} &amp; X_{2,2} &amp; ... &amp; X_{2,p} \\
+\vdots &amp; \vdots &amp; \vdots &amp; ... &amp; \vdots \\
+1 &amp; X_{n,1} &amp; X_{n,2} &amp; ... &amp; X_{n,p}
+\end{bmatrix}
+\]</span> <span class="math inline">\(\boldsymbol{\beta} = (\beta_1,...,\beta_n)^T\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon} = (\varepsilon_1,...,\varepsilon_n)^T\)</span></p>
+<p><strong>A.2.(b) [8 points] In class, we will find that the OLS estimator for</strong> <span class="math inline">\(\mathbf{\beta}\)</span> in MLR is <span class="math inline">\(\widehat{\boldsymbol\beta} = (X^TX)^{-1}X^T\mathbf{Y}\)</span>.</p>
+<ol type="1">
+<li><p>What condition must be true about the columns of <span class="math inline">\(X\)</span> for the “Gram” matrix <span class="math inline">\(X^TX\)</span> to be invertible?</p></li>
+<li><p>What does this condition mean in practical terms?</p></li>
+<li><p>Suppose that the number of measurements (<span class="math inline">\(n\)</span>) is less than the number of model parameters (<span class="math inline">\(p+1\)</span>). What does this say about the invertibility of <span class="math inline">\(X^TX\)</span>? What does this mean on a practical level?</p></li>
+<li><p>What is true about about <span class="math inline">\(\widehat{\boldsymbol\beta}\)</span> if <span class="math inline">\(X^TX\)</span> is not invertible?</p></li>
+<li><p>For <span class="math inline">\(X^TX\)</span> to be invertible, the columns of <span class="math inline">\(X\)</span> must be linearly independent. That means that no column of <span class="math inline">\(X\)</span>–i.e., no measured predictor–can be written as a linear combination of other columns. This implies that <span class="math inline">\(n &gt; (p+1)\)</span>.</p></li>
+<li><p>If we’ve measured a predictor that is simply a linear combination of others, that means that that predictor is not adding any new information that’s not already contained in the other predictors. Imagine a simple case: <span class="math inline">\(X_1\)</span> is a predictor of measured weights in pounds, and <span class="math inline">\(X_2\)</span> is a predictor of measured weights in kilograms. Thus, <span class="math inline">\(X_1 = 2.2046 X_2\)</span>. Measuring <span class="math inline">\(X_1\)</span> doesn’t give any new information.</p></li>
+<li><p>This implies that we have more parameters than data/measurements, and thus <span class="math inline">\(X^TX\)</span> will not be invertible.</p></li>
+<li><p>The formula for <span class="math inline">\(\widehat{\boldsymbol\beta} = (X^TX)^{-1}X^T\mathbf{Y}\)</span> is derived from the “normal equations”: <span class="math display">\[ (X^TX)\mathbf{\beta} = X^T\mathbf{Y}.\]</span> The normal equations have a unique solutions if and only if <span class="math inline">\(X^TX\)</span> is invertible. If it’s not invertible, then either the normal equations have no solutions or infinitely many solutions.</p></li>
+</ol>
+</section>
+</section>
+<section id="b.-computational-problems" class="level2">
+<h2 class="anchored" data-anchor-id="b.-computational-problems">B. Computational Problems</h2>
+<section id="b.1-exploratory-data-analysis-and-basic-regression" class="level3">
+<h3 class="anchored" data-anchor-id="b.1-exploratory-data-analysis-and-basic-regression">B.1 Exploratory data analysis and basic regression</h3>
+<p><strong>B.1.(a) Load the “gala” dataset, and describe the variables.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>gala <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/gala.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>gala <span class="ot">=</span> gala[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gala)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Species          Endemics          Area            Elevation      
+ Min.   :  2.00   Min.   : 0.00   Min.   :   0.010   Min.   :  25.00  
+ 1st Qu.: 13.00   1st Qu.: 7.25   1st Qu.:   0.258   1st Qu.:  97.75  
+ Median : 42.00   Median :18.00   Median :   2.590   Median : 192.00  
+ Mean   : 85.23   Mean   :26.10   Mean   : 261.709   Mean   : 368.03  
+ 3rd Qu.: 96.00   3rd Qu.:32.25   3rd Qu.:  59.237   3rd Qu.: 435.25  
+ Max.   :444.00   Max.   :95.00   Max.   :4669.320   Max.   :1707.00  
+    Nearest          Scruz           Adjacent      
+ Min.   : 0.20   Min.   :  0.00   Min.   :   0.03  
+ 1st Qu.: 0.80   1st Qu.: 11.03   1st Qu.:   0.52  
+ Median : 3.05   Median : 46.65   Median :   2.59  
+ Mean   :10.06   Mean   : 56.98   Mean   : 261.10  
+ 3rd Qu.:10.03   3rd Qu.: 81.08   3rd Qu.:  59.24  
+ Max.   :47.40   Max.   :290.20   Max.   :4669.32  </code></pre>
+</div>
+</div>
+<p><strong>B.1.(b) [8 points] Use ggplot() to explore the relationship between the Species variable (response) and Endemics, Elevation, Nearest, and Adjacent (predictor variables). You might do so by creating four separate scatter plots. Do these relationships look linear? Does the variability in Species change as a function of any of the predictors? Are there any outliers in any of the plots?</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("gridExtra")</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="fu">ggplot</span>(<span class="at">data =</span> gala) </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Endemics, <span class="at">y =</span> Species)) </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Elevation, <span class="at">y =</span> Species))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Nearest, <span class="at">y =</span> Species))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Adjacent, <span class="at">y =</span> Species))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(p1,p2,p3,p4, <span class="at">nrow =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Fall_23_HW1_Solutions_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(gala)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Species     Endemics       Area   Elevation      Nearest
+Species    1.00000000  0.970876516  0.6178431  0.73848666 -0.014094067
+Endemics   0.97087652  1.000000000  0.6169791  0.79290437  0.005994286
+Area       0.61784307  0.616979087  1.0000000  0.75373492 -0.111103196
+Elevation  0.73848666  0.792904369  0.7537349  1.00000000 -0.011076984
+Nearest   -0.01409407  0.005994286 -0.1111032 -0.01107698  1.000000000
+Scruz     -0.17114244 -0.154264319 -0.1007849 -0.01543829  0.615410357
+Adjacent   0.02616635  0.082658026  0.1800376  0.53645782 -0.116247885
+                Scruz    Adjacent
+Species   -0.17114244  0.02616635
+Endemics  -0.15426432  0.08265803
+Area      -0.10078493  0.18003759
+Elevation -0.01543829  0.53645782
+Nearest    0.61541036 -0.11624788
+Scruz      1.00000000  0.05166066
+Adjacent   0.05166066  1.00000000</code></pre>
+</div>
+</div>
+<ol type="1">
+<li>The Species vs Endemics plot appears to be approximately linear, but perhaps with some curvature.</li>
+<li>The Species vs Elevation plot appears roughly linear, but there appears to be more variance in Species as Elevation gets higher.</li>
+<li>The Species vs Nearest plot doesn’t appear to have a linear relationship.</li>
+<li>The Species vs Adjacent plot doesn’t appear to have a linear relationship, and there seem to be a few very large outliers.</li>
+</ol>
+<p><strong>B.1.(c) [18 points] Perform a linear regression with Species as the response and Endemics, Elevation, Nearest, and Adjacent as predictors. Store your <code>lm()</code> object in the variable <code>lm_species</code>. Interpret the parameter estimate associated with Endemics in the markdown cell below (assume, for the moment, that the model is correct, and so the interpretation holds).</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lm_species <span class="ot">=</span> <span class="fu">lm</span>(Species <span class="sc">~</span> Endemics <span class="sc">+</span> Elevation <span class="sc">+</span> Nearest <span class="sc">+</span> Adjacent, <span class="at">data =</span> gala)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Species ~ Endemics + Elevation + Nearest + Adjacent, 
+    data = gala)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-77.232 -10.318   3.412   9.521  70.768 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -17.510039   8.333335  -2.101   0.0459 *  
+Endemics      4.192551   0.429056   9.772  5.1e-10 ***
+Elevation    -0.008594   0.032903  -0.261   0.7961    
+Nearest      -0.203743   0.376472  -0.541   0.5932    
+Adjacent     -0.005629   0.009876  -0.570   0.5738    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 28.59 on 25 degrees of freedom
+Multiple R-squared:  0.9464,    Adjusted R-squared:  0.9378 
+F-statistic: 110.3 on 4 and 25 DF,  p-value: 1.673e-15</code></pre>
+</div>
+</div>
+<p>After adjusting for the highest elevation of the island (m), the distance from the nearest island (km), and the area of the adjacent island (square km), if the number of endemic species on that island were increased by one, <em>on average</em>, we would see a <span class="math inline">\(\approx 4.19\)</span> increase in the number of plant species found on the island.</p>
+<p>(This conclusion sounds causal; but it shouldn’t necessarily be interpreted as such!)</p>
+</section>
+<section id="b.2-wildfire-data" class="level3">
+<h3 class="anchored" data-anchor-id="b.2-wildfire-data">B.2 Wildfire data</h3>
+<p>The wildfire data has the following variables measured for <span class="math inline">\(517\)</span> wildfires:</p>
+<ol type="1">
+<li><code>X</code>: <span class="math inline">\(x\)</span>-axis spatial coordinate within the Montesinho park map: <span class="math inline">\(1\)</span> to <span class="math inline">\(9\)</span></li>
+<li><code>Y</code>: <span class="math inline">\(y\)</span>-axis spatial coordinate within the Montesinho park map: <span class="math inline">\(2\)</span> to <span class="math inline">\(9\)</span></li>
+<li><code>month</code>: month of the year: ‘jan’ to ‘dec’</li>
+<li><code>day</code>: day of the week: ‘mon’ to ‘sun’</li>
+<li><code>FFMC</code>: FFMC index from the FWI system: <span class="math inline">\(18.7\)</span> to <span class="math inline">\(96.20\)</span></li>
+<li><code>DMC</code>: DMC index from the FWI system: <span class="math inline">\(1.1\)</span> to <span class="math inline">\(291.3\)</span></li>
+<li><code>DC</code>: DC index from the FWI system: <span class="math inline">\(7.9\)</span> to <span class="math inline">\(860.6\)</span></li>
+<li><code>ISI</code>: ISI index from the FWI system: <span class="math inline">\(0.0\)</span> to <span class="math inline">\(56.10\)</span></li>
+<li><code>temp</code>: temperature in Celsius degrees: <span class="math inline">\(2.2\)</span> to <span class="math inline">\(33.30\)</span></li>
+<li><code>RH</code>: relative humidity in <span class="math inline">\(\%\)</span>: <span class="math inline">\(15.0\)</span> to <span class="math inline">\(100\)</span></li>
+<li>`wind’: wind speed in km/h: <span class="math inline">\(0.40\)</span> to <span class="math inline">\(9.40\)</span></li>
+<li><code>rain</code>: outside rain in mm/m2 : <span class="math inline">\(0.0\)</span> to <span class="math inline">\(6.4\)</span></li>
+<li><code>area</code>: the burned area of the forest (in ha): <span class="math inline">\(0.00\)</span> to <span class="math inline">\(1090.84\)</span></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fire <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/forestfires.csv"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(fire)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 517  13</code></pre>
+</div>
+</div>
+<p><strong>B.2 (a) The area variable is very skewed towards</strong> <span class="math inline">\(0.0\)</span>. Thus it may make sense to model with the logarithm transform. Transform the $y = $ <code>area</code> variable using <span class="math inline">\(\log(y + 1)\)</span>. Store this new variable in a <span class="math inline">\(14^{th}\)</span> column and name that column <code>log_area</code>. Also print a summary to detect</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fire2 = fire[fire$area != 0,]</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#dim(fire2)</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#convert to log area</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>fire[,<span class="dv">14</span>] <span class="ot">=</span> <span class="fu">log</span>(fire[,<span class="dv">13</span>] <span class="sc">+</span> <span class="dv">1</span>) </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(fire)[<span class="dv">14</span>] <span class="ot">=</span><span class="st">"log_area"</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#convert rain to factor</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>fire[,<span class="dv">12</span>] <span class="ot">=</span> <span class="fu">as.factor</span>(<span class="fu">ifelse</span>(fire[,<span class="dv">12</span>] <span class="sc">==</span> <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(fire)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  X Y month day FFMC  DMC    DC  ISI temp RH wind rain area log_area
+1 7 5   mar fri 86.2 26.2  94.3  5.1  8.2 51  6.7    0    0        0
+2 7 4   oct tue 90.6 35.4 669.1  6.7 18.0 33  0.9    0    0        0
+3 7 4   oct sat 90.6 43.7 686.9  6.7 14.6 33  1.3    0    0        0
+4 8 6   mar fri 91.7 33.3  77.5  9.0  8.3 97  4.0    1    0        0
+5 8 6   mar sun 89.3 51.3 102.2  9.6 11.4 99  1.8    0    0        0
+6 8 6   aug sun 92.3 85.3 488.0 14.7 22.2 29  5.4    0    0        0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fire)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       X               Y          month               day           
+ Min.   :1.000   Min.   :2.0   Length:517         Length:517        
+ 1st Qu.:3.000   1st Qu.:4.0   Class :character   Class :character  
+ Median :4.000   Median :4.0   Mode  :character   Mode  :character  
+ Mean   :4.669   Mean   :4.3                                        
+ 3rd Qu.:7.000   3rd Qu.:5.0                                        
+ Max.   :9.000   Max.   :9.0                                        
+      FFMC            DMC              DC             ISI        
+ Min.   :18.70   Min.   :  1.1   Min.   :  7.9   Min.   : 0.000  
+ 1st Qu.:90.20   1st Qu.: 68.6   1st Qu.:437.7   1st Qu.: 6.500  
+ Median :91.60   Median :108.3   Median :664.2   Median : 8.400  
+ Mean   :90.64   Mean   :110.9   Mean   :547.9   Mean   : 9.022  
+ 3rd Qu.:92.90   3rd Qu.:142.4   3rd Qu.:713.9   3rd Qu.:10.800  
+ Max.   :96.20   Max.   :291.3   Max.   :860.6   Max.   :56.100  
+      temp             RH              wind       rain         area        
+ Min.   : 2.20   Min.   : 15.00   Min.   :0.400   0:509   Min.   :   0.00  
+ 1st Qu.:15.50   1st Qu.: 33.00   1st Qu.:2.700   1:  8   1st Qu.:   0.00  
+ Median :19.30   Median : 42.00   Median :4.000           Median :   0.52  
+ Mean   :18.89   Mean   : 44.29   Mean   :4.018           Mean   :  12.85  
+ 3rd Qu.:22.80   3rd Qu.: 53.00   3rd Qu.:4.900           3rd Qu.:   6.57  
+ Max.   :33.30   Max.   :100.00   Max.   :9.400           Max.   :1090.84  
+    log_area     
+ Min.   :0.0000  
+ 1st Qu.:0.0000  
+ Median :0.4187  
+ Mean   :1.1110  
+ 3rd Qu.:2.0242  
+ Max.   :6.9956  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#factor(fire$month, levels = month.abb)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plyr)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">count</span>(fire<span class="sc">$</span>month)); x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     x freq
+1  apr    9
+2  aug  184
+3  dec    9
+4  feb   20
+5  jan    2
+6  jul   32
+7  jun   17
+8  mar   54
+9  may    2
+10 nov    1
+11 oct   15
+12 sep  172</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(x,<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>freq)) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">'identity'</span>) <span class="sc">+</span> <span class="fu">coord_flip</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Fall_23_HW1_Solutions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(fire[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">12</span>,<span class="dv">13</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Fall_23_HW1_Solutions_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>lmod_fire <span class="ot">=</span> <span class="fu">lm</span>(log_area <span class="sc">~</span> temp <span class="sc">+</span> RH <span class="sc">+</span> wind <span class="sc">+</span> DC <span class="sc">+</span> DMC <span class="sc">+</span> ISI <span class="sc">+</span> rain, <span class="at">data =</span> fire)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmod_fire)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log_area ~ temp + RH + wind + DC + DMC + ISI + rain, 
+    data = fire)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.5992 -1.1035 -0.5894  0.8830  5.7150 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  0.6964131  0.4748314   1.467   0.1431  
+temp         0.0070512  0.0172538   0.409   0.6829  
+RH          -0.0036030  0.0051120  -0.705   0.4812  
+wind         0.0833846  0.0367182   2.271   0.0236 *
+DC           0.0002516  0.0003558   0.707   0.4798  
+DMC          0.0013642  0.0014303   0.954   0.3407  
+ISI         -0.0190541  0.0152076  -1.253   0.2108  
+rain1       -0.7245896  0.5239925  -1.383   0.1673  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.392 on 509 degrees of freedom
+Multiple R-squared:  0.02256,   Adjusted R-squared:  0.009115 
+F-statistic: 1.678 on 7 and 509 DF,  p-value: 0.112</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
