@@ -18,7 +18,7 @@ All homework submission (by me) and posted solutions for [STAT II](Stats2.md) at
 - [HW1](HW/STAT5010_HW1.html)
     - [Solutions from TA/Professor](HW/solutions/STAT-5010_Fall_23_HW1_Solutions.html)
 
-# Unit 2: 
+# Unit 2: Regression Inference, Prediction, and Explanation
 
 - [HW2](HW/STAT5010_HW2.html)
-    - [Solutions form TA/Professor](HW/solutions/STAT-5010__HW2_V2_Solutions.html)
+    - [Solutions form TA/Professor](HW/solutions/)

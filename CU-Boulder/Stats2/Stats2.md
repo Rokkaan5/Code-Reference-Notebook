@@ -21,7 +21,7 @@ permalink: /CUB/StatII
 ## Resources
 (No lecture code)
 
-**[Assignments](homeworks.qmd#unit-0-r-r-markdown-linear-algebra):**
+**[Assignments](homeworks.md#unit-0-r-r-markdown-linear-algebra):**
 
 - Intro to R Markdown
 - Intro to Tidyverse
@@ -34,13 +34,13 @@ permalink: /CUB/StatII
 - Sums of Squares (TSS, RSS, ESS)
 
 ## Resources
-**[Lecture material](class_code.qmd#unit-1-regression-basics):**
+**[Lecture material](class_code.md#unit-1-regression-basics):**
 
 - Regression Modeling in R - Part 1
 - Regression Modeling in R - Part 2
 
 
-**[Assignment](homeworks.qmd#unit-1-regression-basics):**
+**[Assignment](homeworks.md#unit-1-regression-basics):**
 
 - HW1
 
@@ -51,7 +51,11 @@ permalink: /CUB/StatII
 - Motivating the F-test
 
 ## Resources
-**[Lecture material](class_code.qmd#unit-2-regression-inference-prediction-and-explanation):**
+**[Lecture material](class_code.md#unit-2-regression-inference-prediction-and-explanation):**
 
 - T-tests in R
 - F-test and T-test
+
+**[Assignment](homeworks.md#unit-2-regression-inference-prediction-and-explanation)**
+
+- HW2
