@@ -23,6 +23,14 @@ permalink: /CUB/NeuralNetworks
 
 - Assignment 1
 
+**Extra Codes for Gradient Descent by Kal Parvanov**
+
+(all raw code)
+
+- [1d Gradient Descent](kal-presentation_Grdnt-dscnt/1d_GD-raw.html)
+- [Stochastic vs. Gradient Descent](kal-presentation_Grdnt-dscnt/SGDvsGD-raw.html)
+- [Logistic Minibatch](kal-presentation_Grdnt-dscnt/Logistic_minibatch-raw.html)
+
 ## Topics
 - Introduction to Neural Networks
     1. History
