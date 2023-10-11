@@ -18,5 +18,5 @@ All lecture code (and posted solutions) for [STAT II](Stats2.md) at [CU Boulder]
 
 # Unit 2: Regression Inference, Prediction, and Explanation
 
-- [T-tests in R](lecture_code/Unit2/t-tests%20in%20R_modified.html)
+- [T-tests in R](lecture_code/Unit2/t-tests_in_R_modified.html)
 - [F-test and T-test combined](lecture_code/Unit2/F-and-T-test-combined.html)
