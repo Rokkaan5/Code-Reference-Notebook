@@ -11,8 +11,8 @@ All lecture code (and posted solutions) for [STAT II](Stats2.md) at [CU Boulder]
 
 # Unit 1: Regression Basics
 
-- [Regression Modeling in R - Part 1](lecture_code/Unit1/Unit1-Code-Regression%20modeling%20in%20R-1.html)
-    - [Solutions from Professor](lecture_code/Unit1/Unit1-Code-Regression%20modeling%20in%20R-1-Solutions.html)
+- [Regression Modeling in R - Part 1](lecture_code/Unit1/Unit1-Code-Regression_modeling_in_R-1.html)
+    - [Solutions from Professor](lecture_code/Unit1/Unit1-Code-Regression_modeling_in_R-1-Solutions.html)
 - [Regression Modeling in R - Part 2](lecture_code/Unit1/Unit1-Code-Regression_modeling_in_R-2-Solutions.html)
 
 
