@@ -8,12 +8,17 @@ All homework submission (by me) and posted solutions for [STAT II](Stats2.md) at
 
 # Unit 0: R, R-Markdown, Linear Algebra
 
-- [Intro to R Markdown](HW/Introduction%20to%20R-Markdown.Rmd)
-    - [Solutions from TA/Professor](HW/solutions/Intro%20to%20R%20Markdown%20Solutions.Rmd)
+- [Intro to R Markdown](HW/Introduction%20to%20R-Markdown.html)
+    - [Solutions from TA/Professor](HW/solutions/Intro%20to%20R%20Markdown%20Solutions.html)
 - Intro to Tidyverse
-    - [Solutions from TA/Professer](HW/solutions/Introduction%20to%20the%20Tidyvrse-Solutions.Rmd)
+    - [Solutions from TA/Professer](HW/solutions/Introduction%20to%20the%20Tidyvrse-Solutions.html)
 
 # Unit 1: Regression Basics
 
-- [HW1](HW/STAT5010_HW1.Rmd)
-    - [Solutions from TA/Professor](HW/solutions/STAT-5010_Fall_23_HW1_Solutions.Rmd)
+- [HW1](HW/STAT5010_HW1.html)
+    - [Solutions from TA/Professor](HW/solutions/STAT-5010_Fall_23_HW1_Solutions.html)
+
+# Unit 2: 
+
+- [HW2](HW/STAT5010_HW2.html)
+    - [Solutions form TA/Professor](HW/solutions/STAT-5010__HW2_V2_Solutions.html)

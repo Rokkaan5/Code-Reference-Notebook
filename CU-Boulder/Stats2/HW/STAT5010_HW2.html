@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>STAT 5010 - HW2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="STAT5010_HW2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="STAT5010_HW2_files/libs/quarto-html/quarto.js"></script>
+<script src="STAT5010_HW2_files/libs/quarto-html/popper.min.js"></script>
+<script src="STAT5010_HW2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="STAT5010_HW2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="STAT5010_HW2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="STAT5010_HW2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="STAT5010_HW2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="STAT5010_HW2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="STAT5010_HW2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#homework-2_version_2" id="toc-homework-2_version_2" class="nav-link active" data-scroll-target="#homework-2_version_2">Homework #2_Version_2</a>
+  <ul class="collapse">
+  <li><a href="#a.-theoretical-problems" id="toc-a.-theoretical-problems" class="nav-link" data-scroll-target="#a.-theoretical-problems">A. Theoretical Problems</a>
+  <ul class="collapse">
+  <li><a href="#problem-a.1" id="toc-problem-a.1" class="nav-link" data-scroll-target="#problem-a.1">Problem A.1</a></li>
+  <li><a href="#problem-a.2" id="toc-problem-a.2" class="nav-link" data-scroll-target="#problem-a.2">Problem A.2</a></li>
+  <li><a href="#problem-a.3-the-multivariate-normal-distribution-and-its-application-to-regression" id="toc-problem-a.3-the-multivariate-normal-distribution-and-its-application-to-regression" class="nav-link" data-scroll-target="#problem-a.3-the-multivariate-normal-distribution-and-its-application-to-regression">Problem A.3: The multivariate normal distribution and its application to regression</a></li>
+  </ul></li>
+  <li><a href="#b.-computational-problems" id="toc-b.-computational-problems" class="nav-link" data-scroll-target="#b.-computational-problems">B. Computational Problems</a>
+  <ul class="collapse">
+  <li><a href="#problem-b.1" id="toc-problem-b.1" class="nav-link" data-scroll-target="#problem-b.1">Problem B.1</a></li>
+  <li><a href="#b.2-the-gala-data-set-revisited." id="toc-b.2-the-gala-data-set-revisited." class="nav-link" data-scroll-target="#b.2-the-gala-data-set-revisited.">B.2 The “gala” data-set, revisited.</a></li>
+  <li><a href="#b.3" id="toc-b.3" class="nav-link" data-scroll-target="#b.3">B.3</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">STAT 5010 - HW2</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="homework-2_version_2" class="level1">
+<h1>Homework #2_Version_2</h1>
+<p><strong>See Canvas for this assignment due date</strong>. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don’t know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel is preferred). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="a.-theoretical-problems" class="level2">
+<h2 class="anchored" data-anchor-id="a.-theoretical-problems">A. Theoretical Problems</h2>
+<section id="problem-a.1" class="level3">
+<h3 class="anchored" data-anchor-id="problem-a.1">Problem A.1</h3>
+<p>In class, we analyzed regression with an intercept, <span class="math inline">\(\beta_0\)</span>. In some circumstances, we may have theoretical reasons to suggest that the intercept term is zero. As such, some have proposed to not estimate <span class="math inline">\(\beta_0\)</span>, and instead, use the one-predictor linear model: <span class="math inline">\(Y_i = \beta_1x_i + \varepsilon_i\)</span>. The goal of this problem is to understand some of the consequences of using this model.</p>
+<p><strong>A.1 (a) [8 points] Find the least squares estimator of</strong> <span class="math inline">\(\beta_1\)</span>.</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p><span class="math display">\[Y_i = \beta_1x_i + \varepsilon_i \Rightarrow \hat{Y_i} = \hat{\beta_1}x_i\]</span> <span class="math display">\[ \varepsilon_i = (Y_i - \hat{Y_i})^2 = (Y_i - \hat{\beta_1}x_i)^2\]</span></p>
+<p>Minimum residual would occur where the derivative of <span class="math inline">\(\varepsilon_i\)</span> is zero. Thus to find best estimator <span class="math inline">\(\hat{\beta_1}\)</span> for lowest residual would be found by using the partial derivative of the residual, <span class="math inline">\(\varepsilon_i\)</span>, with respect to the estimator <span class="math inline">\(\hat{\beta_1}\)</span> and set that equal to zero.</p>
+<p><span class="math display">\[\begin{equation}
+\frac{\partial \varepsilon_i}{\partial \hat{\beta_1}} = \frac{\partial}{\partial \hat{\beta_1}}(Y_i - \hat{\beta_1}x_i)^2  = 0\\
+
+= \frac{\partial}{\partial \hat{\beta_1}}[Y_i^2 - 2\hat{\beta_1}x_i + (\hat{\beta_1}x_i)^2] \\
+
+= 0 - 2(1)x_i  + 2\hat{\beta_1}x_i^2 \\
+= 2\hat{\beta_1}x_i^2 - 2x_i = 0 \\
+\end{equation}\]</span></p>
+<p>Then from here we can solve for <span class="math inline">\(\hat{\beta_1}\)</span>.</p>
+<p><span class="math display">\[\begin{equation}
+2\hat{\beta_1}x_i^2 - 2x_i = 0 \\
+\Rightarrow \hat{\beta_1}x_i^2 - x_i = 0 \\
+\Rightarrow \hat{\beta_1}x_i^2 = x_i \\
+\Rightarrow \hat{\beta_1} = \frac{1}{x_i} = x_i^{-1}
+
+\end{equation}\]</span></p>
+<p><strong>A.1 (b) [4 points] Show that the residuals of this model fit do not necessarily sum to zero.</strong></p>
+<p>You can do this through a simulation if you’d like!</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>So from <strong>A.1(a)</strong>, if <span class="math inline">\(\hat{\beta_1} = \frac{1}{x_i}\)</span>, then we have the following residual:</p>
+<p><span class="math display">\[\varepsilon_i = (Y_i - \hat{Y_i})^2 \\
+= (Y_i - \hat{\beta_1}x_i)^2 \\
+= [Y_i - (x_i^{-1})x_i]^2\\
+= (Y_i - 1)^2\]</span></p>
+<p>We have that <span class="math inline">\(\varepsilon_i = (Y_i - 1)^2\)</span></p>
+<p>So we need some evidence that there can be cases where <span class="math display">\[\sum_{i=1}^n \varepsilon_i = \sum_{i=1}^n (Y_i - 1)^2 \ne 0 \]</span></p>
+<p>I can make up a super simple example of <span class="math inline">\(Y\)</span>. (And that’s all I need for an example of this type of linear regression model since the residuals are only dependent on <span class="math inline">\(Y_i\)</span>)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)    <span class="co"># super simple example Y</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((y <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">^</span><span class="dv">2</span>)     <span class="co"># sum of residuals eps = (Y_i - 1)^2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14</code></pre>
+</div>
+</div>
+<p>(obviously <span class="math inline">\(14 \ne 0\)</span>)</p>
+<p><strong>A.1 (c) [6 points] Show that</strong></p>
+<span class="math display">\[\begin{align*}
+\sum^n_{i=1}(Y_i - \widehat{Y}_i)(\widehat{Y}_i - \bar{Y})
+\end{align*}\]</span>
+<p><strong>is not necessarily zero. Use this fact to argue that, for this model, the coefficient of determination,</strong> <span class="math inline">\(R^2\)</span> does <em>not</em> have the interpretation given in class.</p>
+<p>Again, this proof can be done through simulation.</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p><span class="math display">\[\hat{Y_i} = \hat{\beta_1}x_i = (x_i^{-1})x_i = 1\]</span></p>
+<p>In other words, this model always predicts 1 for all values of <span class="math inline">\(x\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># I'll use the same example Y</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>y_hat <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">length</span>(y))    <span class="co"># predicted y (y-hat) is all ones (of same length Y)</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(y_hat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 1 1 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>y_bar <span class="ot">&lt;-</span> <span class="fu">mean</span>(y)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(y_bar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.5</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>((y <span class="sc">-</span> y_hat)<span class="sc">*</span>(y_hat <span class="sc">-</span> y_bar))  <span class="co"># sum of (Y_i - Y_hat)(Y_hat - Y_bar)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -9</code></pre>
+</div>
+</div>
+</section>
+<section id="problem-a.2" class="level3">
+<h3 class="anchored" data-anchor-id="problem-a.2">Problem A.2</h3>
+<p>Suppose that, for <span class="math inline">\(i = 1,...,n\)</span>, the pairs <span class="math inline">\((x_i, y_i)\)</span> are generated according to a simple linear regression model</p>
+<p><span class="math display">\[Y_i = \beta_0 + \beta_1x_i + \varepsilon_i,\]</span></p>
+<p>where <span class="math inline">\(x_i\)</span> are fixed constants and <span class="math inline">\(\varepsilon_i \overset{iid}{\sim} N(0,\sigma^2)\)</span>. Then, imagine reparameterizing the model as</p>
+<p><span class="math display">\[Y_i = \beta^*_0 + \beta^*_1\left(\frac{x_i- \bar{x}}{sd(x)}\right) + \varepsilon_i,\]</span></p>
+<p>where <span class="math inline">\(sd(x) = \frac{1}{n-1}\sum(x_i - \bar{x})^2\)</span>.</p>
+<p>Let <span class="math inline">\(\widehat\beta_j\)</span> be the least squares estimator of <span class="math inline">\(\beta_j\)</span>, and <span class="math inline">\(\widehat\beta^*_j\)</span> be the least squares estimator of <span class="math inline">\(\beta^*_j\)</span> for <span class="math inline">\(j=0,1\)</span>.</p>
+<p><strong>A.2 (a) [7 points] Show that</strong> <span class="math inline">\(\widehat\beta^*_1 \ne \widehat\beta_1\)</span>.</p>
+<p>HINT: For regression with one predictor, <span class="math inline">\(\displaystyle \widehat\beta_1 = \frac{\sum^n_{i=1}\left( x_i - \bar{x}\right)\left(y_i - \bar{y} \right)}{\sum^n_{i=1}\left(x_i - \bar{x}\right)^2}\)</span>.</p>
+<p>YOUR ANSWER HERE</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>A.2 (b) [4 points] Show that, in general,</strong> <span class="math inline">\(\widehat\beta^*_0 \ne \widehat\beta_0\)</span>, and find <span class="math inline">\(\widehat\beta^*_0\)</span> in terms of <span class="math inline">\(Y_i\)</span>. In what particular case is <span class="math inline">\(\widehat\beta^*_0 = \widehat\beta_0\)</span>?</p>
+<p>HINT: For SLR, <span class="math inline">\(\widehat\beta_0 = \bar{y} - \widehat\beta_1 \bar{x}\)</span>.</p>
+<p>YOUR ANSWER HERE</p>
+<p><strong>A.2 (c) [5 points] Why might the reparameterized model be beneficial?</strong></p>
+<p>YOUR ANSWER HERE</p>
+</section>
+<section id="problem-a.3-the-multivariate-normal-distribution-and-its-application-to-regression" class="level3">
+<h3 class="anchored" data-anchor-id="problem-a.3-the-multivariate-normal-distribution-and-its-application-to-regression">Problem A.3: The multivariate normal distribution and its application to regression</h3>
+<p>The multivariate normal distribution of an <span class="math inline">\(n\)</span>-dimensional vector <span class="math inline">\(\mathbf{Y} = (Y_1,...,Y_n)^T\)</span> can be written in the following notation:</p>
+<p><span class="math display">\[\mathbf{Y} \sim N\left(\boldsymbol{\mu}, \Sigma \right),\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\mu} = (\underbrace{ \mu_1 }_{E(Y_1)},...,\underbrace{ \mu_n }_{E(Y_n)})^T\)</span> is a vector of means and</p>
+<p><span class="math inline">\(\Sigma = \left(\begin{matrix} \sigma_{Y_1, Y_1} &amp; \sigma_{Y_1, Y_2} &amp; \cdots &amp; \sigma_{Y_1, Y_n} \\ \sigma_{Y_2, Y_1} &amp; \sigma_{Y_2, Y_2} &amp; \cdots &amp; \sigma_{Y_2, Y_n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ \sigma_{Y_n, Y_1} &amp; \sigma_{Y_n, Y_2} &amp; \cdots &amp; \sigma_{Y_n, Y_n} \\ \end{matrix}\right)\)</span></p>
+<p>and <span class="math inline">\(\Sigma\)</span> is a <em>variance-covariance</em> matrix with entries <span class="math inline">\(\displaystyle \sigma_{Y_i, Y_j} = Cov(Y_i,Y_j)\)</span> for <span class="math inline">\(i,j = 1,...,n\)</span>.</p>
+<p>What does it mean for a vector to have a <em>multivariate normal distribution</em>? It means that, for any constant (i.e., <em>non-random</em>) vector <span class="math inline">\(\mathbf{a} = (a_1,a_2,...,a_n)^T\)</span>, every linear combination <span class="math inline">\(X = \mathbf{a}^T\mathbf{Y} = a_1Y_1 + a_2Y_2 + ... + a_nY_n\)</span> has a univariate normal distribution with mean <span class="math inline">\(\mu_X = \mathbf{a}^T\boldsymbol{\mu}\)</span> and variance <span class="math inline">\(\sigma_X^2 = \mathbf{a}^T\Sigma\mathbf{a}\)</span>.</p>
+<p>Further, note that: if <span class="math inline">\(\mathbf{b}\)</span> is an <span class="math inline">\(m\times1\)</span> constant vector, and <span class="math inline">\(B\)</span> is an <span class="math inline">\(m \times n\)</span> constant matrix, then <span class="math inline">\(\mathbf{b} + B\mathbf{Y} \sim N\left(\mathbf{b} + B\boldsymbol\mu, B\Sigma B^T \right)\)</span>.</p>
+<p>Ok, those were some great properties, and you should make use of them below.</p>
+<p>Consider the linear regression model <span class="math inline">\(\mathbf{Y} = X\boldsymbol\beta + \boldsymbol{\varepsilon}\)</span>, where <span class="math inline">\(\,\boldsymbol{\varepsilon} {\sim} N(\mathbf{0},\sigma^2I_n)\)</span>, <span class="math inline">\(\mathbf{0}\)</span> is an <span class="math inline">\(n\times 1\)</span> vector, and <span class="math inline">\(I_n\)</span> is the <span class="math inline">\(n \times n\)</span> identity matrix.</p>
+<p><strong>A.3 (a) [5 points] Find the distribution of</strong> <span class="math inline">\(\varepsilon_i\)</span>.</p>
+<p>Use the properties above!</p>
+<p>YOUR ANSWER HERE</p>
+<p><strong>A.3 (b) [5 points] Show that</strong> <span class="math inline">\(\mathbf{Y} \sim N(X\boldsymbol\beta, \sigma^2I_n)\)</span></p>
+<p>YOUR ANSWER HERE</p>
+<p><strong>A.3 (c) [10 points] Let</strong> <span class="math inline">\(\widehat{\boldsymbol\beta}\)</span> be the least squares estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span>. Prove that <span class="math inline">\(\boldsymbol{\widehat\beta}\)</span> has a multivariate normal distribution. What are the mean and variance-covariance matrix?</p>
+<p>YOUR ANSWER HERE</p>
+</section>
+</section>
+<section id="b.-computational-problems" class="level2">
+<h2 class="anchored" data-anchor-id="b.-computational-problems">B. Computational Problems</h2>
+<section id="problem-b.1" class="level3">
+<h3 class="anchored" data-anchor-id="problem-b.1">Problem B.1</h3>
+<p><strong>B.1 (a) [10 points] Run a simulation to confirm your result in problem A.2 (a) - (b). Let’s do this in parts. In the cell directly below:</strong></p>
+<ul>
+<li>Set <code>n = 50</code>, <span class="math inline">\(\boldsymbol\beta =\)</span> <code>beta = c(1, 3.5)</code>.</li>
+<li>Simulate <span class="math inline">\(n\)</span> predictor values (<span class="math inline">\(x\)</span>) randomly from <span class="math inline">\(N(3,1)\)</span>. Store those values in a variable <code>x</code>.</li>
+<li>Simulate <span class="math inline">\(n\)</span> random error terms from <span class="math inline">\(N(0,2)\)</span>. Store them in the variable <code>e</code>.</li>
+<li>Calculate the response (<span class="math inline">\(y\)</span>) according to <code>y = b0 + b1 x + e</code></li>
+<li>Fit a simple linear regression model to the data using the <code>lm()</code> function. Store the <code>lm()</code> object in a variable <code>l</code> and the coefficients of that model in a variable <code>b1 = coef(l)</code>.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1918</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">50</span>; beta <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="fl">3.5</span>);</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n,<span class="dv">3</span>,<span class="dv">1</span>)  <span class="co"># predictors</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">2</span>)  <span class="co"># error terms</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> beta[<span class="dv">1</span>] <span class="sc">+</span> beta[<span class="dv">2</span>]<span class="sc">*</span>x <span class="sc">+</span> e  <span class="co"># response</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">=</span> <span class="fu">coef</span>(l)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(l)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.8629 -1.3586 -0.1809  1.4524  6.6325 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   0.9936     0.9195   1.081    0.285    
+x             3.5910     0.2985  12.028 4.29e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2.328 on 48 degrees of freedom
+Multiple R-squared:  0.7509,    Adjusted R-squared:  0.7457 
+F-statistic: 144.7 on 1 and 48 DF,  p-value: 4.288e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(b1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)           x 
+   0.993581    3.591000 </code></pre>
+</div>
+</div>
+<p><strong>B.1 (b) [8 points] Now:</strong></p>
+<ul>
+<li><strong>Center and scale the predictor values (as done in A.2 above) and store those values in a variable <code>z</code>.</strong></li>
+<li><strong>Fit a simple linear regression model to the new data,</strong> <span class="math inline">\((z_i, y_i)\)</span>, using the <code>lm()</code> function. Store the <code>lm()</code> object in a variable <code>l2</code> and the coefficients of that model in a variable <code>b2 = coef(l2)</code> (<code>b2</code> should be a vector of length <span class="math inline">\(2\)</span>).</li>
+<li><strong>In the Markdown cell below the hidden test cell, describe the differences between <code>b</code> and <code>b2</code>.</strong></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#re-parameterize</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> beta[<span class="dv">1</span>] <span class="sc">+</span> beta[<span class="dv">2</span>]<span class="sc">*</span>((x<span class="sc">-</span><span class="fu">mean</span>(x))<span class="sc">/</span><span class="fu">sd</span>(x)) <span class="sc">+</span> e</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  1.0710375  3.8229460 -1.7599973  2.6174574  0.9136948  1.4354619</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># new linear regression</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>l2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> z)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>b2 <span class="ot">=</span> <span class="fu">coef</span>(l2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(b2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)           z 
+   9.966114    1.078506 </code></pre>
+</div>
+</div>
+<p>YOUR ANSWER HERE</p>
+</section>
+<section id="b.2-the-gala-data-set-revisited." class="level3">
+<h3 class="anchored" data-anchor-id="b.2-the-gala-data-set-revisited.">B.2 The “gala” data-set, revisited.</h3>
+<p><strong>B.2 (a) [0 points] Load the “gala” data-set, and perform a linear regression with Species as the response and Endemics, Elevation, Nearest, and Adjacent as predictors. Store your <code>lm()</code> object in the variable <code>lm_species</code>. Note that you already did this on the first assignment.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>gala <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/gala.csv"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>gala <span class="ot">=</span> gala[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gala)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Species          Endemics          Area            Elevation      
+ Min.   :  2.00   Min.   : 0.00   Min.   :   0.010   Min.   :  25.00  
+ 1st Qu.: 13.00   1st Qu.: 7.25   1st Qu.:   0.258   1st Qu.:  97.75  
+ Median : 42.00   Median :18.00   Median :   2.590   Median : 192.00  
+ Mean   : 85.23   Mean   :26.10   Mean   : 261.709   Mean   : 368.03  
+ 3rd Qu.: 96.00   3rd Qu.:32.25   3rd Qu.:  59.237   3rd Qu.: 435.25  
+ Max.   :444.00   Max.   :95.00   Max.   :4669.320   Max.   :1707.00  
+    Nearest          Scruz           Adjacent      
+ Min.   : 0.20   Min.   :  0.00   Min.   :   0.03  
+ 1st Qu.: 0.80   1st Qu.: 11.03   1st Qu.:   0.52  
+ Median : 3.05   Median : 46.65   Median :   2.59  
+ Mean   :10.06   Mean   : 56.98   Mean   : 261.10  
+ 3rd Qu.:10.03   3rd Qu.: 81.08   3rd Qu.:  59.24  
+ Max.   :47.40   Max.   :290.20   Max.   :4669.32  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>lm_species <span class="ot">&lt;-</span> <span class="fu">lm</span>(Species <span class="sc">~</span> Endemics<span class="sc">+</span>Elevation<span class="sc">+</span>Nearest<span class="sc">+</span>Adjacent, <span class="at">data =</span> gala)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Species ~ Endemics + Elevation + Nearest + Adjacent, 
+    data = gala)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-77.232 -10.318   3.412   9.521  70.768 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -17.510039   8.333335  -2.101   0.0459 *  
+Endemics      4.192551   0.429056   9.772  5.1e-10 ***
+Elevation    -0.008594   0.032903  -0.261   0.7961    
+Nearest      -0.203743   0.376472  -0.541   0.5932    
+Adjacent     -0.005629   0.009876  -0.570   0.5738    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 28.59 on 25 degrees of freedom
+Multiple R-squared:  0.9464,    Adjusted R-squared:  0.9378 
+F-statistic: 110.3 on 4 and 25 DF,  p-value: 1.673e-15</code></pre>
+</div>
+</div>
+<p><strong>B.2 (b) [10 points] Calculate the residual sum of squares, and the total sum of squares for this model, and store these quantities in <code>rss</code> and <code>tss</code>, respectively. Then, use these calculations to verify the Multiple R-squared calculation in the summary from the previous part. Store your</strong> <span class="math inline">\(R^2\)</span> for this model in <code>r2</code>. Interpret <span class="math inline">\(R^2\)</span> (assume, for the moment, that the model is correct, and so the interpretation holds). Note that the anova table calculates sums of squares. Why doesn’t the total sum of squares show up in the table?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>(<span class="fu">anova</span>(lm_species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: Species
+          Df Sum Sq Mean Sq  F value Pr(&gt;F)    
+Endemics   1 359208  359208 439.5849 &lt;2e-16 ***
+Elevation  1   1007    1007   1.2325 0.2775    
+Nearest    1    172     172   0.2107 0.6502    
+Adjacent   1    265     265   0.3249 0.5738    
+Residuals 25  20429     817                    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ess <span class="ot">=</span> <span class="fu">sum</span>((<span class="fu">fitted</span>(lm_species) <span class="sc">-</span> <span class="fu">mean</span>(gala<span class="sc">$</span>Species))<span class="sc">^</span><span class="dv">2</span>); </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>rss <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">residuals</span>(lm_species)<span class="sc">^</span><span class="dv">2</span>);</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>tss <span class="ot">=</span> <span class="fu">with</span>(gala, <span class="fu">sum</span>((Species <span class="sc">-</span> <span class="fu">mean</span>(Species))<span class="sc">^</span><span class="dv">2</span>)); </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>rss<span class="sc">/</span>tss; </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">"The explained sum of squares is"</span>, <span class="fu">round</span>(ess,<span class="dv">2</span>), <span class="st">"."</span>),</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste</span>(<span class="st">"The residual sum of squares is "</span>, <span class="fu">round</span>(rss,<span class="dv">2</span>), <span class="st">"."</span>),</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste</span>(<span class="st">"The total sum of squares is "</span>, <span class="fu">round</span>(tss,<span class="dv">2</span>), <span class="st">"."</span>),</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste</span>(<span class="st">"The coefficient of determination is"</span>, <span class="fu">round</span>(r2,<span class="dv">2</span>), <span class="st">"."</span>),</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">#paste("The estimate of the error standard deviation is", round(sigma,2), "."),</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>           )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The explained sum of squares is 360652.56 .
+The residual sum of squares is  20428.8 .
+The total sum of squares is  381081.37 .
+The coefficient of determination is 0.95 .</code></pre>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>I’m guessing the <code>anova()</code> function likely doesn’t include the total sum of squares, because it is something that is not dependent on linear regression estimates or residuals (and maybe from the fact it can be derived from RSS and ESS).</p>
+<p><strong>B.2 (c) [4 points] Plot the residuals vs the fitted values. Based on what we’ve discussed in class, what do you expect to see in this plot? Do you see what you expect to see? If not, what does that mean?</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lm_species,<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">fitted</span>(lm_species),<span class="at">y=</span><span class="fu">residuals</span>(lm_species))) <span class="sc">+</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"fitted values"</span>) <span class="sc">+</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"residuals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW2_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>YOUR ANSWER HERE</p>
+</section>
+<section id="b.3" class="level3">
+<h3 class="anchored" data-anchor-id="b.3">B.3</h3>
+<p>Consider the data below on the number of hours of exercise per week versus the risk of developing a disease. We might look at two sets of patients, those below the age of 50 and those over the age of 50.</p>
+<p><strong>B.3 (a) [4 points] Estimate the regression line</strong> <span class="math display">\[p_i = \beta_0 + \beta_1 hours_i + \varepsilon_i,\]</span> where <span class="math inline">\(\varepsilon_i\)</span> is assumed to be <span class="math inline">\(N(0,\sigma^2)\)</span>. Denote the estimated regression line as <span class="math display">\[\widehat p_i = \widehat\beta_0 + \widehat\beta_1 hours_i.\]</span> Plot the estimated regression line on top of the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/colorado.edu_attached-files_simp.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>p <span class="ot">=</span> df<span class="sc">$</span>p<span class="sc">/</span><span class="dv">100</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ages     hours         p
+1   50 3.6239201 0.2952386
+2   26 2.4600381 0.2210206
+3   35 3.8070524 0.2095405
+4   28 3.0390379 0.1829365
+5   43 0.7089589 0.3309662
+6   45 4.4194311 0.2976093</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>est_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(p <span class="sc">~</span> hours, <span class="at">data =</span>df)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(est_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = p ~ hours, data = df)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.279701 -0.085412 -0.008813  0.076613  0.266713 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 0.277558   0.018034  15.391  &lt; 2e-16 ***
+hours       0.013972   0.003796   3.681 0.000299 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.114 on 198 degrees of freedom
+Multiple R-squared:  0.06405,   Adjusted R-squared:  0.05933 
+F-statistic: 13.55 on 1 and 198 DF,  p-value: 0.0002994</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>est_betas <span class="ot">=</span> <span class="fu">coef</span>(est_reg)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>estimate <span class="ot">=</span> est_betas[<span class="dv">1</span>] <span class="sc">+</span> est_betas[<span class="dv">2</span>]<span class="sc">*</span>df<span class="sc">$</span>hours</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df,<span class="fu">aes</span>(<span class="at">x=</span>hours)) <span class="sc">+</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>p)) <span class="sc">+</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>estimate)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW2_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>B.3 (b) [3 points] What is the interpretation of</strong> <span class="math inline">\(\widehat\beta_1\)</span>?</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>In this case, <span class="math inline">\(\widehat\beta_1\)</span> is interpreted to be positive when estimated from the <em>entire</em> dataset.</p>
+<p><strong>B.3 (c) [9 points] Now, create a variable that is 1 if the individual is over 50 years old and 0 otherwise. Plot</strong> <span class="math inline">\(p\)</span> against <span class="math inline">\(hours\)</span> for each subgroup. What do you notice?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">over50 =</span> <span class="fu">as.integer</span>(<span class="fu">ifelse</span>(ages<span class="sc">&gt;</span><span class="dv">50</span>,<span class="dv">1</span>,<span class="dv">0</span>)))  <span class="co"># 1 is over 50; 0 is 50 and under</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>df_grouped <span class="ot">&lt;-</span> df_grouped <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(over50) <span class="co"># I guess I didn't end up needing this, but I'll still leave it in here</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_grouped)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+# Groups:   over50 [1]
+   ages hours     p over50
+  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt;
+1    50 3.62  0.295      0
+2    26 2.46  0.221      0
+3    35 3.81  0.210      0
+4    28 3.04  0.183      0
+5    43 0.709 0.331      0
+6    45 4.42  0.298      0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df_grouped<span class="sc">$</span>over50 <span class="sc">==</span> <span class="dv">1</span>,<span class="st">"over 50"</span>,<span class="st">"50 and under"</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df_grouped,<span class="fu">aes</span>(<span class="at">x=</span>hours,<span class="at">y=</span>p,<span class="at">color=</span>label)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW2_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>I notice two distinct ‘clusters’ that more or less clearly separate those who are either over or under 50 years of age. And both seem easy to do linear regression and perhaps expect a rather negative slope for both.</p>
+<p>(I don’t explicitly show it here, but there always appear to be three dots of the other color whenever I try <code>over50</code> = 1 for ages <span class="math inline">\(\ge 50\)</span> or <span class="math inline">\(\le 50\)</span>. So both clusters will appear to always have 3 outliers from the other cluster it seems.)</p>
+<p><strong>B.3 (d) [9 points] Estimate two regression lines: one for only the individuals under 50, and the other for individuals over 50. Interpret the slope coefficients of each.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>le_50 <span class="ot">&lt;-</span> df[df_grouped<span class="sc">$</span>over50 <span class="sc">==</span> <span class="dv">0</span>,]          <span class="co"># the data where ages are &lt;50</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>g_50 <span class="ot">&lt;-</span> df[df_grouped<span class="sc">$</span>over50 <span class="sc">==</span> <span class="dv">1</span>,]      <span class="co"># the data where ages are &gt;= 50</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>le_p <span class="ot">&lt;-</span> <span class="fu">lm</span>(p<span class="sc">~</span>hours,<span class="at">data=</span>le_50)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(le_p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = p ~ hours, data = le_50)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.116548 -0.045052 -0.000001  0.037414  0.243181 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.294337   0.013039  22.574  &lt; 2e-16 ***
+hours       -0.017539   0.003949  -4.441  2.3e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.06098 on 101 degrees of freedom
+Multiple R-squared:  0.1634,    Adjusted R-squared:  0.1551 
+F-statistic: 19.72 on 1 and 101 DF,  p-value: 2.296e-05</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>g_p <span class="ot">&lt;-</span> <span class="fu">lm</span>(p<span class="sc">~</span>hours,<span class="at">data=</span>g_50)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(g_p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = p ~ hours, data = g_50)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.06263 -0.03002  0.00195  0.03044  0.06417 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.619998   0.012086   51.30   &lt;2e-16 ***
+hours       -0.032428   0.002044  -15.87   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.03507 on 95 degrees of freedom
+Multiple R-squared:  0.726, Adjusted R-squared:  0.7232 
+F-statistic: 251.8 on 1 and 95 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not asked but just interesting to see</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>le_betas <span class="ot">=</span> <span class="fu">coef</span>(le_p)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>le_estimate <span class="ot">=</span> le_betas[<span class="dv">1</span>] <span class="sc">+</span> le_betas[<span class="dv">2</span>]<span class="sc">*</span>le_50<span class="sc">$</span>hours</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>g_betas <span class="ot">=</span> <span class="fu">coef</span>(g_p)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>g_estimate <span class="ot">=</span> g_betas[<span class="dv">1</span>] <span class="sc">+</span> g_betas[<span class="dv">2</span>]<span class="sc">*</span>g_50<span class="sc">$</span>hours</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> le_50,<span class="fu">aes</span>(<span class="at">x=</span>hours)) <span class="sc">+</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>p)) <span class="sc">+</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>le_estimate)) <span class="sc">+</span> </span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Ages 50 and under"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW2_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> g_50,<span class="fu">aes</span>(<span class="at">x=</span>hours)) <span class="sc">+</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>p)) <span class="sc">+</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>g_estimate)) <span class="sc">+</span> </span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Ages above 50"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW2_files/figure-html/unnamed-chunk-22-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>Just looking at the numeric values of the slope coefficients for both regression line summaries, they seem about right. I was expecting a negative slope and nothing too steep.</p>
+<p>(And then from the plots afterward the regression models seemed to do an alright job.)</p>
+<p><strong>B.3 (e) [3 points] Compare your coefficient interpretations in B.3 (d) and B.3 (b). What do you notice? Is it true that the more you exercise, the lower your probability of the disease?</strong></p>
+<p>YOUR ANSWER HERE</p>
+<p><strong>B.3 (f) [3 points] Plot the residuals</strong> <span class="math inline">\(\varepsilon_i = p_i - \widehat p_i\)</span> against the fitted values, <span class="math inline">\(\widehat p_i\)</span> for each model. What do you notice?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>est_reg,<span class="fu">aes</span>(<span class="at">x=</span>estimate,<span class="at">y=</span><span class="fu">residuals</span>(est_reg))) <span class="sc">+</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"estimate"</span>) <span class="sc">+</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"residuals"</span>) <span class="sc">+</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Residuals vs. Estimate from B.3(a)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW2_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>le_p,<span class="fu">aes</span>(<span class="at">x=</span>le_estimate,<span class="at">y=</span><span class="fu">residuals</span>(le_p))) <span class="sc">+</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"estimate"</span>) <span class="sc">+</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"residuals"</span>) <span class="sc">+</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Residuals vs. Estimate from B.3(d): 50 &amp; under"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW2_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>g_p,<span class="fu">aes</span>(<span class="at">x=</span>g_estimate,<span class="at">y=</span><span class="fu">residuals</span>(g_p))) <span class="sc">+</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"estimate"</span>) <span class="sc">+</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"residuals"</span>) <span class="sc">+</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Residuals vs. Estimate from B.3(d): ages over 50"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW2_files/figure-html/unnamed-chunk-23-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>B.3 (g) [3 points] Which model would you prefer and why?</strong></p>
+<p>YOUR ANSWER HERE</p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
