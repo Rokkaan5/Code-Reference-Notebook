@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep 13 21:52:38 2023
+
+@author: kaloyanparvanov
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Objective function: f(x) = x^2
+def function(x):
+    return x**2
+
+# Derivative of the function: f'(x) = 2x
+def gradient(x):
+    return 2*x
+
+def gd(lr=0.1, epochs=10, start_x=5):
+    x = start_x
+    x_values = [x]
+    
+    for i in range(epochs):
+        grad = gradient(x)
+        x = x - lr * grad
+        x_values.append(x)
+
+    return x_values
+
+def plot_gd(x_values):
+    x = np.linspace(-6, 6, 400)
+    y = function(x)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.plot(x, y, 'r-', label='f(x)=x^2')
+    ax.plot(x_values, [function(val) for val in x_values], 'bo-', label='GD Steps')
+
+    # Current GD value
+    current_x = x_values[-1]
+
+    # Tangent line at the current point
+    tangent = gradient(current_x) * (x - current_x) + function(current_x)
+    ax.plot(x, tangent, 'g--')  # Plotting tangent line
+
+    # Gradient vector (horizontal) at the current point
+    arrow_length = 1
+    if gradient(current_x) > 0:  # Gradient is positive
+        ax.annotate('', xy=(current_x + arrow_length, function(current_x)), 
+                    xytext=(current_x, function(current_x)),
+                    arrowprops=dict(facecolor='black', shrink=0, headwidth=6, width=1))
+    else:  # Gradient is negative
+        ax.annotate('', xy=(current_x - arrow_length, function(current_x)), 
+                    xytext=(current_x, function(current_x)),
+                    arrowprops=dict(facecolor='black', shrink=0, headwidth=6, width=1))
+
+    ax.set_title("Gradient Descent in Action")
+    ax.legend()
+
+    return fig
+
+x_values = gd(lr=0.9, epochs=10)
+for i, x in enumerate(x_values):
+    fig = plot_gd(x_values[:i+1])
+    fig.savefig(f'/Users/kaloyanparvanov/Downloads/1D_GD/frame_{i:02}.png')
+    plt.close(fig)
