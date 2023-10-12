@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>STAT 5010: HW3</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="STAT5010_HW3_files/libs/clipboard/clipboard.min.js"></script>
+<script src="STAT5010_HW3_files/libs/quarto-html/quarto.js"></script>
+<script src="STAT5010_HW3_files/libs/quarto-html/popper.min.js"></script>
+<script src="STAT5010_HW3_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="STAT5010_HW3_files/libs/quarto-html/anchor.min.js"></script>
+<link href="STAT5010_HW3_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="STAT5010_HW3_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="STAT5010_HW3_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="STAT5010_HW3_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="STAT5010_HW3_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#homework-3-version-2" id="toc-homework-3-version-2" class="nav-link active" data-scroll-target="#homework-3-version-2">Homework #3 Version 2</a>
+  <ul class="collapse">
+  <li><a href="#a.-theoretical-problems" id="toc-a.-theoretical-problems" class="nav-link" data-scroll-target="#a.-theoretical-problems">A. Theoretical Problems</a>
+  <ul class="collapse">
+  <li><a href="#a.1-deriving-the-t-statistic" id="toc-a.1-deriving-the-t-statistic" class="nav-link" data-scroll-target="#a.1-deriving-the-t-statistic">A.1 Deriving the t-statistic</a></li>
+  <li><a href="#problem-a.2" id="toc-problem-a.2" class="nav-link" data-scroll-target="#problem-a.2">Problem A.2</a></li>
+  <li><a href="#a.3-more-linear-algebra-and-regression" id="toc-a.3-more-linear-algebra-and-regression" class="nav-link" data-scroll-target="#a.3-more-linear-algebra-and-regression">A.3 More linear algebra and regression!</a></li>
+  <li><a href="#problem-a.4-trace-of-the-hat-matrix" id="toc-problem-a.4-trace-of-the-hat-matrix" class="nav-link" data-scroll-target="#problem-a.4-trace-of-the-hat-matrix">Problem A.4 Trace of the hat matrix</a></li>
+  </ul></li>
+  <li><a href="#b.-computational-problems" id="toc-b.-computational-problems" class="nav-link" data-scroll-target="#b.-computational-problems">B. Computational Problems</a></li>
+  <li><a href="#problem-b.1-comparing-models-20-points" id="toc-problem-b.1-comparing-models-20-points" class="nav-link" data-scroll-target="#problem-b.1-comparing-models-20-points">Problem B.1: Comparing Models (20 points)</a>
+  <ul class="collapse">
+  <li><a href="#problem-b.2" id="toc-problem-b.2" class="nav-link" data-scroll-target="#problem-b.2">Problem B.2</a></li>
+  <li><a href="#problem-b.3" id="toc-problem-b.3" class="nav-link" data-scroll-target="#problem-b.3">Problem B.3</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">STAT 5010: HW3</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="homework-3-version-2" class="level1">
+<h1>Homework #3 Version 2</h1>
+<p><strong>See Canvas for the due date</strong>. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don’t know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel is preferred). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work.</p>
+<section id="a.-theoretical-problems" class="level2">
+<h2 class="anchored" data-anchor-id="a.-theoretical-problems">A. Theoretical Problems</h2>
+<section id="a.1-deriving-the-t-statistic" class="level3">
+<h3 class="anchored" data-anchor-id="a.1-deriving-the-t-statistic">A.1 Deriving the t-statistic</h3>
+<p>In this question, we’ll walk through the proof that the t-test statistic has a t-distribution. More specifically, consider the simple linear regression model <span class="math inline">\(Y_i = \beta_0 + \beta_1x_i + \varepsilon_i\)</span>, where <span class="math inline">\(\varepsilon_i \overset{iid}{\sim} N(0,\sigma^2)\)</span>, <span class="math inline">\(x_i\)</span> are fixed and known, <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are fixed and unknown, and <span class="math inline">\(i=1,...,n\)</span>. We estimate <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> using least squares, and denote the least squares estimators <span class="math inline">\(\widehat\beta_0\)</span> and <span class="math inline">\(\widehat\beta_1\)</span>.</p>
+<p>Consider testing the hypotheses <span class="math inline">\(H_0: \beta_1 = 0 \,\,\, vs \,\,\, H_1: \beta_1 \ne 0\)</span>. In class, we claimed that the appropriate test statistics is</p>
+<p><span class="math display">\[
+\begin{align*}
+t = \frac{\widehat\beta_1}{\widehat{s.e.}(\widehat\beta_1)},
+\end{align*} \]</span></p>
+<p>where, for simple linear regression, <span class="math display">\[\widehat{s.e.}(\widehat\beta_1) = \sqrt{\frac{\widehat{\sigma}^2}{\sum^n_{i=1}\left(x_i - \bar{x}\right)^2}} \,\,\,\, , \text{ and } \,\,\,\,\, \,\, \widehat{\sigma}^2 = \frac{RSS}{(n - 2)}.\]</span></p>
+<p>Further, we claimed that <span class="math inline">\(t \sim t\left(n - 2 \right)\)</span>. That is, the test statistic <span class="math inline">\(t\)</span> has a t-distribution with <span class="math inline">\(n-2\)</span> degrees of freedom. Let’s prove it in a few steps!</p>
+<p><strong>A.1 (a) [4 points] Recall that</strong> <span class="math inline">\(\displaystyle\widehat\beta_1 \sim N\left(\beta_1, \,\, \frac{\sigma^2}{\sum^n_{i=1}\left(x_i - \bar{x}\right)^2} \right)\)</span>. Argue that <span class="math inline">\(\displaystyle Z = \frac{\widehat\beta_1}{\sqrt{\frac{\sigma^2}{\sum^n_{i=1}\left(x_i - \bar{x}\right)^2}}}\)</span> has a standard normal distribution under <span class="math inline">\(H_0\)</span>. (This should be easy!)</p>
+<p>YOUR ANSWER HERE</p>
+<p>For shorthand, let <span class="math inline">\(\mu_{y_i|x_i} = \beta_0 + \beta_1x_i\)</span>.</p>
+<p><strong>A.1 (b) (i). [5 points] First, show that</strong> <span class="math inline">\(\displaystyle \frac{\sum^n_{i=1}\left(y_i - \mu_{y_i|x_i}\right)^2}{\sigma^2} \sim \chi^2(n)\)</span>. This should follow straight from the definition of the <span class="math inline">\(\chi^2(n)\)</span> distribution given in class, along with some easy algebra!</p>
+<p>YOUR ANSWER HERE</p>
+<p><strong>A.1 (b) (ii). [8 points] Now, show that</strong> <span class="math inline">\(\displaystyle \frac{\sum^n_{i=1}\left(y_i - \mu_{y_i|x_i}\right)^2}{\sigma^2} = \frac{\sum^n_{i=1}\left(y_i - \widehat{y}_i\right)^2}{\sigma^2} + \frac{\sum^n_{i=1}\left(\widehat{y}_i - \mu_{y_i|x_i}\right)^2}{\sigma^2}\)</span>. (HINT: add and subtract <span class="math inline">\(\widehat{y}_i\)</span> to the lefthand side.)</p>
+<p>Note that the middle term <span class="math inline">\(\frac{\sum^n_{i=1}\left(y_i - \widehat{y}_i\right)^2}{\sigma^2}\)</span> can be written as <span class="math inline">\(\frac{RSS}{\sigma^2}\)</span>, or equivalently, <span class="math inline">\(\frac{(n-2)\widehat\sigma^2}{\sigma^2}.\)</span></p>
+<p>YOUR ANSWER HERE</p>
+<p>Ok, so maybe we won’t do the <em>entire</em> proof. Note, without having to prove it, that <span class="math inline">\(\displaystyle\frac{(n-2)\widehat\sigma^2}{\sigma^2} \sim \chi^2(n-2)\)</span>. This is because</p>
+<p><span class="math display">\[\displaystyle \underbrace{\frac{\sum^n_{i=1}\left(y_i - \mu_{y|x}\right)^2}{\sigma^2}}_{\chi^2(n)} = \underbrace{\frac{(n-2)\widehat\sigma^2}{\sigma^2}}_{\chi^2(n - 2)} + \underbrace{\frac{\sum^n_{i=1}\left(\widehat{y}_i - \mu_{y|x}\right)^2}{\sigma^2}}_{\chi^2(2)},\]</span></p>
+<p>which follows from some facts about the <span class="math inline">\(\chi^2\)</span> distribution involving moment generating functions. Math Stat students, you should know how to prove this :)</p>
+<p>With <span class="math inline">\(\displaystyle\frac{(n-2)\widehat\sigma^2}{\sigma^2} \sim \chi^2(n-2)\)</span> in hand, let’s finish the proof that our test statistic for individual t-tests follows a t distribution with <span class="math inline">\(n-2\)</span> degrees of freedom.</p>
+<p>By definition, a random variable <span class="math inline">\(T\)</span> has a t-distribution with <span class="math inline">\(d\)</span> degrees of freedom if it can be written as</p>
+<p><span class="math display">\[T = \frac{Z}{\sqrt{W\big/d}},\]</span></p>
+<p>where <span class="math inline">\(Z \sim N(0,1)\)</span> and <span class="math inline">\(W \sim \chi^2(d)\)</span>.</p>
+<p><strong>A.1 (c) [8 points] Prove that</strong> <span class="math inline">\(t = \frac{\widehat\beta_1}{\widehat{s.e.}(\widehat\beta_1)}\)</span> can be written in the form of a t-distributed random variable with <span class="math inline">\(n-2\)</span> degrees of freedom. Specifically, let <span class="math inline">\(Z\)</span> be defined as in problem A.1 (a), and <span class="math inline">\(W = \frac{(n-2)\widehat\sigma^2}{\sigma^2}\)</span>. Show that</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{Z}{\sqrt{W\big/(n-2)}} = \frac{\widehat\beta_1}{\widehat{s.e.}(\widehat\beta_1)} = t  ,
+\end{align*} \]</span></p>
+<p>which, by definition, means that <span class="math inline">\(t \sim t(n-2)\)</span>.</p>
+<p>YOUR ANSWER HERE</p>
+</section>
+<section id="problem-a.2" class="level3">
+<h3 class="anchored" data-anchor-id="problem-a.2">Problem A.2</h3>
+<p><em>Over the next few classes, we will be discussing the use of regression–and statistical modeling more generally–for prediction and explanation. The purpose of this problem is to encourage you to gain a deeper understanding of prediction, explanation, and the relationship between these two concepts.</em></p>
+<p><strong>[10 points] Read “To Explain or to Predict?” by Galit Shmueli and answer at least three of the following questions. Each answer should be typed in a markdown cell in this notebook, and roughly one paragraph (5-10 sentences) in length. The goal of this assignment is to provide the opportunity to think more rigorously about some of the statistical models that we will encounter in this course. What is their purpose? How can we get the most out of our statistical analysis?</strong></p>
+<ol type="1">
+<li><p>What is explanatory modeling? Where is explanatory modeling most often used? What does explanatory modeling have to do with causality?</p></li>
+<li><p>What is predictive modeling? Where is predictive modeling most often used? What does predictive modeling have to do with causality?</p></li>
+<li><p>How are explanation and prediction different? Is it universally recognized that they are different?</p></li>
+<li><p>Describe how, according to Shmueli, the statistical modeling procedure might change based on whether the goal of the modeling is explanation or prediction.</p></li>
+<li><p>What are some suggestions that Shmueli gives to the statistical community based on his analysis of prediction and explanation? Do you agree with these suggestions?</p></li>
+</ol>
+<p>(If you did this as your “classwork #0” assignment, then, lucky you! Review and past your answers here.)</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p><strong>1. What is explanatory modeling? Where is explanatory modeling most often used? What does explanatory modeling have to do with causality?</strong></p>
+<p>Shmueli specifically defines explanatory modeling as the use of statistical models to test causal hypotheses about theoretical “constructs.” Where “constructs” are abstractions that can be observable or non-observable (i.e.&nbsp;not measureable variables). Shmueli finds that explanatory modeling is often used in the field of “Information Systems (IS)”, which seems like mostly the social sciences. Some examples of the theoretical constructs that are used in the causal hypotheses include things like trust, perceived usefulness, perceived ease of use, etc. The relation of explanatory modeling with causality is regarding the step in process where causal hypotheses are connected to the “statistical conclusions” led by the statistical inferences. And how these “statistical conclusions” are then made into “research conclusions.”</p>
+<p><strong>2. What is predictive modeling? Where is predictive modeling most often used? What does predictive modeling have to do with causality?</strong></p>
+<p>Then, Shmueli defines predictive modeling exactly as it sounds, the process of using statistical models (or data mining algorithms) to predict (produce) new or future observations. (i.e.&nbsp;Given some input X, what are the new predicted outputs (Y)?) Predictive modeling has relation to causality because there is some underlying implication that the inputs (predictors) have some influence on the output, which could imply some association with causality (but may not be definitive).</p>
+<p><strong>3. How are explanation and prediction different? Is it universally recognized that they are different?</strong></p>
+<p>The nature of uncertainty associated with each are different (thus their difference is relevant). I can’t say I know if it’s necessarily universally known that they are different. From my own experience I think without the explicit mention of this topic/discussion I probably would’ve used both terms fairly interchangeably. And the article by Shmueli describes that the “debate” was brought up in the philosophical sciences to determine if they are the same, but was found a bit later that they have natures that are different.</p>
+</section>
+<section id="a.3-more-linear-algebra-and-regression" class="level3">
+<h3 class="anchored" data-anchor-id="a.3-more-linear-algebra-and-regression">A.3 More linear algebra and regression!</h3>
+<p>In class, we defined the <em>hat</em> or <em>projection</em> matrix as</p>
+<p><span class="math display">\[H = X(X^TX)^{-1}X^T.\]</span></p>
+<p>The goal of this question is to use the hat matrix to prove that the fitted values, <span class="math inline">\(\widehat{\mathbf Y}\)</span>, and the residuals, <span class="math inline">\(\widehat{\boldsymbol\varepsilon}\)</span>, are uncorrelated. We will do it in steps, and <em>some</em> of the proofs will only be required for STAT 5010 students. Note that STAT 4010 students are asked to answer part (e), as to why this result has practical importance.</p>
+<p><strong>A.3 (a) [5 points] Show that</strong> <span class="math inline">\(\widehat{Y} = HY\)</span>. That is, <span class="math inline">\(H\)</span> “puts a hat on” <span class="math inline">\(Y\)</span>.</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p><span class="math inline">\(y = \beta X + \varepsilon\)</span></p>
+<p>We can start with our <span class="math inline">\(\hat{\beta}_{OLS}\)</span>. (There’s a proof that this is an unbiased estimate of <span class="math inline">\(\beta\)</span> in our lecture notes, but because we’ve already had a quiz on it and it’s not asked for in this question I’m not going to explicitly write it out.)</p>
+<p><span class="math display">\[\hat{\beta}_{OLS} = (X^\top X)^{-1} X^\top Y \]</span> And we have <span class="math inline">\(\widehat{Y} = X \hat{\beta}_{OLS}\)</span>.So then,</p>
+<p><span class="math display">\[\begin{equation}
+\widehat{Y} = X \hat{\beta}_{OLS} \\
+= X \underbrace{[(X^\top X)^{-1} X^\top Y]}_{\hat{\beta}_{OLS}} \\
+= \underbrace{X(X^\top X)^{-1} X^\top}_H Y \\
+
+\Rightarrow \widehat{Y} = HY
+\end{equation}\]</span></p>
+<p><strong>A.3 (b) [5 points] Show that</strong> <span class="math inline">\(H\)</span> is symmetric: <span class="math inline">\(H = H^T\)</span>.</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>(If <span class="math inline">\(A^2 = A\)</span> then matrix <span class="math inline">\(A\)</span> is symmetric (I think)).</p>
+<p>(<span class="math inline">\(I\)</span> is the identity matrix (and any matrix multiplied with the identity matrix is itself).)</p>
+<p><span class="math display">\[\begin{equation}
+\Rightarrow H^2 = HH \\
+HH = \underbrace{[X(X^\top X)^{-1} X^\top]}_H \underbrace{[X(X^\top X)^{-1} X^\top]}_H \\
+= X\underbrace{(X^\top X)^{-1} X^\top X}_{I}(X^\top X)^{-1} X^\top \\
+= X(X^\top X)^{-1} X^\top \\
+=  H \\
+\end{equation}\]</span></p>
+<p>Thus <span class="math inline">\(HH = H\)</span></p>
+<p><strong>A.3 (c) [4 points] Show that</strong> <span class="math inline">\(H(I_n - H) = 0_n\)</span>, where <span class="math inline">\(0_n\)</span> is the zero matrix of size <span class="math inline">\(n \times n\)</span>.</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p><span class="math display">\[H(I_n - H) = HI_n - HH\]</span></p>
+<p>And from the previous question (<em>A.3(b)</em>) we know that <span class="math inline">\(HH = H\)</span>. Thus,</p>
+<p><span class="math display">\[\begin{equation}
+\Rightarrow H(I_n - H) = \underbrace{HI_n}_H - \underbrace{HH}_H \\
+= H - H \\
+= 0_n \\
+\end{equation}\]</span></p>
+<p><strong>A.3 (d) [4 points] Stating that</strong> <span class="math inline">\(\widehat{\mathbf Y}\)</span> is uncorrelated with <span class="math inline">\(\widehat{\boldsymbol\varepsilon}\)</span> is equivalent to showing that these vectors are orthogonal. That is, we need to show that their dot product is zero:</p>
+<p><span class="math display">\[ \widehat{\mathbf Y}^T\widehat{\boldsymbol\varepsilon} = 0.\]</span> <strong>Prove this result.</strong></p>
+<p>It’s interesting to think about why uncorrelated, in this case, is equivalent to orthogonal. Extra credit if you can tell me why!</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>Some helpful equations</p>
+<p><span class="math display">\[\begin{equation}
+\widehat{Y} = HY \\
+\widehat{\varepsilon}_i = (y_i - \hat{y}_i) \Rightarrow \widehat{\boldsymbol\varepsilon} = Y - \widehat{Y}
+\end{equation}\]</span></p>
+<p>So I’m guessing the following is valid (?)</p>
+<p><span class="math display">\[\begin{equation}
+\widehat{\mathbf Y}^T\widehat{\boldsymbol\varepsilon} = HY (Y - \widehat{Y}) \\
+= HY^2 - Y\widehat{Y} \\
+= HY^2 - Y(HY) \\
+= HY^2 - HY^2 \\
+= 0
+\end{equation}\]</span></p>
+<p><em>Extra credit answer</em>: Orthogonality between vectors implies there is no correlation, because orthogonal vectors are linearly independent. In other words, orthogonal vectors can not use a sum of or dot product of them to recreate the other.</p>
+<p><strong>A.3 (e) [2 points] Why is this result important in the practical use of linear regression?</strong></p>
+<p>YOUR ANSWER HERE</p>
+</section>
+<section id="problem-a.4-trace-of-the-hat-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="problem-a.4-trace-of-the-hat-matrix">Problem A.4 Trace of the hat matrix</h3>
+<p>Define the trace of a square matrix</p>
+<p><span class="math inline">\(A = \left(\begin{matrix} a_{1,1} &amp; a_{1,2} &amp; \cdots &amp; a_{1,n} \\ a_{2,1} &amp; a_{2,2} &amp; \cdots &amp; a_{2,n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ a_{n,1} &amp; a_{n,2} &amp; \cdots &amp; a_{n,n} \end{matrix} \right)\)</span></p>
+<p>to be <span class="math inline">\(tr(A) = \sum^n_{i=1}a_{i,i}\)</span>, i.e., the sum of the diagonal elements of <span class="math inline">\(A\)</span>.</p>
+<p><strong>A.4 (a) [6 points] Let</strong> <span class="math inline">\(B\)</span> be a <span class="math inline">\(m \times n\)</span> matrix and <span class="math inline">\(C\)</span> <span class="math inline">\(n\times m\)</span> matrix. Prove that <span class="math inline">\(tr(BC) = tr(CB).\)</span></p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>So we have,</p>
+<p><span class="math display">\[\begin{equation}
+B =
+
+\begin{pmatrix}
+b_{1,1} &amp; \cdots &amp; b_{1,n} \\
+\vdots &amp; \ddots &amp; \vdots \\
+b_{m,1} &amp; \cdots &amp; b_{m,n} \\
+\end{pmatrix}
+
+; C =
+
+\begin{pmatrix}
+c_{1,1} &amp; \cdots &amp; c_{1,m} \\
+\vdots &amp; \ddots &amp; \vdots \\
+c_{n,1} &amp; \cdots &amp; c_{n,m} \\
+\end{pmatrix}
+
+\end{equation}\]</span></p>
+<p>Let’s start by finding <span class="math inline">\(tr(BC)\)</span>. That starts by finding <span class="math inline">\(BC\)</span>, <span class="math display">\[\begin{equation}
+BC =
+\begin{pmatrix}
+\sum_i^n b_{1,i}c_{i,1} &amp; \cdots &amp; \cdots &amp; \sum_i^n b_{1,i}c_{i,m}\\
+\vdots &amp; \sum_i^n b_{2,i}c_{i,2} &amp; \cdots &amp; \vdots \\
+\vdots &amp; \vdots                  &amp; \ddots &amp; \vdots \\
+\sum_i^n b_{m,i}c_{i,1} &amp; \cdots &amp; \cdots &amp; \sum_i^n b_{m,i}c_{i,m}\\
+\end{pmatrix}
+\end{equation}\]</span></p>
+<p>(Honestly we only needed the diagonal values, but just for nice latex formatting I added the corner values.)</p>
+<p><span class="math display">\[\begin{equation}
+\Rightarrow tr(BC) = (\sum_i^n b_{1,i}c_{i,1}) + (\sum_i^n b_{2,i}c_{i,2}) + \cdots + (\sum_i^n b_{m,i}c_{i,m}) \\
+= \sum_j^m \sum_i^n b_{j,i}c_{i,j}
+\end{equation}\]</span></p>
+<p>Then for <span class="math inline">\(tr(CB)\)</span>,</p>
+<p><span class="math display">\[\begin{equation}
+CB =
+\begin{pmatrix}
+\sum_j^m c_{1,j}b_{j,1} &amp; \cdots &amp; \cdots &amp; \sum_j^m c_{1,j}b_{j,n}\\
+\vdots &amp; \sum_j^m c_{2,j}b_{j,2} &amp; \cdots &amp; \vdots \\
+\vdots &amp; \vdots                  &amp; \ddots &amp; \vdots \\
+\sum_j^m c_{n,j}b_{j,1} &amp; \cdots &amp; \cdots &amp; \sum_j^m c_{n,j}b_{j,n}\\
+\end{pmatrix}
+\\
+\Rightarrow tr(CB) = (\sum_j^m c_{1,j}b_{j,1}) + (\sum_j^m c_{2,j}b_{j,2}) + \cdots + (\sum_j^m c_{n,j}b_{j,n}) \\
+= \sum_i^n \sum_j^m c_{i,j}b_{j,i}
+\end{equation}\]</span></p>
+<p>Because order of multiplication doesn’t matter in summations either,</p>
+<p><span class="math display">\[\begin{equation}
+\Rightarrow tr(CB) = \sum_i^n \sum_j^m c_{i,j}b_{j,i} \\
+= \sum_j^m \sum_i^n b_{j,i}c_{i,j} \\
+= tr(BC)
+\end{equation}\]</span></p>
+<p><strong>A.4 (b) [4 points] Let</strong> <span class="math inline">\(H\)</span> be the hat matrix as defined in class. Prove that <span class="math inline">\(tr(H) = p+1\)</span>, where <span class="math inline">\(p\)</span> is the number of parameters in the regression.</p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>The matrix <span class="math inline">\(X\)</span> is an <span class="math inline">\(m \times n\)</span> matrix, where (the number of columns of <span class="math inline">\(X\)</span>) <span class="math inline">\(n\)</span> is equal to <span class="math inline">\(p+1\)</span> (<span class="math inline">\(n=p+1\)</span>).</p>
+<p><span class="math display">\[tr(H) = tr(X(X^TX)^{-1}X^T)\]</span></p>
+<p>And as we found in part <strong>(a)</strong>: <span class="math inline">\(tr(BC) = tr(CB)\)</span>,</p>
+<p><span class="math display">\[\begin{equation}
+tr(X(X^TX)^{-1}X^T) = tr(X^TX(X^TX)^{-1}) \\
+= tr(I)
+\end{equation}\]</span></p>
+<p>And the <span class="math inline">\(m\times n\)</span> matrix <span class="math inline">\(X\)</span> is a full-rank matrix (proved in previous HWs), which means <span class="math inline">\(rank(X)= n\)</span>. Thus the identity matrix <span class="math inline">\(I\)</span> is an <span class="math inline">\(n \times n\)</span> matrix.</p>
+<p>Or in other words,</p>
+<p><span class="math display">\[\begin{equation}
+tr(H)  \\
+= tr(I_{n \times n}) \\
+= n \\
+= p+1
+\end{equation}\]</span></p>
+</section>
+</section>
+<section id="b.-computational-problems" class="level2">
+<h2 class="anchored" data-anchor-id="b.-computational-problems">B. Computational Problems</h2>
+</section>
+<section id="problem-b.1-comparing-models-20-points" class="level2">
+<h2 class="anchored" data-anchor-id="problem-b.1-comparing-models-20-points">Problem B.1: Comparing Models (20 points)</h2>
+<p>In this exercise, we will fit multiple different models to the same data and determine which of those models we should ultimately use.</p>
+<p>This data set has <span class="math inline">\(345\)</span> rows and <span class="math inline">\(7\)</span> columns, where the 7th column is not a variable but just a train/test selector. The dataset does not contain any variable representing presence or absence of a liver disorder.</p>
+<ol type="1">
+<li><p><code>Mcv</code>: Mean Corpuscular Volume (Blood Test)</p></li>
+<li><p><code>Alkphos</code>: Alkaline Phosphotase (Blood Test)</p></li>
+<li><p><code>Sgpt</code>: Alamine Aminotransferase (Blood Test)</p></li>
+<li><p><code>Sgot</code>: Aspartate Aminotransferase (Blood Test)</p></li>
+<li><p><code>Gammagt</code>: Gamma-Glutamyl Transpeptidase (Blood Test)</p></li>
+<li><p><code>Drinks</code>: Number of half-pint equivalents of alcoholic beverages drunk per day</p></li>
+</ol>
+<p>The first five columns are integer-valued and represent the result of various blood tests which may be of use in diagnosing alcohol-related liver disorders. The sixth column is real-valued and represents the number of alcoholic drinks (equivalent to half pints of beer) taken per day by the subject, self reported.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>liver <span class="ot">=</span> <span class="fu">na.omit</span>(<span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/liver.csv"</span>)))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>liver <span class="ot">=</span> liver[,<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(liver)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Mcv            Alkphos            Sgpt             Sgot      
+ Min.   : 65.00   Min.   : 23.00   Min.   :  4.00   Min.   : 5.00  
+ 1st Qu.: 87.00   1st Qu.: 57.00   1st Qu.: 19.00   1st Qu.:19.00  
+ Median : 90.00   Median : 67.00   Median : 26.00   Median :23.00  
+ Mean   : 90.16   Mean   : 69.87   Mean   : 30.41   Mean   :24.64  
+ 3rd Qu.: 93.00   3rd Qu.: 80.00   3rd Qu.: 34.00   3rd Qu.:27.00  
+ Max.   :103.00   Max.   :138.00   Max.   :155.00   Max.   :82.00  
+    Gammagt           Drinks      
+ Min.   :  5.00   Min.   : 0.000  
+ 1st Qu.: 15.00   1st Qu.: 0.500  
+ Median : 25.00   Median : 3.000  
+ Mean   : 38.28   Mean   : 3.455  
+ 3rd Qu.: 46.00   3rd Qu.: 6.000  
+ Max.   :297.00   Max.   :20.000  </code></pre>
+</div>
+</div>
+<section id="b.1-a-6-points-three-different-models" class="level4">
+<h4 class="anchored" data-anchor-id="b.1-a-6-points-three-different-models">B.1 (a) [6 points] Three Different Models</h4>
+<p>We will fit three different models to this data:</p>
+<ol type="1">
+<li><code>mod.1</code>: Fits <code>Drinks</code> as the response with <code>Mcv</code> as the predictor.</li>
+<li><code>mod.2</code>: Fits <code>Drinks</code> as the response with <code>Mcv</code> and <code>Alkphos</code> as predictors.</li>
+<li><code>mod.3</code>: Fits <code>Drinks</code> as the response with <code>Mcv</code>, <code>Alkphos</code> and <code>Sgpt</code> as predictors.</li>
+</ol>
+<p>Fit these models in the cell below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>mod<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(Drinks <span class="sc">~</span> Mcv, <span class="at">data =</span> liver)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>mod<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(Drinks <span class="sc">~</span> Mcv <span class="sc">+</span> Alkphos, <span class="at">data =</span> liver)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>mod<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(Drinks <span class="sc">~</span> Mcv <span class="sc">+</span> Alkphos <span class="sc">+</span> Sgpt, <span class="at">data =</span> liver)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>B.1 (b) [3 points] Partial F-Tests</strong></p>
+<p>Compare the 3 models using pairwise F-tests to determine which of the three we should use moving forward. It may be helpful to write out the null and alternative hypotheses for these tests.</p>
+<p>Copy your selected model into the <code>final.model</code> variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>final.model <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod<span class="fl">.1</span>,mod<span class="fl">.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: Drinks ~ Mcv
+Model 2: Drinks ~ Mcv + Alkphos
+  Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
+1    343 3457.9                              
+2    342 3428.8  1    29.069 2.8995 0.08952 .
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod<span class="fl">.1</span>,mod<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: Drinks ~ Mcv
+Model 2: Drinks ~ Mcv + Alkphos + Sgpt
+  Res.Df    RSS Df Sum of Sq      F   Pr(&gt;F)   
+1    343 3457.9                                
+2    341 3334.7  2    123.17 6.2977 0.002062 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod<span class="fl">.2</span>,mod<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: Drinks ~ Mcv + Alkphos
+Model 2: Drinks ~ Mcv + Alkphos + Sgpt
+  Res.Df    RSS Df Sum of Sq      F   Pr(&gt;F)   
+1    342 3428.8                                
+2    341 3334.7  1    94.103 9.6228 0.002082 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>final.model <span class="ot">=</span> mod<span class="fl">.3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>B.1 (c) [4 points] Coefficient Confidence Intervals</strong></p>
+<p>Using your selected best model, calculate a <span class="math inline">\(95\%\)</span> confidence interval for the parameter associated with the <code>Mcv</code> predictor (you can use the <code>confint()</code> function). Save the lower and upper values into <code>Mcv.CI.lower</code> and <code>Mcv.CI.upper</code> respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Mcv.CI.lower <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Mcv.CI.upper <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mod<span class="fl">.3</span>,<span class="st">"Mcv"</span>,<span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        2.5 %    97.5 %
+Mcv 0.1390871 0.2899383</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#lower</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">Mcv.CI.lower =</span> <span class="fu">confint</span>(mod<span class="fl">.3</span>,<span class="st">"Mcv"</span>,<span class="at">level =</span> <span class="fl">0.95</span>)[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1390871</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#upper</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">Mcv.CI.upper =</span> <span class="fu">confint</span>(mod<span class="fl">.3</span>,<span class="st">"Mcv"</span>,<span class="at">level =</span> <span class="fl">0.95</span>)[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2899383</code></pre>
+</div>
+</div>
+<p><strong>B.1 (d) [6 points] Model Comparison</strong></p>
+<p>So far, we’ve used the F-test as a way to choose a “best” model among the three proposed. Now let’s compare the models according to their mean squared errors (MSE). The MSE is defined as</p>
+<p><span class="math display">\[
+\begin{align*}
+MSE = \frac{1}{n}\sum^n_{i=1}\left(y_i - \widehat{y}_i \right)^2.
+\end{align*}
+\]</span></p>
+<p>Compute the MSE for each of the three models and save their values into their respective <code>MSE.#</code> variables.</p>
+<p>Which of these models has the best MSE? Do these conclusions agree with the model you selected in part <strong>1.b</strong>? Think about why or why not.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>MSE<span class="fl">.1</span> <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>MSE<span class="fl">.2</span> <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>MSE<span class="fl">.3</span> <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># finding the mse is the same as taking the mean of the residuals (and the "summary" function gives us the residuals)</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># mse of mod.1</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>(<span class="at">MSE.1 =</span> <span class="fu">mean</span>(<span class="fu">summary</span>(mod<span class="fl">.1</span>)<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10.02276</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mse of mod.2</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">MSE.2 =</span> <span class="fu">mean</span>(<span class="fu">summary</span>(mod<span class="fl">.2</span>)<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.938497</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mse of mod.3</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">MSE.3 =</span> <span class="fu">mean</span>(<span class="fu">summary</span>(mod<span class="fl">.3</span>)<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.665735</code></pre>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p><code>mod.3</code> has the lowest, thus the best, MSE. (Then <code>mod.2</code> and then <code>mod.1</code> in that order.) This does match the conclusion from <strong>B.1(b)</strong> (fortunately), because the conclusion from that question was that the other two parameters in addition to <code>Msv</code> held more significance and thus could potentially perform the better than the other two models. And since <code>mod.3</code> had the lowest MSE (i.e.&nbsp;lowest error) it supports that conclusion.</p>
+<p><strong>B.1 (e) This model violates at least one of our regression assumptions. Which one? Produce a plot to show evidence of this violation.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mod<span class="fl">.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW3_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>The residual vs.&nbsp;fitted plot shows that the model fails the homoscedasticity assumption (finite variance and expected value of 0 for residuals).</p>
+</section>
+<section id="problem-b.2" class="level3">
+<h3 class="anchored" data-anchor-id="problem-b.2">Problem B.2</h3>
+<p>Consider the <a href="https://rdrr.io/cran/faraway/man/teengamb.html"><code>teengamb</code></a> data. Fit a model with <code>gamble</code> as the response and <code>income</code> as the predictor.</p>
+<p><strong>B.2 (a) [2 points] Load the dataset and explore it graphically and numerically. Are there relationships between variables?</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/teengamb.txt"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sex status income verbal gamble
+1   1     51   2.00      8    0.0
+2   1     28   2.50      8    0.0
+3   1     37   2.00      6    0.0
+4   1     28   7.00      4    7.3
+5   1     65   2.00      8   19.6
+6   1     61   3.47      6    0.1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW3_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>col4 <span class="ot">=</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"darkgrey"</span>, <span class="st">"grey"</span>,<span class="st">"#CFB87C"</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(df), <span class="at">method =</span> <span class="st">"ellipse"</span>, <span class="at">col =</span> <span class="fu">col4</span>(<span class="dv">100</span>),  <span class="at">addCoef.col =</span> <span class="st">"black"</span>, <span class="at">tl.col =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW3_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>The link provided above explains the columns as such:</p>
+<ul>
+<li><code>sex</code>
+<ul>
+<li>0 = male</li>
+<li>1 = female</li>
+</ul></li>
+<li><code>status</code>
+<ul>
+<li>Socioeconomic status score based on parents’ occupation</li>
+</ul></li>
+<li><code>income</code>
+<ul>
+<li>in pounds per week</li>
+</ul></li>
+<li><code>verbal</code>
+<ul>
+<li>verbal score in words out of 12 correctly defined</li>
+</ul></li>
+<li><code>gamble</code>
+<ul>
+<li>expenditure on gambling in pounds per year</li>
+</ul></li>
+</ul>
+<p>There from the pair plot and correlation matrix, there’s only a few correlations (relationships) that have some notable significance. <code>income</code> and <code>gamble</code> seem to have the highest correlation out of all of the variables (which is kinda funny) with a positive correlation of <span class="math inline">\(0.62\)</span>. I think the benchmark for “significant” correlation may have been <span class="math inline">\(\pm0.6\)</span> (also depending on the field), but the next highest one is the relationship between <code>status</code> and <code>verbal</code>. The rest of the variables don’t have all that much significant relationship with each other.</p>
+<p><strong>B.2 (b) [3 points] Randomly split the dataset into two parts:</strong></p>
+<ol type="1">
+<li><strong>50% of the data stored in the variable <code>train</code>. This will be the data that we fit/train our model on.</strong></li>
+<li><strong>the remaining 50% of the data stored in the variable <code>test</code>. We will use this data to test our predictions.</strong></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1985</span>) <span class="co">#don't change the seed!</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">floor</span>(<span class="fl">0.5</span><span class="sc">*</span><span class="fu">nrow</span>(df))  <span class="co"># find the number corresponding to 80% of the data.</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>index <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(df)),<span class="at">size=</span>n)   <span class="co"># randomly assigning indices to be included in the training set</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>train <span class="ot">=</span> df[index,] <span class="co"># set the training set to be the randomly sampled rows of the dataframe</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>test <span class="ot">=</span> df[<span class="sc">-</span>index, ]   <span class="co"># set the testing set to be the remaining rows</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"There are"</span>, <span class="fu">dim</span>(train)[<span class="dv">1</span>], <span class="st">"rows and"</span>, <span class="fu">dim</span>(train)[<span class="dv">2</span>], <span class="st">"columns in training set.</span><span class="sc">\n</span><span class="st">"</span>)  <span class="co"># check the dimensions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 23 rows and 5 columns in training set.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"There are"</span>, <span class="fu">dim</span>(test)[<span class="dv">1</span>], <span class="st">"rows and"</span>, <span class="fu">dim</span>(test)[<span class="dv">2</span>], <span class="st">"columns in testing set."</span>)  <span class="co"># check the dimensions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 24 rows and 5 columns in testing set.</code></pre>
+</div>
+</div>
+<p><strong>B.2 (c) [2 points] Conduct simple linear regression, using the <code>lm_gamble = lm()</code> function and your training set, <code>train</code>, with <code>gamlbe</code> as the response, and <code>income</code> as the predictor.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>lm_gamble <span class="ot">&lt;-</span> <span class="fu">lm</span>(gamble <span class="sc">~</span> income, <span class="at">data =</span> train)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_gamble)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = gamble ~ income, data = train)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-29.385  -8.506  -5.722   8.299  55.224 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)    1.539      6.532   0.236   0.8160  
+income         2.942      1.142   2.577   0.0176 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 19.72 on 21 degrees of freedom
+Multiple R-squared:  0.2402,    Adjusted R-squared:  0.204 
+F-statistic:  6.64 on 1 and 21 DF,  p-value: 0.01759</code></pre>
+</div>
+</div>
+<p><strong>B.2 (d) [8 points] We learned that, often, the goal of regression is to make predictions on new data. Let’s see how well the model does at predicting values that we left out of the training set.</strong></p>
+<p><strong>We can get a sense of how well the model does at predicting by computing the mean squared prediction error (MSPE):</strong></p>
+<p><span class="math display">\[
+\begin{align*}
+MSPE = \frac{1}{k}\sum^k_{i=1}\left(y^\star_i - \widehat{y}^\star_i \right)^2 = \frac{1}{k}\sum^k_{i=1}\left(y^\star_i - \mathbf{x}^\star_i\boldsymbol{\widehat\beta} \right)^2
+\end{align*}
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(k\)</span> is the number of rows in the <code>test</code> set.</li>
+<li><span class="math inline">\(y^\star_i\)</span> is the <span class="math inline">\(i^{th}\)</span> response value in the <code>test</code> set.</li>
+<li><span class="math inline">\(\mathbf{x}_i^\star = \left(1,x_{i,1}^\star, x_{i,2}^\star,...,x_{i,p}^\star \right)\)</span> is the <span class="math inline">\(i^{th}\)</span> set of predictors (and a 1 for the intercept multiplication…) in the <code>test</code> set. Notice that it’s a row vector.</li>
+<li><span class="math inline">\(\widehat{\boldsymbol\beta}\)</span> is the least squares estimate of <span class="math inline">\(\boldsymbol\beta\)</span>, fit on the <em>training set</em>, <code>train</code>.</li>
+</ul>
+<p><strong>Compute the MSPE for your <code>test</code> data.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(lm_gamble,test)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> test<span class="sc">$</span>gamble</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>mspe <span class="ot">&lt;-</span> <span class="fu">mean</span>((y<span class="sc">-</span>yhat)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"MSPE = "</span>,mspe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MSPE =  1020.549</code></pre>
+</div>
+</div>
+<p><strong>B.2 (e) [4 points] The mean squared error (MSE) is similar to the MSPE, but it uses the training data instead of the test data. Compute the MSE on your <code>train</code> data.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">summary</span>(lm_gamble)<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"MSE = "</span>,mse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MSE =  355.0589</code></pre>
+</div>
+</div>
+</section>
+<section id="problem-b.3" class="level3">
+<h3 class="anchored" data-anchor-id="problem-b.3">Problem B.3</h3>
+<p>Now let’s perform multiple linear regression using the dataset from Problem B.2</p>
+<p><strong>B.3 (a) [3 points] Perform MLR, using your training set, using <code>gamble</code> as the response and all other variables as predictors. Store your <code>lm()</code> object in <code>mlr_gamble</code>.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sex"    "status" "income" "verbal" "gamble"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>mlr_gamble <span class="ot">&lt;-</span> <span class="fu">lm</span>(gamble <span class="sc">~</span> . , <span class="at">data =</span> train)  <span class="co"># "." represents 'the rest of the columns' I believe</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mlr_gamble)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = gamble ~ ., data = train)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-33.289  -9.757  -0.366   4.850  47.351 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)   6.5475    19.6722   0.333   0.7431  
+sex         -16.8618    11.3995  -1.479   0.1564  
+status        0.1519     0.3916   0.388   0.7027  
+income        2.9988     1.1238   2.669   0.0157 *
+verbal       -0.8320     2.7808  -0.299   0.7682  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 18.18 on 18 degrees of freedom
+Multiple R-squared:  0.4465,    Adjusted R-squared:  0.3235 
+F-statistic:  3.63 on 4 and 18 DF,  p-value: 0.02448</code></pre>
+</div>
+</div>
+<p><strong>B.3 (b) [13 points] Compute the MSE for the data in the training set (store in <code>mse_train</code>), and for data in the testing set (store in <code>mse_test</code>). Which one is lower? Explain why you think it’s lower.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co">#training MSE</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>(mse_train <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">summary</span>(mlr_gamble)<span class="sc">$</span>residuals<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 258.6779</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#test MSE</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>mlr_yhat <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(mlr_gamble,test)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> test<span class="sc">$</span>gamble</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>(mse_test <span class="ot">&lt;-</span> <span class="fu">mean</span>((y<span class="sc">-</span>yhat)<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1020.549</code></pre>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>The MSE of the training set is much lower than the MSE for the testing set. I can’t say I know why it is <em>so</em> much lower, but it probably makes sense that the MSE for a training set would be lower in general because the error is what the model is trying to minimize (optimization problem).</p>
+<p><strong>B.3 (c) [4 points] Compute the hat matrix for this regression, and then compute its trace (sum of the diagonals). Store your answer in <code>pp1</code>. Comment on the value of the trace (hint, refer to other problems in this homework!).</strong></p>
+<p>To compute the trace quickly, you can use the <code>tr()</code> function in the <code>psych</code> package. You’ll probably need to install the package in Anaconda.</p>
+<p><em>Jasmine’s note to self:</em></p>
+<ul>
+<li><code>t()</code> computes transpose of matrix</li>
+<li><code>solve()</code> computes inverse of matrix</li>
+<li><code>%*%</code> is matrix multiplication</li>
+<li>hat matrix = <span class="math inline">\(X(X^\top X)^{-1}X^\top\)</span> = <code>X %*% solve(t(X)X) %*% t(X)</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># "design matrix" X</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(mlr_gamble)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co"># hat matrix</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>hat_mat <span class="ot">&lt;-</span> X <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X) <span class="sc">%*%</span> <span class="fu">t</span>(X)</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="co"># trace of hat matrix</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>pp1 <span class="ot">&lt;-</span> <span class="fu">tr</span>(hat_mat)</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"trace of hat matrix ="</span>, pp1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>trace of hat matrix = 5</code></pre>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>And expected from question <strong>A.4(b)</strong> the trace of the hat matrix (<span class="math inline">\(tr(H)\)</span>) is equal to <span class="math inline">\(p+1\)</span>, in other words, the number of predictors plus 1.</p>
+<p>(In our case, <span class="math inline">\(p=4\)</span> and we got <span class="math inline">\(tr(H) = 5 = p + 1\)</span>)</p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

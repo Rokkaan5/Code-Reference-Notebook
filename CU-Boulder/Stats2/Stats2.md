@@ -59,3 +59,4 @@ permalink: /CUB/StatII
 **[Assignment](homeworks.md#unit-2-regression-inference-prediction-and-explanation)**
 
 - HW2
+- HW3

@@ -1,0 +1,619 @@
+---
+title: "STAT 5010: HW3"
+author: "Jasmine Kobayashi"
+format:
+    html:
+        code-fold: false
+execute:
+    output: true
+    warning: false
+toc: true
+---
+
+
+# Homework #3 Version 2
+
+**See Canvas for the due date**. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don't know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel is preferred). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work.
+
+## A. Theoretical Problems
+
+### A.1 Deriving the t-statistic
+
+In this question, we'll walk through the proof that the t-test statistic has a t-distribution. More specifically, consider the simple linear regression model $Y_i = \beta_0 + \beta_1x_i + \varepsilon_i$, where $\varepsilon_i \overset{iid}{\sim} N(0,\sigma^2)$, $x_i$ are fixed and known, $\sigma^2$, $\beta_0$ and $\beta_1$ are fixed and unknown, and $i=1,...,n$. We estimate $\beta_0$ and $\beta_1$ using least squares, and denote the least squares estimators $\widehat\beta_0$ and $\widehat\beta_1$.
+
+Consider testing the hypotheses $H_0: \beta_1 = 0 \,\,\, vs \,\,\, H_1: \beta_1 \ne 0$. In class, we claimed that the appropriate test statistics is
+
+$$
+\begin{align*}
+t = \frac{\widehat\beta_1}{\widehat{s.e.}(\widehat\beta_1)},
+\end{align*} $$
+
+where, for simple linear regression, $$\widehat{s.e.}(\widehat\beta_1) = \sqrt{\frac{\widehat{\sigma}^2}{\sum^n_{i=1}\left(x_i - \bar{x}\right)^2}} \,\,\,\, , \text{ and } \,\,\,\,\, \,\, \widehat{\sigma}^2 = \frac{RSS}{(n - 2)}.$$
+
+Further, we claimed that $t \sim t\left(n - 2 \right)$. That is, the test statistic $t$ has a t-distribution with $n-2$ degrees of freedom. Let's prove it in a few steps!
+
+**A.1 (a) [4 points] Recall that** $\displaystyle\widehat\beta_1 \sim N\left(\beta_1, \,\, \frac{\sigma^2}{\sum^n_{i=1}\left(x_i - \bar{x}\right)^2} \right)$. Argue that $\displaystyle Z = \frac{\widehat\beta_1}{\sqrt{\frac{\sigma^2}{\sum^n_{i=1}\left(x_i - \bar{x}\right)^2}}}$ has a standard normal distribution under $H_0$. (This should be easy!)
+
+YOUR ANSWER HERE
+
+For shorthand, let $\mu_{y_i|x_i} = \beta_0 + \beta_1x_i$.
+
+**A.1 (b) (i). [5 points] First, show that** $\displaystyle \frac{\sum^n_{i=1}\left(y_i - \mu_{y_i|x_i}\right)^2}{\sigma^2} \sim \chi^2(n)$. This should follow straight from the definition of the $\chi^2(n)$ distribution given in class, along with some easy algebra!
+
+YOUR ANSWER HERE
+
+**A.1 (b) (ii). [8 points] Now, show that** $\displaystyle \frac{\sum^n_{i=1}\left(y_i - \mu_{y_i|x_i}\right)^2}{\sigma^2} = \frac{\sum^n_{i=1}\left(y_i - \widehat{y}_i\right)^2}{\sigma^2} + \frac{\sum^n_{i=1}\left(\widehat{y}_i - \mu_{y_i|x_i}\right)^2}{\sigma^2}$. (HINT: add and subtract $\widehat{y}_i$ to the lefthand side.)
+
+Note that the middle term $\frac{\sum^n_{i=1}\left(y_i - \widehat{y}_i\right)^2}{\sigma^2}$ can be written as $\frac{RSS}{\sigma^2}$, or equivalently, $\frac{(n-2)\widehat\sigma^2}{\sigma^2}.$
+
+YOUR ANSWER HERE
+
+Ok, so maybe we won't do the *entire* proof. Note, without having to prove it, that $\displaystyle\frac{(n-2)\widehat\sigma^2}{\sigma^2} \sim \chi^2(n-2)$. This is because
+
+$$\displaystyle \underbrace{\frac{\sum^n_{i=1}\left(y_i - \mu_{y|x}\right)^2}{\sigma^2}}_{\chi^2(n)} = \underbrace{\frac{(n-2)\widehat\sigma^2}{\sigma^2}}_{\chi^2(n - 2)} + \underbrace{\frac{\sum^n_{i=1}\left(\widehat{y}_i - \mu_{y|x}\right)^2}{\sigma^2}}_{\chi^2(2)},$$
+
+which follows from some facts about the $\chi^2$ distribution involving moment generating functions. Math Stat students, you should know how to prove this :)
+
+With $\displaystyle\frac{(n-2)\widehat\sigma^2}{\sigma^2} \sim \chi^2(n-2)$ in hand, let's finish the proof that our test statistic for individual t-tests follows a t distribution with $n-2$ degrees of freedom.
+
+By definition, a random variable $T$ has a t-distribution with $d$ degrees of freedom if it can be written as
+
+$$T = \frac{Z}{\sqrt{W\big/d}},$$
+
+where $Z \sim N(0,1)$ and $W \sim \chi^2(d)$.
+
+**A.1 (c) [8 points] Prove that** $t = \frac{\widehat\beta_1}{\widehat{s.e.}(\widehat\beta_1)}$ can be written in the form of a t-distributed random variable with $n-2$ degrees of freedom. Specifically, let $Z$ be defined as in problem A.1 (a), and $W = \frac{(n-2)\widehat\sigma^2}{\sigma^2}$. Show that
+
+$$
+\begin{align*}
+\frac{Z}{\sqrt{W\big/(n-2)}} = \frac{\widehat\beta_1}{\widehat{s.e.}(\widehat\beta_1)} = t  ,
+\end{align*} $$
+
+which, by definition, means that $t \sim t(n-2)$.
+
+YOUR ANSWER HERE
+
+### Problem A.2
+
+*Over the next few classes, we will be discussing the use of regression--and statistical modeling more generally--for prediction and explanation. The purpose of this problem is to encourage you to gain a deeper understanding of prediction, explanation, and the relationship between these two concepts.*
+
+**[10 points] Read "To Explain or to Predict?" by Galit Shmueli and answer at least three of the following questions. Each answer should be typed in a markdown cell in this notebook, and roughly one paragraph (5-10 sentences) in length. The goal of this assignment is to provide the opportunity to think more rigorously about some of the statistical models that we will encounter in this course. What is their purpose? How can we get the most out of our statistical analysis?**
+
+1.  What is explanatory modeling? Where is explanatory modeling most often used? What does explanatory modeling have to do with causality?
+
+2.  What is predictive modeling? Where is predictive modeling most often used? What does predictive modeling have to do with causality?
+
+3.  How are explanation and prediction different? Is it universally recognized that they are different?
+
+4.  Describe how, according to Shmueli, the statistical modeling procedure might change based on whether the goal of the modeling is explanation or prediction.
+
+5.  What are some suggestions that Shmueli gives to the statistical community based on his analysis of prediction and explanation? Do you agree with these suggestions?
+
+(If you did this as your "classwork #0" assignment, then, lucky you! Review and past your answers here.)
+
+*YOUR ANSWER HERE*
+
+**1.  What is explanatory modeling? Where is explanatory modeling most often used? What does explanatory modeling have to do with causality?**
+
+Shmueli specifically defines explanatory modeling as the use of statistical models to test causal hypotheses about theoretical "constructs." Where "constructs" are abstractions that can be observable or non-observable (i.e. not measureable variables). Shmueli finds that explanatory modeling is often used in the field of "Information Systems (IS)", which seems like mostly the social sciences. Some examples of the theoretical constructs that are used in the causal hypotheses include things like trust, perceived usefulness, perceived ease of use, etc. The relation of explanatory modeling with causality is regarding the step in process where causal hypotheses are connected to the "statistical conclusions" led by the statistical inferences. And how these "statistical conclusions" are then made into "research conclusions."
+
+**2.  What is predictive modeling? Where is predictive modeling most often used? What does predictive modeling have to do with causality?**
+
+Then, Shmueli defines predictive modeling exactly as it sounds, the process of using statistical models (or data mining algorithms) to predict (produce) new or future observations. (i.e. Given some input X, what are the new predicted outputs (Y)?) Predictive modeling has relation to causality because there is some underlying implication that the inputs (predictors) have some influence on the output, which could imply some association with causality (but may not be definitive).
+
+**3.  How are explanation and prediction different? Is it universally recognized that they are different?**
+
+The nature of uncertainty associated with each are different (thus their difference is relevant). I can't say I know if it's necessarily universally known that they are different. From my own experience I think without the explicit mention of this topic/discussion I probably would've used both terms fairly interchangeably. And the article by Shmueli describes that the "debate" was brought up in the philosophical sciences to determine if they are the same, but was found a bit later that they have natures that are different.
+
+### A.3 More linear algebra and regression!
+
+In class, we defined the *hat* or *projection* matrix as
+
+$$H = X(X^TX)^{-1}X^T.$$
+
+The goal of this question is to use the hat matrix to prove that the fitted values, $\widehat{\mathbf Y}$, and the residuals, $\widehat{\boldsymbol\varepsilon}$, are uncorrelated. We will do it in steps, and *some* of the proofs will only be required for STAT 5010 students. Note that STAT 4010 students are asked to answer part (e), as to why this result has practical importance.
+
+**A.3 (a) [5 points] Show that** $\widehat{Y} = HY$. That is, $H$ "puts a hat on" $Y$.
+
+*YOUR ANSWER HERE*
+
+$y = \beta X + \varepsilon$
+
+We can start with our $\hat{\beta}_{OLS}$. (There's a proof that this is an unbiased estimate of $\beta$ in our lecture notes, but because we've already had a quiz on it and it's not asked for in this question I'm not going to explicitly write it out.)
+
+
+$$\hat{\beta}_{OLS} = (X^\top X)^{-1} X^\top Y $$
+And we have $\widehat{Y} = X \hat{\beta}_{OLS}$.So then,
+
+\begin{equation}
+\widehat{Y} = X \hat{\beta}_{OLS} \\
+= X \underbrace{[(X^\top X)^{-1} X^\top Y]}_{\hat{\beta}_{OLS}} \\
+= \underbrace{X(X^\top X)^{-1} X^\top}_H Y \\
+
+\Rightarrow \widehat{Y} = HY
+\end{equation}
+
+**A.3 (b) [5 points] Show that** $H$ is symmetric: $H = H^T$.
+
+*YOUR ANSWER HERE*
+
+(If $A^2 = A$ then matrix $A$ is symmetric (I think)).
+
+($I$ is the identity matrix (and any matrix multiplied with the identity matrix is itself).)
+
+\begin{equation}
+\Rightarrow H^2 = HH \\
+HH = \underbrace{[X(X^\top X)^{-1} X^\top]}_H \underbrace{[X(X^\top X)^{-1} X^\top]}_H \\
+= X\underbrace{(X^\top X)^{-1} X^\top X}_{I}(X^\top X)^{-1} X^\top \\
+= X(X^\top X)^{-1} X^\top \\ 
+=  H \\
+\end{equation}
+
+Thus $HH = H$
+
+
+**A.3 (c) [4 points] Show that** $H(I_n - H) = 0_n$, where $0_n$ is the zero matrix of size $n \times n$.
+
+*YOUR ANSWER HERE*
+
+$$H(I_n - H) = HI_n - HH$$
+
+And from the previous question (*A.3(b)*) we know that $HH = H$. Thus,
+
+\begin{equation}
+\Rightarrow H(I_n - H) = \underbrace{HI_n}_H - \underbrace{HH}_H \\
+= H - H \\
+= 0_n \\
+\end{equation}
+
+**A.3 (d) [4 points] Stating that** $\widehat{\mathbf Y}$ is uncorrelated with $\widehat{\boldsymbol\varepsilon}$ is equivalent to showing that these vectors are orthogonal. That is, we need to show that their dot product is zero:
+
+$$ \widehat{\mathbf Y}^T\widehat{\boldsymbol\varepsilon} = 0.$$ **Prove this result.**
+
+It's interesting to think about why uncorrelated, in this case, is equivalent to orthogonal. Extra credit if you can tell me why!
+
+*YOUR ANSWER HERE*
+
+Some helpful equations
+
+\begin{equation}
+\widehat{Y} = HY \\
+\widehat{\varepsilon}_i = (y_i - \hat{y}_i) \Rightarrow \widehat{\boldsymbol\varepsilon} = Y - \widehat{Y}
+\end{equation}
+
+So I'm guessing the following is valid (?)
+
+\begin{equation}
+\widehat{\mathbf Y}^T\widehat{\boldsymbol\varepsilon} = HY (Y - \widehat{Y}) \\
+= HY^2 - Y\widehat{Y} \\ 
+= HY^2 - Y(HY) \\
+= HY^2 - HY^2 \\
+= 0
+\end{equation}
+
+
+*Extra credit answer*: Orthogonality between vectors implies there is no correlation, because orthogonal vectors are linearly independent. In other words, orthogonal vectors can not use a sum of or dot product of them to recreate the other. 
+
+**A.3 (e) [2 points] Why is this result important in the practical use of linear regression?**
+
+YOUR ANSWER HERE
+
+### Problem A.4 Trace of the hat matrix
+
+Define the trace of a square matrix
+
+$A = \left(\begin{matrix} a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\ a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\ \vdots & \vdots & \ddots & \vdots \\ a_{n,1} & a_{n,2} & \cdots & a_{n,n} \end{matrix} \right)$
+
+to be $tr(A) = \sum^n_{i=1}a_{i,i}$, i.e., the sum of the diagonal elements of $A$.
+
+**A.4 (a) [6 points] Let** $B$ be a $m \times n$ matrix and $C$ $n\times m$ matrix. Prove that $tr(BC) = tr(CB).$
+
+*YOUR ANSWER HERE*
+
+So we have,
+
+\begin{equation}
+B = 
+
+\begin{pmatrix}
+b_{1,1} & \cdots & b_{1,n} \\
+\vdots & \ddots & \vdots \\
+b_{m,1} & \cdots & b_{m,n} \\
+\end{pmatrix}
+
+; C = 
+
+\begin{pmatrix}
+c_{1,1} & \cdots & c_{1,m} \\
+\vdots & \ddots & \vdots \\
+c_{n,1} & \cdots & c_{n,m} \\
+\end{pmatrix}
+
+\end{equation}
+
+Let's start by finding $tr(BC)$. That starts by finding $BC$,
+\begin{equation}
+BC =
+\begin{pmatrix}
+\sum_i^n b_{1,i}c_{i,1} & \cdots & \cdots & \sum_i^n b_{1,i}c_{i,m}\\
+\vdots & \sum_i^n b_{2,i}c_{i,2} & \cdots & \vdots \\
+\vdots & \vdots                  & \ddots & \vdots \\
+\sum_i^n b_{m,i}c_{i,1} & \cdots & \cdots & \sum_i^n b_{m,i}c_{i,m}\\
+\end{pmatrix}
+\end{equation}
+
+(Honestly we only needed the diagonal values, but just for nice latex formatting I added the corner values.)
+
+\begin{equation}
+\Rightarrow tr(BC) = (\sum_i^n b_{1,i}c_{i,1}) + (\sum_i^n b_{2,i}c_{i,2}) + \cdots + (\sum_i^n b_{m,i}c_{i,m}) \\
+= \sum_j^m \sum_i^n b_{j,i}c_{i,j}
+\end{equation}
+
+Then for $tr(CB)$,
+
+\begin{equation}
+CB =
+\begin{pmatrix}
+\sum_j^m c_{1,j}b_{j,1} & \cdots & \cdots & \sum_j^m c_{1,j}b_{j,n}\\
+\vdots & \sum_j^m c_{2,j}b_{j,2} & \cdots & \vdots \\
+\vdots & \vdots                  & \ddots & \vdots \\
+\sum_j^m c_{n,j}b_{j,1} & \cdots & \cdots & \sum_j^m c_{n,j}b_{j,n}\\
+\end{pmatrix}
+\\
+\Rightarrow tr(CB) = (\sum_j^m c_{1,j}b_{j,1}) + (\sum_j^m c_{2,j}b_{j,2}) + \cdots + (\sum_j^m c_{n,j}b_{j,n}) \\
+= \sum_i^n \sum_j^m c_{i,j}b_{j,i}
+\end{equation}
+
+Because order of multiplication doesn't matter in summations either,
+
+\begin{equation}
+\Rightarrow tr(CB) = \sum_i^n \sum_j^m c_{i,j}b_{j,i} \\
+= \sum_j^m \sum_i^n b_{j,i}c_{i,j} \\
+= tr(BC)
+\end{equation}
+
+**A.4 (b) [4 points] Let** $H$ be the hat matrix as defined in class. Prove that $tr(H) = p+1$, where $p$ is the number of parameters in the regression.
+
+*YOUR ANSWER HERE*
+
+The matrix $X$ is an $m \times n$ matrix, where (the number of columns of $X$) $n$ is equal to $p+1$ ($n=p+1$).
+
+$$tr(H) = tr(X(X^TX)^{-1}X^T)$$
+
+And as we found in part **(a)**: $tr(BC) = tr(CB)$,
+
+
+\begin{equation}
+tr(X(X^TX)^{-1}X^T) = tr(X^TX(X^TX)^{-1}) \\
+= tr(I)
+\end{equation}
+
+And the $m\times n$ matrix $X$ is a full-rank matrix (proved in previous HWs), which means $rank(X)= n$. Thus the identity matrix $I$ is an $n \times n$ matrix.
+
+Or in other words,
+
+\begin{equation}
+tr(H)  \\
+= tr(I_{n \times n}) \\
+= n \\
+= p+1
+\end{equation}
+
+## B. Computational Problems
+
+## Problem B.1: Comparing Models (20 points)
+
+In this exercise, we will fit multiple different models to the same data and determine which of those models we should ultimately use.
+
+This data set has $345$ rows and $7$ columns, where the 7th column is not a variable but just a train/test selector. The dataset does not contain any variable representing presence or absence of a liver disorder.
+
+1.  `Mcv`: Mean Corpuscular Volume (Blood Test)
+
+2.  `Alkphos`: Alkaline Phosphotase (Blood Test)
+
+3.  `Sgpt`: Alamine Aminotransferase (Blood Test)
+
+4.  `Sgot`: Aspartate Aminotransferase (Blood Test)
+
+5.  `Gammagt`: Gamma-Glutamyl Transpeptidase (Blood Test)
+
+6.  `Drinks`: Number of half-pint equivalents of alcoholic beverages drunk per day
+
+The first five columns are integer-valued and represent the result of various blood tests which may be of use in diagnosing alcohol-related liver disorders. The sixth column is real-valued and represents the number of alcoholic drinks (equivalent to half pints of beer) taken per day by the subject, self reported.
+
+```{r}
+library(ggplot2)
+
+liver = na.omit(read.csv(url("https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/liver.csv")))
+
+liver = liver[,1:6]
+
+summary(liver)
+```
+
+#### B.1 (a) [6 points] Three Different Models
+
+We will fit three different models to this data:
+
+1.  `mod.1`: Fits `Drinks` as the response with `Mcv` as the predictor.
+2.  `mod.2`: Fits `Drinks` as the response with `Mcv` and `Alkphos` as predictors.
+3.  `mod.3`: Fits `Drinks` as the response with `Mcv`, `Alkphos` and `Sgpt` as predictors.
+
+Fit these models in the cell below.
+
+```{r}
+#YOUR CODE HERE
+library(ISLR)
+
+mod.1 <- lm(Drinks ~ Mcv, data = liver)
+mod.2 <- lm(Drinks ~ Mcv + Alkphos, data = liver)
+mod.3 <- lm(Drinks ~ Mcv + Alkphos + Sgpt, data = liver)
+```
+
+**B.1 (b) [3 points] Partial F-Tests**
+
+Compare the 3 models using pairwise F-tests to determine which of the three we should use moving forward. It may be helpful to write out the null and alternative hypotheses for these tests.
+
+Copy your selected model into the `final.model` variable.
+
+```{r}
+final.model = NA
+#YOUR CODE HERE
+```
+
+```{r}
+anova(mod.1,mod.2)
+```
+```{r}
+anova(mod.1,mod.3)
+```
+```{r}
+anova(mod.2,mod.3)
+```
+```{r}
+final.model = mod.3
+```
+
+
+**B.1 (c) [4 points] Coefficient Confidence Intervals**
+
+Using your selected best model, calculate a $95\%$ confidence interval for the parameter associated with the `Mcv` predictor (you can use the `confint()` function). Save the lower and upper values into `Mcv.CI.lower` and `Mcv.CI.upper` respectively.
+
+```{r}
+Mcv.CI.lower = NA
+Mcv.CI.upper = NA
+
+#YOUR CODE HERE
+confint(mod.3,"Mcv",level = 0.95)
+
+#lower
+(Mcv.CI.lower = confint(mod.3,"Mcv",level = 0.95)[1])
+#upper
+(Mcv.CI.upper = confint(mod.3,"Mcv",level = 0.95)[2])
+```
+
+**B.1 (d) [6 points] Model Comparison**
+
+So far, we've used the F-test as a way to choose a "best" model among the three proposed. Now let's compare the models according to their mean squared errors (MSE). The MSE is defined as
+
+$$
+\begin{align*}
+MSE = \frac{1}{n}\sum^n_{i=1}\left(y_i - \widehat{y}_i \right)^2.
+\end{align*} 
+$$
+
+Compute the MSE for each of the three models and save their values into their respective `MSE.#` variables.
+
+Which of these models has the best MSE? Do these conclusions agree with the model you selected in part **1.b**? Think about why or why not.
+
+```{R}
+MSE.1 = NA
+MSE.2 = NA
+MSE.3 = NA
+
+#YOUR CODE HERE
+
+# finding the mse is the same as taking the mean of the residuals (and the "summary" function gives us the residuals)
+
+# mse of mod.1
+(MSE.1 = mean(summary(mod.1)$residuals^2))
+
+# mse of mod.2
+(MSE.2 = mean(summary(mod.2)$residuals^2))
+
+# mse of mod.3
+(MSE.3 = mean(summary(mod.3)$residuals^2))
+```
+
+*YOUR ANSWER HERE*
+
+`mod.3` has the lowest, thus the best, MSE. (Then `mod.2` and then `mod.1` in that order.) This does match the conclusion from **B.1(b)** (fortunately), because the conclusion from that question was that the other two parameters in addition to `Msv` held more significance and thus could potentially perform the better than the other two models. And since `mod.3` had the lowest MSE (i.e. lowest error) it supports that conclusion. 
+
+**B.1 (e) This model violates at least one of our regression assumptions. Which one? Produce a plot to show evidence of this violation.**
+
+
+```{r}
+par(mfrow = c(2,2))
+plot(mod.3)
+```
+
+*YOUR ANSWER HERE*
+
+The residual vs. fitted plot shows that the model fails the homoscedasticity assumption (finite variance and expected value of 0 for residuals). 
+
+### Problem B.2
+
+Consider the [`teengamb`](https://rdrr.io/cran/faraway/man/teengamb.html) data. Fit a model with `gamble` as the response and `income` as the predictor.
+
+**B.2 (a) [2 points] Load the dataset and explore it graphically and numerically. Are there relationships between variables?**
+
+```{r}
+df = read.csv("https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/teengamb.txt", sep = "\t")
+```
+
+```{r}
+#YOUR CODE HERE
+head(df)
+```
+
+```{r}
+pairs(df)
+```
+
+```{r}
+library(corrplot)
+col4 = colorRampPalette(c("black", "darkgrey", "grey","#CFB87C"))
+corrplot(cor(df), method = "ellipse", col = col4(100),  addCoef.col = "black", tl.col = "black")
+```
+
+*YOUR ANSWER HERE*
+
+The link provided above explains the columns as such:
+
+- `sex` 
+  - 0 = male
+  - 1 = female
+- `status`
+  - Socioeconomic status score based on parents' occupation
+
+- `income`
+  - in pounds per week
+
+- `verbal`
+  - verbal score in words out of 12 correctly defined
+
+- `gamble`
+  - expenditure on gambling in pounds per year
+  
+
+There from the pair plot and correlation matrix, there's only a few correlations (relationships) that have some notable significance. `income` and `gamble` seem to have the highest correlation out of all of the variables (which is kinda funny) with a positive correlation of $0.62$. I think the benchmark for "significant" correlation may have been $\pm0.6$ (also depending on the field), but the next highest one is the relationship between `status` and `verbal`. The rest of the variables don't have all that much significant relationship with each other. 
+
+**B.2 (b) [3 points] Randomly split the dataset into two parts:**
+
+1.  **50% of the data stored in the variable `train`. This will be the data that we fit/train our model on.**
+2.  **the remaining 50% of the data stored in the variable `test`. We will use this data to test our predictions.**
+
+```{r}
+set.seed(1985) #don't change the seed!
+#YOUR CODE HERE
+n = floor(0.5*nrow(df))  # find the number corresponding to 80% of the data.
+index = sample(seq_len(nrow(df)),size=n)   # randomly assigning indices to be included in the training set
+train = df[index,] # set the training set to be the randomly sampled rows of the dataframe
+test = df[-index, ]   # set the testing set to be the remaining rows
+
+cat("There are", dim(train)[1], "rows and", dim(train)[2], "columns in training set.\n")  # check the dimensions
+cat("There are", dim(test)[1], "rows and", dim(test)[2], "columns in testing set.")  # check the dimensions
+```
+
+**B.2 (c) [2 points] Conduct simple linear regression, using the `lm_gamble = lm()` function and your training set, `train`, with `gamlbe` as the response, and `income` as the predictor.**
+
+```{r}
+#YOUR CODE HERE
+lm_gamble <- lm(gamble ~ income, data = train)
+summary(lm_gamble)
+```
+
+**B.2 (d) [8 points] We learned that, often, the goal of regression is to make predictions on new data. Let's see how well the model does at predicting values that we left out of the training set.**
+
+**We can get a sense of how well the model does at predicting by computing the mean squared prediction error (MSPE):**
+
+$$
+\begin{align*}
+MSPE = \frac{1}{k}\sum^k_{i=1}\left(y^\star_i - \widehat{y}^\star_i \right)^2 = \frac{1}{k}\sum^k_{i=1}\left(y^\star_i - \mathbf{x}^\star_i\boldsymbol{\widehat\beta} \right)^2
+\end{align*}
+$$
+
+where:
+
+-   $k$ is the number of rows in the `test` set.
+-   $y^\star_i$ is the $i^{th}$ response value in the `test` set.
+-   $\mathbf{x}_i^\star = \left(1,x_{i,1}^\star, x_{i,2}^\star,...,x_{i,p}^\star \right)$ is the $i^{th}$ set of predictors (and a 1 for the intercept multiplication...) in the `test` set. Notice that it's a row vector.
+-   $\widehat{\boldsymbol\beta}$ is the least squares estimate of $\boldsymbol\beta$, fit on the *training set*, `train`.
+
+**Compute the MSPE for your `test` data.**
+
+```{r}
+#YOUR CODE HERE
+yhat <- predict.lm(lm_gamble,test)
+y <- test$gamble
+
+mspe <- mean((y-yhat)^2)
+
+cat("MSPE = ",mspe)
+```
+
+**B.2 (e) [4 points] The mean squared error (MSE) is similar to the MSPE, but it uses the training data instead of the test data. Compute the MSE on your `train` data.**
+
+```{r}
+#YOUR CODE HERE
+mse <- mean(summary(lm_gamble)$residuals^2)
+cat("MSE = ",mse)
+```
+
+### Problem B.3
+
+Now let's perform multiple linear regression using the dataset from Problem B.2
+
+**B.3 (a) [3 points] Perform MLR, using your training set, using `gamble` as the response and all other variables as predictors. Store your `lm()` object in `mlr_gamble`.**
+
+```{r}
+#YOUR CODE HERE
+colnames(train)
+mlr_gamble <- lm(gamble ~ . , data = train)  # "." represents 'the rest of the columns' I believe
+summary(mlr_gamble)
+```
+
+**B.3 (b) [13 points] Compute the MSE for the data in the training set (store in `mse_train`), and for data in the testing set (store in `mse_test`). Which one is lower? Explain why you think it's lower.**
+
+```{r, warning=FALSE}
+#YOUR CODE HERE
+
+#training MSE
+(mse_train <- mean(summary(mlr_gamble)$residuals^2))
+
+
+#test MSE
+mlr_yhat <- predict.lm(mlr_gamble,test)
+y <- test$gamble
+
+(mse_test <- mean((y-yhat)^2))
+```
+
+*YOUR ANSWER HERE*
+
+The MSE of the training set is much lower than the MSE for the testing set. I can't say I know why it is *so* much lower, but it probably makes sense that the MSE for a training set would be lower in general because the error is what the model is trying to minimize (optimization problem). 
+
+**B.3 (c) [4 points] Compute the hat matrix for this regression, and then compute its trace (sum of the diagonals). Store your answer in `pp1`. Comment on the value of the trace (hint, refer to other problems in this homework!).**
+
+To compute the trace quickly, you can use the `tr()` function in the `psych` package. You'll probably need to install the package in Anaconda.
+
+*Jasmine's note to self:*
+
+- `t()` computes transpose of matrix
+- `solve()` computes inverse of matrix
+- `%*%` is matrix multiplication
+- hat matrix = $X(X^\top X)^{-1}X^\top$ = `X %*% solve(t(X)X) %*% t(X)`
+
+```{r, warning=FALSE,message=FALSE}
+#YOUR CODE HERE
+library(psych)
+
+# "design matrix" X
+X <- model.matrix(mlr_gamble)
+
+# hat matrix
+hat_mat <- X %*% solve(t(X) %*% X) %*% t(X)
+
+# trace of hat matrix
+pp1 <- tr(hat_mat)
+cat("trace of hat matrix =", pp1)
+
+```
+
+*YOUR ANSWER HERE*
+
+And expected from question **A.4(b)** the trace of the hat matrix ($tr(H)$) is equal to $p+1$, in other words, the number of predictors plus 1.
+
+(In our case, $p=4$ and we got $tr(H) = 5 = p + 1$)
+
+
