@@ -18,8 +18,8 @@ These are my homework submissions, so all my code. As much as possible done "fro
 
 ## Module 2
 
-- Assignment 2 - Part 1: One Layer NN with One Output
-- Assignment 2 - Part 2: Multinomial NN with Softmax, CCE, and One-Hot Encoding
+- [Assignment 2 - Part 1: One Layer NN with One Output](HW/hw2/Part1/A2_Part1_JasmineKobayashi.html)
+- [Assignment 2 - Part 2: Multinomial NN with Softmax, CCE, and One-Hot Encoding](HW/hw2/Part2/A2_Part2_JasmineKobayashi.html)
 
 ## Module 3
 
