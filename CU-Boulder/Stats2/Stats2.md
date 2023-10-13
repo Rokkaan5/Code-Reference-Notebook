@@ -60,3 +60,7 @@ permalink: /CUB/StatII
 
 - HW2
 - HW3
+
+# Exam 1 Review
+
+[Solutions to Exam1 Code Review](Exam1Review/STAT5010_Exam1ReviewCoding-Solutions.html) (because I never attempted it myself)

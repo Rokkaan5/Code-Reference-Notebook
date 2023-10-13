@@ -1,0 +1,125 @@
+---
+title: "Exam1 Review - Solutions"
+author: "Dr. Osita Onyejekwe"
+format:
+    html:
+        code-fold: false
+execute:
+    output: true
+    warning: false
+toc: true
+---
+
+# Data Analysis and interpretation
+
+Load the hotel data into R. Here’s a description of the data:
+
+Dataset:  hotel_energy.csv
+
+Source: Y. Xin, S. Lu, N. Zhu, W. Wu (2012). "Energy Consumption Quota of Four and Five Star Luxury Hotels Buildings in Hainan Province, China," Energy and Buildings, Vol. 45, pp. 250-256.
+
+Description: Energy Consumption and attributes for 19 Luxury Hotels.
+
+**Variables/Labels:**
+
+- Hotel Id   (`hotel`)
+- Energy Consumption in Kilowatt-hours
+- Area in square meters   (`area`)
+- Age in years     (`age`)
+- Number of guestrooms    (`numrooms`)
+- Occupancy Rate in percent   (`occrate`)
+- Effective number of guestrooms  (`effrooms` = `numrooms`*`occrate`/100)
+
+## (a) Perform simple linear regression using energy consumption as the response and area as the predictor. Report a summary of your model.
+
+
+```{R}
+hotel = read.table("https://www.colorado.edu/amath/sites/default/files/attached-files/hotel_0.txt", sep = ",", header = TRUE)
+head(hotel)
+```
+
+
+```{R}
+lmod = lm(enrgcons ~ area, data = hotel)
+summary(lmod)
+```
+
+
+## (b) Is the slope coefficient significant at the α = 0.05 level?
+
+The p-value for the t-test associated with the slope coefficient is smaller than any reasonable $\alpha$. So, yes, the slope term is statistically significant.
+
+## (c)  Interpret the slope coefficient in terms of the data.
+
+Assuming that the model is correct, increasing a hotel's area by one square meter increases its energy consumption, on average, by 159.25 Kilowatt-hours.
+
+## (d) What percentage of the variability in energy consumption is explained by area?
+
+Assuming the model is correct, about 77% of the variability in energy consumption is explained by area, assuming the model is correct. (This is the coefficient of determination, or, $R^2$).
+
+## (e) Now perform multiple linear regression with number of guest rooms, area, and age as predictors (same response). Report a summary of your model. Interpret the coefficient associated with area. Is it different from the SLR model?
+
+
+```{R}
+lmod2 = lm(enrgcons ~ area + numrooms + age, data = hotel)
+summary(lmod2)
+```
+
+
+When adjusting for age, and the number of rooms, increasing a hotel's area by one square meter increases its energy consumption, on average, by 196.19 Kilowatt-hours.
+
+## (f) Plot the residuals against the fitted values (for the MLR model). Does this plot suggest that any regression assumptions are violated?
+
+
+```{R}
+plot(lmod2$fitted, lmod2$resid); abline(0,0)
+par(mfrow = c(2,2)); plot(lmod)
+```
+
+
+It's a bit hard to tell just from this plot whether any assumptions are violated. There doesn't seem to be any clear curvature to the plot (which would indicate a missing predictor or a violation of linearity) or some sort of "trumpet" pattern, which would indicate a violation of the constant variance assumption.
+
+## (g) Interpret the coefficient associated with the number of guest rooms. Is there anything that seems odd about this interpretation?
+
+The energy consumption, on average, goes *down* by 6087.90 Kwh, when adding a room, for a constant area and age. This might seem odd at first, but since the regression adjusts for area, it makes some sense: more rooms in the same area might make for a more efficient use of energy. Also, note that the p-value associated with this coefficient is large, and so we might be justified in leavning this predictor out of the model.
+
+## (h) Perform a formal test to decide whether the MLR model is necessary, or whether the SLR model will do. Interpret the results.
+
+
+```{R}
+anova(lmod2, lmod)
+```
+
+The F-test performed above suggests that the reduced model is sufficient (i.e., the p-value, 0.4203536, is high, and we can't reject the null that the reduced model is sufficient).
+
+# Interpretations of $R^2$
+
+In this question, we'll consider how $R^2$ might be misinterpreted. 
+
+## (a) Randomly choose $n = 100$ $x$ values between zero and one. Then, simulate $Y$ data such that $Y_i = 1 + 2X_i + \varepsilon_i$, where $\varepsilon_i \sim N(0,25)$. Fit a linear regression model in R and report $R^2$.
+
+
+```{R}
+n = 100; x = runif(n,0,1); y = 1 + 2*x + rnorm(n, 0, 5)
+lmod = lm(y~x); summary(lmod)
+```
+
+
+## (b) True or False: A simple linear regression model may be correct (i.e., it represents the way that the data were generated) but $R^2 \approx 0$. 
+
+True. Above, $R^2 = 0.01366$, but the model is correct, i.e., the true relationship between $X$ and $Y$ is linear.
+
+## (c) Now use the values from part (a), and let $y = x^2$. So, $y$ and $x$ are perfectly related, but not linearly. Fit a simple linear regression model in R and report $R^2$. 
+
+
+```{R}
+y2 = x^2
+lmod2 = lm(y2 ~ x)
+summary(lmod2)
+plot(x,y2); abline(lmod2)
+```
+
+
+## (d) True or False: A simple linear regression model may be incorrect (i.e., it does not represent the way that the data were generated) but $R^2 \approx 1$. 
+
+True. In part (c), the model is clearly incorrect, but $R^2$ is close to one.

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Osita Onyejekwe">
+
+<title>Exam1 Review - Solutions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="STAT5010_Exam1ReviewCoding-Solutions_files/libs/clipboard/clipboard.min.js"></script>
+<script src="STAT5010_Exam1ReviewCoding-Solutions_files/libs/quarto-html/quarto.js"></script>
+<script src="STAT5010_Exam1ReviewCoding-Solutions_files/libs/quarto-html/popper.min.js"></script>
+<script src="STAT5010_Exam1ReviewCoding-Solutions_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="STAT5010_Exam1ReviewCoding-Solutions_files/libs/quarto-html/anchor.min.js"></script>
+<link href="STAT5010_Exam1ReviewCoding-Solutions_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="STAT5010_Exam1ReviewCoding-Solutions_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="STAT5010_Exam1ReviewCoding-Solutions_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="STAT5010_Exam1ReviewCoding-Solutions_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="STAT5010_Exam1ReviewCoding-Solutions_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-analysis-and-interpretation" id="toc-data-analysis-and-interpretation" class="nav-link active" data-scroll-target="#data-analysis-and-interpretation">Data Analysis and interpretation</a>
+  <ul class="collapse">
+  <li><a href="#a-perform-simple-linear-regression-using-energy-consumption-as-the-response-and-area-as-the-predictor.-report-a-summary-of-your-model." id="toc-a-perform-simple-linear-regression-using-energy-consumption-as-the-response-and-area-as-the-predictor.-report-a-summary-of-your-model." class="nav-link" data-scroll-target="#a-perform-simple-linear-regression-using-energy-consumption-as-the-response-and-area-as-the-predictor.-report-a-summary-of-your-model.">(a) Perform simple linear regression using energy consumption as the response and area as the predictor. Report a summary of your model.</a></li>
+  <li><a href="#b-is-the-slope-coefficient-significant-at-the-α-0.05-level" id="toc-b-is-the-slope-coefficient-significant-at-the-α-0.05-level" class="nav-link" data-scroll-target="#b-is-the-slope-coefficient-significant-at-the-α-0.05-level">(b) Is the slope coefficient significant at the α = 0.05 level?</a></li>
+  <li><a href="#c-interpret-the-slope-coefficient-in-terms-of-the-data." id="toc-c-interpret-the-slope-coefficient-in-terms-of-the-data." class="nav-link" data-scroll-target="#c-interpret-the-slope-coefficient-in-terms-of-the-data.">(c) Interpret the slope coefficient in terms of the data.</a></li>
+  <li><a href="#d-what-percentage-of-the-variability-in-energy-consumption-is-explained-by-area" id="toc-d-what-percentage-of-the-variability-in-energy-consumption-is-explained-by-area" class="nav-link" data-scroll-target="#d-what-percentage-of-the-variability-in-energy-consumption-is-explained-by-area">(d) What percentage of the variability in energy consumption is explained by area?</a></li>
+  <li><a href="#e-now-perform-multiple-linear-regression-with-number-of-guest-rooms-area-and-age-as-predictors-same-response.-report-a-summary-of-your-model.-interpret-the-coefficient-associated-with-area.-is-it-different-from-the-slr-model" id="toc-e-now-perform-multiple-linear-regression-with-number-of-guest-rooms-area-and-age-as-predictors-same-response.-report-a-summary-of-your-model.-interpret-the-coefficient-associated-with-area.-is-it-different-from-the-slr-model" class="nav-link" data-scroll-target="#e-now-perform-multiple-linear-regression-with-number-of-guest-rooms-area-and-age-as-predictors-same-response.-report-a-summary-of-your-model.-interpret-the-coefficient-associated-with-area.-is-it-different-from-the-slr-model">(e) Now perform multiple linear regression with number of guest rooms, area, and age as predictors (same response). Report a summary of your model. Interpret the coefficient associated with area. Is it different from the SLR model?</a></li>
+  <li><a href="#f-plot-the-residuals-against-the-fitted-values-for-the-mlr-model.-does-this-plot-suggest-that-any-regression-assumptions-are-violated" id="toc-f-plot-the-residuals-against-the-fitted-values-for-the-mlr-model.-does-this-plot-suggest-that-any-regression-assumptions-are-violated" class="nav-link" data-scroll-target="#f-plot-the-residuals-against-the-fitted-values-for-the-mlr-model.-does-this-plot-suggest-that-any-regression-assumptions-are-violated">(f) Plot the residuals against the fitted values (for the MLR model). Does this plot suggest that any regression assumptions are violated?</a></li>
+  <li><a href="#g-interpret-the-coefficient-associated-with-the-number-of-guest-rooms.-is-there-anything-that-seems-odd-about-this-interpretation" id="toc-g-interpret-the-coefficient-associated-with-the-number-of-guest-rooms.-is-there-anything-that-seems-odd-about-this-interpretation" class="nav-link" data-scroll-target="#g-interpret-the-coefficient-associated-with-the-number-of-guest-rooms.-is-there-anything-that-seems-odd-about-this-interpretation">(g) Interpret the coefficient associated with the number of guest rooms. Is there anything that seems odd about this interpretation?</a></li>
+  <li><a href="#h-perform-a-formal-test-to-decide-whether-the-mlr-model-is-necessary-or-whether-the-slr-model-will-do.-interpret-the-results." id="toc-h-perform-a-formal-test-to-decide-whether-the-mlr-model-is-necessary-or-whether-the-slr-model-will-do.-interpret-the-results." class="nav-link" data-scroll-target="#h-perform-a-formal-test-to-decide-whether-the-mlr-model-is-necessary-or-whether-the-slr-model-will-do.-interpret-the-results.">(h) Perform a formal test to decide whether the MLR model is necessary, or whether the SLR model will do. Interpret the results.</a></li>
+  </ul></li>
+  <li><a href="#interpretations-of-r2" id="toc-interpretations-of-r2" class="nav-link" data-scroll-target="#interpretations-of-r2">Interpretations of <span class="math inline">\(R^2\)</span></a>
+  <ul class="collapse">
+  <li><a href="#a-randomly-choose-n-100-x-values-between-zero-and-one.-then-simulate-y-data-such-that-y_i-1-2x_i-varepsilon_i-where-varepsilon_i-sim-n025.-fit-a-linear-regression-model-in-r-and-report-r2." id="toc-a-randomly-choose-n-100-x-values-between-zero-and-one.-then-simulate-y-data-such-that-y_i-1-2x_i-varepsilon_i-where-varepsilon_i-sim-n025.-fit-a-linear-regression-model-in-r-and-report-r2." class="nav-link" data-scroll-target="#a-randomly-choose-n-100-x-values-between-zero-and-one.-then-simulate-y-data-such-that-y_i-1-2x_i-varepsilon_i-where-varepsilon_i-sim-n025.-fit-a-linear-regression-model-in-r-and-report-r2.">(a) Randomly choose <span class="math inline">\(n = 100\)</span> <span class="math inline">\(x\)</span> values between zero and one. Then, simulate <span class="math inline">\(Y\)</span> data such that <span class="math inline">\(Y_i = 1 + 2X_i + \varepsilon_i\)</span>, where <span class="math inline">\(\varepsilon_i \sim N(0,25)\)</span>. Fit a linear regression model in R and report <span class="math inline">\(R^2\)</span>.</a></li>
+  <li><a href="#b-true-or-false-a-simple-linear-regression-model-may-be-correct-i.e.-it-represents-the-way-that-the-data-were-generated-but-r2-approx-0." id="toc-b-true-or-false-a-simple-linear-regression-model-may-be-correct-i.e.-it-represents-the-way-that-the-data-were-generated-but-r2-approx-0." class="nav-link" data-scroll-target="#b-true-or-false-a-simple-linear-regression-model-may-be-correct-i.e.-it-represents-the-way-that-the-data-were-generated-but-r2-approx-0.">(b) True or False: A simple linear regression model may be correct (i.e., it represents the way that the data were generated) but <span class="math inline">\(R^2 \approx 0\)</span>.</a></li>
+  <li><a href="#c-now-use-the-values-from-part-a-and-let-y-x2.-so-y-and-x-are-perfectly-related-but-not-linearly.-fit-a-simple-linear-regression-model-in-r-and-report-r2." id="toc-c-now-use-the-values-from-part-a-and-let-y-x2.-so-y-and-x-are-perfectly-related-but-not-linearly.-fit-a-simple-linear-regression-model-in-r-and-report-r2." class="nav-link" data-scroll-target="#c-now-use-the-values-from-part-a-and-let-y-x2.-so-y-and-x-are-perfectly-related-but-not-linearly.-fit-a-simple-linear-regression-model-in-r-and-report-r2.">(c) Now use the values from part (a), and let <span class="math inline">\(y = x^2\)</span>. So, <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> are perfectly related, but not linearly. Fit a simple linear regression model in R and report <span class="math inline">\(R^2\)</span>.</a></li>
+  <li><a href="#d-true-or-false-a-simple-linear-regression-model-may-be-incorrect-i.e.-it-does-not-represent-the-way-that-the-data-were-generated-but-r2-approx-1." id="toc-d-true-or-false-a-simple-linear-regression-model-may-be-incorrect-i.e.-it-does-not-represent-the-way-that-the-data-were-generated-but-r2-approx-1." class="nav-link" data-scroll-target="#d-true-or-false-a-simple-linear-regression-model-may-be-incorrect-i.e.-it-does-not-represent-the-way-that-the-data-were-generated-but-r2-approx-1.">(d) True or False: A simple linear regression model may be incorrect (i.e., it does not represent the way that the data were generated) but <span class="math inline">\(R^2 \approx 1\)</span>.</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Exam1 Review - Solutions</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr.&nbsp;Osita Onyejekwe </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="data-analysis-and-interpretation" class="level1">
+<h1>Data Analysis and interpretation</h1>
+<p>Load the hotel data into R. Here’s a description of the data:</p>
+<p>Dataset: hotel_energy.csv</p>
+<p>Source: Y. Xin, S. Lu, N. Zhu, W. Wu (2012). “Energy Consumption Quota of Four and Five Star Luxury Hotels Buildings in Hainan Province, China,” Energy and Buildings, Vol. 45, pp.&nbsp;250-256.</p>
+<p>Description: Energy Consumption and attributes for 19 Luxury Hotels.</p>
+<p><strong>Variables/Labels:</strong></p>
+<ul>
+<li>Hotel Id (<code>hotel</code>)</li>
+<li>Energy Consumption in Kilowatt-hours</li>
+<li>Area in square meters (<code>area</code>)</li>
+<li>Age in years (<code>age</code>)</li>
+<li>Number of guestrooms (<code>numrooms</code>)</li>
+<li>Occupancy Rate in percent (<code>occrate</code>)</li>
+<li>Effective number of guestrooms (<code>effrooms</code> = <code>numrooms</code>*<code>occrate</code>/100)</li>
+</ul>
+<section id="a-perform-simple-linear-regression-using-energy-consumption-as-the-response-and-area-as-the-predictor.-report-a-summary-of-your-model." class="level2">
+<h2 class="anchored" data-anchor-id="a-perform-simple-linear-regression-using-energy-consumption-as-the-response-and-area-as-the-predictor.-report-a-summary-of-your-model.">(a) Perform simple linear regression using energy consumption as the response and area as the predictor. Report a summary of your model.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>hotel <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"https://www.colorado.edu/amath/sites/default/files/attached-files/hotel_0.txt"</span>, <span class="at">sep =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(hotel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  hotel enrgcons   area age numrooms occrate effrooms
+1     1  1953916  43000   6      420      NA   136.92
+2     2  1045555  19979  16      215      NA   135.45
+3     3  4245313  46529   7      273      NA   177.59
+4     4  2126199  20962   6      222      NA   156.51
+5     5  2785958  24212   5      474      NA   330.38
+6     6 13833968 112200   4      787      NA   385.39</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lmod <span class="ot">=</span> <span class="fu">lm</span>(enrgcons <span class="sc">~</span> area, <span class="at">data =</span> hotel)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = enrgcons ~ area, data = hotel)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-4355890  -872098     1538  1305292  3148838 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -538035.42 1085087.38  -0.496    0.626    
+area            159.25      20.96   7.599 7.29e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2102000 on 17 degrees of freedom
+Multiple R-squared:  0.7726,    Adjusted R-squared:  0.7592 
+F-statistic: 57.75 on 1 and 17 DF,  p-value: 7.294e-07</code></pre>
+</div>
+</div>
+</section>
+<section id="b-is-the-slope-coefficient-significant-at-the-α-0.05-level" class="level2">
+<h2 class="anchored" data-anchor-id="b-is-the-slope-coefficient-significant-at-the-α-0.05-level">(b) Is the slope coefficient significant at the α = 0.05 level?</h2>
+<p>The p-value for the t-test associated with the slope coefficient is smaller than any reasonable <span class="math inline">\(\alpha\)</span>. So, yes, the slope term is statistically significant.</p>
+</section>
+<section id="c-interpret-the-slope-coefficient-in-terms-of-the-data." class="level2">
+<h2 class="anchored" data-anchor-id="c-interpret-the-slope-coefficient-in-terms-of-the-data.">(c) Interpret the slope coefficient in terms of the data.</h2>
+<p>Assuming that the model is correct, increasing a hotel’s area by one square meter increases its energy consumption, on average, by 159.25 Kilowatt-hours.</p>
+</section>
+<section id="d-what-percentage-of-the-variability-in-energy-consumption-is-explained-by-area" class="level2">
+<h2 class="anchored" data-anchor-id="d-what-percentage-of-the-variability-in-energy-consumption-is-explained-by-area">(d) What percentage of the variability in energy consumption is explained by area?</h2>
+<p>Assuming the model is correct, about 77% of the variability in energy consumption is explained by area, assuming the model is correct. (This is the coefficient of determination, or, <span class="math inline">\(R^2\)</span>).</p>
+</section>
+<section id="e-now-perform-multiple-linear-regression-with-number-of-guest-rooms-area-and-age-as-predictors-same-response.-report-a-summary-of-your-model.-interpret-the-coefficient-associated-with-area.-is-it-different-from-the-slr-model" class="level2">
+<h2 class="anchored" data-anchor-id="e-now-perform-multiple-linear-regression-with-number-of-guest-rooms-area-and-age-as-predictors-same-response.-report-a-summary-of-your-model.-interpret-the-coefficient-associated-with-area.-is-it-different-from-the-slr-model">(e) Now perform multiple linear regression with number of guest rooms, area, and age as predictors (same response). Report a summary of your model. Interpret the coefficient associated with area. Is it different from the SLR model?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lmod2 <span class="ot">=</span> <span class="fu">lm</span>(enrgcons <span class="sc">~</span> area <span class="sc">+</span> numrooms <span class="sc">+</span> age, <span class="at">data =</span> hotel)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = enrgcons ~ area + numrooms + age, data = hotel)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-3767734  -638009   492081   949224  3214282 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -828513.80 1958786.74  -0.423 0.678316    
+area            196.19      40.34   4.863 0.000207 ***
+numrooms      -6087.90    6500.87  -0.936 0.363863    
+age          111834.20  133440.71   0.838 0.415140    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2112000 on 15 degrees of freedom
+Multiple R-squared:  0.7974,    Adjusted R-squared:  0.7569 
+F-statistic: 19.68 on 3 and 15 DF,  p-value: 1.853e-05</code></pre>
+</div>
+</div>
+<p>When adjusting for age, and the number of rooms, increasing a hotel’s area by one square meter increases its energy consumption, on average, by 196.19 Kilowatt-hours.</p>
+</section>
+<section id="f-plot-the-residuals-against-the-fitted-values-for-the-mlr-model.-does-this-plot-suggest-that-any-regression-assumptions-are-violated" class="level2">
+<h2 class="anchored" data-anchor-id="f-plot-the-residuals-against-the-fitted-values-for-the-mlr-model.-does-this-plot-suggest-that-any-regression-assumptions-are-violated">(f) Plot the residuals against the fitted values (for the MLR model). Does this plot suggest that any regression assumptions are violated?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lmod2<span class="sc">$</span>fitted, lmod2<span class="sc">$</span>resid); <span class="fu">abline</span>(<span class="dv">0</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_Exam1ReviewCoding-Solutions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)); <span class="fu">plot</span>(lmod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_Exam1ReviewCoding-Solutions_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It’s a bit hard to tell just from this plot whether any assumptions are violated. There doesn’t seem to be any clear curvature to the plot (which would indicate a missing predictor or a violation of linearity) or some sort of “trumpet” pattern, which would indicate a violation of the constant variance assumption.</p>
+</section>
+<section id="g-interpret-the-coefficient-associated-with-the-number-of-guest-rooms.-is-there-anything-that-seems-odd-about-this-interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="g-interpret-the-coefficient-associated-with-the-number-of-guest-rooms.-is-there-anything-that-seems-odd-about-this-interpretation">(g) Interpret the coefficient associated with the number of guest rooms. Is there anything that seems odd about this interpretation?</h2>
+<p>The energy consumption, on average, goes <em>down</em> by 6087.90 Kwh, when adding a room, for a constant area and age. This might seem odd at first, but since the regression adjusts for area, it makes some sense: more rooms in the same area might make for a more efficient use of energy. Also, note that the p-value associated with this coefficient is large, and so we might be justified in leavning this predictor out of the model.</p>
+</section>
+<section id="h-perform-a-formal-test-to-decide-whether-the-mlr-model-is-necessary-or-whether-the-slr-model-will-do.-interpret-the-results." class="level2">
+<h2 class="anchored" data-anchor-id="h-perform-a-formal-test-to-decide-whether-the-mlr-model-is-necessary-or-whether-the-slr-model-will-do.-interpret-the-results.">(h) Perform a formal test to decide whether the MLR model is necessary, or whether the SLR model will do. Interpret the results.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(lmod2, lmod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: enrgcons ~ area + numrooms + age
+Model 2: enrgcons ~ area
+  Res.Df        RSS Df   Sum of Sq      F Pr(&gt;F)
+1     15 6.6931e+13                             
+2     17 7.5129e+13 -2 -8.1987e+12 0.9187 0.4204</code></pre>
+</div>
+</div>
+<p>The F-test performed above suggests that the reduced model is sufficient (i.e., the p-value, 0.4203536, is high, and we can’t reject the null that the reduced model is sufficient).</p>
+</section>
+</section>
+<section id="interpretations-of-r2" class="level1">
+<h1>Interpretations of <span class="math inline">\(R^2\)</span></h1>
+<p>In this question, we’ll consider how <span class="math inline">\(R^2\)</span> might be misinterpreted.</p>
+<section id="a-randomly-choose-n-100-x-values-between-zero-and-one.-then-simulate-y-data-such-that-y_i-1-2x_i-varepsilon_i-where-varepsilon_i-sim-n025.-fit-a-linear-regression-model-in-r-and-report-r2." class="level2">
+<h2 class="anchored" data-anchor-id="a-randomly-choose-n-100-x-values-between-zero-and-one.-then-simulate-y-data-such-that-y_i-1-2x_i-varepsilon_i-where-varepsilon_i-sim-n025.-fit-a-linear-regression-model-in-r-and-report-r2.">(a) Randomly choose <span class="math inline">\(n = 100\)</span> <span class="math inline">\(x\)</span> values between zero and one. Then, simulate <span class="math inline">\(Y\)</span> data such that <span class="math inline">\(Y_i = 1 + 2X_i + \varepsilon_i\)</span>, where <span class="math inline">\(\varepsilon_i \sim N(0,25)\)</span>. Fit a linear regression model in R and report <span class="math inline">\(R^2\)</span>.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">100</span>; x <span class="ot">=</span> <span class="fu">runif</span>(n,<span class="dv">0</span>,<span class="dv">1</span>); y <span class="ot">=</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>lmod <span class="ot">=</span> <span class="fu">lm</span>(y<span class="sc">~</span>x); <span class="fu">summary</span>(lmod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-13.1943  -2.3569  -0.0995   2.5025   9.9083 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)  -0.4858     0.9374  -0.518   0.6054   
+x             4.4518     1.5815   2.815   0.0059 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.295 on 98 degrees of freedom
+Multiple R-squared:  0.0748,    Adjusted R-squared:  0.06536 
+F-statistic: 7.923 on 1 and 98 DF,  p-value: 0.005899</code></pre>
+</div>
+</div>
+</section>
+<section id="b-true-or-false-a-simple-linear-regression-model-may-be-correct-i.e.-it-represents-the-way-that-the-data-were-generated-but-r2-approx-0." class="level2">
+<h2 class="anchored" data-anchor-id="b-true-or-false-a-simple-linear-regression-model-may-be-correct-i.e.-it-represents-the-way-that-the-data-were-generated-but-r2-approx-0.">(b) True or False: A simple linear regression model may be correct (i.e., it represents the way that the data were generated) but <span class="math inline">\(R^2 \approx 0\)</span>.</h2>
+<p>True. Above, <span class="math inline">\(R^2 = 0.01366\)</span>, but the model is correct, i.e., the true relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is linear.</p>
+</section>
+<section id="c-now-use-the-values-from-part-a-and-let-y-x2.-so-y-and-x-are-perfectly-related-but-not-linearly.-fit-a-simple-linear-regression-model-in-r-and-report-r2." class="level2">
+<h2 class="anchored" data-anchor-id="c-now-use-the-values-from-part-a-and-let-y-x2.-so-y-and-x-are-perfectly-related-but-not-linearly.-fit-a-simple-linear-regression-model-in-r-and-report-r2.">(c) Now use the values from part (a), and let <span class="math inline">\(y = x^2\)</span>. So, <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> are perfectly related, but not linearly. Fit a simple linear regression model in R and report <span class="math inline">\(R^2\)</span>.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>y2 <span class="ot">=</span> x<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>lmod2 <span class="ot">=</span> <span class="fu">lm</span>(y2 <span class="sc">~</span> x)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y2 ~ x)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.07372 -0.05127 -0.03093  0.05064  0.19594 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.20309    0.01520  -13.36   &lt;2e-16 ***
+x            1.05230    0.02565   41.03   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.06965 on 98 degrees of freedom
+Multiple R-squared:  0.945, Adjusted R-squared:  0.9444 
+F-statistic:  1683 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x,y2); <span class="fu">abline</span>(lmod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_Exam1ReviewCoding-Solutions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="d-true-or-false-a-simple-linear-regression-model-may-be-incorrect-i.e.-it-does-not-represent-the-way-that-the-data-were-generated-but-r2-approx-1." class="level2">
+<h2 class="anchored" data-anchor-id="d-true-or-false-a-simple-linear-regression-model-may-be-incorrect-i.e.-it-does-not-represent-the-way-that-the-data-were-generated-but-r2-approx-1.">(d) True or False: A simple linear regression model may be incorrect (i.e., it does not represent the way that the data were generated) but <span class="math inline">\(R^2 \approx 1\)</span>.</h2>
+<p>True. In part (c), the model is clearly incorrect, but <span class="math inline">\(R^2\)</span> is close to one.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
