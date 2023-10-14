@@ -123,6 +123,10 @@ class OneLayer_OneOutput_FF():
     def grad_desc(self,y_hat,y,X):
         pass
 
+    # Back Prop
+    def BackPropagation(self):
+        pass
+
     # Visualizations (confusion matrix & Lce plot)==================
     # Confusion matrix-------------------------------------------------------------
     def ConfusionMatrix(self, y_hat,y):
@@ -148,47 +152,49 @@ class OneLayer_OneOutput_FF():
         ax.yaxis.set_ticklabels(["0", "1"])
     # Plot of Lce vs. Epochs--------------------------------------------------------
     def plot_LCE(self):
-        plt.figure()
-        plt.plot(np.arange(0,len(self.Lce_list)),self.Lce_list,'-',label="LR = {}".format(self.LR))
-        plt.xlabel("epochs")
-        plt.ylabel('Loss')
-        plt.title("Loss over epochs")
-        plt.legend()
+        # plt.figure()
+        # plt.plot(np.arange(0,len(self.Lce_list)),self.Lce_list,'-',label="LR = {}".format(self.LR))
+        # plt.xlabel("epochs")
+        # plt.ylabel('Loss')
+        # plt.title("Loss over epochs")
+        # plt.legend()
+        pass
 
     # Run multiple iterations (with specified epochs, etc.)========================================================
     def run_model(self, print_all_params = True):
         
-        # Save LCE values (for plotting)------------------------------------
-        self.Lce_list = []
-        #-------------------------------------------------------------------
+        # # Save LCE values (for plotting)------------------------------------
+        # self.Lce_list = []
+        # #-------------------------------------------------------------------
         
-        for i in range(self.epochs):
-            # Linear eq: apply parameters to data---------------------------
-            self.z = self.lin_eq(X=self.X,w=self.w,b=self.b)
+        # for i in range(self.epochs):
+        #     # Linear eq: apply parameters to data---------------------------
+        #     self.z = self.lin_eq(X=self.X,w=self.w,b=self.b)
             
-            # Sigmoid activation--------------------------------------------
-            self.y_hat = self.Sigmoid(z=self.z)
+        #     # Sigmoid activation--------------------------------------------
+        #     self.y_hat = self.Sigmoid(z=self.z)
             
-            # Calculate loss------------------------------------------------
-            loss = self.LCE(y_hat=self.y_hat,y=self.y)
-            self.Lce_list.append(loss)
+        #     # Calculate loss------------------------------------------------
+        #     loss = self.LCE(y_hat=self.y_hat,y=self.y)
+        #     self.Lce_list.append(loss)
            
-            # print info to check if doing as expected (if wanted)----------
-            if print_all_params:
-                            print("Epoch",i)
-                            print("w vector: \n",self.w)
-                            print("b = ",self.b)
-                            print("y^: \n",self.y_hat)
-                            print("LCE (Loss) = ", loss)
+        #     # print info to check if doing as expected (if wanted)----------
+        #     if print_all_params:
+        #                     print("Epoch",i)
+        #                     print("w vector: \n",self.w)
+        #                     print("b = ",self.b)
+        #                     print("y^: \n",self.y_hat)
+        #                     print("LCE (Loss) = ", loss)
             
-            # Update params with gradient descent---------------------------
-            dL_dw,dL_db = self.grad_desc(y_hat=self.y_hat,y=self.y,X=self.X)
-            # p_new = p_prev - (LR)gradient(p_prev)
-            self.w = self.w - self.LR*dL_dw
-            self.b = self.b - self.LR*dL_db
-        print("finished running all epochs")
+        #     # Update params with gradient descent---------------------------
+        #     dL_dw,dL_db = self.grad_desc(y_hat=self.y_hat,y=self.y,X=self.X)
+        #     # p_new = p_prev - (LR)gradient(p_prev)
+        #     self.w = self.w - self.LR*dL_dw
+        #     self.b = self.b - self.LR*dL_db
+        # print("finished running all epochs")
 
-        # Visualizations
-        self.ConfusionMatrix(y_hat=self.y_hat,y=self.y)
-        self.plot_LCE()
+        # # Visualizations
+        # self.ConfusionMatrix(y_hat=self.y_hat,y=self.y)
+        # self.plot_LCE()
+        pass
 
