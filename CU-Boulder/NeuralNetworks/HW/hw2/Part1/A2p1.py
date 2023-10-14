@@ -191,4 +191,4 @@ class OneLayer_OneOutput_FF():
         # Visualizations
         self.ConfusionMatrix(y_hat=self.y_hat,y=self.y)
         self.plot_LCE()
-# %%
+
