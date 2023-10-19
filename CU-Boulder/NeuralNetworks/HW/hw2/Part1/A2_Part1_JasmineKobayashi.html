@@ -1602,6 +1602,69 @@ h_{n1} &amp; h_{n2} &amp; h_{n3} &amp; h_{n4} \\
 </section>
 <section id="fracpartial-lpartial-b" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-b"><span class="math inline">\(\frac{\partial L}{\partial B}\)</span></h3>
+<p><span class="math display">\[\begin{equation*}
+\mathbf{B} =
+\begin{bmatrix}
+b_1 \\
+\vdots \\
+b_n
+\end{bmatrix}
+\end{equation*}\]</span></p>
+<p>Starting small again,</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial b_i} &amp;= \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} \cdot \frac{\partial z^{(2)}_i}{\partial h_{ik}} \cdot \frac{\partial h_{ik}}{\partial z_{ik}^{(1)}} \cdot \frac{\partial z_{ik}^{(1)}}{\partial b_i}
+\end{align*}\]</span></p>
+<p>Again, since we’re already familiar with <span class="math inline">\(\frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i}\)</span>, we will focus on the last few partial derivatives.</p>
+<p>Starting with <span class="math inline">\(\frac{\partial z^{(2)}_i}{\partial h_{ik}}\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+z_{i}^{(2)} &amp;= \displaystyle \sum_k^4 h_{ik}w_k^{(2)} + c_i \\
+\Rightarrow
+\frac{\partial z^{(2)}_i}{\partial h_{ik}} &amp;= \sum_k^4 (1)w_k^{(2)} + 0 \\
+&amp;= \sum_k^4 w_k^{(2)}
+\end{align*}\]</span></p>
+<p>(I don’t think I can put this in itself into a matrix, but I can start to see this can utilize a dot product (matrix multiplication))</p>
+<p>Then <span class="math inline">\(\frac{\partial h_{ik}}{\partial z_{ik}}\)</span>,</p>
+<p><span class="math display">\[\begin{align*}
+h_{ik} &amp;= S(z_{ik}^{(1)}) \\
+\Rightarrow
+\frac{\partial h_{ik}}{\partial z_{ik}^{(1)}} &amp;= S(z_{ik}^{(1)})(1 - S(z_{ik}^{(1)})) \\
+&amp;= h_{ik}(1 - h_{ik}) \\
+&amp;= h_{ik} - (h_{ik})^2 \\
+\end{align*}\]</span> We can put this in matrix form again, and perhaps call it <span class="math inline">\(\Omega\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+\Rightarrow
+\frac{\partial H_1}{\partial Z^{(1)}} &amp;= H_1 - [H_1 \ast H_1] \\
+&amp;= \Omega
+\end{align*}\]</span></p>
+<p>Then finally, <span class="math inline">\(\frac{\partial z_{ik}^{(1)}}{\partial b_i}\)</span>,</p>
+<p><span class="math display">\[\begin{align*}
+z_{i,k}^{(1)} &amp;= \sum_j^3 x_{i,j}w_{j,k} + b_i \\
+\Rightarrow
+\frac{\partial z_{ik}^{(1)}}{\partial b_i} &amp;= 0 + (1)
+\end{align*}\]</span></p>
+<p>I can summarize this as a vector of ones again.</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial Z^{(1)}}{\partial B} &amp;=
+\begin{bmatrix}
+1 \\
+\vdots \\
+1
+\end{bmatrix} \\
+&amp;= \vec{1}_n
+\end{align*}\]</span></p>
+<p>Altogether, we get something like this:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial b_i} &amp;= \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} \cdot \frac{\partial z^{(2)}_i}{\partial h_{ik}} \cdot \frac{\partial h_{ik}}{\partial z_{ik}^{(1)}} \cdot \frac{\partial z_{ik}^{(1)}}{\partial b_i} \\
+&amp;= [\hat{y}_i - y_i][\hat{y}_i(1- \hat{y}_i)](\displaystyle \sum_k^4 w_k^{(2)}) [h_{ik} - (h_{ik})^2][1]
+\end{align*}\]</span></p>
+<p>As mentioned before, <span class="math inline">\(E \ast \Phi\)</span> has shape (<span class="math inline">\(n \times 1\)</span>), <span class="math inline">\(\Omega\)</span> has the same shape as <span class="math inline">\(H_1\)</span>, (<span class="math inline">\(n \times 4\)</span>). And we can use a dot product (matrix multiplication) with <span class="math inline">\(W^{(2)}\)</span> to get <span class="math inline">\(\sum w_k{(2)}\)</span>, and <span class="math inline">\(W^{(2)}\)</span> has shape (<span class="math inline">\(4 \times 1\)</span>). We want the final matrix of the partial derivative (<span class="math inline">\(\frac{\partial L}{\partial B}\)</span>) to match the shape of <span class="math inline">\(\mathbf{B}\)</span>, (<span class="math inline">\(n \times 1\)</span>) (or the transpose (<span class="math inline">\(1 \times n\)</span>)).</p>
+<p>Thus we can build the matrix/vector formula as such:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial B} &amp;= \underbrace{\frac{\partial L}{\partial \mathbf{\hat{y}}} \cdot \frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}}}_{E \ast \Phi} \cdot \underbrace{\frac{\partial Z^{(2)}}{\partial H_1}}_{W^{(2)}} \cdot \underbrace{\frac{\partial H_1}{\partial Z^{(1)}}}_{\Omega} \cdot \underbrace{\frac{\partial Z^{(1)}}{\partial B}}_{\vec{1}_n} \\
+\Rightarrow
+&amp;= [E \ast \Phi] \ast [\Omega \odot W^{(2)}] \ast \vec{1}_n \\
+&amp;= [E \ast \Phi] \ast [\Omega \odot W^{(2)}]
+\end{align*}\]</span></p>
 </section>
 <section id="fracpartial-lpartial-w1" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></h3>
