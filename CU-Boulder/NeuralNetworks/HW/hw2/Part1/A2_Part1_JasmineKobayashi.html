@@ -119,7 +119,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#writing-out-the-derivatives-by-hand." id="toc-writing-out-the-derivatives-by-hand." class="nav-link" data-scroll-target="#writing-out-the-derivatives-by-hand.">4) Writing out the derivatives by hand.</a>
   <ul class="collapse">
-  <li><a href="#jk-answer" id="toc-jk-answer" class="nav-link" data-scroll-target="#jk-answer">JK answer:</a></li>
+  <li><a href="#jk-answer" id="toc-jk-answer" class="nav-link" data-scroll-target="#jk-answer">JK answer:</a>
+  <ul class="collapse">
+  <li><a href="#fracpartial-lpartial-c" id="toc-fracpartial-lpartial-c" class="nav-link" data-scroll-target="#fracpartial-lpartial-c"><span class="math inline">\(\frac{\partial L}{\partial C}\)</span></a></li>
+  <li><a href="#fracpartial-lpartial-w1" id="toc-fracpartial-lpartial-w1" class="nav-link" data-scroll-target="#fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#adding-back-propagation-to-your-code-so-that-mathbfw_1-mathbfb-and-c-are-updated." id="toc-adding-back-propagation-to-your-code-so-that-mathbfw_1-mathbfb-and-c-are-updated." class="nav-link" data-scroll-target="#adding-back-propagation-to-your-code-so-that-mathbfw_1-mathbfb-and-c-are-updated.">5) Adding Back Propagation to your code so that <span class="math inline">\(\mathbf{W_1}\)</span>, <span class="math inline">\(\mathbf{B}\)</span>, and <span class="math inline">\(C\)</span> are updated.</a></li>
   <li><a href="#test-model" id="toc-test-model" class="nav-link" data-scroll-target="#test-model">6) Test model</a></li>
@@ -323,7 +327,7 @@ c_n
 <section id="z_2" class="level3">
 <h3 class="anchored" data-anchor-id="z_2"><span class="math inline">\(Z_2\)</span></h3>
 <p><span class="math display">\[\begin{align*}
-Z_2 &amp;= H_1 W^{(2)} + C \\
+Z^{(2)} &amp;= H_1 W^{(2)} + C \\
 &amp;=
 \begin{bmatrix}
 h_{11} &amp; h_{12} &amp; h_{13} &amp; h_{14} \\
@@ -358,6 +362,10 @@ z_1^{(2)} \\
 \vdots \\
 z_n^{(2)}
 \end{bmatrix}
+\end{align*}\]</span></p>
+<p>Or in other words, each <span class="math inline">\(Z^{(2)}\)</span> element can be summarized as,</p>
+<p><span class="math display">\[\begin{align*}
+z_j^{(2)} = \sum_k^4 h_{j,k}w_k^{(2)} + c_j
 \end{align*}\]</span></p>
 </section>
 <section id="mathbfhaty" class="level3">
@@ -1205,13 +1213,175 @@ L  \frac{1}{n} \displaystyle \sum_i^n (\hat{y}_i - y_i)^2
 </section>
 <section id="writing-out-the-derivatives-by-hand." class="level1">
 <h1>4) Writing out the derivatives by hand.</h1>
-<p>For this part and in order to help you to code the back propagation, write out the derivatives for updating <span class="math inline">\(\mathbf{W_1}\)</span>, <span class="math inline">\(\mathbf{W_2}\)</span>, <span class="math inline">\(\mathbf{B}\)</span>, and <span class="math inline">\(C\)</span>.</p>
+<p>For this part and in order to help you to code the back propagation, write out the derivatives for updating <span class="math inline">\(\mathbf{W1}\)</span>, <span class="math inline">\(\mathbf{W2}\)</span>, <span class="math inline">\(\mathbf{B}\)</span>, and <span class="math inline">\(\mathbf{C}\)</span>.</p>
 <p>Please write them clearly :)</p>
-<p>You can do this “matrix style” - so for example, <span class="math inline">\(\frac{\partial L}{\partial \mathbf{W_1}}\)</span>, or you can write them out individually, such as <span class="math inline">\(\frac{\partial L}{dw_{11}}\)</span>, <span class="math inline">\(\frac{\partial L}{\partial w_{12}}\)</span>, etc…</p>
+<p>You can do this “matrix style” - so for example, <span class="math inline">\(\frac{\partial L}{\partial \mathbf{W1}}\)</span>, or you can write them out individually, such as <span class="math inline">\(\frac{\partial L}{dw_{11}}\)</span>, <span class="math inline">\(\frac{\partial L}{\partial w_{12}}\)</span>, etc…</p>
 <p>Either way, show all your work and illustrate how the matrices (such as <span class="math inline">\(\mathbf{X}\)</span>, <span class="math inline">\(\mathbf{W_1}\)</span>, <span class="math inline">\(\mathbf{W_2}\)</span>, etc. etc.) will all fit together to create the final derivative.</p>
 <p><strong>Hints:</strong> There are many examples on the PowerPoints. We reviewed this in class. You can also see examples of this in my code examples which are all here: <a href="https://gatesboltonanalytics.com/?page_id=680">Gates Bolton Analytics - Neural Networks Page</a></p>
 <section id="jk-answer" class="level2">
 <h2 class="anchored" data-anchor-id="jk-answer">JK answer:</h2>
+<p>Parameters we want to update via back propagation (and gradient descent):</p>
+<span class="math display">\[\begin{aligned}
+\begin{array}{ccc}
+\hline
+\text{Parameter} &amp; \text{Matrix/Vector form} &amp; \text{Shape} \\
+\hline
+\\
+
+W^{(1)} &amp;
+\begin{bmatrix}
+w_{11} &amp; w_{12} &amp; w_{13} &amp; w_{14} \\
+w_{21} &amp; w_{22} &amp; w_{23} &amp; w_{24} \\
+w_{31} &amp; w_{32} &amp; w_{33} &amp; w_{34}
+\end{bmatrix}
+&amp;
+[3 \times 4]\\
+
+\\
+\hline
+\\
+
+\mathbf{B} &amp;
+\begin{bmatrix}
+b_1 \\
+\vdots \\
+b_n
+\end{bmatrix}
+&amp;
+[n \times 1]\\
+
+\\
+\hline
+\\
+
+W^{(2)} &amp;
+\begin{bmatrix}
+w_1^{(2)} \\[6pt]
+w_2^{(2)} \\[6pt]
+w_3^{(2)} \\[6pt]
+w_4^{(2)} \\[6pt]
+\end{bmatrix}
+&amp;
+[4 \times 1]\\
+
+\\
+\hline
+\\
+
+\mathbf{C} &amp;
+\begin{bmatrix}
+c_1 \\
+\vdots \\
+c_n
+\end{bmatrix}
+&amp;
+[n \times 1]
+
+\end{array}
+\end{aligned}\]</span>
+<p>Other relevant formulas:</p>
+<span class="math display">\[\begin{aligned}
+\begin{array}{cccc}
+\hline
+\text{Variable (matrix/vector form)}&amp; \text{Shape} &amp; \text{Vector/Matrix Formula} &amp; \text{Element-wise formula} \\
+\hline \\
+
+L &amp; \text{(scalar)} &amp; \frac{1}{2}([\mathbf{\hat{y}} - \mathbf{y}]\cdot[\mathbf{\hat{y}} - \mathbf{y}]) &amp; \frac{1}{2} \displaystyle\sum_i^n (\hat{y}_i - y_i)^2 \\
+\\
+\hline \\
+
+\mathbf{\hat{y}} =
+\begin{bmatrix}
+\hat{y}_1 \\
+\vdots \\
+\hat{y}_n \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+S(z_1^{(2)}) \\
+\vdots \\
+S(z_n^{(2)})
+\end{bmatrix}
+&amp;
+[n \times 1]
+&amp;
+\mathbf{\hat{y}} = S(Z^{(2)})
+&amp; \hat{y}_i = S(z_i^{(2)}) \\
+\\
+\hline
+\\
+
+Z^{(2)} = \begin{bmatrix}
+z_1^{(2)} \\
+\vdots \\
+z_n^{(2)}
+\end{bmatrix}
+&amp;
+[n \times 4]
+&amp;
+Z^{(2)} = H_1 W^{(2)} + C
+&amp; z_j^{(2)} = \displaystyle \sum_k^4 h_{j,k}w_k^{(2)} + c_j \\
+
+\\
+\hline
+\\
+
+H_1 =
+\begin{bmatrix}
+h_{11} &amp; h_{12} &amp; h_{13} &amp; h_{14} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+h_{n1} &amp; h_{n2} &amp; h_{n3} &amp; h_{n4} \\
+\end{bmatrix}
+&amp;
+[n \times 4]
+&amp;
+H_1 = S(Z^{(1)})
+&amp;
+h_{j,k} = S(z_{j,k}^{(1)}) \\
+
+\\
+\hline
+\\
+
+Z^{(1)} =
+\begin{bmatrix}
+z_{11} &amp; z_{12} &amp; z_{13} &amp; z_{14} \\
+z_{21} &amp; z_{22} &amp; z_{23} &amp; z_{24} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+z_{n1} &amp; z_{n2} &amp; z_{n3} &amp; z_{n4}
+\end{bmatrix}
+&amp;
+[n \times 4]
+&amp;
+Z^{(1)} =  X\cdot W_1 + B
+&amp;
+z_{j,k} = \sum_i^3 x_{j,i}w_{i,k} + b_j \\
+
+\end{array}
+\end{aligned}\]</span>
+<p>Reminder the following are specific to the architecture of this assignment:</p>
+<ul>
+<li><span class="math inline">\(4\)</span> comes from the number of units in the hidden layer</li>
+<li><span class="math inline">\(3\)</span> comes from the number of inputs/columns in <span class="math inline">\(X\)</span></li>
+<li>(<span class="math inline">\(n\)</span> in this is supposed to be 6 for the dataset I created)</li>
+</ul>
+<section id="fracpartial-lpartial-c" class="level3">
+<h3 class="anchored" data-anchor-id="fracpartial-lpartial-c"><span class="math inline">\(\frac{\partial L}{\partial C}\)</span></h3>
+</section>
+<section id="fracpartial-lpartial-w1" class="level3">
+<h3 class="anchored" data-anchor-id="fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial W^{(1)}} &amp;=
+\begin{bmatrix}
+\frac{\partial L}{\partial w_{11}} &amp; \frac{\partial L}{\partial w_{12}} &amp; \frac{\partial L}{\partial w_{13}} &amp; \frac{\partial L}{\partial w_{14}} \\[6pt]
+\frac{\partial L}{\partial w_{21}} &amp; \frac{\partial L}{\partial w_{22}} &amp; \frac{\partial L}{\partial w_{23}} &amp; \frac{\partial L}{\partial w_{24}} \\[6pt]
+\frac{\partial L}{\partial w_{31}} &amp; \frac{\partial L}{\partial w_{32}} &amp; \frac{\partial L}{\partial w_{33}} &amp; \frac{\partial L}{\partial w_{34}}
+\end{bmatrix}
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial w_{11}} &amp;=
+\end{align*}\]</span></p>
+</section>
 </section>
 </section>
 <section id="adding-back-propagation-to-your-code-so-that-mathbfw_1-mathbfb-and-c-are-updated." class="level1">
