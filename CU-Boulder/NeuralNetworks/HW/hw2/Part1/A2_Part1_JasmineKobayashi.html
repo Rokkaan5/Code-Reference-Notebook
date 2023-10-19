@@ -1450,19 +1450,19 @@ z_i^{(2)} &amp;= \displaystyle \sum_k^4 h_{i,k}w_k^{(2)} + c_i \\
 \underbrace{S(z^{(2)}_i)(1-S(z^{(2)}_i))}_{\textstyle \frac{\partial \hat{y}_i}{\partial z^{(2)}_i}}
 \underbrace{(1)}_{\textstyle \frac{\partial z^{(2)}_i}{\partial c_i}} \\
 
-&amp;= [\hat{y}_i - y_i][\hat{y}_i(1- \hat{y}_i)]
+&amp;= [\hat{y}_i - y_i][\hat{y}_i(1- \hat{y}_i)][1]
 \end{align*}\]</span></p>
 <p>So I think I can summarize this derivative with the following vector notation:</p>
 <p><span class="math display">\[\begin{align*}
 \frac{\partial L}{\partial C} &amp;=
 \begin{bmatrix}
-(\hat{y}_1 - y_1)(\hat{y}_1 - (\hat{y}_1)^2) \\
+(\hat{y}_1 - y_1)(\hat{y}_1 - (\hat{y}_1)^2) (1)\\
 \vdots \\
-(\hat{y}_n - y_n)(\hat{y}_n - (\hat{y}_n)^2)
+(\hat{y}_n - y_n)(\hat{y}_n - (\hat{y}_n)^2) (1)
 \end{bmatrix}
 \end{align*}\]</span></p>
 <p>I can probably <em>technically</em> stop here, but I want to see if I can make things “simpler” notation to start thinking about how I can translate these into Python.</p>
-<p>I want to start by breaking these into their own matrices. For instance, maybe we can call the matrix/vector for <span class="math inline">\(\frac{\partial L}{\partial \hat{y}_i}\)</span>, <span class="math inline">\(\Phi\)</span> (can be anything though).</p>
+<p>I want to start by breaking these into their own matrices. For instance, maybe we can call the matrix/vector for <span class="math inline">\(\frac{\partial L}{\partial \hat{y}_i}\)</span>, <span class="math inline">\(E\)</span> (can be anything though).</p>
 <p><span class="math display">\[\begin{align*}
 \frac{\partial L}{\partial \hat{y}_i} &amp;= \mathbf{\hat{y}} - \mathbf{y} =
 \begin{bmatrix}
@@ -1470,23 +1470,33 @@ z_i^{(2)} &amp;= \displaystyle \sum_k^4 h_{i,k}w_k^{(2)} + c_i \\
 \vdots \\
 \hat{y}_n - y_n
 \end{bmatrix} \\
-&amp;= \Phi
+&amp;= E
 \end{align*}\]</span></p>
-<p>And then maybe call the matrix/vector for <span class="math inline">\(\frac{\partial \hat{y}_i}{\partial z^{(2)}_i}\)</span>, <span class="math inline">\(\Omega\)</span>.</p>
+<p>And then maybe call the matrix/vector for <span class="math inline">\(\frac{\partial \hat{y}_i}{\partial z^{(2)}_i}\)</span>, <span class="math inline">\(\Phi\)</span>.</p>
 <p><span class="math display">\[\begin{align*}
 \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} &amp;= S(z^{(2)}_i)(1-S(z^{(2)}_i)) \\
 &amp;= \hat{y}_i(1- \hat{y}_i) \\
 &amp;= \hat{y}_i - (\hat{y}_i)^2 \\
 &amp;= \mathbf{\hat{y}} - (\mathbf{\hat{y}} \ast \mathbf{\hat{y}}) \\
-&amp;= \Omega
+&amp;= \Phi
 \end{align*}\]</span></p>
-<p>Then I think I can finalize the matrix/vector notation as follows for this partial derivative:</p>
+<p>And this is not really vital, but just for the sake of clarity and commiting to everything written before, I’ll will use <span class="math inline">\(\vec{1}_n\)</span> as notation of a vector entirely made of ones, where <span class="math inline">\(n\)</span> is the number of elements in the vector.</p>
+<p>i.e:</p>
+<p><span class="math display">\[\begin{align*}
+\vec{1}_3 =  
+\begin{bmatrix}
+1 \\
+1 \\
+1
+\end{bmatrix}
+\end{align*}\]</span></p>
+<p>Thus I think I can finalize the matrix/vector notation as follows for this partial derivative:</p>
 <p><span class="math display">\[\begin{align*}
 \frac{\partial L}{\partial C} &amp;=
 \begin{bmatrix}
-(\hat{y}_1 - y_1)(\hat{y}_1 - (\hat{y}_1)^2) \\
+(\hat{y}_1 - y_1)(\hat{y}_1 - (\hat{y}_1)^2) (1)\\
 \vdots \\
-(\hat{y}_n - y_n)(\hat{y}_n - (\hat{y}_n)^2)
+(\hat{y}_n - y_n)(\hat{y}_n - (\hat{y}_n)^2) (1)
 \end{bmatrix}\\
 &amp;=
 \begin{bmatrix}
@@ -1499,10 +1509,24 @@ z_i^{(2)} &amp;= \displaystyle \sum_k^4 h_{i,k}w_k^{(2)} + c_i \\
 \hat{y}_1 - (\hat{y}_1)^2 \\
 \vdots \\
 \hat{y}_n - (\hat{y}_n)^2
+\end{bmatrix}
+\ast
+\begin{bmatrix}
+1 \\
+\vdots \\
+1
 \end{bmatrix}\\
 
-&amp;= \Phi \ast \Omega
+&amp;= E \ast \Phi \ast \vec{1}_n
 \end{align*}\]</span></p>
+<p>Because the vector of ones (<span class="math inline">\(\vec{1}_n\)</span>), we can also see that technically <span class="math inline">\(\frac{\partial L}{\partial C} = \frac{\partial L}{\partial Z^{(2)}}\)</span></p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial C}
+
+&amp;= E \ast \Phi \\
+&amp;= \frac{\partial L}{\partial \mathbf{\hat{y}}} \cdot \frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}}
+\end{align*}\]</span></p>
+<p>This will come in handy with the rest of the derivatives as we’ll soon see.</p>
 </section>
 <section id="fracpartial-lpartial-w2" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-w2"><span class="math inline">\(\frac{\partial L}{\partial W^{(2)}}\)</span></h3>
