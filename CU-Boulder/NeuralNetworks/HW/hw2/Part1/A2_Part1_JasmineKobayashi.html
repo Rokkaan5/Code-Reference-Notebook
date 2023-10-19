@@ -1286,7 +1286,7 @@ c_n
 \text{Variable (matrix/vector form)}&amp; \text{Shape} &amp; \text{Vector/Matrix Formula} &amp; \text{Element-wise formula} \\
 \hline \\
 
-L &amp; \text{(scalar)} &amp; \frac{1}{2}([\mathbf{\hat{y}} - \mathbf{y}]\cdot[\mathbf{\hat{y}} - \mathbf{y}]) &amp; \frac{1}{2} \displaystyle\sum_i^n (\hat{y}_i - y_i)^2 \\
+L &amp; \text{(scalar)} &amp; \frac{1}{2}([\mathbf{\hat{y}} - \mathbf{y}]\cdot[\mathbf{\hat{y}} - \mathbf{y}]) &amp; L = \frac{1}{2} \displaystyle\sum_i^n (\hat{y}_i - y_i)^2 \\
 \\
 \hline \\
 
@@ -1320,7 +1320,7 @@ z_n^{(2)}
 [n \times 4]
 &amp;
 Z^{(2)} = H_1 W^{(2)} + C
-&amp; z_j^{(2)} = \displaystyle \sum_k^4 h_{j,k}w_k^{(2)} + c_j \\
+&amp; z_i^{(2)} = \displaystyle \sum_k^4 h_{i,k}w_k^{(2)} + c_i \\
 
 \\
 \hline
@@ -1337,7 +1337,7 @@ h_{n1} &amp; h_{n2} &amp; h_{n3} &amp; h_{n4} \\
 &amp;
 H_1 = S(Z^{(1)})
 &amp;
-h_{j,k} = S(z_{j,k}^{(1)}) \\
+h_{i,k} = S(z_{i,k}^{(1)}) \\
 
 \\
 \hline
@@ -1355,7 +1355,7 @@ z_{n1} &amp; z_{n2} &amp; z_{n3} &amp; z_{n4}
 &amp;
 Z^{(1)} =  X\cdot W_1 + B
 &amp;
-z_{j,k} = \sum_i^3 x_{j,i}w_{i,k} + b_j \\
+z_{i,k} = \displaystyle \sum_j^3 x_{i,j}w_{j,k} + b_i \\
 
 \end{array}
 \end{aligned}\]</span>
@@ -1367,6 +1367,34 @@ z_{j,k} = \sum_i^3 x_{j,i}w_{i,k} + b_j \\
 </ul>
 <section id="fracpartial-lpartial-c" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-c"><span class="math inline">\(\frac{\partial L}{\partial C}\)</span></h3>
+<p><span class="math display">\[\begin{equation*}
+C =
+\begin{bmatrix}
+c_1 \\
+\vdots \\
+c_n
+\end{bmatrix}
+\end{equation*}\]</span></p>
+<p>Let’s start with finding <span class="math inline">\(\frac{\partial L}{\partial c_i}\)</span></p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial c_i} &amp;= \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} \cdot \frac{\partial z^{(2)}_i}{\partial c_i}
+\end{align*}\]</span></p>
+<p>Breaking down each partial derivative one at a time:</p>
+<p><span class="math display">\[\begin{align*}
+L &amp;= \frac{1}{2} \displaystyle\sum_i^n (\hat{y}_i - y_i)^2 \\
+\Rightarrow
+\frac{\partial L}{\partial \hat{y}_i} &amp;= \frac{1}{2} (2) (\hat{y}_i - y_i) \\
+&amp;= \hat{y}_i - y_i
+\end{align*}\]</span></p>
+<p>Then we have <span class="math inline">\(\frac{\partial \hat{y}_i}{\partial z_i^{(2)}}\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+\hat{y}_i = S(z_i^{(2)})
+\end{align*}\]</span></p>
+<p>And reminder: <span class="math inline">\(\frac{d}{dz} S(z) = S(z)(1-S(z))\)</span></p>
+<p><span class="math display">\[\begin{align*}
+\Rightarrow
+\frac{\partial \hat{y}_i}{\partial z^{(2)}_i} &amp;= S(z^{(2)}_i)(1-S(z^{(2)}_i))
+\end{align*}\]</span></p>
 </section>
 <section id="fracpartial-lpartial-w1" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></h3>
