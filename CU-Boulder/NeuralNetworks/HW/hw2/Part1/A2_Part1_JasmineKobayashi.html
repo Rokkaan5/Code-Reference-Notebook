@@ -119,9 +119,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#writing-out-the-derivatives-by-hand." id="toc-writing-out-the-derivatives-by-hand." class="nav-link" data-scroll-target="#writing-out-the-derivatives-by-hand.">4) Writing out the derivatives by hand.</a>
   <ul class="collapse">
-  <li><a href="#jk-answer" id="toc-jk-answer" class="nav-link" data-scroll-target="#jk-answer">JK answer:</a>
+  <li><a href="#jks-answer-2" id="toc-jks-answer-2" class="nav-link" data-scroll-target="#jks-answer-2">JK’s answer:</a>
   <ul class="collapse">
   <li><a href="#fracpartial-lpartial-c" id="toc-fracpartial-lpartial-c" class="nav-link" data-scroll-target="#fracpartial-lpartial-c"><span class="math inline">\(\frac{\partial L}{\partial C}\)</span></a></li>
+  <li><a href="#fracpartial-lpartial-w2" id="toc-fracpartial-lpartial-w2" class="nav-link" data-scroll-target="#fracpartial-lpartial-w2"><span class="math inline">\(\frac{\partial L}{\partial W^{(2)}}\)</span></a></li>
   <li><a href="#fracpartial-lpartial-w1" id="toc-fracpartial-lpartial-w1" class="nav-link" data-scroll-target="#fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></a></li>
   </ul></li>
   </ul></li>
@@ -1218,8 +1219,8 @@ L  \frac{1}{n} \displaystyle \sum_i^n (\hat{y}_i - y_i)^2
 <p>You can do this “matrix style” - so for example, <span class="math inline">\(\frac{\partial L}{\partial \mathbf{W1}}\)</span>, or you can write them out individually, such as <span class="math inline">\(\frac{\partial L}{dw_{11}}\)</span>, <span class="math inline">\(\frac{\partial L}{\partial w_{12}}\)</span>, etc…</p>
 <p>Either way, show all your work and illustrate how the matrices (such as <span class="math inline">\(\mathbf{X}\)</span>, <span class="math inline">\(\mathbf{W_1}\)</span>, <span class="math inline">\(\mathbf{W_2}\)</span>, etc. etc.) will all fit together to create the final derivative.</p>
 <p><strong>Hints:</strong> There are many examples on the PowerPoints. We reviewed this in class. You can also see examples of this in my code examples which are all here: <a href="https://gatesboltonanalytics.com/?page_id=680">Gates Bolton Analytics - Neural Networks Page</a></p>
-<section id="jk-answer" class="level2">
-<h2 class="anchored" data-anchor-id="jk-answer">JK answer:</h2>
+<section id="jks-answer-2" class="level2">
+<h2 class="anchored" data-anchor-id="jks-answer-2">JK’s answer:</h2>
 <p>Parameters we want to update via back propagation (and gradient descent):</p>
 <span class="math display">\[\begin{aligned}
 \begin{array}{ccc}
@@ -1359,12 +1360,50 @@ z_{i,k} = \displaystyle \sum_j^3 x_{i,j}w_{j,k} + b_i \\
 
 \end{array}
 \end{aligned}\]</span>
-<p>Reminder the following are specific to the architecture of this assignment:</p>
+<p>Reminder (to self) the following are specific to the architecture of this assignment:</p>
 <ul>
 <li><span class="math inline">\(4\)</span> comes from the number of units in the hidden layer</li>
 <li><span class="math inline">\(3\)</span> comes from the number of inputs/columns in <span class="math inline">\(X\)</span></li>
 <li>(<span class="math inline">\(n\)</span> in this is supposed to be 6 for the dataset I created)</li>
 </ul>
+<p><strong>Other potentially useful multiplication notation to match with python.</strong></p>
+<p>I will try my best to match the multiplication notation as done in Professor Gates’ lecture slides.</p>
+<p>Thus, I will use an “o-dot” (<span class="math inline">\(\odot\)</span>) to represent matrix multiplcation, (equivalent to <code>@</code> in Python) i.e.:</p>
+<p><span class="math display">\[\begin{align*}
+A \odot B =
+\begin{bmatrix}
+a_{11} &amp; a_{12} \\
+a_{21} &amp; a_{22}\\
+\end{bmatrix}
+\odot
+\begin{bmatrix}
+b_{11} &amp; b_{12} \\
+b_{21} &amp; b_{22} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11}b_{11} + a_{12}b_{21} &amp; a_{11}b_{12} + a_{12}b_{22} \\
+a_{21}b_{11} + a_{22}b_{21} &amp; a_{21}b_{12} + a_{22}b_{22}
+\end{bmatrix}
+\end{align*}\]</span></p>
+<p>And I will use an asterisk (<span class="math inline">\(\ast\)</span>) for element-wise (“regular”) multiplication, (equivalent to <code>*</code> in Python) i.e.:</p>
+<p><span class="math display">\[\begin{align*}
+A \ast B =
+\begin{bmatrix}
+a_{11} &amp; a_{12} \\
+a_{21} &amp; a_{22}\\
+\end{bmatrix}
+\ast
+\begin{bmatrix}
+b_{11} &amp; b_{12} \\
+b_{21} &amp; b_{22} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11}b_{11} &amp; a_{12}b_{12} \\
+a_{21}b_{21} &amp; a_{22}b_{22}
+\end{bmatrix}
+\end{align*}\]</span></p>
 <section id="fracpartial-lpartial-c" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-c"><span class="math inline">\(\frac{\partial L}{\partial C}\)</span></h3>
 <p><span class="math display">\[\begin{equation*}
@@ -1393,8 +1432,80 @@ L &amp;= \frac{1}{2} \displaystyle\sum_i^n (\hat{y}_i - y_i)^2 \\
 <p>And reminder: <span class="math inline">\(\frac{d}{dz} S(z) = S(z)(1-S(z))\)</span></p>
 <p><span class="math display">\[\begin{align*}
 \Rightarrow
-\frac{\partial \hat{y}_i}{\partial z^{(2)}_i} &amp;= S(z^{(2)}_i)(1-S(z^{(2)}_i))
+\frac{\partial \hat{y}_i}{\partial z^{(2)}_i} &amp;= S(z^{(2)}_i)(1-S(z^{(2)}_i)) \\
+&amp;= \hat{y}_i(1- \hat{y}_i)
 \end{align*}\]</span></p>
+<p>Then finally we have <span class="math inline">\(\frac{\partial z^{(2)}_i}{\partial c_i}\)</span></p>
+<p><span class="math display">\[\begin{align*}
+z_i^{(2)} &amp;= \displaystyle \sum_k^4 h_{i,k}w_k^{(2)} + c_i \\
+\Rightarrow
+\frac{\partial z^{(2)}_i}{\partial c_i} &amp;= 0 + (1)
+\end{align*}\]</span></p>
+<p>So altogether we have,</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial c_i} &amp;= \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} \cdot \frac{\partial z^{(2)}_i}{\partial c_i} \\
+
+&amp;=
+\underbrace{(\hat{y}_i - y_i)}_{\textstyle \frac{\partial L}{ \partial \hat{y}_i}}
+\underbrace{S(z^{(2)}_i)(1-S(z^{(2)}_i))}_{\textstyle \frac{\partial \hat{y}_i}{\partial z^{(2)}_i}}
+\underbrace{(1)}_{\textstyle \frac{\partial z^{(2)}_i}{\partial c_i}} \\
+
+&amp;= [\hat{y}_i - y_i][\hat{y}_i(1- \hat{y}_i)]
+\end{align*}\]</span></p>
+<p>So I think I can summarize this derivative with the following vector notation:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial C} &amp;=
+\begin{bmatrix}
+(\hat{y}_1 - y_1)(\hat{y}_1 - (\hat{y}_1)^2) \\
+\vdots \\
+(\hat{y}_n - y_n)(\hat{y}_n - (\hat{y}_n)^2)
+\end{bmatrix}
+\end{align*}\]</span></p>
+<p>I can probably <em>technically</em> stop here, but I want to see if I can make things “simpler” notation to start thinking about how I can translate these into Python.</p>
+<p>I want to start by breaking these into their own matrices. For instance, maybe we can call the matrix/vector for <span class="math inline">\(\frac{\partial L}{\partial \hat{y}_i}\)</span>, <span class="math inline">\(\Phi\)</span> (can be anything though).</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial \hat{y}_i} &amp;= \mathbf{\hat{y}} - \mathbf{y} =
+\begin{bmatrix}
+\hat{y}_1 - y_1\\
+\vdots \\
+\hat{y}_n - y_n
+\end{bmatrix} \\
+&amp;= \Phi
+\end{align*}\]</span></p>
+<p>And then maybe call the matrix/vector for <span class="math inline">\(\frac{\partial \hat{y}_i}{\partial z^{(2)}_i}\)</span>, <span class="math inline">\(\Omega\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial \hat{y}_i}{\partial z^{(2)}_i} &amp;= S(z^{(2)}_i)(1-S(z^{(2)}_i)) \\
+&amp;= \hat{y}_i(1- \hat{y}_i) \\
+&amp;= \hat{y}_i - (\hat{y}_i)^2 \\
+&amp;= \mathbf{\hat{y}} - (\mathbf{\hat{y}} \ast \mathbf{\hat{y}}) \\
+&amp;= \Omega
+\end{align*}\]</span></p>
+<p>Then I think I can finalize the matrix/vector notation as follows for this partial derivative:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial C} &amp;=
+\begin{bmatrix}
+(\hat{y}_1 - y_1)(\hat{y}_1 - (\hat{y}_1)^2) \\
+\vdots \\
+(\hat{y}_n - y_n)(\hat{y}_n - (\hat{y}_n)^2)
+\end{bmatrix}\\
+&amp;=
+\begin{bmatrix}
+\hat{y}_1 - y_1\\
+\vdots \\
+\hat{y}_n - y_n
+\end{bmatrix}
+\ast
+\begin{bmatrix}
+\hat{y}_1 - (\hat{y}_1)^2 \\
+\vdots \\
+\hat{y}_n - (\hat{y}_n)^2
+\end{bmatrix}\\
+
+&amp;= \Phi \ast \Omega
+\end{align*}\]</span></p>
+</section>
+<section id="fracpartial-lpartial-w2" class="level3">
+<h3 class="anchored" data-anchor-id="fracpartial-lpartial-w2"><span class="math inline">\(\frac{\partial L}{\partial W^{(2)}}\)</span></h3>
 </section>
 <section id="fracpartial-lpartial-w1" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></h3>
