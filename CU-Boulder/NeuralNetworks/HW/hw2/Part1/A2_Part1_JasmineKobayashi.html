@@ -123,6 +123,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#fracpartial-lpartial-c" id="toc-fracpartial-lpartial-c" class="nav-link" data-scroll-target="#fracpartial-lpartial-c"><span class="math inline">\(\frac{\partial L}{\partial C}\)</span></a></li>
   <li><a href="#fracpartial-lpartial-w2" id="toc-fracpartial-lpartial-w2" class="nav-link" data-scroll-target="#fracpartial-lpartial-w2"><span class="math inline">\(\frac{\partial L}{\partial W^{(2)}}\)</span></a></li>
+  <li><a href="#fracpartial-lpartial-b" id="toc-fracpartial-lpartial-b" class="nav-link" data-scroll-target="#fracpartial-lpartial-b"><span class="math inline">\(\frac{\partial L}{\partial B}\)</span></a></li>
   <li><a href="#fracpartial-lpartial-w1" id="toc-fracpartial-lpartial-w1" class="nav-link" data-scroll-target="#fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></a></li>
   </ul></li>
   </ul></li>
@@ -1280,9 +1281,10 @@ c_n
 
 \end{array}
 \end{aligned}\]</span>
+<p>And I believe for gradient descent to work properly, I think the (final matrix/vector form of the) partial derivatives of each parameter needs to match the shape of the original parameter.</p>
 <p>Other relevant formulas:</p>
 <span class="math display">\[\begin{aligned}
-\begin{array}{cccc}
+\begin{array}{c|c|c|c}
 \hline
 \text{Variable (matrix/vector form)}&amp; \text{Shape} &amp; \text{Vector/Matrix Formula} &amp; \text{Element-wise formula} \\
 \hline \\
@@ -1530,6 +1532,76 @@ z_i^{(2)} &amp;= \displaystyle \sum_k^4 h_{i,k}w_k^{(2)} + c_i \\
 </section>
 <section id="fracpartial-lpartial-w2" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-w2"><span class="math inline">\(\frac{\partial L}{\partial W^{(2)}}\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+W^{(2)} =
+\begin{bmatrix}
+w_1^{(2)} \\[6pt]
+w_2^{(2)} \\[6pt]
+w_3^{(2)} \\[6pt]
+w_4^{(2)} \\[6pt]
+\end{bmatrix}
+\end{align*}\]</span></p>
+<p>Let’s start small again,</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial w_k^{(2)}} &amp;= \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} \cdot \frac{\partial z^{(2)}_i}{\partial w_k^{(2)}}
+\end{align*}\]</span></p>
+<p>First pattern emerges! We’ve seen <span class="math inline">\(\textstyle \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i}\)</span> before when deriving <span class="math inline">\(\frac{\partial L}{\partial C}\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} &amp;= \frac{\partial L}{\partial \mathbf{\hat{y}}} \cdot \frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}} \\
+&amp;= E \ast \Phi
+\end{align*}\]</span></p>
+<p>Yay! So that essentially means all I have to worry about is <span class="math inline">\(\frac{\partial z^{(2)}_i}{\partial w_k^{(2)}}\)</span>.</p>
+<p>So we had,</p>
+<p><span class="math display">\[\begin{align*}
+z_i^{(2)}
+&amp;= \sum_k^4 h_{i,k}w_k^{(2)} + c_i\\
+\Rightarrow
+\frac{\partial z^{(2)}_i}{\partial w_k^{(2)}} &amp;= h_{i,k}(1) + 0 \\
+&amp;= h_{i,k}
+\end{align*}\]</span></p>
+<p>Where in this case, (<span class="math inline">\(i=1,\dots,n\)</span>) and (<span class="math inline">\(k=1,\dots,4\)</span>).</p>
+<p>Thus,</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial z^{(2)}_i}{\partial w_k^{(2)}} &amp;= h_{i,k} \\
+
+\Rightarrow
+\frac{\partial Z^{(2)}}{\partial W^{(2)}} &amp;=
+
+\begin{bmatrix}
+\frac{\partial z^{(2)}_1}{\partial w_1^{(2)}} &amp; \frac{\partial z^{(2)}_1}{\partial w_2^{(2)}} &amp; \frac{\partial z^{(2)}_1}{\partial w_3^{(2)}} &amp; \frac{\partial z^{(2)}_1}{\partial w_4^{(2)}} \\[6pts]
+
+\frac{\partial z^{(2)}_2}{\partial w_1^{(2)}} &amp; \frac{\partial z^{(2)}_2}{\partial w_2^{(2)}} &amp; \frac{\partial z^{(2)}_2}{\partial w_3^{(2)}} &amp; \frac{\partial z^{(2)}_2}{\partial w_4^{(2)}} \\[6pts]
+
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+
+\frac{\partial z^{(2)}_n}{\partial w_1^{(2)}} &amp; \frac{\partial z^{(2)}_n}{\partial w_2^{(2)}} &amp; \frac{\partial z^{(2)}_n}{\partial w_3^{(2)}} &amp; \frac{\partial z^{(2)}_n}{\partial w_4^{(2)}} \\[6pts]
+\end{bmatrix}\\
+
+&amp;=
+\begin{bmatrix}
+h_{11} &amp; h_{12} &amp; h_{13} &amp; h_{14} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+h_{n1} &amp; h_{n2} &amp; h_{n3} &amp; h_{n4} \\
+\end{bmatrix} \\
+&amp;=H_1 \\
+\end{align*}\]</span></p>
+<p>So finally we have,</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial w_k^{(2)}}
+&amp;= \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} \cdot \frac{\partial z^{(2)}_i}{\partial w_k^{(2)}}\\
+&amp;= [\hat{y}_i - y_i][\hat{y}_i(1- \hat{y}_i)](h_{i,k})\\
+
+\Rightarrow
+\frac{\partial L}{\partial W^{(2)}} &amp;= \underbrace{\frac{\partial L}{\partial \mathbf{\hat{y}}}}_E \cdot \underbrace{\frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}}}_{\textstyle \Phi} \cdot \underbrace{\frac{\partial Z^{(2)}}{\partial W^{(2)}}}_{H_1} \\
+\end{align*}\]</span></p>
+<p><span class="math inline">\(E \ast \Phi\)</span> has shape (<span class="math inline">\(n \times 1\)</span>), and <span class="math inline">\(H_1\)</span> has shape (<span class="math inline">\(n \times 4\)</span>). We want the final matrix of the partial derivative (<span class="math inline">\(\frac{\partial L}{\partial W^{(2)}}\)</span>) to match the shape of <span class="math inline">\(W^{(2)}\)</span>, (<span class="math inline">\(4 \times 1\)</span>) (or the transpose (<span class="math inline">\(1 \times 4\)</span>)).</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial W^{(2)}} &amp;= \underbrace{\frac{\partial L}{\partial \mathbf{\hat{y}}}}_E \cdot \underbrace{\frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}}}_{\textstyle \Phi} \cdot \underbrace{\frac{\partial Z^{(2)}}{\partial W^{(2)}}}_{H_1} \\
+&amp;= [E \ast \Phi] \odot H_1
+\end{align*}\]</span></p>
+</section>
+<section id="fracpartial-lpartial-b" class="level3">
+<h3 class="anchored" data-anchor-id="fracpartial-lpartial-b"><span class="math inline">\(\frac{\partial L}{\partial B}\)</span></h3>
 </section>
 <section id="fracpartial-lpartial-w1" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></h3>
