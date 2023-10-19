@@ -274,7 +274,7 @@ z_{n1} &amp; z_{n2} &amp; z_{n3} &amp; z_{n4}
 z_{n4} = x_{n1}w_{14} + x_{n2}w_{24} + x_{n3}w_{34} + b_n
 \end{align*}\]</span></p>
 <p>In other words, I guess any <span class="math inline">\(Z\)</span> element can be summarized as,</p>
-<p><span class="math display">\[z_{j,k} = \sum_i^3 x_{j,i}w_{i,k} + b_j\]</span></p>
+<p><span class="math display">\[z_{i,k} = \sum_j^3 x_{i,j}w_{j,k} + b_i\]</span></p>
 </section>
 <section id="h_1" class="level3">
 <h3 class="anchored" data-anchor-id="h_1"><span class="math inline">\(H_1\)</span></h3>
@@ -367,7 +367,7 @@ z_n^{(2)}
 \end{align*}\]</span></p>
 <p>Or in other words, each <span class="math inline">\(Z^{(2)}\)</span> element can be summarized as,</p>
 <p><span class="math display">\[\begin{align*}
-z_j^{(2)} = \sum_k^4 h_{j,k}w_k^{(2)} + c_j
+z_i^{(2)} = \sum_k^4 h_{i,k}w_k^{(2)} + c_i
 \end{align*}\]</span></p>
 </section>
 <section id="mathbfhaty" class="level3">
@@ -1668,16 +1668,78 @@ z_{i,k}^{(1)} &amp;= \sum_j^3 x_{i,j}w_{j,k} + b_i \\
 </section>
 <section id="fracpartial-lpartial-w1" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></h3>
+<p>(FINALLY)</p>
 <p><span class="math display">\[\begin{align*}
-\frac{\partial L}{\partial W^{(1)}} &amp;=
+W^{(1)} =
 \begin{bmatrix}
-\frac{\partial L}{\partial w_{11}} &amp; \frac{\partial L}{\partial w_{12}} &amp; \frac{\partial L}{\partial w_{13}} &amp; \frac{\partial L}{\partial w_{14}} \\[6pt]
-\frac{\partial L}{\partial w_{21}} &amp; \frac{\partial L}{\partial w_{22}} &amp; \frac{\partial L}{\partial w_{23}} &amp; \frac{\partial L}{\partial w_{24}} \\[6pt]
-\frac{\partial L}{\partial w_{31}} &amp; \frac{\partial L}{\partial w_{32}} &amp; \frac{\partial L}{\partial w_{33}} &amp; \frac{\partial L}{\partial w_{34}}
+w_{11} &amp; w_{12} &amp; w_{13} &amp; w_{14} \\
+w_{21} &amp; w_{22} &amp; w_{23} &amp; w_{24} \\
+w_{31} &amp; w_{32} &amp; w_{33} &amp; w_{34}
 \end{bmatrix}
 \end{align*}\]</span></p>
+<p>Let’s start element-wise again,</p>
 <p><span class="math display">\[\begin{align*}
-\frac{\partial L}{\partial w_{11}} &amp;=
+\frac{\partial L}{\partial w_{j,k}^{(1)}} &amp;= \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} \cdot \frac{\partial z^{(2)}_i}{\partial h_{ik}} \cdot \frac{\partial h_{ik}}{\partial z_{ik}^{(1)}} \cdot \frac{\partial z_{ik}^{(1)}}{\partial w_{jk}^{(1)}}
+\end{align*}\]</span></p>
+<p>Much like last time, we only need the last derivative (<span class="math inline">\(\frac{\partial z_{ik}^{(1)}}{\partial w_{jk}^{(1)}}\)</span>).</p>
+<p><span class="math display">\[\begin{align*}
+z_{i,k}^{(1)} &amp;= \sum_j^3 x_{i,j}w_{j,k} + b_i \\
+\Rightarrow
+\frac{\partial z_{ik}^{(1)}}{\partial w_{jk}^{(1)}} &amp;= \sum_j^3 x_{i,j}(1) + 0\\
+&amp;= x_{i,j} \\
+\end{align*}\]</span></p>
+<p>It appears that regardless of the value of <span class="math inline">\(k\)</span> the partial derivative is an <span class="math inline">\(x\)</span> value associated the row of <span class="math inline">\(z\)</span> (the <span class="math inline">\(i\)</span> value), and the column of <span class="math inline">\(w^{(1)}\)</span> (value of <span class="math inline">\(j\)</span>).</p>
+<p><span class="math display">\[\begin{align*}
+\Rightarrow \frac{\partial z_{i1}^{(1)}}{\partial w_{j1}^{(1)}} &amp;= \frac{\partial z_{i2}^{(1)}}{\partial w_{j2}^{(1)}} = \frac{\partial z_{i3}^{(1)}}{\partial w_{j3}^{(1)}} = \frac{\partial z_{i4}^{(1)}}{\partial w_{j4}^{(1)}} = x_{i,j} \\
+\end{align*}\]</span></p>
+<p>Thus I think I can summarize as the following matrix (which turns out to be X)</p>
+<p><span class="math display">\[\begin{align*}
+\Rightarrow
+\frac{\partial Z^{(1)}}{\partial W^{(1)}} &amp;=
+\begin{bmatrix}
+\frac{\partial z_{1k}^{(1)}}{\partial w_{1k}^{(1)}} &amp; \frac{\partial z_{1k}^{(1)}}{\partial w_{2k}^{(1)}} &amp;
+\frac{\partial z_{1k}^{(1)}}{\partial w_{3k}^{(1)}} \\[8pt]
+\frac{\partial z_{2k}^{(1)}}{\partial w_{1k}^{(1)}} &amp; \frac{\partial z_{2k}^{(1)}}{\partial w_{2k}^{(1)}} &amp;
+\frac{\partial z_{2k}^{(1)}}{\partial w_{3k}^{(1)}} \\[8pt]
+\vdots &amp; \vdots &amp; \vdots \\[6pt]
+\frac{\partial z_{nk}^{(1)}}{\partial w_{1k}^{(1)}} &amp; \frac{\partial z_{nk}^{(1)}}{\partial w_{2k}^{(1)}} &amp;
+\frac{\partial z_{nk}^{(1)}}{\partial w_{3k}^{(1)}} \\[8pt]
+\end{bmatrix}\\
+&amp; =
+\begin{bmatrix}
+x_{11} &amp; x_{12} &amp; x_{13} \\
+\vdots  &amp; \vdots  &amp; \vdots  \\
+x_{n1} &amp; x_{n2} &amp; x_{n3} \\
+\end{bmatrix} \\
+&amp;= X
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial w_{j,k}^{(1)}} &amp;= \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z^{(2)}_i} \cdot \frac{\partial z^{(2)}_i}{\partial h_{ik}} \cdot \frac{\partial h_{ik}}{\partial z_{ik}^{(1)}} \cdot \frac{\partial z_{ik}^{(1)}}{\partial w_{jk}^{(1)}} \\
+&amp;= [\hat{y}_i - y_i][\hat{y}_i(1- \hat{y}_i)](\displaystyle \sum_k^4 w_k^{(2)}) [h_{ik} - (h_{ik})^2][x_{ij}] \\
+\Rightarrow
+\frac{\partial L}{\partial W^{(1)}} &amp;= \underbrace{\frac{\partial L}{\partial \mathbf{\hat{y}}} \cdot \frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}}}_{E \ast \Phi} \cdot \underbrace{\frac{\partial Z^{(2)}}{\partial H_1}}_{W^{(2)}} \cdot \underbrace{\frac{\partial H_1}{\partial Z^{(1)}}}_{\Omega} \cdot \underbrace{\frac{\partial Z^{(1)}}{\partial W^{(1)}}}_{X} \\
+\end{align*}\]</span></p>
+<p>The following is just to check the shapes work out as hoped:</p>
+<p><span class="math display">\[\begin{align*}
+\Rightarrow
+&amp;= \underbrace{X^\top}_{(3 \times n)} \odot [(\underbrace{[E \ast \Phi]}_{(n \times 1)} \odot \underbrace{W^{(2)\top}}_{(1 \times 4)}) \ast \underbrace{\Omega}_{(n \times 4)}] \\
+&amp;= \underbrace{X^\top}_{(3 \times n)} \odot [(\underbrace{[E \ast \Phi] \odot W^{(2)\top}}_{(n \times 4)}) \ast \underbrace{\Omega}_{(n \times 4)}] \\
+&amp;= \underbrace{X^\top}_{(3 \times n)} \odot \underbrace{[([E \ast \Phi] \odot W^{(2)\top}) \ast \Omega]}_{(n \times 4)} \\
+\end{align*}\]</span></p>
+<p>The final shape is (<span class="math inline">\(3 \times 4\)</span>) matrix as hoped, thus:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial W^{(1)}}
+&amp;= \frac{\partial L}{\partial \mathbf{\hat{y}}}
+\cdot
+\frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}}
+\cdot
+\frac{\partial Z^{(2)}}{\partial H_1}
+\cdot
+\frac{\partial H_1}{\partial Z^{(1)}}
+\cdot
+\frac{\partial Z^{(1)}}{\partial W^{(1)}} \\
+&amp;=
+X^\top \odot [([E \ast \Phi] \odot W^{(2)\top}) \ast \Omega]
 \end{align*}\]</span></p>
 </section>
 </section>
