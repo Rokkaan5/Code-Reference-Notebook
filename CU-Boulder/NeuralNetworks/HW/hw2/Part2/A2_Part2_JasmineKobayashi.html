@@ -59,7 +59,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#mathbfhaty" id="toc-mathbfhaty" class="nav-link" data-scroll-target="#mathbfhaty"><span class="math inline">\(\mathbf{\hat{y}}\)</span></a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#what-are-the-following-derivatives" id="toc-what-are-the-following-derivatives" class="nav-link" data-scroll-target="#what-are-the-following-derivatives">3) What are the following derivatives</a></li>
+  <li><a href="#what-are-the-following-derivatives" id="toc-what-are-the-following-derivatives" class="nav-link" data-scroll-target="#what-are-the-following-derivatives">3) What are the following derivatives</a>
+  <ul class="collapse">
+  <li><a href="#jks-answer-1" id="toc-jks-answer-1" class="nav-link" data-scroll-target="#jks-answer-1">JK’s answer:</a></li>
+  </ul></li>
   <li><a href="#calculate-softmax-results" id="toc-calculate-softmax-results" class="nav-link" data-scroll-target="#calculate-softmax-results">4) Calculate Softmax results</a></li>
   <li><a href="#derivative-of-softmax" id="toc-derivative-of-softmax" class="nav-link" data-scroll-target="#derivative-of-softmax">5) Derivative of Softmax</a></li>
   <li><a href="#combination" id="toc-combination" class="nav-link" data-scroll-target="#combination">6) Combination</a></li>
@@ -171,7 +174,7 @@ z_{n2} = x_{n1}w_{12} + x_{n2}w_{22} + x_{n3}w_{32} + b_n
 <p><span class="math display">\[\begin{equation*}
 f =
 \begin{cases}
-x   &amp;\text{if x &gt; 0} \\
+x   &amp;\text{if } x &gt; 0 \\
 0   &amp;\text{else}
 \end{cases}
 \end{equation*}\]</span></p>
@@ -276,11 +279,191 @@ z_{i,l}^{(2)} = \sum_k^2 h_{i,k}w_{k,l}^{(2)} + c_i
 <p>Use the Categorical Cross Entropy Loss function.</p>
 <p>Use One-Hot Encoding for <span class="math inline">\(\mathbf{y}\)</span> (your label)</p>
 <p>Show all your work</p>
-<p><strong><em>JK:</em></strong></p>
-<p><span class="math inline">\(\frac{\partial L}{\partial W_1} = ?\)</span></p>
-<p><span class="math inline">\(\frac{\partial L}{\partial W_2} = ?\)</span></p>
-<p><span class="math inline">\(\frac{\partial L}{\partial B} = ?\)</span></p>
-<p><span class="math inline">\(\frac{\partial L}{\partial C} = ?\)</span></p>
+<section id="jks-answer-1" class="level2">
+<h2 class="anchored" data-anchor-id="jks-answer-1">JK’s answer:</h2>
+<p>Parameters we want to update via back propagation (and gradient descent):</p>
+<span class="math display">\[\begin{aligned}
+\begin{array}{ccc}
+\hline
+\text{Parameter} &amp; \text{Matrix/Vector form} &amp; \text{Shape} \\
+\hline
+\\
+
+W^{(1)} &amp;
+\begin{bmatrix}
+w_{11} &amp; w_{12}  \\
+w_{21} &amp; w_{22}  \\
+w_{31} &amp; w_{32}
+\end{bmatrix}
+&amp;
+[3 \times 2]\\
+
+\\
+\hline
+\\
+
+\mathbf{B} &amp;
+\begin{bmatrix}
+b_1 \\
+\vdots \\
+b_n
+\end{bmatrix}
+&amp;
+[n \times 1]\\
+
+\\
+\hline
+\\
+
+W^{(2)} &amp;
+\begin{bmatrix}
+w_{11}^{(2)} &amp; w_{12}^{(2)} &amp; w_{13}^{(2)} &amp; w_{14}^{(2)}  \\[6pt]
+w_{21}^{(2)} &amp; w_{22}^{(2)} &amp; w_{23}^{(2)} &amp; w_{24}^{(2)}  \\[6pt]
+\end{bmatrix}
+&amp;
+[2 \times 4]\\
+
+\\
+\hline
+\\
+
+\mathbf{C} &amp;
+\begin{bmatrix}
+c_1 \\
+\vdots \\
+c_n
+\end{bmatrix}
+&amp;
+[n \times 1]
+
+\end{array}
+\end{aligned}\]</span>
+<p>And I believe for gradient descent to work properly, I think the (final matrix/vector form of the) partial derivatives of each parameter needs to match the shape of the original parameter.</p>
+<p>Other relevant formulas:</p>
+<span class="math display">\[\begin{aligned}
+\begin{array}{c|c|c|c}
+\hline
+\text{Variable (matrix/vector form)}&amp; \text{Shape} &amp; \text{Vector/Matrix Formula} &amp; \text{Element-wise formula} \\
+\hline \\
+
+L_{CCE} &amp; \text{(scalar)} &amp; -log(\mathbf{\hat{y}}) &amp; L = -log(\hat{y_i}) \\
+\\
+\hline \\
+
+\mathbf{\hat{y}} =
+\begin{bmatrix}
+[\hat{y}_{11} &amp; \hat{y}_{12} &amp; \hat{y}_{13} &amp; \hat{y}_{14}] \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+[\hat{y}_{n1} &amp; \hat{y}_{n2} &amp; \hat{y}_{n3} &amp; \hat{y}_{n4}] \\
+\end{bmatrix}
+&amp;
+[n \times 4]
+&amp;
+\mathbf{\hat{y}} = \text{softmax}(Z^{(2)})
+&amp; \hat{y}_{i,l} =  \frac{\textstyle{\text{exp}}(z_{i,l}^{(2)})}{\displaystyle \sum_l^4 \text{exp}(z_{i,l}^{(2)})}\\
+\\
+\hline
+\\
+
+Z^{(2)} =
+\begin{bmatrix}
+z_{11}^{(2)} &amp; z_{12}^{(2)} &amp; z_{13}^{(2)} &amp; z_{14}^{(2)} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+z_{n1}^{(2)} &amp; z_{n2}^{(2)} &amp; z_{n3}^{(2)} &amp; z_{n4}^{(2)}  
+\end{bmatrix}
+&amp;
+[n \times 4]
+&amp;
+Z^{(2)} = H_1 W^{(2)} + C
+&amp; z_{i,l}^{(2)} = \displaystyle \sum_k^2 h_{i,k}w_{k,l}^{(2)} + c_i \\
+
+\\
+\hline
+\\
+
+H_1 =
+\begin{bmatrix}
+h_{11} &amp; h_{12}  \\
+\vdots &amp; \vdots  \\
+h_{n1} &amp; h_{n2}  \\
+\end{bmatrix}
+&amp;
+[n \times 2]
+&amp;
+H_1 = \text{reLU}(Z^{(1)})
+&amp;
+h_{i,k} =
+\begin{cases}
+z_{i,k}^{(1)}   &amp;\text{if } z &gt; 0 \\
+0   &amp;\text{else}
+\end{cases} \\
+
+\\
+\hline
+\\
+
+Z^{(1)} =
+\begin{bmatrix}
+z_{11} &amp; z_{12} &amp; z_{13} &amp; z_{14} \\
+z_{21} &amp; z_{22} &amp; z_{23} &amp; z_{24} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+z_{n1} &amp; z_{n2} &amp; z_{n3} &amp; z_{n4}
+\end{bmatrix}
+&amp;
+[n \times 4]
+&amp;
+Z^{(1)} =  X\cdot W_1 + B
+&amp;
+z_{i,k}^{(1)} = \displaystyle \sum_j^3 x_{i,j}w_{j,k}^{(1)} + b_i \\
+
+\end{array}
+\end{aligned}\]</span>
+<p>Reminder (to self) the following are specific to the architecture of this assignment:</p>
+<ul>
+<li><span class="math inline">\(2\)</span> comes from the number of units in the hidden layer</li>
+<li><span class="math inline">\(3\)</span> comes from the number of inputs/columns in <span class="math inline">\(X\)</span></li>
+<li><span class="math inline">\(4\)</span> comes from the number of possible labels/outputs in <span class="math inline">\(y\)</span> and <span class="math inline">\(\hat{y}\)</span></li>
+<li>(<span class="math inline">\(n\)</span> in this is supposed to be 6 for the dataset I created)</li>
+</ul>
+<p><strong>Other potentially useful multiplication notation to match with python.</strong></p>
+<p>I will try my best to match the multiplication notation as done in Professor Gates’ lecture slides.</p>
+<p>Thus, I will use an “o-dot” (<span class="math inline">\(\odot\)</span>) to represent matrix multiplcation, (equivalent to <code>@</code> in Python) i.e.:</p>
+<p><span class="math display">\[\begin{align*}
+A \odot B =
+\begin{bmatrix}
+a_{11} &amp; a_{12} \\
+a_{21} &amp; a_{22}\\
+\end{bmatrix}
+\odot
+\begin{bmatrix}
+b_{11} &amp; b_{12} \\
+b_{21} &amp; b_{22} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11}b_{11} + a_{12}b_{21} &amp; a_{11}b_{12} + a_{12}b_{22} \\
+a_{21}b_{11} + a_{22}b_{21} &amp; a_{21}b_{12} + a_{22}b_{22}
+\end{bmatrix}
+\end{align*}\]</span></p>
+<p>And I will use an asterisk (<span class="math inline">\(\ast\)</span>) for element-wise (“regular”) multiplication, (equivalent to <code>*</code> in Python) i.e.:</p>
+<p><span class="math display">\[\begin{align*}
+A \ast B =
+\begin{bmatrix}
+a_{11} &amp; a_{12} \\
+a_{21} &amp; a_{22}\\
+\end{bmatrix}
+\ast
+\begin{bmatrix}
+b_{11} &amp; b_{12} \\
+b_{21} &amp; b_{22} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+a_{11}b_{11} &amp; a_{12}b_{12} \\
+a_{21}b_{21} &amp; a_{22}b_{22}
+\end{bmatrix}
+\end{align*}\]</span></p>
+</section>
 </section>
 <section id="calculate-softmax-results" class="level1">
 <h1>4) Calculate Softmax results</h1>
