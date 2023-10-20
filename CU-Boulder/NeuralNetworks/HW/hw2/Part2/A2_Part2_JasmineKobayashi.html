@@ -49,7 +49,16 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#draw-nn-architecture" id="toc-draw-nn-architecture" class="nav-link active" data-scroll-target="#draw-nn-architecture">1) Draw NN architecture</a></li>
-  <li><a href="#write-out-all-the-feed-forward-equations" id="toc-write-out-all-the-feed-forward-equations" class="nav-link" data-scroll-target="#write-out-all-the-feed-forward-equations">2) Write out all the Feed Forward equations</a></li>
+  <li><a href="#write-out-all-the-feed-forward-equations" id="toc-write-out-all-the-feed-forward-equations" class="nav-link" data-scroll-target="#write-out-all-the-feed-forward-equations">2) Write out all the Feed Forward equations</a>
+  <ul class="collapse">
+  <li><a href="#jks-answer" id="toc-jks-answer" class="nav-link" data-scroll-target="#jks-answer">JK’s answer</a>
+  <ul class="collapse">
+  <li><a href="#z_1" id="toc-z_1" class="nav-link" data-scroll-target="#z_1"><span class="math inline">\(Z_1\)</span></a></li>
+  <li><a href="#h_1" id="toc-h_1" class="nav-link" data-scroll-target="#h_1"><span class="math inline">\(H_1\)</span></a></li>
+  <li><a href="#z_2" id="toc-z_2" class="nav-link" data-scroll-target="#z_2"><span class="math inline">\(Z_2\)</span></a></li>
+  <li><a href="#mathbfhaty" id="toc-mathbfhaty" class="nav-link" data-scroll-target="#mathbfhaty"><span class="math inline">\(\mathbf{\hat{y}}\)</span></a></li>
+  </ul></li>
+  </ul></li>
   <li><a href="#what-are-the-following-derivatives" id="toc-what-are-the-following-derivatives" class="nav-link" data-scroll-target="#what-are-the-following-derivatives">3) What are the following derivatives</a></li>
   <li><a href="#calculate-softmax-results" id="toc-calculate-softmax-results" class="nav-link" data-scroll-target="#calculate-softmax-results">4) Calculate Softmax results</a></li>
   <li><a href="#derivative-of-softmax" id="toc-derivative-of-softmax" class="nav-link" data-scroll-target="#derivative-of-softmax">5) Derivative of Softmax</a></li>
@@ -105,7 +114,160 @@ ul.task-list li input[type="checkbox"] {
 <section id="write-out-all-the-feed-forward-equations" class="level1">
 <h1>2) Write out all the Feed Forward equations</h1>
 <p>You will have equations for <span class="math inline">\(Z_1\)</span>, <span class="math inline">\(H_1\)</span>, <span class="math inline">\(Z_2\)</span>, <span class="math inline">\(\hat{Y}\)</span>.</p>
-<p><strong><em>JK:</em></strong></p>
+<section id="jks-answer" class="level2">
+<h2 class="anchored" data-anchor-id="jks-answer">JK’s answer</h2>
+<section id="z_1" class="level3">
+<h3 class="anchored" data-anchor-id="z_1"><span class="math inline">\(Z_1\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+Z_1 &amp; =  X\cdot W_1 + B
+
+\\
+&amp; =
+\begin{bmatrix}
+x_{11} &amp; x_{12} &amp; x_{13} \\
+\vdots  &amp; \vdots  &amp; \vdots  \\
+x_{n1} &amp; x_{n2} &amp; x_{n3} \\
+\end{bmatrix}
+
+\begin{bmatrix}
+w_{11} &amp; w_{12}  \\
+w_{21} &amp; w_{22}  \\
+w_{31} &amp; w_{32}
+\end{bmatrix}
+
++
+\begin{bmatrix}
+b_1 \\
+\vdots \\
+b_n
+\end{bmatrix}
+
+\\
+
+&amp; =
+\begin{bmatrix}
+z_{11} &amp; z_{12}  \\
+z_{21} &amp; z_{22}  \\
+\vdots &amp; \vdots  \\
+z_{n1} &amp; z_{n2}
+\end{bmatrix}
+\end{align*}\]</span></p>
+<p>Where we have:</p>
+<p><span class="math display">\[\begin{align*}
+&amp; z_{11} = x_{11}w_{11} + x_{12}w_{21} + x_{13}w_{31} + b_1 &amp; &amp; \\
+&amp; z_{12} = x_{11}w_{12} + x_{12}w_{22} + x_{13}w_{32} + b_1 &amp; &amp;\\
+\end{align*}\]</span></p>
+<p><span class="math display">\[\vdots\]</span></p>
+<p><span class="math display">\[\begin{align*}
+z_{n2} = x_{n1}w_{12} + x_{n2}w_{22} + x_{n3}w_{32} + b_n
+\end{align*}\]</span></p>
+<p>In other words, any <span class="math inline">\(Z\)</span> element can be summarized as,</p>
+<p><span class="math display">\[z_{i,k} = \sum_j^3 x_{i,j}w_{j,k} + b_i\]</span></p>
+</section>
+<section id="h_1" class="level3">
+<h3 class="anchored" data-anchor-id="h_1"><span class="math inline">\(H_1\)</span></h3>
+<p>We’re assuming the first hidden layer uses the reLU activation function.</p>
+<p>reLU function:</p>
+<p><span class="math display">\[\begin{equation*}
+f =
+\begin{cases}
+x   &amp;\text{if x &gt; 0} \\
+0   &amp;\text{else}
+\end{cases}
+\end{equation*}\]</span></p>
+<p><span class="math inline">\(h\)</span> is the same value as <span class="math inline">\(x\)</span> if it’s positive and 0 otherwise.</p>
+<p>The <span class="math inline">\(H1\)</span> matrix is as follows:</p>
+<p><span class="math display">\[\begin{align*}
+H_1 &amp; =
+\begin{bmatrix}
+f(z_{11}) &amp; f(z_{12}) \\
+\vdots    &amp;   \vdots  \\
+f(z_{n1}) &amp; f(z_{n2}) \\
+\end{bmatrix}
+
+\\
+
+&amp; =
+\begin{bmatrix}
+h_{11} &amp; h_{12}  \\
+\vdots &amp; \vdots  \\
+h_{n1} &amp; h_{n2}  \\
+\end{bmatrix}
+\end{align*}\]</span></p>
+<p>The number of columns in <span class="math inline">\(H_1\)</span> is the number of hidden units in the hidden layer.</p>
+</section>
+<section id="z_2" class="level3">
+<h3 class="anchored" data-anchor-id="z_2"><span class="math inline">\(Z_2\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+Z^{(2)} &amp;= H_1 W^{(2)} + C \\
+&amp;=
+\begin{bmatrix}
+h_{11} &amp; h_{12} \\
+\vdots &amp; \vdots \\
+h_{n1} &amp; h_{n2} \\
+\end{bmatrix}
+
+\begin{bmatrix}
+w_{11}^{(2)} &amp; w_{12}^{(2)} &amp; w_{13}^{(2)} &amp; w_{14}^{(2)}  \\[6pt]
+w_{21}^{(2)} &amp; w_{22}^{(2)} &amp; w_{23}^{(2)} &amp; w_{24}^{(2)}  \\[6pt]
+\end{bmatrix}
+
++
+
+\begin{bmatrix}
+c_1 \\
+\vdots \\
+c_n
+\end{bmatrix}\\
+&amp;=
+\begin{bmatrix}
+z_{11}^{(2)} &amp; z_{12}^{(2)} &amp; z_{13}^{(2)} &amp; z_{14}^{(2)} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+z_{n1}^{(2)} &amp; z_{n2}^{(2)} &amp; z_{n3}^{(2)} &amp; z_{n4}^{(2)}  
+\end{bmatrix}
+\end{align*}\]</span></p>
+<p>Where,</p>
+<p><span class="math display">\[\begin{align*}
+&amp; z_{11}^{(2)} = h_{11}w_{11}^{(2)} + h_{12}w_{21}^{(2)} + c_1 &amp; &amp; \\
+&amp; z_{12}^{(2)} = h_{11}w_{12}^{(2)} + h_{12}w_{22}^{(2)} + c_1 &amp; &amp;\\
+\end{align*}\]</span></p>
+<p><span class="math display">\[\vdots\]</span></p>
+<p><span class="math display">\[\begin{align*}
+z_{n4}^{(2)} = h_{n1}w_{14}^{(2)} + x_{n2}w_{24}^{(2)} + c_n
+\end{align*}\]</span></p>
+<p>Or in other words, each <span class="math inline">\(Z^{(2)}\)</span> element can be summarized as,</p>
+<p><span class="math display">\[\begin{align*}
+z_{i,l}^{(2)} = \sum_k^2 h_{i,k}w_{k,l}^{(2)} + c_i
+\end{align*}\]</span></p>
+</section>
+<section id="mathbfhaty" class="level3">
+<h3 class="anchored" data-anchor-id="mathbfhaty"><span class="math inline">\(\mathbf{\hat{y}}\)</span></h3>
+<p>And lastly we have the predicted output <span class="math inline">\(\mathbf{\hat{y}}\)</span>.</p>
+<p>In the case of this architecture, we’re expecting 4 outputs.</p>
+<p>And for this assignment, we said we would use the Softmax function, which is defined as follows.</p>
+<p><span class="math display">\[\begin{align*}
+\hat{y}_{i,l} = \text{softmax}(z_{i,l}^{(2)}) = \frac{\text{exp}(z_{i,l}^{(2)})}{\displaystyle \sum_l^4 \text{exp}(z_{i,l}^{(2)})}
+\end{align*}\]</span></p>
+<p>Where <span class="math inline">\(\text{exp}(x) = e^x\)</span> (I just used that notation to make the variables easier to see in the fraction.)</p>
+<p>The summation from <span class="math inline">\(l=1\)</span> to <span class="math inline">\(l=4\)</span> is due to the fact that we have four possible classes/outcomes for this architecture. (So the formula above is specific to this assignment.)</p>
+<p>The softmax function gives the probability distributions of the possible outcomes. So in this case we would have 4 probabilities of the 4 labels from the softmax. (The probabilities are pdfs too, so the probabilities for each instance are non-negative and all sum up to one.)</p>
+<p><span class="math display">\[\begin{align*}
+\Rightarrow
+\mathbf{\hat{y}} &amp;=
+\begin{bmatrix}
+[\hat{y}_{11} &amp; \hat{y}_{12} &amp; \hat{y}_{13} &amp; \hat{y}_{14}] \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+[\hat{y}_{n1} &amp; \hat{y}_{n2} &amp; \hat{y}_{n3} &amp; \hat{y}_{n4}] \\
+\end{bmatrix}\\
+&amp;=
+\begin{bmatrix}
+[\text{softmax}(z_{11}^{(2)}) &amp; \text{softmax}(z_{12}^{(2)}) &amp; \text{softmax}(z_{13}^{(2)}) &amp; \text{softmax}(z_{14}^{(2)})] \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+[\text{softmax}(z_{n1}^{(2)}) &amp; \text{softmax}(z_{n2}^{(2)}) &amp; \text{softmax}(z_{n3}^{(2)}) &amp; \text{softmax}(z_{n4}^{(2)})]
+\end{bmatrix}
+\end{align*}\]</span></p>
+</section>
+</section>
 </section>
 <section id="what-are-the-following-derivatives" class="level1">
 <h1>3) What are the following derivatives</h1>
