@@ -9,10 +9,12 @@ import seaborn as sns
 import random
 
 # %%
-class OneLayer_OneOutput_FF():
+class OneLayer_OneOutput():
     def __init__(self,
                  data_filename = "A2_Data_JasmineKobayashi.csv", 
                  scale_data = True,
+                 hidden_units= 4,
+                 randomize_initial_parameters = False,
                  verbose = True):
         # Read Data
         self.df = pd.read_csv(data_filename)
@@ -35,27 +37,6 @@ class OneLayer_OneOutput_FF():
             print("Shape of y:", self.y.shape)
             print("y vector: \n", self.y)
 
-    def MSE_loss(self,y_hat,y):
-        # L = mean((y_hat - y)^2)
-        return np.mean((y_hat - y)**2)
-        
-    def lin_eq(self,X,W,B):
-        assert X.shape[1] == W.shape[0], "Linear eq: z = X @ W + B. Shape of X: {}; Shape of W: {}".format(X.shape,W.shape)
-        assert B.shape[0] == X.shape[0], "Linear eq: z = X @ W + B. Length of B should match X rows; Length B = {}; Shape of X = {}".format(B.shape[0],X.shape)
-        return X @ W + B
-    
-    def Sigmoid(self,z,
-                derivative = False):
-        if derivative:
-            return self.Sigmoid(z) * (1 - self.Sigmoid(z)) # dS/dz = S(z)(1-S(z))
-        # Sigmoid
-        return 1/(1 + math.e**(-z)) # S(z) = 1/(1 + e^(-z))
-    
-    def FeedForward(self,
-                    hidden_units= 4,
-                    randomize_parameters = False,
-                    activation = "sigmoid",
-                    verbose = True):
         # Shape of W1
         w1_ncol = hidden_units        # Number of W1 cols should be number of hidden units in H1
         w1_nrow = self.X.shape[1]     # Number of W1 rows should be number of X columns (dim of X)
@@ -67,7 +48,7 @@ class OneLayer_OneOutput_FF():
         # Shape of C (column vector)
         c_length = self.X.shape[0]    # length of X rows
         
-        if randomize_parameters: 
+        if randomize_initial_parameters: 
             # TODO: Finish potential code of randomized parameters
             # # bounds of randomized weights
             # bound = 1/np.sqrt(w1_nrow)   # I found online that supposedly this is a standard range for randomized weights
@@ -96,6 +77,28 @@ class OneLayer_OneOutput_FF():
             print("Shape of C :", self.C.shape)
             print("C (bias vector for Z2): \n",self.C)
 
+
+    def MSE_loss(self,y_hat,y):
+        # L = mean((y_hat - y)^2)
+        return np.mean((y_hat - y)**2)
+        
+
+    def lin_eq(self,X,W,B):
+        assert X.shape[1] == W.shape[0], "Linear eq: z = X @ W + B. Shape of X: {}; Shape of W: {}".format(X.shape,W.shape)
+        assert B.shape[0] == X.shape[0], "Linear eq: z = X @ W + B. Length of B should match X rows; Length B = {}; Shape of X = {}".format(B.shape[0],X.shape)
+        return X @ W + B
+    
+    def Sigmoid(self,z,
+                derivative = False):
+        if derivative:
+            return self.Sigmoid(z) * (1 - self.Sigmoid(z)) # dS/dz = S(z)(1-S(z))
+        # Sigmoid
+        return 1/(1 + math.e**(-z)) # S(z) = 1/(1 + e^(-z))
+    
+
+    def FeedForward(self,
+                    activation = "sigmoid",
+                    verbose = True):
         # Create H1
         # Z1 = X @ W1 + B
         self.Z1 = self.lin_eq(self.X,self.W1,self.B)
@@ -120,7 +123,8 @@ class OneLayer_OneOutput_FF():
         
     
     # Gradient descent----------------------------------------------
-    def grad_desc(self,y_hat,y,LR):
+    def grad_desc(self,y_hat,y,LR,
+                  verbose = True):
         # Error = y^ - y = E
         self.E = y_hat - y                                      # shape = n x 1 
 
@@ -140,7 +144,7 @@ class OneLayer_OneOutput_FF():
 
         # dL/dW2 = [dL/dy^][dy^/dZ2][dZ2/W2] 
         #        = [y^-y][S(Z2)(1 - S(Z2))][H1]
-        self.dL_dW2 = self.dL_dZ2 @ self.H1                          # should match shape of W2 (4 x 1)
+        self.dL_dW2 =  self.H1.T @ self.dL_dZ2                         # should match shape of W2 (4 x 1)
 
         # dL/dB = [dL/dy^][dy^/dZ2][dZ2/dH1][dH1/dZ1][dZ1/dB] 
         #       = [y^-y][S(Z2)(1 - S(Z2))][W2][S(Z1)(1-S(Z1))][1]
@@ -162,14 +166,20 @@ class OneLayer_OneOutput_FF():
         self.W2 = self.W2 - (LR*self.dL_dW2)
         self.B = self.B - (LR*self.dL_dB)
         self.W1 = self.W1 - (LR*self.dL_W1)
-        pass
 
-    # # Back Prop
-    # def BackPropagation(self,epochs):
-    #     loss_record = []
-    #     for i in epochs:
-    #         pass
-    #     pass
+        if verbose:
+            # print("# of X cols (should be # of W1 rows):", self.X.shape[1])
+            # print("# of hidden units (should be # of W1 cols):", hidden_units)
+            print("Updated W1 has shape:", self.W1.shape)
+            print("Updated W1 matrix: \n", self.W1)
+            print("Shape of updated B:", self.B.shape)
+            print("Updated B (bias vector for Z1): \n", self.B)
+            print("Shape of updated W2:",self.W2.shape)
+            print("Updated W2 matrix: \n", self.W2)
+            print("Shape of updated  C :", self.C.shape)
+            print("Updated C (bias vector for Z2): \n",self.C)
+        
+
 
     # Visualizations (confusion matrix & Lce plot)==================
     # Confusion matrix-------------------------------------------------------------
@@ -194,51 +204,43 @@ class OneLayer_OneOutput_FF():
         ax.set_title("Confusion Matrix")
         ax.xaxis.set_ticklabels(["0", "1"])
         ax.yaxis.set_ticklabels(["0", "1"])
+    
     # Plot of Lce vs. Epochs--------------------------------------------------------
     def plot_LCE(self):
-        # plt.figure()
-        # plt.plot(np.arange(0,len(self.Lce_list)),self.Lce_list,'-',label="LR = {}".format(self.LR))
-        # plt.xlabel("epochs")
-        # plt.ylabel('Loss')
-        # plt.title("Loss over epochs")
-        # plt.legend()
-        pass
+        plt.figure()
+        plt.plot(np.arange(0,len(self.loss_record)),self.loss_record,'-',label="LR = {}".format(self.LR))
+        plt.xlabel("epochs")
+        plt.ylabel('Loss')
+        plt.title("Loss over epochs")
+        plt.legend()
 
     # Run multiple iterations (with specified epochs, etc.)========================================================
-    def run_model(self, print_all_params = True):
+    def run_model(self, 
+                  epochs,
+                  LR= 1,
+                  hidden_units= 4,
+                  randomize_parameters = False,
+                  activation = "sigmoid", 
+                  verbose = True):
         
-        # # Save LCE values (for plotting)------------------------------------
-        # self.Lce_list = []
-        # #-------------------------------------------------------------------
-        
-        # for i in range(self.epochs):
-        #     # Linear eq: apply parameters to data---------------------------
-        #     self.z = self.lin_eq(X=self.X,w=self.w,b=self.b)
-            
-        #     # Sigmoid activation--------------------------------------------
-        #     self.y_hat = self.Sigmoid(z=self.z)
-            
-        #     # Calculate loss------------------------------------------------
-        #     loss = self.LCE(y_hat=self.y_hat,y=self.y)
-        #     self.Lce_list.append(loss)
-           
-        #     # print info to check if doing as expected (if wanted)----------
-        #     if print_all_params:
-        #                     print("Epoch",i)
-        #                     print("w vector: \n",self.w)
-        #                     print("b = ",self.b)
-        #                     print("y^: \n",self.y_hat)
-        #                     print("LCE (Loss) = ", loss)
-            
-        #     # Update params with gradient descent---------------------------
-        #     dL_dw,dL_db = self.grad_desc(y_hat=self.y_hat,y=self.y,X=self.X)
-        #     # p_new = p_prev - (LR)gradient(p_prev)
-        #     self.w = self.w - self.LR*dL_dw
-        #     self.b = self.b - self.LR*dL_db
-        # print("finished running all epochs")
+        # Save LCE values (for plotting)------------------------------------
+        self.loss_record = []
+        #-------------------------------------------------------------------
+        self.LR = LR
+        print("Running model for {} epochs...".format(epochs))
+        for i in range(epochs):
+            print("Epoch",i)
+            self.FeedForward(activation= activation,
+                             verbose=verbose)
+            self.loss_record.append(self.MSE_loss(y_hat=self.y_hat,
+                                                  y=self.y))
+            # Update params with gradient descent---------------------------
+            self.grad_desc(y_hat=self.y_hat,
+                           y=self.y,
+                           LR=self.LR,
+                           verbose=verbose)
+        print("finished running all epochs")
 
-        # # Visualizations
-        # self.ConfusionMatrix(y_hat=self.y_hat,y=self.y)
-        # self.plot_LCE()
-        pass
-
+        # Visualizations
+        self.ConfusionMatrix(y_hat=self.y_hat,y=self.y)
+        self.plot_LCE()
