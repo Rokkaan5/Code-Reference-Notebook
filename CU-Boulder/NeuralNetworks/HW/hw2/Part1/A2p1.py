@@ -120,12 +120,56 @@ class OneLayer_OneOutput_FF():
         
     
     # Gradient descent----------------------------------------------
-    def grad_desc(self,y_hat,y,X):
+    def grad_desc(self,y_hat,y,LR):
+        # Error = y^ - y = E
+        self.E = y_hat - y                                      # shape = n x 1 
+
+        # dy^/dZ2 = S(Z2)(1 - S(Z2)) = y^(1 - y^) = y^ - (y^)(y^) = Phi
+        self.Phi = self.Sigmoid(self.Z2,derivative=True)        # shape = Z2.shape = n x 1
+        
+        # dL/dZ2  = [y^-y][S(Z2)(1 - S(Z2))] is a term that shows up in every gradient 
+        # so it's going to be useful to save this
+        self.dL_dZ2 = self.E * self.Phi                                   # shape = [n x 1]*[n x 1] => [n x 1]
+
+        self.dH_dZ1 = self.Sigmoid(self.Z1,derivative=True)     # shape = Z1.shape = n x 4
+
+        # dL/dC = [dL/dy^][dy^/dZ2][dZ2/C] 
+        #       = [y^-y][S(Z2)(1 - S(Z2))][1]
+        self.dZ2_dC = np.array([[1]]*self.C.shape[0])           # vector of 1s with same shape of C
+        self.dL_dC = self.dL_dZ2 * self.dZ2_dC                            # should match shape of C (n x 1)
+
+        # dL/dW2 = [dL/dy^][dy^/dZ2][dZ2/W2] 
+        #        = [y^-y][S(Z2)(1 - S(Z2))][H1]
+        self.dL_dW2 = self.dL_dZ2 @ self.H1                          # should match shape of W2 (4 x 1)
+
+        # dL/dB = [dL/dy^][dy^/dZ2][dZ2/dH1][dH1/dZ1][dZ1/dB] 
+        #       = [y^-y][S(Z2)(1 - S(Z2))][W2][S(Z1)(1-S(Z1))][1]
+        #       = ([y^-y] * [S(Z2)(1 - S(Z2))]) * ([S(Z1)(1-S(Z1))] @ [W2]) * [1] 
+        
+        # dH1/dZ1 = S(Z1)(1-S(Z1)) = H1(1-H1)  # I'm going to call this matrix Omega
+        self.Omega = self.Sigmoid(self.Z1,derivative = True)      # should match shape of Z1 (n x 4)
+        self.dZ1_dB = np.array([[1]]*self.B.shape[0])           # vector of 1s with same shape of B
+        # [n x n][n x 1][n x 1]
+        self.dL_dB = self.dL_dZ2 * (self.Omega @ self.W2) * self.dZ1_dB               # should match shape of B (n x 1)
+        # dL/dW1 = [dL/dy^][dy^/dZ2][dZ2/dH1][dH1/dZ1][dZ1/dW1] 
+        #        = [y^-y][S(Z2)(1 - S(Z2))][W2][S(Z1)(1-S(Z1))][X] 
+        #        = [X]^T @ [([[y^-y] * [S(Z2)(1 - S(Z2))]] @ [W2]) * [S(Z1)(1-S(Z1))]] 
+        #        = [X]^T @ [([E * Phi] * [W2]^T) * Omega]
+        self.dL_W1 = self.X.T @ (( (self.E * self.Phi) @ self.W2.T) * self.Omega)    # should match shape of W1 (3 x 4)
+
+        # Gradient descent
+        self.C = self.C - (LR*self.dL_dC)
+        self.W2 = self.W2 - (LR*self.dL_dW2)
+        self.B = self.B - (LR*self.dL_dB)
+        self.W1 = self.W1 - (LR*self.dL_W1)
         pass
 
-    # Back Prop
-    def BackPropagation(self):
-        pass
+    # # Back Prop
+    # def BackPropagation(self,epochs):
+    #     loss_record = []
+    #     for i in epochs:
+    #         pass
+    #     pass
 
     # Visualizations (confusion matrix & Lce plot)==================
     # Confusion matrix-------------------------------------------------------------
