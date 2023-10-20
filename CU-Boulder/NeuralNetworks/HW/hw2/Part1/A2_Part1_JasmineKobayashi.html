@@ -467,7 +467,7 @@ Loss = L &amp;= \frac{1}{2} (\mathbf{y} - \mathbf{\hat{y}})^2 \\
 <li><p>Use <span class="math inline">\(L = \frac{1}{n} \displaystyle \sum^n (\hat{y} - y)^2\)</span> as the Loss Function when <span class="math inline">\(n\)</span> is the number of rows in your dataset. Do not “hard code”. The TAs or I should be able to use your code to read ANY dataset that has 3 columns of data, one label column called “LABEL” (of 0 or 1), and any number of rows.</p></li>
 </ol>
 <p><strong><em>JK answer:</em></strong></p>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#%% libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -478,9 +478,9 @@ Loss = L &amp;= \frac{1}{2} (\mathbf{y} - \mathbf{\hat{y}})^2 \\
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> OneLayer_OneOutput_FF():</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> HW2_FeedForward():</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                 data_filename <span class="op">=</span> <span class="st">"A2_Data_JasmineKobayashi.csv"</span>, </span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                 scale_data <span class="op">=</span> <span class="va">True</span>,</span>
@@ -589,8 +589,8 @@ Loss = L &amp;= \frac{1}{2} (\mathbf{y} - \mathbf{\hat{y}})^2 \\
 <span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"Z2 matrix: </span><span class="ch">\n</span><span class="st">"</span>, <span class="va">self</span>.Z2)</span>
 <span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"y_hat:</span><span class="ch">\n</span><span class="st">"</span>,<span class="va">self</span>.y_hat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>NN <span class="op">=</span> OneLayer_OneOutput_FF()</span>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>NN <span class="op">=</span> HW2_FeedForward()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>NN.FeedForward()</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"MSE Loss:"</span>,NN.MSE_loss(y_hat<span class="op">=</span>NN.y_hat,y<span class="op">=</span>NN.y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -707,8 +707,8 @@ x_{n1} &amp; x_{n2} &amp; x_{n3} \\
 4  &amp; 13 &amp; 57
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>NN <span class="op">=</span> OneLayer_OneOutput_FF(scale_data<span class="op">=</span><span class="va">False</span>,verbose<span class="op">=</span><span class="va">False</span>)</span>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>NN <span class="op">=</span> HW2_FeedForward(scale_data<span class="op">=</span><span class="va">False</span>,verbose<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"non-scaled X:</span><span class="ch">\n</span><span class="st">"</span>,NN.X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>non-scaled X:
@@ -724,8 +724,8 @@ x_{n1} &amp; x_{n2} &amp; x_{n3} \\
 <p>But this is the formula I would use if I did calculate by hand:</p>
 <p><span class="math display">\[x' = \frac{x - min}{max - min}\]</span></p>
 <p>Where <span class="math inline">\(x'\)</span> is the scaled value, <span class="math inline">\(x\)</span> is the value to scale. (<span class="math inline">\(min\)</span> &amp; <span class="math inline">\(max\)</span> are the minimum value and maximum value of the list of values to scale to.)</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>NN <span class="op">=</span> OneLayer_OneOutput_FF(scale_data<span class="op">=</span><span class="va">True</span>,verbose<span class="op">=</span><span class="va">False</span>)</span>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>NN <span class="op">=</span> HW2_FeedForward(scale_data<span class="op">=</span><span class="va">True</span>,verbose<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Min-Max Scaled X:</span><span class="ch">\n</span><span class="st">"</span>,NN.X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Min-Max Scaled X:
@@ -758,7 +758,7 @@ y_n
 1
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y target vector:</span><span class="ch">\n</span><span class="st">"</span>,NN.y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>y target vector:
@@ -789,7 +789,7 @@ w_{31} &amp; w_{32} &amp; w_{33} &amp; w_{34}
 1 &amp; 1 &amp; 1 &amp; 1
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="14">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>NN.FeedForward(verbose<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"W1 matrix: </span><span class="ch">\n</span><span class="st">"</span>,NN.W1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -821,7 +821,7 @@ b_n
 0 \\
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="15">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Bias vector B: </span><span class="ch">\n</span><span class="st">"</span>,NN.B)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Bias vector B: 
@@ -891,9 +891,9 @@ b_n
 1.597 &amp; 1.597 &amp; 1.597 &amp; 1.597
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>NN.Z1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>array([[0.94258373, 0.94258373, 0.94258373, 0.94258373],
        [1.30669856, 1.30669856, 1.30669856, 1.30669856],
        [1.8       , 1.8       , 1.8       , 1.8       ],
@@ -931,7 +931,7 @@ S(z_{n1}) &amp; S(z_{n2}) &amp; S(z_{n3}) &amp; S(z_{n4}) \\
 0.832  &amp; 0.832  &amp; 0.832  &amp; 0.832  
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="17">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"H1 matrix: </span><span class="ch">\n</span><span class="st">"</span>,NN.H1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>H1 matrix: 
@@ -963,7 +963,7 @@ w_4^{(2)} \\[6pt]
 2
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="18">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"W2 matrix: </span><span class="ch">\n</span><span class="st">"</span>,NN.W2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>W2 matrix: 
@@ -994,7 +994,7 @@ c_n
 0
 \end{bmatrix}
 \end{equation*}\]</span></p>
-<div class="cell" data-execution_count="19">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"C bias vector: </span><span class="ch">\n</span><span class="st">"</span>,NN.C)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>C bias vector: 
@@ -1074,7 +1074,7 @@ z_n^{(2)}
 6.656
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="20">
+<div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Z2 matrix: </span><span class="ch">\n</span><span class="st">"</span>,NN.Z2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Z2 matrix: 
@@ -1114,7 +1114,7 @@ S(z_n^{(2)})
 0.999
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="21">
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y-hat prediction vector:</span><span class="ch">\n</span><span class="st">"</span>,NN.y_hat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>y-hat prediction vector:
@@ -1187,7 +1187,7 @@ y_n
 -0.001
 \end{bmatrix}
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="22">
+<div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"(y_hat) - y:</span><span class="ch">\n</span><span class="st">"</span>, NN.y_hat<span class="op">-</span>NN.y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(y_hat) - y:
@@ -1204,7 +1204,7 @@ y_n
 L  \frac{1}{n} \displaystyle \sum_i^n (\hat{y}_i - y_i)^2
 \approx 0.498
 \end{align*}\]</span></p>
-<div class="cell" data-execution_count="24">
+<div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"MSE Loss:"</span>,NN.MSE_loss(y_hat<span class="op">=</span>NN.y_hat,y<span class="op">=</span>NN.y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>MSE Loss: 0.4979790666878168</code></pre>
