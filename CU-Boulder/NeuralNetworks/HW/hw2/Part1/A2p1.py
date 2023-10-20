@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import math
-from sklearn.preprocessing import LabelEncoder,MinMaxScaler
+from sklearn.preprocessing import LabelEncoder,MinMaxScaler,StandardScaler
 from sklearn.metrics import confusion_matrix  
 import seaborn as sns
 import random
@@ -12,7 +12,7 @@ import random
 class OneLayer_OneOutput():
     def __init__(self,
                  data_filename = "A2_Data_JasmineKobayashi.csv", 
-                 scale_data = True,
+                 data_normalizer = StandardScaler(),
                  hidden_units= 4,
                  randomize_initial_parameters = False,
                  verbose = True):
@@ -21,11 +21,15 @@ class OneLayer_OneOutput():
         
         # create X and y, assuming data has column "LABEL" as column with labels
         ## X matrix
-        if scale_data:
-            mm_scaler = MinMaxScaler()
-            X = mm_scaler.fit_transform(self.df.drop(columns="LABEL",axis=1))
+        if data_normalizer is not None:
+            self.data_scaler = data_normalizer
+            X = self.data_scaler.fit_transform(self.df.drop(columns="LABEL",axis=1))
+            print("X was normalized using {}".format(data_normalizer))
         else:
+            self.data_scaler = None
             X = np.array(self.df.drop(columns=['LABEL'],axis=1))
+            print("X was not normalized")
+
         self.X = X
 
         ## y
@@ -178,8 +182,6 @@ class OneLayer_OneOutput():
             print("Updated W2 matrix: \n", self.W2)
             print("Shape of updated  C :", self.C.shape)
             print("Updated C (bias vector for Z2): \n",self.C)
-        
-
 
     # Visualizations (confusion matrix & Lce plot)==================
     # Confusion matrix-------------------------------------------------------------
@@ -232,6 +234,9 @@ class OneLayer_OneOutput():
             print("Epoch",i)
             self.FeedForward(activation= activation,
                              verbose=verbose)
+            
+            if verbose:
+                print("MSE Loss:",self.MSE_loss(y_hat=self.y_hat,y=self.y))
             self.loss_record.append(self.MSE_loss(y_hat=self.y_hat,
                                                   y=self.y))
             # Update params with gradient descent---------------------------
@@ -239,8 +244,36 @@ class OneLayer_OneOutput():
                            y=self.y,
                            LR=self.LR,
                            verbose=verbose)
-        print("finished running all epochs")
+        print("Finished running all epochs")
 
         # Visualizations
         self.ConfusionMatrix(y_hat=self.y_hat,y=self.y)
         self.plot_LCE()
+
+    def test_model(self,
+                   test_data,
+                   verbose = True):
+        self.test_df = pd.read_csv(test_data)
+
+        print("X is now input from test data")
+        if self.data_scaler is not None:
+            self.X = self.data_scaler.transform(self.test_df.drop(columns="LABEL",axis=1))
+            print("Test input X was normalized using same normalizer as training ({})".format(self.data_scaler))
+        else:
+            self.X = self.test_df.drop(columns="LABEL",axis=1)
+
+        self.y = np.array(self.test_df[['LABEL']])
+
+        if verbose:
+            print("Shape of X:", self.X.shape)
+            print("X matrix: \n", self.X)
+            print("Shape of y:", self.y.shape)
+            print("y vector: \n", self.y)
+
+        print("Testing model with test data")
+        self.FeedForward()
+        print("Finished testing model")
+
+        self.ConfusionMatrix(y_hat=self.y_hat,
+                             y=self.y)
+        
