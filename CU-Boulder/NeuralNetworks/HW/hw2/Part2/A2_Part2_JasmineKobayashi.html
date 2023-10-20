@@ -69,7 +69,16 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#fracpartial-lpartial-w1" id="toc-fracpartial-lpartial-w1" class="nav-link" data-scroll-target="#fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#calculate-softmax-results" id="toc-calculate-softmax-results" class="nav-link" data-scroll-target="#calculate-softmax-results">4) Calculate Softmax results</a></li>
+  <li><a href="#calculate-softmax-results" id="toc-calculate-softmax-results" class="nav-link" data-scroll-target="#calculate-softmax-results">4) Calculate Softmax results</a>
+  <ul class="collapse">
+  <li><a href="#jks-answer-2" id="toc-jks-answer-2" class="nav-link" data-scroll-target="#jks-answer-2">JK’s answer</a>
+  <ul class="collapse">
+  <li><a href="#textsoftmax1.1" id="toc-textsoftmax1.1" class="nav-link" data-scroll-target="#textsoftmax1.1"><span class="math inline">\(\text{softmax}(1.1)\)</span></a></li>
+  <li><a href="#textsoftmax2.2" id="toc-textsoftmax2.2" class="nav-link" data-scroll-target="#textsoftmax2.2"><span class="math inline">\(\text{softmax}(2.2)\)</span></a></li>
+  <li><a href="#textsoftmax0.2" id="toc-textsoftmax0.2" class="nav-link" data-scroll-target="#textsoftmax0.2"><span class="math inline">\(\text{softmax}(0.2)\)</span></a></li>
+  <li><a href="#textsoftmax-1.7" id="toc-textsoftmax-1.7" class="nav-link" data-scroll-target="#textsoftmax-1.7"><span class="math inline">\(\text{softmax}(-1.7)\)</span></a></li>
+  </ul></li>
+  </ul></li>
   <li><a href="#derivative-of-softmax" id="toc-derivative-of-softmax" class="nav-link" data-scroll-target="#derivative-of-softmax">5) Derivative of Softmax</a></li>
   <li><a href="#combination" id="toc-combination" class="nav-link" data-scroll-target="#combination">6) Combination</a></li>
   <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">7) Code</a></li>
@@ -476,17 +485,149 @@ a_{21}b_{21} &amp; a_{22}b_{22}
 <section id="fracpartial-lpartial-c" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-c"><span class="math inline">\(\frac{\partial L}{\partial C}\)</span></h3>
 <p><span class="math display">\[\begin{align*}
-\frac{\partial L}{\partial c_i} = \frac{\partial L}{\partial \hat{y}_i} \cdot \frac{\partial \hat{y}_i}{\partial z_{il}^{(2)}} \cdot \frac{\partial z_{il}^{(2)}}{\partial c_i}
+\frac{\partial L}{\partial C} = \frac{\partial L}{\partial \mathbf{\hat{y}_i}} \cdot \frac{\partial \mathbf{\hat{y}_i}}{\partial Z^{(2)}} \cdot \frac{\partial Z^{(2)}}{\partial C}
+\end{align*}\]</span></p>
+<p>We find the derivative of the softmax in question 5, and in question 6 we remind ourselves from the lectures that when we use a combination of Softmax, Categorical Cross entropy, and One-Hot Encoding, then <span class="math inline">\(\frac{\partial L}{\partial Z^{(2)}} = \hat{y} - y\)</span> (aka “error” in the lecture slides). So I’m going to skip those parts and just find the rest of the relevant partial derivatives.</p>
+<p><span class="math display">\[\begin{align*}
+z_{i,l}^{(2)} &amp;= \sum_k^2 h_{i,k}w_{k,l}^{(2)} + c_i \\
+\Rightarrow
+\frac{\partial z_{i,l}^{(2)}}{\partial c_i} &amp;= 0 + (1)\\
+\Rightarrow
+\frac{\partial Z^{(2)}}{\partial C} &amp;=
+\begin{pmatrix}
+1 \\
+\vdots \\
+1
+\end{pmatrix}
+=
+\vec{1}_n
+\end{align*}\]</span></p>
+<p>So in matrix form</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial C} &amp;= \frac{\partial L}{\partial \mathbf{\hat{y}_i}} \cdot \frac{\partial \mathbf{\hat{y}_i}}{\partial Z^{(2)}} \cdot \frac{\partial Z^{(2)}}{\partial C}\\
+&amp;= [\mathbf{\hat{y}} - \mathbf{y}] \ast \vec{1}_n
 \end{align*}\]</span></p>
 </section>
 <section id="fracpartial-lpartial-w2" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-w2"><span class="math inline">\(\frac{\partial L}{\partial W^{(2)}}\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial W^{(2)}} &amp;= \underbrace{\frac{\partial L}{\partial \mathbf{\hat{y}_i}} \cdot \frac{\partial \mathbf{\hat{y}_i}}{\partial Z^{(2)}}}_{\frac{\partial L}{\partial Z^{(2)}}} \cdot \frac{\partial Z^{(2)}}{\partial W^{(2)}}\\
+&amp;= \frac{\partial L}{\partial Z^{(2)}} \cdot \frac{\partial Z^{(2)}}{\partial W^{(2)}}
+\end{align*}\]</span></p>
+<p>Again, focusing on the other derivatives:</p>
+<p><span class="math display">\[\begin{align*}
+z_{i,l}^{(2)} &amp;= \sum_k^2 h_{i,k}w_{k,l}^{(2)} + c_i \\
+\Rightarrow
+\frac{\partial z_{i,l}^{(2)}}{\partial w_{kl}} &amp;= h_{i,k}(1) + 0\\
+\Rightarrow
+\frac{\partial Z^{(2)}}{\partial W^{(2)}} &amp;= H_1
+\end{align*}\]</span></p>
+<p>Matrix form:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial W^{(2)}} &amp;= \frac{\partial L}{\partial \mathbf{\hat{y}_i}} \cdot \frac{\partial \mathbf{\hat{y}_i}}{\partial Z^{(2)}} \cdot \frac{\partial Z^{(2)}}{\partial W^{(2)}}\\
+&amp;= [\mathbf{\hat{y}} - \mathbf{y}] \odot H_1
+\end{align*}\]</span></p>
 </section>
 <section id="fracpartial-lpartial-b" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-b"><span class="math inline">\(\frac{\partial L}{\partial B}\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial B} &amp;= \underbrace{\frac{\partial L}{\partial \mathbf{\hat{y}}} \cdot \frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}}}_{\frac{\partial L}{\partial Z^{(2)}}} \cdot \frac{\partial Z^{(2)}}{\partial H_1} \cdot \frac{\partial H_1}{\partial Z^{(1)}} \cdot \frac{\partial Z^{(1)}}{\partial B} \\
+\end{align*}\]</span></p>
+<p>Starting with <span class="math inline">\(\frac{\partial Z^{(2)}}{\partial H_1}\)</span></p>
+<p><span class="math display">\[\begin{align*}
+z_{i,l}^{(2)} &amp;= \displaystyle \sum_k^2 h_{i,k}w_{k,l}^{(2)} + c_i \\
+\Rightarrow
+\frac{\partial z_{i,l}^{(2)}}{\partial h_{i,k}} &amp;= (1)w_{k,l}^{(2)} + 0 \\
+\Rightarrow
+\frac{\partial Z^{(2)}}{\partial H_1} &amp;= W^{(2)}
+\end{align*}\]</span></p>
+<p>Then for <span class="math inline">\(\frac{\partial H_1}{\partial Z^{(1)}}\)</span></p>
+<p><span class="math display">\[\begin{align*}
+h_{i,k} = \text{reLU}(z_{i,k}^{(1)}) =
+\begin{cases}
+z_{i,k}^{(1)}   &amp;\text{if } z &gt; 0 \\
+0   &amp;\text{else}
+\end{cases}
+\end{align*}\]</span></p>
+<p>We need to start with finding the derivative of the reLU function.</p>
+<p>Generically,</p>
+<p><span class="math display">\[\begin{align*}
+f(z) =
+\begin{cases}
+z   &amp;\text{if } z &gt; 0 \\
+0   &amp;\text{else}
+\end{cases} \\
+\Rightarrow
+f'(z) =
+\begin{cases}
+1   &amp;\text{if } z &gt; 0 \\
+0   &amp;\text{else}
+\end{cases} \\
+\end{align*}\]</span></p>
+<p>So I can summarize this with a matrix, and I can call this matrix, <span class="math inline">\(\Gamma\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial H_1}{\partial Z^{(1)}} =
+\begin{bmatrix}
+f'(z_{11}^{(1)}) &amp; f'(z_{12}^{(1)}) &amp; f'(z_{13}^{(1)}) &amp; f'(z_{14}^{(1)}) \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+f'(z_{n1}^{(1)}) &amp; f'(z_{n2}^{(1)}) &amp; f'(z_{n3}^{(1)}) &amp; f'(z_{n4}^{(1)})
+\end{bmatrix}
+= \Gamma
+\end{align*}\]</span></p>
+<p>Then lastly for <span class="math inline">\(\frac{\partial Z^{(1)}}{\partial B}\)</span></p>
+<p><span class="math display">\[\begin{align*}
+z_{i,k}^{(1)} &amp;= \displaystyle \sum_j^3 x_{i,j}w_{j,k}^{(1)} + b_i \\
+\Rightarrow
+\frac{\partial z_{i,k}^{(1)}}{\partial b_i} &amp;= 0 + (1) \\
+\Rightarrow
+\frac{\partial Z^{(1)}}{\partial B} &amp;=
+\begin{bmatrix}
+1 \\
+\vdots \\
+1
+\end{bmatrix}
+= \vec{1}_n
+
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial B} &amp;=
+\underbrace{\frac{\partial L}{\partial \mathbf{\hat{y}}}
+\cdot
+\frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}}}_{\frac{\partial L}{\partial Z^{(2)}}}
+
+\cdot
+
+\underbrace{\frac{\partial Z^{(2)}}{\partial H_1}}_{W^{(2)}}
+
+\cdot
+
+\underbrace{\frac{\partial H_1}{\partial Z^{(1)}}}_{\Gamma}
+
+\cdot
+
+\underbrace{\frac{\partial Z^{(1)}}{\partial B}}_{\vec{1}_n} \\
+\end{align*}\]</span></p>
 </section>
 <section id="fracpartial-lpartial-w1" class="level3">
 <h3 class="anchored" data-anchor-id="fracpartial-lpartial-w1"><span class="math inline">\(\frac{\partial L}{\partial W^{(1)}}\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial W^{(1)}} &amp;=
+\underbrace{\frac{\partial L}{\partial \mathbf{\hat{y}}}
+\cdot
+\frac{\partial \mathbf{\hat{y}}}{\partial Z^{(2)}}}_{\frac{\partial L}{\partial Z^{(2)}}}
+
+\cdot
+
+\underbrace{\frac{\partial Z^{(2)}}{\partial H_1}}_{W^{(2)}}
+
+\cdot
+
+\underbrace{\frac{\partial H_1}{\partial Z^{(1)}}}_{\Gamma}
+
+\cdot
+
+\frac{\partial Z^{(1)}}{\partial W^{(1)}} \\
+\end{align*}\]</span></p>
 </section>
 </section>
 </section>
@@ -494,7 +635,46 @@ a_{21}b_{21} &amp; a_{22}b_{22}
 <h1>4) Calculate Softmax results</h1>
 <p>If your four <span class="math inline">\(Z_2\)</span> values are <span class="math inline">\(1.1, 2.2, 0.2\)</span> and <span class="math inline">\(-1.7\)</span>, calculate (by hand and show your work) the four softmax results.</p>
 <p>(Yes you can use a calculator or Google for the math - but SHOW THE WORK and steps) If you show just the answer, you will get -50%.</p>
-<p><strong><em>JK:</em></strong></p>
+<section id="jks-answer-2" class="level2">
+<h2 class="anchored" data-anchor-id="jks-answer-2">JK’s answer</h2>
+<p>Softmax formula:</p>
+<p><span class="math display">\[\begin{align*}
+\text{softmax}(z) = \frac{\text{exp}(z)}{\displaystyle \sum_i \text{exp}(z_i)}
+\end{align*}\]</span></p>
+<p><span class="math inline">\(Z2 = [1.1,2.2,0.2,-1.7]\)</span></p>
+<section id="textsoftmax1.1" class="level3">
+<h3 class="anchored" data-anchor-id="textsoftmax1.1"><span class="math inline">\(\text{softmax}(1.1)\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+\text{softmax}(1.1) &amp;= \frac{e^{1.1}}{e^{1.1} + e^{2.2} + e^{0.2} + e^{-1.7}} \\
+&amp; \approx \frac{3.0042}{13.43327} \\
+&amp; \approx 0.2236
+\end{align*}\]</span></p>
+</section>
+<section id="textsoftmax2.2" class="level3">
+<h3 class="anchored" data-anchor-id="textsoftmax2.2"><span class="math inline">\(\text{softmax}(2.2)\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+\text{softmax}(2.2) &amp;= \frac{e^{2.2}}{e^{1.1} + e^{2.2} + e^{0.2} + e^{-1.7}} \\
+&amp; \approx \frac{9.025}{13.43327} \\
+&amp; \approx 0.6718
+\end{align*}\]</span></p>
+</section>
+<section id="textsoftmax0.2" class="level3">
+<h3 class="anchored" data-anchor-id="textsoftmax0.2"><span class="math inline">\(\text{softmax}(0.2)\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+\text{softmax}(0.2) &amp;= \frac{e^{0.2}}{e^{1.1} + e^{2.2} + e^{0.2} + e^{-1.7}} \\
+&amp; \approx \frac{1.2214}{13.43327} \\
+&amp; \approx 0.0909
+\end{align*}\]</span></p>
+</section>
+<section id="textsoftmax-1.7" class="level3">
+<h3 class="anchored" data-anchor-id="textsoftmax-1.7"><span class="math inline">\(\text{softmax}(-1.7)\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+\text{softmax}(-1.7) &amp;= \frac{e^{-1.7}}{e^{1.1} + e^{2.2} + e^{0.2} + e^{-1.7}} \\
+&amp; \approx \frac{0.18268}{13.43327} \\
+&amp; \approx 0.0136
+\end{align*}\]</span></p>
+</section>
+</section>
 </section>
 <section id="derivative-of-softmax" class="level1">
 <h1>5) Derivative of Softmax</h1>
@@ -507,7 +687,7 @@ a_{21}b_{21} &amp; a_{22}b_{22}
 <p>When using the combination of Softmax, Categorical Cross Entropy, and One-Hot Encoding, what is <span class="math inline">\(\frac{\partial L}{\partial Z_2}\)</span> (sometimes written as <span class="math inline">\(\frac{dL}{dz}\)</span> or as “Error” on the slides)?</p>
 <p>(Just give the final answer here. You are not required to show work for this part.)</p>
 <p><strong><em>JK:</em></strong></p>
-<p><span class="math inline">\(\frac{\partial L}{\partial Z_2} = ?\)</span></p>
+<p><span class="math inline">\(\frac{\partial L}{\partial Z_2} = \hat{y} - y\)</span></p>
 </section>
 <section id="code" class="level1">
 <h1>7) Code</h1>
