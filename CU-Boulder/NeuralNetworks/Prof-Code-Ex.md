@@ -32,7 +32,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 ## Extra Resources
 
-- Softmax, CCE, and One-Hot Encoding - 3 Outputs ([Raw code](raw_code/Module2/Extra-3Outputs.html))
+- Softmax, CCE, and One-Hot Encoding - 3 Outputs ([Raw code](raw_code/Module2/Extra-3Outputs.html); [Markdown](mrkdwn/Module2/Extra-3Outputs.html))
 - Gates' Webpage for all extra resources for this module [here](https://gatesboltonanalytics.com/?page_id=680)
 
 
