@@ -16,8 +16,8 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 # Module 1
 
-- Simple NN using just Sklearn ([Raw code](raw_code/NN_Just_sklearn_Gates.html); [Markdown](mrkdwn/NN_Just_sklearn_Gates.html))
-- Logistic Regression ([Raw code](raw_code/LogReg_gates.html); [Markdown](mrkdwn/LogReg_gates.html))
+- Simple NN using just Sklearn ([Raw code](raw_code/Module1/NN_Just_sklearn_Gates.html); [Markdown](mrkdwn/NN_Just_sklearn_Gates.html))
+- Logistic Regression ([Raw code](raw_code/Module1/LogReg_gates.html); [Markdown](mrkdwn/LogReg_gates.html))
     - Using gradient descent
     - Updating **w** and with GD and LR
     - Using the Loss Function LCE: Cross Entropy
@@ -26,13 +26,13 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 # Module 2
 
-- Using FF and BP to Train a NN to predict XOR ([Raw code](raw_code/XOR_NN.html); (markdown not made yet))
-- Using FF and BP - NN - 3D Data - Binary Label ([Raw code](raw_code/Mod2_3D_binary.html); (markdown not made yet))
-- Using FF, BP, Softmax, CCE, One-Hot Encoding, etc. ([Raw code](raw_code/Multinomial_NN.html); (markdown not made yet))
+- Using FF and BP to Train a NN to predict XOR ([Raw code](raw_code/Module2/XOR_NN.html); (markdown not made yet))
+- Using FF and BP - NN - 3D Data - Binary Label ([Raw code](raw_code/Module2/Mod2_3D_binary.html); (markdown not made yet))
+- Using FF, BP, Softmax, CCE, One-Hot Encoding, etc. ([Raw code](raw_code/Module2/Multinomial_NN.html); (markdown not made yet))
 
 ## Extra Resources
 
-- Softmax, CCE, and One-Hot Encoding - 3 Outputs ([Raw code](raw_code/Extra-3Outputs.html))
+- Softmax, CCE, and One-Hot Encoding - 3 Outputs ([Raw code](raw_code/Module2/Extra-3Outputs.html))
 - Gates' Webpage for all extra resources for this module [here](https://gatesboltonanalytics.com/?page_id=680)
 
 
