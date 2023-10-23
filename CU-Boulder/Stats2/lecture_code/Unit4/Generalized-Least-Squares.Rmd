@@ -1,0 +1,210 @@
+---
+title: "Generalized Least Squares"
+author: "Jasmine Kobayashi"
+format:
+    html:
+        code-fold: false
+execute:
+    output: true
+    warning: false
+toc: true
+---
+
+* Global Warming Data Estimating Northern Hemisphere from 8 climate proxies 
+* Each observation represents a year of data (1865-2000)
+
+**Question: What could go wrong if we use OLS?**
+
+Anytime you have data that is collected over time you need to be concerned that you might end up with some correlated error. Here, we might expect that from year to year there might be some sort of correlation between temperatures and if we have a very cold year then next year might be colder than average. This implies some sort of correlation phenomenon. This means GLS!
+
+```{r, warning=FALSE,message=FALSE}
+
+#install.packages("faraway")
+library(faraway)
+
+```
+
+
+```{r}
+globwarm<-na.omit(globwarm)# omitting missing values 
+
+```
+
+```{r}
+
+
+lmod<-lm(nhtemp ~wusa + jasper + westgreen + chesapeake + tornetrask + urals + mongolia+tasman,data=globwarm)
+
+# our concern here is that our errors are correlated 
+
+n <- length(residuals(lmod))
+
+# correlation between residuals lagged by one year. (First one removes the first residuals thus looking at years 2-n). The next removes the final one and looks at 1 to n-1 and taking the correlation between a year and the subsequent year residuals.
+
+cor(residuals(lmod)[-1],residuals(lmod)[-n])
+
+#here 0.5833 is the phi value 
+
+```
+(Note: We don't know the value of sigma because we don't know the population size.)
+
+How could we fit GLS? We need to estimate our BIG SIGMA that basically tells us the structure we are expecting from our correlation between errors and then we will use that to be able to fit a model that incorporates that correlation appropriately. 
+
+*If we assume the errors take a simple auto regressive form such that the error is correlated with the prior,*
+
+$$ \epsilon_{i+1} = \phi \epsilon_i + \delta_i $$
+
+such that, 
+
+$$ \delta_i \sim N(0, \gamma^2) $$
+Note that $\phi$ is the correlation coefficient. We can estimate $\phi$ from the model. $\delta_i$ is the additional error term that we can expect since it is normally distributed. The 0.5833 was what we estimated our $\phi$ to be. 
+
+
+* Under this assumption 
+
+$$\Sigma_{ij} = \phi^{|i-j|}$$. 
+
+
+
+
+We can estimate it like this: 
+
+```{r}
+
+ 
+X <- model.matrix(lmod)
+
+Sigma <- diag(n)  # diagonal matrix (nxn) (length of residuals 1 on diags - 0 elsewhere
+
+Sigma <- 0.5833^abs(row(Sigma) - col(Sigma))
+
+```
+
+
+```{r}
+
+y <- globwarm$nhtemp
+
+Sigma_inv <- solve(Sigma)
+
+XTX_inv <- solve(t(X)%*% Sigma_inv %*% X)
+
+```
+
+```{r}
+
+beta_hat <- XTX_inv %*% t(X) %*% Sigma_inv %*% y
+beta_hat
+
+```
+
+
+```{r}
+
+res <- y - X%*%beta_hat
+#res
+
+cor(res[-1],res[-n])
+
+# the correlation did not improve at all but we will discuss this shortly
+
+```
+
+
+Similar to what we had before, however there is another way to do it. 
+
+```{r}
+
+P <- chol(Sigma)  # P is the square root of Sigma matrix (choleski decomposition)
+
+P_inv <- solve(t(P))
+
+PX <- P_inv %*% X
+
+PY <- P_inv %*% y
+
+lm(PY ~ PX -1)    # -1 because PX already has an intercept in it so -1 makes sure that no additional intercept is fitted
+
+
+
+```
+
+We obtain the same values 
+
+```{r}
+
+matrix(lm(PY ~ PX -1)$coef)
+
+```
+The `nlme` package has a function for fitting linear models like this: 
+
+```{r}
+library(nlme)
+
+glmod <- gls(nhtemp ~ wusa + jasper + westgreen + chesapeake + tornetrask + urals + mongolia + tasman, correlation = corAR1(form = ~ year), data = globwarm)
+
+
+#  lagging by 1 corAR1
+```
+
+
+```{r}
+
+summary(glmod)
+
+```
+We can calculate a confidence interval on that using the intervals function. 
+
+```{r}
+
+intervals(glmod, which = "var-cov")
+
+```
+Examples of correlated Errors 
+
+** Autocorrelation 
+** Grouped (blocked) data
+** Spatial Data (data over states, example USA (regional-cluster))
+
+
+Class Exercise due 10/27/23
+
+**Code
+
+Using the cheddar data (in the faraway package), run the code below to add a time variable
+
+```{r}
+library(faraway)
+cheddar$time <- 1:nrow(cheddar)
+```
+
+
+* Fit a Linear Model Predicting taste from Acetic, H2S and Lactic
+```{r}
+# your code here
+
+```
+
+
+* Plot the residuals from the model against time. What do you see?
+
+```{r}
+# your code here
+
+```
+
+
+YOUR ANSWER HERE
+
+* Fit a GLS model using AR(1) correlation. Is there evidence of correlation between the errors?
+
+```{r}
+# your code here
+
+```
+
+
+YOUR ANSWER HERE
+
+
+Knit and submit entire workbook to canvas 10/27/23 (Friday)

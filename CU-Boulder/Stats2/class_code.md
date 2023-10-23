@@ -20,3 +20,11 @@ All lecture code (and posted solutions) for [STAT II](Stats2.md) at [CU Boulder]
 
 - [T-tests in R](lecture_code/Unit2/t-tests_in_R_modified.html)
 - [F-test and T-test combined](lecture_code/Unit2/F-and-T-test-combined.html)
+
+# Unit 3: Introduction to Causal Inference
+
+(No lecture code)
+
+# Unit 4: Regression Diagnostics
+
+- [Generalized Least Squares](lecture_code/Unit4/Generalized-Least-Squares.html)

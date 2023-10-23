@@ -64,3 +64,30 @@ permalink: /CUB/StatII
 # Exam 1 Review
 
 [Solutions to Exam1 Code Review](Exam1Review/STAT5010_Exam1ReviewCoding-Solutions.html) (because I never attempted it myself)
+
+# Unit 3: Introduction to Causal Inference
+
+(Mainly conceptual)
+
+## Topics
+
+- Defining Causality
+
+## Resources
+
+(No lecture code)
+
+**[Assignment](homeworks.md#unit-3-introduction-to-causal-inference)**
+
+- HW4
+
+# Unit 4: Regression Diagnostics
+
+## Topics
+
+
+## Resources
+
+**[Lecture material](class_code.md)**
+
+- Generalized Least Squares
