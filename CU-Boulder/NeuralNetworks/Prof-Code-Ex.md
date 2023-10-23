@@ -27,7 +27,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 # Module 2
 
 - Using FF and BP to Train a NN to predict XOR ([Raw code](raw_code/Module2/XOR_NN.html); [Markdown](mrkdwn/Module2/XOR_NN.html))
-- Using FF and BP - NN - 3D Data - Binary Label ([Raw code](raw_code/Module2/Mod2_3D_binary.html); (markdown not made yet))
+- Using FF and BP - NN - 3D Data - Binary Label ([Raw code](raw_code/Module2/Mod2_3D_binary.html); [Markdown](mrkdwn/Module2/Mod2_3D_binary.html))
 - Using FF, BP, Softmax, CCE, One-Hot Encoding, etc. ([Raw code](raw_code/Module2/Multinomial_NN.html); (markdown not made yet))
 
 ## Extra Resources
