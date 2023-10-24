@@ -113,7 +113,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#textsoftmax-1.7" id="toc-textsoftmax-1.7" class="nav-link" data-scroll-target="#textsoftmax-1.7"><span class="math inline">\(\text{softmax}(-1.7)\)</span></a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#derivative-of-softmax" id="toc-derivative-of-softmax" class="nav-link" data-scroll-target="#derivative-of-softmax">5) Derivative of Softmax</a></li>
+  <li><a href="#derivative-of-softmax" id="toc-derivative-of-softmax" class="nav-link" data-scroll-target="#derivative-of-softmax">5) Derivative of Softmax</a>
+  <ul class="collapse">
+  <li><a href="#jks-answer-3" id="toc-jks-answer-3" class="nav-link" data-scroll-target="#jks-answer-3">JK’s answer:</a>
+  <ul class="collapse">
+  <li><a href="#case-1-ij" id="toc-case-1-ij" class="nav-link" data-scroll-target="#case-1-ij"><em>Case 1:</em> <span class="math inline">\(i=j\)</span></a></li>
+  <li><a href="#case-2-i-neq-j" id="toc-case-2-i-neq-j" class="nav-link" data-scroll-target="#case-2-i-neq-j"><em>Case 2:</em> <span class="math inline">\(i \neq j\)</span></a></li>
+  <li><a href="#jacobian" id="toc-jacobian" class="nav-link" data-scroll-target="#jacobian">Jacobian</a></li>
+  </ul></li>
+  </ul></li>
   <li><a href="#combination" id="toc-combination" class="nav-link" data-scroll-target="#combination">6) Combination</a></li>
   <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">7) Code</a></li>
   </ul>
@@ -743,9 +751,74 @@ X
 <h1>5) Derivative of Softmax</h1>
 <p>Write out the derivative of the Softmax for the case where <span class="math inline">\(i=j\)</span> and for the case <span class="math inline">\(i\)</span> does not equal <span class="math inline">\(j\)</span>. Show all work and steps.</p>
 <p>Find and paste in the Jacobian for the derivative of the Softmax and assure that your results (for <span class="math inline">\(i=j\)</span> and <span class="math inline">\(i\neq j\)</span>) match the Jacobian values.</p>
-<p><strong><em>JK:</em></strong></p>
-<p>Did not give myself enough time to to finish this.</p>
-<p>(I will work through this on my own time to prepare for the exam, for this assignment I’m going to have to submit this question as is.)</p>
+<section id="jks-answer-3" class="level2">
+<h2 class="anchored" data-anchor-id="jks-answer-3">JK’s answer:</h2>
+<p>Reminder:</p>
+<p><span class="math display">\[\begin{align*}
+\hat{y}_i = \text{softmax}(z_i) = \frac{\text{exp}(z_i)}{\displaystyle \sum_{j=1}^k \text{exp}(z_j)}
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> go from 1 to <span class="math inline">\(k\)</span>, and <span class="math inline">\(k\)</span> is the number of categories.</p>
+<p>Thus, we need <em>two derivatives</em>, for <span class="math inline">\(\frac{\partial \hat{y}_i}{\partial z_j}\)</span>. Cases for when <span class="math inline">\(i=j\)</span> <strong>AND</strong> when <span class="math inline">\(i \neq j\)</span>.</p>
+<section id="case-1-ij" class="level3">
+<h3 class="anchored" data-anchor-id="case-1-ij"><em>Case 1:</em> <span class="math inline">\(i=j\)</span></h3>
+<p>For simpler notation I’m going to state that all summations are <span class="math inline">\(\displaystyle \sum_{j=1}^k\)</span></p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial \hat{y}_i}{\partial z_j} &amp;= \frac{(e^{z_i})(\sum e^{z_j}) - (e^{z_i})(e^{z_i})}{(\sum e^{z_j})^2}\\[6pt]
+&amp;=
+\frac{e^{z_i}}{\sum e^{z_j}} \cdot \left(1 - \frac{e^{z_i}}{\sum e^{z_j}}\right) \\[8pt]
+
+\Rightarrow
+\frac{\partial \hat{y}_i}{\partial z_j} &amp;= \hat{y}_i(1 - \hat{y}_i)
+\end{align*}\]</span></p>
+</section>
+<section id="case-2-i-neq-j" class="level3">
+<h3 class="anchored" data-anchor-id="case-2-i-neq-j"><em>Case 2:</em> <span class="math inline">\(i \neq j\)</span></h3>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial \hat{y}_i}{\partial z_j} &amp;= \frac{(0)(\sum e^{z_j}) - (e^{z_j})(e^{z_i})}{(\sum e^{z_j})^2}\\[6pt]
+&amp;=
+\frac{-e^{z_j}e^{z_i}}{(\sum e^{z_j})^2}\\[6pt]
+
+&amp;=
+\frac{e^{z_i}}{\sum e^{z_j}} \cdot \left(- \frac{e^{z_j}}{\sum e^{z_j}}\right) \\[8pt]
+
+\Rightarrow
+\frac{\partial \hat{y}_i}{\partial z_j} &amp;= \hat{y}_i(- \hat{y}_j) = -\hat{y}_i\hat{y}_j
+\end{align*}\]</span></p>
+</section>
+<section id="jacobian" class="level3">
+<h3 class="anchored" data-anchor-id="jacobian">Jacobian</h3>
+<p>(For the case in this assignment)</p>
+<p><span class="math display">\[\begin{align*}
+J &amp;=
+\begin{bmatrix}
+\frac{\partial \hat{y}_1}{\partial z_1} &amp; \frac{\partial \hat{y}_1}{\partial z_2} &amp; \frac{\partial \hat{y}_1}{\partial z_3} &amp; \frac{\partial \hat{y}_1}{\partial z_4} \\[6pt]
+
+\frac{\partial \hat{y}_2}{\partial z_1} &amp; \frac{\partial \hat{y}_2}{\partial z_2} &amp; \frac{\partial \hat{y}_2}{\partial z_3} &amp; \frac{\partial \hat{y}_2}{\partial z_4} \\[6pt]
+
+\frac{\partial \hat{y}_3}{\partial z_1} &amp; \frac{\partial \hat{y}_3}{\partial z_2} &amp; \frac{\partial \hat{y}_3}{\partial z_3} &amp; \frac{\partial \hat{y}_3}{\partial z_4} \\[6pt]
+
+\frac{\partial \hat{y}_4}{\partial z_1} &amp; \frac{\partial \hat{y}_4}{\partial z_2} &amp; \frac{\partial \hat{y}_4}{\partial z_3} &amp; \frac{\partial \hat{y}_4}{\partial z_4} \\[6pt]
+\end{bmatrix}\\
+
+&amp;=
+\begin{bmatrix}
+\hat{y}_1(1-\hat{y}_1) &amp; -\hat{y}_1\hat{y}_2 &amp; -\hat{y}_1\hat{y}_3 &amp; -\hat{y}_1\hat{y}_4 \\[4pt]
+
+-\hat{y}_2\hat{y}_1 &amp; \hat{y}_2(1-\hat{y}_2) &amp; -\hat{y}_2\hat{y}_3 &amp; -\hat{y}_2\hat{y}_4 \\[4pt]
+
+-\hat{y}_3\hat{y}_1 &amp; -\hat{y}_3\hat{y}_2 &amp; \hat{y}_3(1-\hat{y}_3) &amp; -\hat{y}_3\hat{y}_4 \\[4pt]
+
+-\hat{y}_4\hat{y}_1 &amp; -\hat{y}_4\hat{y}_2 &amp; -\hat{y}_4\hat{y}_3 &amp; \hat{y}_4(1-\hat{y}_4) \\[4pt]
+\end{bmatrix}\\
+
+\end{align*}\]</span></p>
+Lecture slide on Jacobians is as follows:
+<div>
+<p><img src="j_lecture.PNG" width="800"></p>
+</div>
+<p>The jacobian matrix matches the above calculations.</p>
+</section>
+</section>
 </section>
 <section id="combination" class="level1">
 <h1>6) Combination</h1>
