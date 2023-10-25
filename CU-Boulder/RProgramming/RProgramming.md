@@ -8,7 +8,7 @@ permalink: /CUB/RProgramming
 
 (essentially my introduction to R programming in general)
 
-# Lecture notes:
+# [Lecture notes:](Lectures.md)
 
 - Code Day1
 - Programming Basics
