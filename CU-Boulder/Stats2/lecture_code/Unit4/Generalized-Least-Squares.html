@@ -294,35 +294,116 @@ Phi 0.5099744 0.7109922 0.8383752
 </div>
 </div>
 <p>Examples of correlated Errors</p>
-<p>** Autocorrelation ** Grouped (blocked) data ** Spatial Data (data over states, example USA (regional-cluster))</p>
-<p>Class Exercise due 10/27/23</p>
-<p>**Code</p>
+<ul>
+<li>Autocorrelation</li>
+<li>Grouped (blocked) data</li>
+<li>Spatial Data (data over states, example USA (regional-cluster))</li>
+</ul>
+<p><strong>Class Exercise</strong> (due 10/27/23)</p>
+<p>(Code)</p>
 <p>Using the cheddar data (in the faraway package), run the code below to add a time variable</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(faraway)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>cheddar<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cheddar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>cheddar<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(cheddar)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cheddar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  taste Acetic   H2S Lactic time
+1  12.3  4.543 3.135   0.86    1
+2  20.9  5.159 5.043   1.53    2
+3  39.0  5.366 5.438   1.57    3
+4  47.9  5.759 7.496   1.81    4
+5   5.6  4.663 3.807   0.99    5
+6  25.9  5.697 7.601   1.09    6</code></pre>
+</div>
 </div>
 <ul>
 <li>Fit a Linear Model Predicting taste from Acetic, H2S and Lactic</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>lin_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(taste <span class="sc">~</span> Acetic <span class="sc">+</span> H2S <span class="sc">+</span> Lactic, <span class="at">data =</span> cheddar)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lin_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = taste ~ Acetic + H2S + Lactic, data = cheddar)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-17.390  -6.612  -1.009   4.908  25.449 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept) -28.8768    19.7354  -1.463  0.15540   
+Acetic        0.3277     4.4598   0.073  0.94198   
+H2S           3.9118     1.2484   3.133  0.00425 **
+Lactic       19.6705     8.6291   2.280  0.03108 * 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10.13 on 26 degrees of freedom
+Multiple R-squared:  0.6518,    Adjusted R-squared:  0.6116 
+F-statistic: 16.22 on 3 and 26 DF,  p-value: 3.81e-06</code></pre>
+</div>
 </div>
 <ul>
 <li>Plot the residuals from the model against time. What do you see?</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>lm_res <span class="ot">&lt;-</span> <span class="fu">summary</span>(lin_mod)<span class="sc">$</span>res</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cheddar<span class="sc">$</span>time,lm_res,<span class="at">type =</span> <span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Generalized-Least-Squares_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
-<p>YOUR ANSWER HERE</p>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>???</p>
 <ul>
 <li>Fit a GLS model using AR(1) correlation. Is there evidence of correlation between the errors?</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>gls_mod <span class="ot">&lt;-</span> <span class="fu">gls</span>(taste <span class="sc">~</span> Acetic <span class="sc">+</span> H2S <span class="sc">+</span> Lactic, <span class="at">correlation =</span> <span class="fu">corAR1</span>(<span class="at">form =</span> <span class="sc">~</span> time), <span class="at">data =</span> cheddar)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gls_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized least squares fit by REML
+  Model: taste ~ Acetic + H2S + Lactic 
+  Data: cheddar 
+     AIC      BIC  logLik
+  214.94 222.4886 -101.47
+
+Correlation Structure: AR(1)
+ Formula: ~time 
+ Parameter estimate(s):
+      Phi 
+0.2641944 
+
+Coefficients:
+                 Value Std.Error   t-value p-value
+(Intercept) -30.332472 20.273077 -1.496195  0.1466
+Acetic        1.436411  4.876581  0.294553  0.7707
+H2S           4.058880  1.314283  3.088284  0.0047
+Lactic       15.826468  9.235404  1.713674  0.0985
+
+ Correlation: 
+       (Intr) Acetic H2S   
+Acetic -0.899              
+H2S     0.424 -0.395       
+Lactic  0.063 -0.416 -0.435
+
+Standardized residuals:
+        Min          Q1         Med          Q3         Max 
+-1.64546468 -0.63861716 -0.06641714  0.52255676  2.41323021 
+
+Residual standard error: 10.33276 
+Degrees of freedom: 30 total; 26 residual</code></pre>
 </div>
-<p>YOUR ANSWER HERE</p>
-<p>Knit and submit entire workbook to canvas 10/27/23 (Friday)</p>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>From what I’m understanding, the phi-value is an indication of any correlation between residuals(?). If that’s the case, then the phi-value here is 0.2641944, which does not seem like a very high correlation value, so I would say no.</p>
+<p><strong>Knit and submit entire workbook to canvas 10/27/23 (Friday)</strong></p>
 
 </main>
 <!-- /main column -->

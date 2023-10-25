@@ -162,27 +162,30 @@ intervals(glmod, which = "var-cov")
 ```
 Examples of correlated Errors 
 
-** Autocorrelation 
-** Grouped (blocked) data
-** Spatial Data (data over states, example USA (regional-cluster))
+* Autocorrelation 
+* Grouped (blocked) data
+* Spatial Data (data over states, example USA (regional-cluster))
 
 
-Class Exercise due 10/27/23
+**Class Exercise** (due 10/27/23)
 
-**Code
+(Code)
 
 Using the cheddar data (in the faraway package), run the code below to add a time variable
 
-```{r}
+```{r, warning=FALSE,message=FALSE}
 library(faraway)
 cheddar$time <- 1:nrow(cheddar)
+
+head(cheddar)
 ```
 
 
 * Fit a Linear Model Predicting taste from Acetic, H2S and Lactic
 ```{r}
 # your code here
-
+lin_mod <- lm(taste ~ Acetic + H2S + Lactic, data = cheddar)
+summary(lin_mod)
 ```
 
 
@@ -190,21 +193,25 @@ cheddar$time <- 1:nrow(cheddar)
 
 ```{r}
 # your code here
-
+lm_res <- summary(lin_mod)$res
+plot(cheddar$time,lm_res,type = "p")
 ```
 
+*YOUR ANSWER HERE*
 
-YOUR ANSWER HERE
+???
 
 * Fit a GLS model using AR(1) correlation. Is there evidence of correlation between the errors?
 
 ```{r}
 # your code here
-
+gls_mod <- gls(taste ~ Acetic + H2S + Lactic, correlation = corAR1(form = ~ time), data = cheddar)
+summary(gls_mod)
 ```
 
+*YOUR ANSWER HERE*
 
-YOUR ANSWER HERE
+From what I'm understanding, the phi-value is an indication of any correlation between residuals(?). If that's the case, then the phi-value here is 0.2641944, which does not seem like a very high correlation value, so I would say no. 
 
+**Knit and submit entire workbook to canvas 10/27/23 (Friday)**
 
-Knit and submit entire workbook to canvas 10/27/23 (Friday)
