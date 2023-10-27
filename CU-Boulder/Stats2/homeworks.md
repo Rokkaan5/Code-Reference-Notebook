@@ -27,4 +27,4 @@ All homework submission (by me) and posted solutions for [STAT II](Stats2.md) at
 
 # Unit 3: Introduction to Causal Inference
 
-- HW4
+- [HW4 (submitted w/o really finishing)](HW/STAT5010_HW4.html)
