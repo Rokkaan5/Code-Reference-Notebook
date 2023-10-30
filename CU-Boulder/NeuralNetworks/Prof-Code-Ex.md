@@ -38,7 +38,8 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 # Module 3
 
-CNNs and RNNs
+- Intro to Keras ([Raw code](raw_code/Module3/intro_to_keras.html); markdown)
+- Simple Examples of ANNs, RNNs (and LSTM, BRNN), and CNNs in Python/Keras ([Raw](raw_code/Module3/simple_ex_all.html);markdown)
 
 ## Convolutional Neural Networks (CNNs)
 
