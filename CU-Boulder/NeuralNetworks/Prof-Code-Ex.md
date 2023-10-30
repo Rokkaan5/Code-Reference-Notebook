@@ -38,4 +38,49 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 # Module 3
 
-(Not there yet)
+CNNs and RNNs
+
+## Convolutional Neural Networks (CNNs)
+
+1. Image analysis and formats review
+    a. Image formats and formatting
+        i. RGB, GS, 2D, 3D, etc.
+        ii. Pixels and image representations
+        iii. Reading and flattening images into Python
+        iv. Image formats required for TF/Keras
+    b. Images as 2D sequential data - concepts - similarities/differences to text, spatial information, etc.
+2. CNN Elements (using TF/Keras)
+    a. Kernels and filters
+    b. Convolution and cross-correlation
+    c. Derivatives and Back Prop
+    d. Common Loss and Activation Functions
+    e. Pooling (such as max pooling)
+    f. Layer options
+3. CNNs with TF/Keras
+    a. Layer options
+    b. Training and Testing
+    c. Accuracy measures and illustrations
+4. Dense/Flattened Layers
+5. Applications and Examples
+6. CNNs vs. ANNs
+
+## Recurrent Neural Networks (RNNs) and Long Short Term Memory (LSTM)
+1. Review of concepts of recurrence relations and recursion
+2. Architecture of RNNs
+3. Sequential data and RNNs
+4. Comparison between ANN, CNN, and RNN
+5. Limitations of RNN
+    a. Exploding and vanishing gradients
+6. Derivatives and Back Prop for RNNs (and examples of the gradient issue cause)
+7. History of RNNs and LSTM (Long Short Term Memory) RNNs
+8. Coding RNNs and LSTM RNNs in Python with TF/Keras
+
+## Extras:
+
+- Translators
+    - LSTM Encoder/Decoder Language Translation
+    - Spanish-English LSTM Keras Translator
+- Embedding and Sentiment Analysis
+- Attention and Transformers (Introduction ONLY)
+- Using Tensorflow/Keras - 2D IMages and CNNs
+- RNN/LSTM Using TF/Keras and MNIST Data
