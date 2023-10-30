@@ -39,31 +39,14 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 # Module 3
 
 - Intro to Keras ([Raw code](raw_code/Module3/intro_to_keras.html); markdown)
-- Simple Examples of ANNs, RNNs (and LSTM, BRNN), and CNNs in Python/Keras ([Raw](raw_code/Module3/simple_ex_all.html);markdown)
+- Simple Examples of ANNs, RNNs (and LSTM, BRNN), and CNNs in Python/Keras ([Raw code](raw_code/Module3/simple_ex_all.html);markdown)
+
 
 ## Convolutional Neural Networks (CNNs)
 
-1. Image analysis and formats review
-    a. Image formats and formatting
-        i. RGB, GS, 2D, 3D, etc.
-        ii. Pixels and image representations
-        iii. Reading and flattening images into Python
-        iv. Image formats required for TF/Keras
-    b. Images as 2D sequential data - concepts - similarities/differences to text, spatial information, etc.
-2. CNN Elements (using TF/Keras)
-    a. Kernels and filters
-    b. Convolution and cross-correlation
-    c. Derivatives and Back Prop
-    d. Common Loss and Activation Functions
-    e. Pooling (such as max pooling)
-    f. Layer options
-3. CNNs with TF/Keras
-    a. Layer options
-    b. Training and Testing
-    c. Accuracy measures and illustrations
-4. Dense/Flattened Layers
-5. Applications and Examples
-6. CNNs vs. ANNs
+- Simple Example (from comprehensive code) (markdown section here)
+- CNN with Conv2D Image data in Keras ([Raw code](raw_code/Module3/CNN/Conv2D.html); markdown)
+- CNN with Conv2D with CIFAR10 data - Image prediction ([Raw code](raw_code/Module3/CNN/CIFAR10_image_pred.html); markdown)
 
 ## Recurrent Neural Networks (RNNs) and Long Short Term Memory (LSTM)
 1. Review of concepts of recurrence relations and recursion
