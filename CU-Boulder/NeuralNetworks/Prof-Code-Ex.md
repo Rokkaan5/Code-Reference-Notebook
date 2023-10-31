@@ -38,33 +38,21 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 # Module 3
 
-- Intro to Keras ([Raw code](raw_code/Module3/intro_to_keras.html); markdown)
-- Simple Examples of ANNs, RNNs (and LSTM, BRNN), and CNNs in Python/Keras ([Raw code](raw_code/Module3/simple_ex_all.html);markdown)
+- Intro to Keras ([Raw code](raw_code/Module3/intro_to_keras.html); Markdown)
+- Simple Examples of ANNs, RNNs (and LSTM, BRNN), and CNNs in Python/Keras ([Raw code](raw_code/Module3/simple_ex_all.html); Markdown)
 
 
 ## Convolutional Neural Networks (CNNs)
 
 - Simple Example (from comprehensive code) (markdown section here)
-- CNN with Conv2D Image data in Keras ([Raw code](raw_code/Module3/CNN/Conv2D.html); markdown)
-- CNN with Conv2D with CIFAR10 data - Image prediction ([Raw code](raw_code/Module3/CNN/CIFAR10_image_pred.html); markdown)
+- CNN with Conv2D Image data in Keras ([Raw code](raw_code/Module3/CNN/Conv2D.html); Markdown)
+- CNN with Conv2D with CIFAR10 data - Image prediction ([Raw code](raw_code/Module3/CNN/CIFAR10_image_pred.html); Markdown)
 
 ## Recurrent Neural Networks (RNNs) and Long Short Term Memory (LSTM)
-1. Review of concepts of recurrence relations and recursion
-2. Architecture of RNNs
-3. Sequential data and RNNs
-4. Comparison between ANN, CNN, and RNN
-5. Limitations of RNN
-    a. Exploding and vanishing gradients
-6. Derivatives and Back Prop for RNNs (and examples of the gradient issue cause)
-7. History of RNNs and LSTM (Long Short Term Memory) RNNs
-8. Coding RNNs and LSTM RNNs in Python with TF/Keras
+
+- RNN with MNIST ([Raw Code](raw_code/Module3/RNN/RNN_LSTM_MNIST.html); Markdown)
 
 ## Extras:
 
-- Translators
-    - LSTM Encoder/Decoder Language Translation
-    - Spanish-English LSTM Keras Translator
-- Embedding and Sentiment Analysis
-- Attention and Transformers (Introduction ONLY)
-- Using Tensorflow/Keras - 2D IMages and CNNs
-- RNN/LSTM Using TF/Keras and MNIST Data
+- English/Spanish Translator with LSTM Transformer ([Raw Code](raw_code/Module3/other_extra/LSTM_EnDe_lang_trans.html); Markdown)
+- Advanced Sentiment Analysis with Glove Embedding ([Raw Code](raw_code/Module3/other_extra/Sent_analysis.html); Markdown)
