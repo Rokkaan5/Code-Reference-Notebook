@@ -9,12 +9,13 @@ import seaborn as sns
 import random
 
 # %%
-class OneLayer_MultiOutput():
+class OneLayer_OneOutput():
     def __init__(self,
                  data_filename = "A2_Part2_Data_JasmineKobayashi.csv", 
                  data_normalizer = StandardScaler(),
-                 hidden_units= 2,
+                 hidden_units= 4,
                  randomize_initial_parameters = False,
+                 OHE_y = True,
                  verbose = True):
         # Read Data
         self.df = pd.read_csv(data_filename)
@@ -33,9 +34,12 @@ class OneLayer_MultiOutput():
         self.X = X
 
         ## y
-        self.OHE = OneHotEncoder()
-        self.y = self.OHE.fit_transform(self.df[['LABEL']]).toarray()
-        
+        self.orig_y = np.array(self.df[['LABEL']])
+        self.y = self.orig_y
+        self.OHE = None
+        if OHE_y:
+            self.OHE = OneHotEncoder()
+            self.y = self.OHE.fit_transform(self.y).toarray()
 
         if verbose:
             print("Shape of X:", self.X.shape)
@@ -49,7 +53,7 @@ class OneLayer_MultiOutput():
         # Shape of B (column vector)
         b_length = self.X.shape[0]    # length of X rows
         # Shape of W2:
-        w2_ncol = self.y.shape[1]                 # Number of W2 cols should be number of outputs (in this case, only one output)
+        w2_ncol = self.y.shape[1]     # Number of W2 cols should be number of outputs (in this case, only one output)
         w2_nrow = hidden_units        # Number of W2 rows should be number of hidden units in H1
         # Shape of C (column vector)
         c_length = self.X.shape[0]    # length of X rows
@@ -63,7 +67,28 @@ class OneLayer_MultiOutput():
 
             # self.W2 = np.array([]*w2_nrow)
             # print('All parameters were randomized')
-            pass
+            self.W1 = np.random.randn(w1_nrow, w1_ncol) # c by h  
+        
+            print("INIT W1 is\n", self.W1)
+            
+            ##-----------------------------------------
+            ## NOTE ##
+            ##
+            ## The following are all random. However, you can comment this out
+            ## and can set any weights and biases by hand , etc.
+            ##
+            ##---------------------------------------------
+            
+            self.W2 = np.random.randn(w2_nrow, w2_ncol) # h by o 
+            print("W2 is:\n", self.W2)
+            
+            self.B = np.random.randn(b_length,1)
+            print("The b's are:\n", self.B)
+            ## biases for layer 1
+            
+            self.C = np.random.randn(c_length,1)
+            print("The c is\n", self.C)
+            
         else:   # These are the parameters defined by the question 2 in Assignment2
             self.W1 = np.array([[1]*w1_ncol]*w1_nrow) # otherwise, all weights of W1 = 1
             self.B = np.array([[0]]*b_length)         # otherwise, all bias (B) = 0
@@ -87,13 +112,13 @@ class OneLayer_MultiOutput():
     def MSE_loss(self,y_hat,y):
         # L = mean((y_hat - y)^2)
         return np.mean((y_hat - y)**2)
-        
+
     def CCE_loss(self,y_hat,y):
         # each row of y and y^ have to be passed individually
         # loss=[]
         # for j in range(y.shape[0]):
         #     loss.append(-y[j]*np.log(y_hat[j]))
-        return np.mean(-y * np.log(y_hat))
+        return np.mean(-y * np.log(y_hat))        
 
     def lin_eq(self,X,W,B):
         assert X.shape[1] == W.shape[0], "Linear eq: z = X @ W + B. Shape of X: {}; Shape of W: {}".format(X.shape,W.shape)
@@ -117,27 +142,29 @@ class OneLayer_MultiOutput():
             else:
                 relulist.append([max(0.0,value) for value in row])
         return np.array(relulist)
+    
+    def Activation(self,
+                   z,
+                   function = "sigmoid",
+                   derivative = False):
+        if function == "reLU":
+            return self.reLU(z = z, derivative = derivative)
+        else:
+            return self.Sigmoid(z = z, derivative = derivative)
         
-    def softmax(self,Z2):
-        # SMlist = []
-        # for k in range(Z2.shape[0]):
-        #     z2_row = Z2[k]
-        #     smrow = []
-        #     for l in range(Z2.shape[1]):
-        #         denominator = np.sum(math.e**(z2_row))
-        #         SMz2 = (math.e**z2_row[l])/denominator
-        #         smrow.append(SMz2)
-        #     SMlist.append(smrow)
-        # return np.array(SMlist)
-        
-        expZ = np.exp(Z2)
-        
-        SM=expZ/np.sum(expZ, axis=1)[:,None]
-        
-        return SM 
 
+    def Softmax(self, M):
+        #print("M is\n", M)
+        expM = np.exp(M)
+        #print("expM is\n", expM)
+        SM=expM/np.sum(expM, axis=1)[:,None]
+        #print("SM is\n",SM )
+        return SM 
+    
+    
+    
     def FeedForward(self,
-                    activation = "reLU",
+                    activation = "sigmoid",
                     verbose = True):
         # Create H1
         # Z1 = X @ W1 + B
@@ -145,8 +172,11 @@ class OneLayer_MultiOutput():
         if verbose:
             print("Shape of Z1:",self.Z1.shape)
             print("Z1 matrix: \n",self.Z1)
-        self.H1 = self.reLU(self.Z1)
-        # TODO: Add flexibility with other activation functions
+
+        self.act_funct = activation
+        self.H1 = self.Activation(z = self.Z1, 
+                                  function= self.act_funct,
+                                  derivative=False)
         if verbose: 
             print("Activation function:",activation)
             print("H1 matrix: \n", self.H1)
@@ -154,7 +184,11 @@ class OneLayer_MultiOutput():
         # Z2 and y-hat
         # Z2 = H1 @ W2 + C
         self.Z2 = self.lin_eq(self.H1,self.W2,self.C)
-        self.y_hat = self.softmax(self.Z2)
+        
+        if self.OHE is not None:
+            self.y_hat = self.Softmax(self.Z2)
+        else:
+            self.y_hat = self.Sigmoid(self.Z2)
 
         if verbose:
             print("Shape of Z2:", self.Z2.shape)
@@ -165,41 +199,51 @@ class OneLayer_MultiOutput():
     # Gradient descent----------------------------------------------
     def grad_desc(self,y_hat,y,LR,
                   verbose = True):
-        
-        # dL/dZ2  = [y^-y]
-        self.dL_dZ2 = y_hat - y                                   # shape =  [n x 1]
+        # Error = y^ - y = E
+        self.E = y_hat - y                                      # shape = n x 1 
 
-        self.dH_dZ1 = self.reLU(self.Z1,derivative=True)
+        # dy^/dZ2 = S(Z2)(1 - S(Z2)) = y^(1 - y^) = y^ - (y^)(y^) = Phi
+        self.Phi = self.Activation(z = self.Z2,
+                                   function= self.act_funct,
+                                   derivative=True)        # shape = Z2.shape = n x 1
+        
+        # dL/dZ2  = [y^-y][S(Z2)(1 - S(Z2))] is a term that shows up in every gradient 
+        # so it's going to be useful to save this
+        self.dL_dZ2 = self.E * self.Phi                                   # shape = [n x 1]*[n x 1] => [n x 1]
 
         # dL/dC = [dL/dy^][dy^/dZ2][dZ2/C] 
         #       = [y^-y][S(Z2)(1 - S(Z2))][1]
         self.dZ2_dC = np.array([[1]]*self.C.shape[0])           # vector of 1s with same shape of C
         self.dL_dC = self.dL_dZ2 * self.dZ2_dC                            # should match shape of C (n x 1)
-        # I don't see a good way to make these matrices match the shape of C, 
-        #  so instead I'm going to redefine dL/dC to be a single column vector with the averages 
-        #  of each row from the above calculation
-        self.dL_dC = np.array([[np.mean(self.dL_dC)]]*self.C.shape[0])
+        # to get something meaningful and of the right shape
+        self.dL_dC = np.mean(self.dL_dC.T,axis=0)
+        self.dL_dC = self.dL_dC.reshape(self.dL_dC.shape + (1,))
 
         # dL/dW2 = [dL/dy^][dy^/dZ2][dZ2/W2] 
         #        = [y^-y][S(Z2)(1 - S(Z2))][H1]
-        self.dL_dW2 =  self.H1.T @ self.dL_dZ2                         # should match shape of W2 
+        self.dL_dW2 =  self.H1.T @ self.dL_dZ2                         # should match shape of W2 (4 x 1)
 
         # dL/dB = [dL/dy^][dy^/dZ2][dZ2/dH1][dH1/dZ1][dZ1/dB] 
-        #       = [dL/dZ2][gamma][W2][1]
-        #       = [y^-y] * ([gamma] @ [W2]) * [1] 
+        #       = [y^-y][S(Z2)(1 - S(Z2))][W2][S(Z1)(1-S(Z1))][1]
+        #       = ([y^-y] * [S(Z2)(1 - S(Z2))]) * ([S(Z1)(1-S(Z1))] @ [W2]) * [1] 
         
-        self.Gamma = self.reLU(self.Z1,derivative = True)      # should match shape of Z1 (n x 2)
+        # dH1/dZ1                    # I'm going to call this matrix Omega
+        self.Omega = self.Activation(z = self.Z1,
+                                     function= self.act_funct,
+                                     derivative = True)      # should match shape of Z1 (n x 4)
+        
         self.dZ1_dB = np.array([[1]]*self.B.shape[0])           # vector of 1s with same shape of B
+        # [n x n][n x 1][n x 1]
+        self.dL_dB = (self.dL_dZ2 @ self.W2.T)* self.Omega  * self.dZ1_dB               # should match shape of B (n x 1)
+        # to get something meaningful and of the right shape
+        self.dL_dB = np.mean(self.dL_dB.T,axis=0)
+        self.dL_dB = self.dL_dB.reshape(self.dL_dB.shape + (1,))
         
-        self.dL_dB = self.dL_dZ2 * (self.Gamma @ self.W2)  * self.dZ1_dB        # should match shape of B (n x 1)
-        # I have the same problem with dL/dB as with dL/dC, so I will do the same thing as did there
-        #self.dL_dB = np.array([[np.mean(row)] for row in self.dL_dB])
-        self.dL_dB = np.array([[np.mean(self.dL_dB)]]*self.B.shape[0])
         # dL/dW1 = [dL/dy^][dy^/dZ2][dZ2/dH1][dH1/dZ1][dZ1/dW1] 
         #        = [y^-y][S(Z2)(1 - S(Z2))][W2][S(Z1)(1-S(Z1))][X] 
         #        = [X]^T @ [([[y^-y] * [S(Z2)(1 - S(Z2))]] @ [W2]) * [S(Z1)(1-S(Z1))]] 
         #        = [X]^T @ [([E * Phi] * [W2]^T) * Omega]
-        self.dL_W1 = self.X.T @ (( (self.dL_dZ2) @ self.W2.T) * self.Gamma)    # should match shape of W1 (3 x 2)
+        self.dL_W1 = self.X.T @ (( self.dL_dZ2 @ self.W2.T) * self.Omega)    # should match shape of W1 (3 x 4)
 
         # Gradient descent
         self.C = self.C - (LR*self.dL_dC)
@@ -221,12 +265,16 @@ class OneLayer_MultiOutput():
 
     # Visualizations (confusion matrix & Lce plot)==================
     # Confusion matrix-------------------------------------------------------------
-    def ConfusionMatrix(self, y_hat,y):
-        self.prediction = y_hat
-        # self.prediction[y_hat >= .5] = 1
-        # self.prediction[y_hat < .5] = 0
+    def ConfusionMatrix(self):
+        if self.OHE is not None:
+            self.prediction = np.argmax(self.y_hat, axis=1)
+            self.prediction = np.array([self.prediction]).T
+        else:
+            self.prediction = self.y_hat
+            self.prediction[self.y_hat >= .5] = 1
+            self.prediction[self.y_hat < .5] = 0
 
-        self.labels = y
+        self.labels = self.orig_y
         
         
         self.cm = confusion_matrix(self.labels, self.prediction)
@@ -240,8 +288,8 @@ class OneLayer_MultiOutput():
         ax.set_xlabel("Predicted labels")
         ax.set_ylabel("True labels")
         ax.set_title("Confusion Matrix")
-        ax.xaxis.set_ticklabels(["0", "1"])
-        ax.yaxis.set_ticklabels(["0", "1"])
+        # ax.xaxis.set_ticklabels(["0", "1"])
+        # ax.yaxis.set_ticklabels(["0", "1"])
     
     # Plot of Lce vs. Epochs--------------------------------------------------------
     def plot_LCE(self):
@@ -271,12 +319,10 @@ class OneLayer_MultiOutput():
             self.FeedForward(activation= activation,
                              verbose=verbose)
             
-            
-            self.loss_record.append(self.CCE_loss(y_hat=self.y_hat,
-                                                  y=self.y))
             if verbose:
-                print("Loss:",self.loss_record[i])
-
+                print("MSE Loss:",self.MSE_loss(y_hat=self.y_hat,y=self.y))
+            self.loss_record.append(self.MSE_loss(y_hat=self.y_hat,
+                                                  y=self.y))
             # Update params with gradient descent---------------------------
             self.grad_desc(y_hat=self.y_hat,
                            y=self.y,
@@ -285,7 +331,7 @@ class OneLayer_MultiOutput():
         print("Finished running all epochs")
 
         # Visualizations
-        self.ConfusionMatrix(y_hat=self.y_hat,y=self.y)
+        self.ConfusionMatrix()
         self.plot_LCE()
 
     def test_model(self,
@@ -312,6 +358,5 @@ class OneLayer_MultiOutput():
         self.FeedForward()
         print("Finished testing model")
 
-        self.ConfusionMatrix(y_hat=self.y_hat,
-                             y=self.y)
+        self.ConfusionMatrix()
         
