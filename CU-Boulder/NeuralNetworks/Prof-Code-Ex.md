@@ -38,7 +38,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 # Module 3
 
-- Intro to Keras ([Raw code](raw_code/Module3/intro_to_keras.html); Markdown)
+- Intro to Keras ([Raw code](raw_code/Module3/intro_to_keras.html); [Markdown](mrkdwn/Module3/intro_to_keras.html))
 - Simple Examples of ANNs, RNNs (and LSTM, BRNN), and CNNs in Python/Keras ([Raw code](raw_code/Module3/simple_ex_all.html); Markdown)
 
 
