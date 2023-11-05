@@ -28,3 +28,4 @@ All lecture code (and posted solutions) for [STAT II](Stats2.md) at [CU Boulder]
 # Unit 4: Regression Diagnostics
 
 - [Generalized Least Squares](lecture_code/Unit4/Generalized-Least-Squares.html)
+- [Diagnostics in R](lecture_code/Unit4/STAT-5010_Unit4_Code_Part_2.html)

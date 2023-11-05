@@ -91,3 +91,4 @@ permalink: /CUB/StatII
 **[Lecture material](class_code.md)**
 
 - Generalized Least Squares
+- Diagnostics in R
