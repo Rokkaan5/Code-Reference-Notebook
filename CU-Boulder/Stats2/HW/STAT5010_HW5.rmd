@@ -1,0 +1,245 @@
+---
+title: "STAT 5010: HW5"
+author: "Jasmine Kobayashi"
+format:
+    html:
+        code-fold: false
+execute:
+    output: true
+    warning: false
+toc: true
+---
+
+
+**See Canvas for HW #5 assignment due date**. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don't know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel is preferred). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work. 
+
+# A. Theoretical Problems
+
+## A.1 Association studies given causal language?
+
+Sometimes, researchers using non-causal models with observational data are careful to use associative, non-causal language. In some cases, these studies are picked up by media outlets and incorrectly interpreted causally. 
+
+Other times, researchers themselves are unintentionally using causal language with non-causal models and observational data. 
+
+**[20 points] Find a science or social science study reported in the news. Podcasts like *Hidden Brain* might be useful here! Does the report of the study make reference to a causal relationship? If so, based on the actual study, do you think that the causal claims are justified? Does it use phrases like "$X$ is associated with $Y$"? Or "$X$ causes $Y$" ?...**
+
+*YOUR ANSWER HERE*
+
+I can't say I had time to go looking for a specific example, but I will say that I currently am in the possession of several books like "*Weapons of Math Destruction*" (by Cathy O'Neil), and other related books that keep me grounded on being wary and skeptical of putting too much confidence on placing causal language to non-causal models. (Which, quite frankly, I'll probably consider all statistical models to be non-causal models. Just in my opinion, but that can be an entirely different conversation.) (Some of these books and resources I have touch into the territory of artificial *UN*intelligence of machine learning models and etc. which grows into the territory of AI ethics too, but that really is an entirely different conversation.)
+
+# B. Computational Problems
+
+##  B.1 (35 points)
+
+### For the [`teengamb`](https://rdrr.io/cran/faraway/man/teengamb.html) data, fit a model with `gamble` as the response and the other variables as predictors. Look for violations of:
+
+1. [5 points] Constant Variance 
+2. [5 points] Normality 
+3. [5 points] Linearity 
+4. [5 points] Correlations
+5. [5 points] Measurement validity
+6. **[10 points] Look for (a) outliers, (b) leverage points, and (b) potentially influential points. This part of the problem requires some self-study about defining and identifying leverage points, and describing the relationship between leverage and influence. Chapter 6 of *Linear Models with R* (pdf on Canvas) may help!**
+
+**Write a short report detailing your findings.**
+
+
+```{R}
+teengamb = read.csv(("https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/teengamb.txt"), sep = "")
+
+summary(teengamb)
+#YOUR CODE HERE
+tgmod <- lm(gamble ~ ., data = teengamb)
+summary(tgmod)
+```
+
+
+```{R}
+#YOUR CODE HERE
+options(repr.plot.width = 12, repr.plot.height = 12)
+par(mfrow = c(2,2))
+plot(tgmod)
+```
+
+**JK note:** Can take a closer look at these plots individually with the following
+
+#### Residual vs. Fitted <a name="residVfit"></a>
+```{r}
+plot(tgmod,which = 1)
+```
+
+#### Normal QQ plot <a name="QQplot"></a>
+```{r}
+plot(tgmod, which = 2)
+```
+```{r, echo=FALSE,eval=FALSE,results='hide'}
+#not covered in class, so not going to include in HW
+# but still interesting to know
+plot(tgmod, which = 4)
+```
+
+
+
+#### Residuals vs. Leverage <a name="residVlev"></a>
+```{r}
+plot(tgmod, which = 5)
+```
+
+
+*YOUR ANSWER HERE*
+
+**JK note:** The links in the following text will take you to the anchor point of the plot that is being referenced. If viewing this html file on a web browser, you should be able to hit the "back" button to return to where you were before clicking the link to the anchor point (i.e. back to this point in the text). 
+
+
+A quantile-quantile plot (aka QQ plot) can give some potential insight into our normality assumption. The [QQ Plot](#QQplot) produced for this model suggest some non-normality, particularly in the tails of the distribution.
+
+A residual vs. fitted plot can give some information on linearity, and the random distribution and constant variance in the residuals. The [Residual vs. Fitted plot](#residVfit) for this model shows some "fanning out" behavior when you analyze the plot from left-to-right. There may be a couple outliers as well. In any case the plot appears to suggest violations in constant variance in our residuals and our linearity assumptions.
+
+As indicated in the assignment directions, I had to look up "leverage" a bit myself, but from what I understand "leverage" is in relation to how much a regression model would change with or without an observation. I'm still not entirely clear on how to read a residual vs. leverage plot, but I'm guessing according to the one [here](#residVlev) there may be a few points that may have a lot of effect on the model depending on their presence in the dataset. 
+
+
+##  B.2 (45 Points)
+
+Researchers at the National Institutes of Standards and Technology (NIST) collected [pipline data](https://rdrr.io/cran/faraway/man/pipeline.html) on ultrasonic measurements of the depth of defects in the Alaska pipeline in the field. The depths of the defects were then remeasured in the laboratory. The laboratory measurements are more accurate than the field measurements, but more time consuming and expensive. We want to develop a regression model for correcting the in field measurements. 
+
+**B.2 (a) [10 points] Fit a regression model where `Lab` is the response and `Field` is the predictor and save this model as `lmodPipeline`. Check for non-constant variance.**
+
+
+```{r}
+pipeline = read.csv(("https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Modern%20Regression%20Analysis/Datasets/pipeline.txt"), sep = "")
+
+summary(pipeline)
+#YOUR CODE HERE
+lmodPipeline <- lm(Lab ~ Field, data = pipeline)
+summary(lmodPipeline)
+```
+
+
+YOUR ANSWER HERE
+
+**B.2 (b) [10 points] Sometimes transforming the response and predictor helps in stabilizing variance. Find a transformation on `Lab` and/or `Field` so that in the transformed scale the relationship is approximately linear with constant variance. Restrict your choice of transformation to square root, log, and inverse. Save your transformed variables as `pipeline$LabTransform` and `pipeline$FieldTransform`. Then, regress the transformed` Lab` variable (response) onto the transformed `Field` variable (predictor), and save this as `lmodTr`.**
+
+
+```{r}
+#YOUR CODE HERE
+
+#log transform
+pipeline$LabTransform <- log(pipeline$Lab)
+pipeline$FieldTransform <- log(pipeline$Field)
+
+# #square-root transform
+# pipeline$LabTransform <- sqrt(pipeline$Lab)
+# pipeline$FieldTransform <- sqrt(pipeline$Field)
+
+summary(pipeline)
+
+lmodTr <- lm(LabTransform ~ FieldTransform,data = pipeline)
+summary(lmodTr)
+```
+
+**B.2 (c) [5 points] Now let's try weighted least squares. The code below splits the range of `Field` into 12 groups of size nine (except for the last goup which has only eight values). Within each group, we compute the variance of `Lab` as varlab and the mean of `Field` as meanfield. Write comments for each line of the code to demonstrate what each line is doing.**
+
+
+```{R}
+i = order(pipeline$Field);  
+npipe = pipeline[i,];       
+ff = gl(12,9)[-108];  
+meanfield = unlist(lapply(split(npipe$Field,ff),mean));  
+varlab = unlist(lapply(split(npipe$Lab,ff),var)); 
+```
+
+```{r}
+#YOUR CODE HERE
+head(order(pipeline$Field))
+head(npipe)
+```
+
+*JK Answer*
+
+* `i = order(pipeline$Field)` 
+  * `order(pipeline$Field)` extracts the indices of `pipeline` if it was arranged in ascending order with respect to `Field`, the in
+* `npipe = pipeline[i,]`
+  * extracts `pipeline` in the order of `i` (ascending order with respect to `Field`) into variable `npipe`
+  
+```{r}
+gl(12,9)
+gl(12,9)[-108]
+```
+
+*JK Answer*
+
+* `ff = gl(12,9)[-108]`
+  * `gl(12,9)`
+    * the `gl(n,k)` function generates "factor levels"
+      * with `n` number of levels (int)
+      * `k` number of replications
+    * $\Rightarrow$ `gl(12,9)` gives levels from 1 to 12, and there are 9 of each level
+  * `[-108]`
+    * $12 \times 9 = 108$, so there would normally be 108 elements in the object `gl(12,9)`
+      * the `[-108]` portion removes the 108th element
+        * (this is likely done due to the fact that last group is size 8 instead of size 9)
+  * (this is all stored in variable `ff`)
+  * $\Rightarrow$ `ff` has levels 1 to 12, where there are 9 of each level *except* level 12 in which there are only 8
+  
+```{r}
+split(npipe$Field,ff)
+```
+```{r}
+lapply(split(npipe$Field,ff),mean)
+```
+```{r}
+unlist(lapply(split(npipe$Field,ff),mean))
+```
+
+*JK Answer*
+
+* `meanfield = unlist(lapply(split(npipe$Field,ff),mean))`
+  * `split(npipe$Field,ff)`
+    * splits `Field` in `npipe` into the 12 factor levels in `ff` 
+  * `lapply(split(npipe$Field,ff),mean)`
+    * replaces the contents of each level to the mean of each level
+  * `unlist(lapply(split(npipe$Field,ff),mean))`
+    * the `unlist()` function "flattens" a list or vector
+      * so essentially changes the structure of the above so that it's not levels but a list (or something similar datatype)?
+  * in any case, `meanfield` is a list (or something) of means of the `Field` data split into 12 groups.
+* `varlab = unlist(lapply(split(npipe$Lab,ff),var))`
+  * based on the above, I'm guessing `varlab` is similar to `meanfield` but obtaining the *variance* of the `Lab` data when it's split into 12 groups (instead of the mean)
+
+**B.2 (d) [20 points] Suppose that the variance in the repsonse is linked to the predictor in the following way: $$ Var(Lab) = a_0Field^{a_1}.$$ Use simple linear regression on (transformations of) varlab and meanfield to estimate $a_0$ and $a_1$. Call this regression `lmodVar`.Use these estimates to perform weighted least squares where the weights are the inverse of the variance of Lab. Call this regression `lmodwls`.  Print a summary of this model and comment on the fit.**
+
+
+```{R}
+#YOUR CODE HERE (hw help recieved from Dr. O)
+lmodVar = lm(log(varlab[1:12]) ~ log(meanfield[1:12]))
+plot(log(meanfield[1:11]),log(varlab[1:11]))
+abline(lmodVar)
+summary(lmodVar)
+a = coef(lmodVar)
+w = with(pipeline, exp(a[1])*Field^(a[2]))
+```
+
+ 
+
+```{R}
+lmodwls = lm(Lab ~ Field, data = pipeline, weights = 1/w)
+summary(lmodwls)
+
+```
+
+
+   
+```{R}
+plot(fitted(lmodwls), resid(lmodwls))
+plot(fitted(lmodwls), resid(lmodwls, type = "pearson")) #students probably won't use pearson
+#residuals, because we didn't talk about them in class. In that case, the residuals will still
+#appear to have no-nconstant variance.
+```
+
+Using the regular residuals, we still see some evidence of non-constant variance. 
+
+Using the Pearson residuals, which standardizes the residuals, we see an improvement in fit (no strong evidence of non-constant variance).
+
+*YOUR ANSWER HERE* (reworded into own words)
+
+Non-constant variance appears to be more apparent in the plot with the "regular" residuals (again with the "fanning out" behavior).
+
+It's not perfect, but the plot using the Pearson residuals shows "less" non-constant variance. 

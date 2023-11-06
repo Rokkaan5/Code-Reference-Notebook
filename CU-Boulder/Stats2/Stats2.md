@@ -80,6 +80,7 @@ permalink: /CUB/StatII
 **[Assignment](homeworks.md#unit-3-introduction-to-causal-inference)**
 
 - HW4
+- HW5
 
 # Unit 4: Regression Diagnostics
 
