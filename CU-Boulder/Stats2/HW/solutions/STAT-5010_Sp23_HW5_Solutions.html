@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Osita Onyejekwe">
+
+<title>STAT 5010: HW5 - Solutions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="STAT-5010_Sp23_HW5_Solutions_files/libs/clipboard/clipboard.min.js"></script>
+<script src="STAT-5010_Sp23_HW5_Solutions_files/libs/quarto-html/quarto.js"></script>
+<script src="STAT-5010_Sp23_HW5_Solutions_files/libs/quarto-html/popper.min.js"></script>
+<script src="STAT-5010_Sp23_HW5_Solutions_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="STAT-5010_Sp23_HW5_Solutions_files/libs/quarto-html/anchor.min.js"></script>
+<link href="STAT-5010_Sp23_HW5_Solutions_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="STAT-5010_Sp23_HW5_Solutions_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="STAT-5010_Sp23_HW5_Solutions_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="STAT-5010_Sp23_HW5_Solutions_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="STAT-5010_Sp23_HW5_Solutions_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#a.-theoretical-problems" id="toc-a.-theoretical-problems" class="nav-link active" data-scroll-target="#a.-theoretical-problems">A. Theoretical Problems</a></li>
+  <li><a href="#a.1-association-studies-given-causal-language" id="toc-a.1-association-studies-given-causal-language" class="nav-link" data-scroll-target="#a.1-association-studies-given-causal-language">A.1 Association studies given causal language?</a></li>
+  <li><a href="#b.-computational-problems" id="toc-b.-computational-problems" class="nav-link" data-scroll-target="#b.-computational-problems">B. Computational Problems</a></li>
+  <li><a href="#b.1-35-points" id="toc-b.1-35-points" class="nav-link" data-scroll-target="#b.1-35-points">B.1 (35 Points)</a></li>
+  <li><a href="#b.2-45-points" id="toc-b.2-45-points" class="nav-link" data-scroll-target="#b.2-45-points">B.2 (45 Points)</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">STAT 5010: HW5 - Solutions</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr.&nbsp;Osita Onyejekwe </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p><strong>See Canvas for HW #5 assignment due date</strong>. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don’t know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel is preferred). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work.</p>
+<section id="a.-theoretical-problems" class="level2">
+<h2 class="anchored" data-anchor-id="a.-theoretical-problems">A. Theoretical Problems</h2>
+</section>
+<section id="a.1-association-studies-given-causal-language" class="level2">
+<h2 class="anchored" data-anchor-id="a.1-association-studies-given-causal-language">A.1 Association studies given causal language?</h2>
+<p>Sometimes, researchers using non-causal models with observational data are careful to use associative, non-causal language. In some cases, these studies are picked up by media outlets and incorrectly interpreted causally.</p>
+<p>Other times, researchers themselves are unintentionally using causal language with non-causal models and observational data.</p>
+<p><strong>[20 points] Find a science or social science study reported in the news. Podcasts like <em>Hidden Brain</em> might be useful here! Does the report of the study make reference to a causal relationship? If so, based on the actual study, do you think that the causal claims are justified? Does it use phrases like “<span class="math inline">\(X\)</span> is associated with <span class="math inline">\(Y\)</span>”? Or “<span class="math inline">\(X\)</span> causes <span class="math inline">\(Y\)</span>” ?…</strong></p>
+<p>Answers will vary.</p>
+</section>
+<section id="b.-computational-problems" class="level2">
+<h2 class="anchored" data-anchor-id="b.-computational-problems">B. Computational Problems</h2>
+</section>
+<section id="b.1-35-points" class="level2">
+<h2 class="anchored" data-anchor-id="b.1-35-points">B.1 (35 Points)</h2>
+<section id="for-the-teengamb-data-fit-a-model-with-gamble-as-the-response-and-the-other-variables-as-predictors.-look-for-violations-of" class="level4">
+<h4 class="anchored" data-anchor-id="for-the-teengamb-data-fit-a-model-with-gamble-as-the-response-and-the-other-variables-as-predictors.-look-for-violations-of">For the <a href="https://rdrr.io/cran/faraway/man/teengamb.html"><code>teengamb</code></a> data, fit a model with <code>gamble</code> as the response and the other variables as predictors. Look for violations of:</h4>
+<ol type="1">
+<li>[5 points] Constant Variance</li>
+<li>[5 points] Normality</li>
+<li>[5 points] Linearity</li>
+<li>[5 points] Correlations</li>
+<li>[5 points] Measurement validity</li>
+<li><strong>STAT 5510 Only [10 points]: Look for (a) outliers, (b) leverage points, and (b) potentially influential points. This part of the problem requires some self-study about defining and identifying leverage points, and describing the relationship between leverage and influence. Chapter 6 of <em>Linear Models with R</em> (pdf on Canvas) may help!</strong></li>
+</ol>
+<p><strong>Write a short report detailing your findings.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>teengamb <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="fu">paste0</span>(<span class="st">"https://raw.githubusercontent.com/bzaharatos/"</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"-Statistical-Modeling-for-Data-Science-Applications/"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"master/Modern%20Regression%20Analysis%20/Datasets/teengamb.txt"</span>)), <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(teengamb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      sex             status          income           verbal     
+ Min.   :0.0000   Min.   :18.00   Min.   : 0.600   Min.   : 1.00  
+ 1st Qu.:0.0000   1st Qu.:28.00   1st Qu.: 2.000   1st Qu.: 6.00  
+ Median :0.0000   Median :43.00   Median : 3.250   Median : 7.00  
+ Mean   :0.4043   Mean   :45.23   Mean   : 4.642   Mean   : 6.66  
+ 3rd Qu.:1.0000   3rd Qu.:61.50   3rd Qu.: 6.210   3rd Qu.: 8.00  
+ Max.   :1.0000   Max.   :75.00   Max.   :15.000   Max.   :10.00  
+     gamble     
+ Min.   :  0.0  
+ 1st Qu.:  1.1  
+ Median :  6.0  
+ Mean   : 19.3  
+ 3rd Qu.: 19.4  
+ Max.   :156.0  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">### </span><span class="re">BEGIN</span><span class="do"> SOLUTION HERE</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lmod2 <span class="ot">=</span> <span class="fu">lm</span>(gamble <span class="sc">~</span> ., <span class="at">data =</span> teengamb)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = gamble ~ ., data = teengamb)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-51.082 -11.320  -1.451   9.452  94.252 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  22.55565   17.19680   1.312   0.1968    
+sex         -22.11833    8.21111  -2.694   0.0101 *  
+status        0.05223    0.28111   0.186   0.8535    
+income        4.96198    1.02539   4.839 1.79e-05 ***
+verbal       -2.95949    2.17215  -1.362   0.1803    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 22.69 on 42 degrees of freedom
+Multiple R-squared:  0.5267,    Adjusted R-squared:  0.4816 
+F-statistic: 11.69 on 4 and 42 DF,  p-value: 1.815e-06</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)); <span class="fu">plot</span>(lmod2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Sp23_HW5_Solutions_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)) </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#halfnorm(residuals(lmod2)) </span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="do">### </span><span class="re">END</span><span class="do"> SOLUTION HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol type="1">
+<li>Constant Variance: The residual vs.&nbsp;fitted plot provides some evidence that the constant variance assumption is violated. For small fitted values, variability in the residuals is low, but variability increases as the fitted values increase.</li>
+<li>Normality: Piints 24, 36, and 39 deviate considerably from the dotted line, suggesting that the data don’t come from a normal distribution.</li>
+<li>Linearity: The residual vs.&nbsp;fitted plot appears to have a linear trend, suggesting that perhaps an additional predictor (or function of an existing predictor) would help better explain systematic varability in the response.</li>
+<li><strong>STAT 5510 Only: Look for (a) outliers, (b) leverage points, and (b) potentially influential points.</strong> Points 24 (and maybe 39) may be considered an outlier(s). Point 24 has a high Cook’s distance, which suggests that that point is a leverage point and is potentially influential. We also note that, on a half-normal qq plot of the residuals, point 24 is identified as an outlier (and potentially influential). Below, we remove point 24 from the dataset and notice that the fit (parameters) changes substantially.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>teengamb2 <span class="ot">=</span> teengamb[<span class="sc">-</span><span class="dv">24</span>,]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lmod3 <span class="ot">=</span> <span class="fu">lm</span>(gamble <span class="sc">~</span> ., <span class="at">data =</span> teengamb2)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = gamble ~ ., data = teengamb2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-42.999  -8.102  -0.491   8.600  46.688 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   7.6306    12.9251   0.590   0.5582    
+sex         -16.2986     6.1335  -2.657   0.0112 *  
+status        0.1739     0.2083   0.835   0.4088    
+income        4.3312     0.7636   5.672 1.26e-06 ***
+verbal       -1.8019     1.6137  -1.117   0.2707    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 16.74 on 41 degrees of freedom
+Multiple R-squared:  0.5682,    Adjusted R-squared:  0.526 
+F-statistic: 13.49 on 4 and 41 DF,  p-value: 4.225e-07</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)); <span class="fu">plot</span>(lmod3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Sp23_HW5_Solutions_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="b.2-45-points" class="level2">
+<h2 class="anchored" data-anchor-id="b.2-45-points">B.2 (45 Points)</h2>
+<p>Researchers at the National Institutes of Standards and Technology (NIST) collected <a href="https://rdrr.io/cran/faraway/man/pipeline.html">pipline data</a> on ultrasonic measurements of the depth of defects in the Alaska pipeline in the field. The depths of the defects were then remeasured in the laboratory. The laboratory measurements are more accurate than the field measurements, but more time consuming and expensive. We want to develop a regression model for correcting the in field measurements.</p>
+<p><strong>B.2 (a) [10 points] Fit a regression model where <code>Lab</code> is the response and <code>Field</code> is the predictor and save this model as <code>lmodPipeline</code>. Check for non-constant variance.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pipeline <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="fu">paste0</span>(<span class="st">"https://raw.githubusercontent.com/bzaharatos/"</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"-Statistical-Modeling-for-Data-Science-Applications/"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"master/Modern%20Regression%20Analysis%20/Datasets/pipeline.txt"</span>)), <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pipeline)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Field            Lab            Batch      
+ Min.   : 5.00   Min.   : 4.30   Min.   :1.000  
+ 1st Qu.:18.00   1st Qu.:18.35   1st Qu.:2.000  
+ Median :35.00   Median :38.00   Median :3.000  
+ Mean   :33.58   Mean   :39.10   Mean   :3.234  
+ 3rd Qu.:46.50   3rd Qu.:55.55   3rd Qu.:5.000  
+ Max.   :85.00   Max.   :81.90   Max.   :6.000  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="do">### </span><span class="re">BEGIN</span><span class="do"> SOLUTION HERE</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>lmodPipeline <span class="ot">=</span> <span class="fu">lm</span>(Lab <span class="sc">~</span> Field, <span class="at">data =</span> pipeline)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmodPipeline)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Lab ~ Field, data = pipeline)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-21.985  -4.072  -1.431   2.504  24.334 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -1.96750    1.57479  -1.249    0.214    
+Field        1.22297    0.04107  29.778   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.865 on 105 degrees of freedom
+Multiple R-squared:  0.8941,    Adjusted R-squared:  0.8931 
+F-statistic: 886.7 on 1 and 105 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fitted</span>(lmodPipeline), <span class="fu">resid</span>(lmodPipeline, <span class="at">type =</span> <span class="st">"pearson"</span>), <span class="at">xlab =</span> <span class="fu">expression</span>(<span class="fu">hat</span>(Y)), <span class="at">ylab =</span> <span class="st">"Pearson Residuals"</span>); <span class="fu">abline</span>(<span class="dv">0</span>,<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Sp23_HW5_Solutions_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">### </span><span class="re">END</span><span class="do"> SOLUTION HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The Pearson residuals are a type of standardized residual. A plot of the Pearson residuals against the fitted values provides evidence of nonconstant variance.</p>
+<p><strong>B.2 (b) [10 points] Sometimes transforming the response and predictor helps in stabilizing variance. Find a transformation on Lab and/or Field so that in the transformed scale the relationship is approximately linear with constant variance. Restrict your choice of transformation to square root, log, and inverse. Save your transformed variables as <code>pipeline$LabTransform</code> and <code>pipeline$FieldTransform</code>. Then, regress the transformed<code>Lab</code> variable (repsonse) onto the transformed <code>Field</code> variable (predictor), and save this as <code>lmodTr</code>.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pipeline<span class="sc">$</span>LabTransform <span class="ot">=</span> <span class="fu">log</span>(pipeline<span class="sc">$</span>Lab); pipeline<span class="sc">$</span>FieldTransform <span class="ot">=</span> <span class="fu">log</span>(pipeline<span class="sc">$</span>Field)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>lmodTr <span class="ot">=</span> <span class="fu">lm</span>(LabTransform <span class="sc">~</span> FieldTransform, <span class="at">data =</span> pipeline)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(pipeline, <span class="fu">plot</span>(LabTransform <span class="sc">~</span> FieldTransform))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Sp23_HW5_Solutions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fitted</span>(lmodTr), <span class="fu">resid</span>(lmodTr))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Sp23_HW5_Solutions_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>B.2 (c) [5 points] Now let’s try weighted least squares. The code below splits the range of <code>Field</code> into 12 groups of size nine (except for the last goup which has only eight values). Within each group, we compute the variance of <code>Lab</code> as varlab and the mean of <code>Field</code> as meanfield. Write comments for each line of the code to demonstrate what each line is doing.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="fu">order</span>(pipeline<span class="sc">$</span>Field); <span class="co">#index of values in order</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>npipe <span class="ot">=</span> pipeline[i,]; <span class="co">#data ordered according to the field variable </span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ff <span class="ot">=</span> <span class="fu">gl</span>(<span class="dv">12</span>,<span class="dv">9</span>)[<span class="sc">-</span><span class="dv">108</span>];  <span class="co">#generates a factor of 12 levels with 9 replications (removing point 108)</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>meanfield <span class="ot">=</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(<span class="fu">split</span>(npipe<span class="sc">$</span>Field,ff),mean));  <span class="co">#mean of the field variable within each of the 12 groups</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>varlab <span class="ot">=</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(<span class="fu">split</span>(npipe<span class="sc">$</span>Lab,ff),var)) <span class="co">#variance of the field variable within each of the 12 groups</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>B.2 (d) [20 points] Suppose that the variance in the repsonse is linked to the predictor in the following way: <span class="math display">\[ Var(Lab) = a_0Field^{a_1}.\]</span> Use simple linear regression on (transformations of) varlab and meanfield to estimate <span class="math inline">\(a_0\)</span> and <span class="math inline">\(a_1\)</span>. Call this regression <code>lmodVar</code>.Use these estimates to perform weighted least squares where the weights are the inverse of the variance of Lab. Call this regression <code>lmodwls</code>. Print a summary of this model and comment on the fit.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>lmodVar <span class="ot">=</span> <span class="fu">lm</span>(<span class="fu">log</span>(varlab[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>]) <span class="sc">~</span> <span class="fu">log</span>(meanfield[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>]))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log</span>(meanfield[<span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>]),<span class="fu">log</span>(varlab[<span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>]))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(lmodVar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Sp23_HW5_Solutions_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmodVar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = log(varlab[1:12]) ~ log(meanfield[1:12]))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.2038 -0.6729  0.1656  0.7205  1.1891 
+
+Coefficients:
+                     Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)           -0.3538     1.5715  -0.225   0.8264  
+log(meanfield[1:12])   1.1244     0.4617   2.435   0.0351 *
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.018 on 10 degrees of freedom
+Multiple R-squared:  0.3723,    Adjusted R-squared:  0.3095 
+F-statistic: 5.931 on 1 and 10 DF,  p-value: 0.03513</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">=</span> <span class="fu">coef</span>(lmodVar)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> <span class="fu">with</span>(pipeline, <span class="fu">exp</span>(a[<span class="dv">1</span>])<span class="sc">*</span>Field<span class="sc">^</span>(a[<span class="dv">2</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>lmodwls <span class="ot">=</span> <span class="fu">lm</span>(Lab <span class="sc">~</span> Field, <span class="at">data =</span> pipeline, <span class="at">weights =</span> <span class="dv">1</span><span class="sc">/</span>w)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lmodwls)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Lab ~ Field, data = pipeline, weights = 1/w)
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.0826 -0.8102 -0.3189  0.6212  3.4429 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -1.49436    0.90707  -1.647    0.102    
+Field        1.20828    0.03488  34.637   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.169 on 105 degrees of freedom
+Multiple R-squared:  0.9195,    Adjusted R-squared:  0.9188 
+F-statistic:  1200 on 1 and 105 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fitted</span>(lmodwls), <span class="fu">resid</span>(lmodwls))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Sp23_HW5_Solutions_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fitted</span>(lmodwls), <span class="fu">resid</span>(lmodwls, <span class="at">type =</span> <span class="st">"pearson"</span>)) <span class="co">#students probably won't use pearson</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT-5010_Sp23_HW5_Solutions_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#residuals, because we didn't talk about them in class. In that case, the residuals will still</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#appear to have no-nconstant variance.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Using the regular residuals, we still see some evidence of non-constant variance.</p>
+<p>Using the Pearson residuals, which standardizes the redisuals, we see an improvement in fit (no strong evidence of non-constant variance).</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

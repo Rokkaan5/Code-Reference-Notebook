@@ -1,0 +1,162 @@
+---
+title: "STAT 5010: HW5 - Solutions"
+author: "Dr. Osita Onyejekwe"
+format:
+    html:
+        code-fold: false
+execute:
+    output: true
+    warning: false
+toc: true
+---
+
+
+**See Canvas for HW #5 assignment due date**. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don't know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel is preferred). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work. 
+
+## A. Theoretical Problems
+
+## A.1 Association studies given causal language?
+
+Sometimes, researchers using non-causal models with observational data are careful to use associative, non-causal language. In some cases, these studies are picked up by media outlets and incorrectly interpreted causally. 
+
+Other times, researchers themselves are unintentionally using causal language with non-causal models and observational data. 
+
+**[20 points] Find a science or social science study reported in the news. Podcasts like *Hidden Brain* might be useful here! Does the report of the study make reference to a causal relationship? If so, based on the actual study, do you think that the causal claims are justified? Does it use phrases like "$X$ is associated with $Y$"? Or "$X$ causes $Y$" ?...**
+
+Answers will vary.
+
+## B. Computational Problems
+
+##  B.1 (35 Points)
+
+#### For the [`teengamb`](https://rdrr.io/cran/faraway/man/teengamb.html) data, fit a model with `gamble` as the response and the other variables as predictors. Look for violations of:
+
+1. [5 points] Constant Variance 
+2. [5 points] Normality 
+3. [5 points] Linearity 
+4. [5 points] Correlations
+5. [5 points] Measurement validity
+6. **STAT 5510 Only [10 points]: Look for (a) outliers, (b) leverage points, and (b) potentially influential points. This part of the problem requires some self-study about defining and identifying leverage points, and describing the relationship between leverage and influence. Chapter 6 of *Linear Models with R* (pdf on Canvas) may help!**
+
+**Write a short report detailing your findings.**
+
+
+```{R}
+teengamb = read.csv(url(paste0("https://raw.githubusercontent.com/bzaharatos/",
+                               "-Statistical-Modeling-for-Data-Science-Applications/",
+                               "master/Modern%20Regression%20Analysis%20/Datasets/teengamb.txt")), sep = "")
+
+summary(teengamb)
+### BEGIN SOLUTION HERE
+lmod2 = lm(gamble ~ ., data = teengamb)
+summary(lmod2)
+
+par(mfrow = c(2,2)); plot(lmod2)
+
+
+par(mfrow = c(1,2)) 
+#halfnorm(residuals(lmod2)) 
+### END SOLUTION HERE
+```
+
+
+1. Constant Variance: The residual vs. fitted plot provides some evidence that the constant variance assumption is violated. For small fitted values, variability in the residuals is low, but variability increases as the fitted values increase. 
+2. Normality: Piints 24, 36, and 39 deviate considerably from the dotted line, suggesting that the data don't come from a normal distribution.
+3. Linearity: The residual vs. fitted plot appears to have a linear trend, suggesting that perhaps an additional predictor (or function of an existing predictor) would help better explain systematic varability in the response.
+4. **STAT 5510 Only: Look for (a) outliers, (b) leverage points, and (b) potentially influential points.** Points 24 (and maybe 39) may be considered an outlier(s).  Point 24 has a high Cook's distance, which suggests that that point is a leverage point and is potentially influential. We also note that, on a half-normal qq plot of the residuals, point 24 is identified as an outlier (and potentially influential). Below, we remove point 24 from the dataset and notice that the fit (parameters) changes substantially.
+
+
+
+
+```{R}
+teengamb2 = teengamb[-24,]
+lmod3 = lm(gamble ~ ., data = teengamb2)
+summary(lmod3)
+
+par(mfrow = c(2,2)); plot(lmod3)
+```
+
+
+   
+##  B.2 (45 Points)
+
+Researchers at the National Institutes of Standards and Technology (NIST) collected [pipline data](https://rdrr.io/cran/faraway/man/pipeline.html) on ultrasonic measurements of the depth of defects in the Alaska pipeline in the field. The depths of the defects were then remeasured in the laboratory. The laboratory measurements are more accurate than the field measurements, but more time consuming and expensive. We want to develop a regression model for correcting the in field measurements. 
+
+**B.2 (a) [10 points] Fit a regression model where `Lab` is the response and `Field` is the predictor and save this model as `lmodPipeline`. Check for non-constant variance.**
+
+
+```{R}
+pipeline = read.csv(url(paste0("https://raw.githubusercontent.com/bzaharatos/",
+                               "-Statistical-Modeling-for-Data-Science-Applications/",
+                               "master/Modern%20Regression%20Analysis%20/Datasets/pipeline.txt")), sep = "")
+
+summary(pipeline)
+### BEGIN SOLUTION HERE
+lmodPipeline = lm(Lab ~ Field, data = pipeline)
+summary(lmodPipeline)
+plot(fitted(lmodPipeline), resid(lmodPipeline, type = "pearson"), xlab = expression(hat(Y)), ylab = "Pearson Residuals"); abline(0,0)
+### END SOLUTION HERE
+```
+
+
+The Pearson residuals are a type of standardized residual. A plot of the Pearson residuals against the fitted values provides evidence of nonconstant variance.
+
+
+**B.2 (b) [10 points] Sometimes transforming the response and predictor helps in stabilizing variance. Find a transformation on Lab and/or Field so that in the transformed scale the relationship is approximately linear with constant variance. Restrict your choice of transformation to square root, log, and inverse. Save your transformed variables as `pipeline$LabTransform` and `pipeline$FieldTransform`. Then, regress the transformed` Lab` variable (repsonse) onto the transformed `Field` variable (predictor), and save this as `lmodTr`.**
+
+
+```{R}
+pipeline$LabTransform = log(pipeline$Lab); pipeline$FieldTransform = log(pipeline$Field)
+lmodTr = lm(LabTransform ~ FieldTransform, data = pipeline)
+
+with(pipeline, plot(LabTransform ~ FieldTransform))
+plot(fitted(lmodTr), resid(lmodTr))
+```
+
+
+ 
+**B.2 (c) [5 points] Now let's try weighted least squares. The code below splits the range of `Field` into 12 groups of size nine (except for the last goup which has only eight values). Within each group, we compute the variance of `Lab` as varlab and the mean of `Field` as meanfield. Write comments for each line of the code to demonstrate what each line is doing.**
+
+
+```{R}
+i = order(pipeline$Field); #index of values in order
+npipe = pipeline[i,]; #data ordered according to the field variable 
+ff = gl(12,9)[-108];  #generates a factor of 12 levels with 9 replications (removing point 108)
+meanfield = unlist(lapply(split(npipe$Field,ff),mean));  #mean of the field variable within each of the 12 groups
+varlab = unlist(lapply(split(npipe$Lab,ff),var)) #variance of the field variable within each of the 12 groups
+```
+
+**B.2 (d) [20 points] Suppose that the variance in the repsonse is linked to the predictor in the following way: $$ Var(Lab) = a_0Field^{a_1}.$$ Use simple linear regression on (transformations of) varlab and meanfield to estimate $a_0$ and $a_1$. Call this regression `lmodVar`.Use these estimates to perform weighted least squares where the weights are the inverse of the variance of Lab. Call this regression `lmodwls`.  Print a summary of this model and comment on the fit.**
+
+
+```{R}
+lmodVar = lm(log(varlab[1:12]) ~ log(meanfield[1:12]))
+plot(log(meanfield[1:11]),log(varlab[1:11]))
+abline(lmodVar)
+summary(lmodVar)
+a = coef(lmodVar)
+w = with(pipeline, exp(a[1])*Field^(a[2]))
+```
+
+
+
+```{R}
+lmodwls = lm(Lab ~ Field, data = pipeline, weights = 1/w)
+summary(lmodwls)
+
+```
+
+
+   
+```{R}
+plot(fitted(lmodwls), resid(lmodwls))
+plot(fitted(lmodwls), resid(lmodwls, type = "pearson")) #students probably won't use pearson
+#residuals, because we didn't talk about them in class. In that case, the residuals will still
+#appear to have no-nconstant variance.
+```
+
+
+
+Using the regular residuals, we still see some evidence of non-constant variance. 
+
+Using the Pearson residuals, which standardizes the redisuals, we see an improvement in fit (no strong evidence of non-constant variance). 
