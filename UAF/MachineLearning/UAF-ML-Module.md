@@ -36,6 +36,6 @@ permalink: /UAF/ML-Module
 # General DS Process
 [Data Preparation Workbook](Workbooks/Data_Preparation_Workbook.html)
 
-[Model Training Workbook](Workbooks/Model_Training%20Workbook.html)
+[Model Training Workbook](Workbooks/Model_Training_Workbook.html)
 
 [Error Analysis Workbook](Workbooks/Error_Analysis_Workbook.html)
