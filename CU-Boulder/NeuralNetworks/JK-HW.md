@@ -23,4 +23,4 @@ These are my homework submissions, so all my code. As much as possible done "fro
 
 ## Module 3
 
-(Not there yet)
+- Assignment 3
