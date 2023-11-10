@@ -8,13 +8,12 @@ There is a textbook called "Introduction to Data Mining" by Kumar, et. al (2nd e
 
 [webpage for 2nd edition](https://www-users.cse.umn.edu/~kumar001/dmbook/index.php)
 
-## Tutorial notebooks by the authors
 The page also includes some tutorial notebooks/code to supplement some of the chapters. 
 
 ## Python Jupyter notebook tutorials
 Webpage to view and download all of the python tutorial code and data <http://www.cse.msu.edu/~ptan/dmbook/software/>. There's a way to view the notebooks as html pages on the webpage directly. 
 
-The links below are the same exact notebooks I re-rendered through Quarto to include the table of contents on the pages. Otherwise, I made NO other changes to the notebooks are otherwise identical to the code available for download on the textbook webpage (so all credit belongs to them). 
+The links below are the same exact notebooks I re-rendered through Quarto to include the table of contents on the pages. Otherwise, I made NO other changes to the notebooks and are otherwise identical to the code available for download on the textbook webpage (so all credit belongs to them). 
 
 - [Introduction to Numpy and Pandas](Textbooks/IntroDataMining-Kumar/tutorial2.html)
 - [Data Exploration](Textbooks/IntroDataMining-Kumar/tutorial3.html)
@@ -29,7 +28,7 @@ The links below are the same exact notebooks I re-rendered through Quarto to inc
 
 The main "R-code examples" page (with some links to slides , as well as example code by Michael Hahsler): <https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/> 
 
-All the example code is collected into this online book "An R Companion for Introduction to Data Mining": <https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/index.html>
+All the example code is collected into this online book "*An R Companion for Introduction to Data Mining*": <https://mhahsler.github.io/Introduction_to_Data_Mining_R_Examples/book/index.html>
 
 [Link to the GitHub](https://github.com/mhahsler/Introduction_to_Data_Mining_R_Examples)
 
