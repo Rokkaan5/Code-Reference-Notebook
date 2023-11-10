@@ -12,30 +12,30 @@ permalink: /UAF/ML-Module
 **Lecture Workbooks**
 
 # Basic Packages
-[Numpy Workbook](UAF/MachineLearning/NumPy%20Workbook.html)
+[Numpy Workbook](Workbooks/NumPy_Workbook.html)
 
-[Matplotlib Workbook](UAF/MachineLearning/Matplotlib%20Workbook.html)
+[Matplotlib Workbook](Workbooks/Matplotlib_Workbook.html)
 
-[Pandas Workbook](UAF/MachineLearning/Pandas%20Workbook.html)
+[Pandas Workbook](Workbooks/Pandas_Workbook.html)
 
-[Seaborn Workbook](UAF/MachineLearning/Seaborn%20Workbook.html)
+[Seaborn Workbook](Workbooks/Seaborn_Workbook.html)
 
-[Sklearn Workbook](UAF/MachineLearning/Sklearn%20Workbook.html)
+[Sklearn Workbook](Workbooks/Sklearn_Workbook.html)
 
 # Machine Learning
-[Regression Workbook](UAF/MachineLearning/Regression%20Workbook.html)
+[Regression Workbook](Workbooks/Regression_Workbook.html)
 
-[Decision Tree Workbook](UAF/MachineLearning/Decision%20Tree%20Workbook.html)
+[Decision Tree Workbook](Workbooks/Decision_Tree_Workbook.html)
 
-[Classification Workbook](UAF/MachineLearning/Classification%20Workbook.html)
+[Classification Workbook](Workbooks/Classification_Workbook.html)
 
-[Clustering Workbook](UAF/MachineLearning/Clustering%20Workbook.html)
+[Clustering Workbook](Workbooks/Clustering_Workbook.html)
 
-[Neural Network Workbook](UAF/MachineLearning/Neural%20Network%20Workbook.html)
+[Neural Network Workbook](Workbooks/Neural_Network_Workbook.html)
 
 # General DS Process
-[Data Preparation Workbook](UAF/MachineLearning/Data%20Preparation%20Workbook.html)
+[Data Preparation Workbook](Workbooks/Data_Preparation_Workbook.html)
 
-[Model Training Workbook](UAF/MachineLearning/Model%20Training%20Workbook.html)
+[Model Training Workbook](Workbooks/Model_Training%20Workbook.html)
 
-[Error Analysis Workbook](UAF/MachineLearning/Error%20Analysis%20Workbook.html)
+[Error Analysis Workbook](Workbooks/Error_Analysis_Workbook.html)
