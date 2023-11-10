@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Chapter 5 - Classification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Chapter5-Classification_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Chapter5-Classification_files/libs/quarto-html/quarto.js"></script>
+<script src="Chapter5-Classification_files/libs/quarto-html/popper.min.js"></script>
+<script src="Chapter5-Classification_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Chapter5-Classification_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Chapter5-Classification_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Chapter5-Classification_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Chapter5-Classification_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Chapter5-Classification_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Chapter5-Classification_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#practical-statistics-for-data-scientists-python" id="toc-practical-statistics-for-data-scientists-python" class="nav-link active" data-scroll-target="#practical-statistics-for-data-scientists-python">Practical Statistics for Data Scientists (Python)</a></li>
+  <li><a href="#naive-bayes" id="toc-naive-bayes" class="nav-link" data-scroll-target="#naive-bayes">Naive Bayes</a>
+  <ul class="collapse">
+  <li><a href="#the-naive-solution" id="toc-the-naive-solution" class="nav-link" data-scroll-target="#the-naive-solution">The Naive Solution</a>
+  <ul class="collapse">
+  <li><a href="#example-not-in-book" id="toc-example-not-in-book" class="nav-link" data-scroll-target="#example-not-in-book">Example not in book</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#discriminant-analysis" id="toc-discriminant-analysis" class="nav-link" data-scroll-target="#discriminant-analysis">Discriminant Analysis</a>
+  <ul class="collapse">
+  <li><a href="#a-simple-example" id="toc-a-simple-example" class="nav-link" data-scroll-target="#a-simple-example">A Simple Example</a>
+  <ul class="collapse">
+  <li><a href="#figure-5.1" id="toc-figure-5.1" class="nav-link" data-scroll-target="#figure-5.1">Figure 5.1</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#logistic-regression" id="toc-logistic-regression" class="nav-link" data-scroll-target="#logistic-regression">Logistic regression</a>
+  <ul class="collapse">
+  <li><a href="#logistic-response-function-and-logit" id="toc-logistic-response-function-and-logit" class="nav-link" data-scroll-target="#logistic-response-function-and-logit">Logistic Response Function and Logit</a></li>
+  <li><a href="#logistic-regression-and-the-glm" id="toc-logistic-regression-and-the-glm" class="nav-link" data-scroll-target="#logistic-regression-and-the-glm">Logistic Regression and the GLM</a></li>
+  <li><a href="#predicted-values-from-logistic-regression" id="toc-predicted-values-from-logistic-regression" class="nav-link" data-scroll-target="#predicted-values-from-logistic-regression">Predicted Values from Logistic Regression</a></li>
+  <li><a href="#interpreting-the-coefficients-and-odds-ratios" id="toc-interpreting-the-coefficients-and-odds-ratios" class="nav-link" data-scroll-target="#interpreting-the-coefficients-and-odds-ratios">Interpreting the Coefficients and Odds Ratios</a></li>
+  <li><a href="#assessing-the-model" id="toc-assessing-the-model" class="nav-link" data-scroll-target="#assessing-the-model">Assessing the Model</a></li>
+  </ul></li>
+  <li><a href="#evaluating-classification-models" id="toc-evaluating-classification-models" class="nav-link" data-scroll-target="#evaluating-classification-models">Evaluating Classification Models</a>
+  <ul class="collapse">
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">Confusion Matrix</a></li>
+  <li><a href="#precision-recall-and-specificity" id="toc-precision-recall-and-specificity" class="nav-link" data-scroll-target="#precision-recall-and-specificity">Precision, Recall, and Specificity</a></li>
+  <li><a href="#roc-curve" id="toc-roc-curve" class="nav-link" data-scroll-target="#roc-curve">ROC Curve</a></li>
+  <li><a href="#auc" id="toc-auc" class="nav-link" data-scroll-target="#auc">AUC</a></li>
+  </ul></li>
+  <li><a href="#strategies-for-imbalanced-data" id="toc-strategies-for-imbalanced-data" class="nav-link" data-scroll-target="#strategies-for-imbalanced-data">Strategies for Imbalanced Data</a>
+  <ul class="collapse">
+  <li><a href="#undersampling" id="toc-undersampling" class="nav-link" data-scroll-target="#undersampling">Undersampling</a></li>
+  <li><a href="#oversampling-and-updown-weighting" id="toc-oversampling-and-updown-weighting" class="nav-link" data-scroll-target="#oversampling-and-updown-weighting">Oversampling and Up/Down Weighting</a></li>
+  <li><a href="#data-generation" id="toc-data-generation" class="nav-link" data-scroll-target="#data-generation">Data Generation</a></li>
+  <li><a href="#exploring-the-predictions" id="toc-exploring-the-predictions" class="nav-link" data-scroll-target="#exploring-the-predictions">Exploring the Predictions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter 5 - Classification</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="practical-statistics-for-data-scientists-python" class="level1">
+<h1>Practical Statistics for Data Scientists (Python)</h1>
+<blockquote class="blockquote">
+<ol start="3" type="a">
+<li>2019 Peter C. Bruce, Andrew Bruce, Peter Gedeck</li>
+</ol>
+</blockquote>
+<p>Import required Python packages.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:14.194696Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:14.194382Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:15.799722Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:15.798716Z&quot;}" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> MultinomialNB</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.discriminant_analysis <span class="im">import</span> LinearDiscriminantAnalysis</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression <span class="co">#, LogisticRegressionCV</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, precision_recall_fscore_support</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_curve, accuracy_score, roc_auc_score</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> imblearn.over_sampling <span class="im">import</span> SMOTE, ADASYN, BorderlineSMOTE</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pygam <span class="im">import</span> LinearGAM, s, f, l</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dmba <span class="im">import</span> classificationSummary</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>no display found. Using non-interactive Agg backend</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:15.803360Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:15.803149Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:16.169820Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:16.169119Z&quot;}" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> common</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    DATA <span class="op">=</span> common.dataDirectory()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ImportError</span>:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    DATA <span class="op">=</span> Path().resolve() <span class="op">/</span> <span class="st">'data'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Define paths to data sets. If you don’t keep your data in the same directory as the code, adapt the path names.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:16.173097Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:16.172908Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:16.177543Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:16.176079Z&quot;}" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>LOAN3000_CSV <span class="op">=</span> DATA <span class="op">/</span> <span class="st">'loan3000.csv'</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>LOAN_DATA_CSV <span class="op">=</span> DATA <span class="op">/</span> <span class="st">'loan_data.csv.gz'</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>FULL_TRAIN_SET_CSV <span class="op">=</span> DATA <span class="op">/</span> <span class="st">'full_train_set.csv.gz'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="naive-bayes" class="level1">
+<h1>Naive Bayes</h1>
+<section id="the-naive-solution" class="level2">
+<h2 class="anchored" data-anchor-id="the-naive-solution">The Naive Solution</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:16.181332Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:16.181157Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:16.431952Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:16.430978Z&quot;}" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>loan_data <span class="op">=</span> pd.read_csv(LOAN_DATA_CSV)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># convert to categorical</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>loan_data.outcome <span class="op">=</span> loan_data.outcome.astype(<span class="st">'category'</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>loan_data.outcome.cat.reorder_categories([<span class="st">'paid off'</span>, <span class="st">'default'</span>])</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>loan_data.purpose_ <span class="op">=</span> loan_data.purpose_.astype(<span class="st">'category'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>loan_data.home_ <span class="op">=</span> loan_data.home_.astype(<span class="st">'category'</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>loan_data.emp_len_ <span class="op">=</span> loan_data.emp_len_.astype(<span class="st">'category'</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>predictors <span class="op">=</span> [<span class="st">'purpose_'</span>, <span class="st">'home_'</span>, <span class="st">'emp_len_'</span>]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>outcome <span class="op">=</span> <span class="st">'outcome'</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.get_dummies(loan_data[predictors], prefix<span class="op">=</span><span class="st">''</span>, prefix_sep<span class="op">=</span><span class="st">''</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> loan_data[outcome]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>naive_model <span class="op">=</span> MultinomialNB(alpha<span class="op">=</span><span class="fl">0.01</span>, fit_prior<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>naive_model <span class="op">=</span> MultinomialNB(alpha<span class="op">=</span><span class="fl">1e-10</span>, fit_prior<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>naive_model.fit(X, y)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>new_loan <span class="op">=</span> X.loc[<span class="dv">146</span>:<span class="dv">146</span>, :]</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'predicted class: '</span>, naive_model.predict(new_loan)[<span class="dv">0</span>])</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>probabilities <span class="op">=</span> pd.DataFrame(naive_model.predict_proba(new_loan),</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>                             columns<span class="op">=</span>naive_model.classes_)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'predicted probabilities'</span>,)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(probabilities)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>predicted class:  default
+predicted probabilities
+    default  paid off
+0  0.653699  0.346301</code></pre>
+</div>
+</div>
+<section id="example-not-in-book" class="level3">
+<h3 class="anchored" data-anchor-id="example-not-in-book">Example not in book</h3>
+<p>Numerical variables are not supported in scikit-learn. The example would need to demonstrate binning a variable and display the probability distribution of the bins.</p>
+<pre><code>## example not in book
+less_naive &lt;- NaiveBayes(outcome ~ borrower_score + payment_inc_ratio + 
+                           purpose_ + home_ + emp_len_, data = loan_data)
+less_naive$table[1:2]
+
+png(filename=file.path(PSDS_PATH, 'figures', 'psds_naive_bayes.png'),  width = 4, height=3, units='in', res=300)
+
+stats &lt;- less_naive$table[[1]]
+ggplot(data.frame(borrower_score=c(0,1)), aes(borrower_score)) +
+  stat_function(fun = dnorm, color='blue', linetype=1, 
+                arg=list(mean=stats[1, 1], sd=stats[1, 2])) +
+  stat_function(fun = dnorm, color='red', linetype=2, 
+                arg=list(mean=stats[2, 1], sd=stats[2, 2])) +
+  labs(y='probability')
+dev.off()</code></pre>
+</section>
+</section>
+</section>
+<section id="discriminant-analysis" class="level1">
+<h1>Discriminant Analysis</h1>
+<section id="a-simple-example" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-example">A Simple Example</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:16.435118Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:16.434917Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:16.454130Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:16.453281Z&quot;}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>loan3000 <span class="op">=</span> pd.read_csv(LOAN3000_CSV)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>loan3000.outcome <span class="op">=</span> loan3000.outcome.astype(<span class="st">'category'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>predictors <span class="op">=</span> [<span class="st">'borrower_score'</span>, <span class="st">'payment_inc_ratio'</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>outcome <span class="op">=</span> <span class="st">'outcome'</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> loan3000[predictors]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> loan3000[outcome]</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>loan_lda <span class="op">=</span> LinearDiscriminantAnalysis()</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>loan_lda.fit(X, y)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame(loan_lda.scalings_, index<span class="op">=</span>X.columns))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                          0
+borrower_score     7.175839
+payment_inc_ratio -0.099676</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:16.457102Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:16.456899Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:16.465568Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:16.464796Z&quot;}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> pd.DataFrame(loan_lda.predict_proba(loan3000[predictors]),</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                    columns<span class="op">=</span>loan_lda.classes_)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pred.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    default  paid off
+0  0.553544  0.446456
+1  0.558953  0.441047
+2  0.272696  0.727304
+3  0.506254  0.493746
+4  0.609952  0.390048</code></pre>
+</div>
+</div>
+<section id="figure-5.1" class="level3">
+<h3 class="anchored" data-anchor-id="figure-5.1">Figure 5.1</h3>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:16.468298Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:16.468090Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:16.744368Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:16.743532Z&quot;}" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use scalings and center of means to determine decision boundary</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>center <span class="op">=</span> np.mean(loan_lda.means_, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>slope <span class="op">=</span> <span class="op">-</span> loan_lda.scalings_[<span class="dv">0</span>] <span class="op">/</span> loan_lda.scalings_[<span class="dv">1</span>]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>intercept <span class="op">=</span> center[<span class="dv">1</span>] <span class="op">-</span> center[<span class="dv">0</span>] <span class="op">*</span> slope</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># payment_inc_ratio for borrower_score of 0 and 20</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>x_0 <span class="op">=</span> (<span class="dv">0</span> <span class="op">-</span> intercept) <span class="op">/</span> slope</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>x_20 <span class="op">=</span> (<span class="dv">20</span> <span class="op">-</span> intercept) <span class="op">/</span> slope</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>lda_df <span class="op">=</span> pd.concat([loan3000, pred[<span class="st">'default'</span>]], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>lda_df.head()</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> sns.scatterplot(x<span class="op">=</span><span class="st">'borrower_score'</span>, y<span class="op">=</span><span class="st">'payment_inc_ratio'</span>,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>                    hue<span class="op">=</span><span class="st">'default'</span>, data<span class="op">=</span>lda_df, </span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>                    palette<span class="op">=</span>sns.diverging_palette(<span class="dv">240</span>, <span class="dv">10</span>, n<span class="op">=</span><span class="dv">9</span>, as_cmap<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>                    ax<span class="op">=</span>ax, legend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="dv">20</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="fl">0.15</span>, <span class="fl">0.8</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>ax.plot((x_0, x_20), (<span class="dv">0</span>, <span class="dv">20</span>), linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="op">*</span>loan_lda.means_.transpose())</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter5-Classification_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="logistic-regression" class="level1">
+<h1>Logistic regression</h1>
+<section id="logistic-response-function-and-logit" class="level2">
+<h2 class="anchored" data-anchor-id="logistic-response-function-and-logit">Logistic Response Function and Logit</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:16.747624Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:16.747355Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:17.031969Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:17.031129Z&quot;}" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> np.arange(<span class="fl">0.01</span>, <span class="dv">1</span>, <span class="fl">0.01</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'p'</span>: p,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'logit'</span>: np.log(p <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> p)),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'odds'</span>: p <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> p),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'grey'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>ax.axvline(<span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'grey'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>ax.plot(df[<span class="st">'p'</span>], df[<span class="st">'logit'</span>])</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Probability'</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'logit(p)'</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter5-Classification_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="logistic-regression-and-the-glm" class="level2">
+<h2 class="anchored" data-anchor-id="logistic-regression-and-the-glm">Logistic Regression and the GLM</h2>
+<p>The package <em>scikit-learn</em> has a specialised class for <code>LogisticRegression</code>. <em>Statsmodels</em> has a more general method based on generalized linear model (GLM).</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:17.037884Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:17.036980Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:17.160300Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:17.159611Z&quot;}" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>predictors <span class="op">=</span> [<span class="st">'payment_inc_ratio'</span>, <span class="st">'purpose_'</span>, <span class="st">'home_'</span>, <span class="st">'emp_len_'</span>, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">'borrower_score'</span>]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>outcome <span class="op">=</span> <span class="st">'outcome'</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.get_dummies(loan_data[predictors], prefix<span class="op">=</span><span class="st">''</span>, prefix_sep<span class="op">=</span><span class="st">''</span>, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                   drop_first<span class="op">=</span><span class="va">True</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> loan_data[outcome] <span class="co"># .cat.categories</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>logit_reg <span class="op">=</span> LogisticRegression(penalty<span class="op">=</span><span class="st">'l2'</span>, C<span class="op">=</span><span class="fl">1e42</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>logit_reg.fit(X, y)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'intercept '</span>, logit_reg.intercept_[<span class="dv">0</span>])</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'classes'</span>, logit_reg.classes_)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({<span class="st">'coeff'</span>: logit_reg.coef_[<span class="dv">0</span>]}, </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>             index<span class="op">=</span>X.columns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>intercept  -1.6380882883923482
+classes ['default' 'paid off']</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">coeff</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">payment_inc_ratio</td>
+<td>-0.079728</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">borrower_score</td>
+<td>4.611037</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">debt_consolidation</td>
+<td>-0.249342</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">home_improvement</td>
+<td>-0.407614</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">major_purchase</td>
+<td>-0.229376</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">medical</td>
+<td>-0.510087</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">other</td>
+<td>-0.620534</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">small_business</td>
+<td>-1.215662</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">OWN</td>
+<td>-0.048453</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">RENT</td>
+<td>-0.157355</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">&gt; 1 Year</td>
+<td>0.357463</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Note that the intercept and coefficients are reversed compared to the R model.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:17.163690Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:17.163015Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:17.169389Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:17.168700Z&quot;}" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loan_data[<span class="st">'purpose_'</span>].cat.categories)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loan_data[<span class="st">'home_'</span>].cat.categories)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(loan_data[<span class="st">'emp_len_'</span>].cat.categories)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Index(['credit_card', 'debt_consolidation', 'home_improvement',
+       'major_purchase', 'medical', 'other', 'small_business'],
+      dtype='object')
+Index(['MORTGAGE', 'OWN', 'RENT'], dtype='object')
+Index([' &lt; 1 Year', ' &gt; 1 Year'], dtype='object')</code></pre>
+</div>
+</div>
+<p><em>Not in book</em> : If you have a feature or outcome variable that is ordinal, use the scikit-learn <code>OrdinalEncoder</code> to replace the categories (here, ‘paid off’ and ‘default’) with numbers. In the below code, we replace ‘paid off’ with 0 and ‘default’ with 1. This reverses the order of the predicted classes and as a consequence, the coefficients will be reversed.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:17.172930Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:17.172507Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:17.270480Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:17.269865Z&quot;}" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> OrdinalEncoder</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>enc <span class="op">=</span> OrdinalEncoder(categories<span class="op">=</span>[[<span class="st">'paid off'</span>, <span class="st">'default'</span>]])</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>y_enc <span class="op">=</span> enc.fit_transform(loan_data[[outcome]]).ravel()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>logit_reg_enc <span class="op">=</span> LogisticRegression(penalty<span class="op">=</span><span class="st">"l2"</span>, C<span class="op">=</span><span class="fl">1e42</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>logit_reg_enc.fit(X, y_enc)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'intercept '</span>, logit_reg_enc.intercept_[<span class="dv">0</span>])</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'classes'</span>, logit_reg_enc.classes_)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({<span class="st">'coeff'</span>: logit_reg_enc.coef_[<span class="dv">0</span>]}, </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>             index<span class="op">=</span>X.columns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>intercept  1.6378909416318836
+classes [0. 1.]</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">coeff</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">payment_inc_ratio</td>
+<td>0.079739</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">borrower_score</td>
+<td>-4.612183</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">debt_consolidation</td>
+<td>0.249414</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">home_improvement</td>
+<td>0.407734</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">major_purchase</td>
+<td>0.229710</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">medical</td>
+<td>0.510744</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">other</td>
+<td>0.620800</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">small_business</td>
+<td>1.214936</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">OWN</td>
+<td>0.048211</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">RENT</td>
+<td>0.157288</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">&gt; 1 Year</td>
+<td>-0.356794</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="predicted-values-from-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="predicted-values-from-logistic-regression">Predicted Values from Logistic Regression</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:17.273633Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:17.273409Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:17.293082Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:17.291698Z&quot;}" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> pd.DataFrame(logit_reg.predict_log_proba(X),</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                    columns<span class="op">=</span>logit_reg.classes_)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pred.describe())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            default      paid off
+count  45342.000000  45342.000000
+mean      -0.757850     -0.760423
+std        0.378032      0.390419
+min       -2.768873     -3.538865
+25%       -0.985728     -0.977164
+50%       -0.697366     -0.688946
+75%       -0.472209     -0.467076
+max       -0.029476     -0.064787</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:17.297687Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:17.296627Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:17.318641Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:17.317742Z&quot;}" data-scrolled="true" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> pd.DataFrame(logit_reg.predict_proba(X),</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                    columns<span class="op">=</span>logit_reg.classes_)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pred.describe())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            default      paid off
+count  45342.000000  45342.000000
+mean       0.500001      0.499999
+std        0.167336      0.167336
+min        0.062733      0.029046
+25%        0.373167      0.376377
+50%        0.497895      0.502105
+75%        0.623623      0.626833
+max        0.970954      0.937267</code></pre>
+</div>
+</div>
+</section>
+<section id="interpreting-the-coefficients-and-odds-ratios" class="level2">
+<h2 class="anchored" data-anchor-id="interpreting-the-coefficients-and-odds-ratios">Interpreting the Coefficients and Odds Ratios</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:17.322842Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:17.322222Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:17.453280Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:17.452416Z&quot;}" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>ax.plot(df[<span class="st">'logit'</span>], df[<span class="st">'odds'</span>])</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'log(odds ratio)'</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'odds ratio'</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">0</span>, <span class="fl">5.1</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="op">-</span><span class="dv">5</span>, <span class="dv">105</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter5-Classification_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="assessing-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="assessing-the-model">Assessing the Model</h2>
+<p>For comparison, here the GLM model using <em>statsmodels</em>. This method requires that the outcome is mapped to numbers.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:17.456596Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:17.456391Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:17.566111Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:17.565125Z&quot;}" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use GLM (general linear model) with the binomial family to </span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a logistic regression</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>y_numbers <span class="op">=</span> [<span class="dv">1</span> <span class="cf">if</span> yi <span class="op">==</span> <span class="st">'default'</span> <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> yi <span class="kw">in</span> y]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>logit_reg_sm <span class="op">=</span> sm.GLM(y_numbers, X.assign(const<span class="op">=</span><span class="dv">1</span>), </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                      family<span class="op">=</span>sm.families.Binomial())</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>logit_result <span class="op">=</span> logit_reg_sm.fit()</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(logit_result.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 Generalized Linear Model Regression Results                  
+==============================================================================
+Dep. Variable:                      y   No. Observations:                45342
+Model:                            GLM   Df Residuals:                    45330
+Model Family:                Binomial   Df Model:                           11
+Link Function:                  Logit   Scale:                          1.0000
+Method:                          IRLS   Log-Likelihood:                -28757.
+Date:                Wed, 24 May 2023   Deviance:                       57515.
+Time:                        12:46:35   Pearson chi2:                 4.54e+04
+No. Iterations:                     4   Pseudo R-squ. (CS):             0.1112
+Covariance Type:            nonrobust                                         
+======================================================================================
+                         coef    std err          z      P&gt;|z|      [0.025      0.975]
+--------------------------------------------------------------------------------------
+payment_inc_ratio      0.0797      0.002     32.058      0.000       0.075       0.085
+borrower_score        -4.6126      0.084    -55.203      0.000      -4.776      -4.449
+debt_consolidation     0.2494      0.028      9.030      0.000       0.195       0.303
+home_improvement       0.4077      0.047      8.747      0.000       0.316       0.499
+major_purchase         0.2296      0.054      4.277      0.000       0.124       0.335
+medical                0.5105      0.087      5.882      0.000       0.340       0.681
+other                  0.6207      0.039     15.738      0.000       0.543       0.698
+small_business         1.2153      0.063     19.192      0.000       1.091       1.339
+OWN                    0.0483      0.038      1.271      0.204      -0.026       0.123
+RENT                   0.1573      0.021      7.420      0.000       0.116       0.199
+ &gt; 1 Year             -0.3567      0.053     -6.779      0.000      -0.460      -0.254
+const                  1.6381      0.074     22.224      0.000       1.494       1.783
+======================================================================================</code></pre>
+</div>
+</div>
+<p>Use splines</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:17.569719Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:17.569089Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:17.891474Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:17.890590Z&quot;}" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>formula <span class="op">=</span> (<span class="st">'outcome ~ bs(payment_inc_ratio, df=8) + purpose_ + '</span> <span class="op">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">'home_ + emp_len_ + bs(borrower_score, df=3)'</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> smf.glm(formula<span class="op">=</span>formula, data<span class="op">=</span>loan_data, family<span class="op">=</span>sm.families.Binomial())</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> model.fit()</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                             Generalized Linear Model Regression Results                             
+=====================================================================================================
+Dep. Variable:     ['outcome[default]', 'outcome[paid off]']   No. Observations:                45342
+Model:                                                   GLM   Df Residuals:                    45321
+Model Family:                                       Binomial   Df Model:                           20
+Link Function:                                         Logit   Scale:                          1.0000
+Method:                                                 IRLS   Log-Likelihood:                -28731.
+Date:                                       Wed, 24 May 2023   Deviance:                       57462.
+Time:                                               12:46:36   Pearson chi2:                 4.54e+04
+No. Iterations:                                            6   Pseudo R-squ. (CS):             0.1122
+Covariance Type:                                   nonrobust                                         
+==================================================================================================
+                                     coef    std err          z      P&gt;|z|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------
+Intercept                          1.5756      0.331      4.765      0.000       0.928       2.224
+purpose_[T.debt_consolidation]     0.2486      0.028      8.998      0.000       0.194       0.303
+purpose_[T.home_improvement]       0.4097      0.047      8.757      0.000       0.318       0.501
+purpose_[T.major_purchase]         0.2382      0.054      4.416      0.000       0.132       0.344
+purpose_[T.medical]                0.5206      0.087      5.980      0.000       0.350       0.691
+purpose_[T.other]                  0.6284      0.040     15.781      0.000       0.550       0.706
+purpose_[T.small_business]         1.2250      0.063     19.305      0.000       1.101       1.349
+home_[T.OWN]                       0.0498      0.038      1.309      0.191      -0.025       0.124
+home_[T.RENT]                      0.1577      0.021      7.431      0.000       0.116       0.199
+emp_len_[T. &gt; 1 Year]             -0.3526      0.053     -6.699      0.000      -0.456      -0.249
+bs(payment_inc_ratio, df=8)[0]     0.7042      0.342      2.060      0.039       0.034       1.374
+bs(payment_inc_ratio, df=8)[1]     0.6621      0.198      3.351      0.001       0.275       1.049
+bs(payment_inc_ratio, df=8)[2]     0.8118      0.245      3.309      0.001       0.331       1.293
+bs(payment_inc_ratio, df=8)[3]     1.0377      0.223      4.644      0.000       0.600       1.476
+bs(payment_inc_ratio, df=8)[4]     1.1901      0.233      5.112      0.000       0.734       1.646
+bs(payment_inc_ratio, df=8)[5]     2.8404      0.316      8.980      0.000       2.220       3.460
+bs(payment_inc_ratio, df=8)[6]    -1.3427      1.229     -1.092      0.275      -3.752       1.067
+bs(payment_inc_ratio, df=8)[7]     7.1094      6.393      1.112      0.266      -5.420      19.639
+bs(borrower_score, df=3)[0]       -2.9011      0.533     -5.448      0.000      -3.945      -1.857
+bs(borrower_score, df=3)[1]       -2.6056      0.196    -13.284      0.000      -2.990      -2.221
+bs(borrower_score, df=3)[2]       -5.7421      0.508    -11.313      0.000      -6.737      -4.747
+==================================================================================================</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:17.895385Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:17.894779Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:18.270716Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:18.269717Z&quot;}" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.genmod.generalized_linear_model <span class="im">import</span> GLMResults</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> partialResidualPlot(model, df, outcome, feature, fig, ax):</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    y_actual <span class="op">=</span> [<span class="dv">0</span> <span class="cf">if</span> s <span class="op">==</span> <span class="st">'default'</span> <span class="cf">else</span> <span class="dv">1</span> <span class="cf">for</span> s <span class="kw">in</span> df[outcome]]</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> model.predict(df)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    org_params <span class="op">=</span> model.params.copy()</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    zero_params <span class="op">=</span> model.params.copy()</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># set model parametes of other features to 0</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, name <span class="kw">in</span> <span class="bu">enumerate</span>(zero_params.index):</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> feature <span class="kw">in</span> name:</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>        zero_params[i] <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    model.initialize(model.model, zero_params)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    feature_prediction <span class="op">=</span> model.predict(df)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    ypartial <span class="op">=</span> <span class="op">-</span>np.log(<span class="dv">1</span><span class="op">/</span>feature_prediction <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    ypartial <span class="op">=</span> ypartial <span class="op">-</span> np.mean(ypartial)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    model.initialize(model.model, org_params)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">'feature'</span>: df[feature],</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">'residual'</span>: <span class="op">-</span><span class="dv">2</span> <span class="op">*</span> (y_actual <span class="op">-</span> y_pred),</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">'ypartial'</span>: ypartial<span class="op">/</span> <span class="dv">2</span>,</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> results.sort_values(by<span class="op">=</span>[<span class="st">'feature'</span>])</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    ax.scatter(results.feature, results.residual, marker<span class="op">=</span><span class="st">"."</span>, s<span class="op">=</span><span class="fl">72.</span><span class="op">/</span>fig.dpi)</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>    ax.plot(results.feature, results.ypartial, color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(feature)</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="ss">f'Residual + </span><span class="sc">{</span>feature<span class="sc">}</span><span class="ss"> contribution'</span>)</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ax</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>partialResidualPlot(results, loan_data, <span class="st">'outcome'</span>, <span class="st">'payment_inc_ratio'</span>, fig, ax)</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">0</span>, <span class="dv">25</span>)</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>)</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter5-Classification_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="evaluating-classification-models" class="level1">
+<h1>Evaluating Classification Models</h1>
+<section id="confusion-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="confusion-matrix">Confusion Matrix</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:18.274333Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:18.274152Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:18.291371Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:18.290358Z&quot;}" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confusion matrix</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> logit_reg.predict(X)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>pred_y <span class="op">=</span> logit_reg.predict(X) <span class="op">==</span> <span class="st">'default'</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>true_y <span class="op">=</span> y <span class="op">==</span> <span class="st">'default'</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>true_pos <span class="op">=</span> true_y <span class="op">&amp;</span> pred_y</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>true_neg <span class="op">=</span> <span class="op">~</span>true_y <span class="op">&amp;</span> <span class="op">~</span>pred_y</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>false_pos <span class="op">=</span> <span class="op">~</span>true_y <span class="op">&amp;</span> pred_y</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>false_neg <span class="op">=</span> true_y <span class="op">&amp;</span> <span class="op">~</span>pred_y</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> pd.DataFrame([[np.<span class="bu">sum</span>(true_pos), np.<span class="bu">sum</span>(false_neg)], [np.<span class="bu">sum</span>(false_pos), np.<span class="bu">sum</span>(true_neg)]],</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>                       index<span class="op">=</span>[<span class="st">'Y = default'</span>, <span class="st">'Y = paid off'</span>],</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>                       columns<span class="op">=</span>[<span class="st">'Yhat = default'</span>, <span class="st">'Yhat = paid off'</span>])</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(conf_mat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Yhat = default  Yhat = paid off
+Y = default            14336             8335
+Y = paid off            8148            14523</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:18.296845Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:18.294975Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:18.463313Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:18.462640Z&quot;}" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(confusion_matrix(y, logit_reg.predict(X)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[14336  8335]
+ [ 8148 14523]]</code></pre>
+</div>
+</div>
+<p>The package <em>dmba</em> contains the function <code>classificationSummary</code> that prints confusion matrix and accuracy for a classification model.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:18.467518Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:18.467302Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:18.752266Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:18.751356Z&quot;}" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>classificationSummary(y, logit_reg.predict(X), </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                      class_names<span class="op">=</span>logit_reg.classes_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix (Accuracy 0.6365)
+
+         Prediction
+  Actual  default paid off
+ default    14336     8335
+paid off     8148    14523</code></pre>
+</div>
+</div>
+</section>
+<section id="precision-recall-and-specificity" class="level2">
+<h2 class="anchored" data-anchor-id="precision-recall-and-specificity">Precision, Recall, and Specificity</h2>
+<p>The <em>scikit-learn</em> function <code>precision_recall_fscore_support</code> returns precision, recall, fbeta_score and support.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:18.755964Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:18.755747Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:18.912153Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:18.911570Z&quot;}" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>conf_mat <span class="op">=</span> confusion_matrix(y, logit_reg.predict(X))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Precision'</span>, conf_mat[<span class="dv">0</span>, <span class="dv">0</span>] <span class="op">/</span> <span class="bu">sum</span>(conf_mat[:, <span class="dv">0</span>]))</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Recall'</span>, conf_mat[<span class="dv">0</span>, <span class="dv">0</span>] <span class="op">/</span> <span class="bu">sum</span>(conf_mat[<span class="dv">0</span>, :]))</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Specificity'</span>, conf_mat[<span class="dv">1</span>, <span class="dv">1</span>] <span class="op">/</span> <span class="bu">sum</span>(conf_mat[<span class="dv">1</span>, :]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Precision 0.6376089663760897
+Recall 0.6323496978518812
+Specificity 0.6405981209474659</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:18.914750Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:18.914511Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:19.213578Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:19.212679Z&quot;}" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>precision_recall_fscore_support(y, logit_reg.predict(X), </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                                labels<span class="op">=</span>[<span class="st">'default'</span>, <span class="st">'paid off'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>(array([0.63760897, 0.63535742]),
+ array([0.6323497 , 0.64059812]),
+ array([0.63496844, 0.63796701]),
+ array([22671, 22671]))</code></pre>
+</div>
+</div>
+</section>
+<section id="roc-curve" class="level2">
+<h2 class="anchored" data-anchor-id="roc-curve">ROC Curve</h2>
+<p>The function <code>roc_curve</code> in <em>Scikit-learn</em> calculates all the information that is required for plotting a ROC curve.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:19.216320Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:19.216088Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:19.374369Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:19.373157Z&quot;}" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fpr, tpr, thresholds <span class="op">=</span> roc_curve(y, logit_reg.predict_proba(X)[:, <span class="dv">0</span>], </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>                                 pos_label<span class="op">=</span><span class="st">'default'</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>roc_df <span class="op">=</span> pd.DataFrame({<span class="st">'recall'</span>: tpr, <span class="st">'specificity'</span>: <span class="dv">1</span> <span class="op">-</span> fpr})</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> roc_df.plot(x<span class="op">=</span><span class="st">'specificity'</span>, y<span class="op">=</span><span class="st">'recall'</span>, figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>), legend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>ax.plot((<span class="dv">1</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'specificity'</span>)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'recall'</span>)</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter5-Classification_files/figure-html/cell-24-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="auc" class="level2">
+<h2 class="anchored" data-anchor-id="auc">AUC</h2>
+<p>Accuracy can easily be calculated using the <em>scikit-learn</em> function <code>accuracy_score</code>.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:19.377721Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:19.377392Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:19.414489Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:19.413330Z&quot;}" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">sum</span>(roc_df.recall[:<span class="op">-</span><span class="dv">1</span>] <span class="op">*</span> np.diff(<span class="dv">1</span> <span class="op">-</span> roc_df.specificity)))</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roc_auc_score([<span class="dv">1</span> <span class="cf">if</span> yi <span class="op">==</span> <span class="st">'default'</span> <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> yi <span class="kw">in</span> y], logit_reg.predict_proba(X)[:, <span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.691710795288669
+0.6917108731135808</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:19.419623Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:19.418737Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:19.569010Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:19.568191Z&quot;}" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>fpr, tpr, thresholds <span class="op">=</span> roc_curve(y, logit_reg.predict_proba(X)[:,<span class="dv">0</span>], </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>                                 pos_label<span class="op">=</span><span class="st">'default'</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>roc_df <span class="op">=</span> pd.DataFrame({<span class="st">'recall'</span>: tpr, <span class="st">'specificity'</span>: <span class="dv">1</span> <span class="op">-</span> fpr})</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> roc_df.plot(x<span class="op">=</span><span class="st">'specificity'</span>, y<span class="op">=</span><span class="st">'recall'</span>, figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>), legend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(<span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.plot((1, 0), (0, 1))</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'specificity'</span>)</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'recall'</span>)</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>ax.fill_between(roc_df.specificity, <span class="dv">0</span>, roc_df.recall, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter5-Classification_files/figure-html/cell-26-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="strategies-for-imbalanced-data" class="level1">
+<h1>Strategies for Imbalanced Data</h1>
+<section id="undersampling" class="level2">
+<h2 class="anchored" data-anchor-id="undersampling">Undersampling</h2>
+<blockquote class="blockquote">
+<p>The results differ from the R version, however are equivalent to results obtained using the R code. Model based results are of similar magnitude.</p>
+</blockquote>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:19.572345Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:19.572125Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:19.840546Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:19.839547Z&quot;}" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>full_train_set <span class="op">=</span> pd.read_csv(FULL_TRAIN_SET_CSV)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(full_train_set.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(119987, 19)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:19.844147Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:19.843743Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:19.856631Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:19.855802Z&quot;}" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'percentage of loans in default: '</span>, </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(      <span class="dv">100</span> <span class="op">*</span> np.mean(full_train_set.outcome <span class="op">==</span> <span class="st">'default'</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>18.894546909248504
+percentage of loans in default:  None</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:19.859257Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:19.859062Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:20.719833Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:20.718606Z&quot;}" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>predictors <span class="op">=</span> [<span class="st">'payment_inc_ratio'</span>, <span class="st">'purpose_'</span>, <span class="st">'home_'</span>, <span class="st">'emp_len_'</span>, </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">'dti'</span>, <span class="st">'revol_bal'</span>, <span class="st">'revol_util'</span>]</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>outcome <span class="op">=</span> <span class="st">'outcome'</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.get_dummies(full_train_set[predictors], prefix<span class="op">=</span><span class="st">''</span>, prefix_sep<span class="op">=</span><span class="st">''</span>, </span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>                   drop_first<span class="op">=</span><span class="va">True</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> full_train_set[outcome]</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>full_model <span class="op">=</span> LogisticRegression(penalty<span class="op">=</span><span class="st">'l2'</span>, C<span class="op">=</span><span class="fl">1e42</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>)</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>full_model.fit(X, y)</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'percentage of loans predicted to default: '</span>, </span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(      <span class="dv">100</span> <span class="op">*</span> np.mean(full_model.predict(X) <span class="op">==</span> <span class="st">'default'</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.9759390600648404
+percentage of loans predicted to default:  None</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:20.723284Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:20.722757Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:20.742561Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:20.741585Z&quot;}" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>(np.mean(full_train_set.outcome <span class="op">==</span> <span class="st">'default'</span>) <span class="op">/</span> </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a> np.mean(full_model.predict(X) <span class="op">==</span> <span class="st">'default'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<pre><code>19.360375747224595</code></pre>
+</div>
+</div>
+</section>
+<section id="oversampling-and-updown-weighting" class="level2">
+<h2 class="anchored" data-anchor-id="oversampling-and-updown-weighting">Oversampling and Up/Down Weighting</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:20.746431Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:20.745350Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:21.586120Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:21.585263Z&quot;}" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>default_wt <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> np.mean(full_train_set.outcome <span class="op">==</span> <span class="st">'default'</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>wt <span class="op">=</span> [default_wt <span class="cf">if</span> outcome <span class="op">==</span> <span class="st">'default'</span> <span class="cf">else</span> <span class="dv">1</span> <span class="cf">for</span> outcome <span class="kw">in</span> full_train_set.outcome]</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>full_model <span class="op">=</span> LogisticRegression(penalty<span class="op">=</span><span class="st">"l2"</span>, C<span class="op">=</span><span class="fl">1e42</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>full_model.fit(X, y, wt)</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'percentage of loans predicted to default (weighting): '</span>, </span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(      <span class="dv">100</span> <span class="op">*</span> np.mean(full_model.predict(X) <span class="op">==</span> <span class="st">'default'</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>61.79836148916132
+percentage of loans predicted to default (weighting):  None</code></pre>
+</div>
+</div>
+</section>
+<section id="data-generation" class="level2">
+<h2 class="anchored" data-anchor-id="data-generation">Data Generation</h2>
+<p>The package <em>imbalanced-learn</em> provides an implementation of the <em>SMOTE</em> and similar algorithms.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:21.589636Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:21.589086Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:26.221456Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:26.220452Z&quot;}" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>X_resampled, y_resampled <span class="op">=</span> SMOTE().fit_resample(X, y)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'percentage of loans in default (SMOTE resampled): '</span>, </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="op">*</span> np.mean(y_resampled <span class="op">==</span> <span class="st">'default'</span>))</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>full_model <span class="op">=</span> LogisticRegression(penalty<span class="op">=</span><span class="st">"l2"</span>, C<span class="op">=</span><span class="fl">1e42</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>full_model.fit(X_resampled, y_resampled)</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'percentage of loans predicted to default (SMOTE): '</span>, </span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="op">*</span> np.mean(full_model.predict(X) <span class="op">==</span> <span class="st">'default'</span>))</span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>X_resampled, y_resampled <span class="op">=</span> ADASYN().fit_resample(X, y)</span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'percentage of loans in default (ADASYN resampled): '</span>, </span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="op">*</span> np.mean(y_resampled <span class="op">==</span> <span class="st">'default'</span>))</span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a>full_model <span class="op">=</span> LogisticRegression(penalty<span class="op">=</span><span class="st">"l2"</span>, C<span class="op">=</span><span class="fl">1e42</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>)</span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a>full_model.fit(X_resampled, y_resampled)</span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'percentage of loans predicted to default (ADASYN): '</span>, </span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(      <span class="dv">100</span> <span class="op">*</span> np.mean(full_model.predict(X) <span class="op">==</span> <span class="st">'default'</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>percentage of loans in default (SMOTE resampled):  50.0
+percentage of loans predicted to default (SMOTE):  29.31900955936893
+percentage of loans in default (ADASYN resampled):  48.56040383751355
+27.57382049722053
+percentage of loans predicted to default (ADASYN):  None</code></pre>
+</div>
+</div>
+</section>
+<section id="exploring-the-predictions" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-the-predictions">Exploring the Predictions</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:26.226370Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:26.225034Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:26.638161Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:26.637239Z&quot;}" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>loan3000 <span class="op">=</span> pd.read_csv(LOAN3000_CSV)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>predictors <span class="op">=</span> [<span class="st">'borrower_score'</span>, <span class="st">'payment_inc_ratio'</span>]</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>outcome <span class="op">=</span> <span class="st">'outcome'</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> loan3000[predictors]</span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> loan3000[outcome]</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>loan_tree <span class="op">=</span> DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">1</span>, criterion<span class="op">=</span><span class="st">'entropy'</span>, </span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>                                   min_impurity_decrease<span class="op">=</span><span class="fl">0.003</span>)</span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>loan_tree.fit(X, y)</span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>loan_lda <span class="op">=</span> LinearDiscriminantAnalysis()</span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>loan_lda.fit(X, y)</span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a>logit_reg <span class="op">=</span> LogisticRegression(penalty<span class="op">=</span><span class="st">"l2"</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>)</span>
+<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a>logit_reg.fit(X, y)</span>
+<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a><span class="co">## model</span></span>
+<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a>gam <span class="op">=</span> LinearGAM(s(<span class="dv">0</span>) <span class="op">+</span> s(<span class="dv">1</span>))</span>
+<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gam.gridsearch(X.values, [<span class="dv">1</span> <span class="cf">if</span> yi <span class="op">==</span> <span class="st">'default'</span> <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> yi <span class="kw">in</span> y]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>100% (11 of 11) |########################| Elapsed Time: 0:00:00 Time:  0:00:00</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>LinearGAM(callbacks=[Deviance(), Diffs()], fit_intercept=True, 
+   max_iter=100, scale=None, terms=s(0) + s(1) + intercept, 
+   tol=0.0001, verbose=False)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:26.642958Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:26.642003Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:27.029777Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:27.028334Z&quot;}" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Decision Tree'</span>: loan_tree,</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Linear Discriminant Analysis'</span>: loan_lda,</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Logistic Regression'</span>: logit_reg,</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Generalized Additive Model'</span>: gam,</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">2</span>, ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>xvalues <span class="op">=</span> np.arange(<span class="fl">0.25</span>, <span class="fl">0.73</span>, <span class="fl">0.005</span>)</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>yvalues <span class="op">=</span> np.arange(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">20.1</span>, <span class="fl">0.1</span>)</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>xx, yy <span class="op">=</span> np.meshgrid(xvalues, yvalues)</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'borrower_score'</span>: xx.ravel(),</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'payment_inc_ratio'</span>: yy.ravel(),</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>boundary <span class="op">=</span> {}</span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n, (title, model) <span class="kw">in</span> <span class="bu">enumerate</span>(models.items()):</span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axes[n <span class="op">//</span> <span class="dv">2</span>, n <span class="op">%</span> <span class="dv">2</span>]</span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>    predict <span class="op">=</span> model.predict(X)</span>
+<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">'Generalized'</span> <span class="kw">in</span> title:</span>
+<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>        Z <span class="op">=</span> np.array([<span class="dv">1</span> <span class="cf">if</span> z <span class="op">&gt;</span> <span class="fl">0.5</span> <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> z <span class="kw">in</span> predict])</span>
+<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>        Z <span class="op">=</span> np.array([<span class="dv">1</span> <span class="cf">if</span> z <span class="op">==</span> <span class="st">'default'</span> <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> z <span class="kw">in</span> predict])</span>
+<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a>    Z <span class="op">=</span> Z.reshape(xx.shape)</span>
+<span id="cb59-29"><a href="#cb59-29" aria-hidden="true" tabindex="-1"></a>    boundary[title] <span class="op">=</span> yvalues[np.argmax(Z <span class="op">&gt;</span> <span class="dv">0</span>, axis<span class="op">=</span><span class="dv">0</span>)]</span>
+<span id="cb59-30"><a href="#cb59-30" aria-hidden="true" tabindex="-1"></a>    boundary[title][Z[<span class="op">-</span><span class="dv">1</span>,:] <span class="op">==</span> <span class="dv">0</span>] <span class="op">=</span> yvalues[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb59-31"><a href="#cb59-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-32"><a href="#cb59-32" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> ax.pcolormesh(xx, yy, Z, cmap<span class="op">=</span><span class="st">'Blues'</span>, vmin<span class="op">=</span><span class="fl">0.1</span>, vmax<span class="op">=</span><span class="fl">1.3</span>, shading<span class="op">=</span><span class="st">'auto'</span>)</span>
+<span id="cb59-33"><a href="#cb59-33" aria-hidden="true" tabindex="-1"></a>    ax.set_title(title)</span>
+<span id="cb59-34"><a href="#cb59-34" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">True</span>)</span>
+<span id="cb59-35"><a href="#cb59-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-36"><a href="#cb59-36" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb59-37"><a href="#cb59-37" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter5-Classification_files/figure-html/cell-34-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T19:56:27.033503Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T19:56:27.033290Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T19:56:27.171134Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T19:56:27.170483Z&quot;}" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>boundary[<span class="st">'borrower_score'</span>] <span class="op">=</span> xvalues</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>boundaries <span class="op">=</span> pd.DataFrame(boundary)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">4</span>))</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>boundaries.plot(x<span class="op">=</span><span class="st">'borrower_score'</span>, ax<span class="op">=</span>ax)</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'payment_inc_ratio'</span>)</span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="dv">20</span>)</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter5-Classification_files/figure-html/cell-35-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
