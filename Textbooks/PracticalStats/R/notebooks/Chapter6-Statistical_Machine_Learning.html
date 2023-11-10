@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Chapter 6 - Statistical Machine Learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Chapter6-Statistical_Machine_Learning_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Chapter6-Statistical_Machine_Learning_files/libs/quarto-html/quarto.js"></script>
+<script src="Chapter6-Statistical_Machine_Learning_files/libs/quarto-html/popper.min.js"></script>
+<script src="Chapter6-Statistical_Machine_Learning_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Chapter6-Statistical_Machine_Learning_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Chapter6-Statistical_Machine_Learning_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Chapter6-Statistical_Machine_Learning_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Chapter6-Statistical_Machine_Learning_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Chapter6-Statistical_Machine_Learning_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Chapter6-Statistical_Machine_Learning_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#practical-statistics-for-data-scientists-r" id="toc-practical-statistics-for-data-scientists-r" class="nav-link active" data-scroll-target="#practical-statistics-for-data-scientists-r">Practical Statistics for Data Scientists (R)</a></li>
+  <li><a href="#k-nearest-neighbors" id="toc-k-nearest-neighbors" class="nav-link" data-scroll-target="#k-nearest-neighbors">K-Nearest Neighbors</a>
+  <ul class="collapse">
+  <li><a href="#a-small-example-predicting-loan-default" id="toc-a-small-example-predicting-loan-default" class="nav-link" data-scroll-target="#a-small-example-predicting-loan-default">A Small Example: Predicting Loan Default</a></li>
+  <li><a href="#standardization-normalization-z-scores" id="toc-standardization-normalization-z-scores" class="nav-link" data-scroll-target="#standardization-normalization-z-scores">Standardization (Normalization, Z-Scores)</a></li>
+  <li><a href="#knn-as-a-feature-engine" id="toc-knn-as-a-feature-engine" class="nav-link" data-scroll-target="#knn-as-a-feature-engine">KNN as a Feature Engine</a></li>
+  </ul></li>
+  <li><a href="#tree-models" id="toc-tree-models" class="nav-link" data-scroll-target="#tree-models">Tree Models</a>
+  <ul class="collapse">
+  <li><a href="#a-simple-example" id="toc-a-simple-example" class="nav-link" data-scroll-target="#a-simple-example">A Simple Example</a></li>
+  <li><a href="#the-recursive-partitioning-algorithm" id="toc-the-recursive-partitioning-algorithm" class="nav-link" data-scroll-target="#the-recursive-partitioning-algorithm">The Recursive Partitioning Algorithm</a></li>
+  <li><a href="#measuring-homogeneity-or-impurity" id="toc-measuring-homogeneity-or-impurity" class="nav-link" data-scroll-target="#measuring-homogeneity-or-impurity">Measuring Homogeneity or Impurity</a></li>
+  </ul></li>
+  <li><a href="#bagging-and-the-random-forest" id="toc-bagging-and-the-random-forest" class="nav-link" data-scroll-target="#bagging-and-the-random-forest">Bagging and the Random Forest</a>
+  <ul class="collapse">
+  <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest">Random Forest</a></li>
+  <li><a href="#variable-importance" id="toc-variable-importance" class="nav-link" data-scroll-target="#variable-importance">Variable importance</a></li>
+  <li><a href="#search-over-hyperparameter-space-not-in-book-this-takes-a-while" id="toc-search-over-hyperparameter-space-not-in-book-this-takes-a-while" class="nav-link" data-scroll-target="#search-over-hyperparameter-space-not-in-book-this-takes-a-while">search over hyperparameter space (not in book); this takes a while</a></li>
+  </ul></li>
+  <li><a href="#boosting" id="toc-boosting" class="nav-link" data-scroll-target="#boosting">Boosting</a>
+  <ul class="collapse">
+  <li><a href="#xgboost" id="toc-xgboost" class="nav-link" data-scroll-target="#xgboost">XGBoost</a></li>
+  <li><a href="#regularization-avoiding-overfitting" id="toc-regularization-avoiding-overfitting" class="nav-link" data-scroll-target="#regularization-avoiding-overfitting">Regularization: Avoiding Overfitting</a></li>
+  <li><a href="#hyperparameters-and-cross-validation" id="toc-hyperparameters-and-cross-validation" class="nav-link" data-scroll-target="#hyperparameters-and-cross-validation">Hyperparameters and Cross-Validation</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter 6 - Statistical Machine Learning</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="practical-statistics-for-data-scientists-r" class="level1">
+<h1>Practical Statistics for Data Scientists (R)</h1>
+<blockquote class="blockquote">
+<ol start="3" type="a">
+<li>2019 Peter C. Bruce, Andrew Bruce, Peter Gedeck</li>
+</ol>
+</blockquote>
+<p>Import required R packages.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:41.386066Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:41.383471Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:42.550381Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:42.548832Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FNN)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xgboost)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning message:
+“package ‘dplyr’ was built under R version 4.1.2”
+
+Attaching package: ‘dplyr’
+
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Warning message:
+“package ‘rpart’ was built under R version 4.1.2”
+randomForest 4.6-14
+
+Type rfNews() to see new features/changes/bug fixes.
+
+
+Attaching package: ‘randomForest’
+
+
+The following object is masked from ‘package:ggplot2’:
+
+    margin
+
+
+The following object is masked from ‘package:dplyr’:
+
+    combine
+
+
+
+Attaching package: ‘xgboost’
+
+
+The following object is masked from ‘package:dplyr’:
+
+    slice
+
+</code></pre>
+</div>
+</div>
+<p>Define paths to data sets. If you don’t keep your data in the same directory as the code, adapt the path names.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:42.580211Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:42.553797Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:42.992289Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:42.990733Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>PSDS_PATH <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">dirname</span>(<span class="fu">dirname</span>(<span class="fu">getwd</span>())))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>loan200 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.path</span>(PSDS_PATH, <span class="st">'data'</span>, <span class="st">'loan200.csv'</span>), <span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>loan200<span class="sc">$</span>outcome <span class="ot">&lt;-</span> <span class="fu">ordered</span>(loan200<span class="sc">$</span>outcome, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">'paid off'</span>, <span class="st">'default'</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>loan3000 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.path</span>(PSDS_PATH, <span class="st">'data'</span>, <span class="st">'loan3000.csv'</span>), <span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>loan3000<span class="sc">$</span>outcome <span class="ot">&lt;-</span> <span class="fu">ordered</span>(loan3000<span class="sc">$</span>outcome, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">'paid off'</span>, <span class="st">'default'</span>))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>loan_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.path</span>(PSDS_PATH, <span class="st">'data'</span>, <span class="st">'loan_data.csv.gz'</span>), <span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>loan_data <span class="ot">&lt;-</span> <span class="fu">select</span>(loan_data, <span class="sc">-</span>X, <span class="sc">-</span>status)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>loan_data<span class="sc">$</span>outcome <span class="ot">&lt;-</span> <span class="fu">ordered</span>(loan_data<span class="sc">$</span>outcome, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">'paid off'</span>, <span class="st">'default'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:42.998097Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:42.996619Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:43.008207Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:43.006720Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set this if XGBoost returns training errors of 0</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">KMP_DUPLICATE_LIB_OK =</span> <span class="st">"TRUE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="k-nearest-neighbors" class="level1">
+<h1>K-Nearest Neighbors</h1>
+<section id="a-small-example-predicting-loan-default" class="level2">
+<h2 class="anchored" data-anchor-id="a-small-example-predicting-loan-default">A Small Example: Predicting Loan Default</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:43.013573Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:43.011896Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:43.033029Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:43.031443Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>newloan <span class="ot">&lt;-</span> loan200[<span class="dv">1</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>knn_pred <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train=</span>loan200[<span class="sc">-</span><span class="dv">1</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">test=</span>newloan, <span class="at">cl=</span>loan200[<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>], <span class="at">k=</span><span class="dv">20</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>knn_pred <span class="sc">==</span> <span class="st">'paid off'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+TRUE
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:43.037651Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:43.036461Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:43.078722Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:43.076692Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## look at the nearest 20 records and create circle</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we add 1 as we excluded the first data point for prediction</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>nearest_points <span class="ot">&lt;-</span> loan200[<span class="fu">attr</span>(knn_pred, <span class="st">'nn.index'</span>) <span class="sc">+</span> <span class="dv">1</span>, ] </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>nearest_points</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="fu">attr</span>(knn_pred, <span class="st">'nn.dist'</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>circleFun <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">center=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="at">r=</span><span class="dv">1</span>, <span class="at">npoints=</span><span class="dv">100</span>){</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  tt <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> pi, <span class="at">length.out=</span>npoints <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  xx <span class="ot">&lt;-</span> center[<span class="dv">1</span>] <span class="sc">+</span> r <span class="sc">*</span> <span class="fu">cos</span>(tt)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  yy <span class="ot">&lt;-</span> center[<span class="dv">2</span>] <span class="sc">+</span> r <span class="sc">*</span> <span class="fu">sin</span>(tt)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">data.frame</span>(<span class="at">x=</span><span class="fu">c</span>(xx, xx[<span class="dv">1</span>]), <span class="at">y=</span><span class="fu">c</span>(yy, yy[<span class="dv">1</span>])))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>circle_df <span class="ot">&lt;-</span> <span class="fu">circleFun</span>(<span class="at">center=</span><span class="fu">unlist</span>(newloan), <span class="at">r=</span><span class="fu">max</span>(dist), <span class="at">npoints=</span><span class="dv">201</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>loan200_df <span class="ot">&lt;-</span> loan200 <span class="co"># bind_cols(loan200, circle_df)</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(loan200_df<span class="sc">$</span>outcome)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 20 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">outcome</th>
+<th data-quarto-table-cell-role="th" scope="col">payment_inc_ratio</th>
+<th data-quarto-table-cell-role="th" scope="col">dti</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;ord&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">36</td>
+<td>default</td>
+<td>8.65527</td>
+<td>22.23</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">183</td>
+<td>default</td>
+<td>9.05778</td>
+<td>21.62</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">182</td>
+<td>paid off</td>
+<td>9.44925</td>
+<td>23.30</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">86</td>
+<td>default</td>
+<td>8.70942</td>
+<td>24.13</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">10</td>
+<td>default</td>
+<td>9.43396</td>
+<td>24.15</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">170</td>
+<td>default</td>
+<td>8.02887</td>
+<td>20.86</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">22</td>
+<td>default</td>
+<td>6.91886</td>
+<td>22.47</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">200</td>
+<td>paid off</td>
+<td>9.64200</td>
+<td>20.17</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">78</td>
+<td>paid off</td>
+<td>7.70160</td>
+<td>24.57</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">56</td>
+<td>paid off</td>
+<td>11.52250</td>
+<td>21.45</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">142</td>
+<td>paid off</td>
+<td>8.64978</td>
+<td>19.78</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">32</td>
+<td>paid off</td>
+<td>11.86030</td>
+<td>22.54</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">67</td>
+<td>paid off</td>
+<td>9.52255</td>
+<td>19.66</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">164</td>
+<td>paid off</td>
+<td>7.90032</td>
+<td>19.71</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">162</td>
+<td>paid off</td>
+<td>10.18890</td>
+<td>25.47</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">113</td>
+<td>default</td>
+<td>5.82492</td>
+<td>22.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">79</td>
+<td>default</td>
+<td>12.35380</td>
+<td>22.22</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">47</td>
+<td>paid off</td>
+<td>5.62357</td>
+<td>22.35</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">42</td>
+<td>paid off</td>
+<td>8.16320</td>
+<td>19.14</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">140</td>
+<td>default</td>
+<td>10.02450</td>
+<td>19.11</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>'paid off'</li><li>'default'</li></ol>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:43.084615Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:43.082998Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:43.108319Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:43.106913Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set first entry as target - requires adding additional level to factor</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(loan200_df<span class="sc">$</span>outcome) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">levels</span>(loan200_df<span class="sc">$</span>outcome), <span class="st">"newloan"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>loan200_df[<span class="dv">1</span>, <span class="st">'outcome'</span>] <span class="ot">&lt;-</span> <span class="st">'newloan'</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(loan200_df)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(nearest_points<span class="sc">$</span>outcome) <span class="ot">&lt;-</span> <span class="fu">levels</span>(loan200_df<span class="sc">$</span>outcome)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">outcome</th>
+<th data-quarto-table-cell-role="th" scope="col">payment_inc_ratio</th>
+<th data-quarto-table-cell-role="th" scope="col">dti</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;ord&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>newloan</td>
+<td>9.00000</td>
+<td>22.50</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>default</td>
+<td>5.46933</td>
+<td>21.33</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>paid off</td>
+<td>6.90294</td>
+<td>8.97</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>paid off</td>
+<td>11.14800</td>
+<td>1.83</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>default</td>
+<td>3.72120</td>
+<td>10.81</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>paid off</td>
+<td>1.89923</td>
+<td>11.34</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:43.113487Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:43.111912Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:43.527278Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:43.525086Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>loan200_df, <span class="fu">aes</span>(<span class="at">x=</span>payment_inc_ratio, <span class="at">y=</span>dti, <span class="at">color=</span>outcome)) <span class="sc">+</span> <span class="co"># , shape=outcome)) +</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">shape=</span>outcome), <span class="at">size=</span><span class="dv">2</span>, <span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>nearest_points, <span class="fu">aes</span>(<span class="at">shape=</span>outcome), <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>loan200_df[<span class="dv">1</span>,], <span class="fu">aes</span>(<span class="at">shape=</span>outcome), <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">4</span>)) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"paid off"</span><span class="ot">=</span><span class="st">"#1b9e77"</span>, <span class="st">"default"</span><span class="ot">=</span><span class="st">"#d95f02"</span>, <span class="st">"newloan"</span><span class="ot">=</span><span class="st">'black'</span>)) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="at">data=</span>circle_df, <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y), <span class="at">color=</span><span class="st">'black'</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">15</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">17</span>, <span class="dv">29</span>)) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="standardization-normalization-z-scores" class="level2">
+<h2 class="anchored" data-anchor-id="standardization-normalization-z-scores">Standardization (Normalization, Z-Scores)</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:43.535808Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:43.533770Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:43.603728Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:43.602135Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loan_df <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> payment_inc_ratio <span class="sc">+</span> dti <span class="sc">+</span> revol_bal <span class="sc">+</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                          revol_util, <span class="at">data=</span>loan_data)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>newloan <span class="ot">&lt;-</span> loan_df[<span class="dv">1</span>, , drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>loan_df <span class="ot">&lt;-</span> loan_df[<span class="sc">-</span><span class="dv">1</span>,]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>outcome <span class="ot">&lt;-</span> loan_data[<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>knn_pred <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train=</span>loan_df, <span class="at">test=</span>newloan, <span class="at">cl=</span>outcome, <span class="at">k=</span><span class="dv">5</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>loan_df[<span class="fu">attr</span>(knn_pred, <span class="st">"nn.index"</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">payment_inc_ratio</th>
+<th data-quarto-table-cell-role="th" scope="col">dti</th>
+<th data-quarto-table-cell-role="th" scope="col">revol_bal</th>
+<th data-quarto-table-cell-role="th" scope="col">revol_util</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">35537</td>
+<td>1.47212</td>
+<td>1.46</td>
+<td>1686</td>
+<td>10.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">33652</td>
+<td>3.38178</td>
+<td>6.37</td>
+<td>1688</td>
+<td>8.4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">25864</td>
+<td>2.36303</td>
+<td>1.39</td>
+<td>1691</td>
+<td>3.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">42954</td>
+<td>1.28160</td>
+<td>7.14</td>
+<td>1684</td>
+<td>3.9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">43600</td>
+<td>4.12244</td>
+<td>8.98</td>
+<td>1684</td>
+<td>7.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:43.608793Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:43.607226Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:43.807336Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:43.805903Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>loan_df <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> payment_inc_ratio <span class="sc">+</span> dti <span class="sc">+</span> revol_bal <span class="sc">+</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                          revol_util, <span class="at">data=</span>loan_data)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>loan_std <span class="ot">&lt;-</span> <span class="fu">scale</span>(loan_df)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>newloan_std <span class="ot">&lt;-</span> loan_std[<span class="dv">1</span>, , drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>loan_std <span class="ot">&lt;-</span> loan_std[<span class="sc">-</span><span class="dv">1</span>,]</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>loan_df <span class="ot">&lt;-</span> loan_df[<span class="sc">-</span><span class="dv">1</span>,]</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>outcome <span class="ot">&lt;-</span> loan_data[<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>knn_pred <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train=</span>loan_std, <span class="at">test=</span>newloan_std, <span class="at">cl=</span>outcome, <span class="at">k=</span><span class="dv">5</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>loan_df[<span class="fu">attr</span>(knn_pred, <span class="st">"nn.index"</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">payment_inc_ratio</th>
+<th data-quarto-table-cell-role="th" scope="col">dti</th>
+<th data-quarto-table-cell-role="th" scope="col">revol_bal</th>
+<th data-quarto-table-cell-role="th" scope="col">revol_util</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">2081</td>
+<td>2.61091</td>
+<td>1.03</td>
+<td>1218</td>
+<td>9.7</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">1439</td>
+<td>2.34343</td>
+<td>0.51</td>
+<td>278</td>
+<td>9.9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">30216</td>
+<td>2.71200</td>
+<td>1.34</td>
+<td>1075</td>
+<td>8.5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">28543</td>
+<td>2.39760</td>
+<td>0.74</td>
+<td>2917</td>
+<td>7.4</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">44738</td>
+<td>2.34309</td>
+<td>1.37</td>
+<td>488</td>
+<td>7.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="knn-as-a-feature-engine" class="level2">
+<h2 class="anchored" data-anchor-id="knn-as-a-feature-engine">KNN as a Feature Engine</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:43.812149Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:43.810691Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:49.772253Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:49.770659Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>borrow_df <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> dti <span class="sc">+</span> revol_bal <span class="sc">+</span> revol_util <span class="sc">+</span> open_acc <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                            delinq_2yrs_zero <span class="sc">+</span> pub_rec_zero, <span class="at">data=</span>loan_data)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>borrow_knn <span class="ot">&lt;-</span> <span class="fu">knn</span>(borrow_df, <span class="at">test=</span>borrow_df, <span class="at">cl=</span>loan_data[, <span class="st">'outcome'</span>], <span class="at">prob=</span><span class="cn">TRUE</span>, <span class="at">k=</span><span class="dv">20</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">attr</span>(borrow_knn, <span class="st">"prob"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>borrow_feature <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(borrow_knn <span class="sc">==</span> <span class="st">'default'</span>, prob, <span class="dv">1</span> <span class="sc">-</span> prob)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(borrow_feature)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>loan_data<span class="sc">$</span>borrower_score <span class="ot">&lt;-</span> borrow_feature</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  0.000   0.400   0.500   0.501   0.600   0.950 </code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:49.777424Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:49.776254Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:51.083232Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:51.081928Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(borrow_feature)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="tree-models" class="level1">
+<h1>Tree Models</h1>
+<section id="a-simple-example" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-example">A Simple Example</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:51.088932Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:51.087534Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:51.164208Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:51.162530Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>loan_tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(outcome <span class="sc">~</span> borrower_score <span class="sc">+</span> payment_inc_ratio,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data=</span>loan3000, <span class="at">control=</span><span class="fu">rpart.control</span>(<span class="at">cp=</span><span class="fl">0.005</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(loan_tree, <span class="at">uniform=</span><span class="cn">TRUE</span>, <span class="at">margin=</span><span class="fl">0.05</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(loan_tree, <span class="at">cex=</span><span class="fl">0.75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:51.168216Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:51.167153Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:51.181262Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:51.179832Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>loan_tree</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>n= 3000 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+ 1) root 3000 1445 paid off (0.5183333 0.4816667)  
+   2) borrower_score&gt;=0.575 878  261 paid off (0.7027335 0.2972665) *
+   3) borrower_score&lt; 0.575 2122  938 default (0.4420358 0.5579642)  
+     6) borrower_score&gt;=0.375 1639  802 default (0.4893228 0.5106772)  
+      12) payment_inc_ratio&lt; 10.42265 1157  547 paid off (0.5272256 0.4727744)  
+        24) payment_inc_ratio&lt; 4.42601 334  139 paid off (0.5838323 0.4161677) *
+        25) payment_inc_ratio&gt;=4.42601 823  408 paid off (0.5042527 0.4957473)  
+          50) borrower_score&gt;=0.475 418  190 paid off (0.5454545 0.4545455) *
+          51) borrower_score&lt; 0.475 405  187 default (0.4617284 0.5382716) *
+      13) payment_inc_ratio&gt;=10.42265 482  192 default (0.3983402 0.6016598) *
+     7) borrower_score&lt; 0.375 483  136 default (0.2815735 0.7184265) *</code></pre>
+</div>
+</div>
+</section>
+<section id="the-recursive-partitioning-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="the-recursive-partitioning-algorithm">The Recursive Partitioning Algorithm</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:51.185414Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:51.184306Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:51.642334Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:51.640780Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Figure 6-4: View of partition rules</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>r_tree <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x1 =</span> <span class="fu">c</span>(<span class="fl">0.575</span>, <span class="fl">0.375</span>, <span class="fl">0.375</span>, <span class="fl">0.375</span>, <span class="fl">0.475</span>),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x2 =</span> <span class="fu">c</span>(<span class="fl">0.575</span>, <span class="fl">0.375</span>, <span class="fl">0.575</span>, <span class="fl">0.575</span>, <span class="fl">0.475</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y1 =</span> <span class="fu">c</span>(<span class="dv">0</span>,         <span class="dv">0</span>, <span class="fl">10.42</span>, <span class="fl">4.426</span>, <span class="fl">4.426</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y2 =</span> <span class="fu">c</span>(<span class="dv">25</span>,       <span class="dv">25</span>, <span class="fl">10.42</span>, <span class="fl">4.426</span>, <span class="fl">10.42</span>),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">rule_number =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)))</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>r_tree <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(r_tree)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>rules <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="fl">0.575</span>, <span class="fl">0.375</span>, <span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.475</span>),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">y=</span><span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">24</span>, <span class="fl">10.42</span>, <span class="fl">4.426</span>, <span class="fl">9.42</span>),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">rule_number =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>))) <span class="co"># , 3, 4, 5)))</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>labs <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x=</span><span class="fu">c</span>(.<span class="dv">575</span> <span class="sc">+</span> (<span class="dv">1</span><span class="fl">-.575</span>)<span class="sc">/</span><span class="dv">2</span>, </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>                   .<span class="dv">375</span><span class="sc">/</span><span class="dv">2</span>, </span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>                   (.<span class="dv">375</span> <span class="sc">+</span> .<span class="dv">575</span>)<span class="sc">/</span><span class="dv">2</span>,</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>                   (.<span class="dv">375</span> <span class="sc">+</span> .<span class="dv">575</span>)<span class="sc">/</span><span class="dv">2</span>, </span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>                   (.<span class="dv">475</span> <span class="sc">+</span> .<span class="dv">575</span>)<span class="sc">/</span><span class="dv">2</span>, </span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>                   (.<span class="dv">375</span> <span class="sc">+</span> .<span class="dv">475</span>)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>                   ),</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">y=</span><span class="fu">c</span>(<span class="fl">12.5</span>, </span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>                   <span class="fl">12.5</span>,</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>                   <span class="fl">10.42</span> <span class="sc">+</span> (<span class="dv">25</span><span class="fl">-10.42</span>)<span class="sc">/</span><span class="dv">2</span>,</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>                   <span class="fl">4.426</span><span class="sc">/</span><span class="dv">2</span>, </span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>                   <span class="fl">4.426</span> <span class="sc">+</span> (<span class="fl">10.42-4.426</span>)<span class="sc">/</span><span class="dv">2</span>,</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>                   <span class="fl">4.426</span> <span class="sc">+</span> (<span class="fl">10.42-4.426</span>)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>                   ),</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>               <span class="at">decision =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">'paid off'</span>, <span class="st">'default'</span>, <span class="st">'default'</span>, <span class="st">'paid off'</span>, <span class="st">'paid off'</span>, <span class="st">'default'</span>)))</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>loan3000, <span class="fu">aes</span>(<span class="at">x=</span>borrower_score, <span class="at">y=</span>payment_inc_ratio)) <span class="sc">+</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="fu">aes</span>(<span class="at">color=</span>outcome, <span class="at">shape=</span>outcome), <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">'blue'</span>, <span class="st">'red'</span>)) <span class="sc">+</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">46</span>)) <span class="sc">+</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>r_tree, <span class="fu">aes</span>(<span class="at">x=</span>x1, <span class="at">y=</span>y1, <span class="at">xend=</span>x2, <span class="at">yend=</span>y2, <span class="at">linetype=</span>rule_number), <span class="at">size=</span><span class="fl">1.5</span>, <span class="at">alpha=</span>.<span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="fl">1.5</span>)),</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">linetype =</span> <span class="fu">guide_legend</span>(<span class="at">keywidth=</span><span class="dv">3</span>, <span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="dv">1</span>))) <span class="sc">+</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">25</span>)) <span class="sc">+</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">data=</span>labs, <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y, <span class="at">label=</span>decision)) <span class="sc">+</span></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>  <span class="co">#theme(legend.position='bottom') +</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:51.647895Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:51.646873Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:52.034561Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:52.033460Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>loan3000, <span class="fu">aes</span>(<span class="at">x=</span>borrower_score, <span class="at">y=</span>payment_inc_ratio)) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="fu">aes</span>(<span class="at">color=</span>outcome, <span class="at">shape=</span>outcome, <span class="at">size=</span>outcome), <span class="at">alpha=</span>.<span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"paid off"</span><span class="ot">=</span><span class="st">"#7fbc41"</span>, <span class="st">"default"</span><span class="ot">=</span><span class="st">"#d95f02"</span>)) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'paid off'</span><span class="ot">=</span><span class="dv">0</span>, <span class="st">'default'</span><span class="ot">=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'paid off'</span><span class="ot">=</span><span class="fl">0.5</span>, <span class="st">'default'</span><span class="ot">=</span><span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>r_tree, <span class="fu">aes</span>(<span class="at">x=</span>x1, <span class="at">y=</span>y1, <span class="at">xend=</span>x2, <span class="at">yend=</span>y2), <span class="at">size=</span><span class="fl">1.5</span>) <span class="sc">+</span> <span class="co">#, linetype=rule_number), size=1.5, alpha=.7) +</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="fl">1.5</span>)),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">linetype =</span> <span class="fu">guide_legend</span>(<span class="at">keywidth=</span><span class="dv">3</span>, <span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="dv">1</span>))) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">25</span>)) <span class="sc">+</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">data=</span>labs, <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y, <span class="at">label=</span>decision)) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">data=</span>rules, <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y, <span class="at">label=</span>rule_number), </span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="fl">2.5</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill=</span><span class="st">'#eeeeee'</span>, <span class="at">label.r=</span><span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"lines"</span>), <span class="at">label.padding=</span><span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">"lines"</span>)) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="dv">2</span>))) <span class="sc">+</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="measuring-homogeneity-or-impurity" class="level2">
+<h2 class="anchored" data-anchor-id="measuring-homogeneity-or-impurity">Measuring Homogeneity or Impurity</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:52.041005Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:52.039968Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:52.120557Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:52.119232Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>info <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  info <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(x<span class="sc">==</span><span class="dv">0</span>, <span class="dv">0</span>, <span class="sc">-</span>x <span class="sc">*</span> <span class="fu">log2</span>(x) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">-</span>x) <span class="sc">*</span> <span class="fu">log2</span>(<span class="dv">1</span><span class="sc">-</span>x))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(info)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">50</span><span class="sc">/</span><span class="dv">100</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="fu">info</span>(x) <span class="sc">+</span> <span class="fu">info</span>(<span class="dv">1</span><span class="sc">-</span>x))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>gini <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>x))</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="fu">gini</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-17-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:52.124725Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:52.123575Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:52.135253Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:52.133952Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>impure <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">p =</span> <span class="fu">rep</span>(x, <span class="dv">3</span>),</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">impurity =</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">*</span>x,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">gini</span>(x)<span class="sc">/</span><span class="fu">gini</span>(.<span class="dv">5</span>)<span class="sc">*</span><span class="fu">info</span>(.<span class="dv">5</span>),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">info</span>(x)),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">'Accuracy'</span>, <span class="st">'Gini'</span>, <span class="st">'Entropy'</span>), <span class="fu">rep</span>(<span class="dv">51</span>,<span class="dv">3</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:52.139807Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:52.138596Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:52.400993Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:52.399472Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>impure, <span class="fu">aes</span>(<span class="at">x=</span>p, <span class="at">y=</span>impurity, <span class="at">linetype=</span>type, <span class="at">color=</span>type)) <span class="sc">+</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>( <span class="at">linetype =</span> <span class="fu">guide_legend</span>( <span class="at">keywidth=</span><span class="dv">3</span>, <span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="dv">1</span>))) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>)) <span class="sc">+</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>)) <span class="sc">+</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title=</span><span class="fu">element_blank</span>()) </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="bagging-and-the-random-forest" class="level1">
+<h1>Bagging and the Random Forest</h1>
+<section id="random-forest" class="level2">
+<h2 class="anchored" data-anchor-id="random-forest">Random Forest</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:52.405503Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:52.404304Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:53.590565Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:53.588574Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(outcome <span class="sc">~</span> borrower_score <span class="sc">+</span> payment_inc_ratio,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data=</span>loan3000)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>rf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+ randomForest(formula = outcome ~ borrower_score + payment_inc_ratio,      data = loan3000) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 1
+
+        OOB estimate of  error rate: 39%
+Confusion matrix:
+         paid off default class.error
+paid off      970     585   0.3762058
+default       585     860   0.4048443</code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:53.594969Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:53.593813Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:53.750203Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:53.748414Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>error_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">error_rate=</span>rf<span class="sc">$</span>err.rate[,<span class="st">'OOB'</span>],</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">num_trees=</span><span class="dv">1</span><span class="sc">:</span>rf<span class="sc">$</span>ntree)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(error_df, <span class="fu">aes</span>(<span class="at">x=</span>num_trees, <span class="at">y=</span>error_rate)) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()  <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:53.754513Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:53.753354Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:54.096653Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:54.095119Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf, <span class="at">prob=</span><span class="cn">TRUE</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>rf_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(loan3000, <span class="at">pred =</span> pred)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>rf_df, <span class="fu">aes</span>(<span class="at">x=</span>borrower_score, <span class="at">y=</span>payment_inc_ratio, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">shape=</span>pred, <span class="at">color=</span>pred, <span class="at">size=</span>pred)) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'paid off'</span><span class="ot">=</span><span class="st">'#b8e186'</span>, <span class="st">'default'</span><span class="ot">=</span><span class="st">'#d95f02'</span>)) <span class="sc">+</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'paid off'</span><span class="ot">=</span><span class="dv">0</span>, <span class="st">'default'</span><span class="ot">=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'paid off'</span><span class="ot">=</span><span class="fl">0.5</span>, <span class="st">'default'</span><span class="ot">=</span><span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>)) <span class="sc">+</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="dv">2</span>))) <span class="sc">+</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-22-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>A nice plot showing a gradient of predictions but not as illustrative as the prior plot (not in book)</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:54.102493Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:54.101377Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:54.111071Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:54.109573Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># graph &lt;- ggplot(data=rf_df, aes(x=borrower_score, y=payment_inc_ratio, color=prob_default)) +</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   geom_point(alpha=.6) +</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   scale_color_gradient2(low='blue', mid='white', high='red', midpoint=.5) +</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   scale_x_continuous(expand=c(0,0)) + </span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   scale_y_continuous(expand=c(0,0), lim=c(0, 20)) + </span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   theme(legend.position='bottom') +</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   geom_line(data=lda_df0, col='green', size=2, alpha=.8)</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># graph</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:54.115811Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:54.114550Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:13:54.123121Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:13:54.121734Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># graph</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dev.off()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="variable-importance" class="level2">
+<h2 class="anchored" data-anchor-id="variable-importance">Variable importance</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:13:54.128168Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:13:54.126934Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:29.259101Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:29.253905Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>rf_all <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(outcome <span class="sc">~</span> ., <span class="at">data=</span>loan_data, <span class="at">importance=</span><span class="cn">TRUE</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>rf_all</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(rf_all, <span class="at">type=</span><span class="dv">1</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>imp1 <span class="ot">&lt;-</span> <span class="fu">importance</span>(rf_all, <span class="at">type=</span><span class="dv">1</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>imp2 <span class="ot">&lt;-</span> <span class="fu">importance</span>(rf_all, <span class="at">type=</span><span class="dv">2</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>idx <span class="ot">&lt;-</span> <span class="fu">order</span>(imp1[,<span class="dv">1</span>])</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>nms <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">row.names</span>(imp1)[idx], <span class="at">levels=</span><span class="fu">row.names</span>(imp1)[idx])</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>imp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Predictor =</span> <span class="fu">rep</span>(nms, <span class="dv">2</span>),</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Importance =</span> <span class="fu">c</span>(imp1[idx, <span class="dv">1</span>], imp2[idx, <span class="dv">1</span>]),</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Type =</span> <span class="fu">rep</span>( <span class="fu">c</span>(<span class="st">'Accuracy Decrease'</span>, <span class="st">'Gini Decrease'</span>), <span class="fu">rep</span>(<span class="fu">nrow</span>(imp1), <span class="dv">2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+Call:
+ randomForest(formula = outcome ~ ., data = loan_data, importance = TRUE) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 4
+
+        OOB estimate of  error rate: 33.96%
+Confusion matrix:
+         paid off default class.error
+paid off    14605    8066   0.3557849
+default      7330   15341   0.3233205</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-25-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:29.312439Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:29.308587Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:30.041047Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:30.038108Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(imp) <span class="sc">+</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y=</span>Predictor, <span class="at">x=</span>Importance), <span class="at">size=</span><span class="dv">2</span>, <span class="at">stat=</span><span class="st">"identity"</span>) <span class="sc">+</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Type, <span class="at">ncol=</span><span class="dv">1</span>, <span class="at">scales=</span><span class="st">"free_x"</span>) <span class="sc">+</span> </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>() ,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_line</span>(<span class="at">linetype=</span><span class="dv">3</span>, <span class="at">color=</span><span class="st">"darkgray"</span>) ) <span class="sc">+</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-26-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="search-over-hyperparameter-space-not-in-book-this-takes-a-while" class="level2">
+<h2 class="anchored" data-anchor-id="search-over-hyperparameter-space-not-in-book-this-takes-a-while">search over hyperparameter space (not in book); this takes a while</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:30.051415Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:30.046451Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:30.077523Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:30.075214Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loan_data1 &lt;- loan_data0[,-which(names(loan_data0) %in% 'emp_length')]</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># loan_data1$term = factor(loan_data1$term)</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># loan_data1$emp_length = factor(loan_data1$emp_length&gt;1)</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># params &lt;- data.frame(nodesize = c(5, 15, 25, 5, 10, 25),</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                      mtry = c(3, 3, 3, 5, 5, 5))</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rf_list &lt;- vector('list', 6)</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co"># for(i in 1:nrow(params)){</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   rf_list[[i]] &lt;- randomForest(outcome ~ ., data=loan_data, mtry=params[i, 'mtry'],</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co">#                                nodesize = params[i,'nodesize'], ntree=100)</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co"># rf_list[[1]]$confusion</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="boosting" class="level1">
+<h1>Boosting</h1>
+<section id="xgboost" class="level2">
+<h2 class="anchored" data-anchor-id="xgboost">XGBoost</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:30.088252Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:30.083440Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:30.298207Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:30.296938Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>predictors <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(loan3000[, <span class="fu">c</span>(<span class="st">'borrower_score'</span>, <span class="st">'payment_inc_ratio'</span>)])</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>label <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(loan3000[,<span class="st">'outcome'</span>]) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>xgb <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(<span class="at">data=</span>predictors, <span class="at">label=</span>label, <span class="at">objective=</span><span class="st">'binary:logistic'</span>, </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">params=</span><span class="fu">list</span>(<span class="at">subsample=</span><span class="fl">0.63</span>, <span class="at">eta=</span><span class="fl">0.1</span>), <span class="at">nrounds=</span><span class="dv">100</span>, </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">eval_metric=</span><span class="st">'error'</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb, <span class="at">newdata=</span>predictors)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>xgb_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(loan3000, <span class="at">pred_default =</span> pred <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="at">prob_default =</span> pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] train-error:0.359000 
+[2] train-error:0.351333 
+[3] train-error:0.347667 
+[4] train-error:0.339333 
+[5] train-error:0.339333 
+[6] train-error:0.337333 
+[7] train-error:0.335333 
+[8] train-error:0.334667 
+[9] train-error:0.337000 
+[10]    train-error:0.332333 
+[11]    train-error:0.324667 
+[12]    train-error:0.326333 
+[13]    train-error:0.318667 
+[14]    train-error:0.320667 
+[15]    train-error:0.320333 
+[16]    train-error:0.320000 
+[17]    train-error:0.318667 
+[18]    train-error:0.317000 
+[19]    train-error:0.313000 
+[20]    train-error:0.308667 
+[21]    train-error:0.307333 
+[22]    train-error:0.307000 
+[23]    train-error:0.312000 
+[24]    train-error:0.312000 
+[25]    train-error:0.308667 
+[26]    train-error:0.308333 
+[27]    train-error:0.308667 
+[28]    train-error:0.307667 
+[29]    train-error:0.303667 
+[30]    train-error:0.300000 
+[31]    train-error:0.299667 
+[32]    train-error:0.295333 
+[33]    train-error:0.296333 
+[34]    train-error:0.295000 
+[35]    train-error:0.294667 
+[36]    train-error:0.295667 
+[37]    train-error:0.292333 
+[38]    train-error:0.289667 
+[39]    train-error:0.292333 
+[40]    train-error:0.290333 
+[41]    train-error:0.291667 
+[42]    train-error:0.292000 
+[43]    train-error:0.292000 
+[44]    train-error:0.290667 
+[45]    train-error:0.287333 
+[46]    train-error:0.286333 
+[47]    train-error:0.281667 
+[48]    train-error:0.280000 
+[49]    train-error:0.280000 
+[50]    train-error:0.278000 
+[51]    train-error:0.276000 
+[52]    train-error:0.274333 
+[53]    train-error:0.274333 
+[54]    train-error:0.276333 
+[55]    train-error:0.274333 
+[56]    train-error:0.273000 
+[57]    train-error:0.273333 
+[58]    train-error:0.270333 
+[59]    train-error:0.268000 
+[60]    train-error:0.266333 
+[61]    train-error:0.266333 
+[62]    train-error:0.264000 
+[63]    train-error:0.266000 
+[64]    train-error:0.264000 
+[65]    train-error:0.262667 
+[66]    train-error:0.263667 
+[67]    train-error:0.260333 
+[68]    train-error:0.256333 
+[69]    train-error:0.257000 
+[70]    train-error:0.257333 
+[71]    train-error:0.256667 
+[72]    train-error:0.254333 
+[73]    train-error:0.255000 
+[74]    train-error:0.255667 
+[75]    train-error:0.254333 
+[76]    train-error:0.252000 
+[77]    train-error:0.252667 
+[78]    train-error:0.251667 
+[79]    train-error:0.249000 
+[80]    train-error:0.250000 
+[81]    train-error:0.248667 
+[82]    train-error:0.247000 
+[83]    train-error:0.246333 
+[84]    train-error:0.247667 
+[85]    train-error:0.248000 
+[86]    train-error:0.247667 
+[87]    train-error:0.245333 
+[88]    train-error:0.245667 
+[89]    train-error:0.242667 
+[90]    train-error:0.242000 
+[91]    train-error:0.240667 
+[92]    train-error:0.237333 
+[93]    train-error:0.241000 
+[94]    train-error:0.240667 
+[95]    train-error:0.239667 
+[96]    train-error:0.239333 
+[97]    train-error:0.240000 
+[98]    train-error:0.241333 
+[99]    train-error:0.240000 
+[100]   train-error:0.238667 </code></pre>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:30.303541Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:30.302089Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:30.626988Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:30.625697Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>xgb_df, <span class="fu">aes</span>(<span class="at">x=</span>borrower_score, <span class="at">y=</span>payment_inc_ratio, </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">color=</span>pred_default, <span class="at">shape=</span>pred_default)) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span><span class="fl">0.6</span>, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>( <span class="at">values=</span><span class="fu">c</span>(<span class="dv">46</span>, <span class="dv">4</span>)) <span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="fl">0.03</span>, <span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>)) <span class="sc">+</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-29-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:30.631941Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:30.630948Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:30.919288Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:30.917013Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>xgb_df, <span class="fu">aes</span>(<span class="at">x=</span>borrower_score, <span class="at">y=</span>payment_inc_ratio, </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">color=</span>pred_default, <span class="at">shape=</span>pred_default, <span class="at">size=</span>pred_default)) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha=</span>.<span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'FALSE'</span><span class="ot">=</span><span class="st">'#b8e186'</span>, <span class="st">'TRUE'</span><span class="ot">=</span><span class="st">'#d95f02'</span>)) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'FALSE'</span><span class="ot">=</span><span class="dv">0</span>, <span class="st">'TRUE'</span><span class="ot">=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">'FALSE'</span><span class="ot">=</span><span class="fl">0.5</span>, <span class="st">'TRUE'</span><span class="ot">=</span><span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="fl">0.03</span>, <span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span> </span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">20</span>)) <span class="sc">+</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="dv">2</span>))) <span class="sc">+</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-30-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="regularization-avoiding-overfitting" class="level2">
+<h2 class="anchored" data-anchor-id="regularization-avoiding-overfitting">Regularization: Avoiding Overfitting</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:30.924666Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:30.923377Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:33.280920Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:33.279597Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>seed <span class="ot">&lt;-</span> <span class="dv">400820</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>predictors <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(loan_data[,<span class="sc">-</span><span class="fu">which</span>(<span class="fu">names</span>(loan_data) <span class="sc">%in%</span> <span class="st">'outcome'</span>)])</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>label <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(loan_data<span class="sc">$</span>outcome)<span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>test_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(loan_data), <span class="dv">10000</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>xgb_default <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(<span class="at">data=</span>predictors[<span class="sc">-</span>test_idx,], <span class="at">label=</span>label[<span class="sc">-</span>test_idx], </span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">objective=</span><span class="st">'binary:logistic'</span>, <span class="at">nrounds=</span><span class="dv">250</span>, <span class="at">verbose=</span><span class="dv">0</span>, </span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">eval_metric=</span><span class="st">'error'</span>)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>pred_default <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb_default, predictors[test_idx,])</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>error_default <span class="ot">&lt;-</span> <span class="fu">abs</span>(label[test_idx] <span class="sc">-</span> pred_default) <span class="sc">&gt;</span> <span class="fl">0.5</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>xgb_default<span class="sc">$</span>evaluation_log[<span class="dv">250</span>,]</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(error_default)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.table: 1 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">iter</th>
+<th data-quarto-table-cell-role="th" scope="col">train_error</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>250</td>
+<td>0.1254881</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+0.3628
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:33.284662Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:33.283600Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:36.510037Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:36.508630Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>xgb_penalty <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(<span class="at">data=</span>predictors[<span class="sc">-</span>test_idx,], <span class="at">label=</span>label[<span class="sc">-</span>test_idx], </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">params=</span><span class="fu">list</span>(<span class="at">eta=</span>.<span class="dv">1</span>, <span class="at">subsample=</span>.<span class="dv">63</span>, <span class="at">lambda=</span><span class="dv">1000</span>),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">objective=</span><span class="st">'binary:logistic'</span>, <span class="at">nrounds=</span><span class="dv">250</span>, <span class="at">verbose=</span><span class="dv">0</span>, </span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">eval_metric=</span><span class="st">'error'</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>pred_penalty <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb_penalty, predictors[test_idx,])</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>error_penalty <span class="ot">&lt;-</span> <span class="fu">abs</span>(label[test_idx] <span class="sc">-</span> pred_penalty) <span class="sc">&gt;</span> <span class="fl">0.5</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>xgb_penalty<span class="sc">$</span>evaluation_log[<span class="dv">250</span>,]</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(error_penalty)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.table: 1 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">iter</th>
+<th data-quarto-table-cell-role="th" scope="col">train_error</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>250</td>
+<td>0.3101126</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+0.3332
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:36.513725Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:36.512643Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:40.333985Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:40.332269Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>error_default <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">250</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>error_penalty <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">250</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">250</span>) {</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  pred_default <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb_default, predictors[test_idx,], <span class="at">iterationrange=</span><span class="fu">c</span>(<span class="dv">1</span>, i))</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  error_default[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(label[test_idx] <span class="sc">-</span> pred_default) <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  pred_penalty <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb_penalty, predictors[test_idx,], <span class="at">iterationrange=</span><span class="fu">c</span>(<span class="dv">1</span>, i))</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  error_penalty[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(label[test_idx] <span class="sc">-</span> pred_penalty) <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>errors <span class="ot">&lt;-</span> <span class="fu">rbind</span>(xgb_default<span class="sc">$</span>evaluation_log,</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>                xgb_penalty<span class="sc">$</span>evaluation_log,</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">data.frame</span>(<span class="at">iter=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">250</span>, <span class="at">train_error=</span>error_default),</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">data.frame</span>(<span class="at">iter=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">250</span>, <span class="at">train_error=</span>error_penalty))</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>errors<span class="sc">$</span>type <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">'default train'</span>, <span class="st">'penalty train'</span>, </span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'default test'</span>, <span class="st">'penalty test'</span>), <span class="fu">rep</span>(<span class="dv">250</span>, <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:40.338135Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:40.336994Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:16:40.586808Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:16:40.585485Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(errors, <span class="fu">aes</span>(<span class="at">x=</span>iter, <span class="at">y=</span>train_error, <span class="at">group=</span>type)) <span class="sc">+</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">linetype=</span>type, <span class="at">color=</span>type), <span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">'solid'</span>, <span class="st">'dashed'</span>, <span class="st">'dotted'</span>, <span class="st">'longdash'</span>)) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="fl">1.5</span>,<span class="st">"cm"</span>)) <span class="sc">+</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Iterations"</span>, <span class="at">y=</span><span class="st">"Error"</span>) <span class="sc">+</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="dv">1</span>)))</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter6-Statistical_Machine_Learning_files/figure-html/cell-34-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="hyperparameters-and-cross-validation" class="level2">
+<h2 class="anchored" data-anchor-id="hyperparameters-and-cross-validation">Hyperparameters and Cross-Validation</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T20:16:40.590873Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T20:16:40.589713Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T20:17:49.129099Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T20:17:49.126699Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fu">nrow</span>(loan_data)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>fold_number <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, N, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">eta =</span> <span class="fu">rep</span>(<span class="fu">c</span>(.<span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">9</span>), <span class="dv">3</span>),</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">max_depth =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">12</span>), <span class="fu">rep</span>(<span class="dv">3</span>,<span class="dv">3</span>)))</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>rf_list <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">'list'</span>, <span class="dv">9</span>)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>error <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow=</span><span class="dv">9</span>, <span class="at">ncol=</span><span class="dv">5</span>)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(params)){</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>){</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">'Fold'</span>, k, <span class="st">'for model'</span>, i, <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>)</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    fold_idx <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>N)[fold_number <span class="sc">==</span> k]</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    xgb <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(<span class="at">data=</span>predictors[<span class="sc">-</span>fold_idx,], <span class="at">label=</span>label[<span class="sc">-</span>fold_idx], </span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">params=</span><span class="fu">list</span>(<span class="at">eta=</span>params[i, <span class="st">'eta'</span>], </span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>                               <span class="at">max_depth=</span>params[i, <span class="st">'max_depth'</span>]),</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>                   <span class="at">objective=</span><span class="st">'binary:logistic'</span>, <span class="at">nrounds=</span><span class="dv">100</span>, <span class="at">verbose=</span><span class="dv">0</span>, </span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>                   <span class="at">eval_metric=</span><span class="st">'error'</span>)</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>    pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb, predictors[fold_idx,])</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>    error[i, k] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(label[fold_idx] <span class="sc">-</span> pred) <span class="sc">&gt;=</span> <span class="fl">0.5</span>)</span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>avg_error <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">round</span>(<span class="fu">rowMeans</span>(error), <span class="dv">4</span>)</span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(params, avg_error)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fold 1 for model 1 
+Fold 2 for model 1 
+Fold 3 for model 1 
+Fold 4 for model 1 
+Fold 5 for model 1 
+Fold 1 for model 2 
+Fold 2 for model 2 
+Fold 3 for model 2 
+Fold 4 for model 2 
+Fold 5 for model 2 
+Fold 1 for model 3 
+Fold 2 for model 3 
+Fold 3 for model 3 
+Fold 4 for model 3 
+Fold 5 for model 3 
+Fold 1 for model 4 
+Fold 2 for model 4 
+Fold 3 for model 4 
+Fold 4 for model 4 
+Fold 5 for model 4 
+Fold 1 for model 5 
+Fold 2 for model 5 
+Fold 3 for model 5 
+Fold 4 for model 5 
+Fold 5 for model 5 
+Fold 1 for model 6 
+Fold 2 for model 6 
+Fold 3 for model 6 
+Fold 4 for model 6 
+Fold 5 for model 6 
+Fold 1 for model 7 
+Fold 2 for model 7 
+Fold 3 for model 7 
+Fold 4 for model 7 
+Fold 5 for model 7 
+Fold 1 for model 8 
+Fold 2 for model 8 
+Fold 3 for model 8 
+Fold 4 for model 8 
+Fold 5 for model 8 
+Fold 1 for model 9 
+Fold 2 for model 9 
+Fold 3 for model 9 
+Fold 4 for model 9 
+Fold 5 for model 9 </code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 9 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">eta</th>
+<th data-quarto-table-cell-role="th" scope="col">max_depth</th>
+<th data-quarto-table-cell-role="th" scope="col">avg_error</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.1</td>
+<td>3</td>
+<td>33.04</td>
+</tr>
+<tr class="even">
+<td>0.5</td>
+<td>3</td>
+<td>33.47</td>
+</tr>
+<tr class="odd">
+<td>0.9</td>
+<td>3</td>
+<td>34.41</td>
+</tr>
+<tr class="even">
+<td>0.1</td>
+<td>6</td>
+<td>33.13</td>
+</tr>
+<tr class="odd">
+<td>0.5</td>
+<td>6</td>
+<td>35.45</td>
+</tr>
+<tr class="even">
+<td>0.9</td>
+<td>6</td>
+<td>37.57</td>
+</tr>
+<tr class="odd">
+<td>0.1</td>
+<td>12</td>
+<td>34.65</td>
+</tr>
+<tr class="even">
+<td>0.5</td>
+<td>12</td>
+<td>36.89</td>
+</tr>
+<tr class="odd">
+<td>0.9</td>
+<td>12</td>
+<td>38.19</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Chapter 2 - Data and Sampling Distributions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Chapter2-Data_and_sampling_distributions_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Chapter2-Data_and_sampling_distributions_files/libs/quarto-html/quarto.js"></script>
+<script src="Chapter2-Data_and_sampling_distributions_files/libs/quarto-html/popper.min.js"></script>
+<script src="Chapter2-Data_and_sampling_distributions_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Chapter2-Data_and_sampling_distributions_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Chapter2-Data_and_sampling_distributions_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Chapter2-Data_and_sampling_distributions_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Chapter2-Data_and_sampling_distributions_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Chapter2-Data_and_sampling_distributions_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Chapter2-Data_and_sampling_distributions_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#practical-statistics-for-data-scientists-r" id="toc-practical-statistics-for-data-scientists-r" class="nav-link active" data-scroll-target="#practical-statistics-for-data-scientists-r">Practical Statistics for Data Scientists (R)</a></li>
+  <li><a href="#sampling-distribution-of-a-statistic" id="toc-sampling-distribution-of-a-statistic" class="nav-link" data-scroll-target="#sampling-distribution-of-a-statistic">Sampling Distribution of a Statistic</a></li>
+  <li><a href="#the-bootstrap" id="toc-the-bootstrap" class="nav-link" data-scroll-target="#the-bootstrap">The Bootstrap</a></li>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals">Confidence Intervals</a></li>
+  <li><a href="#normal-distribution" id="toc-normal-distribution" class="nav-link" data-scroll-target="#normal-distribution">Normal Distribution</a>
+  <ul class="collapse">
+  <li><a href="#standard-normal-and-qq-plots" id="toc-standard-normal-and-qq-plots" class="nav-link" data-scroll-target="#standard-normal-and-qq-plots">Standard Normal and QQ-Plots</a></li>
+  </ul></li>
+  <li><a href="#long-tailed-distributions" id="toc-long-tailed-distributions" class="nav-link" data-scroll-target="#long-tailed-distributions">Long-Tailed Distributions</a></li>
+  <li><a href="#binomial-distribution" id="toc-binomial-distribution" class="nav-link" data-scroll-target="#binomial-distribution">Binomial Distribution</a></li>
+  <li><a href="#poisson-and-related-distribution" id="toc-poisson-and-related-distribution" class="nav-link" data-scroll-target="#poisson-and-related-distribution">Poisson and Related Distribution</a>
+  <ul class="collapse">
+  <li><a href="#poisson-distributions" id="toc-poisson-distributions" class="nav-link" data-scroll-target="#poisson-distributions">Poisson Distributions</a></li>
+  <li><a href="#exponential-distribution" id="toc-exponential-distribution" class="nav-link" data-scroll-target="#exponential-distribution">Exponential Distribution</a></li>
+  <li><a href="#weibull-distribution" id="toc-weibull-distribution" class="nav-link" data-scroll-target="#weibull-distribution">Weibull Distribution</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Chapter 2 - Data and Sampling Distributions</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="practical-statistics-for-data-scientists-r" class="level1">
+<h1>Practical Statistics for Data Scientists (R)</h1>
+<blockquote class="blockquote">
+<ol start="3" type="a">
+<li>2019 Peter C. Bruce, Andrew Bruce, Peter Gedeck</li>
+</ol>
+</blockquote>
+<p>Import required R packages.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:49:57.464576Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:49:57.461380Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:49:57.796267Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:49:57.794733Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(boot)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Define paths to data sets. If you don’t keep your data in the same directory as the code, adapt the path names.</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:49:57.824912Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:49:57.799579Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:05.388599Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:05.387161Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>PSDS_PATH <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">dirname</span>(<span class="fu">dirname</span>(<span class="fu">getwd</span>())))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>loans_income <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.path</span>(PSDS_PATH, <span class="st">'data'</span>, <span class="st">'loans_income.csv'</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>loans_income <span class="ot">&lt;-</span> loans_income[, <span class="dv">1</span>]   <span class="co"># convert data frame to vector</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sp500_px <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.path</span>(PSDS_PATH, <span class="st">'data'</span>, <span class="st">'sp500_data.csv.gz'</span>), <span class="at">row.names=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Figure 2.1</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:05.392663Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:05.391658Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:05.475483Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:05.474248Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="sc">-</span><span class="dv">3</span>, <span class="at">to=</span><span class="dv">3</span>, <span class="at">length=</span><span class="dv">300</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gauss <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>)<span class="sc">+</span>.<span class="dv">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(x, gauss, <span class="at">type=</span><span class="st">'l'</span>, <span class="at">col=</span><span class="st">'blue'</span>, <span class="at">xlab=</span><span class="st">''</span>, <span class="at">ylab=</span><span class="st">''</span>, <span class="at">axes=</span><span class="cn">FALSE</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">polygon</span>(x, gauss, <span class="at">col=</span><span class="st">'blue'</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    norm_samp <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">mar=</span><span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>)<span class="sc">+</span>.<span class="dv">1</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">hist</span>(norm_samp, <span class="at">axes=</span><span class="cn">FALSE</span>, <span class="at">col=</span><span class="st">'red'</span>, <span class="at">main=</span><span class="st">''</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<strong>null device:</strong> 1
+</div>
+<div class="cell-output cell-output-display">
+<strong>null device:</strong> 1
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter2-Data_and_sampling_distributions_files/figure-html/cell-4-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="sampling-distribution-of-a-statistic" class="level1">
+<h1>Sampling Distribution of a Statistic</h1>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:05.481226Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:05.479967Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:05.898450Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:05.896779Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># take a simple random sample</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>samp_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">income=</span><span class="fu">sample</span>(loans_income, <span class="dv">1000</span>), </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">type=</span><span class="st">'data_dist'</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># take a sample of means of 5 values</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>samp_mean_05 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">income =</span> <span class="fu">tapply</span>(<span class="fu">sample</span>(loans_income, <span class="dv">1000</span><span class="sc">*</span><span class="dv">5</span>), </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="fu">rep</span>(<span class="dv">5</span>, <span class="dv">1000</span>)), <span class="at">FUN=</span>mean),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">'mean_of_5'</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># take a sample of means of 20 values</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>samp_mean_20 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">income =</span> <span class="fu">tapply</span>(<span class="fu">sample</span>(loans_income, <span class="dv">1000</span><span class="sc">*</span><span class="dv">20</span>), </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="fu">rep</span>(<span class="dv">20</span>, <span class="dv">1000</span>)), <span class="at">FUN=</span>mean),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">'mean_of_20'</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># bind the data.frames and convert type to a factor</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>income <span class="ot">&lt;-</span> <span class="fu">rbind</span>(samp_data, samp_mean_05, samp_mean_20)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>income<span class="sc">$</span>type <span class="ot">&lt;-</span> <span class="fu">factor</span>(income<span class="sc">$</span>type, </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>                     <span class="at">levels=</span><span class="fu">c</span>(<span class="st">'data_dist'</span>, <span class="st">'mean_of_5'</span>, <span class="st">'mean_of_20'</span>),</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels=</span><span class="fu">c</span>(<span class="st">'Data'</span>, <span class="st">'Mean of 5'</span>, <span class="st">'Mean of 20'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:05.903762Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:05.902404Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:06.782149Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:06.780698Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(income, <span class="fu">aes</span>(<span class="at">x=</span>income)) <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">40</span>) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(type <span class="sc">~</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter2-Data_and_sampling_distributions_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="the-bootstrap" class="level1">
+<h1>The Bootstrap</h1>
+<p>As the calculation uses random samples, results will vary between runs</p>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:06.787032Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:06.786075Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.249584Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.248268Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>stat_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x, idx) <span class="fu">median</span>(x[idx])</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>boot_obj <span class="ot">&lt;-</span> <span class="fu">boot</span>(loans_income, <span class="at">R=</span><span class="dv">1000</span>, <span class="at">statistic=</span>stat_fun)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>boot_obj</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+ORDINARY NONPARAMETRIC BOOTSTRAP
+
+
+Call:
+boot(data = loans_income, statistic = stat_fun, R = 1000)
+
+
+Bootstrap Statistics :
+    original   bias    std. error
+t1*    62000 -75.8725     220.336</code></pre>
+</div>
+</div>
+</section>
+<section id="confidence-intervals" class="level1">
+<h1>Confidence Intervals</h1>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:11.254466Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:11.253349Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.566362Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.565256Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R version for figure 2-9 not available</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>sample20 <span class="ot">&lt;-</span> <span class="fu">sample</span>(loans_income, <span class="dv">20</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sampleMean <span class="ot">&lt;-</span> <span class="fu">mean</span>(sample20)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>stat_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(x, idx) <span class="fu">mean</span>(x[idx])</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>boot_obj <span class="ot">&lt;-</span> <span class="fu">boot</span>(sample20, <span class="at">R=</span><span class="dv">500</span>, <span class="at">statistic=</span>stat_fun)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>boot_ci <span class="ot">&lt;-</span> <span class="fu">boot.ci</span>(boot_obj, <span class="at">conf=</span><span class="fl">0.9</span>, <span class="at">type=</span><span class="st">'basic'</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">mean=</span>boot_obj<span class="sc">$</span>t)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>ci90 <span class="ot">&lt;-</span> boot_ci<span class="sc">$</span>basic[<span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>ci <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ci=</span>ci90, <span class="at">y=</span><span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">11</span>))</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ci &lt;- boot_ci$basic[4:5]</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>ci</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(X, <span class="fu">aes</span>(<span class="at">x=</span>mean)) <span class="sc">+</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">40</span>, <span class="at">fill=</span><span class="st">'#AAAAAA'</span>) <span class="sc">+</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>sampleMean, <span class="at">linetype=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">x=</span>ci, <span class="at">y=</span><span class="dv">10</span>), <span class="at">data=</span>ci, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">x=</span>ci90[<span class="dv">1</span>], <span class="at">y=</span>y), <span class="at">data=</span>ci, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_path</span>(<span class="fu">aes</span>(<span class="at">x=</span>ci90[<span class="dv">2</span>], <span class="at">y=</span>y), <span class="at">data=</span>ci, <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x=</span>sampleMean, <span class="at">y=</span><span class="dv">20</span>, <span class="at">label=</span><span class="st">'Sample mean'</span>), <span class="at">size=</span><span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x=</span>sampleMean, <span class="at">y=</span><span class="dv">8</span>, <span class="at">label=</span><span class="st">'90% interval'</span>), <span class="at">size=</span><span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">''</span>, <span class="at">y=</span><span class="st">'Counts'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 2 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">ci</th>
+<th data-quarto-table-cell-role="th" scope="col">y</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>51643.09</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>65262.95</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter2-Data_and_sampling_distributions_files/figure-html/cell-8-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="normal-distribution" class="level1">
+<h1>Normal Distribution</h1>
+<section id="standard-normal-and-qq-plots" class="level2">
+<h2 class="anchored" data-anchor-id="standard-normal-and-qq-plots">Standard Normal and QQ-Plots</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:11.571069Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:11.570102Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.634567Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.632673Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>norm_samp <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(norm_samp, <span class="at">main=</span><span class="st">''</span>, <span class="at">xlab=</span><span class="st">'Quantile of normal distribution'</span>, <span class="at">ylab=</span><span class="st">'z-score'</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a=</span><span class="dv">0</span>, <span class="at">b=</span><span class="dv">1</span>, <span class="at">col=</span><span class="st">'grey'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter2-Data_and_sampling_distributions_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="long-tailed-distributions" class="level1">
+<h1>Long-Tailed Distributions</h1>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:11.638838Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:11.637772Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.736013Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.734237Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nflx <span class="ot">&lt;-</span> sp500_px[,<span class="st">'NFLX'</span>]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>nflx <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">log</span>(nflx[nflx<span class="sc">&gt;</span><span class="dv">0</span>]))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(nflx)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a=</span><span class="dv">0</span>, <span class="at">b=</span><span class="dv">1</span>, <span class="at">col=</span><span class="st">'grey'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Chapter2-Data_and_sampling_distributions_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="binomial-distribution" class="level1">
+<h1>Binomial Distribution</h1>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:11.740553Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:11.739371Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.751944Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.750436Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x=</span><span class="dv">2</span>, <span class="at">size=</span><span class="dv">5</span>, <span class="at">p=</span><span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.0729
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:11.756561Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:11.755423Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.767364Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.765950Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pbinom</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.99144
+</div>
+</div>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:11.772205Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:11.771070Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.783149Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.781830Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="at">x=</span><span class="dv">0</span>, <span class="at">size=</span><span class="dv">200</span>, <span class="at">p=</span><span class="fl">0.02</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0.0175879466057216
+</div>
+</div>
+</section>
+<section id="poisson-and-related-distribution" class="level1">
+<h1>Poisson and Related Distribution</h1>
+<section id="poisson-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="poisson-distributions">Poisson Distributions</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:11.788071Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:11.786907Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.799099Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.797852Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpois</span>(<span class="dv">100</span>, <span class="at">lambda=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>1</li><li>2</li><li>1</li><li>3</li><li>2</li><li>2</li><li>2</li><li>5</li><li>4</li><li>1</li><li>2</li><li>3</li><li>2</li><li>6</li><li>1</li><li>5</li><li>6</li><li>2</li><li>3</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>3</li><li>4</li><li>3</li><li>0</li><li>2</li><li>6</li><li>5</li><li>2</li><li>4</li><li>1</li><li>0</li><li>2</li><li>0</li><li>2</li><li>3</li><li>5</li><li>3</li><li>1</li><li>4</li><li>4</li><li>4</li><li>0</li><li>3</li><li>3</li><li>2</li><li>2</li><li>0</li><li>2</li><li>2</li><li>4</li><li>1</li><li>1</li><li>3</li><li>3</li><li>3</li><li>4</li><li>2</li><li>3</li><li>3</li><li>1</li><li>1</li><li>2</li><li>1</li><li>2</li><li>3</li><li>1</li><li>4</li><li>0</li><li>3</li><li>1</li><li>2</li><li>0</li><li>3</li><li>2</li><li>3</li><li>0</li><li>3</li><li>1</li><li>2</li><li>2</li><li>4</li><li>0</li><li>2</li><li>1</li><li>2</li><li>3</li><li>0</li><li>1</li><li>3</li><li>2</li><li>2</li><li>1</li><li>4</li><li>0</li><li>3</li><li>6</li></ol>
+</div>
+</div>
+</section>
+<section id="exponential-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="exponential-distribution">Exponential Distribution</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:11.803939Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:11.802670Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.815844Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.814553Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rexp</span>(<span class="at">n=</span><span class="dv">100</span>, <span class="at">rate=</span>.<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>6.6387056976319</li><li>0.00671107089146972</li><li>15.8785874388161</li><li>6.38528264166629</li><li>8.68918771813524</li><li>0.274932847301402</li><li>1.06028521491309</li><li>6.01590430343008</li><li>0.0938750174827874</li><li>6.455080602108</li><li>5.10756899318257</li><li>0.109575668516709</li><li>1.76504792412743</li><li>4.22755784334099</li><li>2.73555422724424</li><li>2.99772624107118</li><li>10.1910778410257</li><li>4.24046883338547</li><li>5.38781171643591</li><li>1.49715713458136</li><li>7.57909522512741</li><li>5.56268148908022</li><li>0.48676422405141</li><li>6.09078133457756</li><li>6.68753373415625</li><li>11.2692872335421</li><li>0.240654313408696</li><li>0.93524647863907</li><li>0.237767025828362</li><li>2.17688306933269</li><li>4.11088208646929</li><li>5.98701289368278</li><li>3.27576701529324</li><li>2.44518182369098</li><li>2.65118177514523</li><li>6.89840606392777</li><li>19.0709319597029</li><li>4.2481197921539</li><li>0.343186936452641</li><li>12.4508189869331</li><li>2.6477911563808</li><li>10.9372709208196</li><li>0.721764060341698</li><li>2.24458673556056</li><li>3.63028225540078</li><li>6.02424021789289</li><li>6.94234882740921</li><li>3.90822082271284</li><li>1.47203455446288</li><li>3.39078255929053</li><li>2.43980085477233</li><li>37.5974821092045</li><li>4.77533383739597</li><li>11.1677639832007</li><li>8.94654936641915</li><li>7.29937603655172</li><li>12.1011851628529</li><li>3.0562479631044</li><li>4.74031542406833</li><li>4.89552368854588</li><li>1.62813091390937</li><li>24.5761018324841</li><li>16.3374472028556</li><li>7.1010031654349</li><li>14.9024343879204</li><li>3.73627926008094</li><li>8.33818527665312</li><li>7.30655012610269</li><li>9.61141072171641</li><li>5.0246896970174</li><li>0.56829016949424</li><li>2.56963648600504</li><li>2.46017653727904</li><li>11.7490146582233</li><li>3.95642243770367</li><li>2.44337729178369</li><li>9.85450135501933</li><li>6.62140896286489</li><li>2.37537440145388</li><li>13.8170197320389</li><li>3.08518774704097</li><li>1.72244070330635</li><li>0.445838205571774</li><li>3.26657653786242</li><li>4.10568973965607</li><li>1.33629720053316</li><li>4.05508079079396</li><li>1.76590585149825</li><li>3.5914235193441</li><li>2.463207191322</li><li>0.0122641150969449</li><li>3.26816772576421</li><li>0.385862767880727</li><li>3.17886889711023</li><li>0.920671530423423</li><li>1.34112713625655</li><li>0.0603274325840175</li><li>2.97972794855013</li><li>3.78438647349781</li><li>0.993724381551147</li></ol>
+</div>
+</div>
+</section>
+<section id="weibull-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="weibull-distribution">Weibull Distribution</h2>
+<div class="cell" data-execution="{&quot;iopub.execute_input&quot;:&quot;2022-04-26T11:50:11.820751Z&quot;,&quot;iopub.status.busy&quot;:&quot;2022-04-26T11:50:11.819575Z&quot;,&quot;iopub.status.idle&quot;:&quot;2022-04-26T11:50:11.832390Z&quot;,&quot;shell.execute_reply&quot;:&quot;2022-04-26T11:50:11.831131Z&quot;}" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rweibull</span>(<span class="dv">100</span>, <span class="fl">1.5</span>, <span class="dv">5000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class="list-inline"><li>4499.9469087383</li><li>4042.55633497126</li><li>1073.1495671654</li><li>3159.09987975885</li><li>4974.52614176412</li><li>2949.62497478611</li><li>2128.01143663711</li><li>2405.78021439449</li><li>1436.20676132317</li><li>990.870351651932</li><li>15948.7863439461</li><li>2193.5512462928</li><li>431.237968884442</li><li>8021.51705437204</li><li>7176.85274208302</li><li>1726.16847646174</li><li>15432.2320438396</li><li>3722.52579913858</li><li>2315.58339714901</li><li>4688.61654616324</li><li>5773.71012278984</li><li>5957.38615651158</li><li>4420.91810196551</li><li>11118.2133339338</li><li>5644.0183487254</li><li>268.172503622882</li><li>3278.29462985983</li><li>5831.18829924818</li><li>1897.10729386551</li><li>2874.14050863636</li><li>3694.63206129977</li><li>6936.28368575503</li><li>11993.7818702942</li><li>2089.01149696554</li><li>11197.4556462157</li><li>8322.25908418299</li><li>2814.78015962007</li><li>814.731509584515</li><li>10274.4828040905</li><li>2555.78080741607</li><li>3194.22935618332</li><li>5561.83279605555</li><li>5051.0214577727</li><li>2202.90718839887</li><li>1804.1323841232</li><li>2940.93010612826</li><li>9353.69810673535</li><li>10680.6407734377</li><li>14120.9182438411</li><li>4105.98547295025</li><li>4906.51046170843</li><li>6699.02504063442</li><li>3972.15963877528</li><li>8777.24782907867</li><li>4070.65808245301</li><li>402.461985725905</li><li>1870.70389662604</li><li>4313.78909706364</li><li>72.8318973649935</li><li>8042.16384036621</li><li>2897.01331552382</li><li>4862.73786415366</li><li>6869.39110509247</li><li>6005.34245824658</li><li>3371.31646516406</li><li>3218.09008172202</li><li>998.1283768481</li><li>757.342562010431</li><li>2220.93148180153</li><li>275.284245889383</li><li>4895.80629989815</li><li>8644.01646704474</li><li>762.540326320649</li><li>3827.43172604326</li><li>1314.12319094317</li><li>874.476199379994</li><li>564.998428652256</li><li>6972.12479399578</li><li>4515.33025707628</li><li>4234.61356418928</li><li>7463.38093277952</li><li>1168.32630799661</li><li>2127.94007122508</li><li>3922.45391910682</li><li>15338.53704693</li><li>3636.37104394751</li><li>4700.73706406616</li><li>3738.2288938485</li><li>3649.29651590692</li><li>3075.87357309704</li><li>4767.1116677551</li><li>7382.92514217553</li><li>1862.74043248913</li><li>1723.93241869719</li><li>5358.53673763179</li><li>3783.55273200043</li><li>1631.6235037063</li><li>9452.39344248378</li><li>5725.83423782393</li><li>5672.22971901444</li></ol>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
