@@ -6,6 +6,8 @@ permalink: /CUB/class_codes
 
 All lecture code (and posted solutions) for [STAT II](Stats2.md) at [CU Boulder](../../CUB.md) (Fall 2023)
 
+{:toc}
+
 # Unit 0: R, R-Markdown, Linear Algebra
 (No lecture code)
 
