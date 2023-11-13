@@ -80,7 +80,6 @@ permalink: /CUB/StatII
 **[Assignments](homeworks.md#unit-3-introduction-to-causal-inference)**
 
 - HW4
-- HW5
 
 # Unit 4: Regression Diagnostics
 
@@ -95,6 +94,10 @@ permalink: /CUB/StatII
 - Generalized Least Squares
 - Diagnostics in R
 
+**[Assignment](homeworks.md#unit-4-regression-diagnostics)**
+
+- HW5
+
 # Unit 5: Model Selection and Collinearity
 
 ## Topics
@@ -105,7 +108,7 @@ permalink: /CUB/StatII
 
 ## Resources
 
-**Lecture material**
+**[Lecture material](class_code.md#unit-5-model-selection-and-collinearity)**
 
 - Model Selection in R
 
