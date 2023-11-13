@@ -30,3 +30,8 @@ All homework submission (by me) and posted solutions for [STAT II](Stats2.md) at
 - [HW4 (submitted w/o really finishing)](HW/STAT5010_HW4.html)
 - [HW5 (submitted w/o really finishing)](HW/STAT5010_HW5.html)
     - [Solutions from TA/Professor](HW/solutions/STAT-5010_Sp23_HW5_Solutions.html)
+
+# Unit 4: Regression Diagnostics
+
+# Unit 5: Model Selection and Collinearity
+

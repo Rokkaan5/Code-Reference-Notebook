@@ -86,10 +86,27 @@ permalink: /CUB/StatII
 
 ## Topics
 
+- Generalized Least Squares
 
 ## Resources
 
-**[Lecture material](class_code.md)**
+**[Lecture material](class_code.md#unit-4-regression-diagnostics)**
 
 - Generalized Least Squares
 - Diagnostics in R
+
+# Unit 5: Model Selection and Collinearity
+
+## Topics
+
+- Motivating Model Selection
+- Test Based Procedures for Model Selection
+- MSPE for Model Selection
+
+## Resources
+
+**Lecture material**
+
+- Model Selection in R
+
+**Assignment**
