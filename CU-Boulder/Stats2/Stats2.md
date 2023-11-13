@@ -56,7 +56,7 @@ permalink: /CUB/StatII
 - T-tests in R
 - F-test and T-test
 
-**[Assignment](homeworks.md#unit-2-regression-inference-prediction-and-explanation)**
+**[Assignments](homeworks.md#unit-2-regression-inference-prediction-and-explanation)**
 
 - HW2
 - HW3
@@ -77,7 +77,7 @@ permalink: /CUB/StatII
 
 (No lecture code)
 
-**[Assignment](homeworks.md#unit-3-introduction-to-causal-inference)**
+**[Assignments](homeworks.md#unit-3-introduction-to-causal-inference)**
 
 - HW4
 - HW5
