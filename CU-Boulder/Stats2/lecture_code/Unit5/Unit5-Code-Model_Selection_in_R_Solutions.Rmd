@@ -1,0 +1,212 @@
+---
+title: "Model selection in R - Solutions"
+author: "Dr. Osita Onyejekwe"
+format:
+    html:
+        code-fold: false
+execute:
+    output: true
+    warning: false
+toc: true
+---
+
+In this lesson, we will implement various model selection methods on real data in R.
+
+Let's use the `fabric` data to illustrate the implementation of model selection techniques. This dataset contains the acoustic absorption coefficients of 24 woven fabrics with different air gap distances ($d=0,1,2,3cm$). There are four different possible response variables based on these air gap distances:
+
+1.  `acoustic0`: air gap distance $d=0 cm$
+
+2.  **`acoustic1`: air gap distance** $d=1 cm$
+
+3.  `acoustic2`: air gap distance $d=2 cm$
+
+4.  `acoustic3`: air gap distance $d=3 cm$
+
+For simplicity, we'll focus on `acoustic1`. The following predictors are given:
+
+5.  `thickness`: the thickness of the woven fabric, in mm
+
+6.  `diameter`: the diameter of the woven fabric, in mm
+
+7.  `perforation`: perforation was measured as a percentage, and is related to the pore width and yarn width of the woven fabric
+
+8.  `weight`: the weight of the woven fabric, measured in g/m\^2
+
+9.  `stiffness`: the weight of the woven fabric, measured in mN x cm
+
+10. `airPerm`: the air permeability of the woven fabric, measured in mm/s
+
+According to Tang, Kong, and Yan, "It has been found that the acoustic absorption properties" of a woven fabric are "mainly determined by the perforation ratio and air permeability." The goal of this analysis is to see if other fabric properties can be vuseful in predicting the absorption coefficient with $d = 1$, i.e., `acoustic1`. We'll use several different model selection techniques to show how they are implemented and how they might differ from one another.
+
+Source: X. Tang, D. Kong, X. Yan (2018). "Multiple Regression Analysis of a Woven Fabric Sound Absorber," Textile Research Journal, <https://doi.org/10.1177/0040517518758001>.
+
+```{R}
+#Another way to read the data:
+#fabric = read.table("http://users.stat.ufl.edu/~winner/data/fabricsoundabsorb.csv", header = TRUE, sep = ",")
+
+library(RCurl) #a package that includes the function getURL(), which allows for reading data from github.
+library(ggplot2)
+url = getURL(paste0("https://raw.githubusercontent.com/bzaharatos/",
+                    "-Statistical-Modeling-for-Data-Science-Applications/",
+                    "master/Modern%20Regression%20Analysis%20/",
+                    "Datasets/fabricsoundabsorb.csv"))
+fabric = read.csv(text = url, sep = ",")
+#names(hprice) = c("price", "area", "bath", "bed","fireplace","lot", "age","fireplace_yn")
+
+head(fabric)
+summary(fabric)
+```
+
+```{R}
+library(corrplot)
+col4 = colorRampPalette(c("black", "darkgrey", "grey","#CFB87C"))
+corrplot(cor(fabric[c(2:7,9)]), method = "ellipse", col = col4(100),  addCoef.col = "black", tl.col = "black")
+```
+
+Let's start with the full model, which uses `acoustic1` as the response and `thickness`, `diameter`, `perforation`, `weight`, `stiffness`, and `airPerm` as predictors.
+
+```{R}
+
+lm_fabric <- lm(acoustic1 ~ thickness + diameter + perforation + weight + stiffness + airPerm , data  = fabric)
+
+summary(lm_fabric)
+
+```
+
+Here, we see that several of the predictors have t-tests with high p-values (higher than the standard $\alpha = 0.05$). Instead of just removing all of those, let's perform backward selection, removing the predictor with the largest p-value greater than $\alpha_0 = 0.15$, `thickness` in this case, and then refit the model. We can do this with the `update()` function. Remember that $\alpha_0$, sometimes called the "p-to-remove", is used as a cuttoff in backward selection, and if the goal is prediction, then $0.15$ or $0.2$ is thought to work well.
+
+```{R}
+
+lm_fabric <- update(lm_fabric, .~. -thickness)
+summary(lm_fabric)
+
+
+```
+
+Notice that our p-values have changed! For example, before, `weight` as not sigificant at the $\alpha = 0.05$ level and now it is. And, importantly, we still have p-values above $\alpha_0 = 0.15$. So, let's remove the predictor with the largest p-value, namely, `diameter`.
+
+```{R}
+lm_fabric <- update(lm_fabric, .~. -diameter)
+summary(lm_fabric)
+```
+
+It looks like we have at least one more iteration, since `stiffness` has a p-value greater than $\alpha_0$.
+
+```{R}
+lm_fabric <- update(lm_fabric, .~. -stiffness)
+summary(lm_fabric)
+```
+
+Notice that each of our remaining predictors have a p-value less than $\alpha_0 = 0.15$. This is the "best" model, according to backward selection. Of course, there's nothing about backward selection that is consistent with statistical inference, so we should use this procedure with **caution**! The same is true for forward selection and other stepwise selection methods.
+
+### AIC, BIC, and adjusted $R^2$
+
+Recall that AIC is defined as:
+
+$$AIC\left(g\left(\mathbf{x}; \widehat{\boldsymbol\beta}\right) \right) = 2(p+1) + n\log(RSS/n).$$
+
+We can use AIC (or BIC, or adjusted $R^2$) to help us choose a "best" model. One way to do this would be:
+
+1.  Fit *all* simple linear regression models, and report the one with the lowest RSS. This is allowed because when the number of predictors is the same, RSS (and equivalently, $R^2$) can be used to compare models.
+
+2.  Fit all two-predictor models, and report the one with the lowest RSS.
+
+3.  Continue this process: fit all $k$-predictor models, and report the one with the lowest RSS.
+
+4.  At this point, we should have the "best" models (in terms of RSS) for all models of size $k$, where $k$ ranges from $1$ to $p$. We can no longer use RSS to compare across *these* models, since each is of a difference size. So, we use a criterion that takes into account the tradeoff between fit (RSS) and model size/complexity ($p$).
+
+The `regsubsets()` function in the `leaps` library can help us streamline this process.
+
+```{R}
+library(leaps)
+library(MASS)
+
+n = dim(fabric)[1]; 
+reg1 = regsubsets(acoustic1 ~ thickness + diameter + perforation + weight + stiffness + airPerm,
+  data = fabric)
+rs = summary(reg1)
+rs$which
+
+```
+
+The table above provides the best model (in terms of RSS) of size $k$, for $k = 1,2,...,6$. For example, the best simple linear regression model is the model `acoustic1` = $\widehat\beta_0 + \widehat\beta_1 \times$ `airPerm`. Now, to compare these models with each other, we calculate AIC, and plot the AIC values as a function of model size.
+
+```{R}
+AIC = 2*(2:7) + n*log(rs$rss/ n)
+plot(AIC ~ I(1:6), xlab = "number of predictors", ylab = "AIC")
+```
+
+In this plot, we see that the model of size $k=3$ has the lowest AIC. That means that our model selection procedure chosen: `acoustic1` = $\widehat{\beta_0}$ $+$ $\widehat{\beta_1}$ $\times$`perforation` $+$  $\widehat{\beta_2}$$\times$`weigh` $+$ $\widehat{\beta_3}$$\times$`airPerm`.
+
+Interestingly, using
+
+$$R_{a}^{2} = 1 - \frac { \frac {RSS} {(n-(p+1))} } { \frac {TSS} {(n-1)} }$$
+
+we get  a different model, namely the model with five predictors (`diameter`, `perforation`, `weight`, `stiffness`, `airPerm`). 
+
+
+```{R}
+plot(1:6, rs$adjr2, xlab = "numbetr of predictors"  , ylab = "adjusted R Squared")
+```
+
+And BIC, which is given as
+
+$$BIC\left(g\left(\mathbf{x}; \widehat{\boldsymbol\beta}\right) \right) = (p+1)\log(n) -2\log L\left(\widehat{\boldsymbol\beta} \right),$$
+
+chooses the same model as AIC.
+
+```{R}
+BIC = log(n)*(2:7) + n*log(rs$rss/n) 
+plot(BIC ~ I(1:6), xlab = "number of predictors", ylab = "BIC")
+```
+
+Is there evidence of collinearity in the data using the full model? How about using the model chosen by AIC?
+
+```{R}
+library(car) #for the vif() function
+
+lm_fabric_full = lm(acoustic1 ~ thickness + diameter + perforation + weight + stiffness + airPerm, data = fabric)
+vif(lm_fabric_full)
+kappa(lm_fabric_full)
+cor(model.matrix(lm_fabric_full)[,-1])
+```
+
+For the full model, we see:
+
+1.  The VIF for the estimators associated with `thickness` and `weight` are in the "some evidence of collinearity" range (i.e., $5 < VIF < 10$).
+
+2.  The condition number is very high ($>> 30$), suggesting collinearity is an issue.
+
+3.  The correlation matrix for the predictors shows high pairwise correlations.
+
+
+```{r}
+
+lm_fabric_aic <- lm(acoustic1 ~ perforation + weight + airPerm , data = fabric)
+vif(lm_fabric_aic)
+kappa(lm_fabric_aic)
+cor(model.matrix(lm_fabric_aic)[,-1])
+
+```
+
+For the full model, we see:
+
+1.  The VIF for the estimators are now below $5$, which is not evidence of collinearity.
+
+2.  The condition number is still very high ($>> 30$), suggesting collinearity is an issue.
+
+3.  The correlation matrix for the predictors shows high pairwise correlations. Specifically, `airPerm` and `perforation` are highly correlated. We might remove one and refit the model. (do on your own for practice). 
+
+```{r}
+
+lm_fabric_aic <- lm(acoustic1 ~ perforation + weight  , data = fabric)
+vif(lm_fabric_aic)
+kappa(lm_fabric_aic)
+cor(model.matrix(lm_fabric_aic)[,-1])
+
+```
+***REGULARIZATION***
+
+PCA 
+RIDGE
+LASSO  STAT 5600 : STAT LEARNING 
