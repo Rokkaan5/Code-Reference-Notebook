@@ -138,5 +138,17 @@ Extras:
 ## Resources
 [Various code examples by professor:](Prof-Code-Ex.md#module-3) 
 
+- General Keras
+    - Intro to Keras 
+    - Simple Examples of ANNs, RNNs (and LSTM, BRNN), and CNNs in Python/Keras 
+    - TF-Keras with record data 
+- Convolutional Neural Networks (CNNs)
+    - CNN with Conv2D Image data in Keras 
+    - CNN with Conv2D with CIFAR10 data - Image prediction
+- Recurrent Neural Networks (RNNs) and Long Short Term Memory (LSTM)
+    - RNN with MNIST 
+- Extras
+    - English/Spanish Translator with LSTM Transformer 
+    - Advanced Sentiment Analysis with Glove Embedding 
 
 [One Assignment:](JK-HW.md#module-3) 
