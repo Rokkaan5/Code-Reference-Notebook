@@ -151,4 +151,4 @@ Extras:
     - English/Spanish Translator with LSTM Transformer 
     - Advanced Sentiment Analysis with Glove Embedding 
 
-[One Assignment - Three parts:](JK-HW.md#module-3) 
+[One Assignment - Five parts:](JK-HW.md#module-3) 
