@@ -40,7 +40,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 - Intro to Keras ([Raw code](raw_code/Module3/intro_to_keras.html); [Markdown](mrkdwn/Module3/intro_to_keras.html))
 - Simple Examples of ANNs, RNNs (and LSTM, BRNN), and CNNs in Python/Keras ([Raw code](raw_code/Module3/simple_ex_all.html); [Markdown](mrkdwn/Module3/simple_ex_all.html))
-
+- TF-Keras with record data ([Raw code](raw_code/Module3/TFkeras-record.html); [Markdown](mrkdwn/Module3/TFkeras-record.html))
 
 ## Convolutional Neural Networks (CNNs)
 
