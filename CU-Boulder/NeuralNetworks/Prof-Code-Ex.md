@@ -40,6 +40,13 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 - Intro to Keras ([Raw code](raw_code/Module3/intro_to_keras.html); [Markdown](mrkdwn/Module3/intro_to_keras.html))
 - Simple Examples of ANNs, RNNs (and LSTM, BRNN), and CNNs in Python/Keras ([Raw code](raw_code/Module3/simple_ex_all.html); [Markdown](mrkdwn/Module3/simple_ex_all.html))
+    - ANN
+    - RNN
+        - Simple RNN
+        - Bidirectional
+        - LSTM
+    - CNN
+    - ANN with flattened image data
 - TF-Keras with record data ([Raw code](raw_code/Module3/TFkeras-record.html); [Markdown](mrkdwn/Module3/TFkeras-record.html))
 
 ## Convolutional Neural Networks (CNNs)
@@ -51,6 +58,10 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 ## Recurrent Neural Networks (RNNs) and Long Short Term Memory (LSTM)
 
 - RNN with MNIST ([Raw Code](raw_code/Module3/RNN/RNN_LSTM_MNIST.html); Markdown)
+- Simple Example (from comprehensive code) - *RNN related sections*:
+    - ([Simple RNN](mrkdwn/Module3/simple_ex_all.html#simplernn))
+    - ([RNN with Bidirectional](mrkdwn/Module3/simple_ex_all.html#rnn-with-bidirectional))
+    - ([LSTM](mrkdwn/Module3/simple_ex_all.html#lstm))
 
 ## Extras:
 
