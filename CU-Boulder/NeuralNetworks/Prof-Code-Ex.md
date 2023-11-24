@@ -53,7 +53,7 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 - Simple Example (from comprehensive code) ([CNN section](mrkdwn/Module3/simple_ex_all.html#cnn))
 - CNN with Conv2D Image data in Keras ([Raw code](raw_code/Module3/CNN/Conv2D.html); [Markdown](mrkdwn/Module3/CNN/Conv2D.html))
-- CNN with Conv2D with CIFAR10 data - Image prediction ([Raw code](raw_code/Module3/CNN/CIFAR10_image_pred.html); Markdown)
+- CNN with Conv2D with CIFAR10 data - Image prediction ([Raw code](raw_code/Module3/CNN/CIFAR10_image_pred.html); [Markdown](mrkdwn/Module3/CNN/CIFAR10_image_pred.html))
 
 ## Recurrent Neural Networks (RNNs) and Long Short Term Memory (LSTM)
 
