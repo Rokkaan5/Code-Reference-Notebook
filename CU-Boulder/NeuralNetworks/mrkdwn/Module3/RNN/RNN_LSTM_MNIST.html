@@ -72,10 +72,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data" id="toc-data" class="nav-link active" data-scroll-target="#data">Data</a>
+  <ul class="collapse">
+  <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data">Importing the data</a></li>
+  <li><a href="#normalizing-the-data" id="toc-normalizing-the-data" class="nav-link" data-scroll-target="#normalizing-the-data">Normalizing the data</a></li>
+  <li><a href="#check-data-and-shapes" id="toc-check-data-and-shapes" class="nav-link" data-scroll-target="#check-data-and-shapes">Check data and shapes</a></li>
+  </ul></li>
+  <li><a href="#build-the-model" id="toc-build-the-model" class="nav-link" data-scroll-target="#build-the-model">Build the model</a>
+  <ul class="collapse">
+  <li><a href="#adding-the-model-layers" id="toc-adding-the-model-layers" class="nav-link" data-scroll-target="#adding-the-model-layers">Adding the model layers</a></li>
+  <li><a href="#compiling-the-model" id="toc-compiling-the-model" class="nav-link" data-scroll-target="#compiling-the-model">Compiling the model</a></li>
+  <li><a href="#fitting-data-to-the-model" id="toc-fitting-data-to-the-model" class="nav-link" data-scroll-target="#fitting-data-to-the-model">Fitting data to the model</a></li>
+  </ul></li>
+  <li><a href="#evaluating-the-test-loss-and-accuracy" id="toc-evaluating-the-test-loss-and-accuracy" class="nav-link" data-scroll-target="#evaluating-the-test-loss-and-accuracy">Evaluating the test loss and accuracy</a>
+  <ul class="collapse">
+  <li><a href="#visualizing-the-change-in-the-validation-loss" id="toc-visualizing-the-change-in-the-validation-loss" class="nav-link" data-scroll-target="#visualizing-the-change-in-the-validation-loss">visualizing the change in the validation loss</a></li>
+  <li><a href="#visualizing-the-change-in-the-accuracy" id="toc-visualizing-the-change-in-the-accuracy" class="nav-link" data-scroll-target="#visualizing-the-change-in-the-accuracy">visualizing the change in the accuracy</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -103,76 +127,360 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>Gates’ full, raw (unedited) code Reference: Professor Ami Gates, Dept. Applied Math, Data Science, University of Colorado</p>
 <p><a href="https://gatesboltonanalytics.com/?page_id=715">Dr.&nbsp;Gates’ Website</a></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow.keras</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.datasets <span class="im">import</span> mnist</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.models <span class="im">import</span> Sequential</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.layers <span class="im">import</span> LSTM, Dense, Dropout, LSTM</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.optimizers <span class="im">import</span> Adam</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras <span class="im">import</span> layers</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Importing the data</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>(X_train, y_train),(X_test, y_test) <span class="op">=</span> mnist.load_data()  <span class="co"># unpacks images to x_train/x_test and labels to y_train/y_test</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Normalizing the data</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> X_train.astype(<span class="st">'float32'</span>) <span class="op">/</span> <span class="fl">255.0</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> X_test.astype(<span class="st">'float32'</span>) <span class="op">/</span> <span class="fl">255.0</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_train[<span class="dv">4</span>])</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_train[<span class="dv">4</span>])</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>plt.imshow(X_train[<span class="dv">3</span>]) </span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_train.shape)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_train.shape[<span class="dv">1</span>:])</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_train.shape)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_test.shape)</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_test.shape)</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> tensorflow.keras.models.Sequential()</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">#Adding the model layers</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of units is the number of neurons connected to the </span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">#layer holding the concatenated vector of hidden state and input</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.LSTM(<span class="dv">128</span>, input_shape<span class="op">=</span>(X_train.shape[<span class="dv">1</span>:]), return_sequences<span class="op">=</span><span class="va">True</span>))</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.Dropout(<span class="fl">0.2</span>))</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.LSTM(<span class="dv">128</span>))</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.Dense(<span class="dv">64</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.Dropout(<span class="fl">0.2</span>))</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">'softmax'</span>))</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co">#Compiling the model</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>( loss<span class="op">=</span><span class="st">'sparse_categorical_crossentropy'</span>, </span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>              optimizer <span class="op">=</span> tensorflow.keras.optimizers.Adam(lr<span class="op">=</span><span class="fl">0.001</span>, decay<span class="op">=</span><span class="fl">1e-6</span>), metrics<span class="op">=</span>[<span class="st">'accuracy'</span>] )</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">#Fitting data to the model</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>history <span class="op">=</span> model.fit(X_train, y_train, epochs<span class="op">=</span><span class="dv">3</span>, validation_data<span class="op">=</span>(X_test, y_test))</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluating the test loss and accuracy</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>test_loss, test_acc <span class="op">=</span> model.evaluate(X_test, y_test)</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test Loss: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(test_loss))</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test Accuracy: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(test_acc))</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>train_loss <span class="op">=</span> history.history[<span class="st">'loss'</span>]</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>val_loss <span class="op">=</span> history.history[<span class="st">'val_loss'</span>]</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>train_acc <span class="op">=</span> history.history[<span class="st">'accuracy'</span>]</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>val_acc <span class="op">=</span> history.history[<span class="st">'val_accuracy'</span>]</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="co">#visualizing the change in the validation loss</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>plt.plot(val_loss) </span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Test Loss"</span>,size<span class="op">=</span><span class="dv">18</span>)</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of iterations"</span>) </span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Test Loss"</span>) </span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>plt.show() </span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="co">#visualizing the change in the validation loss</span></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>plt.plot(val_acc) </span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Test Accuracy"</span>,size<span class="op">=</span><span class="dv">18</span>)</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of iterations"</span>) </span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Test Accuracy"</span>) </span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras <span class="im">import</span> layers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-11-24 03:22:07.549642: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-11-24 03:22:07.588365: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.</code></pre>
+</div>
+</div>
+<section id="data" class="level1">
+<h1>Data</h1>
+<section id="importing-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="importing-the-data">Importing the data</h2>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(X_train, y_train),(X_test, y_test) <span class="op">=</span> mnist.load_data()  <span class="co"># unpacks images to x_train/x_test and labels to y_train/y_test</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="normalizing-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="normalizing-the-data">Normalizing the data</h2>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> X_train.astype(<span class="st">'float32'</span>) <span class="op">/</span> <span class="fl">255.0</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> X_test.astype(<span class="st">'float32'</span>) <span class="op">/</span> <span class="fl">255.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="check-data-and-shapes" class="level2">
+<h2 class="anchored" data-anchor-id="check-data-and-shapes">Check data and shapes</h2>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_train[<span class="dv">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.21568628 0.5803922  0.8235294  0.99215686 0.99215686 0.44313726
+  0.34117648 0.5803922  0.21568628 0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.34117648
+  0.9098039  0.9882353  0.99215686 0.7411765  0.8235294  0.9882353
+  0.9882353  0.99215686 0.65882355 0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.01568628 0.22352941 0.9490196
+  0.9882353  0.74509805 0.25490198 0.01960784 0.04705882 0.7137255
+  0.9882353  0.99215686 0.45490196 0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.3764706  0.9882353  0.9882353
+  0.7176471  0.05490196 0.         0.         0.36078432 0.9882353
+  0.9882353  0.88235295 0.08235294 0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.5176471  0.99215686 0.9882353  0.57254905
+  0.05490196 0.         0.         0.         0.84313726 0.9882353
+  0.9882353  0.30980393 0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.49411765 0.99215686 0.96862745 0.6901961  0.03529412
+  0.         0.         0.03137255 0.30588236 0.9607843  0.99215686
+  0.5058824  0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.0627451  0.9098039  0.9882353  0.6901961  0.         0.
+  0.         0.14117648 0.7882353  0.9882353  0.9882353  0.6627451
+  0.04313726 0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.08627451 0.9882353  0.9882353  0.11764706 0.08627451 0.46666667
+  0.77254903 0.94509804 0.99215686 0.9882353  0.9843137  0.3019608
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.0627451  0.90588236 0.9882353  0.99215686 0.9882353  0.9882353
+  0.9882353  0.8862745  0.8901961  0.9882353  0.90588236 0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.21568628 0.92156863 0.99215686 0.8509804  0.5411765
+  0.16470589 0.09411765 0.7529412  0.9882353  0.56078434 0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.24313726 1.         0.99215686 0.42745098 0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.2784314  0.99215686 0.9882353  0.08235294 0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.99215686 0.9882353  0.08235294 0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.2784314  0.99215686 0.9882353  0.08235294 0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.41568628 0.99215686 0.9882353  0.08235294 0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.1764706  1.         0.99215686 0.08235294 0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.85490197 0.9882353  0.21960784 0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.3764706  0.9882353  0.7411765  0.16470589
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.05490196 0.72156864 0.9882353  0.6666667
+  0.04313726 0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.05490196 0.5764706  0.9882353
+  0.16470589 0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]
+ [0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.         0.         0.
+  0.         0.         0.         0.        ]]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_train[<span class="dv">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>9</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(X_train[<span class="dv">3</span>]) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7fba18b31b50&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="RNN_LSTM_MNIST_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_train.shape)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_train.shape[<span class="dv">1</span>:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(60000, 28, 28)
+(28, 28)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_train.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(60000,)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_test.shape)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y_test.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(10000, 28, 28)
+(10000,)</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="build-the-model" class="level1">
+<h1>Build the model</h1>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> tensorflow.keras.models.Sequential()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-11-24 03:22:11.036391: E tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:266] failed call to cuInit: UNKNOWN ERROR (100)</code></pre>
+</div>
+</div>
+<section id="adding-the-model-layers" class="level2">
+<h2 class="anchored" data-anchor-id="adding-the-model-layers">Adding the model layers</h2>
+<p>The number of units is the number of neurons connected to the layer holding the concatenated vector of hidden state and input</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.LSTM(<span class="dv">128</span>, input_shape<span class="op">=</span>(X_train.shape[<span class="dv">1</span>:]), return_sequences<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.Dropout(<span class="fl">0.2</span>))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.LSTM(<span class="dv">128</span>))</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.Dense(<span class="dv">64</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.Dropout(<span class="fl">0.2</span>))</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>model.add(tensorflow.keras.layers.Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">'softmax'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-11-24 03:22:11.477172: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_2_grad/concat/split_2/split_dim' with dtype int32
+     [[{{node gradients/split_2_grad/concat/split_2/split_dim}}]]
+2023-11-24 03:22:11.478953: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_grad/concat/split/split_dim' with dtype int32
+     [[{{node gradients/split_grad/concat/split/split_dim}}]]
+2023-11-24 03:22:11.481374: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_1_grad/concat/split_1/split_dim' with dtype int32
+     [[{{node gradients/split_1_grad/concat/split_1/split_dim}}]]
+2023-11-24 03:22:11.695191: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_2_grad/concat/split_2/split_dim' with dtype int32
+     [[{{node gradients/split_2_grad/concat/split_2/split_dim}}]]
+2023-11-24 03:22:11.698659: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_grad/concat/split/split_dim' with dtype int32
+     [[{{node gradients/split_grad/concat/split/split_dim}}]]
+2023-11-24 03:22:11.700738: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_1_grad/concat/split_1/split_dim' with dtype int32
+     [[{{node gradients/split_1_grad/concat/split_1/split_dim}}]]</code></pre>
+</div>
+</div>
+</section>
+<section id="compiling-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="compiling-the-model">Compiling the model</h2>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>( loss<span class="op">=</span><span class="st">'sparse_categorical_crossentropy'</span>, </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>              optimizer <span class="op">=</span> tensorflow.keras.optimizers.Adam(learning_rate<span class="op">=</span><span class="fl">0.001</span>, weight_decay<span class="op">=</span><span class="fl">1e-6</span>), metrics<span class="op">=</span>[<span class="st">'accuracy'</span>] )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fitting-data-to-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="fitting-data-to-the-model">Fitting data to the model</h2>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>history <span class="op">=</span> model.fit(X_train, y_train, epochs<span class="op">=</span><span class="dv">3</span>, validation_data<span class="op">=</span>(X_test, y_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/3
+1874/1875 [============================&gt;.] - ETA: 0s - loss: 0.3368 - accuracy: 0.89431875/1875 [==============================] - 109s 56ms/step - loss: 0.3367 - accuracy: 0.8944 - val_loss: 0.1145 - val_accuracy: 0.9642
+Epoch 2/3
+1875/1875 [==============================] - 105s 56ms/step - loss: 0.1035 - accuracy: 0.9705 - val_loss: 0.0931 - val_accuracy: 0.9731
+Epoch 3/3
+1875/1875 [==============================] - 106s 57ms/step - loss: 0.0705 - accuracy: 0.9795 - val_loss: 0.0669 - val_accuracy: 0.9800</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-11-24 03:22:12.461990: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_2_grad/concat/split_2/split_dim' with dtype int32
+     [[{{node gradients/split_2_grad/concat/split_2/split_dim}}]]
+2023-11-24 03:22:12.465875: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_grad/concat/split/split_dim' with dtype int32
+     [[{{node gradients/split_grad/concat/split/split_dim}}]]
+2023-11-24 03:22:12.468364: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_1_grad/concat/split_1/split_dim' with dtype int32
+     [[{{node gradients/split_1_grad/concat/split_1/split_dim}}]]
+2023-11-24 03:22:12.710119: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_2_grad/concat/split_2/split_dim' with dtype int32
+     [[{{node gradients/split_2_grad/concat/split_2/split_dim}}]]
+2023-11-24 03:22:12.713717: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_grad/concat/split/split_dim' with dtype int32
+     [[{{node gradients/split_grad/concat/split/split_dim}}]]
+2023-11-24 03:22:12.716928: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_1_grad/concat/split_1/split_dim' with dtype int32
+     [[{{node gradients/split_1_grad/concat/split_1/split_dim}}]]
+2023-11-24 03:22:13.922317: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_2_grad/concat/split_2/split_dim' with dtype int32
+     [[{{node gradients/split_2_grad/concat/split_2/split_dim}}]]
+2023-11-24 03:22:13.924951: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_grad/concat/split/split_dim' with dtype int32
+     [[{{node gradients/split_grad/concat/split/split_dim}}]]
+2023-11-24 03:22:13.926593: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_1_grad/concat/split_1/split_dim' with dtype int32
+     [[{{node gradients/split_1_grad/concat/split_1/split_dim}}]]
+2023-11-24 03:22:14.172767: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_2_grad/concat/split_2/split_dim' with dtype int32
+     [[{{node gradients/split_2_grad/concat/split_2/split_dim}}]]
+2023-11-24 03:22:14.176502: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_grad/concat/split/split_dim' with dtype int32
+     [[{{node gradients/split_grad/concat/split/split_dim}}]]
+2023-11-24 03:22:14.178674: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_1_grad/concat/split_1/split_dim' with dtype int32
+     [[{{node gradients/split_1_grad/concat/split_1/split_dim}}]]
+2023-11-24 03:23:54.940137: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_2_grad/concat/split_2/split_dim' with dtype int32
+     [[{{node gradients/split_2_grad/concat/split_2/split_dim}}]]
+2023-11-24 03:23:54.942231: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_grad/concat/split/split_dim' with dtype int32
+     [[{{node gradients/split_grad/concat/split/split_dim}}]]
+2023-11-24 03:23:54.945119: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_1_grad/concat/split_1/split_dim' with dtype int32
+     [[{{node gradients/split_1_grad/concat/split_1/split_dim}}]]
+2023-11-24 03:23:55.188500: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_2_grad/concat/split_2/split_dim' with dtype int32
+     [[{{node gradients/split_2_grad/concat/split_2/split_dim}}]]
+2023-11-24 03:23:55.191130: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_grad/concat/split/split_dim' with dtype int32
+     [[{{node gradients/split_grad/concat/split/split_dim}}]]
+2023-11-24 03:23:55.193490: I tensorflow/core/common_runtime/executor.cc:1197] [/device:CPU:0] (DEBUG INFO) Executor start aborting (this does not indicate an error and you can ignore this message): INVALID_ARGUMENT: You must feed a value for placeholder tensor 'gradients/split_1_grad/concat/split_1/split_dim' with dtype int32
+     [[{{node gradients/split_1_grad/concat/split_1/split_dim}}]]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="evaluating-the-test-loss-and-accuracy" class="level1">
+<h1>Evaluating the test loss and accuracy</h1>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>test_loss, test_acc <span class="op">=</span> model.evaluate(X_test, y_test)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test Loss: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(test_loss))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Test Accuracy: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(test_acc))</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>train_loss <span class="op">=</span> history.history[<span class="st">'loss'</span>]</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>val_loss <span class="op">=</span> history.history[<span class="st">'val_loss'</span>]</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>train_acc <span class="op">=</span> history.history[<span class="st">'accuracy'</span>]</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>val_acc <span class="op">=</span> history.history[<span class="st">'val_accuracy'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>313/313 [==============================] - 7s 22ms/step - loss: 0.0669 - accuracy: 0.9800
+Test Loss: 0.06691638380289078
+Test Accuracy: 0.9800000190734863</code></pre>
+</div>
+</div>
+<section id="visualizing-the-change-in-the-validation-loss" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-the-change-in-the-validation-loss">visualizing the change in the validation loss</h2>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plt.plot(val_loss) </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Test Loss"</span>,size<span class="op">=</span><span class="dv">18</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of iterations"</span>) </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Test Loss"</span>) </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="RNN_LSTM_MNIST_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="visualizing-the-change-in-the-accuracy" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-the-change-in-the-accuracy">visualizing the change in the accuracy</h2>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>plt.plot(val_acc) </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Test Accuracy"</span>,size<span class="op">=</span><span class="dv">18</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Number of iterations"</span>) </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Test Accuracy"</span>) </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="RNN_LSTM_MNIST_files/figure-html/cell-17-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
 
 </main>
 <!-- /main column -->
