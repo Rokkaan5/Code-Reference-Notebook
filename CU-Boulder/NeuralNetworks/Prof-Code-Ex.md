@@ -65,5 +65,5 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 ## Extras:
 
-- English/Spanish Translator with LSTM Transformer ([Raw Code](raw_code/Module3/other_extra/LSTM_EnDe_lang_trans.html); Markdown)
+- English/Spanish Translator with LSTM Transformer ([Raw Code](raw_code/Module3/other_extra/LSTM_EnDe_lang_trans.html); [Markdown](mrkdwn/Module3/other_extra/LSTM_EnDe_lang_trans.html))
 - Advanced Sentiment Analysis with Glove Embedding ([Raw Code](raw_code/Module3/other_extra/Sent_analysis.html); Markdown)
