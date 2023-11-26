@@ -157,6 +157,6 @@ Extras:
 - Assignment 3 
     - Part 1: ANNs in Keras
     - Part 2: Use TF/Keras to Create a CNN
-    - (Part 3: Illustrate the processes for cross-correlation with a fitler of kernels... (**No coding**))
+    - (Part 3: (**Non coding portion**))
     - Part 4: Use TF/Keras to Create both an RNN and an LSTM and Compare Results
     - Part 5: Type out the back propagation derivatives for $\frac{\partial L}{\partial U}$
