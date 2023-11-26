@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sanchit Tanwar">
+
+<title>Lesson 5 - Image Classification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Lesson5-Image_classification_in_keras_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Lesson5-Image_classification_in_keras_files/libs/quarto-html/quarto.js"></script>
+<script src="Lesson5-Image_classification_in_keras_files/libs/quarto-html/popper.min.js"></script>
+<script src="Lesson5-Image_classification_in_keras_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Lesson5-Image_classification_in_keras_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Lesson5-Image_classification_in_keras_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Lesson5-Image_classification_in_keras_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Lesson5-Image_classification_in_keras_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Lesson5-Image_classification_in_keras_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Lesson5-Image_classification_in_keras_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#downloading-dataset-from-kaggle" id="toc-downloading-dataset-from-kaggle" class="nav-link active" data-scroll-target="#downloading-dataset-from-kaggle">Downloading dataset from kaggle</a></li>
+  <li><a href="#visualizing-data" id="toc-visualizing-data" class="nav-link" data-scroll-target="#visualizing-data">Visualizing Data</a></li>
+  <li><a href="#creating-dataloader" id="toc-creating-dataloader" class="nav-link" data-scroll-target="#creating-dataloader">Creating Dataloader</a></li>
+  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lesson 5 - Image Classification</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sanchit Tanwar </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This is code for the image classification <a href="https://medium.com/@sanchittanwar75/making-our-first-cnn-based-project-using-keras-c3a7790b1e02">blog</a>.</p>
+<section id="downloading-dataset-from-kaggle" class="level1">
+<h1>Downloading dataset from kaggle</h1>
+<div class="cell" data-outputid="2bb07c9e-ed71-4a7d-dc2b-9c385dcd30f9" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Upload kaggle.json file which can be downloaded from kaggle websites my account section</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.colab <span class="im">import</span> files</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>files.upload()</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>os.system(<span class="st">"mkdir -p ~/.kaggle"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>os.system(<span class="st">"cp kaggle.json ~/.kaggle/"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>os.system(<span class="st">"chmod 600 ~/.kaggle/kaggle.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+     <input type="file" id="files-139c4c84-0573-4a03-aa4f-413aa1aa591c" name="files[]" multiple="" disabled="">
+     <output id="result-139c4c84-0573-4a03-aa4f-413aa1aa591c">
+      Upload widget is only available when the cell has been executed in the
+      current browser session. Please rerun this cell to enable.
+      </output>
+      <script src="/nbextensions/google.colab/files.js"></script> 
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Saving kaggle.json to kaggle.json</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="4b372266-670f-4528-c1cd-d89116a8f3d4" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>kaggle competitions download <span class="op">-</span>c dogs<span class="op">-</span>vs<span class="op">-</span>cats</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading sampleSubmission.csv to /content
+  0% 0.00/86.8k [00:00&lt;?, ?B/s]
+100% 86.8k/86.8k [00:00&lt;00:00, 73.5MB/s]
+Downloading test1.zip to /content
+ 95% 257M/271M [00:05&lt;00:00, 41.7MB/s]
+100% 271M/271M [00:05&lt;00:00, 48.0MB/s]
+Downloading train.zip to /content
+ 98% 532M/543M [00:06&lt;00:00, 115MB/s]
+100% 543M/543M [00:06&lt;00:00, 84.2MB/s]</code></pre>
+</div>
+</div>
+<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>unzip train.<span class="bu">zip</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualizing-data" class="level1">
+<h1>Visualizing Data</h1>
+<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cv2</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dog_img <span class="op">=</span> cv2.imread(<span class="st">'./train/dog.6281.jpg'</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>cat_img <span class="op">=</span> cv2.imread(<span class="st">'./train/cat.6361.jpg'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>files.download(<span class="st">'./train/cat.6361.jpg'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="7b2a51f8-4b0c-40c8-c793-53ab52ac1b06" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(dog_img)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7fd565738358&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Lesson5-Image_classification_in_keras_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-outputid="32d75cf6-d4ef-434e-acba-930b3bf66931" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(cat_img)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7fd5616bf1d0&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="Lesson5-Image_classification_in_keras_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="creating-dataloader" class="level1">
+<h1>Creating Dataloader</h1>
+<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creating list with labels</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>filenames <span class="op">=</span> os.listdir(<span class="st">'./train'</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>categories <span class="op">=</span> []</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> filename <span class="kw">in</span> filenames:</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  category <span class="op">=</span> filename.split(<span class="st">'.'</span>)[<span class="dv">0</span>]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> category <span class="op">==</span> <span class="st">'dog'</span>:</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    categories.append(<span class="st">'dog'</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    categories.append(<span class="st">'cat'</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'filename'</span>: filenames,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'category'</span>: categories</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>train_df, test_df <span class="op">=</span> train_test_split(df,test_size <span class="op">=</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="2e5ec2dc-8b52-442a-8f38-f1fdc9e3abef" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Class for image data generator</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.preprocessing.image <span class="im">import</span> ImageDataGenerator</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#We need to normalize image</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>datagen <span class="op">=</span> ImageDataGenerator(rescale<span class="op">=</span><span class="fl">1.</span><span class="op">/</span><span class="dv">255</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>traingenerator <span class="op">=</span> datagen.flow_from_dataframe( train_df , <span class="st">'./train'</span>,x_col <span class="op">=</span> <span class="st">'filename'</span> , y_col <span class="op">=</span> <span class="st">'category'</span>, target_size <span class="op">=</span> (<span class="dv">224</span>,<span class="dv">224</span>) ,class_mode<span class="op">=</span><span class="st">'categorical'</span>, batch_size <span class="op">=</span> <span class="dv">32</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>testgenerator <span class="op">=</span> datagen.flow_from_dataframe( test_df , <span class="st">'./train'</span>,x_col <span class="op">=</span> <span class="st">'filename'</span> , y_col <span class="op">=</span> <span class="st">'category'</span>, target_size <span class="op">=</span> (<span class="dv">224</span>,<span class="dv">224</span>) ,class_mode<span class="op">=</span><span class="st">'categorical'</span>, batch_size <span class="op">=</span> <span class="dv">32</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Found 20000 validated image filenames belonging to 2 classes.
+Found 5000 validated image filenames belonging to 2 classes.</code></pre>
+</div>
+</div>
+</section>
+<section id="model" class="level1">
+<h1>Model</h1>
+<div class="cell" data-outputid="f50e5ddb-a0c9-49f7-c06c-134a8e7b9702" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.models <span class="im">import</span> Sequential</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> keras.layers <span class="im">import</span> Conv2D, MaxPooling2D, Dropout, Flatten, Dense, Activation, BatchNormalization</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Sequential()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>model.add(Conv2D(<span class="dv">32</span>, (<span class="dv">5</span>,<span class="dv">5</span>), activation<span class="op">=</span><span class="st">'relu'</span>, input_shape<span class="op">=</span>(<span class="dv">224</span>, <span class="dv">224</span>, <span class="dv">3</span>)))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>model.add(MaxPooling2D(pool_size<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">2</span>)))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>model.add(Conv2D(<span class="dv">64</span>, (<span class="dv">5</span>,<span class="dv">5</span>), activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>model.add(MaxPooling2D(pool_size<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">2</span>)))</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>model.add(Conv2D(<span class="dv">128</span>, (<span class="dv">5</span>,<span class="dv">5</span>), activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>model.add(MaxPooling2D(pool_size<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">2</span>)))</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>model.add(Conv2D(<span class="dv">256</span>, (<span class="dv">5</span>,<span class="dv">5</span>), activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>model.add(MaxPooling2D(pool_size<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">2</span>)))</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>model.add(Conv2D(<span class="dv">256</span>, (<span class="dv">5</span>,<span class="dv">5</span>), activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>model.add(MaxPooling2D(pool_size<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">2</span>)))</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>model.add(Flatten())</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>model.add(Dense(<span class="dv">512</span>, activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>model.add(BatchNormalization())</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>model.add(Dropout(<span class="fl">0.5</span>))</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>model.add(Dense(<span class="dv">2</span>, activation<span class="op">=</span><span class="st">'softmax'</span>)) <span class="co"># 2 because we have cat and dog classes</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(loss<span class="op">=</span><span class="st">'categorical_crossentropy'</span>, optimizer<span class="op">=</span><span class="st">'adam'</span>, metrics<span class="op">=</span>[<span class="st">'accuracy'</span>])</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_24 (Conv2D)           (None, 220, 220, 32)      2432      
+_________________________________________________________________
+max_pooling2d_24 (MaxPooling (None, 110, 110, 32)      0         
+_________________________________________________________________
+conv2d_25 (Conv2D)           (None, 106, 106, 64)      51264     
+_________________________________________________________________
+max_pooling2d_25 (MaxPooling (None, 53, 53, 64)        0         
+_________________________________________________________________
+conv2d_26 (Conv2D)           (None, 49, 49, 128)       204928    
+_________________________________________________________________
+max_pooling2d_26 (MaxPooling (None, 24, 24, 128)       0         
+_________________________________________________________________
+conv2d_27 (Conv2D)           (None, 20, 20, 256)       819456    
+_________________________________________________________________
+max_pooling2d_27 (MaxPooling (None, 10, 10, 256)       0         
+_________________________________________________________________
+conv2d_28 (Conv2D)           (None, 6, 6, 256)         1638656   
+_________________________________________________________________
+max_pooling2d_28 (MaxPooling (None, 3, 3, 256)         0         
+_________________________________________________________________
+flatten_6 (Flatten)          (None, 2304)              0         
+_________________________________________________________________
+dense_11 (Dense)             (None, 512)               1180160   
+_________________________________________________________________
+batch_normalization_6 (Batch (None, 512)               2048      
+_________________________________________________________________
+dropout_6 (Dropout)          (None, 512)               0         
+_________________________________________________________________
+dense_12 (Dense)             (None, 2)                 1026      
+=================================================================
+Total params: 3,899,970
+Trainable params: 3,898,946
+Non-trainable params: 1,024
+_________________________________________________________________</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="b9a110f5-1c75-447b-f827-2656d6d7673d" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>history <span class="op">=</span> model.fit_generator(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    traingenerator, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    epochs<span class="op">=</span><span class="dv">20</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    validation_data <span class="op">=</span> testgenerator,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    validation_steps<span class="op">=</span> <span class="bu">len</span>(testgenerator),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    steps_per_epoch <span class="op">=</span> <span class="bu">len</span>(traingenerator)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/20
+625/625 [==============================] - 114s 182ms/step - loss: 0.7580 - acc: 0.5399 - val_loss: 0.6757 - val_acc: 0.5898
+Epoch 2/20
+625/625 [==============================] - 112s 179ms/step - loss: 0.6373 - acc: 0.6366 - val_loss: 0.6183 - val_acc: 0.6516
+Epoch 3/20
+625/625 [==============================] - 111s 178ms/step - loss: 0.5499 - acc: 0.7283 - val_loss: 0.5589 - val_acc: 0.7110
+Epoch 4/20
+625/625 [==============================] - 111s 178ms/step - loss: 0.4665 - acc: 0.7802 - val_loss: 0.4535 - val_acc: 0.7905
+Epoch 5/20
+625/625 [==============================] - 112s 179ms/step - loss: 0.3810 - acc: 0.8350 - val_loss: 0.4036 - val_acc: 0.8146
+Epoch 6/20
+625/625 [==============================] - 111s 178ms/step - loss: 0.3102 - acc: 0.8659 - val_loss: 0.3044 - val_acc: 0.8726
+Epoch 7/20
+625/625 [==============================] - 111s 178ms/step - loss: 0.2538 - acc: 0.8931 - val_loss: 0.2989 - val_acc: 0.8752
+Epoch 8/20
+625/625 [==============================] - 110s 176ms/step - loss: 0.2068 - acc: 0.9157 - val_loss: 0.3417 - val_acc: 0.8754
+Epoch 9/20
+625/625 [==============================] - 111s 177ms/step - loss: 0.1759 - acc: 0.9303 - val_loss: 0.2940 - val_acc: 0.8792
+Epoch 10/20
+625/625 [==============================] - 110s 176ms/step - loss: 0.1364 - acc: 0.9457 - val_loss: 0.2914 - val_acc: 0.8994
+Epoch 11/20
+625/625 [==============================] - 111s 177ms/step - loss: 0.1056 - acc: 0.9588 - val_loss: 0.2934 - val_acc: 0.9000
+Epoch 12/20
+625/625 [==============================] - 110s 177ms/step - loss: 0.0744 - acc: 0.9715 - val_loss: 0.3326 - val_acc: 0.9000
+Epoch 13/20
+625/625 [==============================] - 110s 177ms/step - loss: 0.0664 - acc: 0.9750 - val_loss: 0.3849 - val_acc: 0.8909
+Epoch 14/20
+625/625 [==============================] - 110s 176ms/step - loss: 0.0636 - acc: 0.9772 - val_loss: 0.3531 - val_acc: 0.9054
+Epoch 15/20
+625/625 [==============================] - 110s 176ms/step - loss: 0.0477 - acc: 0.9820 - val_loss: 0.3527 - val_acc: 0.9012
+Epoch 16/20
+625/625 [==============================] - 110s 177ms/step - loss: 0.0437 - acc: 0.9849 - val_loss: 0.4422 - val_acc: 0.8774
+Epoch 17/20
+625/625 [==============================] - 110s 177ms/step - loss: 0.0539 - acc: 0.9809 - val_loss: 0.5910 - val_acc: 0.8271
+Epoch 18/20
+625/625 [==============================] - 110s 176ms/step - loss: 0.0533 - acc: 0.9806 - val_loss: 0.5047 - val_acc: 0.8786
+Epoch 19/20
+625/625 [==============================] - 111s 178ms/step - loss: 0.0252 - acc: 0.9909 - val_loss: 0.4095 - val_acc: 0.9078
+Epoch 20/20
+625/625 [==============================] - 111s 178ms/step - loss: 0.0290 - acc: 0.9897 - val_loss: 0.3844 - val_acc: 0.9058</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="0ea71bcf-9e6c-4c4b-85fd-ef91b764367a" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plt.plot(history.history[<span class="st">'acc'</span>])</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plt.plot(history.history[<span class="st">'val_acc'</span>])</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Model accuracy'</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Accuracy'</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'Train'</span>, <span class="st">'Test'</span>], loc<span class="op">=</span><span class="st">'upper left'</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Lesson5-Image_classification_in_keras_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-outputid="4d65d5d3-56ea-4817-f793-2091f52242d3" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plt.plot(history.history[<span class="st">'loss'</span>]) </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>plt.plot(history.history[<span class="st">'val_loss'</span>]) </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Model loss'</span>) </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>) </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>) </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.legend([<span class="st">'Train'</span>, <span class="st">'Test'</span>], loc<span class="op">=</span><span class="st">'upper left'</span>) </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Lesson5-Image_classification_in_keras_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-outputid="bdc3d5c9-3aa8-4856-c791-44ad22048f5f" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Encoder dictionary created by keras</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>traingenerator.class_indices</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="67">
+<pre><code>{'cat': 0, 'dog': 1}</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="9786f8e7-1201-45e4-f859-1621f25d9e05" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> (traingenerator.class_indices)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> <span class="bu">dict</span>((v,k) <span class="cf">for</span> k,v <span class="kw">in</span> labels.items())</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{0: 'cat', 1: 'dog'}</code></pre>
+</div>
+</div>
+<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> img_show(image):</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  b,g,r <span class="op">=</span> cv2.split(image)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  image <span class="op">=</span> cv2.merge((r,g,b))</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  plt.imshow(image)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  plt.show()</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test(model,image_path):</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  img <span class="op">=</span> cv2.imread(image_path)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  img <span class="op">=</span> img_show(img)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  img <span class="op">=</span> cv2.resize(img,(<span class="dv">224</span>,<span class="dv">224</span>))</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  img <span class="op">=</span> np.reshape(img,(<span class="dv">1</span>,<span class="dv">224</span>,<span class="dv">224</span>,<span class="dv">3</span>))</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  img <span class="op">=</span> img<span class="op">/</span><span class="fl">255.0</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  prediction <span class="op">=</span> model.predict(img)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  prediction <span class="op">=</span> np.argmax(prediction)</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  labels <span class="op">=</span> (traingenerator.class_indices)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  labels <span class="op">=</span> <span class="bu">dict</span>((v,k) <span class="cf">for</span> k,v <span class="kw">in</span> labels.items())</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> labels[prediction]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="bae89323-2f64-446c-b2a4-ab82554aee72" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'predicted label is:'</span> , test(model,<span class="st">'/content/download.jfif'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Lesson5-Image_classification_in_keras_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>predicted label is: cat</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
