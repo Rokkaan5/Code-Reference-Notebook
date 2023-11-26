@@ -64,8 +64,9 @@ permalink: /CUB/NeuralNetworks
 
 [One Assignment - Two Parts:](JK-HW.md#module-2) 
 
-- Assignment 2 - Part 1: One Layer NN with One Output
-- Assignment 2 - Part 2: Multinomial NN with Softmax, CCE, and One-Hot Encoding
+- Assignment 2 
+    - Part 1: One Layer NN with One Output
+    - Part 2: Multinomial NN with Softmax, CCE, and One-Hot Encoding
 
 ## Topics
 
@@ -152,3 +153,10 @@ Extras:
     - Advanced Sentiment Analysis with Glove Embedding 
 
 [One Assignment - Five parts:](JK-HW.md#module-3) 
+
+- Assignment 3 
+    - Part 1: ANNs in Keras
+    - Part 2: Use TF/Keras to Create a CNN
+    - (Part 3: Illustrate the processes for cross-correlation with a fitler of kernels... (**No coding**))
+    - Part 4: Use TF/Keras to Create both an RNN and an LSTM and Compare Results
+    - Part 5: Type out the back propagation derivatives for $\frac{\partial L}{\partial U}$
