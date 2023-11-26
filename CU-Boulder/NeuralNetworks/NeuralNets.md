@@ -10,6 +10,7 @@ permalink: /CUB/NeuralNetworks
 
 - [Professor Gates' Code Examples](Prof-Code-Ex.md)
 - [Jasmine's Homework Submissions](JK-HW.md)
+- [Other course resources](other_resources.md)
 
 # Module 1: Intro to NN and Logistic Regression
 
