@@ -27,7 +27,14 @@ Case studies, student presentations, etc.
 ## Case Studies
 
 - Case Study 4
-- Case Study 5
+- Case Study 5 (my group)
+    - No project code, but here are notebooks from presentation is based on
+        - Lesson 1
+        - Lesson 2
+        - Lesson 3
+        - Lesson 4: Neural Networks in Keras
+            - [JK edited](CaseStudy5/Lesson4-Neuralnetworkkeras_plusJK.html)
+        - [Lesson 5: Image Classification in Keras](CaseStudy5/Lesson5-Image_classification_in_keras.html)
 - Case Study 6
 
 ## Other
