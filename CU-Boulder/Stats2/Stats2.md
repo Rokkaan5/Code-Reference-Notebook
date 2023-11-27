@@ -112,4 +112,18 @@ permalink: /CUB/StatII
 
 - Model Selection in R
 
-**Assignment**
+**[Assignment](homeworks.md#unit-5-model-selection-and-collinearity)**
+
+- HW6
+
+
+# Unit 6: Generalized Linear Models
+
+## Resources
+
+**[Lecture material](class_code.md#unit-6-generalized-linear-models)**
+
+
+**[Assignment](homeworks.md#unit-6-generalized-linear-models)**
+
+- HW7

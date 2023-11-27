@@ -35,3 +35,6 @@ All lecture code (and posted solutions) for [STAT II](Stats2.md) at [CU Boulder]
 
 - [Model Selection in R](lecture_code/Unit5/Unit5-Code-Model_Selection_in_R.html)
     - [Solutions posted by Professor](lecture_code/Unit5/Unit5-Code-Model_Selection_in_R_Solutions.html)
+
+# Unit 6: Generalized Linear Models
+
