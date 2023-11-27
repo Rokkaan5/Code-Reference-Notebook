@@ -102,10 +102,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#build-model" id="toc-build-model" class="nav-link" data-scroll-target="#build-model">Build model</a></li>
   <li><a href="#train-model" id="toc-train-model" class="nav-link" data-scroll-target="#train-model">Train Model</a></li>
-  <li><a href="#evaluate-model" id="toc-evaluate-model" class="nav-link" data-scroll-target="#evaluate-model">Evaluate Model</a>
+  <li><a href="#evaluate-model" id="toc-evaluate-model" class="nav-link" data-scroll-target="#evaluate-model">Evaluate Model</a></li>
+  <li><a href="#loss-accuracy-vs.-epochs-plots" id="toc-loss-accuracy-vs.-epochs-plots" class="nav-link" data-scroll-target="#loss-accuracy-vs.-epochs-plots">Loss &amp; Accuracy vs.&nbsp;Epochs plots</a>
   <ul class="collapse">
   <li><a href="#test-model-with-predictions" id="toc-test-model-with-predictions" class="nav-link" data-scroll-target="#test-model-with-predictions">Test Model with predictions</a></li>
   </ul></li>
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">Confusion Matrix</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -164,10 +166,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>When you submit, you will submit your code and you Word Doc. Please only use .py or Jupyter for code and ONLY .docx for the Word Doc.</p>
 <hr>
 <p>JK answers:</p>
-</section>
-</section>
-<section id="data-preprocessing-cleaning-etc." class="level1">
-<h1>Data (Preprocessing, cleaning, etc.)</h1>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#libraries</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
@@ -186,11 +184,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>2023-11-26 22:33:54.884709: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2023-11-26 22:33:54.977311: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+<pre><code>2023-11-26 23:09:29.532997: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-11-26 23:09:29.599826: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.</code></pre>
 </div>
 </div>
+</section>
+</section>
+<section id="data-preprocessing-cleaning-etc." class="level1">
+<h1>Data (Preprocessing, cleaning, etc.)</h1>
 <section id="load-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-data">Load Data</h2>
 <div class="cell" data-execution_count="2">
@@ -201,8 +203,66 @@ To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI
 <section id="eda" class="level2">
 <h2 class="anchored" data-anchor-id="eda">EDA</h2>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X_train[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X_train[:<span class="dv">6</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>array([[[0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        ...,
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0]],
+
+       [[0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        ...,
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0]],
+
+       [[0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        ...,
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0]],
+
+       [[0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        ...,
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0]],
+
+       [[0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        ...,
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0]],
+
+       [[0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        ...,
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0]]], dtype=uint8)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y_train[:<span class="dv">6</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>array([5, 0, 4, 1, 9, 2], dtype=uint8)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X_train[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>array([[  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
           0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
           0,   0],
@@ -289,28 +349,28 @@ To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI
           0,   0]], dtype=uint8)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(X_train[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;matplotlib.image.AxesImage at 0x7fe25d7e5f90&gt;</code></pre>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(X_train[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7fe4ae3ff710&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="A3_Part1_JasmineKobayashi_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+<p><img src="A3_Part1_JasmineKobayashi_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
 </div>
 </div>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>y_train[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>y_train[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>5</code></pre>
 </div>
 </div>
 <section id="data-shapes" class="level3">
 <h3 class="anchored" data-anchor-id="data-shapes">Data Shapes</h3>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_train shape:"</span>,X_train.shape)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_train shape:"</span>,y_train.shape)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_test shape:"</span>,X_test.shape)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_test shape:"</span>,y_test.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_train shape:"</span>,X_train.shape)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_train shape:"</span>,y_train.shape)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_test shape:"</span>,X_test.shape)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_test shape:"</span>,y_test.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>X_train shape: (60000, 28, 28)
 y_train shape: (60000,)
@@ -318,9 +378,9 @@ X_test shape: (10000, 28, 28)
 y_test shape: (10000,)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>np.unique(y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>np.unique(y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], dtype=uint8)</code></pre>
 </div>
 </div>
@@ -359,25 +419,25 @@ x' &amp;= \frac{x - a_{\text{min}}}{a_{\text{max}} - a_{\text{min}}} \\
 \end{align*}\]</span></p>
 <p>The above assumes the minimum value in the data is zero, but still keeps some generalization by not assuming the max value is always 255.</p>
 <p>(I’m guessing it may be safe to assume most image data that follows this simplification have max values of 255, but I still wanted to keep some flexibility. I have started to feel uncomfortable hard coding every little thing.)</p>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check min and max values</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_train min:"</span>, X_train.<span class="bu">min</span>())</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_train max:"</span>,X_train.<span class="bu">max</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check min and max values</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_train min:"</span>, X_train.<span class="bu">min</span>())</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_train max:"</span>,X_train.<span class="bu">max</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>X_train min: 0
 X_train max: 255</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> X_train.<span class="bu">min</span>() <span class="op">==</span> <span class="dv">0</span>   <span class="co"># the following min-max normlization is only effective if the minimum value in the data is zero</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># min-max scale from 0 to 1 (as long as original min value was zero)</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>X_train, X_test <span class="op">=</span> X_train<span class="op">/</span>X_train.<span class="bu">max</span>(), X_test<span class="op">/</span>X_train.<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> X_train.<span class="bu">min</span>() <span class="op">==</span> <span class="dv">0</span>   <span class="co"># the following min-max normlization is only effective if the minimum value in the data is zero</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># min-max scale from 0 to 1 (as long as original min value was zero)</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>X_train, X_test <span class="op">=</span> X_train<span class="op">/</span>X_train.<span class="bu">max</span>(), X_test<span class="op">/</span>X_train.<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preview scaling</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>X_train[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preview scaling</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>X_train[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>array([[0.        , 0.        , 0.        , 0.        , 0.        ,
         0.        , 0.        , 0.        , 0.        , 0.        ,
         0.        , 0.        , 0.        , 0.        , 0.        ,
@@ -561,19 +621,19 @@ X_train max: 255</code></pre>
 </ul>
 <section id="build-model" class="level2">
 <h2 class="anchored" data-anchor-id="build-model">Build model</h2>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct model</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>NN_Model <span class="op">=</span> tf.keras.models.Sequential([</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Flatten(input_shape<span class="op">=</span>(<span class="dv">28</span>, <span class="dv">28</span>)),</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dense(<span class="dv">128</span>, activation<span class="op">=</span><span class="st">'relu'</span>), </span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dense(<span class="dv">64</span>, activation<span class="op">=</span><span class="st">'relu'</span>), </span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dropout(<span class="fl">0.2</span>),                   </span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">'softmax'</span>) </span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>NN_Model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct model</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>NN_Model <span class="op">=</span> tf.keras.models.Sequential([</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Flatten(input_shape<span class="op">=</span>(<span class="dv">28</span>, <span class="dv">28</span>)),</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dense(<span class="dv">128</span>, activation<span class="op">=</span><span class="st">'relu'</span>), </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dense(<span class="dv">64</span>, activation<span class="op">=</span><span class="st">'relu'</span>), </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dropout(<span class="fl">0.2</span>),                   </span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">'softmax'</span>) </span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>NN_Model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Model: "sequential"
 _________________________________________________________________
@@ -596,179 +656,188 @@ Non-trainable params: 0
 _________________________________________________________________</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>2023-11-26 22:33:59.699668: E tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:266] failed call to cuInit: UNKNOWN ERROR (100)</code></pre>
+<pre><code>2023-11-26 23:09:33.900861: E tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:266] failed call to cuInit: UNKNOWN ERROR (100)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compile model</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>NN_Model.<span class="bu">compile</span>(loss<span class="op">=</span><span class="st">"sparse_categorical_crossentropy"</span>,</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                 metrics<span class="op">=</span>[<span class="st">"accuracy"</span>],</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                 optimizer<span class="op">=</span><span class="st">'adam'</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                 )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compile model</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>NN_Model.<span class="bu">compile</span>(loss<span class="op">=</span><span class="st">"sparse_categorical_crossentropy"</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                 metrics<span class="op">=</span>[<span class="st">"accuracy"</span>],</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                 optimizer<span class="op">=</span><span class="st">'adam'</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                 )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="train-model" class="level2">
 <h2 class="anchored" data-anchor-id="train-model">Train Model</h2>
-<div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>hist <span class="op">=</span> NN_Model.fit(X_train,y_train, epochs<span class="op">=</span><span class="dv">30</span>, validation_data<span class="op">=</span>(X_test,y_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>hist <span class="op">=</span> NN_Model.fit(X_train,y_train, epochs<span class="op">=</span><span class="dv">30</span>, validation_data<span class="op">=</span>(X_test,y_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch 1/30
-1875/1875 [==============================] - 7s 3ms/step - loss: 0.2829 - accuracy: 0.9168 - val_loss: 0.1191 - val_accuracy: 0.9645
+1875/1875 [==============================] - 10s 5ms/step - loss: 0.2868 - accuracy: 0.9153 - val_loss: 0.1303 - val_accuracy: 0.9582
 Epoch 2/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.1242 - accuracy: 0.9632 - val_loss: 0.0975 - val_accuracy: 0.9708
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.1243 - accuracy: 0.9631 - val_loss: 0.1012 - val_accuracy: 0.9689
 Epoch 3/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0879 - accuracy: 0.9731 - val_loss: 0.0813 - val_accuracy: 0.9750
+1875/1875 [==============================] - 7s 4ms/step - loss: 0.0890 - accuracy: 0.9730 - val_loss: 0.0836 - val_accuracy: 0.9746
 Epoch 4/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0675 - accuracy: 0.9786 - val_loss: 0.0874 - val_accuracy: 0.9744
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0702 - accuracy: 0.9784 - val_loss: 0.0844 - val_accuracy: 0.9742
 Epoch 5/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0578 - accuracy: 0.9821 - val_loss: 0.0782 - val_accuracy: 0.9767
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0561 - accuracy: 0.9820 - val_loss: 0.0875 - val_accuracy: 0.9750
 Epoch 6/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0459 - accuracy: 0.9856 - val_loss: 0.0729 - val_accuracy: 0.9799
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0479 - accuracy: 0.9851 - val_loss: 0.0856 - val_accuracy: 0.9759
 Epoch 7/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0423 - accuracy: 0.9863 - val_loss: 0.0821 - val_accuracy: 0.9775
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0421 - accuracy: 0.9860 - val_loss: 0.0809 - val_accuracy: 0.9776
 Epoch 8/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0339 - accuracy: 0.9891 - val_loss: 0.0930 - val_accuracy: 0.9773
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0365 - accuracy: 0.9886 - val_loss: 0.0857 - val_accuracy: 0.9771
 Epoch 9/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0320 - accuracy: 0.9891 - val_loss: 0.0865 - val_accuracy: 0.9793
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0316 - accuracy: 0.9899 - val_loss: 0.0925 - val_accuracy: 0.9761
 Epoch 10/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0269 - accuracy: 0.9910 - val_loss: 0.0880 - val_accuracy: 0.9797
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0277 - accuracy: 0.9911 - val_loss: 0.0979 - val_accuracy: 0.9771
 Epoch 11/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0256 - accuracy: 0.9912 - val_loss: 0.0841 - val_accuracy: 0.9799
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0257 - accuracy: 0.9918 - val_loss: 0.0845 - val_accuracy: 0.9795
 Epoch 12/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0226 - accuracy: 0.9927 - val_loss: 0.0894 - val_accuracy: 0.9809
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0241 - accuracy: 0.9920 - val_loss: 0.0902 - val_accuracy: 0.9791
 Epoch 13/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0231 - accuracy: 0.9923 - val_loss: 0.0987 - val_accuracy: 0.9809
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0210 - accuracy: 0.9930 - val_loss: 0.0987 - val_accuracy: 0.9784
 Epoch 14/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0208 - accuracy: 0.9932 - val_loss: 0.1132 - val_accuracy: 0.9759
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0196 - accuracy: 0.9935 - val_loss: 0.1059 - val_accuracy: 0.9777
 Epoch 15/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0184 - accuracy: 0.9939 - val_loss: 0.1135 - val_accuracy: 0.9770
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0192 - accuracy: 0.9934 - val_loss: 0.1158 - val_accuracy: 0.9770
 Epoch 16/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0172 - accuracy: 0.9942 - val_loss: 0.1396 - val_accuracy: 0.9770
+1875/1875 [==============================] - 7s 4ms/step - loss: 0.0190 - accuracy: 0.9933 - val_loss: 0.1338 - val_accuracy: 0.9763
 Epoch 17/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0166 - accuracy: 0.9946 - val_loss: 0.1394 - val_accuracy: 0.9742
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0159 - accuracy: 0.9948 - val_loss: 0.1175 - val_accuracy: 0.9766
 Epoch 18/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0161 - accuracy: 0.9948 - val_loss: 0.1063 - val_accuracy: 0.9805
+1875/1875 [==============================] - 7s 4ms/step - loss: 0.0166 - accuracy: 0.9948 - val_loss: 0.1250 - val_accuracy: 0.9766
 Epoch 19/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0147 - accuracy: 0.9951 - val_loss: 0.1144 - val_accuracy: 0.9805
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0140 - accuracy: 0.9954 - val_loss: 0.1031 - val_accuracy: 0.9809
 Epoch 20/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0151 - accuracy: 0.9950 - val_loss: 0.1208 - val_accuracy: 0.9784
+1875/1875 [==============================] - 7s 4ms/step - loss: 0.0152 - accuracy: 0.9950 - val_loss: 0.1167 - val_accuracy: 0.9801
 Epoch 21/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0138 - accuracy: 0.9954 - val_loss: 0.1187 - val_accuracy: 0.9806
+1875/1875 [==============================] - 7s 4ms/step - loss: 0.0155 - accuracy: 0.9948 - val_loss: 0.1155 - val_accuracy: 0.9788
 Epoch 22/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0131 - accuracy: 0.9956 - val_loss: 0.1282 - val_accuracy: 0.9793
+1875/1875 [==============================] - 7s 4ms/step - loss: 0.0127 - accuracy: 0.9959 - val_loss: 0.1212 - val_accuracy: 0.9792
 Epoch 23/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0134 - accuracy: 0.9955 - val_loss: 0.1351 - val_accuracy: 0.9797
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0123 - accuracy: 0.9958 - val_loss: 0.1382 - val_accuracy: 0.9786
 Epoch 24/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0127 - accuracy: 0.9960 - val_loss: 0.1299 - val_accuracy: 0.9808
+1875/1875 [==============================] - 6s 3ms/step - loss: 0.0159 - accuracy: 0.9952 - val_loss: 0.1314 - val_accuracy: 0.9775
 Epoch 25/30
-1875/1875 [==============================] - 6s 3ms/step - loss: 0.0117 - accuracy: 0.9965 - val_loss: 0.1388 - val_accuracy: 0.9803
+1875/1875 [==============================] - 8s 4ms/step - loss: 0.0136 - accuracy: 0.9957 - val_loss: 0.1300 - val_accuracy: 0.9800
 Epoch 26/30
-1875/1875 [==============================] - 7s 4ms/step - loss: 0.0140 - accuracy: 0.9958 - val_loss: 0.1366 - val_accuracy: 0.9816
+1875/1875 [==============================] - 9s 5ms/step - loss: 0.0118 - accuracy: 0.9959 - val_loss: 0.1356 - val_accuracy: 0.9806
 Epoch 27/30
-1875/1875 [==============================] - 8s 4ms/step - loss: 0.0111 - accuracy: 0.9964 - val_loss: 0.1301 - val_accuracy: 0.9820
+1875/1875 [==============================] - 8s 4ms/step - loss: 0.0101 - accuracy: 0.9966 - val_loss: 0.1322 - val_accuracy: 0.9804
 Epoch 28/30
-1875/1875 [==============================] - 8s 4ms/step - loss: 0.0118 - accuracy: 0.9966 - val_loss: 0.1460 - val_accuracy: 0.9784
+1875/1875 [==============================] - 8s 4ms/step - loss: 0.0139 - accuracy: 0.9957 - val_loss: 0.1315 - val_accuracy: 0.9790
 Epoch 29/30
-1875/1875 [==============================] - 8s 4ms/step - loss: 0.0118 - accuracy: 0.9963 - val_loss: 0.1378 - val_accuracy: 0.9804
+1875/1875 [==============================] - 8s 4ms/step - loss: 0.0100 - accuracy: 0.9967 - val_loss: 0.1446 - val_accuracy: 0.9797
 Epoch 30/30
-1875/1875 [==============================] - 8s 4ms/step - loss: 0.0104 - accuracy: 0.9967 - val_loss: 0.1466 - val_accuracy: 0.9796</code></pre>
+1875/1875 [==============================] - 10s 5ms/step - loss: 0.0117 - accuracy: 0.9961 - val_loss: 0.1561 - val_accuracy: 0.9780</code></pre>
 </div>
 </div>
 </section>
 <section id="evaluate-model" class="level2">
 <h2 class="anchored" data-anchor-id="evaluate-model">Evaluate Model</h2>
-<div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accuracy plot</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'accuracy'</span>], label<span class="op">=</span><span class="st">'accuracy'</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'val_accuracy'</span>], label <span class="op">=</span> <span class="st">'val_accuracy'</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Accuracy'</span>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.ylim([0.5, 1])</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
-<pre><code>&lt;matplotlib.legend.Legend at 0x7fe234060c50&gt;</code></pre>
+</section>
+<section id="loss-accuracy-vs.-epochs-plots" class="level2">
+<h2 class="anchored" data-anchor-id="loss-accuracy-vs.-epochs-plots">Loss &amp; Accuracy vs.&nbsp;Epochs plots</h2>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accuracy plot</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'accuracy'</span>], label<span class="op">=</span><span class="st">'accuracy'</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'val_accuracy'</span>], label <span class="op">=</span> <span class="st">'val_accuracy'</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Accuracy'</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"NN HW3-Part1 Accuracy over all Epochs"</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.ylim([0.5, 1])</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7fe446a36d90&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="A3_Part1_JasmineKobayashi_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+<p><img src="A3_Part1_JasmineKobayashi_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
 </div>
 </div>
-<div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loss plot</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'loss'</span>], label<span class="op">=</span><span class="st">'loss'</span>)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'val_loss'</span>], label <span class="op">=</span> <span class="st">'val_loss'</span>)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>)</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.ylim([0.5, 1])</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>&lt;matplotlib.legend.Legend at 0x7fe1f8240d90&gt;</code></pre>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loss plot</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'loss'</span>], label<span class="op">=</span><span class="st">'loss'</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'val_loss'</span>], label <span class="op">=</span> <span class="st">'val_loss'</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"NN HW3-Part1 Loss over all Epochs"</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.ylim([0.5, 1])</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7fe446aaf690&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="A3_Part1_JasmineKobayashi_files/figure-html/cell-16-output-2.png" class="img-fluid"></p>
+<p><img src="A3_Part1_JasmineKobayashi_files/figure-html/cell-18-output-2.png" class="img-fluid"></p>
 </div>
 </div>
-<div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>Eval_Loss, Eval_Accuracy <span class="op">=</span> NN_Model.evaluate(X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>Eval_Loss, Eval_Accuracy <span class="op">=</span> NN_Model.evaluate(X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>313/313 [==============================] - 1s 2ms/step - loss: 0.1466 - accuracy: 0.9796</code></pre>
+<pre><code>313/313 [==============================] - 1s 2ms/step - loss: 0.1561 - accuracy: 0.9780</code></pre>
 </div>
 </div>
 <section id="test-model-with-predictions" class="level3">
 <h3 class="anchored" data-anchor-id="test-model-with-predictions">Test Model with predictions</h3>
-<div class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> NN_Model.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> NN_Model.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>313/313 [==============================] - 1s 2ms/step</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview results</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">0</span>   <span class="co"># index to check</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Prediction for X_test[</span><span class="sc">{}</span><span class="st">]:"</span>.<span class="bu">format</span>(i),pred[i])</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st"> ArgMax (final prediction) for X_test[</span><span class="sc">{}</span><span class="st">]:"</span>.<span class="bu">format</span>(i),np.argmax(pred[i]))</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st"> Label for X_test[</span><span class="sc">{}</span><span class="st">] (y_test[</span><span class="sc">{}</span><span class="st">]):"</span>.<span class="bu">format</span>(i,i), y_test[i])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview results</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">0</span>   <span class="co"># index to check</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Prediction for X_test[</span><span class="sc">{}</span><span class="st">]:"</span>.<span class="bu">format</span>(i),pred[i])</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st"> ArgMax (final prediction) for X_test[</span><span class="sc">{}</span><span class="st">]:"</span>.<span class="bu">format</span>(i),np.argmax(pred[i]))</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st"> Label for X_test[</span><span class="sc">{}</span><span class="st">] (y_test[</span><span class="sc">{}</span><span class="st">]):"</span>.<span class="bu">format</span>(i,i), y_test[i])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Prediction for X_test[0]: [1.7696639e-22 2.3388281e-14 3.9487399e-10 8.8337445e-12 4.2252168e-15
- 2.5769600e-21 2.3710569e-28 1.0000000e+00 5.3704527e-15 4.7247388e-12]
+<pre><code>Prediction for X_test[0]: [6.3854554e-23 2.2880131e-20 1.7975410e-20 1.1580782e-17 3.0040163e-20
+ 1.0337131e-23 3.2074157e-32 1.0000000e+00 1.9476907e-24 2.5626674e-13]
 
  ArgMax (final prediction) for X_test[0]: 7
 
  Label for X_test[0] (y_test[0]): 7</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>final_pred <span class="op">=</span> np.squeeze(np.array(pred.argmax(axis<span class="op">=</span><span class="dv">1</span>)))   <span class="co"># final prediction (arg-max of pred)</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(final_pred,y_test)</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="confusion-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="confusion-matrix">Confusion Matrix</h2>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>final_pred <span class="op">=</span> np.squeeze(np.array(pred.argmax(axis<span class="op">=</span><span class="dv">1</span>)))   <span class="co"># final prediction (arg-max of pred)</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(final_pred,y_test)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[ 970    0    2    0    2    1    4    0    1    1]
- [   0 1126    4    0    1    1    2    8    0    2]
- [   0    0 1003    0    3    0    1    4    1    0]
- [   1    3    4  999    0    8    1    1    7   11]
- [   0    0    3    0  954    1    4    1    3   11]
- [   0    1    1    2    0  872    2    0    2    3]
- [   4    1    2    0    4    1  943    0    3    0]
- [   1    1    6    3    1    1    0 1004    4    6]
- [   3    3    6    0    3    5    1    2  951    1]
- [   1    0    1    6   14    2    0    8    2  974]]</code></pre>
+<pre><code>[[ 974    1    4    3    1    4    5    1   12    0]
+ [   1 1126    1    0    1    0    3    1    0    3]
+ [   0    3 1015    9    3    0    2    9    9    1]
+ [   0    0    2  979    0    5    1    1    3    0]
+ [   0    0    1    0  957    1    3    0    3    6]
+ [   2    0    0    8    0  874    7    0   11    2]
+ [   1    2    1    0    5    3  935    0    3    1]
+ [   0    1    6    5    2    0    0 1003    2    2]
+ [   0    2    1    3    1    2    2    2  924    1]
+ [   2    0    1    3   12    3    0   11    7  993]]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">8</span>)) </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>sns.heatmap(cm, annot<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">'g'</span>, ax<span class="op">=</span>ax, annot_kws<span class="op">=</span>{<span class="st">'size'</span>: <span class="dv">18</span>})</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'True labels'</span>) </span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Predicted labels'</span>)</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Confusion Matrix: NN'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
-<pre><code>Text(0.5, 1.0, 'Confusion Matrix: NN')</code></pre>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">8</span>)) </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>sns.heatmap(cm, annot<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">'g'</span>, ax<span class="op">=</span>ax, annot_kws<span class="op">=</span>{<span class="st">'size'</span>: <span class="dv">18</span>})</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'True labels'</span>) </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Predicted labels'</span>)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Confusion Matrix: NN HW3-Part 1'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>Text(0.5, 1.0, 'Confusion Matrix: NN HW3-Part 1')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="A3_Part1_JasmineKobayashi_files/figure-html/cell-21-output-2.png" class="img-fluid"></p>
+<p><img src="A3_Part1_JasmineKobayashi_files/figure-html/cell-23-output-2.png" class="img-fluid"></p>
 </div>
 </div>
-</section>
 </section>
 </section>
 
