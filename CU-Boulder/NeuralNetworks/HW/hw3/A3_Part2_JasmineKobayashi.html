@@ -82,8 +82,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#data" id="toc-data" class="nav-link active" data-scroll-target="#data">Data:</a></li>
   <li><a href="#requirements" id="toc-requirements" class="nav-link" data-scroll-target="#requirements">Requirements:</a></li>
-  <li><a href="#data-1" id="toc-data-1" class="nav-link" data-scroll-target="#data-1">Data</a></li>
-  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a></li>
+  <li><a href="#data-1" id="toc-data-1" class="nav-link" data-scroll-target="#data-1">Data</a>
+  <ul class="collapse">
+  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load Data</a></li>
+  <li><a href="#quick-eda" id="toc-quick-eda" class="nav-link" data-scroll-target="#quick-eda">Quick EDA</a></li>
+  </ul></li>
+  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a>
+  <ul class="collapse">
+  <li><a href="#build-model" id="toc-build-model" class="nav-link" data-scroll-target="#build-model">Build Model</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -155,28 +162,165 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>2023-11-26 22:45:07.274762: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2023-11-26 22:45:07.320694: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+<pre><code>2023-11-27 00:00:40.772371: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-11-27 00:00:40.937803: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.</code></pre>
 </div>
 </div>
 </section>
 <section id="data-1" class="level1">
 <h1>Data</h1>
+<section id="load-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-data">Load Data</h2>
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Data <span class="op">=</span> tf.keras.datasets.mnist</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>(X_train, y_train),(X_test, y_test) <span class="op">=</span> Data.load_data()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="quick-eda" class="level2">
+<h2 class="anchored" data-anchor-id="quick-eda">Quick EDA</h2>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Min-max normalize data</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> X_train.<span class="bu">min</span>() <span class="op">==</span> <span class="dv">0</span>   <span class="co"># the following min-max normlization is only effective if the minimum value in the data is zero</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># min-max scale from 0 to 1 (as long as original min value was zero)</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>X_train, X_test <span class="op">=</span> X_train<span class="op">/</span>X_train.<span class="bu">max</span>(), X_test<span class="op">/</span>X_train.<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X_train[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>array([[  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0,  67, 232,  39,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,  62,  81,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0, 120, 180,  39,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0, 126, 163,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   2, 153, 210,  40,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0, 220, 163,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,  27, 254, 162,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0, 222, 163,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0, 183, 254, 125,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,  46, 245, 163,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0, 198, 254,  56,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0, 120, 254, 163,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,  23, 231, 254,  29,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0, 159, 254, 120,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0, 163, 254, 216,  16,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0, 159, 254,  67,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,  14,  86, 178, 248, 254,  91,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0, 159, 254,  85,   0,   0,   0,  47,  49, 116, 144,
+        150, 241, 243, 234, 179, 241, 252,  40,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0, 150, 253, 237, 207, 207, 207, 253, 254, 250, 240,
+        198, 143,  91,  28,   5, 233, 250,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0, 119, 177, 177, 177, 177, 177,  98,  56,   0,
+          0,   0,   0,   0, 102, 254, 220,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0, 169, 254, 137,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0, 169, 254,  57,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0, 169, 254,  57,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0, 169, 255,  94,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0, 169, 254,  96,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0, 169, 254, 153,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0, 169, 255, 153,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,  96, 254, 153,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0],
+       [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+          0,   0]], dtype=uint8)</code></pre>
 </div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(X_train[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7fb27c0e0dd0&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A3_Part2_JasmineKobayashi_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>y_train[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>5</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_train shape:"</span>,X_train.shape)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_train shape:"</span>,y_train.shape)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_test shape:"</span>,X_test.shape)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_test shape:"</span>,y_test.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>X_train shape: (60000, 28, 28)
+y_train shape: (60000,)
+X_test shape: (10000, 28, 28)
+y_test shape: (10000,)</code></pre>
+</div>
+</div>
+<p>(See Part1 for more extensive EDA and detailed info about Min-Max normalization formula simplification.)</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Min-max normalize data</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> X_train.<span class="bu">min</span>() <span class="op">==</span> <span class="dv">0</span>   <span class="co"># the following min-max normlization is only effective if the minimum value in the data is zero</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># min-max scale from 0 to 1 (as long as original min value was zero)</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>X_train, X_test <span class="op">=</span> X_train<span class="op">/</span>X_train.<span class="bu">max</span>(), X_test<span class="op">/</span>X_train.<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 <section id="model" class="level1">
 <h1>Model</h1>
+<p><strong>Reminder of model requirements:</strong></p>
+<ul>
+<li>Use the <code>Sequential</code> Model</li>
+<li>Have at least two <code>Conv2D</code> layers with all the needed parameters, shapes, number of filters, and activation.</li>
+<li>Have at least two <code>MaxPooling</code> layers</li>
+<li>You will need at least <code>Flatten</code> Layer and one <code>Dense</code> Layer.</li>
+<li>Use the appropriate loss function, optimizer, and metrics.</li>
+<li>Include the first two and last two epoch runs.</li>
+<li>Include a visualization for the Loss over all epochs</li>
+<li>Include a confusion matrix</li>
+</ul>
+<section id="build-model" class="level2">
+<h2 class="anchored" data-anchor-id="build-model">Build Model</h2>
+</section>
 </section>
 
 </main>
