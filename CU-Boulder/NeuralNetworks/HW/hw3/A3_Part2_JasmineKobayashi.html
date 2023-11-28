@@ -89,6 +89,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a>
   <ul class="collapse">
   <li><a href="#build-model" id="toc-build-model" class="nav-link" data-scroll-target="#build-model">Build Model</a></li>
+  <li><a href="#train-model" id="toc-train-model" class="nav-link" data-scroll-target="#train-model">Train Model</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -155,8 +156,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>2023-11-27 00:00:40.772371: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2023-11-27 00:00:40.937803: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+<pre><code>2023-11-28 03:03:53.559509: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-11-28 03:03:53.669361: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.</code></pre>
 </div>
 </div>
@@ -165,6 +166,7 @@ To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI
 <h1>Data</h1>
 <section id="load-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-data">Load Data</h2>
+<p>(Using Digits MNIST again)</p>
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Data <span class="op">=</span> tf.keras.datasets.mnist</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>(X_train, y_train),(X_test, y_test) <span class="op">=</span> Data.load_data()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -264,7 +266,7 @@ To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(X_train[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;matplotlib.image.AxesImage at 0x7fb27c0e0dd0&gt;</code></pre>
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7f627250f3d0&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="A3_Part2_JasmineKobayashi_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
@@ -313,6 +315,149 @@ y_test shape: (10000,)</code></pre>
 </ul>
 <section id="build-model" class="level2">
 <h2 class="anchored" data-anchor-id="build-model">Build Model</h2>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> tf.keras.models.Sequential([</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    tf.keras.layers.Conv2D(<span class="dv">28</span>,<span class="dv">3</span>,activation<span class="op">=</span><span class="st">'relu'</span>,input_shape <span class="op">=</span> (<span class="dv">28</span>,<span class="dv">28</span>,<span class="dv">1</span>)),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    tf.keras.layers.MaxPooling2D((<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>model.add(layers.Conv2D(<span class="dv">36</span>,<span class="dv">2</span>,activation<span class="op">=</span><span class="st">'relu'</span>))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>model.add(layers.MaxPooling2D((<span class="dv">2</span>,<span class="dv">2</span>)))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>model.add(layers.Flatten())</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>model.add(layers.Dense(<span class="dv">10</span>))</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 26, 26, 28)        280       
+                                                                 
+ max_pooling2d (MaxPooling2D  (None, 13, 13, 28)       0         
+ )                                                               
+                                                                 
+ conv2d_1 (Conv2D)           (None, 12, 12, 36)        4068      
+                                                                 
+ max_pooling2d_1 (MaxPooling  (None, 6, 6, 36)         0         
+ 2D)                                                             
+                                                                 
+ flatten (Flatten)           (None, 1296)              0         
+                                                                 
+ dense (Dense)               (None, 10)                12970     
+                                                                 
+=================================================================
+Total params: 17,318
+Trainable params: 17,318
+Non-trainable params: 0
+_________________________________________________________________</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-11-28 03:04:00.328045: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:982] could not open file to read NUMA node: /sys/bus/pci/devices/0000:02:00.0/numa_node
+Your kernel may have been built without NUMA support.
+2023-11-28 03:04:00.354704: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:982] could not open file to read NUMA node: /sys/bus/pci/devices/0000:02:00.0/numa_node
+Your kernel may have been built without NUMA support.
+2023-11-28 03:04:00.354873: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:982] could not open file to read NUMA node: /sys/bus/pci/devices/0000:02:00.0/numa_node
+Your kernel may have been built without NUMA support.
+2023-11-28 03:04:00.359409: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:982] could not open file to read NUMA node: /sys/bus/pci/devices/0000:02:00.0/numa_node
+Your kernel may have been built without NUMA support.
+2023-11-28 03:04:00.359715: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:982] could not open file to read NUMA node: /sys/bus/pci/devices/0000:02:00.0/numa_node
+Your kernel may have been built without NUMA support.
+2023-11-28 03:04:00.359852: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:982] could not open file to read NUMA node: /sys/bus/pci/devices/0000:02:00.0/numa_node
+Your kernel may have been built without NUMA support.
+2023-11-28 03:04:00.709419: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:982] could not open file to read NUMA node: /sys/bus/pci/devices/0000:02:00.0/numa_node
+Your kernel may have been built without NUMA support.
+2023-11-28 03:04:00.709644: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:982] could not open file to read NUMA node: /sys/bus/pci/devices/0000:02:00.0/numa_node
+Your kernel may have been built without NUMA support.
+2023-11-28 03:04:00.709658: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1722] Could not identify NUMA node of platform GPU id 0, defaulting to 0.  Your kernel may not have been built with NUMA support.
+2023-11-28 03:04:00.709732: I tensorflow/compiler/xla/stream_executor/cuda/cuda_gpu_executor.cc:982] could not open file to read NUMA node: /sys/bus/pci/devices/0000:02:00.0/numa_node
+Your kernel may have been built without NUMA support.
+2023-11-28 03:04:00.709768: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1635] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 4096 MB memory:  -&gt; device: 0, name: NVIDIA GeForce GTX 1660 Ti with Max-Q Design, pci bus id: 0000:02:00.0, compute capability: 7.5</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compile model</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>adam <span class="op">=</span> tf.keras.optimizers.legacy.Adam(learning_rate <span class="op">=</span> <span class="fl">0.001</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># for some reason, if I don't use the code above I get a "Graph Execution Error" </span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># when I try to train the model</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(loss<span class="op">=</span>tf.keras.losses.SparseCategoricalCrossentropy(from_logits<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                 metrics<span class="op">=</span>[<span class="st">"accuracy"</span>],</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                 optimizer<span class="op">=</span> adam</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                 )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="train-model" class="level2">
+<h2 class="anchored" data-anchor-id="train-model">Train Model</h2>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>hist <span class="op">=</span> model.fit(X_train,y_train, epochs<span class="op">=</span><span class="dv">10</span>, validation_data<span class="op">=</span>(X_test,y_test))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/10
+1875/1875 [==============================] - 22s 11ms/step - loss: 0.2012 - accuracy: 0.9396 - val_loss: 0.0747 - val_accuracy: 0.9756
+Epoch 2/10
+1875/1875 [==============================] - 21s 11ms/step - loss: 0.0679 - accuracy: 0.9794 - val_loss: 0.0514 - val_accuracy: 0.9840
+Epoch 3/10
+1875/1875 [==============================] - 22s 12ms/step - loss: 0.0520 - accuracy: 0.9839 - val_loss: 0.0491 - val_accuracy: 0.9831
+Epoch 4/10
+1875/1875 [==============================] - 21s 11ms/step - loss: 0.0409 - accuracy: 0.9875 - val_loss: 0.0411 - val_accuracy: 0.9855
+Epoch 5/10
+1875/1875 [==============================] - 22s 11ms/step - loss: 0.0345 - accuracy: 0.9893 - val_loss: 0.0345 - val_accuracy: 0.9882
+Epoch 6/10
+1875/1875 [==============================] - 30s 16ms/step - loss: 0.0289 - accuracy: 0.9909 - val_loss: 0.0352 - val_accuracy: 0.9891
+Epoch 7/10
+1875/1875 [==============================] - 33s 18ms/step - loss: 0.0246 - accuracy: 0.9923 - val_loss: 0.0397 - val_accuracy: 0.9867
+Epoch 8/10
+1875/1875 [==============================] - 27s 14ms/step - loss: 0.0210 - accuracy: 0.9932 - val_loss: 0.0420 - val_accuracy: 0.9873
+Epoch 9/10
+1875/1875 [==============================] - 21s 11ms/step - loss: 0.0178 - accuracy: 0.9941 - val_loss: 0.0382 - val_accuracy: 0.9887
+Epoch 10/10
+1875/1875 [==============================] - 20s 11ms/step - loss: 0.0158 - accuracy: 0.9949 - val_loss: 0.0395 - val_accuracy: 0.9880</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-11-28 03:04:07.470210: I tensorflow/compiler/xla/stream_executor/cuda/cuda_dnn.cc:424] Loaded cuDNN version 8800
+2023-11-28 03:04:07.618264: I tensorflow/tsl/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+2023-11-28 03:04:07.644179: I tensorflow/tsl/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+2023-11-28 03:04:07.644257: W tensorflow/compiler/xla/stream_executor/gpu/asm_compiler.cc:109] Couldn't get ptxas version : FAILED_PRECONDITION: Couldn't get ptxas/nvlink version string: INTERNAL: Couldn't invoke ptxas --version
+2023-11-28 03:04:07.676397: I tensorflow/tsl/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+2023-11-28 03:04:07.676548: W tensorflow/compiler/xla/stream_executor/gpu/redzone_allocator.cc:317] INTERNAL: Failed to launch ptxas
+Relying on driver to perform ptx compilation. 
+Modify $PATH to customize ptxas location.
+This message will be only logged once.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accuracy plot</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'accuracy'</span>], label<span class="op">=</span><span class="st">'accuracy'</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'val_accuracy'</span>], label <span class="op">=</span> <span class="st">'val_accuracy'</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Accuracy'</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"NN HW3-Part2 Accuracy over all Epochs"</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.ylim([0.5, 1])</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f62445c0f50&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A3_Part2_JasmineKobayashi_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loss plot</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'loss'</span>], label<span class="op">=</span><span class="st">'loss'</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'val_loss'</span>], label <span class="op">=</span> <span class="st">'val_loss'</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"NN HW3-Part2 Loss over all Epochs"</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.ylim([0.5, 1])</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f624417fd90&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A3_Part2_JasmineKobayashi_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
+</div>
+</div>
 </section>
 </section>
 
