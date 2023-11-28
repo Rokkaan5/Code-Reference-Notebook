@@ -90,6 +90,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#build-model" id="toc-build-model" class="nav-link" data-scroll-target="#build-model">Build Model</a></li>
   <li><a href="#train-model" id="toc-train-model" class="nav-link" data-scroll-target="#train-model">Train Model</a></li>
+  <li><a href="#evaluate-model" id="toc-evaluate-model" class="nav-link" data-scroll-target="#evaluate-model">Evaluate Model</a>
+  <ul class="collapse">
+  <li><a href="#loss-accuracy-vs.-epochs-plots" id="toc-loss-accuracy-vs.-epochs-plots" class="nav-link" data-scroll-target="#loss-accuracy-vs.-epochs-plots">Loss &amp; Accuracy vs.&nbsp;Epochs plots</a></li>
+  <li><a href="#test-model-with-predictions" id="toc-test-model-with-predictions" class="nav-link" data-scroll-target="#test-model-with-predictions">Test Model with predictions</a></li>
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">Confusion Matrix</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -425,6 +431,11 @@ Modify $PATH to customize ptxas location.
 This message will be only logged once.</code></pre>
 </div>
 </div>
+</section>
+<section id="evaluate-model" class="level2">
+<h2 class="anchored" data-anchor-id="evaluate-model">Evaluate Model</h2>
+<section id="loss-accuracy-vs.-epochs-plots" class="level3">
+<h3 class="anchored" data-anchor-id="loss-accuracy-vs.-epochs-plots">Loss &amp; Accuracy vs.&nbsp;Epochs plots</h3>
 <div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accuracy plot</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plt.plot(hist.history[<span class="st">'accuracy'</span>], label<span class="op">=</span><span class="st">'accuracy'</span>)</span>
@@ -458,6 +469,60 @@ This message will be only logged once.</code></pre>
 <p><img src="A3_Part2_JasmineKobayashi_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
 </div>
 </div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Eval_Loss, Eval_Accuracy <span class="op">=</span> model.evaluate(X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>313/313 [==============================] - 2s 7ms/step - loss: 0.0395 - accuracy: 0.9880</code></pre>
+</div>
+</div>
+</section>
+<section id="test-model-with-predictions" class="level3">
+<h3 class="anchored" data-anchor-id="test-model-with-predictions">Test Model with predictions</h3>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> model.predict(X_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>313/313 [==============================] - 2s 5ms/step</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview results</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">5</span>   <span class="co"># index to check</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Prediction for X_test[</span><span class="sc">{}</span><span class="st">]:"</span>.<span class="bu">format</span>(i),pred[i])</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st"> ArgMax (final prediction) for X_test[</span><span class="sc">{}</span><span class="st">]:"</span>.<span class="bu">format</span>(i),np.argmax(pred[i]))</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st"> Label for X_test[</span><span class="sc">{}</span><span class="st">] (y_test[</span><span class="sc">{}</span><span class="st">]):"</span>.<span class="bu">format</span>(i,i), y_test[i])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Prediction for X_test[5]: [-10.8973465    8.7961035   -6.763789   -11.762037    -0.80592346
+  -7.2202244   -9.78028     -0.94046813  -1.4403772   -8.194285  ]
+
+ ArgMax (final prediction) for X_test[5]: 1
+
+ Label for X_test[5] (y_test[5]): 1</code></pre>
+</div>
+</div>
+</section>
+<section id="confusion-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="confusion-matrix">Confusion Matrix</h3>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#final predictions</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>final_pred <span class="op">=</span> np.squeeze(np.array(pred.argmax(axis<span class="op">=</span><span class="dv">1</span>)))   <span class="co"># final prediction (arg-max of pred)</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">#confusion matrix</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(final_pred,y_test)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plot</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">8</span>)) </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>sns.heatmap(cm, annot<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">'g'</span>, ax<span class="op">=</span>ax, annot_kws<span class="op">=</span>{<span class="st">'size'</span>: <span class="dv">18</span>})</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'True labels'</span>) </span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Predicted labels'</span>)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Confusion Matrix: NN HW3-Part 1'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>Text(0.5, 1.0, 'Confusion Matrix: NN HW3-Part 1')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A3_Part2_JasmineKobayashi_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
 </section>
 </section>
 
