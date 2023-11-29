@@ -57,11 +57,11 @@ Most (if not all) code made availabe through her own [website](https://gatesbolt
 
 ## Recurrent Neural Networks (RNNs) and Long Short Term Memory (LSTM)
 
-- RNN with MNIST ([Raw Code](raw_code/Module3/RNN/RNN_LSTM_MNIST.html); [Markdown](mrkdwn/Module3/RNN/RNN_LSTM_MNIST.html))
 - Simple Example (from comprehensive code) - *RNN related sections*:
     - [Simple RNN](mrkdwn/Module3/simple_ex_all.html#simplernn)
     - [RNN with Bidirectional](mrkdwn/Module3/simple_ex_all.html#rnn-with-bidirectional)
     - [LSTM](mrkdwn/Module3/simple_ex_all.html#lstm)
+- RNN with MNIST ([Raw Code](raw_code/Module3/RNN/RNN_LSTM_MNIST.html); [Markdown](mrkdwn/Module3/RNN/RNN_LSTM_MNIST.html))
 
 ## Extras:
 
