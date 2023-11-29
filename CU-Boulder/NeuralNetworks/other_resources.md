@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Neural Networks: Other class resources"
-permalink: /CUB/NeuralNetworks/ProfGatesCode
+permalink: /CUB/NeuralNetworks/other
 ---
 # [CU Boulder](../../CUB.md): [Neural Networks](NeuralNets.md)
 (Fall 2023) Neural Networks with Dr. Ami Gates at CU Boulder
