@@ -58,6 +58,14 @@ summary(lmod)
 
 ```{R}
 #YOUR CODE HERE
+glmod = glm(cbind(orings$damage,6-orings$damage) ~ temp, data = orings, 
+            family = binomial)
+
+summary(glmod)
+phat = predict(glmod, type = "response"); #phat
+r = with(orings, (damage/6 - phat)/sqrt((phat*(1-phat))/6)) #Pearson Residuals
+summary(resid(glmod, type = "deviance"))
+summary(r)
 ```
 
 ### (c) Plot the data again with the logit model.
@@ -67,6 +75,12 @@ You'll need the inverse of the logit function: $$\text{logit}(\eta) = \frac{e^\e
 
 ```{R}
 #YOUR CODE HERE
+plot(orings$temp,orings$prop, xlim = c(25,85), 
+     ylim = c(0,1), xlab = "Temp",ylab = "Prob of Damage")
+x = seq(25,85,1)
+eta = 11.66299 - 0.21623*x
+ilogit = exp(eta)/(1+exp(eta))
+lines(x, ilogit,col = "grey") #ilogit is the inverse logit transform
 ```
 
 ### (d) Now let's check the interpretation of $\widehat{\beta}_1$. Create a new temperature value of 45 and 46 degrees. Calculuate the odds of failure at 45 and 46 degrees. What is the ratio of these two odds?
@@ -82,6 +96,17 @@ Thus, an estimate of the odds ratio is $\displaystyle\frac{\widehat{o}_{46}}{\wi
 
 ```{R}
 #YOUR CODE HERE
+newdata = data.frame(temp = 45)  #chooses a value of temp 
+logodds1 = (coef(glmod)[1] + coef(glmod)[2]*newdata) #log odds of failure at temp = 45
+odds1 = exp(logodds1) #calculuate the odds...
+newdata2 = data.frame(temp = 46) #add 1... 
+
+logodds2 =(coef(glmod)[1] + coef(glmod)[2]*newdata2) #log odds of failure at temp = 46
+odds2 = exp(logodds2) #calculuate the odds...
+
+#check interpretation...
+odds2/odds1 #should equal exp(coef(glmod)[2]) #
+exp(coef(glmod)[2])
 ```
 
 ### (e) Compute confidence intervals for the model parameters "by hand".
@@ -89,6 +114,13 @@ Thus, an estimate of the odds ratio is $\displaystyle\frac{\widehat{o}_{46}}{\wi
 
 ```{R}
 #YOUR CODE HERE
+beta0CI = c(coef(glmod)[1] -qnorm(0.975)*3.29626, 
+            coef(glmod)[1] +qnorm(0.975)*3.29626)
+beta1CI = c(coef(glmod)[2] -qnorm(0.975)*0.05318, 
+            coef(glmod)[2] +qnorm(0.975)* 0.05318)
+
+beta0CI
+beta1CI
 ```
 
 ### (f) Now compute them using confint(glmod).
@@ -98,6 +130,7 @@ Notice that these intervals are slightly different; they are based on the profil
 
 ```{R}
 #YOUR CODE HERE
+confint(glmod)
 ```
 
 ### (g) Predict the probability of faulire at Temp = 45 degrees.
@@ -105,6 +138,8 @@ Notice that these intervals are slightly different; they are based on the profil
 
 ```{R}
 #YOUR CODE HERE
+pred = predict.glm(glmod, newdata, se = T, type = "response") 
+pred$fit
 ```
 
 ## Problem #2 
@@ -122,6 +157,10 @@ head(admission)
 
 ```{R}
 #YOUR CODE HERE
+admission$rank = as.factor(admission$rank)
+admission.glm = glm(admit ~ gre + gpa + rank, data = admission, family = binomial)
+summary(admission.glm)
+confint.default(admission.glm)
 ```
 
 ### (b) Construct a reduced model without the `rank` variable. Conduct the likelihood ratio test to decide whether the reduced model is sufficient. You can do this using `anova()` or `lrtest()`.
@@ -129,6 +168,9 @@ head(admission)
 
 ```{R}
 #YOUR CODE HERE
+admission.red.glm = glm(admit ~ gre + gpa, data = admission, family = binomial)
+summary(admission.red.glm)
+anova(admission.red.glm, admission.glm, test = "Chisq") #Likelihood ratio test
 ```
 
 YOUR ANSWER HERE
@@ -160,6 +202,15 @@ dim(gala)
 
 ```{R}
 #YOUR CODE HERE
+lmod = lm(Species ~ ., data = gala)
+summary(lmod)
+par(mfrow = c(2,2))
+plot(lmod)
+df = data.frame(x = fitted(lmod), y = stdres(lmod))
+ggplot(df, aes(x = x, y = y)) + 
+    geom_point() + 
+    theme_bw() + 
+    geom_hline(yintercept = 0)
 ```
 
 ### (b) Recall that a square root transformation of the response might be helpful when the nonconstant variance assumption is violated. Try this transformation.
@@ -167,6 +218,14 @@ dim(gala)
 
 ```{R}
 #YOUR CODE HERE
+lmod2 = lm(sqrt(Species) ~ ., data = gala)
+summary(lmod2)
+#par(mfrow = c(2,2)); plot(lmod2)
+df = data.frame(x = fitted(lmod2), y = stdres(lmod2))
+ggplot(df, aes(x = x, y = y)) + 
+    geom_point() + 
+    theme_bw() + 
+    geom_hline(yintercept = 0)
 ```
 
 ### (c) One issue with a transformation is that it makes interpretation less natural. Let's try a Poisson regression (with no transformation on the repsonse).
@@ -174,6 +233,15 @@ dim(gala)
 
 ```{R}
 #YOUR CODE HERE
+glmod = glm(Species ~ ., data = gala, family = poisson)
+summary(glmod)
+#par(mfrow = c(2,2)); plot(glmod)
+
+df = data.frame(x = predict(glmod, type = "link"), y = stdres(glmod))
+ggplot(df, aes(x = x, y = y)) + 
+    geom_point() + 
+    theme_bw() + 
+    geom_hline(yintercept = 0)
 ```
 
 ### (d) Interpret the parameter associated with Nearest.
@@ -181,6 +249,7 @@ dim(gala)
 
 ```{R}
 #YOUR CODE HERE
+exp(8.826e-03)
 ```
 
 YOUR ANSWER HERE
@@ -190,6 +259,14 @@ YOUR ANSWER HERE
 
 ```{R}
 #YOUR CODE HERE
+d_res = with(gala, -2*sum(Species*log(fitted(glmod)/Species)
+                 - (Species - fitted(glmod))))
+d_res
+
+chisq = with(gala, sum((Species - fitted(glmod))^2/fitted(glmod)))
+chisq
+
+pval = 1-pchisq(chisq, 24)
 ```
 
 YOUR ANSWER HERE
@@ -197,6 +274,9 @@ YOUR ANSWER HERE
 
 ```{R}
 #YOUR CODE HERE
+#checking whether dropping nearest is reasonable...
+glmodred = glm(Species ~ .-Nearest, data = gala, family = poisson)
+anova(glmodred, glmod, test = "Chisq")
 ```
 
 ## Problem #4 (Optional)
