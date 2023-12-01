@@ -89,11 +89,34 @@ ul.task-list li input[type="checkbox"] {
 <p>Then, compare with examples/web to see if you are right. If you are wrong (which is often an even better learning experience) determine why and correct it. The idea at the end is less about being “right” (as the solution is online) but rather to understand what you did. You will need this for the exam.</p>
 <hr>
 <p>From here on = JK answers</p>
-<p><span class="math inline">\(\frac{\partial L}{\partial W}\)</span> as given in the slides (<span class="math inline">\(W = W_{hh}\)</span>) is as follows:</p>
+<p><span class="math inline">\(\frac{\partial L}{\partial W}\)</span> math as given in the lecture slides</p>
+<p>(<span class="math inline">\(W = W_{hh}\)</span>)</p>
+<p>Relevant formulas:</p>
 <p><span class="math display">\[\begin{align*}
-\frac{\partial L}{\partial W} &amp;= \underbrace{\left(\frac{\partial L}{\partial \hat{y}_t} * \frac{\partial \hat{y}_t}{\partial o_t} \right)}_{\hat{y}_t - y_t} * \underbrace{\frac{\partial o_t}{\partial h_t}}_{V} * \underbrace{\frac{\partial h_t}{\partial W}}_{a} \\
+z^{(t)} &amp;= Wh^{(t-1)} + Ux^{(t)} \\
+h^{(t)} &amp;= tanh(z^{(t)}) \\
+o^{(t)} &amp;= Vh^{(t)} \\
+\hat{y}^{(t)} &amp;= \text{softmax}(o^{(t)})
+\end{align*}\]</span></p>
+<p>Thus <span class="math inline">\(\frac{\partial L}{\partial W}\)</span> is given as follows (but I changed a few details to match the above formulas):</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial W} &amp;=\left(\frac{\partial L}{\partial \hat{y}_t} * \frac{\partial \hat{y}_t}{\partial o_t} \right) * \frac{\partial o_t}{\partial h_t} * \frac{\partial h_t}{\partial z_t} * \frac{\partial z_t}{\partial W}\\
 
-&amp;= (\hat{y}_t - y_t) * V * [1 - tanh^2(Wh_{t-1} + Ux_{t})]* h_{t-1}
+&amp;= (\hat{y}_t - y_t) * V * [1 - tanh^2(z_t)]* h_{t-1}
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial L}{\partial U} &amp;=\left(\frac{\partial L}{\partial \hat{y}_t} * \frac{\partial \hat{y}_t}{\partial o_t} \right) * \frac{\partial o_t}{\partial h_t} * \frac{\partial h_t}{\partial U} \\
+
+&amp;= (\hat{y}_t - y_t) * V * [1 - tanh^2(z_t)]* (1)
+\end{align*}\]</span></p>
+<p>So in any case, the only difference is:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial z_t}{\partial U} = 1
+\end{align*}\]</span></p>
+<p>As opposed to</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial z_t}{\partial W} &amp;=  (1)h_{t-1} - 0 \\
+&amp;= h_{t-1}
 \end{align*}\]</span></p>
 
 </main>
