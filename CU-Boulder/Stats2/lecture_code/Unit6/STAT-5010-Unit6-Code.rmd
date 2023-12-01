@@ -1,0 +1,272 @@
+---
+title: "Generalized Linear Models"
+author: "Jasmine Kobayashi"
+format:
+    html:
+        code-fold: false
+execute:
+    output: true
+    warning: false
+toc: true
+---
+# STAT 5010 Unit #6 Code: GLMs
+
+The goal of this assignment is to analyze data using generalized linear models.
+
+## Problem #1
+
+In January 1986, the space shuttle Challenger exploded shortly after launch. An investigation was launched into the cause of the crash and attention focused on the rubber O-ring seals in the rocket boosters. At lower temperatures, rubber becomes more brittle and is a less effective sealant. At the time of the launch, the temperature was 31°F. Could the failure of the O-rings have been predicted? In the 23 previous shuttle missions for which data exists, some evidence of damage due to blow by and erosion was recorded on some O-rings. Each shuttle had two boosters, each with three O-rings. For each mission, we know the number of O-rings out of six showing some damage and the launch temperature. 
+
+The 'orings' is a data frame with 23 observations on the following 2 variables.
+
+1. temp:  Ambient temperature (Fahrenheit) at launch time
+2. damage: Number of damaged 'O' rings (out of a total of 6)
+
+### (a) Construct a new variable called prop, which is the proportion of damaged 'O' rings. Plot prop against temperature. What do you notice about this plot?
+
+
+```{r}
+library(MASS)
+#library(aod) #wald.test
+#library(lmtest) #lrtest (likelihood ratio test--same as anova)
+
+orings = read.csv(url(paste0("https://raw.githubusercontent.com/bzaharatos/",
+                             "-Statistical-Modeling-for-Data-Science-Applications/",
+                             "master/Generalized%20Linear%20Models%20and%20Nonparametric%20Regression/",
+                             "Datasets/orings.txt")), sep = "")
+head(orings)
+orings$prop = orings$damage/6 
+with(orings, plot(temp, prop))
+```
+
+### (b) Use the `glm()` function for fitting the logit model (logistic regression).
+
+Note: The first argument will be the model: `response ~ predictors`. For binomial response data, we need two pieces of information about the response values: `y` and `n`. Thus for binomial families, the response can be specified as a two-column matrix with the columns giving the numbers of successes and failures. You'll also need to specify the `family` argument, and the `data` argument. Use ?glm to specify these arguments.
+
+First, just note that a standard linear model isn't a great idea...
+
+
+```{R}
+#first, just note that a standard linear model isn't a great idea...
+lmod = lm(prop ~ temp, orings) #Use SLR...
+with(orings, plot(temp, prop))
+abline(lmod) #fit...bad idea
+summary(lmod)
+
+```
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+### (c) Plot the data again with the logit model.
+
+You'll need the inverse of the logit function: $$\text{logit}(\eta) = \frac{e^\eta}{1 + e^\eta}.$$
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+### (d) Now let's check the interpretation of $\widehat{\beta}_1$. Create a new temperature value of 45 and 46 degrees. Calculuate the odds of failure at 45 and 46 degrees. What is the ratio of these two odds?
+
+Note that in general, the odds ratio is equal to:
+
+\begin{align*}
+\frac{o_{x+1}}{o_{x}} &= \frac{e^{\beta_0 + \beta_1(x+1)}}{e^{\beta_0 + \beta_1x}} = \frac{e^{\beta_0 + \beta_1x + \beta_1(1)}}{e^{\beta_0 + \beta_1 x}} = \frac{e^{\beta_0 + \beta_1 x}e^{\beta_1}}{e^{\beta_0 + \beta_1x}} = e^{\beta_1}.
+\end{align*}
+
+Thus, an estimate of the odds ratio is $\displaystyle\frac{\widehat{o}_{46}}{\widehat o_{45}} = e^{\widehat\beta_1}$. 
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+### (e) Compute confidence intervals for the model parameters "by hand".
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+### (f) Now compute them using confint(glmod).
+
+Notice that these intervals are slightly different; they are based on the profile likelihood and do not assume asymptotic normality. They are more accurate for small sample sizes. Profile likelihood confidence intervals don’t assume normality of the estimator and appear to perform better for small samples sizes than Wald CIs (above). They are, nonetheless, still based on an asymptotic approximation – the asymptotic chi-square distribution of the log likelihood ratio test statistic. (for more info: http://www.math.umt.edu/patterson/ProfileLikelihoodCI.pdf)
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+### (g) Predict the probability of faulire at Temp = 45 degrees.
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+## Problem #2 
+
+A researcher is interested in how variables, such as gre (Graduate Record Exam scores), gpa (grade point average) and prestige of the undergraduate institution (rank), effect admission into graduate school. The response variable, admit/don't admit, is a binary variable.
+
+
+```{R}
+admission = read.csv("https://stats.idre.ucla.edu/stat/data/binary.csv")
+head(admission)
+```
+
+### (a) Perform logistic regression treating `admit` as the response. Be sure to treat `rank` as a categorical variable.
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+### (b) Construct a reduced model without the `rank` variable. Conduct the likelihood ratio test to decide whether the reduced model is sufficient. You can do this using `anova()` or `lrtest()`.
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+YOUR ANSWER HERE
+
+## Problem #3
+
+For each 30 Galapagos islands, we have a count of the number of plant species found on each island and the number that are endemic to that island. We also have five geographic variables for each island. 
+
+1. Species: the number of plant species found on the island
+2. Endemics: the number of endemic species
+3. Area: the area of the island (km$^2$)
+4. Elevation: the highest elevation of the island (m)
+5. Nearest: the distance from the nearest island (km)
+6. Scruz: the distance from Santa Cruz island (km)
+7. Adjacent: the area of the adjacent island (square km)
+
+### (a) Remove the Endemics variable from the dataframe, and fit a linear model with Species as the response and all other variables as predictors. Run some diagnostics and explain why this model is not the best fit.
+
+
+```{R}
+library(ggplot2)
+gala = read.table("https://www.colorado.edu/amath/sites/default/files/attached-files/gala.txt", header = TRUE, sep = "\t")
+gala = gala[,-2]
+
+head(gala)
+dim(gala)
+```
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+### (b) Recall that a square root transformation of the response might be helpful when the nonconstant variance assumption is violated. Try this transformation.
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+### (c) One issue with a transformation is that it makes interpretation less natural. Let's try a Poisson regression (with no transformation on the repsonse).
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+### (d) Interpret the parameter associated with Nearest.
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+YOUR ANSWER HERE
+
+### (e) Calculate the deviance for Poisson regression. Does this value show up in the summary? Also, check the goodness of fit of this model using Pearson's $\chi^2$ statistic. What do you conclude about the fit?
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+YOUR ANSWER HERE
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+## Problem #4 (Optional)
+
+Research another type of GLM (beyond binomial and Poisson), find a dataset that is reasonably modeled by that GLM, and model it. Does the model fit well?
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+## Problem #5
+
+The following data is on lung cancer incidence in four Danish cities 1968-1971. This data set contains counts of incident lung cancer cases and population size in four neighbouring Danish cities by age group.
+
+Because we have an exposure (population), we should include an offset term. 
+
+### (a) Fit a Poisson model, with an offset for population, and then estiamte the dispersion parameter.
+
+
+```{R}
+library(ISwR)
+data(eba1977)
+cancer = eba1977
+head(cancer, 10)
+```
+
+
+```{R}
+glmodrate = glm(cases ~ age + city + offset(log(pop)), data = cancer, 
+                family = poisson(link = "log"))
+summary(glmodrate)
+dp = sum(resid(glmodrate, type = "pearson")^2)/glmodrate$df.res; 
+dp
+```
+
+
+```{R}
+summary(glmodrate, dispersion = dp)
+```
+
+### (b) Fit a reduced model without the city variable. Test to see if city is needed.
+
+
+```{R}
+glmodratered = glm(cases ~ age + offset(log(pop)), data = cancer, 
+                family = poisson(link = "log"))
+```
+
+
+```{R}
+anova(glmodratered, glmodrate, test = "Chisq") #city not necessary
+```
+
+### (c) Look at some plots to diagnose problems with the model.
+
+
+```{R}
+par(mfrow = c(2,2)); plot(glmodratered)
+```
+
+### (d) Use the reduced model to predict the rate of cancer at age = "40-54" and pop = 1000 (i.e., cancer per 1000 people). Then, use the full model to predict the rate of cancer at at age = "40-54" and pop = 1000 in the city of Kolding. Do the predictions differ very much?
+
+
+```{R}
+newdataRed = data.frame(age = "40-54", pop = 1000)
+predRed = predict(glmodratered, newdataRed, type = "response")
+predRed
+
+newdataFull = data.frame(city = "Kolding", age = "40-54", pop = 1000)
+predFull = predict(glmodrate, newdataFull, type = "link")
+exp(predFull)
+```
