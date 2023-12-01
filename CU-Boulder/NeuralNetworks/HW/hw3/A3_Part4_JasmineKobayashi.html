@@ -68,6 +68,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="A3_Part4_JasmineKobayashi_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="A3_Part4_JasmineKobayashi_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="A3_Part4_JasmineKobayashi_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -82,9 +85,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#data" id="toc-data" class="nav-link active" data-scroll-target="#data">Data</a>
   <ul class="collapse">
+  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading">Data loading</a></li>
   <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a>
   <ul class="collapse">
+  <li><a href="#data-columns-and-their-meanings" id="toc-data-columns-and-their-meanings" class="nav-link" data-scroll-target="#data-columns-and-their-meanings">Data columns and their meanings:</a></li>
+  </ul></li>
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning">Data Cleaning</a>
+  <ul class="collapse">
+  <li><a href="#training-and-testing-sets" id="toc-training-and-testing-sets" class="nav-link" data-scroll-target="#training-and-testing-sets">Training and Testing sets</a></li>
   <li><a href="#data-shapes" id="toc-data-shapes" class="nav-link" data-scroll-target="#data-shapes">Data Shapes</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#rnn-model" id="toc-rnn-model" class="nav-link" data-scroll-target="#rnn-model">RNN Model</a>
+  <ul class="collapse">
+  <li><a href="#evaluate-model" id="toc-evaluate-model" class="nav-link" data-scroll-target="#evaluate-model">Evaluate Model</a>
+  <ul class="collapse">
+  <li><a href="#loss-accuracy-vs.-epoch-plots" id="toc-loss-accuracy-vs.-epoch-plots" class="nav-link" data-scroll-target="#loss-accuracy-vs.-epoch-plots">Loss &amp; Accuracy vs.&nbsp;Epoch plots</a></li>
+  <li><a href="#test-model-with-predictions" id="toc-test-model-with-predictions" class="nav-link" data-scroll-target="#test-model-with-predictions">Test Model with Predictions</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -129,82 +146,891 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras <span class="im">import</span> layers</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow.keras</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.datasets <span class="im">import</span> mnist</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.models <span class="im">import</span> Sequential</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.layers <span class="im">import</span> LSTM, Dense, Dropout, LSTM</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.optimizers <span class="im">import</span> Adam</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras <span class="im">import</span> layers</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler,MinMaxScaler</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow.keras</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.datasets <span class="im">import</span> mnist</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.models <span class="im">import</span> Sequential</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.layers <span class="im">import</span> LSTM, Dense, Dropout, LSTM</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras.optimizers <span class="im">import</span> Adam</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.keras <span class="im">import</span> layers</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>2023-11-29 00:44:05.277574: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2023-11-29 00:44:05.456972: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+<pre><code>2023-12-01 06:55:35.876779: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-12-01 06:55:35.932642: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.</code></pre>
 </div>
 </div>
 <section id="data" class="level1">
 <h1>Data</h1>
-<p>(Using IMBD movie review data.)</p>
+<p>I started messing around with the movie data, but ended struggling for a while since I’m less familar about working with text data, etc. So instead, I’m going to be using data from my undergrad research work, which is a time series data: NASA’s <a href="https://omniweb.gsfc.nasa.gov/">OMNI dataset</a>.</p>
+<p>However, one thing to note. The problem I tackle with this data is a <strong>regression problem not a classification problem</strong>. So I won’t be outputting a confusion matrix, but I will be sure to use another form of performance evaluation visualization.</p>
+<section id="data-loading" class="level2">
+<h2 class="anchored" data-anchor-id="data-loading">Data loading</h2>
+<p>If I submitted as I intended, the csv data should’ve been included in my submission (titled “<code>omni_df.csv</code>”)</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>omni_df <span class="op">=</span> pd.read_csv(<span class="st">'omni_df.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>omni_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Epoch</th>
+<th data-quarto-table-cell-role="th">BX_GSE</th>
+<th data-quarto-table-cell-role="th">BY_GSE</th>
+<th data-quarto-table-cell-role="th">BZ_GSE</th>
+<th data-quarto-table-cell-role="th">Vx</th>
+<th data-quarto-table-cell-role="th">Vy</th>
+<th data-quarto-table-cell-role="th">Vz</th>
+<th data-quarto-table-cell-role="th">proton_density</th>
+<th data-quarto-table-cell-role="th">T</th>
+<th data-quarto-table-cell-role="th">AE_INDEX</th>
+<th data-quarto-table-cell-role="th">AL_INDEX</th>
+<th data-quarto-table-cell-role="th">AU_INDEX</th>
+<th data-quarto-table-cell-role="th">SYM_H</th>
+<th data-quarto-table-cell-role="th">ASY_H</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2000-01-01 00:00:00</td>
+<td>-5.94</td>
+<td>0.24</td>
+<td>-0.15</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>668.0</td>
+<td>-486.0</td>
+<td>182.0</td>
+<td>-44.0</td>
+<td>48.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2000-01-01 00:01:00</td>
+<td>-5.88</td>
+<td>2.17</td>
+<td>0.53</td>
+<td>-662.6</td>
+<td>7.3</td>
+<td>-46.5</td>
+<td>3.12</td>
+<td>343841.0</td>
+<td>638.0</td>
+<td>-487.0</td>
+<td>151.0</td>
+<td>-45.0</td>
+<td>48.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2000-01-01 00:02:00</td>
+<td>-5.71</td>
+<td>3.23</td>
+<td>1.44</td>
+<td>-661.4</td>
+<td>2.4</td>
+<td>-46.3</td>
+<td>3.24</td>
+<td>326583.0</td>
+<td>666.0</td>
+<td>-527.0</td>
+<td>139.0</td>
+<td>-45.0</td>
+<td>48.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2000-01-01 00:03:00</td>
+<td>-5.33</td>
+<td>3.80</td>
+<td>1.84</td>
+<td>-659.8</td>
+<td>-8.4</td>
+<td>-56.2</td>
+<td>3.11</td>
+<td>306470.0</td>
+<td>615.0</td>
+<td>-474.0</td>
+<td>141.0</td>
+<td>-45.0</td>
+<td>48.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2000-01-01 00:04:00</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>554.0</td>
+<td>-418.0</td>
+<td>136.0</td>
+<td>-45.0</td>
+<td>47.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
 <section id="eda" class="level2">
 <h2 class="anchored" data-anchor-id="eda">EDA</h2>
-<p>Below is code to preview a (decoded) sequence in the <code>X_train</code> array (copied directly from the example on the <a href="https://keras.io/api/datasets/imdb/">Keras IMDB data webpage</a>).</p>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the default parameters to keras.datasets.imdb.load_data</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>start_char <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>oov_char <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>index_from <span class="op">=</span> <span class="dv">3</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve the training sequences.</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>(X_train, y_train), (X_test,y_test) <span class="op">=</span> keras.datasets.imdb.load_data(</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    start_char<span class="op">=</span>start_char, oov_char<span class="op">=</span>oov_char, index_from<span class="op">=</span>index_from</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Retrieve the word index file mapping words to indices</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>word_index <span class="op">=</span> keras.datasets.imdb.get_word_index()</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Reverse the word index to obtain a dict mapping indices to words</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># And add `index_from` to indices to sync with `x_train`</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>inverted_word_index <span class="op">=</span> <span class="bu">dict</span>(</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    (i <span class="op">+</span> index_from, word) <span class="cf">for</span> (word, i) <span class="kw">in</span> word_index.items()</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Update `inverted_word_index` to include `start_char` and `oov_char`</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>inverted_word_index[start_char] <span class="op">=</span> <span class="st">"[START]"</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>inverted_word_index[oov_char] <span class="op">=</span> <span class="st">"[OOV]"</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Decode the first sequence in the dataset</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>decoded_sequence <span class="op">=</span> <span class="st">" "</span>.join(inverted_word_index[i] <span class="cf">for</span> i <span class="kw">in</span> X_train[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Data loaded as it is, looks like this:</p>
-<p>(saves me a bit of time for data cleaning aspects)</p>
+<section id="data-columns-and-their-meanings" class="level3">
+<h3 class="anchored" data-anchor-id="data-columns-and-their-meanings">Data columns and their meanings:</h3>
+<p><strong>JK Note to TAs:</strong> It’s not crucial to this work for you to understand these for the purposes of this assignment, but just in case it might be helpful.</p>
+<p>Can also refer to their <a href="https://omniweb.gsfc.nasa.gov/html/ow_data.html">about OMNI data page</a></p>
+<p>Essentially this is all solar wind data</p>
+<ul>
+<li><code>Epoch</code>: Date and Time (datetime index)</li>
+<li>Interplanetary Magnetic Field (units = nano-Teslas (nT))
+<ul>
+<li><code>BX_GSE</code>: x-component of Magnetic Field in <a href="https://www.spenvis.oma.be/help/background/coortran/coortran.html#GSE">GSE coordinate system</a></li>
+<li><code>BY_GSE</code>: y-component of Magnetic Field in GSE coordinate system</li>
+<li><code>BX_GSE</code>: z-component of Magnetic Field in GSE coordinate system</li>
+</ul></li>
+<li>Solar Wind velocity (km/sec)
+<ul>
+<li><code>Vx</code>: Solar wind velocity in x</li>
+<li><code>Vy</code>: Solar wind velocity in y</li>
+<li><code>Vz</code>: Solar wind velocity in z</li>
+</ul></li>
+<li><code>proton_density</code>: Proton density in the solar wind (n/cc)</li>
+<li><code>T</code>: Temperature (K)</li>
+<li>Geomagnetic Indices
+<ul>
+<li>all units = nano Teslas (nT)</li>
+<li><a href="https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.stp.indices:G00584#:~:text=The%20AU%20and%20AL%20indices%20are%20intended%20to%20express%20the,Show%20more...">Auroral Electrojet</a>
+<ul>
+<li><code>AE_INDEX</code>: Auroral Electrojet Index (AE = AU-AL)</li>
+<li><code>AU_INDEX</code>: Auroral Electrojet upper</li>
+<li><code>AL_INDEX</code>: Auroral Electrojet lower</li>
+</ul></li>
+<li><a href="https://wdc.kugi.kyoto-u.ac.jp/aeasy/asy.pdf">SYM/ASY H</a>
+<ul>
+<li><code>SYM_H</code>: Longitudinally symmetric disturbance of geomagnetic H-component
+<ul>
+<li>Sym-H is the same is the <a href="https://www.ngdc.noaa.gov/stp/geomag/dst.html">Dst Index</a>, but at higher resolution</li>
+</ul></li>
+<li><code>ASY_H</code>: Longitudinally asymmetric disturbance of geomagnetic H-component</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>For my purposes the features (predictor variables, model input, etc. however you want to call it) are: <code>BX_GSE</code>, <code>BY_GSE</code>, <code>BZ_GSE</code>, <code>AE_INDEX</code>, <code>AL_INDEX</code>, <code>AU_INDEX</code>, <code>SYM_H</code>, <code>ASY_H</code></p>
+<p>And the targets (“label”, the model output, etc.) are: <code>Vx</code>, <code>Vy</code>, <code>Vz</code>, <code>proton_density</code>, <code>T</code></p>
 <div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>X_train[:<span class="dv">6</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>omni_df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>array([list([1, 14, 22, 16, 43, 530, 973, 1622, 1385, 65, 458, 4468, 66, 3941, 4, 173, 36, 256, 5, 25, 100, 43, 838, 112, 50, 670, 22665, 9, 35, 480, 284, 5, 150, 4, 172, 112, 167, 21631, 336, 385, 39, 4, 172, 4536, 1111, 17, 546, 38, 13, 447, 4, 192, 50, 16, 6, 147, 2025, 19, 14, 22, 4, 1920, 4613, 469, 4, 22, 71, 87, 12, 16, 43, 530, 38, 76, 15, 13, 1247, 4, 22, 17, 515, 17, 12, 16, 626, 18, 19193, 5, 62, 386, 12, 8, 316, 8, 106, 5, 4, 2223, 5244, 16, 480, 66, 3785, 33, 4, 130, 12, 16, 38, 619, 5, 25, 124, 51, 36, 135, 48, 25, 1415, 33, 6, 22, 12, 215, 28, 77, 52, 5, 14, 407, 16, 82, 10311, 8, 4, 107, 117, 5952, 15, 256, 4, 31050, 7, 3766, 5, 723, 36, 71, 43, 530, 476, 26, 400, 317, 46, 7, 4, 12118, 1029, 13, 104, 88, 4, 381, 15, 297, 98, 32, 2071, 56, 26, 141, 6, 194, 7486, 18, 4, 226, 22, 21, 134, 476, 26, 480, 5, 144, 30, 5535, 18, 51, 36, 28, 224, 92, 25, 104, 4, 226, 65, 16, 38, 1334, 88, 12, 16, 283, 5, 16, 4472, 113, 103, 32, 15, 16, 5345, 19, 178, 32]),
-       list([1, 194, 1153, 194, 8255, 78, 228, 5, 6, 1463, 4369, 5012, 134, 26, 4, 715, 8, 118, 1634, 14, 394, 20, 13, 119, 954, 189, 102, 5, 207, 110, 3103, 21, 14, 69, 188, 8, 30, 23, 7, 4, 249, 126, 93, 4, 114, 9, 2300, 1523, 5, 647, 4, 116, 9, 35, 8163, 4, 229, 9, 340, 1322, 4, 118, 9, 4, 130, 4901, 19, 4, 1002, 5, 89, 29, 952, 46, 37, 4, 455, 9, 45, 43, 38, 1543, 1905, 398, 4, 1649, 26, 6853, 5, 163, 11, 3215, 10156, 4, 1153, 9, 194, 775, 7, 8255, 11596, 349, 2637, 148, 605, 15358, 8003, 15, 123, 125, 68, 23141, 6853, 15, 349, 165, 4362, 98, 5, 4, 228, 9, 43, 36893, 1157, 15, 299, 120, 5, 120, 174, 11, 220, 175, 136, 50, 9, 4373, 228, 8255, 5, 25249, 656, 245, 2350, 5, 4, 9837, 131, 152, 491, 18, 46151, 32, 7464, 1212, 14, 9, 6, 371, 78, 22, 625, 64, 1382, 9, 8, 168, 145, 23, 4, 1690, 15, 16, 4, 1355, 5, 28, 6, 52, 154, 462, 33, 89, 78, 285, 16, 145, 95]),
-       list([1, 14, 47, 8, 30, 31, 7, 4, 249, 108, 7, 4, 5974, 54, 61, 369, 13, 71, 149, 14, 22, 112, 4, 2401, 311, 12, 16, 3711, 33, 75, 43, 1829, 296, 4, 86, 320, 35, 534, 19, 263, 4821, 1301, 4, 1873, 33, 89, 78, 12, 66, 16, 4, 360, 7, 4, 58, 316, 334, 11, 4, 1716, 43, 645, 662, 8, 257, 85, 1200, 42, 1228, 2578, 83, 68, 3912, 15, 36, 165, 1539, 278, 36, 69, 44076, 780, 8, 106, 14, 6905, 1338, 18, 6, 22, 12, 215, 28, 610, 40, 6, 87, 326, 23, 2300, 21, 23, 22, 12, 272, 40, 57, 31, 11, 4, 22, 47, 6, 2307, 51, 9, 170, 23, 595, 116, 595, 1352, 13, 191, 79, 638, 89, 51428, 14, 9, 8, 106, 607, 624, 35, 534, 6, 227, 7, 129, 113]),
-       list([1, 4, 18609, 16085, 33, 2804, 4, 2040, 432, 111, 153, 103, 4, 1494, 13, 70, 131, 67, 11, 61, 15305, 744, 35, 3715, 761, 61, 5766, 452, 9214, 4, 985, 7, 64317, 59, 166, 4, 105, 216, 1239, 41, 1797, 9, 15, 7, 35, 744, 2413, 31, 8, 4, 687, 23, 4, 33929, 7339, 6, 3693, 42, 38, 39, 121, 59, 456, 10, 10, 7, 265, 12, 575, 111, 153, 159, 59, 16, 1447, 21, 25, 586, 482, 39, 4, 96, 59, 716, 12, 4, 172, 65, 9, 579, 11, 6004, 4, 1615, 5, 23005, 7, 5168, 17, 13, 7064, 12, 19, 6, 464, 31, 314, 11, 87564, 6, 719, 605, 11, 8, 202, 27, 310, 4, 3772, 3501, 8, 2722, 58, 10, 10, 537, 2116, 180, 40, 14, 413, 173, 7, 263, 112, 37, 152, 377, 4, 537, 263, 846, 579, 178, 54, 75, 71, 476, 36, 413, 263, 2504, 182, 5, 17, 75, 2306, 922, 36, 279, 131, 2895, 17, 2867, 42, 17, 35, 921, 18435, 192, 5, 1219, 3890, 19, 20523, 217, 4122, 1710, 537, 20341, 1236, 5, 736, 10, 10, 61, 403, 9, 47289, 40, 61, 4494, 5, 27, 4494, 159, 90, 263, 2311, 4319, 309, 8, 178, 5, 82, 4319, 4, 65, 15, 9225, 145, 143, 5122, 12, 7039, 537, 746, 537, 537, 15, 7979, 4, 18665, 594, 7, 5168, 94, 9096, 3987, 15242, 11, 28280, 4, 538, 7, 1795, 246, 56615, 9, 10161, 11, 635, 14, 9, 51, 408, 12, 94, 318, 1382, 12, 47, 6, 2683, 936, 5, 6307, 10197, 19, 49, 7, 4, 1885, 13699, 1118, 25, 80, 126, 842, 10, 10, 47289, 18223, 4726, 27, 4494, 11, 1550, 3633, 159, 27, 341, 29, 2733, 19, 4185, 173, 7, 90, 16376, 8, 30, 11, 4, 1784, 86, 1117, 8, 3261, 46, 11, 25837, 21, 29, 9, 2841, 23, 4, 1010, 26747, 793, 6, 13699, 1386, 1830, 10, 10, 246, 50, 9, 6, 2750, 1944, 746, 90, 29, 16376, 8, 124, 4, 882, 4, 882, 496, 27, 33029, 2213, 537, 121, 127, 1219, 130, 5, 29, 494, 8, 124, 4, 882, 496, 4, 341, 7, 27, 846, 10, 10, 29, 9, 1906, 8, 97, 6, 236, 11120, 1311, 8, 4, 23643, 7, 31, 7, 29851, 91, 22793, 3987, 70, 4, 882, 30, 579, 42, 9, 12, 32, 11, 537, 10, 10, 11, 14, 65, 44, 537, 75, 11876, 1775, 3353, 12716, 1846, 4, 11286, 7, 154, 5, 4, 518, 53, 13243, 11286, 7, 3211, 882, 11, 399, 38, 75, 257, 3807, 19, 18223, 17, 29, 456, 4, 65, 7, 27, 205, 113, 10, 10, 33058, 4, 22793, 10359, 9, 242, 4, 91, 1202, 11377, 5, 2070, 307, 22, 7, 5168, 126, 93, 40, 18223, 13, 188, 1076, 3222, 19, 4, 13465, 7, 2348, 537, 23, 53, 537, 21, 82, 40, 18223, 13, 33195, 14, 280, 13, 219, 4, 52788, 431, 758, 859, 4, 953, 1052, 12283, 7, 5991, 5, 94, 40, 25, 238, 60, 35410, 4, 15812, 804, 27767, 7, 4, 9941, 132, 8, 67, 6, 22, 15, 9, 283, 8, 5168, 14, 31, 9, 242, 955, 48, 25, 279, 22148, 23, 12, 1685, 195, 25, 238, 60, 796, 13713, 4, 671, 7, 2804, 5, 4, 559, 154, 888, 7, 726, 50, 26, 49, 7008, 15, 566, 30, 579, 21, 64, 2574]),
-       list([1, 249, 1323, 7, 61, 113, 10, 10, 13, 1637, 14, 20, 56, 33, 2401, 18, 457, 88, 13, 2626, 1400, 45, 3171, 13, 70, 79, 49, 706, 919, 13, 16, 355, 340, 355, 1696, 96, 143, 4, 22, 32, 289, 7, 61, 369, 71, 2359, 5, 13, 16, 131, 2073, 249, 114, 249, 229, 249, 20, 13, 28, 126, 110, 13, 473, 8, 569, 61, 419, 56, 429, 6, 1513, 18, 35, 534, 95, 474, 570, 5, 25, 124, 138, 88, 12, 421, 1543, 52, 725, 6397, 61, 419, 11, 13, 1571, 15, 1543, 20, 11, 4, 22016, 5, 296, 12, 3524, 5, 15, 421, 128, 74, 233, 334, 207, 126, 224, 12, 562, 298, 2167, 1272, 7, 2601, 5, 516, 988, 43, 8, 79, 120, 15, 595, 13, 784, 25, 3171, 18, 165, 170, 143, 19, 14, 5, 7224, 6, 226, 251, 7, 61, 113]),
-       list([1, 778, 128, 74, 12, 630, 163, 15, 4, 1766, 7982, 1051, 43222, 32, 85, 156, 45, 40, 148, 139, 121, 664, 665, 10, 10, 1361, 173, 4, 749, 86588, 16, 3804, 8, 4, 226, 65, 12, 43, 127, 24, 15344, 10, 10])],
-      dtype=object)</code></pre>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">BX_GSE</th>
+<th data-quarto-table-cell-role="th">BY_GSE</th>
+<th data-quarto-table-cell-role="th">BZ_GSE</th>
+<th data-quarto-table-cell-role="th">Vx</th>
+<th data-quarto-table-cell-role="th">Vy</th>
+<th data-quarto-table-cell-role="th">Vz</th>
+<th data-quarto-table-cell-role="th">proton_density</th>
+<th data-quarto-table-cell-role="th">T</th>
+<th data-quarto-table-cell-role="th">AE_INDEX</th>
+<th data-quarto-table-cell-role="th">AL_INDEX</th>
+<th data-quarto-table-cell-role="th">AU_INDEX</th>
+<th data-quarto-table-cell-role="th">SYM_H</th>
+<th data-quarto-table-cell-role="th">ASY_H</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>8.888632e+06</td>
+<td>8.888632e+06</td>
+<td>8.888632e+06</td>
+<td>7.679877e+06</td>
+<td>7.679877e+06</td>
+<td>7.679877e+06</td>
+<td>7.679877e+06</td>
+<td>7.673164e+06</td>
+<td>9.552960e+06</td>
+<td>9.552960e+06</td>
+<td>9.552960e+06</td>
+<td>9.552960e+06</td>
+<td>9.552960e+06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>2.586364e-03</td>
+<td>5.997560e-02</td>
+<td>2.418269e-03</td>
+<td>-4.353644e+02</td>
+<td>-1.359368e+00</td>
+<td>-2.238432e+00</td>
+<td>5.999525e+00</td>
+<td>9.880642e+04</td>
+<td>1.792767e+02</td>
+<td>-1.114364e+02</td>
+<td>6.784032e+01</td>
+<td>-1.203162e+01</td>
+<td>2.011680e+01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>3.660013e+00</td>
+<td>4.227383e+00</td>
+<td>3.395529e+00</td>
+<td>1.053745e+02</td>
+<td>2.552232e+01</td>
+<td>2.266174e+01</td>
+<td>4.988173e+00</td>
+<td>9.744486e+04</td>
+<td>2.102548e+02</td>
+<td>1.550540e+02</td>
+<td>7.383967e+01</td>
+<td>1.971669e+01</td>
+<td>1.593993e+01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>-4.951000e+01</td>
+<td>-5.109000e+01</td>
+<td>-6.064000e+01</td>
+<td>-1.136500e+03</td>
+<td>-8.649000e+02</td>
+<td>-3.104000e+02</td>
+<td>3.000000e-02</td>
+<td>5.430000e+02</td>
+<td>1.000000e+00</td>
+<td>-4.141000e+03</td>
+<td>-9.750000e+02</td>
+<td>-4.900000e+02</td>
+<td>0.000000e+00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>-2.650000e+00</td>
+<td>-2.670000e+00</td>
+<td>-1.730000e+00</td>
+<td>-4.948000e+02</td>
+<td>-1.630000e+01</td>
+<td>-1.490000e+01</td>
+<td>3.000000e+00</td>
+<td>3.551900e+04</td>
+<td>4.200000e+01</td>
+<td>-1.470000e+02</td>
+<td>1.900000e+01</td>
+<td>-1.900000e+01</td>
+<td>1.100000e+01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>0.000000e+00</td>
+<td>2.000000e-02</td>
+<td>0.000000e+00</td>
+<td>-4.126000e+02</td>
+<td>-3.500000e+00</td>
+<td>-2.100000e+00</td>
+<td>4.600000e+00</td>
+<td>7.002000e+04</td>
+<td>9.300000e+01</td>
+<td>-4.500000e+01</td>
+<td>4.100000e+01</td>
+<td>-9.000000e+00</td>
+<td>1.600000e+01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>2.630000e+00</td>
+<td>2.760000e+00</td>
+<td>1.730000e+00</td>
+<td>-3.556000e+02</td>
+<td>1.140000e+01</td>
+<td>1.020000e+01</td>
+<td>7.240000e+00</td>
+<td>1.308720e+05</td>
+<td>2.400000e+02</td>
+<td>-1.800000e+01</td>
+<td>9.000000e+01</td>
+<td>-1.000000e+00</td>
+<td>2.400000e+01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>3.995000e+01</td>
+<td>5.509000e+01</td>
+<td>6.438000e+01</td>
+<td>-9.340000e+01</td>
+<td>3.291000e+02</td>
+<td>4.516000e+02</td>
+<td>8.095000e+01</td>
+<td>7.617765e+06</td>
+<td>4.192000e+03</td>
+<td>7.900000e+01</td>
+<td>2.063000e+03</td>
+<td>1.510000e+02</td>
+<td>9.840000e+02</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 </div>
+</div>
+</section>
+</section>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data Cleaning</h2>
 <div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>y_train[:<span class="dv">6</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of missing values in each column</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>omni_df.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>array([1, 0, 0, 1, 0, 0])</code></pre>
+<pre><code>Epoch                   0
+BX_GSE             664328
+BY_GSE             664328
+BZ_GSE             664328
+Vx                1873083
+Vy                1873083
+Vz                1873083
+proton_density    1873083
+T                 1879796
+AE_INDEX                0
+AL_INDEX                0
+AU_INDEX                0
+SYM_H                   0
+ASY_H                   0
+dtype: int64</code></pre>
 </div>
 </div>
+<p>The data clearly has some missing values, so we’ll use the I’ll combat by interpolating the input parameters, and dropping the other rows with missing target values. Can do so with the <code>interpolate_input()</code> function I defined below.</p>
+<p>(The following is the same code I used to clean my data for work.)</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> interpolate_input(df,features,targets,interpolation_method <span class="op">=</span> <span class="st">'linear'</span>,has_time_col<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                      drop_target_nan<span class="op">=</span><span class="va">True</span>,includes_TH<span class="op">=</span><span class="va">False</span>,th_len<span class="op">=</span><span class="dv">15</span>,include_target_th <span class="op">=</span> <span class="va">False</span>):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Creating X and y df from Time History data th_df (if applicable)-----------------------------------------------</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> includes_TH:</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        X_col <span class="op">=</span> []</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        y_col <span class="op">=</span>[]</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> f <span class="kw">in</span> features:</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,th_len<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                X_col.append(f<span class="op">+</span><span class="st">'_m</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(i))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> include_target_th:</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> tt <span class="kw">in</span> targets:</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,th_len<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>                    X_col.append(tt<span class="op">+</span><span class="st">'_m</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(j))</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tt <span class="kw">in</span> targets:</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>            y_col.append(tt<span class="op">+</span><span class="st">'_m0'</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        features <span class="op">=</span> X_col</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        targets <span class="op">=</span>y_col</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#---------------------------------------------------------------------------------------------------------------    </span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#separate df into features only &amp; targets only dataframes========================================================</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    feat_df <span class="op">=</span> df[features].astype(<span class="st">'float32'</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    targ_df <span class="op">=</span> df[targets].astype(<span class="st">'float32'</span>)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> has_time_col:</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> includes_TH:</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>            time <span class="op">=</span> df[<span class="st">'time'</span>]</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>            time <span class="op">=</span> df[<span class="st">'Epoch'</span>]      <span class="co">#may want to change this so it doesn't only for dfs with column = 'Epoch'</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">#interpolate features-only dataframe==============================================================================</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>    interpolated_feat_df <span class="op">=</span> feat_df.interpolate(interpolation_method)    <span class="co">#if method not specified when function </span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>                                                                        <span class="co"># is passed, defaults to linear interpolation</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">#combine df's together again=====================================================================================</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> has_time_col:</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>        concat_df <span class="op">=</span> pd.concat([time,interpolated_feat_df,targ_df],axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>        concat_df <span class="op">=</span> pd.concat([interpolated_feat_df,targ_df],axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"New df with interpolated input created"</span>)</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># TO drop or NOT to drop... the nan of target parameters---------------------------------------------------------</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> drop_target_nan:</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>        new_df <span class="op">=</span> concat_df.dropna()</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Target Nan's were dropped (no missing values in df;can be used for model training &amp; testing)"</span>)</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>        new_df <span class="op">=</span> concat_df</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Target NaN's were NOT dropped (dataframe still contains missing values)"</span>)</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> new_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [<span class="st">'BX_GSE'</span>,<span class="st">'BY_GSE'</span>,<span class="st">'BZ_GSE'</span>,<span class="st">'AE_INDEX'</span>,<span class="st">'AL_INDEX'</span>,<span class="st">'AU_INDEX'</span>,<span class="st">'SYM_H'</span>,<span class="st">'ASY_H'</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>targets <span class="op">=</span> [<span class="st">'Vx'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> interpolate_input(omni_df,features<span class="op">=</span>features,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                  targets<span class="op">=</span>targets, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                  has_time_col<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                  drop_target_nan<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                  includes_TH<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>New df with interpolated input created
+Target Nan's were dropped (no missing values in df;can be used for model training &amp; testing)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>Epoch       0
+BX_GSE      0
+BY_GSE      0
+BZ_GSE      0
+AE_INDEX    0
+AL_INDEX    0
+AU_INDEX    0
+SYM_H       0
+ASY_H       0
+Vx          0
+dtype: int64</code></pre>
+</div>
+</div>
+<p>Viola! No more missing data</p>
+<section id="training-and-testing-sets" class="level3">
+<h3 class="anchored" data-anchor-id="training-and-testing-sets">Training and Testing sets</h3>
+<p>The following is also code directly from my work code (so there might be some uneccessary things).</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_test_dataframes(df,features,targets,split_type<span class="op">=</span><span class="st">'random'</span>,test_size<span class="op">=</span><span class="fl">0.2</span>,scale<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                          includes_TH<span class="op">=</span><span class="va">False</span>,th_len<span class="op">=</span><span class="dv">15</span>,include_target_th <span class="op">=</span> <span class="va">False</span>):</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Creating X and y df from Time History data th_df (if applicable)-----------------------------------------------</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> includes_TH:</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        X_col <span class="op">=</span> []</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        y_col <span class="op">=</span>[]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> f <span class="kw">in</span> features:</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,th_len<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                X_col.append(f<span class="op">+</span><span class="st">'_m</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(i))</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> include_target_th:</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> tt <span class="kw">in</span> targets:</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,th_len<span class="op">+</span><span class="dv">1</span>):</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                    X_col.append(tt<span class="op">+</span><span class="st">'_m</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(j))</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> tt <span class="kw">in</span> targets:</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>            y_col.append(tt<span class="op">+</span><span class="st">'_m0'</span>)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        X_col <span class="op">=</span> features</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        y_col <span class="op">=</span> targets</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#--------------------------------------------------------------------------------------------------------------- </span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> df[X_col].astype(<span class="st">'float32'</span>)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[y_col].astype(<span class="st">'float32'</span>)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Training-Test Split=====================================================</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">#(Random) Train-Test Split-----------------------------------------------</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    X_train,X_test,y_train,y_test <span class="op">=</span> train_test_split(X,y,test_size<span class="op">=</span> test_size,random_state<span class="op">=</span><span class="dv">123</span>)</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    split <span class="op">=</span> <span class="st">'Random split'</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># (Sequential) Train-Test Split------------------------------------------</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> split_type <span class="op">==</span> <span class="st">'sequential'</span>:</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>        train_size <span class="op">=</span> <span class="dv">1</span><span class="op">-</span>test_size</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>        X_train <span class="op">=</span> X[:<span class="bu">int</span>(train_size<span class="op">*</span><span class="bu">len</span>(X))]   <span class="co">#values up to % indicated by train_size</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>        X_test <span class="op">=</span> X[<span class="bu">int</span>(train_size<span class="op">*</span><span class="bu">len</span>(X)):]    <span class="co">#remaining sequential values from X</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>        y_train <span class="op">=</span> y[:<span class="bu">int</span>(train_size<span class="op">*</span><span class="bu">len</span>(y))]</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>        y_test <span class="op">=</span> y[<span class="bu">int</span>(train_size<span class="op">*</span><span class="bu">len</span>(y)):]</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>        split <span class="op">=</span> <span class="st">'Sequential split'</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print split type--------------------------------------------------------</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Train-Test split was:'</span>, split)</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Scaling==================================================================</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> scale <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>        scaler <span class="op">=</span> scale</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>        X_train <span class="op">=</span> scaler.fit_transform(X_train)</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>        X_test <span class="op">=</span> scaler.transform(X_test)</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'X_train &amp; X_test have been scaled using </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(<span class="bu">str</span>(scale)))</span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'X_train &amp; X_test are not scaled'</span>)</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Dataframes are complete'</span>)  </span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> y_train.to_numpy()</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> y_test.to_numpy()</span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X_train,X_test,y_train,y_test</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>X_train,X_test,y_train,y_test <span class="op">=</span> train_test_dataframes(df,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                      features<span class="op">=</span>features,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                      targets<span class="op">=</span>targets,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                      split_type<span class="op">=</span><span class="st">'sequential'</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                      test_size<span class="op">=</span><span class="fl">0.2</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                      scale<span class="op">=</span>MinMaxScaler(),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                      includes_TH<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Train-Test split was: Sequential split
+X_train &amp; X_test have been scaled using MinMaxScaler()
+Dataframes are complete</code></pre>
+</div>
+</div>
+</section>
 <section id="data-shapes" class="level3">
 <h3 class="anchored" data-anchor-id="data-shapes">Data Shapes</h3>
 <div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_train shape:"</span>,X_train.shape)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_train shape:"</span>,y_train.shape)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_test shape:"</span>,X_test.shape)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_test shape:"</span>,y_test.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_train shape:"</span>,X_train.shape)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_train shape:"</span>,y_train.shape)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"X_test shape:"</span>,X_test.shape)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"y_test shape:"</span>,y_test.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>X_train shape: (25000,)
-y_train shape: (25000,)
-X_test shape: (25000,)
-y_test shape: (25000,)</code></pre>
+<pre><code>X_train shape: (6143901, 8)
+y_train shape: (6143901, 1)
+X_test shape: (1535976, 8)
+y_test shape: (1535976, 1)</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="rnn-model" class="level1">
+<h1>RNN Model</h1>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>RNN_Model <span class="op">=</span> tf.keras.models.Sequential([</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Embedding(input_dim<span class="op">=</span><span class="dv">15</span>, output_dim<span class="op">=</span><span class="dv">128</span>, input_length<span class="op">=</span><span class="dv">8</span>),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.SimpleRNN(units <span class="op">=</span><span class="dv">50</span>),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">## If not using Embedding, you would use SimpleRNN(units, input_shape=(x,y))</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dense(<span class="dv">32</span>,activation<span class="op">=</span><span class="st">'linear'</span>),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dense(<span class="dv">25</span>,activation<span class="op">=</span><span class="st">'linear'</span>),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  tf.keras.layers.Dense(<span class="dv">1</span>, activation<span class="op">=</span><span class="st">'linear'</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>RNN_Model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-12-01 06:56:05.470061: E tensorflow/compiler/xla/stream_executor/cuda/cuda_driver.cc:266] failed call to cuInit: UNKNOWN ERROR (100)</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ embedding (Embedding)       (None, 8, 128)            1920      
+                                                                 
+ simple_rnn (SimpleRNN)      (None, 50)                8950      
+                                                                 
+ dense (Dense)               (None, 32)                1632      
+                                                                 
+ dense_1 (Dense)             (None, 25)                825       
+                                                                 
+ dense_2 (Dense)             (None, 1)                 26        
+                                                                 
+=================================================================
+Total params: 13,353
+Trainable params: 13,353
+Non-trainable params: 0
+_________________________________________________________________</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>loss_function <span class="op">=</span> tf.keras.losses.MeanSquaredError()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>adam <span class="op">=</span> tf.keras.optimizers.legacy.Adam(learning_rate<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> keras.metrics.Accuracy()</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>RNN_Model.<span class="bu">compile</span>(</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                 loss<span class="op">=</span>loss_function,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                 metrics<span class="op">=</span>[accuracy],</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                 optimizer<span class="op">=</span>adam</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                 )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>Hist<span class="op">=</span>RNN_Model.fit(X_train,y_train, epochs<span class="op">=</span><span class="dv">5</span>, validation_data<span class="op">=</span>(X_test, y_test),batch_size<span class="op">=</span><span class="dv">5000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/5
+1229/1229 [==============================] - 89s 72ms/step - loss: 13090.1270 - accuracy: 0.0000e+00 - val_loss: 9743.9307 - val_accuracy: 0.0000e+00
+Epoch 2/5
+1229/1229 [==============================] - 91s 74ms/step - loss: 11456.8604 - accuracy: 1.6276e-07 - val_loss: 9723.5811 - val_accuracy: 0.0000e+00
+Epoch 3/5
+1229/1229 [==============================] - 147s 119ms/step - loss: 11461.3916 - accuracy: 0.0000e+00 - val_loss: 9749.8145 - val_accuracy: 0.0000e+00
+Epoch 4/5
+1229/1229 [==============================] - 146s 119ms/step - loss: 11467.1230 - accuracy: 8.1382e-07 - val_loss: 9789.4033 - val_accuracy: 0.0000e+00
+Epoch 5/5
+1229/1229 [==============================] - 124s 101ms/step - loss: 11463.1650 - accuracy: 0.0000e+00 - val_loss: 9722.2568 - val_accuracy: 0.0000e+00
+CPU times: user 27min 47s, sys: 4min 58s, total: 32min 46s
+Wall time: 9min 58s</code></pre>
+</div>
+</div>
+<section id="evaluate-model" class="level2">
+<h2 class="anchored" data-anchor-id="evaluate-model">Evaluate Model</h2>
+<section id="loss-accuracy-vs.-epoch-plots" class="level3">
+<h3 class="anchored" data-anchor-id="loss-accuracy-vs.-epoch-plots">Loss &amp; Accuracy vs.&nbsp;Epoch plots</h3>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accuracy plot</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>plt.plot(Hist.history[<span class="st">'accuracy'</span>], label<span class="op">=</span><span class="st">'accuracy'</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>plt.plot(Hist.history[<span class="st">'val_accuracy'</span>], label <span class="op">=</span> <span class="st">'val_accuracy'</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Accuracy'</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"NN HW3-Part2 Accuracy over all Epochs"</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.ylim([0.5, 1])</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f6ab9054450&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A3_Part4_JasmineKobayashi_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loss plot</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>plt.plot(Hist.history[<span class="st">'loss'</span>], label<span class="op">=</span><span class="st">'loss'</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>plt.plot(Hist.history[<span class="st">'val_loss'</span>], label <span class="op">=</span> <span class="st">'val_loss'</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epoch'</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Loss'</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"NN HW3-Part2 Loss over all Epochs"</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.ylim([0.5, 1])</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f6a8809ee90&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A3_Part4_JasmineKobayashi_files/figure-html/cell-18-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Eval_Loss, Eval_Accuracy <span class="op">=</span> RNN_Model.evaluate(X_test, y_test,batch_size<span class="op">=</span><span class="dv">5000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>308/308 [==============================] - 13s 42ms/step - loss: 9722.2568 - accuracy: 0.0000e+00</code></pre>
+</div>
+</div>
+</section>
+<section id="test-model-with-predictions" class="level3">
+<h3 class="anchored" data-anchor-id="test-model-with-predictions">Test Model with Predictions</h3>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> RNN_Model.predict(X_test,batch_size<span class="op">=</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1536/1536 [==============================] - 24s 16ms/step</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview results</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">5</span>   <span class="co"># index to check</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Prediction for X_test[</span><span class="sc">{}</span><span class="st">]:"</span>.<span class="bu">format</span>(i),pred[i])</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st"> Label for X_test[</span><span class="sc">{}</span><span class="st">] (y_test[</span><span class="sc">{}</span><span class="st">]):"</span>.<span class="bu">format</span>(i,i), y_test[i])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Prediction for X_test[5]: [-431.53113]
+
+ Label for X_test[5] (y_test[5]): [-430.3]</code></pre>
+</div>
+</div>
+<p>Again, as this is not a classification problem, I’m afraid I can’t provide a confusion matrix as visualization of performance. However, I will use the same “pretty” plot I used to evaluate my models for my research work.</p>
+<p>It’s a density scatter plot of the prediction values plotted against the true values. So, it kinda follows to same concept of the confusion matrix in the sense that the “best” performance has the most points along the diagonal.</p>
+<p>But first it requires some preliminary code:</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> cm</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.colors <span class="im">import</span> Normalize</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.interpolate <span class="im">import</span> interpn</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> pearsonr</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> r2_score</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error <span class="im">as</span> mse</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> density_scatter( x , y, line_z, ax <span class="op">=</span> <span class="va">None</span>, sort <span class="op">=</span> <span class="va">True</span>, bins <span class="op">=</span> <span class="dv">20</span>, nlevels<span class="op">=</span><span class="dv">10</span>, plot_cbar<span class="op">=</span><span class="va">True</span>, <span class="op">**</span>kwargs )   :</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a><span class="co">    Scatter plot colored by 2d histogram</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ax <span class="kw">is</span> <span class="va">None</span> :</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>        fig , ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    data , x_e, y_e <span class="op">=</span> np.histogram2d(x,y, bins <span class="op">=</span> bins, density <span class="op">=</span> <span class="va">False</span> )</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> interpn( ( <span class="fl">0.5</span><span class="op">*</span>(x_e[<span class="dv">1</span>:] <span class="op">+</span> x_e[:<span class="op">-</span><span class="dv">1</span>]) , <span class="fl">0.5</span><span class="op">*</span>(y_e[<span class="dv">1</span>:]<span class="op">+</span>y_e[:<span class="op">-</span><span class="dv">1</span>]) ) , data , np.vstack([x,y]).T , method <span class="op">=</span> <span class="st">"splinef2d"</span>, bounds_error <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">#To be sure to plot all data</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    z[np.where(np.isnan(z))] <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>    z[np.where(z<span class="op">&lt;=</span><span class="fl">0.0</span>)] <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sort the points by density, so that the densest points are plotted last</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> sort :</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>        idx <span class="op">=</span> z.argsort()</span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>        x, y, z <span class="op">=</span> x[idx], y[idx], z[idx]</span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">#x &amp; y values for plotting line of best fit for the model</span></span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>    a, b <span class="op">=</span> np.polyfit(x, y, <span class="dv">1</span>)</span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>    fit_line_x <span class="op">=</span> [<span class="op">-</span><span class="dv">1</span><span class="op">*</span>line_z,line_z]</span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>    fit_line_y <span class="op">=</span> a<span class="op">*</span>np.array(fit_line_x)<span class="op">+</span>b</span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true" tabindex="-1"></a>    cs <span class="op">=</span> ax.scatter( x, y, c<span class="op">=</span>z, marker<span class="op">=</span><span class="st">'.'</span>, cmap<span class="op">=</span><span class="st">'plasma'</span>, alpha<span class="op">=</span><span class="fl">0.8</span>, <span class="op">**</span>kwargs )     <span class="co"># 'marker' was added by JK</span></span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true" tabindex="-1"></a>    ax.plot([<span class="op">-</span><span class="dv">1</span><span class="op">*</span>line_z,line_z], [<span class="op">-</span><span class="dv">1</span><span class="op">*</span>line_z,line_z], <span class="st">'forestgreen'</span>, linewidth<span class="op">=</span><span class="fl">3.</span>, label<span class="op">=</span><span class="st">'R = 1.0'</span>)</span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true" tabindex="-1"></a>    ax.plot(fit_line_x, fit_line_y, linestyle<span class="op">=</span><span class="st">'--'</span>,color<span class="op">=</span><span class="st">'red'</span>, </span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true" tabindex="-1"></a>            linewidth<span class="op">=</span><span class="fl">2.</span>, label<span class="op">=</span><span class="st">'R = </span><span class="sc">{0:.2f}</span><span class="st"> (model)'</span>.<span class="bu">format</span>(pearsonr(x,y)[<span class="dv">0</span>]))</span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">#norm = Normalize(vmin = np.min(z), vmax = np.max(z))</span></span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true" tabindex="-1"></a>    cticks <span class="op">=</span> <span class="bu">list</span>(np.linspace(<span class="dv">0</span>,np.ceil(<span class="bu">len</span>(x)<span class="op">/</span><span class="fl">10.</span>)<span class="op">*</span><span class="dv">10</span>,nlevels))</span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># print(z.max())</span></span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true" tabindex="-1"></a>    cbar <span class="op">=</span> plt.colorbar(cs,ax<span class="op">=</span>ax,ticks<span class="op">=</span>cticks)</span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true" tabindex="-1"></a>    cbar.ax.set_yticklabels([<span class="st">"</span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(i) <span class="cf">for</span> i <span class="kw">in</span> cbar.get_ticks()])</span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true" tabindex="-1"></a>    cbar.set_label(<span class="st">'# per bin'</span>, fontsize<span class="op">=</span><span class="dv">12</span>, labelpad<span class="op">=</span><span class="fl">0.75</span>)</span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> plot_cbar:</span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true" tabindex="-1"></a>        cbar.remove()</span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ax</span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ml_model_performance(target,prediction,target_name,ml_model_name,bins<span class="op">=</span>[<span class="dv">10</span>,<span class="dv">10</span>],n_levels<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Model </span><span class="sc">{}</span><span class="st"> Target Prediction Score:'</span>.<span class="bu">format</span>(target_name),r2_score(target[target_name],prediction[target_name]))</span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Mean-Squared and Root-Mean-Squared Errors</span></span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true" tabindex="-1"></a>    mse1 <span class="op">=</span> mse(target[target_name],prediction[target_name],squared<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true" tabindex="-1"></a>    rmse1 <span class="op">=</span> mse(target[target_name],prediction[target_name],squared<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Mean-squared error ='</span>,mse1)</span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Root-mean-squared error ='</span>, rmse1)</span>
+<span id="cb35-58"><a href="#cb35-58" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-59"><a href="#cb35-59" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Graph</span></span>
+<span id="cb35-60"><a href="#cb35-60" aria-hidden="true" tabindex="-1"></a>    fig , ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb35-61"><a href="#cb35-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-62"><a href="#cb35-62" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.array(prediction[target_name])[:,<span class="dv">0</span>]</span>
+<span id="cb35-63"><a href="#cb35-63" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.array(target[target_name])[:,<span class="dv">0</span>]</span>
+<span id="cb35-64"><a href="#cb35-64" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-65"><a href="#cb35-65" aria-hidden="true" tabindex="-1"></a>    density_scatter(x,y,line_z<span class="op">=</span><span class="fl">1.4e12</span>,ax<span class="op">=</span>ax,sort<span class="op">=</span><span class="va">False</span>,bins<span class="op">=</span>bins,</span>
+<span id="cb35-66"><a href="#cb35-66" aria-hidden="true" tabindex="-1"></a>                    nlevels<span class="op">=</span>n_levels,plot_cbar<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb35-67"><a href="#cb35-67" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-68"><a href="#cb35-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># min_diff = target[target_name].min()-min(prediction[target_name])</span></span>
+<span id="cb35-69"><a href="#cb35-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># max_diff = target[target_name].max()-max(prediction[target_name])</span></span>
+<span id="cb35-70"><a href="#cb35-70" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-71"><a href="#cb35-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ax.set_xlim([int(target[target_name].min()-min_diff),int(target[target_name].max()+abs(max_diff))])</span></span>
+<span id="cb35-72"><a href="#cb35-72" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ax.set_ylim([int(target[target_name].min()-min_diff),int(target[target_name].max()+abs(max_diff))])</span></span>
+<span id="cb35-73"><a href="#cb35-73" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim([<span class="bu">int</span>(target[target_name].<span class="bu">min</span>()),<span class="bu">int</span>(target[target_name].<span class="bu">max</span>())])</span>
+<span id="cb35-74"><a href="#cb35-74" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim([<span class="bu">int</span>(target[target_name].<span class="bu">min</span>()),<span class="bu">int</span>(target[target_name].<span class="bu">max</span>())])</span>
+<span id="cb35-75"><a href="#cb35-75" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb35-76"><a href="#cb35-76" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'Prediction'</span>)</span>
+<span id="cb35-77"><a href="#cb35-77" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'Actual'</span>)</span>
+<span id="cb35-78"><a href="#cb35-78" aria-hidden="true" tabindex="-1"></a>    ax.set_title(ml_model_name <span class="op">+</span> <span class="st">'; Target = </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(target_name),fontsize<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb35-79"><a href="#cb35-79" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb35-80"><a href="#cb35-80" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>np.array(pd.DataFrame(pred,columns<span class="op">=</span>[<span class="st">'Vx'</span>]))[:,<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>array([-431.53113, -431.53113, -431.53113, ..., -431.53113, -431.53113,
+       -431.53113], dtype=float32)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>pred</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>array([[-431.53113],
+       [-431.53113],
+       [-431.53113],
+       ...,
+       [-431.53113],
+       [-431.53113],
+       [-431.53113]], dtype=float32)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>pred.ravel()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>array([-431.53113, -431.53113, -431.53113, ..., -431.53113, -431.53113,
+       -431.53113], dtype=float32)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>np.histogram2d(np.array(pred)[:,<span class="dv">0</span>], np.array(y_test)[:,<span class="dv">0</span>], bins <span class="op">=</span> <span class="dv">10</span>, density <span class="op">=</span> <span class="va">False</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>(array([[0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00,
+         0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00],
+        [0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00,
+         0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00],
+        [0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00,
+         0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00],
+        [0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00,
+         0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00],
+        [0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00,
+         0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00],
+        [2.20000e+02, 3.20500e+03, 2.65790e+04, 7.03180e+04, 1.08776e+05,
+         1.67441e+05, 2.77825e+05, 4.06116e+05, 3.96527e+05, 7.89690e+04],
+        [0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00,
+         0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00],
+        [0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00,
+         0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00],
+        [0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00,
+         0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00],
+        [0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00,
+         0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00, 0.00000e+00]]),
+ array([-432.03112793, -431.93112793, -431.83112793, -431.73112793,
+        -431.63112793, -431.53112793, -431.43112793, -431.33112793,
+        -431.23112793, -431.13112793, -431.03112793]),
+ array([-858.09997559, -796.95997772, -735.81997986, -674.67998199,
+        -613.53998413, -552.39998627, -491.2599884 , -430.11999054,
+        -368.97999268, -307.83999481, -246.69999695]))</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(y_test,columns<span class="op">=</span>[targets])[<span class="st">'Vx'</span>].<span class="bu">max</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>Vx   -246.699997
+dtype: float32</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>plt.plot(pred,y_test,<span class="st">'.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="A3_Part4_JasmineKobayashi_files/figure-html/cell-28-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>density_scatter(pred.ravel(),y_test.ravel(),line_z<span class="op">=</span><span class="fl">1.4e12</span>,bins<span class="op">=</span>[<span class="dv">15</span>,<span class="dv">15</span>],nlevels<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/tmp/ipykernel_757733/13330455.py:30: RankWarning: Polyfit may be poorly conditioned
+  a, b = np.polyfit(x, y, 1)
+/home/jasminekobayashi/anaconda3/envs/code-ref-notebook/lib/python3.11/site-packages/scipy/stats/_stats_py.py:4781: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  warnings.warn(stats.ConstantInputWarning(msg))</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>&lt;Axes: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A3_Part4_JasmineKobayashi_files/figure-html/cell-29-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>ml_model_performance(target<span class="op">=</span>pd.DataFrame(y_test,columns<span class="op">=</span>[targets]),</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>                     prediction<span class="op">=</span>pd.DataFrame(pred,columns<span class="op">=</span>[targets]),</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>                     target_name<span class="op">=</span>targets,</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>                     ml_model_name<span class="op">=</span><span class="st">'Simple RNN model'</span>,bins<span class="op">=</span>[<span class="dv">10</span>,<span class="dv">10</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model ['Vx'] Target Prediction Score: -6.972985637410112e-05
+Mean-squared error = 9722.257
+Root-mean-squared error = 98.6015</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/tmp/ipykernel_757733/13330455.py:30: RankWarning: Polyfit may be poorly conditioned
+  a, b = np.polyfit(x, y, 1)
+/home/jasminekobayashi/anaconda3/envs/code-ref-notebook/lib/python3.11/site-packages/scipy/stats/_stats_py.py:4781: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  warnings.warn(stats.ConstantInputWarning(msg))
+/tmp/ipykernel_757733/13330455.py:73: FutureWarning: Calling int on a single element Series is deprecated and will raise a TypeError in the future. Use int(ser.iloc[0]) instead
+  ax.set_xlim([int(target[target_name].min()),int(target[target_name].max())])
+/tmp/ipykernel_757733/13330455.py:73: FutureWarning: Calling int on a single element Series is deprecated and will raise a TypeError in the future. Use int(ser.iloc[0]) instead
+  ax.set_xlim([int(target[target_name].min()),int(target[target_name].max())])
+/tmp/ipykernel_757733/13330455.py:74: FutureWarning: Calling int on a single element Series is deprecated and will raise a TypeError in the future. Use int(ser.iloc[0]) instead
+  ax.set_ylim([int(target[target_name].min()),int(target[target_name].max())])
+/tmp/ipykernel_757733/13330455.py:74: FutureWarning: Calling int on a single element Series is deprecated and will raise a TypeError in the future. Use int(ser.iloc[0]) instead
+  ax.set_ylim([int(target[target_name].min()),int(target[target_name].max())])</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="A3_Part4_JasmineKobayashi_files/figure-html/cell-30-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
