@@ -160,4 +160,4 @@ Extras:
     - Part 2: Use TF/Keras to Create a CNN
     - (Part 3: (**Non coding portion**))
     - Part 4: Use TF/Keras to Create both an RNN and an LSTM and Compare Results
-    - Part 5: Type out the back propagation derivatives for $\frac{\partial L}{\partial U}$
+    - Part 5: Type out the back propagation derivatives for dL/dU
