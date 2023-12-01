@@ -9,11 +9,10 @@ execute:
     warning: false
 toc: true
 ---
-# STAT 5010 Unit #6 Code: GLMs
 
 The goal of this assignment is to analyze data using generalized linear models.
 
-## Problem #1
+# Problem #1
 
 In January 1986, the space shuttle Challenger exploded shortly after launch. An investigation was launched into the cause of the crash and attention focused on the rubber O-ring seals in the rocket boosters. At lower temperatures, rubber becomes more brittle and is a less effective sealant. At the time of the launch, the temperature was 31°F. Could the failure of the O-rings have been predicted? In the 23 previous shuttle missions for which data exists, some evidence of damage due to blow by and erosion was recorded on some O-rings. Each shuttle had two boosters, each with three O-rings. For each mission, we know the number of O-rings out of six showing some damage and the launch temperature. 
 
@@ -22,7 +21,7 @@ The 'orings' is a data frame with 23 observations on the following 2 variables.
 1. temp:  Ambient temperature (Fahrenheit) at launch time
 2. damage: Number of damaged 'O' rings (out of a total of 6)
 
-### (a) Construct a new variable called prop, which is the proportion of damaged 'O' rings. Plot prop against temperature. What do you notice about this plot?
+## (a) Construct a new variable called prop, which is the proportion of damaged 'O' rings. Plot prop against temperature. What do you notice about this plot?
 
 
 ```{r}
@@ -39,7 +38,7 @@ orings$prop = orings$damage/6
 with(orings, plot(temp, prop))
 ```
 
-### (b) Use the `glm()` function for fitting the logit model (logistic regression).
+## (b) Use the `glm()` function for fitting the logit model (logistic regression).
 
 Note: The first argument will be the model: `response ~ predictors`. For binomial response data, we need two pieces of information about the response values: `y` and `n`. Thus for binomial families, the response can be specified as a two-column matrix with the columns giving the numbers of successes and failures. You'll also need to specify the `family` argument, and the `data` argument. Use ?glm to specify these arguments.
 
@@ -68,7 +67,7 @@ summary(resid(glmod, type = "deviance"))
 summary(r)
 ```
 
-### (c) Plot the data again with the logit model.
+## (c) Plot the data again with the logit model.
 
 You'll need the inverse of the logit function: $$\text{logit}(\eta) = \frac{e^\eta}{1 + e^\eta}.$$
 
@@ -83,7 +82,7 @@ ilogit = exp(eta)/(1+exp(eta))
 lines(x, ilogit,col = "grey") #ilogit is the inverse logit transform
 ```
 
-### (d) Now let's check the interpretation of $\widehat{\beta}_1$. Create a new temperature value of 45 and 46 degrees. Calculuate the odds of failure at 45 and 46 degrees. What is the ratio of these two odds?
+## (d) Now let's check the interpretation of $\widehat{\beta}_1$. Create a new temperature value of 45 and 46 degrees. Calculuate the odds of failure at 45 and 46 degrees. What is the ratio of these two odds?
 
 Note that in general, the odds ratio is equal to:
 
@@ -109,7 +108,7 @@ odds2/odds1 #should equal exp(coef(glmod)[2]) #
 exp(coef(glmod)[2])
 ```
 
-### (e) Compute confidence intervals for the model parameters "by hand".
+## (e) Compute confidence intervals for the model parameters "by hand".
 
 
 ```{R}
@@ -123,7 +122,7 @@ beta0CI
 beta1CI
 ```
 
-### (f) Now compute them using confint(glmod).
+## (f) Now compute them using confint(glmod).
 
 Notice that these intervals are slightly different; they are based on the profile likelihood and do not assume asymptotic normality. They are more accurate for small sample sizes. Profile likelihood confidence intervals don’t assume normality of the estimator and appear to perform better for small samples sizes than Wald CIs (above). They are, nonetheless, still based on an asymptotic approximation – the asymptotic chi-square distribution of the log likelihood ratio test statistic. (for more info: http://www.math.umt.edu/patterson/ProfileLikelihoodCI.pdf)
 
@@ -133,7 +132,7 @@ Notice that these intervals are slightly different; they are based on the profil
 confint(glmod)
 ```
 
-### (g) Predict the probability of faulire at Temp = 45 degrees.
+## (g) Predict the probability of faulire at Temp = 45 degrees.
 
 
 ```{R}
@@ -142,7 +141,7 @@ pred = predict.glm(glmod, newdata, se = T, type = "response")
 pred$fit
 ```
 
-## Problem #2 
+# Problem #2 
 
 A researcher is interested in how variables, such as gre (Graduate Record Exam scores), gpa (grade point average) and prestige of the undergraduate institution (rank), effect admission into graduate school. The response variable, admit/don't admit, is a binary variable.
 
@@ -152,7 +151,7 @@ admission = read.csv("https://stats.idre.ucla.edu/stat/data/binary.csv")
 head(admission)
 ```
 
-### (a) Perform logistic regression treating `admit` as the response. Be sure to treat `rank` as a categorical variable.
+## (a) Perform logistic regression treating `admit` as the response. Be sure to treat `rank` as a categorical variable.
 
 
 ```{R}
@@ -163,7 +162,7 @@ summary(admission.glm)
 confint.default(admission.glm)
 ```
 
-### (b) Construct a reduced model without the `rank` variable. Conduct the likelihood ratio test to decide whether the reduced model is sufficient. You can do this using `anova()` or `lrtest()`.
+## (b) Construct a reduced model without the `rank` variable. Conduct the likelihood ratio test to decide whether the reduced model is sufficient. You can do this using `anova()` or `lrtest()`.
 
 
 ```{R}
@@ -175,7 +174,7 @@ anova(admission.red.glm, admission.glm, test = "Chisq") #Likelihood ratio test
 
 YOUR ANSWER HERE
 
-## Problem #3
+# Problem #3
 
 For each 30 Galapagos islands, we have a count of the number of plant species found on each island and the number that are endemic to that island. We also have five geographic variables for each island. 
 
@@ -187,7 +186,7 @@ For each 30 Galapagos islands, we have a count of the number of plant species fo
 6. Scruz: the distance from Santa Cruz island (km)
 7. Adjacent: the area of the adjacent island (square km)
 
-### (a) Remove the Endemics variable from the dataframe, and fit a linear model with Species as the response and all other variables as predictors. Run some diagnostics and explain why this model is not the best fit.
+## (a) Remove the Endemics variable from the dataframe, and fit a linear model with Species as the response and all other variables as predictors. Run some diagnostics and explain why this model is not the best fit.
 
 
 ```{R}
@@ -213,7 +212,7 @@ ggplot(df, aes(x = x, y = y)) +
     geom_hline(yintercept = 0)
 ```
 
-### (b) Recall that a square root transformation of the response might be helpful when the nonconstant variance assumption is violated. Try this transformation.
+## (b) Recall that a square root transformation of the response might be helpful when the nonconstant variance assumption is violated. Try this transformation.
 
 
 ```{R}
@@ -228,7 +227,7 @@ ggplot(df, aes(x = x, y = y)) +
     geom_hline(yintercept = 0)
 ```
 
-### (c) One issue with a transformation is that it makes interpretation less natural. Let's try a Poisson regression (with no transformation on the repsonse).
+## (c) One issue with a transformation is that it makes interpretation less natural. Let's try a Poisson regression (with no transformation on the repsonse).
 
 
 ```{R}
@@ -244,7 +243,7 @@ ggplot(df, aes(x = x, y = y)) +
     geom_hline(yintercept = 0)
 ```
 
-### (d) Interpret the parameter associated with Nearest.
+## (d) Interpret the parameter associated with Nearest.
 
 
 ```{R}
@@ -254,7 +253,7 @@ exp(8.826e-03)
 
 YOUR ANSWER HERE
 
-### (e) Calculate the deviance for Poisson regression. Does this value show up in the summary? Also, check the goodness of fit of this model using Pearson's $\chi^2$ statistic. What do you conclude about the fit?
+## (e) Calculate the deviance for Poisson regression. Does this value show up in the summary? Also, check the goodness of fit of this model using Pearson's $\chi^2$ statistic. What do you conclude about the fit?
 
 
 ```{R}
@@ -279,7 +278,7 @@ glmodred = glm(Species ~ .-Nearest, data = gala, family = poisson)
 anova(glmodred, glmod, test = "Chisq")
 ```
 
-## Problem #4 (Optional)
+# Problem #4 (Optional)
 
 Research another type of GLM (beyond binomial and Poisson), find a dataset that is reasonably modeled by that GLM, and model it. Does the model fit well?
 
@@ -288,13 +287,13 @@ Research another type of GLM (beyond binomial and Poisson), find a dataset that 
 #YOUR CODE HERE
 ```
 
-## Problem #5
+# Problem #5
 
 The following data is on lung cancer incidence in four Danish cities 1968-1971. This data set contains counts of incident lung cancer cases and population size in four neighbouring Danish cities by age group.
 
 Because we have an exposure (population), we should include an offset term. 
 
-### (a) Fit a Poisson model, with an offset for population, and then estiamte the dispersion parameter.
+## (a) Fit a Poisson model, with an offset for population, and then estiamte the dispersion parameter.
 
 
 ```{R}
