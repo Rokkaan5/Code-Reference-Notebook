@@ -28,5 +28,5 @@ These are my homework submissions, so all my code. As much as possible done "fro
     - [Part 1: ANNs in Keras](HW/hw3/A3_Part1_JasmineKobayashi.html)
     - [Part 2: Use TF/Keras to Create a CNN](HW/hw3/A3_Part2_JasmineKobayashi.html)
     - (Part 3: Illustrate the processes for cross-correlation... (**Non coding portion**))
-    - Part 4: Use TF/Keras to Create both an RNN and an LSTM and Compare Results
-    - Part 5: Type out the back propagation derivatives for $\frac{\partial L}{\partial U}$
+    - [Part 4: Use TF/Keras to Create both an RNN and an LSTM and Compare Results](HW/hw3/A3_Part4_JasmineKobayashi.html)
+    - [Part 5: Type out the back propagation derivatives for $\frac{\partial L}{\partial U}$](HW/hw3/A3_Part5_JasmineKobayashi.html)

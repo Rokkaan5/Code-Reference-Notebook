@@ -123,6 +123,7 @@ permalink: /CUB/StatII
 
 **[Lecture material](class_code.md#unit-6-generalized-linear-models)**
 
+- Generalized Linear Models
 
 **[Assignment](homeworks.md#unit-6-generalized-linear-models)**
 

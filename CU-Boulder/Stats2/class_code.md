@@ -38,3 +38,4 @@ All lecture code (and posted solutions) for [STAT II](Stats2.md) at [CU Boulder]
 
 # Unit 6: Generalized Linear Models
 
+- [Generalized Linear Models](lecture_code/Unit6/STAT-5010-Unit6-Code.html)
