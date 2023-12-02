@@ -37,6 +37,6 @@ All homework submission (by me) and posted solutions for [STAT II](Stats2.md) at
 
 # Unit 5: Model Selection and Collinearity
 
-- Hw6
+- [HW6](HW/STAT5010_HW6.html)
 
 # Unit 6: Generalized Linear Models
