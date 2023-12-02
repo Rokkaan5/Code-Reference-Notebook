@@ -1,0 +1,486 @@
+---
+title: "STAT 5010: HW6 - Solutions"
+author: "Dr. Osita Onyejekwe"
+format:
+    html:
+        code-fold: false
+execute:
+    output: true
+    warning: false
+toc: true
+---
+
+# Homework #6
+
+**See Canvas for this assignment's due date**. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don't know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel is preferred). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work. 
+
+
+
+## A. Theoretical Problems
+
+## A.1 Adjusted $R^2$
+
+**[8 points] Prove that the adjusted $R^2$ is always less than $R^2$.**
+
+$$R_a^2 = 1 - \frac{RSS\big/(n - (p+1))}{TSS\big/(n-1)} = 1 - \left(\frac{RSS}{TSS}\right) \left( \frac{n-1}{n - (p+1)}\right).$$
+
+The term $\left( \frac{n-1}{n - (p+1)}\right)$ will always be greater than one, which means that 
+
+$$\left(\frac{RSS}{TSS}\right) \left( \frac{n-1}{n - (p+1)}\right) > \left(\frac{RSS}{TSS}\right).$$
+
+If the lefthand side is always larger, then subtracting it from one will always make the result smaller.
+
+## A.2 Exponential family of distributions
+
+Let $Y$ be a random variable whose pdf/pmf can be written as
+
+$$f(y; \theta, \phi) = \exp{\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y, \phi)\right\} }, $$
+where $b(\theta)$ and $a(\phi)$ are arbitrary functions. 
+
+**[7 points] Show that $Y \sim \text{Poisson}(\lambda)$ meets this criterion.**
+
+$$f(y ; \lambda) = \frac{e^{-\lambda}\lambda^y}{y!} = \exp{ \left\{ \log\left( \frac{e^{-\lambda}\lambda^y}{y!} \right)\right\} } = \exp{ \left\{- \underbrace{\lambda}_{b(\theta)} + y \underbrace{\log\left(\lambda \right)}_{\theta} - \underbrace{\log\left(y!  \right)}_{c(y, \phi)}\right\} }. $$
+
+Note that $a(\phi) = 1$.
+
+## B. Computational Problems
+
+## B.1 Comparing Model Selection Techniques
+
+Recall again, the Amazon book data. The data consists of data on $n = 325$ books and includes measurements of:
+
+- `aprice`: The price listed on Amazon (dollars)
+
+
+- `lprice`: The book's list price (dollars)
+
+
+- `weight`: The book's weight (ounces)
+
+
+- `pages`: The number of pages in the book
+
+
+- `height`: The book's height (inches)
+
+
+- `width`: The book's width (inches)
+
+
+- `thick`: The thickness of the book (inches)
+
+
+- `cover`: Whether the book is a hard cover of paperback.
+
+
+- And other variables...
+
+We'll explore various models to predict `aprice`. But first, we'll repeat the data cleaning from our lesson on t-tests. We'll also split the data into a training set and a test/validation set.
+
+
+```{R}
+library(ggplot2)
+library(car) #for the vif() function
+library(corrplot)
+
+amazon = read.csv(url(paste0("https://raw.githubusercontent.com/bzaharatos/",
+                    "-Statistical-Modeling-for-Data-Science-Applications/",
+                    "master/Modern%20Regression%20Analysis%20/Datasets/amazon.txt")), sep = "\t")
+names(amazon)
+df = data.frame(aprice = amazon$Amazon.Price, lprice = as.numeric(amazon$List.Price),  
+                pages = amazon$NumPages, width = amazon$Width, weight = amazon$Weight..oz,  
+                height = amazon$Height, thick = amazon$Thick, cover = amazon$Hard..Paper)
+
+#cleaning the data, as was done in our lesson on t-tests
+df$weight[which(is.na(df$weight))] = mean(df$weight, na.rm = TRUE)
+df$pages[which(is.na(df$pages))] = mean(df$pages, na.rm = TRUE)
+df$height[which(is.na(df$height))] = mean(df$height, na.rm = TRUE)
+df$width[which(is.na(df$width))] = mean(df$width, na.rm = TRUE)
+df$thick[which(is.na(df$thick))] = mean(df$thick, na.rm = TRUE)
+df = df[-205,]
+
+#training and test set
+set.seed(11111)
+n = floor(0.8 * nrow(df)) #find the number corresponding to 80% of the data
+index = sample(seq_len(nrow(df)), size = n) #randomly sample indicies to be included in the training set
+
+train = df[index, ] #set the training set to be the randomly sampled rows of the dataframe
+test = df[-index, ] #set the testing set to be the remaining rows
+cat("There are", dim(train)[1], "rows and",dim(train)[2],"columns in the training set. ")  #check the dimensions
+cat("There are", dim(test)[1], "rows and",dim(test)[2],"columns in the testing set.")  #check the dimensions
+
+```
+
+There are 259 rows and 8 columns in the training set. There are 65 rows and 8 columns in the testing set.
+
+Also, here are some pairwise correlations:
+
+
+```{R}
+col4 = colorRampPalette(c("black", "darkgrey", "grey","#CFB87C"))
+corrplot(cor(train[,-8]), method = "ellipse", col = col4(100),  addCoef.col = "black", tl.col = "black")
+```
+
+
+**B.1 (a) [16 points] Fit a full model on the training dataset. Then, use the `update()` function to perform backward selection (let $\alpha_{crit} = 0.15$). At each step of backward selection, calculate the mean squared prediction error (MSPE) on the test set.**
+
+
+```{R}
+#full model
+lmod = lm(aprice ~ ., data = train)
+summary(lmod)
+#vif(lmod)
+
+#mspe
+ystar = predict(lmod, test); 
+mspe1 = with(test, mean((aprice - ystar)^2))
+
+lmod = update(lmod, . ~ . - thick)
+summary(lmod)
+
+#mspe
+ystar = predict(lmod, test); 
+mspe2 = with(test, mean((aprice - ystar)^2))
+```
+
+
+```{R}
+summary(lmod)
+lmod = update(lmod, . ~ . - height)
+
+#mspe
+ystar = predict(lmod, test); 
+mspe3 = with(test, mean((aprice - ystar)^2))
+```
+
+
+```{R}
+lmod = update(lmod, . ~ . - width)
+summary(lmod)
+#mspe
+ystar = predict(lmod, test); 
+mspe4 = with(test, mean((aprice - ystar)^2))
+```
+
+```{R}
+lmod = update(lmod, . ~ . - height)
+summary(lmod)
+#mspe
+ystar = predict(lmod, test); 
+mspe5 = with(test, mean((aprice - ystar)^2))
+```
+
+**B.1 (b) [4 points] Check the standard diagnostic plots for this "best" model. Specifically, do you think this model satisfies the modeling assumptions?**
+
+
+```{R}
+with(train, plot(aprice, fitted(lmod)))
+with(train, abline(0,1))
+par(mfrow = c(2,2))
+plot(lmod)
+```
+
+There appears to be structure in the residual plot, suggesting a violation of the linearity assumption, and possibly the constant variance assumption. The fitted vs observed plot looks reasonable, but there is high variability in large values of the response.
+
+**B.1 (c) [5 points] Compare the MSPE for each of the models you fit along the way to the "best" model found through backward selection. If the goal of this model is prediction, which model is "best"?**
+
+
+```{R}
+mspe = c(mspe1, mspe2, mspe3, mspe4, mspe5); #mspe/max(mspe)
+which.min(mspe)
+plot(1:5, mspe)
+
+```
+
+
+According to the MSPE,
+
+    aprice ~ lprice + pages + weight + cover
+
+is best.
+
+**B.1 (d) [13 points] Now, compute the best model of size $1$, the best model of size $2$, etc. up through the best model of size $7$ (the full model). Then, among the remaining $7$ models, compute the best model according the AIC, BIC, and $R^2_a$. Do the criteria pick out different models? Which model do *you* think is best? Justify your answer.**
+
+
+```{R}
+library(leaps)
+
+n = dim(train)[1]; 
+reg1 = regsubsets(aprice ~ ., data = train)
+rs = summary(reg1)
+rs$which
+
+AIC = 2*(2:8) + n*log(rs$rss/n) 
+plot(AIC ~ I(1:7), xlab = "number of predictors", ylab = "AIC")
+```
+
+
+```{R}
+plot(1:7, rs$adjr2, xlab = "number of predictors", ylab = "adjusted R-squared")
+```
+
+```{R}
+BIC = log(n)*(2:8) + n*log(rs$rss/n) 
+plot(BIC ~ I(1:7), xlab = "number of predictors", ylab = "BIC")
+```
+
+AIC chooses the model:
+
+        aprice ~  lprice + pages + weight + cover
+
+BIC chooses the model:
+
+        aprice ~ lprice + weight + cover
+
+$R^2_a$ chooses the model:
+
+        aprice ~ lprice + pages + width + weight + cover
+
+
+**B.1 (e) [25 points] Compute the MSPE for each of the best models of size $1$, the best model of size $2$, etc. up through the best model of size $7$ (the full model). Which model is best according to this metric? Is this the same model that was selected by MSPE in part B.1 (c)?**
+
+Rather than fit seven separate models, automate this process in a function with a loop:
+
+1. The function should take in the training set, the test set, and the summary of your `regsubsets()` object (what we called `rs` in class).
+
+2. The function should contain a loop. At step i = 1,...,p of the loop, you should:
+    - select the training set model matrix corresponding the the best model of size i. You can do this using the logicals in the table given by `rs$which`.
+    
+    - fit the regression with the selected model matrix
+    
+    - select the test set matrix, xstar, of correct size i = 1,...,p. Again, you can do this using the logicals in the table given by `rs$which`.
+    
+    - compute the predicted value for the selected xstar
+    
+    - compute the MSPE 
+
+
+```{R}
+rs = summary(reg1)
+
+mspe_fun = function(train, test, rs){
+    p = dim(rs$which)[1]; 
+
+    aprice = train$aprice #stores aprice outside of the train df
+    mspe = matrix(NA, ncol = p) #initializes mspe vector
+    for (i in 1:p){
+        #select the model matrix for the model of the correct size
+        X_t = model.matrix(aprice~., data=data.frame(aprice, train[,-1]))[,rs$which[i,]]
+    
+        #fit the regression with the correct model matrix
+        l = lm(aprice ~ X_t + 0); 
+    
+        #store the LS estimates
+        cc = coef(l)
+    
+        #extract the xstar matrix for predictions from the test set
+        #(note we're only running lm() for the model matrix, not the estimates)
+        tt = model.matrix(aprice ~ ., data = test) 
+    
+        #pull the test set xstar of the right size
+        x_t = tt[,rs$which[i,]]
+    
+        #prediction
+        ystar = as.matrix(x_t)%*%cc
+    
+        #MSPE
+        mspe[i] = mean((test$aprice - ystar)^2)
+    }
+    return(mspe)
+}
+
+p = dim(rs$which)[1]; 
+plot(1:p, mspe_fun(train,test,rs))
+```
+
+
+```{R}
+#model of size 1
+lm1 = lm(aprice ~ lprice, data = train)
+#mspe
+ystar = predict(lm1, test); 
+mspe1 = with(test, mean((aprice - ystar)^2))
+
+
+#model of size 2
+lm2 = lm(aprice ~ lprice + weight, data = train)
+#mspe
+ystar = predict(lm2, test); 
+mspe2 = with(test, mean((aprice - ystar)^2))
+
+#model of size 3
+lm3 = lm(aprice ~ lprice + weight + cover, data = train)
+#mspe
+ystar = predict(lm3, test); 
+mspe3 = with(test, mean((aprice - ystar)^2))
+
+#model of size 4
+lm4 = lm(aprice ~ lprice + weight + cover + pages, data = train)
+#mspe
+ystar = predict(lm4, test); 
+mspe4 = with(test, mean((aprice - ystar)^2))
+
+#model of size 5
+lm5 = lm(aprice ~ lprice + width + weight + cover + pages, data = train)
+#mspe
+ystar = predict(lm5, test); 
+mspe5 = with(test, mean((aprice - ystar)^2))
+
+#model of size 6
+lm6 = lm(aprice ~ lprice + weight + cover + pages + width + thick, data = train)
+#mspe
+ystar = predict(lm6, test); 
+mspe6 = with(test, mean((aprice - ystar)^2))
+
+#model of size 7
+lm7 = lm(aprice ~ ., data = train)
+#mspe
+ystar = predict(lm7, test); 
+mspe7 = with(test, mean((aprice - ystar)^2))
+
+mspe = c(mspe1,mspe2,mspe3,mspe4,mspe5,mspe6,mspe7); mspe
+plot(1:7, mspe)
+min(mspe)
+```
+
+The model of size four is best according to this metric:
+
+        aprice ~ lprice + pages + weight + cover  (MSPE = 8.1)
+
+The lowest MSPE among the models found along the way of backward selection corresponded to
+
+        aprice ~ lprice + pages + weight + cover (MSPE = 8.1)
+        
+        
+These models are the same.
+
+**B.1 (f) [5 points] Compute the variance inflation factor for the models selected by AIC, BIC, MSPE, and $R_a^2$. Do any of these models show evidence of collinearity?**
+
+
+```{R}
+vif_aic = vif(lm(aprice ~  lprice + pages + weight + cover, data = train))
+vif_bic = vif(lm(aprice ~ lprice + weight + cover, data = train))
+vif_mspe = vif(lm(aprice ~ lprice + pages + weight + cover, data = train))
+vif_adjr2 = vif(lm(aprice ~ lprice + pages + width + weight + cover, data = train))
+
+vif_aic 
+vif_bic
+vif_mspe
+vif_adjr2
+
+```
+
+None of these models show substantial collinearity according to the VIF metric.
+
+## B.2 Multicollinearity diagnostics and solutions
+
+`longley` is a macroeconomic data set with the following variables:
+
+1. `GNP.deflator`: GNP implicit price deflator (1954=100)
+
+2. `GNP`: Gross National Product.
+
+3. `Unemployed`: number of unemployed.
+
+4. `Armed.Forces`: number of people in the armed forces.
+
+5. `Population`: 'noninstitutionalized' population $\ge 14$ years of age.
+
+6. `Year`: the year (time).
+
+7. `Employed`: number of people employed.
+
+Let's consider models mean to predict `Employed`.
+
+
+```{R}
+require(MASS)
+head(longley)
+```
+
+    
+**B.2 (a) [6 points] First, center and scale the data so that all variables have mean zero and variance one. Then, fit a full model, with `Employed` as the response and all other variables as predictors. Since *all* of the data are centered and scaled, including the responce, you should fit this model without an intercept (the intercept is known to be zero). Does this model appear to violate any of our linear regression assummptions?**
+
+
+```{R}
+longley_scaled = data.frame(scale(longley)); 
+lmod_full = lm(Employed ~ .-1, data = longley_scaled)
+summary(lmod_full)
+
+par(mfrow = c(2,2))
+plot(lmod_full)
+plot(1:length(resid(lmod_full)), resid(lmod_full))
+```
+
+There does not appear to be any evidence of serious violations of linearity, constant variance, or independence. There appears to be some deviation from normality.
+
+**B.2 (b) [4 points] Calculate the variance inflation factors for this model. Comment on the output.**
+
+(You can ignore any "No intercept" warnings; the VIFs are sensible because we know the intercept to be zero.)
+
+
+```{R}
+library(car)
+vif(lmod_full)
+col4 = colorRampPalette(c("black", "darkgrey", "grey","#CFB87C"))
+corrplot(cor(longley_scaled), method = "ellipse", col = col4(100),  addCoef.col = "black", tl.col = "black")
+```
+
+Some of the VIFs are very high, suggesting serious collinearity. We can see that there are pairwise correlations among the predictors.
+
+**B.2 (c) [7 points] Compute the AIC *using the built-in `AIC()` function in `R`* for the full model above and a reduced model containing only GNP. Consider any violations of assumptions and comment on which model is best.**
+
+
+```{R}
+lmod_reduced = lm(Employed ~ GNP-1, data = longley_scaled)
+summary(lmod_reduced)
+
+#diagnostic plots
+par(mfrow = c(2,2))
+plot(lmod_reduced)
+
+#AIC
+rss = c(sum(resid(lmod_full)^2), sum(resid(lmod_reduced)^2))
+
+n = length(resid(lmod_full))
+p = c(length(coef(lmod_full)), length(coef(lmod_reduced))); 
+
+aic = c(AIC(lmod_full), AIC(lmod_reduced))
+cat("The AIC for the full model is ", aic[1], ". The AIC for the reduced model is ", aic[2], ".")
+
+#also acceptable: 
+
+```
+
+
+There does not appear to be any evidence of serious violations of linearity, constant variance, or independence. There appears to be some deviation from normality.
+
+Suppose that there are theoretical reasons to keep all of the predictors in the model. In such cases, we might want to "shrink" the effect of each predictor, i.e., shrink the magnitude of each slope parameter. Ridge regression is one such "shrinkage" method. Instead of minimizing the RSS, ridge regression minimizes
+
+$$Q(\beta) = \sum^n_{i=1}(Y_i - [\beta_0 + \beta_1 z_i + ... + \beta_p z_p])^2 + \lambda \sum^p_{j = 1}\beta_j^2,$$
+
+where $z_j$ are the standardized predictors. The first term controls the the fit of the model, and the second term controls the size of the coefficients. $\lambda$ is a *penalty term* and controls the balance between these two terms. Smaller values of $\lambda$ correspond to larger values of $\widehat\beta$. In the extreme case where $\lambda = 0$, $\widehat\beta$ will be the least squares solution.
+
+**B.2 (d) [5 points] Fit a ridge regression with `Employed` as the response and all others as predictors. Ridge regression can be performed with the `lm.ridge()` function in the `MASS` package. This function requires an argument, `lambda = `, for the tuning parameter. Use `lambda = seq(0,0.1,0.001)`. Plot the coefficients as a function of these $\lambda$ values.**
+
+
+```{R}
+lm_ridge = lm.ridge(Employed ~ .-1, data = longley_scaled, lambda = seq(0,0.1,0.001))
+#cbind(coef(lm_ridge), coef(lmod_full))
+plot(lm_ridge)
+summary(lm_ridge)
+```
+
+Which value of $\lambda$ should we choose? Some suggest that we choose the value where the estimates start to stablize. Others suggest using methods for *estimating* $\lambda$, such as generalized cross validation (GCV). Here are some [details](http://sfb649.wiwi.hu-berlin.de/fedc_homepage/xplore/ebooks/html/csa/node123.html) about GCV. GCV can be implemented by wrapping your ridge regression in the `select()` function.
+
+**B.2 (e) [5 points] Find the GCV value of $\lambda$. Then fit the ridge regression with this value of $\lambda$.**
+
+
+```{R}
+select(lm_ridge)
+```
+
+```{R}
+lm_ridge_final = lm.ridge(Employed ~ .-1, data = longley_scaled, lambda = 0.003)
+lm_ridge_final
+```
