@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>STAT 5010: HW6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="STAT5010_HW6_files/libs/clipboard/clipboard.min.js"></script>
+<script src="STAT5010_HW6_files/libs/quarto-html/quarto.js"></script>
+<script src="STAT5010_HW6_files/libs/quarto-html/popper.min.js"></script>
+<script src="STAT5010_HW6_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="STAT5010_HW6_files/libs/quarto-html/anchor.min.js"></script>
+<link href="STAT5010_HW6_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="STAT5010_HW6_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="STAT5010_HW6_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="STAT5010_HW6_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="STAT5010_HW6_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#a.-theoretical-problems" id="toc-a.-theoretical-problems" class="nav-link active" data-scroll-target="#a.-theoretical-problems">A. Theoretical Problems</a>
+  <ul class="collapse">
+  <li><a href="#a.1-adjusted-r2" id="toc-a.1-adjusted-r2" class="nav-link" data-scroll-target="#a.1-adjusted-r2">A.1 Adjusted <span class="math inline">\(R^2\)</span></a></li>
+  <li><a href="#a.2-exponential-family-of-distributions" id="toc-a.2-exponential-family-of-distributions" class="nav-link" data-scroll-target="#a.2-exponential-family-of-distributions">A.2 Exponential family of distributions</a></li>
+  </ul></li>
+  <li><a href="#b.-computational-problems" id="toc-b.-computational-problems" class="nav-link" data-scroll-target="#b.-computational-problems">B. Computational Problems</a>
+  <ul class="collapse">
+  <li><a href="#b.1-comparing-model-selection-techniques" id="toc-b.1-comparing-model-selection-techniques" class="nav-link" data-scroll-target="#b.1-comparing-model-selection-techniques">B.1 Comparing Model Selection Techniques</a></li>
+  <li><a href="#b.2-multicollinearity-diagnostics-and-solutions" id="toc-b.2-multicollinearity-diagnostics-and-solutions" class="nav-link" data-scroll-target="#b.2-multicollinearity-diagnostics-and-solutions">B.2 Multicollinearity diagnostics and solutions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">STAT 5010: HW6</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p><strong>See Canvas for this assignment’s due date</strong>. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don’t know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel is preferred). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work.</p>
+<section id="a.-theoretical-problems" class="level1">
+<h1>A. Theoretical Problems</h1>
+<section id="a.1-adjusted-r2" class="level2">
+<h2 class="anchored" data-anchor-id="a.1-adjusted-r2">A.1 Adjusted <span class="math inline">\(R^2\)</span></h2>
+<p><strong>[8 points] Prove that the adjusted <span class="math inline">\(R^2\)</span> is always less than <span class="math inline">\(R^2\)</span>.</strong></p>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>R-squared: <span class="math display">\[R^2 = 1 - \frac{\text{RSS}}{\text{TSS}}\]</span></p>
+<p>Adjusted R-squared: <span class="math display">\[R_a^2 = 1 - \frac{\text{RSS}/n-(p+1)}{\text{TSS}/(n-1)}\]</span></p>
+<p>Trying to prove <span class="math display">\[R_a^2 &lt; R^2\]</span> <span class="math display">\[1 - \frac{\text{RSS}/n-(p+1)}{\text{TSS}/(n-1)} &lt; 1 - \frac{\text{RSS}}{\text{TSS}} \]</span></p>
+<p><span class="math display">\[\begin{align*}
+1 - \frac{\text{RSS}}{\text{TSS}} \cdot \frac{(n-1)}{n-(p+1)} &amp;&lt; 1 - \frac{\text{RSS}}{\text{TSS}} \\
+- \frac{\text{RSS}}{\text{TSS}} \cdot \frac{(n-1)}{n-(p+1)} &amp;&lt; - \frac{\text{RSS}}{\text{TSS}} \\
+\frac{(n-1)}{n-(p+1)} &amp;&gt; 1 \\
+n-1 &amp;&gt; n-(p+1) \\
+-1 &amp;&gt; -(p+1) \\
+1 &amp;&lt; p+1 \\
+0 &amp;&lt; p
+\end{align*}\]</span></p>
+<p>And given that <span class="math inline">\(p\)</span> is the number of predictors, <span class="math inline">\(p\)</span> is always <span class="math inline">\(&gt;0\)</span> (positive), thus adjusted <span class="math inline">\(R^2\)</span> is always less than <span class="math inline">\(R^2\)</span>.</p>
+</section>
+<section id="a.2-exponential-family-of-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="a.2-exponential-family-of-distributions">A.2 Exponential family of distributions</h2>
+<p>Let <span class="math inline">\(Y\)</span> be a random variable whose pdf/pmf can be written as</p>
+<p><span class="math display">\[f(y; \theta, \phi) = \exp{\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y, \phi)\right\} }, \]</span></p>
+<p>where <span class="math inline">\(b(\theta)\)</span> and <span class="math inline">\(a(\phi)\)</span> are arbitrary functions.</p>
+<p><strong>[7 points] Show that <span class="math inline">\(Y \sim \text{Poisson}(\lambda)\)</span> meets this criterion.</strong></p>
+<p>YOUR ANSWER HERE</p>
+</section>
+</section>
+<section id="b.-computational-problems" class="level1">
+<h1>B. Computational Problems</h1>
+<section id="b.1-comparing-model-selection-techniques" class="level2">
+<h2 class="anchored" data-anchor-id="b.1-comparing-model-selection-techniques">B.1 Comparing Model Selection Techniques</h2>
+<p>Recall again, the Amazon book data. The data consists of data on <span class="math inline">\(n = 325\)</span> books and includes measurements of:</p>
+<ul>
+<li><p><code>aprice</code>: The price listed on Amazon (dollars)</p></li>
+<li><p><code>lprice</code>: The book’s list price (dollars)</p></li>
+<li><p><code>weight</code>: The book’s weight (ounces)</p></li>
+<li><p><code>pages</code>: The number of pages in the book</p></li>
+<li><p><code>height</code>: The book’s height (inches)</p></li>
+<li><p><code>width</code>: The book’s width (inches)</p></li>
+<li><p><code>thick</code>: The thickness of the book (inches)</p></li>
+<li><p><code>cover</code>: Whether the book is a hard cover of paperback.</p></li>
+<li><p>And other variables…</p></li>
+</ul>
+<p>We’ll explore various models to predict <code>aprice</code>. But first, we’ll repeat the data cleaning from our lesson on t-tests. We’ll also split the data into a training set and a test/validation set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car) <span class="co">#for the vif() function</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>amazon <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="fu">paste0</span>(<span class="st">"https://raw.githubusercontent.com/bzaharatos/"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"-Statistical-Modeling-for-Data-Science-Applications/"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"master/Modern%20Regression%20Analysis%20/Datasets/amazon.txt"</span>)), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(amazon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Title"        "Author"       "List.Price"   "Amazon.Price" "Hard..Paper" 
+ [6] "NumPages"     "Publisher"    "Pub.year"     "ISBN.10"      "Height"      
+[11] "Width"        "Thick"        "Weight..oz." </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">aprice =</span> amazon<span class="sc">$</span>Amazon.Price, <span class="at">lprice =</span> <span class="fu">as.numeric</span>(amazon<span class="sc">$</span>List.Price),  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">pages =</span> amazon<span class="sc">$</span>NumPages, <span class="at">width =</span> amazon<span class="sc">$</span>Width, <span class="at">weight =</span> amazon<span class="sc">$</span>Weight..oz,  </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">height =</span> amazon<span class="sc">$</span>Height, <span class="at">thick =</span> amazon<span class="sc">$</span>Thick, <span class="at">cover =</span> amazon<span class="sc">$</span>Hard..Paper)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#cleaning the data, as was done in our lesson on t-tests</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>weight[<span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>weight))] <span class="ot">=</span> <span class="fu">mean</span>(df<span class="sc">$</span>weight, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>pages[<span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>pages))] <span class="ot">=</span> <span class="fu">mean</span>(df<span class="sc">$</span>pages, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>height[<span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>height))] <span class="ot">=</span> <span class="fu">mean</span>(df<span class="sc">$</span>height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>width[<span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>width))] <span class="ot">=</span> <span class="fu">mean</span>(df<span class="sc">$</span>width, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>thick[<span class="fu">which</span>(<span class="fu">is.na</span>(df<span class="sc">$</span>thick))] <span class="ot">=</span> <span class="fu">mean</span>(df<span class="sc">$</span>thick, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> df[<span class="sc">-</span><span class="dv">205</span>,]</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#training and test set</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">11111</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">floor</span>(<span class="fl">0.8</span> <span class="sc">*</span> <span class="fu">nrow</span>(df)) <span class="co">#find the number corresponding to 80% of the data</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>index <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(df)), <span class="at">size =</span> n) <span class="co">#randomly sample indicies to be included in the training set</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>train <span class="ot">=</span> df[index, ] <span class="co">#set the training set to be the randomly sampled rows of the dataframe</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>test <span class="ot">=</span> df[<span class="sc">-</span>index, ] <span class="co">#set the testing set to be the remaining rows</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"There are"</span>, <span class="fu">dim</span>(train)[<span class="dv">1</span>], <span class="st">"rows and"</span>,<span class="fu">dim</span>(train)[<span class="dv">2</span>],<span class="st">"columns in the training set. "</span>)  <span class="co">#check the dimensions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 259 rows and 8 columns in the training set. </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"There are"</span>, <span class="fu">dim</span>(test)[<span class="dv">1</span>], <span class="st">"rows and"</span>,<span class="fu">dim</span>(test)[<span class="dv">2</span>],<span class="st">"columns in the testing set."</span>)  <span class="co">#check the dimensions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 65 rows and 8 columns in the testing set.</code></pre>
+</div>
+</div>
+<p>Also, here are some pairwise correlations:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>col4 <span class="ot">=</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"darkgrey"</span>, <span class="st">"grey"</span>,<span class="st">"#CFB87C"</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(train[,<span class="sc">-</span><span class="dv">8</span>]), <span class="at">method =</span> <span class="st">"ellipse"</span>, <span class="at">col =</span> <span class="fu">col4</span>(<span class="dv">100</span>),  <span class="at">addCoef.col =</span> <span class="st">"black"</span>, <span class="at">tl.col =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW6_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><strong>B.1 (a) [16 points] Fit a full model on the training dataset. Then, use the <code>update()</code> function to perform backward selection (let <span class="math inline">\(\alpha_{crit} = 0.15\)</span>). At each step of backward selection, calculate the mean squared prediction error (MSPE) on the test set.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>backward <span class="ot">&lt;-</span> <span class="fu">lm</span>(aprice<span class="sc">~</span>.,<span class="at">data =</span> train)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(backward)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = aprice ~ ., data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-20.1643  -1.8518  -0.4658   1.4417  21.3398 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -5.618859   2.975680  -1.888  0.06014 .  
+lprice       0.862284   0.020365  42.342  &lt; 2e-16 ***
+pages       -0.003648   0.002843  -1.283  0.20055    
+width        0.418865   0.376188   1.113  0.26658    
+weight      -0.142183   0.060518  -2.349  0.01958 *  
+height       0.148091   0.342243   0.433  0.66560    
+thick        0.839125   1.397978   0.600  0.54889    
+coverP       1.896960   0.678552   2.796  0.00558 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.827 on 251 degrees of freedom
+Multiple R-squared:  0.9205,    Adjusted R-squared:  0.9183 
+F-statistic: 415.1 on 7 and 251 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mspe</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">=</span> <span class="fu">predict</span>(backward, test)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>(mspe1 <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>aprice <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.358554</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>backward <span class="ot">&lt;-</span> <span class="fu">update</span>(backward,.<span class="sc">~</span>. <span class="sc">-</span> pages)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(backward)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = aprice ~ lprice + width + weight + height + thick + 
+    cover, data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-21.4689  -1.7713  -0.4692   1.3084  22.3686 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -5.64827    2.97941  -1.896  0.05913 .  
+lprice       0.85531    0.01965  43.525  &lt; 2e-16 ***
+width        0.47662    0.37397   1.275  0.20366    
+weight      -0.15826    0.05928  -2.670  0.00809 ** 
+height       0.17440    0.34207   0.510  0.61061    
+thick       -0.39590    1.01532  -0.390  0.69692    
+coverP       1.51538    0.61072   2.481  0.01374 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.832 on 252 degrees of freedom
+Multiple R-squared:   0.92, Adjusted R-squared:  0.9181 
+F-statistic: 482.7 on 6 and 252 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mspe</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">=</span> <span class="fu">predict</span>(backward, test)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>(mspe2 <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>aprice <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.754259</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>backward <span class="ot">&lt;-</span> <span class="fu">update</span>(backward,.<span class="sc">~</span>.<span class="sc">-</span>width)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(backward)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = aprice ~ lprice + weight + height + thick + cover, 
+    data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-21.8337  -1.7664  -0.4518   1.2984  21.9911 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -3.99772    2.68654  -1.488   0.1380    
+lprice       0.86390    0.01848  46.742   &lt;2e-16 ***
+weight      -0.14159    0.05789  -2.446   0.0151 *  
+height       0.30909    0.32573   0.949   0.3436    
+thick       -0.74809    0.97820  -0.765   0.4451    
+coverP       1.32357    0.59262   2.233   0.0264 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.837 on 253 degrees of freedom
+Multiple R-squared:  0.9194,    Adjusted R-squared:  0.9179 
+F-statistic: 577.5 on 5 and 253 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mspe</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">=</span> <span class="fu">predict</span>(backward, test)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>(mspe3 <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>aprice <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.232974</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>backward <span class="ot">&lt;-</span> <span class="fu">update</span>(backward,.<span class="sc">~</span>.<span class="sc">-</span>height)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(backward)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = aprice ~ lprice + weight + thick + cover, data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-21.8261  -1.7592  -0.4444   1.2690  21.7205 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -1.62691    0.98743  -1.648   0.1007    
+lprice       0.87021    0.01724  50.480   &lt;2e-16 ***
+weight      -0.12160    0.05392  -2.255   0.0250 *  
+thick       -0.93012    0.95902  -0.970   0.3330    
+coverP       1.25915    0.58860   2.139   0.0334 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.836 on 254 degrees of freedom
+Multiple R-squared:  0.9192,    Adjusted R-squared:  0.9179 
+F-statistic:   722 on 4 and 254 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mspe</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">=</span> <span class="fu">predict</span>(backward, test)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>(mspe4 <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>aprice <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.751517</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>backward <span class="ot">&lt;-</span> <span class="fu">update</span>(backward,.<span class="sc">~</span>.<span class="sc">-</span>thick)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(backward)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = aprice ~ lprice + weight + cover, data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-21.9164  -1.7187  -0.4726   1.2999  22.0179 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -2.19138    0.79759  -2.748 0.006433 ** 
+lprice       0.87339    0.01692  51.609  &lt; 2e-16 ***
+weight      -0.15585    0.04074  -3.825 0.000164 ***
+coverP       1.38398    0.57429   2.410 0.016667 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.836 on 255 degrees of freedom
+Multiple R-squared:  0.9189,    Adjusted R-squared:  0.9179 
+F-statistic: 962.5 on 3 and 255 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mspe</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>yhat <span class="ot">=</span> <span class="fu">predict</span>(backward, test)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>(mspe5 <span class="ot">&lt;-</span> <span class="fu">mean</span>((test<span class="sc">$</span>aprice <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.703263</code></pre>
+</div>
+</div>
+<p><strong>B.1 (b) [4 points] Check the standard diagnostic plots for this “best” model. Specifically, do you think this model satisfies the modeling assumptions?</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">9</span>, <span class="at">repr.plot.height =</span> <span class="dv">9</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(backward)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW6_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>In short, no I don’t think it satisfies our modeling assumptions.</p>
+<p><strong>B.1 (c) [5 points] Compare the MSPE for each of the models you fit along the way to the “best” model found through backward selection. If the goal of this model is prediction, which model is “best”?</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">c</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>),<span class="fu">c</span>(mspe5,mspe4,mspe3,mspe2,mspe1),<span class="at">xlab =</span> <span class="st">"number of predictors"</span>,<span class="at">ylab =</span> <span class="st">"MSPE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW6_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>The MSPE suggest that the model that had 4 predictors was the “best” model (the one with the lowest prediction error). So not the last one, but the second to last one that still had one predictor that had a p-value above <span class="math inline">\(\alpha = 0.15\)</span>.</p>
+<p><strong>B.1 (d) [13 points] Now, compute the best model of size <span class="math inline">\(1\)</span>, the best model of size <span class="math inline">\(2\)</span>, etc. up through the best model of size <span class="math inline">\(7\)</span> (the full model). Then, among the remaining <span class="math inline">\(7\)</span> models, compute the best model according the AIC, BIC, and <span class="math inline">\(R^2_a\)</span>. Do the criteria pick out different models? Which model do <em>you</em> think is best? Justify your answer.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaps)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>reg1 <span class="ot">=</span> <span class="fu">regsubsets</span>(aprice <span class="sc">~</span> .,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> train)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>rs <span class="ot">=</span> <span class="fu">summary</span>(reg1)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>rs<span class="sc">$</span>which</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept) lprice pages width weight height thick coverP
+1        TRUE   TRUE FALSE FALSE  FALSE  FALSE FALSE  FALSE
+2        TRUE   TRUE FALSE FALSE   TRUE  FALSE FALSE  FALSE
+3        TRUE   TRUE FALSE FALSE   TRUE  FALSE FALSE   TRUE
+4        TRUE   TRUE  TRUE FALSE   TRUE  FALSE FALSE   TRUE
+5        TRUE   TRUE  TRUE  TRUE   TRUE  FALSE FALSE   TRUE
+6        TRUE   TRUE  TRUE  TRUE   TRUE  FALSE  TRUE   TRUE
+7        TRUE   TRUE  TRUE  TRUE   TRUE   TRUE  TRUE   TRUE</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>AIC <span class="ot">=</span> <span class="dv">2</span><span class="sc">*</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">+</span> n<span class="sc">*</span><span class="fu">log</span>(rs<span class="sc">$</span>rss<span class="sc">/</span>n)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(AIC <span class="sc">~</span> <span class="fu">I</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>), <span class="at">xlab =</span> <span class="st">"number of predictors"</span>,<span class="at">ylab =</span> <span class="st">"AIC"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW6_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, rs<span class="sc">$</span>adjr2, <span class="at">xlab =</span> <span class="st">"number of predictors"</span>, <span class="at">ylab =</span> <span class="st">"adjusted R Squared"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW6_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>BIC <span class="ot">=</span> <span class="fu">log</span>(n)<span class="sc">*</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">7</span>) <span class="sc">+</span> n<span class="sc">*</span><span class="fu">log</span>(rs<span class="sc">$</span>rss<span class="sc">/</span>n) </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(BIC <span class="sc">~</span> <span class="fu">I</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>), <span class="at">xlab =</span> <span class="st">"number of predictors"</span>, <span class="at">ylab =</span> <span class="st">"BIC"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW6_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><em>YOUR ANSWER HERE</em></p>
+<p>Yes, the criteria pick out different models. If AIC and BIC look for the lowest of each criteria, interestingly then both suggest all 7 predictors are the best, unless something went wrong (which I suspect it did) in which case, AIC suggest around 4 predictors is the best model and about 2 or 3 predictors is best according to BIC. Then adjusted <span class="math inline">\(R^2\)</span> (which looks for the highest) suggest that around 5 predictors is the best model.</p>
+<p>In <em>my</em> opinion I want to select a model that most agrees with most if not all of these evaluation method which seems to be around 4 predictors (specifically with the predictors: <code>lprice</code>, <code>pages</code> (which is ironic because that was the first predictor out during backward selection), <code>weight</code>, and <code>coverP</code>). BIC didn’t suggest that was the best model specifically but 2-3 predictors is still close to 4 predictors.</p>
+<p><strong>B.1 (e) [25 points] Compute the MSPE for each of the best models of size <span class="math inline">\(1\)</span>, the best model of size <span class="math inline">\(2\)</span>, etc. up through the best model of size <span class="math inline">\(7\)</span> (the full model). Which model is best according to this metric? Is this the same model that was selected by MSPE in part B.1 (c)?</strong></p>
+<p>Rather than fit seven separate models, automate this process in a function with a loop:</p>
+<ol type="1">
+<li><p>The function should take in the training set, the test set, and the summary of your <code>regsubsets()</code> object (what we called <code>rs</code> in class).</p></li>
+<li><p>The function should contain a loop. At step i = 1,…,p of the loop, you should:</p>
+<ul>
+<li><p>select the training set model matrix corresponding the the best model of size i. You can do this using the logicals in the table given by <code>rs$which</code>.</p></li>
+<li><p>fit the regression with the selected model matrix</p></li>
+<li><p>select the test set matrix, xstar, of correct size i = 1,…,p.&nbsp;Again, you can do this using the logicals in the table given by <code>rs$which</code>.</p></li>
+<li><p>compute the predicted value for the selected xstar</p></li>
+<li><p>compute the MSPE</p></li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>YOUR ANSWER HERE</p>
+<p><strong>B.1 (f) [5 points] Compute the variance inflation factor for the models selected by AIC, BIC, MSPE, and <span class="math inline">\(R_a^2\)</span>. Do any of these models show evidence of collinearity?</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>YOUR ANSWER HERE</p>
+</section>
+<section id="b.2-multicollinearity-diagnostics-and-solutions" class="level2">
+<h2 class="anchored" data-anchor-id="b.2-multicollinearity-diagnostics-and-solutions">B.2 Multicollinearity diagnostics and solutions</h2>
+<p><code>longley</code> is a macroeconomic data set with the following variables:</p>
+<ol type="1">
+<li><p><code>GNP.deflator</code>: GNP implicit price deflator (1954=100)</p></li>
+<li><p><code>GNP</code>: Gross National Product.</p></li>
+<li><p><code>Unemployed</code>: number of unemployed.</p></li>
+<li><p><code>Armed.Forces</code>: number of people in the armed forces.</p></li>
+<li><p><code>Population</code>: ‘noninstitutionalized’ population <span class="math inline">\(\ge 14\)</span> years of age.</p></li>
+<li><p><code>Year</code>: the year (time).</p></li>
+<li><p><code>Employed</code>: number of people employed.</p></li>
+</ol>
+<p>Let’s consider models mean to predict <code>Employed</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(longley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     GNP.deflator     GNP Unemployed Armed.Forces Population Year Employed
+1947         83.0 234.289      235.6        159.0    107.608 1947   60.323
+1948         88.5 259.426      232.5        145.6    108.632 1948   61.122
+1949         88.2 258.054      368.2        161.6    109.773 1949   60.171
+1950         89.5 284.599      335.1        165.0    110.929 1950   61.187
+1951         96.2 328.975      209.9        309.9    112.075 1951   63.221
+1952         98.1 346.999      193.2        359.4    113.270 1952   63.639</code></pre>
+</div>
+</div>
+<p><strong>B.2 (a) [6 points] First, center and scale the data so that all variables have mean zero and variance one. Then, fit a full model, with <code>Employed</code> as the response and all other variables as predictors. Since <em>all</em> of the data are centered and scaled, including the responce, you should fit this model without an intercept (the intercept is known to be zero). Does this model appear to violate any of our linear regression assummptions?</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">scale</span>(longley, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  GNP.deflator          GNP            Unemployed        Armed.Forces    
+ Min.   :-1.7311   Min.   :-1.5434   Min.   :-1.41612   Min.   :-1.6535  
+ 1st Qu.:-0.6631   1st Qu.:-0.7024   1st Qu.:-0.90433   1st Qu.:-0.4436  
+ Median :-0.1002   Median :-0.0631   Median :-0.05331   Median : 0.1592  
+ Mean   : 0.0000   Mean   : 0.0000   Mean   : 0.00000   Mean   : 0.0000  
+ 3rd Qu.: 0.8867   3rd Qu.: 0.6679   3rd Qu.: 0.69472   3rd Qu.: 0.6525  
+ Max.   : 1.4102   Max.   : 1.6821   Max.   : 1.72579   Max.   : 1.4187  
+   Population           Year            Employed       
+ Min.   :-1.4111   Min.   :-1.5753   Min.   :-1.46528  
+ 1st Qu.:-0.8102   1st Qu.:-0.7877   1st Qu.:-0.74161  
+ Median :-0.0892   Median : 0.0000   Median : 0.05325  
+ Mean   : 0.0000   Mean   : 0.0000   Mean   : 0.00000  
+ 3rd Qu.: 0.7015   3rd Qu.: 0.7877   3rd Qu.: 0.84668  
+ Max.   : 1.8196   Max.   : 1.5753   Max.   : 1.49033  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>full_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(Employed <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> ., <span class="at">data =</span> df)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(full_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Employed ~ 0 + ., data = df)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.116776 -0.044896 -0.008019  0.028916  0.129669 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+GNP.deflator  0.04628    0.24754   0.187 0.855422    
+GNP          -1.01375    0.89921  -1.127 0.285910    
+Unemployed   -0.53754    0.12328  -4.360 0.001421 ** 
+Armed.Forces -0.20474    0.04028  -5.083 0.000476 ***
+Population   -0.10122    0.42480  -0.238 0.816476    
+Year          2.47966    0.58578   4.233 0.001735 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.08235 on 10 degrees of freedom
+Multiple R-squared:  0.9955,    Adjusted R-squared:  0.9928 
+F-statistic:   367 on 6 and 10 DF,  p-value: 3.937e-11</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">9</span>, <span class="at">repr.plot.height =</span> <span class="dv">9</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(full_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5010_HW6_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>YOUR ANSWER HERE</p>
+<p><strong>B.2 (b) [4 points] Calculate the variance inflation factors for this model. Comment on the output.</strong></p>
+<p>(You can ignore any “No intercept” warnings; the VIFs are sensible because we know the intercept to be zero.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(full_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>GNP.deflator          GNP   Unemployed Armed.Forces   Population         Year 
+   135.53244   1788.51348     33.61889      3.58893    399.15102    758.98060 </code></pre>
+</div>
+</div>
+<p>YOUR ANSWER HERE</p>
+<p><strong>B.2 (c) [7 points] Compute the AIC <em>using the built-in <code>AIC()</code> function in <code>R</code></em> for the full model above and a reduced model containing only GNP. Consider any violations of assumptions and comment on which model is best.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(full_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -28.01095</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>red_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(Employed <span class="sc">~</span> GNP, <span class="at">data =</span> df)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(red_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -4.388804</code></pre>
+</div>
+</div>
+<p>YOUR ANSWER HERE</p>
+<p>Suppose that there are theoretical reasons to keep all of the predictors in the model. In such cases, we might want to “shrink” the effect of each predictor, i.e., shrink the magnitude of each slope parameter. Ridge regression is one such “shrinkage” method. Instead of minimizing the RSS, ridge regression minimizes</p>
+<p><span class="math display">\[Q(\beta) = \sum^n_{i=1}(Y_i - [\beta_0 + \beta_1 z_i + ... + \beta_p z_p])^2 + \lambda \sum^p_{j = 1}\beta_j^2,\]</span></p>
+<p>where <span class="math inline">\(z_j\)</span> are the standardized predictors. The first term controls the the fit of the model, and the second term controls the size of the coefficients. <span class="math inline">\(\lambda\)</span> is a <em>penalty term</em> and controls the balance between these two terms. Smaller values of <span class="math inline">\(\lambda\)</span> correspond to larger values of <span class="math inline">\(\widehat\beta\)</span>. In the extreme case where <span class="math inline">\(\lambda = 0\)</span>, <span class="math inline">\(\widehat\beta\)</span> will be the least squares solution.</p>
+<p><strong>B.2 (d) [5 points] Fit a ridge regression with <code>Employed</code> as the response and all others as predictors. Ridge regression can be performed with the <code>lm.ridge()</code> function in the <code>MASS</code> package. This function requires an argument, <code>lambda =</code>, for the tuning parameter. Use <code>lambda = seq(0,0.1,0.001)</code>. Plot the coefficients as a function of these <span class="math inline">\(\lambda\)</span> values.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>ridge_mod <span class="ot">&lt;-</span> <span class="fu">lm.ridge</span>(Employed <span class="sc">~</span> ., <span class="at">data =</span> df,<span class="at">lambda =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="fl">0.1</span>,<span class="fl">0.001</span>))</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ridge_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Length Class  Mode   
+coef   606    -none- numeric
+scales   6    -none- numeric
+Inter    1    -none- numeric
+lambda 101    -none- numeric
+ym       1    -none- numeric
+xm       6    -none- numeric
+GCV    101    -none- numeric
+kHKB     1    -none- numeric
+kLW      1    -none- numeric</code></pre>
+</div>
+</div>
+<p>Which value of <span class="math inline">\(\lambda\)</span> should we choose? Some suggest that we choose the value where the estimates start to stablize. Others suggest using methods for <em>estimating</em> <span class="math inline">\(\lambda\)</span>, such as generalized cross validation (GCV). Here are some <a href="http://sfb649.wiwi.hu-berlin.de/fedc_homepage/xplore/ebooks/html/csa/node123.html">details</a> about GCV. GCV can be implemented by wrapping your ridge regression in the <code>select()</code> function.</p>
+<p><strong>B.2 (e) [5 points] Find the GCV value of <span class="math inline">\(\lambda\)</span>. Then fit the ridge regression with this value of <span class="math inline">\(\lambda\)</span>.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#YOUR CODE HERE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
