@@ -1,0 +1,275 @@
+---
+title: "STAT 5010: HW7"
+author: "Jasmine Kobayashi"
+format:
+    html:
+        code-fold: false
+execute:
+    output: true
+    warning: false
+toc: true
+---
+
+# Homework #7
+
+**See Canvas for HW #7 assignment due date**. Complete all of the following problems. Ideally, the theoretical problems should be answered in a Markdown cell directly underneath the question. If you don't know LaTex/Markdown, you may submit separate handwritten solutions to the theoretical problems. Please do not turn in messy work. Computational problems should be completed in this notebook (using the R kernel is preferred). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work. 
+
+## A. Theoretical Problems
+
+**No theoretical problems this week. Keep working on your project!**
+
+## B. Computational Problems
+
+### Problem B.1
+
+The National Institute of Diabetes and Digestive and Kidney Diseases conducted a study of 768 adult female Pima Indians living near Phoenix, AZ. The purpose of the study was the investigate factors related to diabetes.
+
+*Before we analyze these data, we should note that some have raised ethical issues with its collection and popularity in the statistics and data science community. We should think seriously about these concerns. For example, Maya Iskandarani wrote a brief [piece](https://researchblog.duke.edu/2016/10/24/diabetes-and-privacy-meet-big-data/) on consent and privacy concerns raised by this dataset. After you familarize yourself with the data, we'll then turn to these ethical concerns.*
+
+
+**B.1 (a) [8 points] Perform simple graphical and numerical summaries of the data. Can you find any obvious irregularities in the data? If so, take appropriate steps to correct these problems.**
+
+
+```{R}
+library(ggplot2)
+library(dplyr)
+pima = read.table("https://raw.githubusercontent.com/CUBuffs/Statistical-Learning-/main/Generalized%20Linear%20Models/Datasets/pima.txt", sep = "\t", header = TRUE)
+
+#Here's a description of the data: https://rdrr.io/cran/faraway/man/pima.html
+#pima
+```
+
+```{r}
+#YOUR CODE HERE
+head(pima)
+```
+```{r}
+summary(pima)
+```
+
+
+```{R}
+library(corrplot)
+col4 = colorRampPalette(c("black", "darkgrey", "grey","#CFB87C"))
+corrplot(cor(pima), method = "ellipse", col = col4(100),  addCoef.col = "black", tl.col = "black")
+```
+
+YOUR ANSWER HERE
+
+**B.1 (b) [12 points] Fit a model with the result of the diabetes test as the response and all the other variables as predictors. Store this model as  `glmod_pima`. Can you tell whether this model fits the data?**
+
+
+```{R}
+#YOUR CODE HERE
+glmod_pima <- glm(test ~ ., data = pima, family = binomial)
+summary(glmod_pima)
+```
+
+
+YOUR ANSWER HERE
+
+**B.1 (c) [14 points] Using the model above, write R code to calculate the odds ratio of testing positive for diabetes for a woman with a BMI at the first quartile compared with a woman at the third quartile, assuming all other factors are held constant. Store your answer in a  variable `x`. Also, give a confidence interval for this ratio, stored in a variable `ci`.**
+
+YOUR ANSWER HERE
+
+
+```{R}
+#YOUR CODE HERE
+summary(pima['bmi'])
+```
+```{r}
+#odds ratio
+newdata = data.frame(bmi=27.3)  
+logodds1 = (coef(glmod_pima)[1] + coef(glmod_pima)[7]*newdata) 
+odds1 = exp(logodds1) #calculuate the odds...
+
+newdata2 = data.frame(bmi=36.6)  
+
+logodds2 =(coef(glmod_pima)[1] + coef(glmod_pima)[7]*newdata2) 
+odds2 = exp(logodds2) #calculuate the odds...
+
+#check interpretation...
+(x <- odds2/odds1) 
+```
+
+```{r}
+#confidence interval
+(ci <- confint(glmod_pima))
+```
+
+
+YOUR ANSWER HERE
+
+**B.1 (d) [10 points] Do women who test positive have higher diastolic blood pressures? Is the diastolic blood pressure significant in the regression model? Explain the distinction between the two questions and discuss why the answers are only apparently contradictory.**
+
+
+```{R}
+#YOUR CODE HERE
+pima$test <- as.factor(pima$test)
+ggplot(data=pima) + geom_boxplot(mapping = aes(x = test, y = diastolic))
+```
+```{r}
+summary(glmod_pima)
+```
+
+*YOUR ANSWER HERE*
+
+The boxplot shows there's not much difference between the diastolic blood pressure data whether the tested positive or not. In terms of the model, it appears to be generally not extremely significant but not necessarily insignificant either. 
+
+**B1 (e) [7 points] Ethical Issues in Data Collection**
+
+Read Maya Iskandarani's [piece](https://researchblog.duke.edu/2016/10/24/diabetes-and-privacy-meet-big-data/) on consent and privacy concerns raised by this dataset. Summarize those concerns here.
+
+YOUR ANSWER HERE
+
+### B.2 Poisson regression
+
+The ships dataset gives the number of damage incidents and aggregate months of service for different types of ships broken down by year of construction and period of operation. 
+
+The code below splits the data into a training set (80% of the data) and a test set (the remaining 20%).
+
+
+```{R}
+library(MASS)
+data(ships)
+ships = ships[ships$service != 0,]
+ships$year = as.factor(ships$year)
+ships$period = as.factor(ships$period)
+
+set.seed(11)
+n = floor(0.8 * nrow(ships))
+index = sample(seq_len(nrow(ships)), size = n)
+
+train = ships[index, ]
+test = ships[-index, ]
+head(train)
+summary(train)
+
+```
+
+**B.2 (a) [10 points] Use the training set to develop an appropriate regression model for `incidents`, using `type`, `period`, and `year` as predictors (HINT: is this a count model or a rate model?). Calculate the mean squared prediction error (MSPE) for the test set. Display your results.**
+
+
+```{R}
+#YOUR CODE HERE
+b2_mod <- glm(incidents ~ type+period+year,data = train,family = poisson())
+summary(b2_mod)
+```
+```{r}
+pred <- predict(b2_mod,test)
+pred
+```
+```{r}
+(mspe1 = with(test, mean((incidents - pred)^2)))
+```
+
+
+YOUR ANSWER HERE
+
+**B.2 (b) [7 points] Do we really need all of these predictors? Construct a new regression model leaving out `year` and calculate the MSPE for this second model. Decide which model is better. Explain why you chose the model that you did.**
+
+
+```{R}
+#YOUR CODE HERE
+b2_mod_red <- update(b2_mod,.~. - year)
+summary(b2_mod_red)
+```
+```{r}
+pred2 <- predict(b2_mod_red,test)
+(mspe2 <- with(test, mean((incidents - pred2)^2)))
+```
+
+*YOUR ANSWER HERE*
+
+The MSPE suggest that the second (reduced) model is better (because the mspe is lower). 
+
+**B.2 (c) [7 points] Compute the AIC and BIC for both models. Which model is best according to these metrics? Does each select a different model?**
+
+
+```{R}
+#YOUR CODE HERE
+#AIC
+library(leaps)
+
+#AIC
+n = dim(train)[1]
+reg1 = regsubsets(incidents ~ type+period+year, data = train)
+(rs1 = summary(reg1))
+AIC1 = 2*(2:7) + n*log(rs1$rss/n)
+plot(AIC1 ~ I(1:8), xlab = "number of predictors",ylab = "AIC")
+```
+```{r}
+#BIC
+BIC1 = log(n)*(2:7) + n*log(rs1$rss/n) 
+plot(BIC1 ~ I(1:8), xlab = "number of predictors", ylab = "BIC")
+```
+*JK note*: I'm not really sure why we would want to do this twice but since the directions indicate applying to "both" models I'll do that. 
+
+```{r}
+#AIC
+n = dim(train)[1]
+reg2 = regsubsets(incidents ~ type+period, data = train)
+(rs2 = summary(reg2))
+AIC2 = 2*(2:7) + n*log(rs2$rss/n)
+plot(AIC2 ~ I(1:6), xlab = "number of predictors",ylab = "AIC")
+
+```
+
+```{r}
+# BIC
+BIC2 = log(n)*(2:7) + n*log(rs2$rss/n) 
+plot(BIC2 ~ I(1:6), xlab = "number of predictors", ylab = "BIC")
+```
+
+
+*YOUR ANSWER HERE*
+
+Both AIC and BIC results seem to suggest around 2 predictors may be about the best. (Although there's also some low AIC and BIC values at 7 & 8 predictors, I'm not sure if that's because I did something wrong or something. Or maybe 7 predictors really is best. If that is the case than that would suggest the inclusion of year is best.)
+
+How do we determine if our model is explaining anything? With linear regression, we had a F-test, but we can't do that for Poisson Regression. If we want to check if our model is better than the null model, then we're going to have to check directly. In particular, we need to compare the deviances of the models to see if they're significantly different.
+
+**B.2 (d) [5 points]  Conduct two $\chi^2$ tests (using the deviance). Let $\alpha = 0.05$:**
+
+1. Test the adequacy of null model.
+
+2. Test the adequacy of your chosen model against the saturated model (the model fit to all predictors). 
+
+**What conclusions should you draw from these tests?**
+
+Note: The video on GLM goodness of fit should help with this question!
+
+
+```{R}
+#YOUR CODE HERE
+anova(b2_mod, b2_mod_red, test = 'Chisq')
+```
+
+YOUR ANSWER HERE
+
+Just like with linear regression, we can use visualizations to assess the fit and appropriateness of our model. Is it maintaining the assumptions that it should be? Is there a discernible structure that isn't being accounted for? And, again like linear regression, it can be up to the user's interpretation what is an isn't a good model.
+
+**B.2 (e) [4 points] Plot the deviance residuals against the linear predictor $\eta$. Interpret this plot.**
+
+Note: The video on GLM goodness of fit should help with this question!
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+YOUR ANSWER HERE
+
+For linear regression, the variance of the data is controlled through the standard deviation $\sigma$, which is independent of the other parameters like the mean $\mu$. However, some GLMs do not have this independence, which can lead to a problem called overdispersion. Overdispersion occurs when the observed data's variance is higher than expected, if the model is correct. 
+
+For Poisson Regression, we expect that the mean of the data should equal the variance. If overdispersion is present, then the assumptions of the model are not being met and we can not trust its output (or our beloved p-values)!
+
+**B.2 (f) [6 points] Explore the two models fit in the beginning of this question for evidence of overdisperion. If you find evidence of overdispersion, you do not need to fix it (but it would be useful for you to know how to). Describe your process and conclusions.**
+
+
+```{R}
+#YOUR CODE HERE
+```
+
+YOUR ANSWER HERE
+
+
