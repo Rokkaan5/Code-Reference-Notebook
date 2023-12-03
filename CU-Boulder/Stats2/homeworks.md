@@ -41,3 +41,5 @@ All homework submission (by me) and posted solutions for [STAT II](Stats2.md) at
     - [Solutions from TA/Professor](HW/solutions/STAT-5010_Sp23_HW6_Solutions.html)
 
 # Unit 6: Generalized Linear Models
+
+- [HW7](HW/STAT5010_HW7.html)
