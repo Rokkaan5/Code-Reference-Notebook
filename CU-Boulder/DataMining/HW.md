@@ -4,7 +4,10 @@ title: "DataMining Assignments"
 permalink: /CUB/DataMining/HW
 ---
 
-# [Data Mining](DataMining.md) - Assignment Submissions
+# [CU Boulder](../../CUB.md): [Data Mining](DataMining.md) - Assignment Submissions
+(Spring 2023) Data Mining with Professor Di Wu at CU Boulder
+
+These are all my homework and exam submissions.
 
 ## HW 1
 

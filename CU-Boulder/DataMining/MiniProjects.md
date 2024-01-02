@@ -4,10 +4,12 @@ title: "CUB-DataMining-MiniProjects"
 permalink: /CUB/DataMining/MiniProjects
 ---
 
-# [Data Mining](DataMining.md)- Mini Projects
+# [CU Boulder](../../CUB.md): [Data Mining](DataMining.md) - Mini Projects
+(Spring 2023) Data Mining with Professor Di Wu at CU Boulder
+
 Most of these are DataCamp Projects available through DataCamp (and these are the finished notebooks)
 
-[A Visual History of Nobel Prize Winners](Mini-Projects/NobelPrize/nobelprize-notebook.html)
+## [A Visual History of Nobel Prize Winners](Mini-Projects/NobelPrize/nobelprize-notebook.html)
 - 
 
 - Some basic Python applications
@@ -15,19 +17,19 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
     - plots, subplots
 - EDA
 
-[Analyzing TV Data](Mini-Projects/TV/TVdata.html)
+## [Analyzing TV Data](Mini-Projects/TV/TVdata.html)
 -
 
 - EDA
 - Statistical analysis
 
-[Recreating John Snow's Ghost Map](Mini-Projects/Map/GhostMap.html)
+## [Recreating John Snow's Ghost Map](Mini-Projects/Map/GhostMap.html)
 - 
 
 - plots
 - Example application of map plots (`folium` package)
 
-[Analyze Your Runkeeper Fitness Data](Mini-Projects/Fitness/FitnessData.html)
+## [Analyze Your Runkeeper Fitness Data](Mini-Projects/Fitness/FitnessData.html)
 - 
 
 - Data Preprocessing 
@@ -40,7 +42,7 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
         - `axhline()`
         - `axhspan()`
 
-[Tweet Classification: Trump vs Trudeau](Mini-Projects/Tweets/TweetClassification.html)
+## [Tweet Classification: Trump vs Trudeau](Mini-Projects/Tweets/TweetClassification.html)
 - 
 
 - Text processing
@@ -50,7 +52,7 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
     - Linear Support Vector Model (`LinearSVC()`)
 - Confusion matrices
 
-[Do Left-handed People Really Die Young?](Mini-Projects/LeftHand/LHDieYoung.html)
+## [Do Left-handed People Really Die Young?](Mini-Projects/LeftHand/LHDieYoung.html)
 -
 
 - (Naive) Bayes rule and theorem
@@ -58,7 +60,7 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
     - Conditional probabilities
     - Probablities
 
-[Predict Blood Donations](Mini-Projects/BloodDonations/Blood.html)
+## [Predict Blood Donations](Mini-Projects/BloodDonations/Blood.html)
 -
 
 - TPOTClassifier application example 
@@ -66,13 +68,13 @@ Most of these are DataCamp Projects available through DataCamp (and these are th
 - Log normalization
 - `operator.itemgetter`
 
-[Predicting Credit Card Approvals](Mini-Projects/PredictCCapproval/notebook.html)
+## [Predicting Credit Card Approvals](Mini-Projects/PredictCCapproval/notebook.html)
 -
 
 - Logistic regression 
 - `GridSearchCV`
 
-[Dr. Semmelwels and the Discovery of Handwashing](Mini-Projects/Handwashing/Handwashing.html)
+## [Dr. Semmelwels and the Discovery of Handwashing](Mini-Projects/Handwashing/Handwashing.html)
 -
 
 - `ax = pd.plot() pd.plot()`

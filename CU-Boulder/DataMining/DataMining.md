@@ -3,7 +3,7 @@ layout: page
 title: "CUB-DataMining"
 permalink: /CUB/DataMining
 ---
-# Data Mining
+[Spring 2023] ***Data Mining*** with Professor Di Wu at [CU Boulder](../../CUB.md)
 
 ## [Lecture Tutorials](Lectures.md)
 

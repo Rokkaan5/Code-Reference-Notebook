@@ -4,7 +4,8 @@ title: "DataMining Lectures"
 permalink: /CUB/DataMining/Lectures
 ---
 
-# [Data Mining](DataMining.md) - Lecture Tutorial Notebooks
+# [CU Boulder](../../CUB.md): [Data Mining](DataMining.md) - Lecture Tutorial Notebooks
+(Spring 2023) Data Mining with Professor Di Wu at CU Boulder
 
 ## 01-Data Integration:
 - [Collect Data from CSV](Lecture-Tutorials/01-Data-Integration/CollectDataFromCSV.html)
