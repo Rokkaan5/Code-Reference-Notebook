@@ -15,6 +15,8 @@ permalink: /CUB/DataMining/Lectures
 - [Collect Data from YahooFinance](Lecture-Tutorials/01-Data-Integration/CollectDataFromYahoo.html)
 - [Data_Integration](Lecture-Tutorials/01-Data-Integration/Data_Integration.html)
 
+([HW1](HW.md#hw-1))
+
 ## 02-Data Manipulation:
 - [Numpy - Basics](Lecture-Tutorials/02-Data-Manipulation/Numpy%201%20-%20%20Basics.html)
 - [Numpy - Multidimensional Arrays](Lecture-Tutorials/02-Data-Manipulation/Numpy%202%20-%20Multi%20Dimensional%20Arrays.html)
