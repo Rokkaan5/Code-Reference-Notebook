@@ -18,6 +18,10 @@ permalink: /CUB/DataMining
 - 08-Clustering
 - 09-Frequent Patterns
 
+## [Assignments](HW.md)
+
+Homework assignments and Exam submissions (Should correlate with lecture topics more or less)
+
 
 ## [Mini-projects](MiniProjects.md)
 Most of these are DataCamp Projects available through DataCamp (and these are the finished notebooks)
