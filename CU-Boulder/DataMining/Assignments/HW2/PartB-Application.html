@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>HW2: Part B - Applications</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="PartB-Application_files/libs/clipboard/clipboard.min.js"></script>
+<script src="PartB-Application_files/libs/quarto-html/quarto.js"></script>
+<script src="PartB-Application_files/libs/quarto-html/popper.min.js"></script>
+<script src="PartB-Application_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="PartB-Application_files/libs/quarto-html/anchor.min.js"></script>
+<link href="PartB-Application_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="PartB-Application_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="PartB-Application_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="PartB-Application_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="PartB-Application_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#part-b---application" id="toc-part-b---application" class="nav-link active" data-scroll-target="#part-b---application">Part B - Application</a></li>
+  <li><a href="#question-1-job-seeking-dataset" id="toc-question-1-job-seeking-dataset" class="nav-link" data-scroll-target="#question-1-job-seeking-dataset">Question 1 (job-seeking dataset)</a>
+  <ul class="collapse">
+  <li><a href="#read-in-the-data" id="toc-read-in-the-data" class="nav-link" data-scroll-target="#read-in-the-data">Read in the data</a></li>
+  <li><a href="#basic-info-of-the-dataset" id="toc-basic-info-of-the-dataset" class="nav-link" data-scroll-target="#basic-info-of-the-dataset">Basic info of the dataset</a></li>
+  <li><a href="#for-a-categorical-attribute" id="toc-for-a-categorical-attribute" class="nav-link" data-scroll-target="#for-a-categorical-attribute">For a categorical attribute:</a>
+  <ul class="collapse">
+  <li><a href="#value-counts" id="toc-value-counts" class="nav-link" data-scroll-target="#value-counts">Value Counts</a></li>
+  </ul></li>
+  <li><a href="#for-a-numerical-attribute" id="toc-for-a-numerical-attribute" class="nav-link" data-scroll-target="#for-a-numerical-attribute">For a numerical attribute</a>
+  <ul class="collapse">
+  <li><a href="#data-basics-min-max" id="toc-data-basics-min-max" class="nav-link" data-scroll-target="#data-basics-min-max">Data basics: Min, Max</a></li>
+  <li><a href="#data-central-tendency-mean-median-mode" id="toc-data-central-tendency-mean-median-mode" class="nav-link" data-scroll-target="#data-central-tendency-mean-median-mode">Data Central Tendency: Mean, Median, Mode</a></li>
+  <li><a href="#data-dispersion-range-midrange-quartiles-iqr-variance-std-outliers" id="toc-data-dispersion-range-midrange-quartiles-iqr-variance-std-outliers" class="nav-link" data-scroll-target="#data-dispersion-range-midrange-quartiles-iqr-variance-std-outliers">Data Dispersion: Range, Midrange, Quartiles, IQR, Variance, Std, Outliers</a></li>
+  <li><a href="#some-plots-just-because" id="toc-some-plots-just-because" class="nav-link" data-scroll-target="#some-plots-just-because">Some plots (just because)</a></li>
+  </ul></li>
+  <li><a href="#what-knowledge-may-be-mined-from-this-data-set" id="toc-what-knowledge-may-be-mined-from-this-data-set" class="nav-link" data-scroll-target="#what-knowledge-may-be-mined-from-this-data-set">What knowledge may be mined from this data set?</a>
+  <ul class="collapse">
+  <li><a href="#categorical" id="toc-categorical" class="nav-link" data-scroll-target="#categorical">Categorical</a></li>
+  <li><a href="#numerical" id="toc-numerical" class="nav-link" data-scroll-target="#numerical">Numerical</a></li>
+  </ul></li>
+  <li><a href="#how-would-the-knowledge-be-useful-in-some-applications" id="toc-how-would-the-knowledge-be-useful-in-some-applications" class="nav-link" data-scroll-target="#how-would-the-knowledge-be-useful-in-some-applications">How would the knowledge be useful in some applications?</a></li>
+  </ul></li>
+  <li><a href="#question-2-news-data" id="toc-question-2-news-data" class="nav-link" data-scroll-target="#question-2-news-data">Question 2 (News data)</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">HW2: Part B - Applications</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="part-b---application" class="level1">
+<h1>Part B - Application</h1>
+</section>
+<section id="question-1-job-seeking-dataset" class="level1">
+<h1>Question 1 (job-seeking dataset)</h1>
+<p><strong>You have collected the data for assisting students in job seeking (Assignment 01, Part B, Prompt 1) and saved it as a .csv file. Apply the Python pandas package to the data you have collected, demonstrate how we can use it to get a better understanding of the data.</strong></p>
+<blockquote class="blockquote">
+<p>Note from Jasmine: I decided to use a different dataset than the one I created in HW1 for the sake of this HW problem. This was because the dataset I built in HW1 was very limited in information and thus difficult to accomplish certain parts of this assignment. For instance, did NOT have any numerical data because the “salary” column contained much more different salary information than I was expecting. So I selected a data set on the same topic (job openings) but with much more useful information to accomplish this part of the assignment.</p>
+</blockquote>
+<p>The single CSV dataset I used for this assignment: https://catalog.data.gov/dataset/nyc-jobs</p>
+<blockquote class="blockquote">
+<p>About the dataset that I used for this assignment: I cleaned the data in a separate notebook. It’s not necessarily filtered with only STEM positions.</p>
+</blockquote>
+<section id="read-in-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="read-in-the-data">Read in the data</h2>
+<div class="cell" data-cell_id="bd538b0ccafa439ea18a3275d17faa0e" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:25}" data-deepnote_cell_type="code" data-execution_millis="1848" data-execution_start="1675406774607" data-source_hash="7db0a668" data-tags="[]" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#import necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="9c379dc8cbfa4b7a93fc5fe2c34b0f59" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:31}" data-deepnote_cell_type="code" data-execution_millis="236" data-execution_start="1675406776498" data-source_hash="169ee0b0" data-tags="[]" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'JasmineKobayashiA02Positions.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-cell_id="5c868410a45942c3884ce5184a8f18ce" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:37}" data-deepnote_cell_type="code" data-execution_millis="94" data-execution_start="1675406776755" data-source_hash="e070f62f" data-tags="[]" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick peek at the df</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'total # of rows in df:'</span>,<span class="bu">len</span>(df))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>total # of rows in df: 5519</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Agency</th>
+<th data-quarto-table-cell-role="th"># Of Positions</th>
+<th data-quarto-table-cell-role="th">Business Title</th>
+<th data-quarto-table-cell-role="th">Civil Service Title</th>
+<th data-quarto-table-cell-role="th">Title Classification</th>
+<th data-quarto-table-cell-role="th">Job Category</th>
+<th data-quarto-table-cell-role="th">Full-Time/Part-Time indicator</th>
+<th data-quarto-table-cell-role="th">Career Level</th>
+<th data-quarto-table-cell-role="th">Salary Range From</th>
+<th data-quarto-table-cell-role="th">Salary Range To</th>
+<th data-quarto-table-cell-role="th">Salary Frequency</th>
+<th data-quarto-table-cell-role="th">Work Location</th>
+<th data-quarto-table-cell-role="th">Job Description</th>
+<th data-quarto-table-cell-role="th">Minimum Qual Requirements</th>
+<th data-quarto-table-cell-role="th">Hours/Shift</th>
+<th data-quarto-table-cell-role="th">Residency Requirement</th>
+<th data-quarto-table-cell-role="th">Posting Date</th>
+<th data-quarto-table-cell-role="th">Post Until</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>NYC HOUSING AUTHORITY</td>
+<td>1</td>
+<td>Director, IT Program Management Office</td>
+<td>COMPUTER SYSTEMS MANAGER</td>
+<td>Competitive-1</td>
+<td>Technology, Data &amp; Innovation</td>
+<td>F</td>
+<td>Manager</td>
+<td>80931.0</td>
+<td>208826.0</td>
+<td>Annual</td>
+<td>ESM-Program &amp; Portfolio Mgt</td>
+<td>The NYCHA IT Department seeks a motivated cand...</td>
+<td>1. A master's degree in computer science from ...</td>
+<td>NaN</td>
+<td>NYCHA has no residency requirements.</td>
+<td>12/07/2022</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>DEPT OF ENVIRONMENT PROTECTION</td>
+<td>2</td>
+<td>Change Order Manager</td>
+<td>PRINCIPAL ADMINISTRATIVE ASSOC</td>
+<td>Competitive-1</td>
+<td>Engineering, Architecture, &amp; Planning Finance,...</td>
+<td>F</td>
+<td>Experienced (non-manager)</td>
+<td>58695.0</td>
+<td>89699.0</td>
+<td>Annual</td>
+<td>96-05 Horace Harding Expway</td>
+<td>The NYC Department of Environmental Protection...</td>
+<td>1. A baccalaureate degree from an accredited c...</td>
+<td>NaN</td>
+<td>New York City residency is generally required ...</td>
+<td>12/13/2022</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>DEPT OF ENVIRONMENT PROTECTION</td>
+<td>1</td>
+<td>ACCOUNTABLE MANAGER</td>
+<td>ADM ENGINEER (NON MGRL)</td>
+<td>Competitive-1</td>
+<td>Engineering, Architecture, &amp; Planning Public S...</td>
+<td>F</td>
+<td>Experienced (non-manager)</td>
+<td>53702.0</td>
+<td>146121.0</td>
+<td>Annual</td>
+<td>96-05 Horace Harding Expway</td>
+<td>The NYC Department of Environmental Protection...</td>
+<td>1. A valid New York State License as a Profess...</td>
+<td>NaN</td>
+<td>New York City Residency is not required for th...</td>
+<td>01/09/2023</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>DISTRICT ATTORNEY RICHMOND COU</td>
+<td>1</td>
+<td>Assistant District Attorney - Domestic Violenc...</td>
+<td>ASSISTANT DISTRICT ATTORNEY (S</td>
+<td>Exempt-4</td>
+<td>Legal Affairs</td>
+<td>F</td>
+<td>Manager</td>
+<td>77000.0</td>
+<td>93000.0</td>
+<td>Annual</td>
+<td>130 Stuyvesant Place, S.I.</td>
+<td>RICHMOND COUNTY DISTRICT ATTORNEY The men and...</td>
+<td>1. New York State Bar Admission. 2. Three ...</td>
+<td>NaN</td>
+<td>New York City residency is generally required ...</td>
+<td>05/11/2022</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>HRA/DEPT OF SOCIAL SERVICES</td>
+<td>1</td>
+<td>SENIOR PROCUREMENT AND CONTRACT ANALYST</td>
+<td>ASSOCIATE STAFF ANALYST</td>
+<td>Competitive-1</td>
+<td>Administration &amp; Human Resources Policy, Resea...</td>
+<td>F</td>
+<td>Experienced (non-manager)</td>
+<td>70611.0</td>
+<td>86887.0</td>
+<td>Annual</td>
+<td>4 World Trade Center</td>
+<td>The Department of Social Services (DSS) is com...</td>
+<td>1. A masterâ€™s degree from an accredited coll...</td>
+<td>NaN</td>
+<td>New York City residency is generally required ...</td>
+<td>04/18/2022</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="basic-info-of-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="basic-info-of-the-dataset">Basic info of the dataset</h2>
+<p>Objects, attributes, datatype of attributes, etc.</p>
+<p>Reminder to self (copied from class slides and class recommended textbook):</p>
+<ul>
+<li><p>Object - entity: abstract data structure with certain attributes/features/dimensions/variables</p></li>
+<li><p>Attributes - characteristic or feature of a data object (Categorical: nominal, binary, ordinal; Numerical: interval-scaled, ratio-scaled, discrete or continuous.</p></li>
+</ul>
+<div class="cell" data-cell_id="1c20ba8434f34a47b86cbd350b726b5e" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:163}" data-deepnote_cell_type="code" data-execution_millis="10" data-execution_start="1675406776845" data-source_hash="de1e323c" data-tags="[]" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 5519 entries, 0 to 5518
+Data columns (total 18 columns):
+ #   Column                         Non-Null Count  Dtype  
+---  ------                         --------------  -----  
+ 0   Agency                         5519 non-null   object 
+ 1   # Of Positions                 5519 non-null   int64  
+ 2   Business Title                 5519 non-null   object 
+ 3   Civil Service Title            5519 non-null   object 
+ 4   Title Classification           5519 non-null   object 
+ 5   Job Category                   5517 non-null   object 
+ 6   Full-Time/Part-Time indicator  5293 non-null   object 
+ 7   Career Level                   5517 non-null   object 
+ 8   Salary Range From              5519 non-null   float64
+ 9   Salary Range To                5519 non-null   float64
+ 10  Salary Frequency               5519 non-null   object 
+ 11  Work Location                  5519 non-null   object 
+ 12  Job Description                5519 non-null   object 
+ 13  Minimum Qual Requirements      5461 non-null   object 
+ 14  Hours/Shift                    1953 non-null   object 
+ 15  Residency Requirement          5519 non-null   object 
+ 16  Posting Date                   5519 non-null   object 
+ 17  Post Until                     1687 non-null   object 
+dtypes: float64(2), int64(1), object(15)
+memory usage: 776.2+ KB</code></pre>
+</div>
+</div>
+<div class="cell" data-cell_id="eb916db0d04e4d4b9ced85d2385181b3" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:61}" data-deepnote_cell_type="code" data-execution_millis="1" data-execution_start="1675406776892" data-source_hash="f77e91be" data-tags="[]" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># objects = available job positions </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># attributes = company name, full vs. part-time (binary),Salary info, location, etc.</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># categorical attributes</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>cat_att <span class="op">=</span> [<span class="st">'Title Classification'</span>,                  <span class="co"># ordinal (rank)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Job Category'</span>,                         <span class="co"># nominal (categorical)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Full-Time/Part-Time indicator'</span>,        <span class="co"># binary</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Career Level'</span>,                         <span class="co"># ordinal</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Salary Frequency'</span>,                     <span class="co"># nominal</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">'Residency Requirement'</span>,]               <span class="co"># nominal</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># numerical attributes</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>num_att <span class="op">=</span> [<span class="st">'# Of Positions'</span>,<span class="st">'Salary Range From'</span>,<span class="st">'Salary Range To'</span>]   <span class="co"># all ratio-scaled (I think)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="for-a-categorical-attribute" class="level2">
+<h2 class="anchored" data-anchor-id="for-a-categorical-attribute">For a categorical attribute:</h2>
+<section id="value-counts" class="level3">
+<h3 class="anchored" data-anchor-id="value-counts">Value Counts</h3>
+<div class="cell" data-cell_id="bb7a99d406494e4a9b9a6aa50f958711" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:79}" data-deepnote_cell_type="code" data-execution_millis="25" data-execution_start="1675406776893" data-source_hash="f8f3ac23" data-tags="[]" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> cat_att:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i<span class="op">+</span><span class="st">':'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    display(df[i].value_counts())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Title Classification:
+Job Category:
+Full-Time/Part-Time indicator:
+Career Level:
+Salary Frequency:
+Residency Requirement:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>Competitive-1               3359
+Non-Competitive-5           1735
+Pending Classification-2     241
+Exempt-4                     131
+Labor-3                       53
+Name: Title Classification, dtype: int64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>Engineering, Architecture, &amp; Planning                                                                                                                                                                                                             682
+Technology, Data &amp; Innovation                                                                                                                                                                                                                     474
+Legal Affairs                                                                                                                                                                                                                                     444
+Building Operations &amp; Maintenance                                                                                                                                                                                                                 304
+Finance, Accounting, &amp; Procurement                                                                                                                                                                                                                296
+                                                                                                                                                                                                                                                 ... 
+Administration &amp; Human Resources Policy, Research &amp; Analysis Public Safety, Inspections, &amp; Enforcement Social Services                                                                                                                              1
+Administration &amp; Human Resources Communications &amp; Intergovernmental Affairs Engineering, Architecture, &amp; Planning Health Policy, Research &amp; Analysis Public Safety, Inspections, &amp; Enforcement                                                      1
+Administration &amp; Human Resources Building Operations &amp; Maintenance Public Safety, Inspections, &amp; Enforcement                                                                                                                                        1
+Constituent Services &amp; Community Programs Engineering, Architecture, &amp; Planning Public Safety, Inspections, &amp; Enforcement                                                                                                                           1
+Constituent Services &amp; Community Programs Communications &amp; Intergovernmental Affairs Engineering, Architecture, &amp; Planning Technology, Data &amp; Innovation Policy, Research &amp; Analysis Public Safety, Inspections, &amp; Enforcement Social Services      1
+Name: Job Category, Length: 190, dtype: int64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>F    5115
+P     178
+Name: Full-Time/Part-Time indicator, dtype: int64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>Experienced (non-manager)    4138
+Manager                       617
+Entry-Level                   610
+Executive                      88
+Student                        64
+Name: Career Level, dtype: int64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>Annual    5129
+Hourly     328
+Daily       62
+Name: Salary Frequency, dtype: int64</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>New York City residency is generally required within 90 days of appointment. However, City Employees in certain titles who have worked for the City for 2 continuous years may also be eligible to reside in Nassau, Suffolk, Putnam, Westchester, Rockland, or Orange County. To determine if the residency requirement applies to you, please discuss with the agency representative at the time of interview.     3316
+New York City Residency is not required for this position                                                                                                                                                                                                                                                                                                                                                            1068
+NYCHA has no residency requirements.                                                                                                                                                                                                                                                                                                                                                                                  365
+New York City Residency is not required for this position.                                                                                                                                                                                                                                                                                                                                                            210
+City Residency is not required for this position                                                                                                                                                                                                                                                                                                                                                                       66
+                                                                                                                                                                                                                                                                                                                                                                                                                     ... 
+Pursuant to New York City Administrative Code Â§ 12-121(a), New York City residency is not required for this position. City employees are required to report to work in-person.                                                                                                                                                                                                                                         2
+NYC RESIDENCY IS NOT REQUIRED FO THIS POSITION                                                                                                                                                                                                                                                                                                                                                                          2
+New York City residency is generally required within 90 days of appointment. However, City Employees in certain titles who have worked for the City for 2 continuous years may also be eligible to reside in Nassau, Suffolk, Putnam, Westchester, Rockland, or Orange County. To determine if the residency requirement applies to you, please discuss with the agency representative at the time of  interview.       2
+The New York City Administrative Code requires an employee in this title to establish city residence within 90 days of entering City service and to remain in compliance with the city residence requirement as a condition of employment.                                                                                                                                                                              1
+New York City residency is generally required within 90 days of appointment. However, City Employees in certain titles who have worked for the City for 2 continuous years may also be eligible to reside in Nassau, Suffolk, Putnam, Westchester, Rockland, or Orange County. To determine if the residency requirement applies to you, please discuss with the agency representative at the time of intervie          1
+Name: Residency Requirement, Length: 88, dtype: int64</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="for-a-numerical-attribute" class="level2">
+<h2 class="anchored" data-anchor-id="for-a-numerical-attribute">For a numerical attribute</h2>
+<section id="data-basics-min-max" class="level3">
+<h3 class="anchored" data-anchor-id="data-basics-min-max">Data basics: Min, Max</h3>
+<div class="cell" data-cell_id="fed915d7fa884c7e8484bc8032162749" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:97}" data-deepnote_cell_type="code" data-execution_millis="28" data-execution_start="1675406776920" data-source_hash="b1b47bd4" data-tags="[]" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basics: min &amp; max</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> num_att:</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\'</span><span class="st">"</span><span class="op">+</span>i<span class="op">+</span><span class="st">"</span><span class="ch">\'</span><span class="st"> :"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Min:'</span>,df[i].<span class="bu">min</span>())</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Max:'</span>,df[i].<span class="bu">max</span>())</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'# Of Positions' :
+Min: 1
+Max: 250
+
+'Salary Range From' :
+Min: 0.0
+Max: 250000.0
+
+'Salary Range To' :
+Min: 15.0
+Max: 265000.0
+</code></pre>
+</div>
+</div>
+</section>
+<section id="data-central-tendency-mean-median-mode" class="level3">
+<h3 class="anchored" data-anchor-id="data-central-tendency-mean-median-mode">Data Central Tendency: Mean, Median, Mode</h3>
+<div class="cell" data-cell_id="90d61a976955476098ff7cb06ddf2782" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:109}" data-deepnote_cell_type="code" data-execution_millis="17" data-execution_start="1675406776934" data-source_hash="fdc81c13" data-tags="[]" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Central tendency: mean, median, mode</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statistics</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> num_att:</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\'</span><span class="st">"</span><span class="op">+</span>i<span class="op">+</span><span class="st">"</span><span class="ch">\'</span><span class="st"> :"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Mean:'</span>,statistics.mean(df[i]))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Median:'</span>,df[i].median())</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Mode:'</span>,df[i].mode()[<span class="dv">0</span>])</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'# Of Positions' :
+Mean: 2.3897445189345894
+Median: 1.0
+Mode: 1
+
+'Salary Range From' :
+Mean: 62416.43542382678
+Median: 60171.0
+Mode: 54100.0
+
+'Salary Range To' :
+Mean: 86458.16485876065
+Median: 83399.0
+Mode: 83981.0
+</code></pre>
+</div>
+</div>
+</section>
+<section id="data-dispersion-range-midrange-quartiles-iqr-variance-std-outliers" class="level3">
+<h3 class="anchored" data-anchor-id="data-dispersion-range-midrange-quartiles-iqr-variance-std-outliers">Data Dispersion: Range, Midrange, Quartiles, IQR, Variance, Std, Outliers</h3>
+<div class="cell" data-cell_id="b0427c1b04dc4bd2ac8b2f5963790493" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:121}" data-deepnote_cell_type="code" data-execution_millis="16" data-execution_start="1675406776989" data-source_hash="dd45c78e" data-tags="[]" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> num_att:</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\'</span><span class="st">"</span><span class="op">+</span>i<span class="op">+</span><span class="st">"</span><span class="ch">\'</span><span class="st"> :"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    Max <span class="op">=</span> df[i].<span class="bu">max</span>()</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    Min <span class="op">=</span> df[i].<span class="bu">min</span>()</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Range:'</span>,Max<span class="op">-</span>Min)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Midrange:'</span>,(Max<span class="op">-</span>Min)<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    quan <span class="op">=</span> df[i].quantile([<span class="fl">0.25</span>,<span class="fl">0.5</span>,<span class="fl">0.75</span>])</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> [<span class="fl">0.25</span>,<span class="fl">0.5</span>,<span class="fl">0.75</span>]:</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'Quantile </span><span class="sc">{}</span><span class="st">: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(j,quan[j]))</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'IQR:'</span>,quan[<span class="fl">0.75</span>] <span class="op">-</span> quan[<span class="fl">0.25</span>])</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Variance:'</span>,df[i].var())</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Std:'</span>,df[i].std())</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'# Of Positions' :
+Range: 249
+Midrange: 124.5
+Quantile 0.25: 1.0
+Quantile 0.5: 1.0
+Quantile 0.75: 1.0
+IQR: 0.0
+Variance: 88.83447980061102
+Std: 9.42520449648765
+
+'Salary Range From' :
+Range: 250000.0
+Midrange: 125000.0
+Quantile 0.25: 50000.0
+Quantile 0.5: 60171.0
+Quantile 0.75: 75504.0
+IQR: 25504.0
+Variance: 896276901.9839704
+Std: 29937.884059899265
+
+'Salary Range To' :
+Range: 264985.0
+Midrange: 132492.5
+Quantile 0.25: 62215.0
+Quantile 0.5: 83399.0
+Quantile 0.75: 109990.0
+IQR: 47775.0
+Variance: 1919148551.416429
+Std: 43808.0877397819
+</code></pre>
+</div>
+</div>
+</section>
+<section id="some-plots-just-because" class="level3">
+<h3 class="anchored" data-anchor-id="some-plots-just-because">Some plots (just because)</h3>
+<div class="cell" data-cell_id="753c35950388419781796e20b0552d06" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:184}" data-deepnote_cell_type="code" data-execution_millis="521" data-execution_start="1675406777003" data-source_hash="3133347f" data-tags="[]" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Salary Range From'</span>].plot.density()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>&lt;AxesSubplot: ylabel='Density'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="PartB-Application_files/figure-html/cell-11-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="e4b136fd5dbb45daaeba73f6cee6d1ad" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:172}" data-deepnote_cell_type="code" data-execution_millis="271" data-execution_start="1675406777528" data-source_hash="bd1c5794" data-tags="[]" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df.boxplot(column<span class="op">=</span><span class="st">'Salary Range From'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>&lt;AxesSubplot: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="PartB-Application_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="94df705d887d4bc2af3400b300c5ac19" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:190}" data-deepnote_cell_type="code" data-execution_millis="376" data-execution_start="1675406777869" data-source_hash="c8d71447" data-tags="[]" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Salary Range To'</span>].plot.density()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>&lt;AxesSubplot: ylabel='Density'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="PartB-Application_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-cell_id="ba757a80a86c4da59094cbbc4aa7a526" data-deepnote_app_coordinates="{&quot;h&quot;:5,&quot;w&quot;:12,&quot;x&quot;:0,&quot;y&quot;:178}" data-deepnote_cell_type="code" data-execution_millis="271" data-execution_start="1675406778243" data-source_hash="7b830c4c" data-tags="[]" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df.boxplot(column<span class="op">=</span>[<span class="st">'Salary Range To'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>&lt;AxesSubplot: &gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="PartB-Application_files/figure-html/cell-14-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="what-knowledge-may-be-mined-from-this-data-set" class="level2">
+<h2 class="anchored" data-anchor-id="what-knowledge-may-be-mined-from-this-data-set">What knowledge may be mined from this data set?</h2>
+<section id="categorical" class="level3">
+<h3 class="anchored" data-anchor-id="categorical">Categorical</h3>
+<ul>
+<li><p>Over half of the positions are considered “competitive” (the other (less than) half are either non-competitive or not categorized)</p></li>
+<li><p>There are 190 job categories in the data set</p></li>
+<li><p>There are significantly more full-time positions than part-time</p></li>
+<li><p>The most sought-after “Career Level” is an “Experienced non-manager”</p></li>
+<li><p>The least sought-after is the “Students” category specifically</p></li>
+<li><p>But there are a considerable amount of Entry-level jobs</p></li>
+</ul>
+<p>And even though I didn’t filter this dataset to consist of only STEM positions, there’s some useful information related to the most sought-after job categories</p>
+<ul>
+<li><p>Engineering is the most sought-after job category</p></li>
+<li><p>“Technology, Data &amp; Innovation” and “Legal Affairs” are the next two sought-after categories.</p></li>
+</ul>
+<p>In other words, the top two sought-after categories are in the STEM field. And that seems like pretty useful or at least reassuring information for someone who studied a program in the STEM field.</p>
+<p>(The “Residency Requirement” category just showed that I probably needed to do more data cleaning, because I could see that some entries were technically the same but the code considered them different because of very small typos.)</p>
+</section>
+<section id="numerical" class="level3">
+<h3 class="anchored" data-anchor-id="numerical">Numerical</h3>
+<ul>
+<li>Most places had only one position open, but some apparently had as many as 250 positions available</li>
+</ul>
+<p>The “Salary Range From” column (in other words the minimum salary)</p>
+<ul>
+<li><p>Apparently, it was possible to start with no salary at all according to the occurrence of zero (but I’m not entirely sure if that’s just a data cleaning negligence on my part).</p></li>
+<li><p>The 3rd quartile and maximum value showed that it’s possible to have a 6-figure minimum salary</p></li>
+</ul>
+<p>The “Salary Range To”</p>
+<ul>
+<li>The most anyone could make from any of these position postings is $265000 (annually I’m sure).</li>
+</ul>
+</section>
+</section>
+<section id="how-would-the-knowledge-be-useful-in-some-applications" class="level2">
+<h2 class="anchored" data-anchor-id="how-would-the-knowledge-be-useful-in-some-applications">How would the knowledge be useful in some applications?</h2>
+<p>The information from the categorical attributes can be useful in understanding the types of jobs that are out there and what are the most sought-after.</p>
+<p>And the information from the numerical attributes can give a sense of the range of salaries to potentially keep in mind (although it might be more useful to group and associate them with specific categories in the categorical attributes).</p>
+</section>
+</section>
+<section id="question-2-news-data" class="level1">
+<h1>Question 2 (News data)</h1>
+<p><strong>You have collected data of news (Assignment 01, Part B, Prompt 2) and saved it as a .csv file. Perform text processing (refer tutorial). Label the data as positive/negative sentiments.</strong></p>
+<blockquote class="blockquote">
+<p>Note from Jasmine: I probably won’t be able to finish this part on time again. Although I really will try to get around to it once some of my other deadlines settle down.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>But I think I would like to explain something since I understand that there’s an effort being made by both the TA and the professor to specifically tailor the exercises to maximize benefits for all students. And I want to make this note to relieve some potential concerns about the skills I’ve been slacking practice on. The note is that I don’t anticipate a lot of text processing in the career field I hope to enter.</p>
+</blockquote>
+<p>With my background in physics, I, personally, hope to apply my data science skills to science/physics research (maybe space physics specifically). And most of the data worked within that field tends to be numeric and categorical, and I can’t imagine much potential in text processing or sentiment analysis in physics research data (because ideally nothing in physics is based on emotion).</p>
+<p>I’m not trying to say that I don’t need this practice nor am I trying to “justify” my slacking. I just thought I would explain why these text-processing parts of the assignments so far have been a lower-priority exercise for me compared to the rest of the exercises.</p>
+<p>I’m sure it would still be a potentially useful skill and practice, and I know it will probably be needed for the rest of the work in this class so again I plan to get around to it eventually. But I thought this might be a potentially useful thought process to explain.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
