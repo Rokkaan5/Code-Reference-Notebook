@@ -26,6 +26,8 @@ permalink: /CUB/DataMining/Lectures
 - [Pandas - Advanced](Lecture-Tutorials/02-Data-Manipulation/Pandas%203%20-%20Advanced.html)
 - [Text Processing](Lecture-Tutorials/02-Data-Manipulation/Text%20Processing.html)
 
+([HW2](HW.md#hw-2))
+
 ## [03-Data Understanding](CU-Boulder/DataMining/Lecture-Tutorials/03-Data-Understanding/DataUnderstanding.html)
 (only one (self-titled) notebook)
 

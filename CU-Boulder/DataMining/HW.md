@@ -10,7 +10,7 @@ permalink: /CUB/DataMining/HW
 These are all my homework and exam submissions.
 
 ## HW 1 
-(associated with [Data Collection/Integration](Lectures.md#01-data-integration) lecture)
+(Associated with [Data Collection/Integration](Lectures.md#01-data-integration) lecture section)
 
 - [Part A - Reasoning](Assignments/HW1/PartA-Reasoning.html)
     - What do you understand by the term "Data Mining"?
@@ -20,5 +20,26 @@ These are all my homework and exam submissions.
 - [Part B - Application](Assignments/HW1/PartB-Application.html)
     - Data collection "tutorial" for job search in STEM
     - Webscraping application of news data for sentimental analysis
+        - (I never finished this part (yet))
 - [Part C - Reading](Assignments/HW1/PartC-Reading.html)
     - **Paper title:** *Security and Privacy Issues of Big Data*
+
+
+## HW 2
+(Associated with [Data Manipulation](Lectures.md#02-data-manipulation) lecture section)
+
+- [Part A - Reasoning](Assignments/HW2/PartA-Reasoning.html)
+    - What is the step "Data Understanding" in statistics, in the Data Mining Pipeline? Why do we need it?
+    - What are the measures of central tendency (Ms)? Explain the relevance of each of them with suitable examples.
+    - What are the measures of dispersion? Explain the relevance of each of them with suitable examples.
+    - What are the measures of similarity? Explain the relevance of each of them with suitable examples.
+    - (Optional question) {given an example scenario and dataset} What statistical test would you perform (t-test or z-test) to check the problem statement?
+        - (I never answered)
+- [Part B - Application](Assignments/HW2/PartB-Application.html)
+    - Job-seeking dataset
+        - Apply the Python `pandas` package to the data and demonstrate how we can use it to get a better understanding of the data.
+    - News data
+        - Perform text processing. Label the data as "positive"/"negative" sentiments
+            - (I never finished this part)
+- [Part C - Reading](Assignments/HW2/PartC-Reading.html)
+    - **Paper title:** *Exploratory Data Analysis*
