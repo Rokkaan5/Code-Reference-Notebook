@@ -119,5 +119,5 @@ These are all my homework and exam submissions.
         - Find a resource that explains the assumptions of linear regression, and demonstrates the consequences if assumptions are not met for the analysis
     - Overfitting
         - Find a comprehensive tutorial that introduces the topic of overfitting and the techniques that help to prevent overfitting
-(I never answered these)
+    - (I never answered these)
 
