@@ -83,6 +83,8 @@ Preprocessing application example
 - [Apriori Algorithm](Lecture-Tutorials/09-Frequent-Patterns/AprioriAlgorithm.html)
 - [FP Growth Algorithm](Lecture-Tutorials/09-Frequent-Patterns/FPGrowthAlgorithm.html)
 
+([HW8](HW.md#hw-8))
+
 ## 10-Outliers
 - [Outlier Detection by **DBSCAN**](Lecture-Tutorials/10-Outliers/DBSCAN.html)
 - [Statistical Outlier Detection - **IQR**](Lecture-Tutorials/10-Outliers/IQR.html)

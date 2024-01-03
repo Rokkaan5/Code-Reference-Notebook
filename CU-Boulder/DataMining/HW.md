@@ -142,3 +142,31 @@ These are all my homework and exam submissions.
     - Agglomerative
         - Find a comprehensive tutorial that introduces the topic of hierarchical clustering and uses Agglomerative method to demonstrate the process.
     - ((Again) I never answered these)
+
+## HW 8
+
+(Associated with [Frequent Patterns](Lectures.md#09-frequent-patterns) lecture section)
+
+- [Part A - Reasoning](Assignments/HW8/PartA-Reasoning.html)
+    - Explain why it is impossible to do FP analysis for all items in Walmart
+    - Explain each with examples
+        - Monotone
+        - Antimonotone
+        - Convertible monotone
+        - Convertible antimonotone
+        - Strongly convertible
+- [Part B - Application](Assignments/HW8/PartB-Application.html)
+    - (Starts from Question 4, because I believe the first three questions were written mathwork for apriori calculation or something)
+    - Do Apriori with Python
+        - Conduct apriori for 2-itemset association rules mining
+        - Conduct apriori for 3 or more itemset association rules mining and...
+            - Setup your parameters so you can find ___ rule(s)
+    - (Optional) {and I didn't do these}
+        - Conduct FP Growth for this dataset and observe the difference
+        - Compare the performance of Apriori and FP Growth by controlling the hyperparameters
+- [Part C - Learning Resource](Assignments/HW8/PartC-Learning_Resource.html)
+    - Constraint Apriori
+        - Find a resource that explains the Constraint Apriori, and how the constraints help improve the efficiency
+    - Lift
+        - Find a comprehensive tutorial that introduces how the concept of Lift is addressed in Association Rules
+
