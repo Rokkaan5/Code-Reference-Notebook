@@ -13,20 +13,20 @@ All of these tutorials were beautifully made by Ajay, the course TA.
 - [Collect Data from CSV](Lecture-Tutorials/01-Data-Integration/CollectDataFromCSV.html)
 - [Collect Data from SQLite](Lecture-Tutorials/01-Data-Integration/CollectDataFromSQLite.html)
 - [Collect Data from Web](Lecture-Tutorials/01-Data-Integration/CollectDataFromWeb.html)
-- [Collect Data from Web (beautifulsoup) - Case Study - MS-DS faculty](Lecture-Tutorials/01-Data-Integration/CollectDataFromWeb%20-%20Case%20Study%20-%20MSDS%20Faculty.html)
+- [Collect Data from Web (beautifulsoup) - Case Study - MS-DS faculty](Lecture-Tutorials/01-Data-Integration/CollectDataFromWeb-Case_Study-MSDS_Faculty.html)
 - [Collect Data from YahooFinance](Lecture-Tutorials/01-Data-Integration/CollectDataFromYahoo.html)
 - [Data_Integration](Lecture-Tutorials/01-Data-Integration/Data_Integration.html)
 
 ([HW1](HW.md#hw-1))
 
 ## 02-Data Manipulation:
-- [Numpy - Basics](Lecture-Tutorials/02-Data-Manipulation/Numpy%201%20-%20%20Basics.html)
-- [Numpy - Multidimensional Arrays](Lecture-Tutorials/02-Data-Manipulation/Numpy%202%20-%20Multi%20Dimensional%20Arrays.html)
-- [Numpy - Masks](Lecture-Tutorials/02-Data-Manipulation/Numpy%203%20-%20Masks.html)
-- [Pandas - Series](Lecture-Tutorials/02-Data-Manipulation/Pandas%201%20-%20Series.html)
-- [Pandas - Dataframe](Lecture-Tutorials/02-Data-Manipulation/Pandas%202%20-%20DataFrame.html)
-- [Pandas - Advanced](Lecture-Tutorials/02-Data-Manipulation/Pandas%203%20-%20Advanced.html)
-- [Text Processing](Lecture-Tutorials/02-Data-Manipulation/Text%20Processing.html)
+- [Numpy - Basics](Lecture-Tutorials/02-Data-Manipulation/Numpy1-Basics.html)
+- [Numpy - Multidimensional Arrays](Lecture-Tutorials/02-Data-Manipulation/Numpy2-MultiDimensionalArrays.html)
+- [Numpy - Masks](Lecture-Tutorials/02-Data-Manipulation/Numpy3-Masks.html)
+- [Pandas - Series](Lecture-Tutorials/02-Data-Manipulation/Pandas1-Series.html)
+- [Pandas - Dataframe](Lecture-Tutorials/02-Data-Manipulation/Pandas2-DataFrame.html)
+- [Pandas - Advanced](Lecture-Tutorials/02-Data-Manipulation/Pandas3-Advanced.html)
+- [Text Processing](Lecture-Tutorials/02-Data-Manipulation/TextProcessing.html)
 
 ([HW2](HW.md#hw-2))
 
@@ -38,9 +38,9 @@ Example of statisical analysis: central tendencies (mean, median, etc.) and disp
 ([HW2](HW.md#hw-2))
 
 ## 04-Data Visualization:
-- [Pandas](Lecture-Tutorials/04-Data-Visualization/1%20-%20Pandas.html)
-- [Matplotlib](Lecture-Tutorials/04-Data-Visualization/2%20-%20Matplotlib.html)
-- [Seaborn](Lecture-Tutorials/04-Data-Visualization/3%20-%20Seaborn.html)
+- [Pandas](Lecture-Tutorials/04-Data-Visualization/1-Pandas.html)
+- [Matplotlib](Lecture-Tutorials/04-Data-Visualization/2-Matplotlib.html)
+- [Seaborn](Lecture-Tutorials/04-Data-Visualization/3-Seaborn.html)
 
 ([HW3](HW.md#hw-3))
 
@@ -67,8 +67,8 @@ Preprocessing application example
 ([HW5](HW.md#hw-5))
 
 ## 07-Regression:
-- [Linear and Polynomial Regression](Lecture-Tutorials/07-Regression/Linear%20and%20Polynomial%20Regression.html)
-- [Overfitting and Underfitting](Lecture-Tutorials/07-Regression/OverFitting%20and%20UnderFitting.html)
+- [Linear and Polynomial Regression](Lecture-Tutorials/07-Regression/LinearandPolynomial%20Regression.html)
+- [Overfitting and Underfitting](Lecture-Tutorials/07-Regression/OverFittingandUnderFitting.html)
 
 ([HW6](HW.md#hw-6))
 
