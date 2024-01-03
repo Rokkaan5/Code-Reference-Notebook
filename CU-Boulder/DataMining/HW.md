@@ -77,6 +77,44 @@ These are all my homework and exam submissions.
 - [Part C - Reading](Assignments/HW4/PartC-Reading.html)
     - **Chosen Paper title:** *Data Preprocessing for Supervised Learning* 
 
+## [Exam 1](Assignments/JasmineKobayashiExam1/Exam1.html)
+All questions had a "*Reasoning*" portion that asked interview-like questions that could be common from a job-interview live-coding test. (Ex: all of them had "Is there any difficulty you met in finishing this question? If yes, how did you solve it?") 
+
+See notebook and questions for specific questions associated with each one.
+
+1. Data Integration
+    - Read CSV
+    - Read JSON
+    - Read Sqlite
+    - Read HTML
+    - *Reasoning* 
+2. Data Manipulation
+    - Integrate parts and all of the data
+    - Assertions (correct indices and data types, etc.)
+    - *Reasoning*
+3. Data Understanding
+    - Big picture (characteristics, # of objects, # of missing, etc.)
+    - Central Tendency
+    - Dispersion
+    - Correlation
+    - *Reasoning*
+4. Data Visualization
+    - Relational plots
+    - Distributional plots
+    - Categorical plots
+    - HeatMap
+    - *Reasoning*
+5. Data Preprocessing
+    - Dealing with Missing Values
+    - Dealing with Outliers
+    - Dealing with Scales (normalizing)
+    - Dealing with Continuous Data
+    - Dealing with Text {Optional}
+    - Save the Processed Data
+    - *Reasoning*
+6. Survey 
+    - (Mainly just a way for the Prof and TA to get some feedback on the exam and course format, etc.)
+
 ## HW 5
 
 (Associated with [Classification](Lectures.md#05-data-preprocessing) lecture section)

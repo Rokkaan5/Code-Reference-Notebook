@@ -52,6 +52,8 @@ Example of statisical analysis: central tendencies (mean, median, etc.) and disp
 
 Preprocessing application example
 
+(Helpful review for [Exam1](HW.md#exam-1))
+
 ## 06-Classification:
 - [Decision Tree](Lecture-Tutorials/06-Classification/DecisionTree.html)
 - [K-Nearest Neighbor (KNN)](Lecture-Tutorials/06-Classification/KNN.html)
