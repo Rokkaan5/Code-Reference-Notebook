@@ -43,3 +43,16 @@ These are all my homework and exam submissions.
             - (I never finished this part)
 - [Part C - Reading](Assignments/HW2/PartC-Reading.html)
     - **Paper title:** *Exploratory Data Analysis*
+
+## HW 3
+(Associated with [Data Understanding](Lectures.md#02-data-manipulation) lecture section)
+
+- [Part A - Reasoning](Assignments/HW3/PartA-Reasoning.html)
+    - What do you mean by a normal distribution of data? What happens when the data is not normally distributed? Explain with an example.
+    - How is a quantile-quantile plot different from a quantile plot? Illustrate with an example.
+    - Identify plot types 
+- [Part B - Application](Assignments/HW3/PartB-Application.html)
+    - Data understanding application to `fatalities` dataset
+    - Data understanding application to our own dataset from HW1
+- [Part C - Reading](Assignments/HW3/PartC-Reading.html)
+    - **Paper title:** *Perceived usefulness of online customer reviews: A review mining approach using machine learning & exploratory data analysis*
