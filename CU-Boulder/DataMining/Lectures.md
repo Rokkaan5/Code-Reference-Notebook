@@ -76,6 +76,8 @@ Preprocessing application example
 - [PCA with Digits dataset](Lecture-Tutorials/08-Clustering/PCA_Digits.html)
 - [PCA with Wine dataset](Lecture-Tutorials/08-Clustering/PCA_for_Wine.html)
 
+([HW7](HW.md#hw-7))
+
 ## 09-Frequent Patterns
 - [Apriori-Dummy](Lecture-Tutorials/09-Frequent-Patterns/Apriori-Dummy.html)
 - [Apriori Algorithm](Lecture-Tutorials/09-Frequent-Patterns/AprioriAlgorithm.html)

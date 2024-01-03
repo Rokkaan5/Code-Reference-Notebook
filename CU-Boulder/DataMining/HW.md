@@ -95,7 +95,7 @@ These are all my homework and exam submissions.
     - (Optional) [I didn't finish any of them]
         - use other sklearn library model
         - play with other dependent variables
-        - use "penguins" dataset and compare performance of classification methods
+        - use `penguins` dataset and compare performance of classification methods
 - [Part C - Learning Resource](Assignments/HW5/PartC-Learning_Resources.html)
     - honestly I have no idea what the original topic(s) were, but it was an assignment that was supposed to find a resource for certain topics
 
@@ -121,3 +121,24 @@ These are all my homework and exam submissions.
         - Find a comprehensive tutorial that introduces the topic of overfitting and the techniques that help to prevent overfitting
     - (I never answered these)
 
+## HW 7
+
+(Associated with [Clustering](Lectures.md#08-clustering) lecture section)
+
+- [Part A - Reasoning](Assignments/HW7/PartA-Reasoning.html)
+    - Identify a real-world business scenario that needs clustering.
+    - We learned normalization in data preprocessing. Discuss how scaling impacts some clustering methods, and how it doesn't impact some other clustering methods.
+    - We learned that order matters in some classification methods, does order matter in clustering?
+- [Part B - Application (Version 1)](Assignments/HW7/PartB-Application.html); [Part B (Version 2: messing around with normalized data)](Assignments/HW7/PartB-Application2.html) 
+    - Clustering ML model application to `penguins` dataset
+        - K-means
+        - hierarchical
+        - DBSCAN
+            - (I didn't end up doing this one for some reason)
+    - PCA analysis 
+- [Part C - Learning Resource](Assignments/HW7/PartC-Learning_Resource.html)
+    - Curse of Dimensionality
+        - Find a resource that explains the Curse of Dimensionality, and demonstrates how high dimensionality affects the clustering methods we learned
+    - Agglomerative
+        - Find a comprehensive tutorial that introduces the topic of hierarchical clustering and uses Agglomerative method to demonstrate the process.
+    - ((Again) I never answered these)
