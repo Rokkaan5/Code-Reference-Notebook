@@ -26,7 +26,7 @@ These are all my homework and exam submissions.
 
 
 ## HW 2
-(Associated with [Data Manipulation](Lectures.md#02-data-manipulation) lecture section)
+(Associated with [Data Manipulation](Lectures.md#02-data-manipulation) & [Data Understanding](Lectures.md#03-data-understanding) lecture section)
 
 - [Part A - Reasoning](Assignments/HW2/PartA-Reasoning.html)
     - What is the step "Data Understanding" in statistics, in the Data Mining Pipeline? Why do we need it?
@@ -45,14 +45,34 @@ These are all my homework and exam submissions.
     - **Paper title:** *Exploratory Data Analysis*
 
 ## HW 3
-(Associated with [Data Understanding](Lectures.md#02-data-manipulation) lecture section)
+(Associated with [Data Visualization](Lectures.md#04-data-visualization) lecture section)
 
 - [Part A - Reasoning](Assignments/HW3/PartA-Reasoning.html)
     - What do you mean by a normal distribution of data? What happens when the data is not normally distributed? Explain with an example.
     - How is a quantile-quantile plot different from a quantile plot? Illustrate with an example.
     - Identify plot types 
 - [Part B - Application](Assignments/HW3/PartB-Application.html)
-    - Data understanding application to `fatalities` dataset
-    - Data understanding application to our own dataset from HW1
+    - Data visualization application to `fatalities` dataset
+    - Data visualization application to our own dataset from HW1
 - [Part C - Reading](Assignments/HW3/PartC-Reading.html)
     - **Paper title:** *Perceived usefulness of online customer reviews: A review mining approach using machine learning & exploratory data analysis*
+
+## HW 4
+
+(Associated with [Data Preprocessing](Lectures.md#04-data-visualization) lecture section)
+
+- [Part A - Reasoning](Assignments/HW4/PartA-Reasoning.html)
+    - Practice of normalization
+        - min-max scaling
+        - z-score normalization
+        - decimal scaling
+    - OLTP or OLAP of example scenarios
+    - Peer review data visualization of other colleagues
+- [Part B - Application](Assignments/HW4/PartB-Application.html)
+    - Data preprocessing application to `fatalities` dataset
+        - normalizing
+        - discretize continuous features
+        - fill missing values
+    - Data preprocessing application to own dataset from HW1
+- [Part C - Reading](Assignments/HW4/PartC-Reading.html)
+    - **Chosen Paper title:** *Data Preprocessing for Supervised Learning* 

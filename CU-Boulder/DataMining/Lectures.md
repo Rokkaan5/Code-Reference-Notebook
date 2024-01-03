@@ -33,16 +33,20 @@ permalink: /CUB/DataMining/Lectures
 
 Example of statisical analysis: central tendencies (mean, median, etc.) and dispersion (quartiles, variance, std, etc.)
 
-([HW3](HW.md#hw-3))
+([HW2](HW.md#hw-2))
 
 ## 04-Data Visualization:
 - [Pandas](Lecture-Tutorials/04-Data-Visualization/1%20-%20Pandas.html)
 - [Matplotlib](Lecture-Tutorials/04-Data-Visualization/2%20-%20Matplotlib.html)
 - [Seaborn](Lecture-Tutorials/04-Data-Visualization/3%20-%20Seaborn.html)
 
+([HW3](HW.md#hw-3))
+
 ## 05-Data Preprocessing:
 - [Data Reduction](Lecture-Tutorials/05-Data-Preprocessing/DataReduction.html)
 - [Data Transformation](Lecture-Tutorials/05-Data-Preprocessing/DataTransformation.html)
+
+([HW4](HW.md#hw-4))
 
 ## [Data Preprocessing Case Study - Boulder Climate](Lecture-Tutorials/Case-Study-Boulder-Weather/BoulderClimateCaseStudy.html)
 
