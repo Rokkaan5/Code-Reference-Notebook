@@ -7,6 +7,8 @@ permalink: /CUB/DataMining/Lectures
 # [CU Boulder](../../CUB.md): [Data Mining](DataMining.md) - Lecture Tutorial Notebooks
 (Spring 2023) Data Mining with Professor Di Wu at CU Boulder
 
+All of these tutorials were beautifully made by Ajay, the course TA. 
+
 ## 01-Data Integration:
 - [Collect Data from CSV](Lecture-Tutorials/01-Data-Integration/CollectDataFromCSV.html)
 - [Collect Data from SQLite](Lecture-Tutorials/01-Data-Integration/CollectDataFromSQLite.html)
@@ -98,3 +100,5 @@ Preprocessing application example
 (Just one notebook)
 
 - [Hello, Neural Networks](Lecture-Tutorials/11-NeuralNetworks/HelloNeuralNetworks.html)
+
+(We technically finished the last two lectures by the time of [Exam2](HW.md#exam-2), but they were both optional to complete on the exam)

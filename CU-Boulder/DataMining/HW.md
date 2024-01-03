@@ -7,7 +7,7 @@ permalink: /CUB/DataMining/HW
 # [CU Boulder](../../CUB.md): [Data Mining](DataMining.md) - Assignment Submissions
 (Spring 2023) Data Mining with Professor Di Wu at CU Boulder
 
-These are all my homework and exam submissions.
+These are all my homework and exam submissions. All work correlates (more or less) with each section in the [Lecture Tutorials](Lectures.md) for the class.
 
 ## HW 1 
 (Associated with [Data Collection/Integration](Lectures.md#01-data-integration) lecture section)
@@ -78,6 +78,8 @@ These are all my homework and exam submissions.
     - **Chosen Paper title:** *Data Preprocessing for Supervised Learning* 
 
 ## [Exam 1](Assignments/JasmineKobayashiExam1/Exam1.html)
+(The [Data Preprocessing Case Study](Lectures.md#data-preprocessing-case-study---boulder-climate) served as the main form of review for this exam)
+
 All questions had a "*Reasoning*" portion that asked interview-like questions that could be common from a job-interview live-coding test. (Ex: all of them had "Is there any difficulty you met in finishing this question? If yes, how did you solve it?") 
 
 See notebook and questions for specific questions associated with each one.
@@ -208,3 +210,22 @@ See notebook and questions for specific questions associated with each one.
     - Lift
         - Find a comprehensive tutorial that introduces how the concept of Lift is addressed in Association Rules
 
+## Exam 2
+
+1. Read and Understand the data
+2. Classification
+    - Decision trees
+    - Logistic Regression
+    - Method of choice
+3. Regression
+    - Simple Linear Regression
+    - Simple Polynomial Regression
+    - Multiple Lienar Regression
+4. Clustering
+    - K-means
+    - DBSCAN
+    - PCA
+5. Frequent Patterns
+    - Apriori algorithm to find association rules
+6. Outliers (Optional)
+7. Neural Network (Optional)
