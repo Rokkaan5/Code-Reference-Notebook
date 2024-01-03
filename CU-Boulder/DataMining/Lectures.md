@@ -66,6 +66,8 @@ Preprocessing application example
 - [Linear and Polynomial Regression](Lecture-Tutorials/07-Regression/Linear%20and%20Polynomial%20Regression.html)
 - [Overfitting and Underfitting](Lecture-Tutorials/07-Regression/OverFitting%20and%20UnderFitting.html)
 
+([HW6](HW.md#hw-6))
+
 ## 08-Clustering
 - [Clustering Algorithm Comparison](Lecture-Tutorials/08-Clustering/ClusteringComparison.html)
 - [K-Means vs. K-Medoid](Lecture-Tutorials/08-Clustering/KMeans_VS_KMedoid.html)

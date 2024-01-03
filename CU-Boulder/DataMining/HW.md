@@ -98,3 +98,26 @@ These are all my homework and exam submissions.
         - use "penguins" dataset and compare performance of classification methods
 - [Part C - Learning Resource](Assignments/HW5/PartC-Learning_Resources.html)
     - honestly I have no idea what the original topic(s) were, but it was an assignment that was supposed to find a resource for certain topics
+
+## HW 6
+
+(Associated with [Regression](Lectures.md#07-regression) lecture section)
+
+- [Part A - Reasoning](Assignments/HW6/PartA-Reasoning.html)
+    - Can Polynomial regression be compared with multiple regression? Why or why not?
+    - Explain the difference between MAE and MSE, and provide scenarios in which one is better than the other.
+    - What is R-squared? Why pursuing R-squared may lead to overfitting?
+- [Part B - Application](Assignments/HW6/PartB-Application.html)
+    - Regression ML model application to "Tetuan-City-power-consumption.csv"
+        - Simple Linear Regression
+        - Polynomial Linear Regression
+        - Polynomial regression with regularized term of choice (Ridge, Lasso, or Elastic Net)
+    - Use any combination of independent variables
+    - Summarize your findings
+- [Part C - Learning Resource](Assignments/HW6/PartC-Learning_Resource.html)
+    - Assumptions matter
+        - Find a resource that explains the assumptions of linear regression, and demonstrates the consequences if assumptions are not met for the analysis
+    - Overfitting
+        - Find a comprehensive tutorial that introduces the topic of overfitting and the techniques that help to prevent overfitting
+(I never answered these)
+
