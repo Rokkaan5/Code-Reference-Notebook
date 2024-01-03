@@ -67,7 +67,7 @@ Preprocessing application example
 ([HW5](HW.md#hw-5))
 
 ## 07-Regression:
-- [Linear and Polynomial Regression](Lecture-Tutorials/07-Regression/LinearandPolynomial%20Regression.html)
+- [Linear and Polynomial Regression](Lecture-Tutorials/07-Regression/LinearandPolynomialRegression.html)
 - [Overfitting and Underfitting](Lecture-Tutorials/07-Regression/OverFittingandUnderFitting.html)
 
 ([HW6](HW.md#hw-6))
