@@ -210,7 +210,7 @@ See notebook and questions for specific questions associated with each one.
     - Lift
         - Find a comprehensive tutorial that introduces how the concept of Lift is addressed in Association Rules
 
-## Exam 2
+## [Exam 2](Assignments/JasmineKobayashiExam2/Exam2.html)
 
 1. Read and Understand the data
 2. Classification
