@@ -60,6 +60,8 @@ Preprocessing application example
 - [Stochastic Gradient Descent](Lecture-Tutorials/06-Classification/Stochastic%20Gradient%20Descent.html)
 - [Support Vector Machine (SVM)](Lecture-Tutorials/06-Classification/SVM.html)
 
+([HW5](HW.md#hw-5))
+
 ## 07-Regression:
 - [Linear and Polynomial Regression](Lecture-Tutorials/07-Regression/Linear%20and%20Polynomial%20Regression.html)
 - [Overfitting and Underfitting](Lecture-Tutorials/07-Regression/OverFitting%20and%20UnderFitting.html)

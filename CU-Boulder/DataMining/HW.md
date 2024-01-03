@@ -76,3 +76,25 @@ These are all my homework and exam submissions.
     - Data preprocessing application to own dataset from HW1
 - [Part C - Reading](Assignments/HW4/PartC-Reading.html)
     - **Chosen Paper title:** *Data Preprocessing for Supervised Learning* 
+
+## HW 5
+
+(Associated with [Classification](Lectures.md#05-data-preprocessing) lecture section)
+
+- [Part A - Reasoning](Assignments/HW5/PartA-Reasoning.html)
+    - Discuss the big picture of learning and why we have both supervised and unsupervised learning
+    - Someone claims that the "Nearest Neighbor" method is not a learning method. Do you agree or disagree, and why?
+    - Why is Logistic Regression considered a classification method?
+- [Part B - Application](Assignments/HW5/PartB-Application.html)
+    - Classification ML model application to "titanic" dataset
+        - Decision tree
+        - Logistic regression
+        - KNN 
+        - SVM
+    - Summarize your findings
+    - (Optional) [I didn't finish any of them]
+        - use other sklearn library model
+        - play with other dependent variables
+        - use "penguins" dataset and compare performance of classification methods
+- [Part C - Learning Resource](Assignments/HW5/PartC-Learning_Resources.html)
+    - honestly I have no idea what the original topic(s) were, but it was an assignment that was supposed to find a resource for certain topics
