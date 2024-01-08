@@ -61,7 +61,7 @@ Preprocessing application example
 - [K-Nearest Neighbor (KNN)](Lecture-Tutorials/06-Classification/KNN.html)
 - [Naive Bayes](Lecture-Tutorials/06-Classification/NaiveBayes.html)
 - [Random Forests](Lecture-Tutorials/06-Classification/RandomForests.html)
-- [Stochastic Gradient Descent](Lecture-Tutorials/06-Classification/Stochastic%20Gradient%20Descent.html)
+- [Stochastic Gradient Descent](Lecture-Tutorials/06-Classification/StochasticGradientDescent.html)
 - [Support Vector Machine (SVM)](Lecture-Tutorials/06-Classification/SVM.html)
 
 ([HW5](HW.md#hw-5))
