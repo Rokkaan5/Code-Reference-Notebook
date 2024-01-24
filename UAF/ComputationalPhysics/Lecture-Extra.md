@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "PHYS 220: Intro to Computational Physics"
-permalink: /UAF/CompPhys/HW
+permalink: /UAF/CompPhys/Lecture-Extra
 ---
 
 # [UAF](../../UAF.md): [Intro to Comp. Phys](CompPhys.md)
