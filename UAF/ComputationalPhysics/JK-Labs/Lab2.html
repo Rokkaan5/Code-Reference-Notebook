@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.542">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>Lab 2: Newton’s law of cooling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Lab2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Lab2_files/libs/quarto-html/quarto.js"></script>
+<script src="Lab2_files/libs/quarto-html/popper.min.js"></script>
+<script src="Lab2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Lab2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Lab2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Lab2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Lab2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Lab2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Lab2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#lab-2-newtons-law-of-cooling" id="toc-lab-2-newtons-law-of-cooling" class="nav-link active" data-scroll-target="#lab-2-newtons-law-of-cooling">Lab 2: Newton’s law of cooling</a>
+  <ul class="collapse">
+  <li><a href="#the-euler-algorithm" id="toc-the-euler-algorithm" class="nav-link" data-scroll-target="#the-euler-algorithm">The Euler Algorithm</a></li>
+  <li><a href="#coffee-cooling-problem" id="toc-coffee-cooling-problem" class="nav-link" data-scroll-target="#coffee-cooling-problem">Coffee cooling problem</a></li>
+  <li><a href="#ode-in-dimensionless-form" id="toc-ode-in-dimensionless-form" class="nav-link" data-scroll-target="#ode-in-dimensionless-form">ODE in dimensionless form</a></li>
+  <li><a href="#note-about-trying-to-find-deltatau--jasmine" id="toc-note-about-trying-to-find-deltatau--jasmine" class="nav-link" data-scroll-target="#note-about-trying-to-find-deltatau--jasmine">Note about trying to find <span class="math inline">\(\Delta\tau\)</span> (-Jasmine)</a></li>
+  <li><a href="#truncation-error" id="toc-truncation-error" class="nav-link" data-scroll-target="#truncation-error">Truncation Error</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 2: Newton’s law of cooling</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="lab-2-newtons-law-of-cooling" class="level1">
+<h1>Lab 2: Newton’s law of cooling</h1>
+<ul>
+<li>Name: Jasmine Kobayashi</li>
+<li>Lab Partner:</li>
+</ul>
+<section id="the-euler-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="the-euler-algorithm">The Euler Algorithm</h2>
+<p>The standard technique for the numerical solution of differential equations involves the conversion of a differential equation to a <em>finite difference</em> equation.</p>
+<p><strong>Example:</strong> The rate of heat loss of a body is proportional to the difference in temperatures between the body <span class="math inline">\((T)\)</span> and its surroundings <span class="math inline">\((T_s)\)</span>.</p>
+<p><span class="math display">\[\frac{dT}{dt} = -R(T-T_s)\]</span></p>
+<p>where <span class="math inline">\(R\)</span> is the cooling constant and <span class="math inline">\(T_s\)</span> is the “surrounding” temperature.</p>
+<p>If we take a uniform time step <span class="math inline">\(\Delta t\)</span>, then this iterative solution can be written, more compactly, as the <strong>Euler Algorithm</strong>, or</p>
+<p><span class="math display">\[t^n = t^{n-1} + \Delta t\]</span></p>
+<p><span class="math display">\[T^n  = T^{n-1} - R (T^{n-1} - T_s) \Delta t\]</span></p>
+<p>where <span class="math inline">\(n\)</span> is an integer for the time step. (Note that we use <em>superscript</em> <span class="math inline">\(n\)</span> to indicate the time step. Later we will use <em>subscript</em> to denote the spatial index on a grid.)</p>
+</section>
+<section id="coffee-cooling-problem" class="level2">
+<h2 class="anchored" data-anchor-id="coffee-cooling-problem">Coffee cooling problem</h2>
+<ul>
+<li><p>Write a program to solve the coffee cup cooling problem using the Euler method, i.e., <span class="math display">\[\begin{equation}
+\frac{dT(t)}{dt} = -R [T(t) - T_A] \nonumber
+\end{equation}\]</span> where <span class="math inline">\(T(t)\)</span> is the temperature of water at time <span class="math inline">\(t\)</span>, <span class="math inline">\(T_A\)</span> is the temperature of air, and <span class="math inline">\(R\)</span> is the cooling constant.</p></li>
+<li><p>Use your program to determine <span class="math inline">\(R\)</span> for the experimental data in Table below for cooling of a cup of coffee in a ceramic mug (the air temperature was 22.0 <span class="math inline">\(^\circ\)</span>C). Since time is measured in minutes, the units of the cooling constant <span class="math inline">\(R\)</span> are min<span class="math inline">\(^{-1}\)</span>. Do several runs with smaller and smaller time intervals until the results look like they are converging. Include a graph of your final simulation results along with the data. Describe any difficulties in fitting the data and mitigation strategies.</p></li>
+</ul>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: right;"><span class="math inline">\(t\)</span> (min)</th>
+<th style="text-align: right;"><span class="math inline">\(T\)</span> (<span class="math inline">\(^\circ\)</span>C)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">83.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">77.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">75.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">73.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.0</td>
+<td style="text-align: right;">71.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">69.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">67.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">7.0</td>
+<td style="text-align: right;">66.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">64.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9.0</td>
+<td style="text-align: right;">63.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10.0</td>
+<td style="text-align: right;">62.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11.0</td>
+<td style="text-align: right;">61.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">12.0</td>
+<td style="text-align: right;">59.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13.0</td>
+<td style="text-align: right;">58.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">14.0</td>
+<td style="text-align: right;">57.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15.0</td>
+<td style="text-align: right;">56.6</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The boundary layer model for a water/air interface predicts <span class="math display">\[\begin{equation}
+R = \frac{\kappa A}{MC \Delta x} \nonumber
+\end{equation}\]</span> where <span class="math inline">\(\kappa\)</span> is the thermal conductivity of air (0.0237 W/m<span class="math inline">\(~^\circ\)</span>C), <span class="math inline">\(A\)</span> is the surface area of the water, <span class="math inline">\(M\)</span> is the mass of the water, <span class="math inline">\(C\)</span> is the specific heat of water (<span class="math inline">\(4.19 \times 10^3\)</span> J/kg <span class="math inline">\(^\circ\)</span>C), and <span class="math inline">\(\Delta x\)</span> is the thickness of the boundary layer. Estimate <span class="math inline">\(M\)</span> and <span class="math inline">\(A\)</span> for a typical cup of coffee and find <span class="math inline">\(\Delta x\)</span>.</li>
+</ul>
+<div id="cell-3" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Coffee cup cooling problem</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Name: Jasmine Kobayashi</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Lab partner:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Date: 1/23/20</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#import necessary modules</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Define constants and initialize variables---------------------------------------------------------------------------------</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> radi(m,h):                                 <span class="co">#Radius;calculated using estimated mass and height (in case want to change est. mass and height)</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (m<span class="op">/</span>(np.pi<span class="op">*</span>h))<span class="op">**</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="fl">0.354</span>                                      <span class="co">#m = est. mass, in liters or kilograms (1 liter= 1 kilogram)</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">0.10</span>                                       <span class="co">#h = est. height, in meters</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Sur_A(h):                                 <span class="co">#Surface Area function; calculated using est. mass and calculated radius</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>radi(m,h)<span class="op">*</span>h<span class="op">+</span><span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>radi(m,h)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> delta_x(m):                               <span class="co">#Delta x function; using est. mass &amp; height (includes above radi &amp; SA functions)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="fl">0.0237</span><span class="op">*</span>Sur_A(h))<span class="op">/</span>(R_cnst(T1,T2,t1,t2,Ts)<span class="op">*</span>m<span class="op">*</span><span class="fl">4.19e3</span>)   <span class="co">#Uses thermal cond. k=0.0237 (W/m deg.C) and specific heat of water C=4.19e3 (J/kg deg.C)</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> R_cnst(T1,T2,t1,t2,Ts):                   <span class="co">#function for constant R calculated from experimental data</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>(T2<span class="op">-</span>T1)<span class="op">/</span>((t2<span class="op">-</span>t1)<span class="op">*</span>(T2<span class="op">-</span>Ts))                                    </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>T1 <span class="op">=</span> <span class="fl">66.4</span>                                     <span class="co">#T1 = T^n</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>T2 <span class="op">=</span> <span class="fl">67.8</span>                                     <span class="co">#T2 = T^n-1                (or the temp before T1; the warmer temperature)</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>t1 <span class="op">=</span> <span class="dv">7</span>                                        <span class="co">#t1 = time for T^n</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>t2 <span class="op">=</span> <span class="dv">6</span>                                        <span class="co">#t2 = time for T^n-1       (or the time before t1)</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Analy_soln(time,T0,R,Ts):                    <span class="co">#Analytical solution, function copied from cooling notes</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (T0<span class="op">-</span>Ts)<span class="op">*</span>np.exp(<span class="op">-</span>R<span class="op">*</span>time)<span class="op">+</span>Ts</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>Ts <span class="op">=</span> <span class="fl">22.0</span>                                     <span class="co">#outside temperature (degrees C)</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>T0 <span class="op">=</span> <span class="fl">77.7</span>                                     <span class="co">#initial coffee temperature (degrees C)</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> R_cnst(T1,T2,t1,t2,Ts)                    <span class="co">#cooling rate in min^-1 (using calculated R constant from data)</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(<span class="dv">1</span>,<span class="dv">16</span>,<span class="dv">1</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">#Add experimental data-----------------------------------------------------------------------------------------------------</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>T<span class="op">=</span> [<span class="fl">83.0</span>,<span class="fl">77.7</span>, <span class="fl">75.1</span>, <span class="fl">73.0</span>, <span class="fl">71.1</span>, <span class="fl">69.4</span>, <span class="fl">67.8</span>, <span class="fl">66.4</span>, <span class="fl">64.7</span>, <span class="fl">63.4</span>, <span class="fl">62.1</span>, <span class="fl">61.0</span>, <span class="fl">59.9</span>, <span class="fl">58.7</span>, <span class="fl">57.8</span>, <span class="fl">56.6</span>]   <span class="co">#Temperature Data</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="dv">16</span>,<span class="dv">1</span>)                                                            <span class="co">#Time, 0 to 15 (min) with 1 step intervals</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="co">#Construct a time stepping loop to solve the ODE using the Euler algorithm-------------------------------------------------</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> numerical_soln(T0,Ts,R,dt):               <span class="co">#Numerical solution. Pretty much copied from the cooling notes.</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> T0<span class="op">-</span>R<span class="op">*</span>(T0<span class="op">-</span>Ts)<span class="op">*</span>dt</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> time[<span class="dv">1</span>]<span class="op">-</span>time[<span class="dv">0</span>]</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>Temp <span class="op">=</span> []</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>Temp.append(T0)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>Tinit<span class="op">=</span>T0</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="bu">len</span>(time)):</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    tmp <span class="op">=</span> numerical_soln(Tinit,Ts,R,dt)</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    Temp.append(tmp)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    Tinit <span class="op">=</span> tmp</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="co">#Print statements---------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span> (<span class="st">'R constant from data:'</span>,R_cnst(T1,T2,t1,t2,Ts), <span class="st">"min^-1"</span>)</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span> (<span class="st">'Calculated delta x='</span>, delta_x(m),<span class="st">'meters'</span>)</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot results-------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>plt.plot(time,Analy_soln(time,T0,R,Ts),<span class="st">'r-.'</span>,label <span class="op">=</span> <span class="st">'analytical'</span>)        <span class="co">#red = analytical</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>plt.plot(t,T,<span class="st">'kx'</span>, label <span class="op">=</span> <span class="st">'data'</span>)                                  <span class="co">#yellow = data</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>plt.plot(time,Temp,<span class="st">'b:'</span>, label<span class="op">=</span><span class="st">'numerical'</span>)                        <span class="co">#blue + = numerical</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Coffee Cooling Graph (Temp. vs. time)'</span>,fontsize <span class="op">=</span> <span class="dv">15</span>)</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'time (mins)'</span>,fontsize<span class="op">=</span><span class="dv">13</span>)</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Temperature ($^{\circ}$C)'</span>,fontsize<span class="op">=</span><span class="dv">13</span>)</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>plt.legend(fontsize<span class="op">=</span><span class="dv">13</span>)</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R constant from data: 0.030567685589519465 min^-1
+Calculated delta x= 0.0038118273798025334 meters</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab2_files/figure-html/cell-2-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ode-in-dimensionless-form" class="level2">
+<h2 class="anchored" data-anchor-id="ode-in-dimensionless-form">ODE in dimensionless form</h2>
+<p>Write a new version of the cooling law ODE code in dimensionless form. That is, solve the following ODE of the form<br>
+<span class="math display">\[\begin{equation}
+\frac{dy}{d \tau} = -y \nonumber
+\end{equation}\]</span> choosing normalizing factors so that <span class="math inline">\(y(0) = 1\)</span> and <span class="math inline">\(y(\tau) = e^{-\tau}\)</span>.</p>
+<ul>
+<li><p>What value of <span class="math inline">\(\Delta \tau\)</span> is necessary for an accuracy of 0.02% at <span class="math inline">\(\tau =
+1\)</span>?</p></li>
+<li><p>Apply the physical constrains to verify that the dimensionless version can reproduce the results from above, i.e., you will have to “reconstitute” the dimensions using the normalization parameters.</p></li>
+</ul>
+<p><strong>Derivation (Coffee cooling problem, ODE)</strong></p>
+<ul>
+<li>Dimensionless time</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\tau = \frac{t}{t_o}
+\end{equation*}\]</span></p>
+<ul>
+<li>Dimensionless temperature</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+y = \frac{T(t) - T_A}{T_o}
+\end{equation*}\]</span></p>
+<p><span class="math display">\[\begin{equation*}
+dt  = t_o d\tau, ~~dT = T_o dy
+\end{equation*}\]</span></p>
+<p><span class="math display">\[\begin{equation*}
+\frac{dT}{dt} = \frac{T_o dy}{t_o d\tau} = -R(T - T_A) = -R T_o y
+\end{equation*}\]</span></p>
+<p><span class="math display">\[\begin{equation*}
+\frac{dy(\tau)}{d\tau} = -(t_o R) y(\tau)
+\end{equation*}\]</span></p>
+<p>Let <span class="math inline">\(t_o = 1/R\)</span>, <span class="math inline">\(T(0) = T_i\)</span> so that <span class="math inline">\(y(0) = (T_i- T_A)/T_o\)</span>. If <span class="math inline">\(y(0) = 1\)</span> then <span class="math inline">\(T_o = T_i - T_A\)</span>.</p>
+<p><span class="math display">\[\begin{equation*}
+\frac{dy(\tau)}{d\tau} = -y(\tau)
+\end{equation*}\]</span></p>
+<div id="cell-5" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Dimensionless ODE</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> y_exact(tau):                                 <span class="co">#y(tau)=e^(-tau)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.exp(<span class="op">-</span>tau)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>tau <span class="op">=</span> t<span class="op">*</span>R                                         <span class="co">#b/c of normalization described above &amp; tau=t/t0 </span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                                                  <span class="co">#(t=0-15mins from above, R=calculated R constant from above)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> numerical_y(dtau,y0):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y0<span class="op">-</span>y0<span class="op">*</span>dtau</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>y0<span class="op">=</span><span class="dv">1</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> tau[<span class="dv">1</span>]<span class="op">-</span>tau[<span class="dv">0</span>]                              <span class="co">#essentially followed same format as numerical with dimension above</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> []</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>yin <span class="op">=</span> y0</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>y.append(y0)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="bu">len</span>(tau)):</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    yp <span class="op">=</span> numerical_y(dtau,yin)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    y.append(yp)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    yin <span class="op">=</span> yp</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>plt.plot(tau,y_exact(tau),<span class="st">"r-."</span>,label<span class="op">=</span><span class="st">"exact"</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>plt.plot(tau,y,<span class="st">"b:"</span>,label<span class="op">=</span><span class="st">"numerical"</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"tau"</span>,fontsize<span class="op">=</span> <span class="dv">13</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"y(tau)"</span>,fontsize<span class="op">=</span> <span class="dv">13</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>plt.legend(fontsize<span class="op">=</span> <span class="dv">13</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Dimensionless representation"</span>,fontsize<span class="op">=</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>Text(0.5, 1.0, 'Dimensionless representation')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab2_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="note-about-trying-to-find-deltatau--jasmine" class="level2">
+<h2 class="anchored" data-anchor-id="note-about-trying-to-find-deltatau--jasmine">Note about trying to find <span class="math inline">\(\Delta\tau\)</span> (-Jasmine)</h2>
+<p>So clearly, with my equations the percent error calculations are quite off and do not work well to try to find <span class="math inline">\(\Delta\tau\)</span>. It seems to me that it comes from my numerical equation for the dimensionless form. From what I remember from your and other examples they were supposed to consist of some <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{final}\)</span>, <em>as well as</em> <span class="math inline">\(\Delta\tau\)</span>? But I was not really sure how those <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\tau_{final}\)</span> got incorporated along with the <span class="math inline">\(\Delta\tau\)</span>. (I’m not sure if that means the above version for reproducing results is also wrong, even though it fits nicely on the graph. Maybe it fits <em>too</em> nicely?)</p>
+<p>Anyway, it’s getting too late to try to work through it anymore than this, and I still want to turn in what I do have on time, so I’m afraid I’ll have to leave this part of this lab like this for now.</p>
+<div id="cell-7" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Graphing % error to estimate delta tau</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ex <span class="op">=</span> y_exact(Tau)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#def Numerical_y(dtau,tau,y0)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>Dtau<span class="op">=</span>[<span class="fl">0.2</span>,<span class="fl">0.1</span>,<span class="fl">0.05</span>,<span class="fl">0.025</span>,<span class="fl">0.125</span>,<span class="fl">0.00625</span>]               </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>y_err <span class="op">=</span> []</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(Dtau)):</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    Tau<span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="dv">2</span>,<span class="fl">0.1</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    yd <span class="op">=</span> numerical_y(Dtau[j],y0)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    err<span class="op">=</span> (<span class="bu">abs</span>(yd <span class="op">-</span> np.exp(<span class="op">-</span><span class="dv">1</span>))<span class="op">/</span>np.exp(<span class="op">-</span><span class="dv">1</span>))<span class="op">*</span><span class="dv">100</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    y_err.append(err)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.plot(Dtau,y_err,<span class="st">"b"</span>,label<span class="op">=</span><span class="st">"error"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="fl">0.02</span>,color<span class="op">=</span><span class="st">'red'</span>,label<span class="op">=</span><span class="st">"0.002</span><span class="sc">% e</span><span class="st">rror"</span>)              <span class="co">#y=0.002% line to see/estimate what delta tau is easier</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Dim.less Error"</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"$\Delta$ Tau"</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"</span><span class="sc">% E</span><span class="st">rror"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>Text(0, 0.5, '% Error')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab2_files/figure-html/cell-4-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-8" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span> (y_err)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[117.46254627672363, 144.64536456131407, 158.23677370360926, 165.0324782747569, 137.84965999016646, 170.12925670311762]</code></pre>
+</div>
+</div>
+</section>
+<section id="truncation-error" class="level2">
+<h2 class="anchored" data-anchor-id="truncation-error">Truncation Error</h2>
+<p>Since we have replaced a differential equation by a difference equation, we know that our numerical solution cannot be identically equal to the “true” solution of the original differential equation. In general, the discrepancy between the two solutions is due to two causes. First, computers do not store real numbers with infinite precision. Arithmetic operations such as addition and division can introduce additional error, called <em>roundoff error</em>. The significance of roundoff errors is that they accumulate with an increasing number of calculations. The second source of discrepancy is due to the choice of algorithm. This error is called the <em>truncation error</em>.</p>
+<ul>
+<li>To illustrate <em>truncation error</em>, show (in this markdown cell) that the Euler method is first order using a Taylor series expansion. That is, compare the <strong>Euler Algorithm</strong> the the Taylor series. We represent the truncation error with the order of the leading term in the error. For example, if the leading term contains <span class="math inline">\(\Delta t^2\)</span>, then we represent the error as <span class="math inline">\(\mathcal{O(\Delta t^2)}\)</span>…and the algorithm is first order accurate.</li>
+</ul>
+<p>——————————————————- <strong>Jasmine’s work</strong>—————————————————-</p>
+<p>So we know that a function defined from the Taylor series is built like this:</p>
+<p><span class="math display">\[f(x) = f(a) + \frac{f'(a)(x-a)}{1!} + \frac{f''(a)(x-a)^2}{2!} + \frac{f'''(a)(x-a)^3}{3!} + ...\]</span></p>
+<p>And the Euler equation starts off looking off something like this: <span class="math display">\[\frac{dT}{dt} = -R(T-T_s)\]</span></p>
+<ul>
+<li>Where <span class="math inline">\(T\)</span> = temperature (of the coffee in this case), <span class="math inline">\(t\)</span> = time, <span class="math inline">\(R\)</span> = the cooling constant, and <span class="math inline">\(T_s\)</span> = the “<em>surrounding</em> temperature” or the outside temperature.</li>
+</ul>
+<p>To start it would be helpful to first rearrange the equation to be a function, not a derivative of a function. So we can start by changing the <span class="math inline">\(\frac{dT}{dt}\)</span> to its more literal meaning.</p>
+<p><span class="math display">\[\frac{dT}{dt} = \frac{\Delta T}{\Delta t} = \frac{T^n - T^{n-1}}{\Delta t}\]</span></p>
+<ul>
+<li>Where <span class="math inline">\(T^n\)</span> and <span class="math inline">\(T^{n-1}\)</span> are temperatures at different times. (<span class="math inline">\(T^{n-1}\)</span> would be temp. before <span class="math inline">\(T^n\)</span>)</li>
+</ul>
+<p>Then the equation can be rearranged to look like this:</p>
+<p><span class="math display">\[T^n = T^{n-1} - R(T^{n-1} - T_s)\Delta t\]</span></p>
+<p>And if we view the function to represent the temperature at a given time it could be written like this.</p>
+<p><span class="math display">\[T(t^n) = T^{n-1} - R(T^{n-1} - T_s)\Delta t\]</span></p>
+<p>And as mentioned before, <span class="math inline">\(\frac{dT}{dt} = -R(T-T_s)\)</span> so we can rewrite again to,</p>
+<p><span class="math display">\[T(t^n) = T^{n-1} + \frac{dT}{dt}\Delta t\]</span></p>
+<p><span class="math display">\[= T^{n-1} + T'(t^{n-1})\Delta t\]</span></p>
+<p><span class="math display">\[= T(t^{n-1}) + T'(t^{n-1})\Delta t\]</span></p>
+<p>Around here it is easier to start seeing the resemblence to the Taylor series. But there’s still a few thing we can do to the Taylor series so that it would have a similar form to the above Euler equation. Like showing steps in the <span class="math inline">\(x\)</span> values.</p>
+<p><span class="math display">\[x^n = x^{n-1} + \Delta x \]</span></p>
+<p><span class="math display">\[x \to x^n\]</span> <span class="math display">\[a \to x^{n-1}\]</span></p>
+<p>So, <span class="math display">\[f(x) = f(a) + \frac{f'(a)(x-a)}{1!} + \frac{f''(a)(x-a)^2}{2!}+...\]</span></p>
+<p><span class="math display">\[\Rightarrow  f(x^n) = f(x^{n-1} + \Delta x) = f(x^{n-1}) + f'(x^{n-1})(\Delta x) + \frac{f''(x^{n-1})(\Delta x)^2}{2!} + ...\]</span></p>
+<p>And it is not difficult to see that <span class="math inline">\(t^n = t^{n-1} + \Delta t\)</span> for the Euler equation also (plus it was mentioned further above).</p>
+<p><span class="math display">\[T(t^{n-1}+ \Delta x) = T(t^{n-1}) + T'(t^{n-1})\Delta t\]</span></p>
+<p>So now it is easy to see that the Euler algorithm is a rewrite of the first two terms of the Taylor series. Meaning that the leading term of the truncated remaining terms contains a <span class="math inline">\(\Delta t^2\)</span> so the error is <span class="math inline">\(\mathcal{O(\Delta t^2)}\)</span></p>
+<p><span class="math display">\[T(t^{n-1}+ \Delta x) = T(t^{n-1}) + T'(t^{n-1})\Delta t + \mathcal{O(\Delta t^2)}\]</span></p>
+<p>and the algorithm is indeed first order accurate.</p>
+<p>———————————————– <strong>End of Jasmine’s work</strong>——————————————————</p>
+<ul>
+<li>Plot the difference between the exact solution and the numerical solution as a function of <span class="math inline">\(\Delta t\)</span>. A numerical method is called <span class="math inline">\(n\)</span>th order if the difference between the analytical and numerical solutions at a fixed value of <span class="math inline">\(t\)</span> is proportional to <span class="math inline">\((\Delta t)^n\)</span>. Verify that the Euler method is first order accurate.</li>
+</ul>
+<div id="cell-10" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Difference between exact and numerical</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.plot(time,<span class="bu">abs</span>(Analy_soln(time,T0,R,Ts)<span class="op">-</span>numerical_soln(T0,Ts,R,dt)))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Diff. between Analytical-Numerical"</span>,fontsize<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"time(min)"</span>,fontsize<span class="op">=</span><span class="dv">13</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Temp"</span>,fontsize<span class="op">=</span><span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>Text(0, 0.5, 'Temp')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab2_files/figure-html/cell-6-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
