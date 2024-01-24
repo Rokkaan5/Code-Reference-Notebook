@@ -15,7 +15,7 @@ permalink: /UAF/CompPhys
 
 # [HW](HW.md)
 
-# [Lecture Extras](Lecture_Extra.md)
+# [Lecture Extras](Lecture-Extra.md)
 
 # Wilberforce Pendulum Project
 
