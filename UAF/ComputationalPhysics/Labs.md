@@ -1,10 +1,11 @@
 ---
 layout: page
 title: "PHYS 220: Intro to Computational Physics"
-permalink: /UAF/CompPhys
+permalink: /UAF/CompPhys/Labs
 ---
 
-[Spring 2020] ***Intro to Computational Physics*** with Dr. Peter Delamere at [UAF](../../UAF.md)
+# [UAF](../../UAF.md): [Intro to Comp. Phys](CompPhys.md)
+[Spring 2020] Intro to Computational Physics with Dr. Peter Delamere at UAF
 
 ---
 
@@ -79,15 +80,5 @@ The following are all *my* submissions to the lab assignments when I was taking 
 ## Lab Solutions
 [Lab 6: (Nonlinear lab) answer](Lab-Solutions/Delamere_Lab6a.html) (Which I got from Hunter when he had the class)
 
-# Wilberforce Pendulum Project
 
-
-Code file 1:
-
-- [Jupyter Run-Through](Wilberforce/Wilberforce.html)
-- [Raw Code](WilberforceProject.md)
-
-Check GitHub repo for python code files for my Wilberforce pendulum animation project
-
-Includes example uses of RK4 and matplotlib.animation
 

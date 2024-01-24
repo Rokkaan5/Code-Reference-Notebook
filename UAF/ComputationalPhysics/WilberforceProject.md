@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Wilberforce Pendulem Project"
-permalink: /UAF-classes/WilberforcePendProj
+permalink: /UAF/CompPhys/WilberforcePendProj
 ---
 
 Raw code for "220Project-1.py"
