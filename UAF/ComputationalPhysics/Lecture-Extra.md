@@ -27,6 +27,8 @@ Some code from Dr. Delamere to supplement the lectures
 
 # [2D Monte Carlo](Lecture-Extra/2D_Monte_Carlo.html)
 
+- Example for Multidimensional Monte Carlo Integration
+
 # Fourier Transform
 
 (I don't have the code for it, but if look in combined lecture notes, I can probably recreate it myself from scratch)
