@@ -3,7 +3,7 @@ layout: page
 title: "UAF Class Resources"
 permalink: /UAF-classes
 ---
-# [Intro to Computational Physics](UAF/ComputationalPhysics/UAF-CompPhys.md)
+# [Intro to Computational Physics](UAF/ComputationalPhysics/CompPhys.md)
 
 Labs and code for Wilberforce Project
 

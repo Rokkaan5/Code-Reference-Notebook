@@ -7,7 +7,7 @@ Quick access links (can delete this section after semester is over)
 # College Courses
 
 ## [UAF classes](UAF.md)
-- [Intro to Computational Physics](UAF/ComputationalPhysics/UAF-CompPhys.md)
+- [Intro to Computational Physics](UAF/ComputationalPhysics/CompPhys.md)
 - [Intro to Machine Learning](UAF/MachineLearning/UAF-ML-Module.md)
 
 ## [CU Boulder classes](CUB.md)
