@@ -15,7 +15,11 @@ permalink: /UAF/CompPhys
 
 # [HW](HW.md)
 
+- My hw submissions
+
 # [Lecture Extras](Lecture-Extra.md)
+
+- Supplementary code notebooks to lectures
 
 # Wilberforce Pendulum Project
 
