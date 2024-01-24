@@ -12,37 +12,37 @@ permalink: /UAF/CompPhys/Labs
 # Labs
 The following are all *my* submissions to the lab assignments when I was taking the class in Spring 2020. But many are incomplete, incorrect, or the code could just generally be more improved/efficient/DRY; so it would be cool to try to go back and finish/fix/improve/generally try them again.
 
-- [Lab1: Python 101](JK-Labs/Kobayashi%20-%20Lab1%20(Finished).html)
+- [Lab1: Python 101](JK-Labs/Lab1.html)
     - Markdown cells
     - Writing simple python code (math, etc.)
     - NumPy
     - Functions
     - Graphics (Matplotlib)
-- [Lab2: Newton's Law of Cooling](JK-Labs/Kobayashi%20-%20Lab2%20(Finished).html)
+- [Lab2: Newton's Law of Cooling](JK-Labs/Lab2.html)
     - Euler Algorithm
     - Coffee cooling problem
     - ODE in dimensionless form
     - Truncation error
-- [Lab3: Motion of Falling Objects](JK-Labs/Kobayashi%20-%20Lab3%20(Finished).html)
+- [Lab3: Motion of Falling Objects](JK-Labs/Lab3.html)
     - 1D motion
         - free fall
         - Accent and descent of a pebble
     - 2D motion
         - Two dimensional trajectories
             - Euler
-- [Lab4: Simple harmonic oscillations and second-order methods](JK-Labs/Kobayashi%20-%20Lab4%20(Finished).html)
+- [Lab4: Simple harmonic oscillations and second-order methods](JK-Labs/Lab4.html)
     - "Modified Euler" and "Improved Euler" methods
     - Log-log plots
     - Truncation error
     - Simple Harmonic Oscillator (SHO)
-- [Lab5: The Simple Pendulum](JK-Labs/Kobayashi%20-%20Lab5%20(Finished).html)
+- [Lab5: The Simple Pendulum](JK-Labs/Lab5.html)
     - Small amplitude oscillations
     - Large amplitude oscillations
     - Different initial conditions
     - 1D oscillator (mass on spring)
         - Phase space
     - `SciPy` ODE integration example 
-- [Lab6: Damped and Driven Non-linear Pendulum](JK-Labs/Kobayashi%20-%20Lab6%20(Finished).html)
+- [Lab6: Damped and Driven Non-linear Pendulum](JK-Labs/Lab6.html)
     - Dimensionless equations
     - Coupled ODEs
     - 4th order Runga-Kutta (rk4)
@@ -53,7 +53,7 @@ The following are all *my* submissions to the lab assignments when I was taking 
     - Damped and sinusoidally-driven pendulum
     - (Optional Bifurcation diagram)
         - (I didn't do it, but solutions should be available)
-- [Lab7: Planetary Motion](JK-Labs/Kobayashi%20-%20Lab7%20(F).html)
+- [Lab7: Planetary Motion](JK-Labs/Lab7.html)
     - Equations of motion
         - Circular orbits
         - Elliptical orbits
@@ -65,7 +65,7 @@ The following are all *my* submissions to the lab assignments when I was taking 
         - Perturbations
         - Mini solar system
             - (I didn't finish this last one, so it would be cool to go back and try to finish it)
-- [Lab8: Coupled Oscillators](JK-Labs/Kobayashi%20-%20Lab8%20(F).html)
+- [Lab8: Coupled Oscillators](JK-Labs/Lab8.html)
     - Normal modes, beats and energy propagation
     - some animation examples
         - (except have to execute from command line not notebook)
