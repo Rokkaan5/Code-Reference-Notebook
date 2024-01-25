@@ -76,7 +76,7 @@ The following are all *my* submissions to the lab assignments when I was taking 
         - arbitrary but non-zero displacements
             - external driving force to single particle
         - perturb chain
-- [**Lab 9:** Wave Motion]
+- [**Lab 9:** Wave Motion](JK-Labs/Lab9.html)
     - (Looks like I didn't really do most of these)
     - Velocity of waves
     - Superposition of waves
