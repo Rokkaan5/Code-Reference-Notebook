@@ -35,6 +35,7 @@ Some code from Dr. Delamere to supplement the lectures
 
 - Mathematics of Fourier Transform
 - Code example of use of *Fast Fourier Transform* (FFT)
+    - `numpy.fft.rfft`
 
 ## [Uncertainty Principle](Lecture-Extra/Uncertainty_principle.html)*
 
