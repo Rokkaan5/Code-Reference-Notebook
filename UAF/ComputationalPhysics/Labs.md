@@ -76,7 +76,13 @@ The following are all *my* submissions to the lab assignments when I was taking 
         - arbitrary but non-zero displacements
             - external driving force to single particle
         - perturb chain
-    
+- [**Lab 9:** Wave Motion]
+    - (Looks like I didn't really do most of these)
+    - Velocity of waves
+    - Superposition of waves
+    - Dispersive waves
+    - Numerical solutions of the wave equation
+
 ## Lab Solutions
 [Lab 6: (Nonlinear lab) answer](Lab-Solutions/Delamere_Lab6a.html) (Which I got from Hunter when he had the class)
 
