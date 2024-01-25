@@ -109,13 +109,10 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#lab-9-wave-motion" id="toc-lab-9-wave-motion" class="nav-link active" data-scroll-target="#lab-9-wave-motion">Lab 9: Wave Motion</a>
-  <ul class="collapse">
-  <li><a href="#exercise-1-velocity-of-waves" id="toc-exercise-1-velocity-of-waves" class="nav-link" data-scroll-target="#exercise-1-velocity-of-waves">Exercise 1: Velocity of waves</a></li>
+  <li><a href="#exercise-1-velocity-of-waves" id="toc-exercise-1-velocity-of-waves" class="nav-link active" data-scroll-target="#exercise-1-velocity-of-waves">Exercise 1: Velocity of waves</a></li>
   <li><a href="#exercise-2-superposition-of-waves" id="toc-exercise-2-superposition-of-waves" class="nav-link" data-scroll-target="#exercise-2-superposition-of-waves">Exercise 2: Superposition of waves</a></li>
   <li><a href="#exercise-3-dispersive-waves" id="toc-exercise-3-dispersive-waves" class="nav-link" data-scroll-target="#exercise-3-dispersive-waves">Exercise 3: Dispersive waves</a></li>
   <li><a href="#exercise-4-numerical-solutions-of-the-wave-equation" id="toc-exercise-4-numerical-solutions-of-the-wave-equation" class="nav-link" data-scroll-target="#exercise-4-numerical-solutions-of-the-wave-equation">Exercise 4: Numerical solutions of the wave equation</a></li>
-  </ul></li>
   </ul>
 </nav>
 </div>
@@ -146,8 +143,6 @@ window.Quarto = {
 </header>
 
 
-<section id="lab-9-wave-motion" class="level1">
-<h1>Lab 9: Wave Motion</h1>
 <ul>
 <li><p>We have found similarities between oscillatory phenomena and wave motion.</p></li>
 <li><p>For a system of <span class="math inline">\(N\)</span> coupled oscillators, the individual oscillation of particles leads to a propagation of energy over arbitrary distances.</p></li>
@@ -160,37 +155,44 @@ window.Quarto = {
 \boxed{ \frac{\partial^2 u(x,t)}{\partial t^2} =
 {v^2}\frac{\partial^2 u(x,t)}{\partial x^2}}
 \end{equation*}\]</span> where <span class="math inline">\(v\)</span> has dimensions of velocity.</p></li>
-<li><p>The wave equation can be obtained from the discrete equation of motion as follows. Replace <span class="math inline">\(u_i(t)\)</span> by <span class="math inline">\(u(x,t)\)</span>, where <span class="math inline">\(x\)</span> is a continuous variable. <span class="math display">\[\begin{eqnarray*}
-\frac{\partial^2 u(x,t)}{\partial t^2} &amp;=&amp;
+<li><p>The wave equation can be obtained from the discrete equation of motion as follows. Replace <span class="math inline">\(u_i(t)\)</span> by <span class="math inline">\(u(x,t)\)</span>, where <span class="math inline">\(x\)</span> is a continuous variable. <span class="math display">\[\begin{align*}
+\frac{\partial^2 u(x,t)}{\partial t^2} &amp;=
 \frac{k a^2}{m}\frac{1}{a^2} \left[ u(x+a,t) - 2u(x,t) +
                                          u(x-a,t)\right]\\
-&amp;=&amp; \frac{T}{\mu} \left[ u(x+a,t) - 2u(x,t) +
+&amp;= \frac{T}{\mu} \left[ u(x+a,t) - 2u(x,t) +
                                          u(x-a,t)\right]\\
-\end{eqnarray*}\]</span> where <span class="math inline">\(\mu = m/a\)</span> (mass density) and <span class="math inline">\(T = k/a\)</span> (tension force on the continuous ``string’’), with <span class="math inline">\(v^2 = T/\mu\)</span>.</p></li>
+\end{align*}\]</span> where <span class="math inline">\(\mu = m/a\)</span> (mass density) and <span class="math inline">\(T = k/a\)</span> (tension force on the continuous ``string’’), with <span class="math inline">\(v^2 = T/\mu\)</span>.</p></li>
 <li><p>Note that the time derivative is written as a partial derivative because <span class="math inline">\(u(x,t)\)</span> is a function of two variables.</p></li>
-<li><p>Now use a Taylor series expansion <span class="math display">\[\begin{eqnarray*}
-u(x + a) &amp;=&amp; u(x) +\frac{\partial u}{\partial x} (a)+ \frac{1}{2!}
+<li><p>Now use a Taylor series expansion</p></li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+u(x + a) &amp;= u(x) +\frac{\partial u}{\partial x} (a)+ \frac{1}{2!}
 \frac{\partial^2 u}{\partial x^2}(a^2) + \cdot \cdot \cdot\\
-u(x - a) &amp;=&amp; u(x) -\frac{\partial u}{\partial x} (a)+ \frac{1}{2!}
+u(x - a) &amp;= u(x) -\frac{\partial u}{\partial x} (a)+ \frac{1}{2!}
 \frac{\partial^2 u}{\partial x^2}(a^2) + \cdot \cdot \cdot\\
-\end{eqnarray*}\]</span> <span class="math display">\[\begin{eqnarray*}
+\end{align*}\]</span></p>
+<p><span class="math display">\[\begin{align*}
 \implies u(x+a) + u(x-a) = 2u(x) +
 \frac{\partial^2 u}{\partial x^2}(a^2) + \cdot \cdot \cdot
-\end{eqnarray*}\]</span> or <span class="math display">\[\begin{eqnarray*}
+\end{align*}\]</span></p>
+<p>or</p>
+<p><span class="math display">\[\begin{align*}
 \boxed{ \frac{\partial^2 u}{\partial x^2} \approx \frac{1}{a^2} \left[
-u(x+a)-  2u(x)+  u(x-a) \right]}
-\end{eqnarray*}\]</span> as <span class="math inline">\(a \rightarrow 0\)</span>.</p></li>
-<li><p>And the wave equation for the continuous ``string’’ is <span class="math display">\[\begin{eqnarray*}
-\frac{\partial^2 u(x,t)}{\partial t^2} = \left(\frac{T}{\mu} \right)
-  \frac{\partial^2 u}{\partial x^2} =v^2 \frac{\partial^2 u}{\partial x^2}
-\end{eqnarray*}\]</span></p></li>
-<li><p>Traveling waves are solutions to the wave equation. These are functions of the form <span class="math inline">\(f(x \pm vt)\)</span>.</p></li>
-<li><p>Examples of solutions (try it!) to the wave equation are <span class="math display">\[\begin{eqnarray*}
+  u(x+a)-  2u(x)+  u(x-a) \right]}
+\end{align*}\]</span></p>
+<p>as <span class="math inline">\(a \rightarrow 0\)</span>. - And the wave equation for the continuous ``string’’ is</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial^2 u(x,t)}{\partial t^2} &amp;= \left(\frac{T}{\mu} \right) \\
+\frac{\partial^2 u}{\partial x^2} &amp;= v^2 \frac{\partial^2 u}{\partial x^2}
+\end{align*}\]</span></p>
+<ul>
+<li>Traveling waves are solutions to the wave equation. These are functions of the form <span class="math inline">\(f(x \pm vt)\)</span>.</li>
+<li>Examples of solutions (try it!) to the wave equation are</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
 u(x,t) &amp;=&amp; A \cos \frac{2 \pi}{\lambda}(x \pm vt)\\
 u(x,t) &amp;=&amp; A \sin \frac{2 \pi}{\lambda}(x \pm vt)\\
-\end{eqnarray*}\]</span> where <span class="math inline">\(\lambda\)</span> is the wavelength and <span class="math inline">\(v\)</span> is the wave speed.</p></li>
-<li><p>Since the wave equation is a linear equation and hence satisfies a superposition principle, we can understand the behavior of a wave of arbitrary shape by using Fourier’s theorem and represent its shape as a sum of sinusoidal waves.</p></li>
-</ul>
+\end{align*}\]</span> where <span class="math inline">\(\lambda\)</span> is the wavelength and <span class="math inline">\(v\)</span> is the wave speed. - Since the wave equation is a linear equation and hence satisfies a superposition principle, we can understand the behavior of a wave of arbitrary shape by using Fourier’s theorem and represent its shape as a sum of sinusoidal waves.</p>
 <section id="exercise-1-velocity-of-waves" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-1-velocity-of-waves">Exercise 1: Velocity of waves</h2>
 <ol type="1">
@@ -227,22 +229,42 @@ v(k) = v_0(1.1 + 0.1 k)
 <section id="exercise-4-numerical-solutions-of-the-wave-equation" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-4-numerical-solutions-of-the-wave-equation">Exercise 4: Numerical solutions of the wave equation</h2>
 <ul>
-<li>The wave equation is <span class="math display">\[\begin{eqnarray*}
-\frac{\partial^2 u}{\partial t^2} =v^2 \frac{\partial^2 u}{\partial x^2}
-\end{eqnarray*}\]</span></li>
-<li>Numerical solutions can be obtained by replacing the second derivative on the right-hand side with the a discrete difference, \begin{equation*} = [ u(x + x, t)</li>
-<li>2 u(x,t) + u(x - x, t) ] \end{equation*}</li>
-<li>Thus, we can write a second-order ordinary differential equation for <em>each grid point</em>, \begin{equation*} = [ u(x + x, t)</li>
-<li>2 u(x,t) + u(x - x, t) ] \end{equation*}</li>
-<li>Now change the second-order ordinary differential equation into two first-order equations by defining a new variable <span class="math inline">\(\psi\)</span>, \begin{eqnarray*} &amp;=&amp; (x,t)\ &amp; = &amp; [ u(x + x, t)</li>
-<li>2 u(x,t) + u(x - x, t) ] \end{eqnarray*}</li>
-<li>Applying a first-order Euler scheme, these equations become two Forward Time Centered Space (FTCS) equations.</li>
-<li>FTCS Scheme: two-point forward difference approximation for the time derivative and a three-point centered difference approximation for the spatial derivative. Subscripts now refer to spatial grid index. <span class="math display">\[\begin{equation*}
-\frac{\psi_j^{n+1} - \psi_j^n}{\Delta t} - \frac{v^2(u_{j-1}^n - 2 u_j^n + u_{j+1}^n)}{\Delta x^2} = 0
-\end{equation*}\]</span> or <span class="math display">\[\begin{equation*}
-\boxed{\psi_j^{n+1} = \psi_j^n + s \left( u_{j-1}^n + 2 u_j^n +  u_{j+1}^n\right )}
-\end{equation*}\]</span> where $ s = v^2 t/x^2$.</li>
+<li>The wave equation is</li>
 </ul>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial^2 u}{\partial t^2} =v^2 \frac{\partial^2 u}{\partial x^2}
+\end{align*}\]</span> - Numerical solutions can be obtained by replacing the second derivative on the right-hand side with the a discrete difference,</p>
+<p><span class="math display">\[\begin{equation*}
+\frac{\partial^2 u}{\partial x^2} = \frac{1}{\Delta x^2} \left [ u(x + \Delta x, t)
+- 2 u(x,t) + u(x - \Delta x, t) \right ]
+\end{equation*}\]</span></p>
+<ul>
+<li>Thus, we can write a second-order ordinary differential equation for <em>each grid point</em>,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\frac{d^2 u}{dt^2} = \frac{v^2}{\Delta x^2} \left [ u(x + \Delta x, t)
+- 2 u(x,t) + u(x - \Delta x, t) \right ]
+\end{equation*}\]</span></p>
+<ul>
+<li>Now change the second-order ordinary differential equation into two first-order equations by defining a new variable <span class="math inline">\(\psi\)</span>,</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\frac{du}{dt} &amp;= \psi(x,t)\\
+\frac{d \psi}{dt} &amp;= \frac{v^2}{\Delta x^2} \left [ u(x + \Delta x, t)
+- 2 u(x,t) + u(x - \Delta x, t) \right ]
+\end{align*}\]</span></p>
+<ul>
+<li>Applying a first-order Euler scheme, these equations become two Forward Time Centered Space (FTCS) equations.</li>
+<li>FTCS Scheme: two-point forward difference approximation for the time derivative and a three-point centered difference approximation for the spatial derivative. Subscripts now refer to spatial grid index.</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\frac{\psi_j^{n+1} - \psi_j^n}{\Delta t} - \frac{v^2(u_{j-1}^n - 2 u_j^n + u_{j+1}^n)}{\Delta x^2} = 0
+\end{equation*}\]</span></p>
+<p>or</p>
+<p><span class="math display">\[\begin{equation*}
+\boxed{\psi_j^{n+1} = \psi_j^n + s \left( u_{j-1}^n + 2 u_j^n +  u_{j+1}^n\right )}
+\end{equation*}\]</span></p>
+<p>where $ s = v^2 t/x^2$.</p>
 <ol type="1">
 <li><p>Examine and <strong>comment</strong> the code below.</p></li>
 <li><p>Investigate the stability of the numerical solution be trying <span class="math inline">\(s = [0.1,0.2,0.5,1.0,1.01,1.1]\)</span>. You might run outside of Jupyter notebook to see the animation. Otherwise, make a series of line plots.</p></li>
@@ -331,7 +353,6 @@ v(k) = v_0(1.1 + 0.1 k)
 </div>
 </div>
 </div>
-</section>
 </section>
 
 </main>
