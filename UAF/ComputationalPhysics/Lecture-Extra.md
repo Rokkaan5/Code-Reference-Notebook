@@ -31,7 +31,10 @@ Some code from Dr. Delamere to supplement the lectures
 
 ## Fourier Transform
 
-(I don't have the code for it, but if look in combined lecture notes, I can probably recreate it myself from scratch)
+(I did't have the original code for it, but I re-created myself from scratch looking at the pdf version of it in the combined lecture notes.)
+
+- Mathematics of Fourier Transform
+- Code example of use of *Fast Fourier Transform* (FFT)
 
 ## Uncertainty Principle
 
