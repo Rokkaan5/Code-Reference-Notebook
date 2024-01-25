@@ -13,6 +13,8 @@ permalink: /UAF/CompPhys/Lecture-Extra
 
 Some code from Dr. Delamere to supplement the lectures
 
+*(For the last 6 notesbooks, I did't have the original code as files, but I re-created myself from scratch looking at the pdf version of it in the combined lecture notes.)
+
 ## [Cooling](Lecture-Extra/Cooling.html)
 
 - Math & code examples for Newton's law of cooling
@@ -29,29 +31,42 @@ Some code from Dr. Delamere to supplement the lectures
 
 - Example for Multidimensional Monte Carlo Integration
 
-## Fourier Transform
-
-(I did't have the original code for it, but I re-created myself from scratch looking at the pdf version of it in the combined lecture notes.)
+## [Fourier Transform](Lecture-Extra/Fourier_Transform.html)*
 
 - Mathematics of Fourier Transform
 - Code example of use of *Fast Fourier Transform* (FFT)
 
-## Uncertainty Principle
+## [Uncertainty Principle](Lecture-Extra/Uncertainty_principle.html)*
 
-(I don't have the code for it, but if look in combined lecture notes, I can probably recreate it myself from scratch)
+- Example with using FFT for wavenumber *k* spectra of wave packets
 
-## Eigenvalues and eigenvectors
+## [Eigenvalues and eigenvectors](Lecture-Extra/Eigen.html)*
 
-(I don't have the code for it, but if look in combined lecture notes, I can probably recreate it myself from scratch)
+- Sample use of `numpy.linalg` module to calculate eigenvalues and eigenvectors
+    - `eigh`
+    - `eigvalsh`
+- Explanation and example with *Asymmetric quantum well*
+- Orthogonality of eigenvectors
+- Symmetric potential well solution
 
-## Molecular Dynamics
+## [Molecular Dynamics](Lecture-Extra/Molecular_dynamics.html)*
 
-(I don't have the code for it, but if look in combined lecture notes, I can probably recreate it myself from scratch)
+- Lennar-Jones potential
+- (Example to simulate molecular dynamics I guess?)
+- (Professor even incorporated code to animate the dynamics, but I haven't gotten it to work yet (especially in Quarto))
 
-## Gaussian Quadrature
+## [Gaussian Quadrature](Lecture-Extra/Gaussian.html)*
 
-(I don't have the code for it, but if look in combined lecture notes, I can probably recreate it myself from scratch)
+- Higher-order integration methods
+    - trapezoidal rule
+    - simpson's rule
+- Gaussian Quadrature
+    - Mathematics
+    - Example code
 
-## Systems of Equations
+## [Systems of Equations](Lecture-Extra/Systems_of_equations.html)*
 
-(I don't have the code for it, but if look in combined lecture notes, I can probably recreate it myself from scratch)
+- Solution of simultaneous linear equations
+- Gaussian elimination
+    - (an alternative to determining the inverse matrix)
+    - Explanation and code example
