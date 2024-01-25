@@ -69,10 +69,10 @@ The following are all *my* submissions to the lab assignments when I was taking 
     - Normal modes, beats and energy propagation
     - some animation examples
         - (except have to execute from command line not notebook)
-    - Motion of two coupled oscillators ($N=2$)
+    - Motion of two coupled oscillators (N=2)
         - weak coupling
         - equal but opposite displacements
-    - $N > 2$
+    - N > 2
         - arbitrary but non-zero displacements
             - external driving force to single particle
         - perturb chain
