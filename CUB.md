@@ -6,7 +6,8 @@ permalink: /CUB-classes
 
 # This semseter's pages (Spring 2024)
 Quick access links (can delete this section after semester is over)
-
+- [AstroPhys](CU-Boulder/AstroPhys/AstroPhys.md)
+- Big Data
 
 # Statistics
 ## [Statistical Programming in R](CU-Boulder/RProgramming/RProgramming.md)
