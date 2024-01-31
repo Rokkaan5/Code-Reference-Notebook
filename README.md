@@ -3,6 +3,8 @@ Jasmine's "notebook" of code examples, reference, etc.
 
 # This semseter's pages (Spring 2024)
 Quick access links (can delete this section after semester is over)
+- [AstroPhys](CU-Boulder/AstroPhys/AstroPhys.md)
+- Big Data
 
 # College Courses
 
@@ -20,6 +22,7 @@ Quick access links (can delete this section after semester is over)
 ### Data & Info Management
 - [Data Structures and Algorithms](CU-Boulder/DataStructures/DataStructures.md)
 - [Data Mining](CU-Boulder/DataMining/DataMining.md)
+- Big Data
 
 ### AI/ML/etc.
 - [Machine Learning](CU-Boulder/MachineLearning/CUB-ML.md)
