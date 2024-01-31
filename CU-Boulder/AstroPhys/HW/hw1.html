@@ -111,9 +111,23 @@ window.Quarto = {
   <ul>
   <li><a href="#binomial-and-poisson-distributions" id="toc-binomial-and-poisson-distributions" class="nav-link active" data-scroll-target="#binomial-and-poisson-distributions">3. Binomial and Poisson Distributions</a>
   <ul class="collapse">
-  <li><a href="#part-a" id="toc-part-a" class="nav-link" data-scroll-target="#part-a">Part (a)</a></li>
-  <li><a href="#part-b" id="toc-part-b" class="nav-link" data-scroll-target="#part-b">Part (b)</a></li>
-  <li><a href="#part-c" id="toc-part-c" class="nav-link" data-scroll-target="#part-c">Part (c)</a></li>
+  <li><a href="#part-a" id="toc-part-a" class="nav-link" data-scroll-target="#part-a">Part (a)</a>
+  <ul class="collapse">
+  <li><a href="#jasmines-reminder-to-self" id="toc-jasmines-reminder-to-self" class="nav-link" data-scroll-target="#jasmines-reminder-to-self">Jasmine’s reminder to self</a></li>
+  </ul></li>
+  <li><a href="#part-b" id="toc-part-b" class="nav-link" data-scroll-target="#part-b">Part (b)</a>
+  <ul class="collapse">
+  <li><a href="#jasmines-reminder-to-self-1" id="toc-jasmines-reminder-to-self-1" class="nav-link" data-scroll-target="#jasmines-reminder-to-self-1">Jasmine’s reminder to self</a></li>
+  <li><a href="#jasmines-written-answer" id="toc-jasmines-written-answer" class="nav-link" data-scroll-target="#jasmines-written-answer">Jasmine’s written answer</a></li>
+  </ul></li>
+  <li><a href="#part-c" id="toc-part-c" class="nav-link" data-scroll-target="#part-c">Part (c)</a>
+  <ul class="collapse">
+  <li><a href="#jasmines-note-to-self" id="toc-jasmines-note-to-self" class="nav-link" data-scroll-target="#jasmines-note-to-self">Jasmine’s note to self</a></li>
+  <li><a href="#parta-repeat-with-no-mistake" id="toc-parta-repeat-with-no-mistake" class="nav-link" data-scroll-target="#parta-repeat-with-no-mistake">Part(a) repeat with no mistake</a></li>
+  <li><a href="#partb-repeat-with-no-mistake" id="toc-partb-repeat-with-no-mistake" class="nav-link" data-scroll-target="#partb-repeat-with-no-mistake">Part(b) repeat with no mistake</a></li>
+  <li><a href="#parta-repeat-with-mistake" id="toc-parta-repeat-with-mistake" class="nav-link" data-scroll-target="#parta-repeat-with-mistake">Part(a) repeat with mistake</a></li>
+  <li><a href="#partb-repeat-with-mistake" id="toc-partb-repeat-with-mistake" class="nav-link" data-scroll-target="#partb-repeat-with-mistake">Part(b) repeat with mistake</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="..\..\..\hw1.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -159,7 +173,20 @@ window.Quarto = {
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-4" class="cell" data-execution_count="37">
+<section id="jasmines-reminder-to-self" class="level3">
+<h3 class="anchored" data-anchor-id="jasmines-reminder-to-self">Jasmine’s reminder to self</h3>
+<p><strong>Binomial probability:</strong></p>
+<p><span class="math display">\[\begin{align*}
+P_B(x;n,p) &amp;= \frac{n!}{(n-x)!x!}p^x q^{n-x}
+\end{align*}\]</span></p>
+<p>where, <span class="math inline">\(q=1-p\)</span></p>
+<p>And other useful:</p>
+<p><span class="math display">\[\begin{align*}
+&amp;E(x) = \mu \\
+&amp;E(x-\mu)^2 = \sigma^2
+\end{align*}\]</span></p>
+<p>where, <span class="math inline">\(E(f(x)) = \sum f(x)P(x)\)</span></p>
+<div id="cell-5" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> a_binomial:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, x_min<span class="op">=</span><span class="dv">0</span>,x_max<span class="op">=</span><span class="dv">15</span>, n<span class="op">=</span><span class="dv">100</span>, p<span class="op">=</span><span class="fl">0.035</span>):</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> np.arange(x_min,x_max<span class="op">+</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
@@ -180,58 +207,63 @@ window.Quarto = {
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        E <span class="op">=</span> <span class="bu">sum</span>(fx<span class="op">*</span>Px)              <span class="co"># E(x) = sum(f(x)*P(x))</span></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> E</span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_binomial(<span class="va">self</span>,title<span class="op">=</span><span class="st">"Binomial Distribution"</span>):</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Px <span class="op">=</span> [<span class="va">self</span>.P_binomial(x<span class="op">=</span> i,n<span class="op">=</span><span class="va">self</span>.n,p<span class="op">=</span><span class="va">self</span>.p,q<span class="op">=</span><span class="va">self</span>.q) <span class="cf">for</span> i <span class="kw">in</span> <span class="va">self</span>.x]</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.x,<span class="va">self</span>.Px, label<span class="op">=</span><span class="st">"Binomial"</span>,c<span class="op">=</span><span class="st">'black'</span>)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">"x"</span>)</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">"P(x)"</span>)</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_mark_mean(<span class="va">self</span>,colors<span class="op">=</span> <span class="st">'green'</span>,linestyles<span class="op">=</span><span class="st">'dashdot'</span>,label <span class="op">=</span> <span class="st">"Mean: "</span>):</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate mean: mu = E(x)</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu <span class="op">=</span> <span class="va">self</span>.Expectation(fx<span class="op">=</span><span class="va">self</span>.x,Px<span class="op">=</span><span class="va">self</span>.Px)   </span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        <span class="co"># mark mean in plot</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        plt.vlines(<span class="va">self</span>.mu,ymax<span class="op">=</span><span class="bu">max</span>(<span class="va">self</span>.Px),ymin<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                   linestyles<span class="op">=</span>linestyles,</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>                   colors<span class="op">=</span>colors,</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span>label <span class="op">+</span> <span class="st">"$\mu$ = </span><span class="sc">{0:.3f}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="va">self</span>.mu))</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_mark_mode(<span class="va">self</span>,colors<span class="op">=</span><span class="st">'blue'</span>,linestyles<span class="op">=</span><span class="st">'solid'</span>,label<span class="op">=</span><span class="st">'Most Likely Value: '</span>):</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate mode: x value where P(x) is highest</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mode <span class="op">=</span> <span class="va">self</span>.x[np.argmax(<span class="va">self</span>.Px)]</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        <span class="co"># mark mode in plot</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        plt.vlines(<span class="va">self</span>.mode,ymax<span class="op">=</span><span class="bu">max</span>(<span class="va">self</span>.Px),ymin<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>                   linestyles<span class="op">=</span><span class="st">'solid'</span>,</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>                   colors<span class="op">=</span>colors,</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span>label<span class="op">+</span> <span class="st">"mode = </span><span class="sc">{0:.3f}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="va">self</span>.mode))</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_mark_std(<span class="va">self</span>,colors<span class="op">=</span><span class="st">'orange'</span>,linestyles<span class="op">=</span><span class="st">'dotted'</span>,label<span class="op">=</span><span class="st">"Standard deviation: "</span>):</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate stand. dev: sigma = sqrt(sigma^2); sigma^2 = E(x-mu)^2</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sigma <span class="op">=</span> np.sqrt(<span class="va">self</span>.Expectation(fx<span class="op">=</span>(<span class="va">self</span>.x<span class="op">-</span><span class="va">self</span>.mu)<span class="op">**</span><span class="dv">2</span>,Px<span class="op">=</span><span class="va">self</span>.Px)) </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_everything(<span class="va">self</span>,x,Px):</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate mean: mu = E(x)</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu <span class="op">=</span> <span class="va">self</span>.Expectation(fx<span class="op">=</span><span class="va">self</span>.x,Px<span class="op">=</span><span class="va">self</span>.Px)   </span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate stand. dev: sigma = sqrt(sigma^2); sigma^2 = E(x-mu)^2</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sigma <span class="op">=</span> np.sqrt(<span class="va">self</span>.Expectation(fx<span class="op">=</span>(<span class="va">self</span>.x<span class="op">-</span><span class="va">self</span>.mu)<span class="op">**</span><span class="dv">2</span>,Px<span class="op">=</span><span class="va">self</span>.Px)) </span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># calculate mode: x value where P(x) is highest</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mode <span class="op">=</span> <span class="va">self</span>.x[np.argmax(<span class="va">self</span>.Px)]</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_binomial(<span class="va">self</span>,title<span class="op">=</span><span class="st">"Binomial Distribution"</span>,label<span class="op">=</span><span class="st">"Binomial"</span>,color<span class="op">=</span><span class="st">'black'</span>):</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Px <span class="op">=</span> [<span class="va">self</span>.P_binomial(x<span class="op">=</span> i,n<span class="op">=</span><span class="va">self</span>.n,p<span class="op">=</span><span class="va">self</span>.p,q<span class="op">=</span><span class="va">self</span>.q) <span class="cf">for</span> i <span class="kw">in</span> <span class="va">self</span>.x]</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.x,<span class="va">self</span>.Px, label<span class="op">=</span>label,c<span class="op">=</span>color)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">"P(x)"</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_mark_mean(<span class="va">self</span>,colors<span class="op">=</span> <span class="st">'green'</span>,linestyles<span class="op">=</span><span class="st">'dashdot'</span>,label <span class="op">=</span> <span class="st">"Mean: "</span>):</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>        <span class="co"># mark mean in plot</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        plt.vlines(<span class="va">self</span>.mu,ymax<span class="op">=</span><span class="bu">max</span>(<span class="va">self</span>.Px),ymin<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>                   linestyles<span class="op">=</span>linestyles,</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                   colors<span class="op">=</span>colors,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span>label <span class="op">+</span> <span class="st">"$\mu$ = </span><span class="sc">{0:.3f}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="va">self</span>.mu))</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_mark_mode(<span class="va">self</span>,colors<span class="op">=</span><span class="st">'blue'</span>,linestyles<span class="op">=</span><span class="st">'solid'</span>,label<span class="op">=</span><span class="st">'Most Likely Value: '</span>):</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>        <span class="co"># mark mode in plot</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>        plt.vlines(<span class="va">self</span>.mode,ymax<span class="op">=</span><span class="bu">max</span>(<span class="va">self</span>.Px),ymin<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>                   linestyles<span class="op">=</span><span class="st">'solid'</span>,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>                   colors<span class="op">=</span>colors,</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span>label<span class="op">+</span> <span class="st">"mode = </span><span class="sc">{0:.3f}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="va">self</span>.mode))</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span>
 <span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>        <span class="co"># mark standard deviation (wrt mean) in plot</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>        plt.vlines(<span class="va">self</span>.mu<span class="op">+</span><span class="va">self</span>.sigma,ymax<span class="op">=</span><span class="bu">max</span>(<span class="va">self</span>.Px),ymin<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>                   colors<span class="op">=</span>colors,</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>                   linestyles<span class="op">=</span>linestyles,</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span>label <span class="op">+</span> <span class="st">"$\sigma$ = </span><span class="sc">{0:.3f}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="va">self</span>.sigma))</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>        plt.vlines(<span class="va">self</span>.mu<span class="op">-</span><span class="va">self</span>.sigma,</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>                   ymax<span class="op">=</span><span class="bu">max</span>(<span class="va">self</span>.Px),</span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>                   ymin<span class="op">=</span><span class="dv">0</span>,colors<span class="op">=</span>colors,</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>                   linestyles<span class="op">=</span>linestyles)</span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_mark_std(<span class="va">self</span>,colors<span class="op">=</span><span class="st">'orange'</span>,linestyles<span class="op">=</span><span class="st">'dotted'</span>,label<span class="op">=</span><span class="st">"Standard deviation: "</span>):</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>        <span class="co"># mark standard deviation (wrt mean) in plot</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>        plt.vlines(<span class="va">self</span>.mu<span class="op">+</span><span class="va">self</span>.sigma,ymax<span class="op">=</span><span class="bu">max</span>(<span class="va">self</span>.Px),ymin<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>                   colors<span class="op">=</span>colors,</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>                   linestyles<span class="op">=</span>linestyles,</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>                   label<span class="op">=</span>label <span class="op">+</span> <span class="st">"$\sigma$ = </span><span class="sc">{0:.3f}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="va">self</span>.sigma))</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>        plt.vlines(<span class="va">self</span>.mu<span class="op">-</span><span class="va">self</span>.sigma,</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>                   ymax<span class="op">=</span><span class="bu">max</span>(<span class="va">self</span>.Px),</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>                   ymin<span class="op">=</span><span class="dv">0</span>,colors<span class="op">=</span>colors,</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>                   linestyles<span class="op">=</span>linestyles)</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> complete_ind_binomial_plot(<span class="va">self</span>,title<span class="op">=</span><span class="st">"Binomial Distribution"</span>):</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.plot_binomial(title<span class="op">=</span>title,label<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.calculate_everything(x<span class="op">=</span><span class="va">self</span>.x,Px<span class="op">=</span><span class="va">self</span>.Px)</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.plot_mark_mean()</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.plot_mark_mode()</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.plot_mark_std()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-5" class="cell" data-execution_count="38">
+<div id="cell-6" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>part_a <span class="op">=</span> a_binomial(x_min<span class="op">=</span><span class="dv">0</span>,x_max<span class="op">=</span><span class="dv">15</span>,n<span class="op">=</span><span class="dv">100</span>,p<span class="op">=</span><span class="fl">0.035</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>part_a.plot_binomial(title<span class="op">=</span><span class="st">"Q3 Part(a): Binomial distribution (n=</span><span class="sc">{}</span><span class="st">,p=</span><span class="sc">{}</span><span class="st">)"</span>.<span class="bu">format</span>(part_a.n,part_a.p))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>part_a.plot_mark_mean()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>part_a.plot_mark_mode()</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>part_a.plot_mark_std()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>part_a.complete_ind_binomial_plot(title<span class="op">=</span><span class="st">"Q3 Part(a): Binomial distribution (n=</span><span class="sc">{}</span><span class="st">,p=</span><span class="sc">{}</span><span class="st">)"</span>.<span class="bu">format</span>(part_a.n,part_a.p))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -241,11 +273,18 @@ window.Quarto = {
 </div>
 </div>
 </section>
+</section>
 <section id="part-b" class="level2">
 <h2 class="anchored" data-anchor-id="part-b">Part (b)</h2>
 <p>Overplot the Poisson distribution for <span class="math inline">\(\lambda = \mu\)</span>; use a different color, symbol, or line style to distinguish the two. How close are the two functions? Do they have the same standard deviation?</p>
-<div id="cell-7" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> b_poisson:</span>
+<section id="jasmines-reminder-to-self-1" class="level3">
+<h3 class="anchored" data-anchor-id="jasmines-reminder-to-self-1">Jasmine’s reminder to self</h3>
+<p><strong>Poisson probability:</strong></p>
+<p><span class="math display">\[\begin{align*}
+P_B(x;\lambda) &amp;= \frac{\lambda^x}{x!}e^{-\lambda}
+\end{align*}\]</span></p>
+<div id="cell-9" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> b_poisson(a_binomial):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, x_min<span class="op">=</span><span class="dv">0</span>,x_max<span class="op">=</span><span class="dv">15</span>, lmd<span class="op">=</span><span class="fl">3.5</span>):              </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> np.arange(x_min,x_max<span class="op">+</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.lmd <span class="op">=</span> lmd                          <span class="co"># the term "lambda" has its own purpose in python so I named the variable "lmd" instead</span></span>
@@ -258,43 +297,25 @@ window.Quarto = {
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        e_lmd <span class="op">=</span> math.exp(<span class="op">-</span>lmd)                      <span class="co"># e^(-lambda)</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fraction<span class="op">*</span>e_lmd                       <span class="co"># [(mu^x)/(x!)]*(e^(-lambda))</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># def other(self,x,Px):</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     mu = sum(x*Px)              # mean: sum(x*P(x))</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     mode = x[np.argmax(Px)]     # mode: x value where P(x) is highest</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     sigma = self.n*self.p*self.q</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     return mu,mode,sigma</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot(<span class="va">self</span>,title<span class="op">=</span><span class="st">"Poisson Distribution"</span>):</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Px <span class="op">=</span> [<span class="va">self</span>.P_poisson(x<span class="op">=</span> i,lmd<span class="op">=</span><span class="va">self</span>.lmd) <span class="cf">for</span> i <span class="kw">in</span> <span class="va">self</span>.x]</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self.mu,self.mode,self.sigma = self.other(x=self.x,Px=self.Px)</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.x,<span class="va">self</span>.Px, label<span class="op">=</span><span class="st">"Poisson"</span>,c<span class="op">=</span><span class="st">'purple'</span>)</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># # mean</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># plt.vlines(self.mu,ymax=max(self.Px),ymin=0,</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            linestyles='dashdot',</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            colors='green',</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            label="Mean: $\mu$ = {0:.3f}".format(self.mu))</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># # mode</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        <span class="co"># plt.vlines(self.mode,ymax=max(self.Px),ymin=0,</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            linestyles='solid',</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            label="Most Likely Value: mode = {0:.3f}".format(self.mode))</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        <span class="co"># # standard deviation (wrt mean)</span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># plt.vlines(self.mu+self.sigma,ymax=max(self.Px),ymin=0,</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            colors='orange',linestyles='dotted',</span></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            label="Standard deviation: $\sigma$ = {0:.3f}".format(self.sigma))</span></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>        <span class="co"># plt.vlines(self.mu-self.sigma,</span></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            ymax=max(self.Px),</span></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            ymin=0,colors='orange',</span></span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        <span class="co">#            linestyles='dotted')</span></span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">"x"</span>)</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">"P(x)"</span>)</span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_poisson(<span class="va">self</span>,title<span class="op">=</span><span class="st">"Poisson Distribution"</span>,label<span class="op">=</span><span class="st">"Poisson"</span>,color<span class="op">=</span><span class="st">'purple'</span>):</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Px <span class="op">=</span> [<span class="va">self</span>.P_poisson(x<span class="op">=</span> i,lmd<span class="op">=</span><span class="va">self</span>.lmd) <span class="cf">for</span> i <span class="kw">in</span> <span class="va">self</span>.x]</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.x,<span class="va">self</span>.Px, label<span class="op">=</span>label,c<span class="op">=</span>color)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">"P(x)"</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> complete_ind_poisson_plot(<span class="va">self</span>,title<span class="op">=</span><span class="st">"Poisson Distribution"</span>):</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.plot_poisson(title<span class="op">=</span>title,label<span class="op">=</span><span class="va">None</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.calculate_everything(x<span class="op">=</span><span class="va">self</span>.x,Px<span class="op">=</span><span class="va">self</span>.Px)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.plot_mark_mean()</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.plot_mark_mode()</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.plot_mark_std()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-8" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>,figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>part_a.plot()</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>part_b.plot(title<span class="op">=</span><span class="st">"Q3 Part(b): Binomial vs. Poisson distribution"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-10" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># individual poisson plot by itself (just to see)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>part_b <span class="op">=</span> b_poisson(lmd<span class="op">=</span>part_a.mu)  <span class="co">#instantiation</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>part_b.complete_ind_poisson_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -303,10 +324,111 @@ window.Quarto = {
 </div>
 </div>
 </div>
+<div id="cell-11" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comparison plot between Binomial and Poisson</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>,figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>part_a.plot_binomial(label<span class="op">=</span><span class="st">"Binomial"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>part_a.plot_mark_std(colors<span class="op">=</span><span class="st">"orange"</span>,label<span class="op">=</span><span class="st">"Binomial stand. dev.: "</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>part_b.plot_poisson(title<span class="op">=</span><span class="st">"Q3 Part(b): Binomial vs. Poisson distribution"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>part_b.calculate_everything(x<span class="op">=</span>part_b.x,Px<span class="op">=</span>part_b.Px)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>part_b.plot_mark_std(colors<span class="op">=</span><span class="st">"green"</span>,label<span class="op">=</span><span class="st">"Poisson stand. dev. :"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw1_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="jasmines-written-answer" class="level3">
+<h3 class="anchored" data-anchor-id="jasmines-written-answer">Jasmine’s written answer</h3>
+<p>Overall, both functions appear to be pretty close and the standard deviation for both are just about the same (only different by 0.04).</p>
+</section>
 </section>
 <section id="part-c" class="level2">
 <h2 class="anchored" data-anchor-id="part-c">Part (c)</h2>
 <p>Repeat <strong>(a)</strong> and <strong>(b)</strong> based on the second experiment (10 second accumulation). Here, I ask you to make a mistake. Assume <span class="math inline">\(p=0.35\)</span> and construct the binomial distribution. Plot your results. What do you conclude?</p>
+<section id="jasmines-note-to-self" class="level3">
+<h3 class="anchored" data-anchor-id="jasmines-note-to-self">Jasmine’s note to self</h3>
+<p>So 100 seconds of 10 second accumulation means <span class="math inline">\(n=10\)</span></p>
+</section>
+<section id="parta-repeat-with-no-mistake" class="level3">
+<h3 class="anchored" data-anchor-id="parta-repeat-with-no-mistake">Part(a) repeat with no mistake</h3>
+<div id="cell-16" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>part_ca <span class="op">=</span> a_binomial(x_max<span class="op">=</span><span class="dv">10</span>,n<span class="op">=</span><span class="dv">10</span>,p<span class="op">=</span><span class="fl">0.035</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>part_ca.complete_ind_binomial_plot(title<span class="op">=</span><span class="st">"Q3 Part(c): Binomial distribution (n=</span><span class="sc">{}</span><span class="st">,p=</span><span class="sc">{}</span><span class="st">)"</span>.<span class="bu">format</span>(part_ca.n,part_ca.p))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw1_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="partb-repeat-with-no-mistake" class="level3">
+<h3 class="anchored" data-anchor-id="partb-repeat-with-no-mistake">Part(b) repeat with no mistake</h3>
+<div id="cell-18" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># individual poisson plot by itself (just to see)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>part_cb <span class="op">=</span> b_poisson(lmd<span class="op">=</span>part_ca.mu)  <span class="co">#instantiation</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>part_cb.complete_ind_poisson_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw1_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="parta-repeat-with-mistake" class="level3">
+<h3 class="anchored" data-anchor-id="parta-repeat-with-mistake">Part(a) repeat with mistake</h3>
+<div id="cell-20" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>part_ca <span class="op">=</span> a_binomial(x_max<span class="op">=</span><span class="dv">10</span>,n<span class="op">=</span><span class="dv">10</span>,p<span class="op">=</span><span class="fl">0.35</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>part_ca.complete_ind_binomial_plot(title<span class="op">=</span><span class="st">"Q3 Part(c): Binomial distribution w/ mistake (n=</span><span class="sc">{}</span><span class="st">,p=</span><span class="sc">{}</span><span class="st">)"</span>.<span class="bu">format</span>(part_ca.n,part_ca.p))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw1_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="partb-repeat-with-mistake" class="level3">
+<h3 class="anchored" data-anchor-id="partb-repeat-with-mistake">Part(b) repeat with mistake</h3>
+<div id="cell-22" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># individual poisson plot by itself (just to see)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>part_cb <span class="op">=</span> b_poisson(lmd<span class="op">=</span>part_ca.mu)  <span class="co">#instantiation</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>part_cb.complete_ind_poisson_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw1_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-23" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># comparison plot between Binomial and Poisson</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>,figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>part_ca.plot_binomial(label<span class="op">=</span><span class="st">"Binomial"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>part_ca.plot_mark_std(colors<span class="op">=</span><span class="st">"orange"</span>,label<span class="op">=</span><span class="st">"Binomial stand. dev.: "</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>part_cb.plot_poisson(title<span class="op">=</span><span class="st">"2nd Experiment with mistake (p=</span><span class="sc">{}</span><span class="st">) Binomial vs. Poisson"</span>.<span class="bu">format</span>(part_ca.p))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>part_cb.calculate_everything(x<span class="op">=</span>part_b.x,Px<span class="op">=</span>part_b.Px)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>part_cb.plot_mark_std(colors<span class="op">=</span><span class="st">"green"</span>,label<span class="op">=</span><span class="st">"Poisson stand. dev. :"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw1_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 
