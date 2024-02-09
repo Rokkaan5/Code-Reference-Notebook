@@ -11,7 +11,7 @@ permalink: /CUB/AstroPhys
 My last elective course for my Master's Data Science degree within in the Astrophysics department.
 
 
-# HW
+# Homework
 
 Any parts of any of the hw that contained coding portions
 
