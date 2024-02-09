@@ -115,8 +115,21 @@ window.Quarto = {
   <li><a href="#part-b" id="toc-part-b" class="nav-link" data-scroll-target="#part-b">Part (b)</a></li>
   <li><a href="#part-c" id="toc-part-c" class="nav-link" data-scroll-target="#part-c">Part (c)</a></li>
   </ul></li>
+  <li><a href="#how-old-is-this-volcano" id="toc-how-old-is-this-volcano" class="nav-link" data-scroll-target="#how-old-is-this-volcano">2. How Old is This Volcano?</a>
+  <ul class="collapse">
+  <li><a href="#part-a-1" id="toc-part-a-1" class="nav-link" data-scroll-target="#part-a-1">Part (a)</a></li>
+  <li><a href="#part-b-1" id="toc-part-b-1" class="nav-link" data-scroll-target="#part-b-1">Part (b)</a></li>
+  <li><a href="#part-c-1" id="toc-part-c-1" class="nav-link" data-scroll-target="#part-c-1">Part (c)</a></li>
+  <li><a href="#part-d" id="toc-part-d" class="nav-link" data-scroll-target="#part-d">Part (d)</a></li>
+  </ul></li>
+  <li><a href="#random-walk-and-the-central-limit-theorem" id="toc-random-walk-and-the-central-limit-theorem" class="nav-link" data-scroll-target="#random-walk-and-the-central-limit-theorem">3. Random Walk and the Central Limit Theorem</a>
+  <ul class="collapse">
+  <li><a href="#part-a-2" id="toc-part-a-2" class="nav-link" data-scroll-target="#part-a-2">Part (a)</a></li>
+  <li><a href="#part-b-2" id="toc-part-b-2" class="nav-link" data-scroll-target="#part-b-2">Part (b)</a></li>
+  <li><a href="#part-c-2" id="toc-part-c-2" class="nav-link" data-scroll-target="#part-c-2">Part (c)</a></li>
+  </ul></li>
   </ul>
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="..\..\..\hw2.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="..\..\..\..\hw2.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -166,6 +179,51 @@ window.Quarto = {
 <section id="part-c" class="level2">
 <h2 class="anchored" data-anchor-id="part-c">Part (c)</h2>
 <p>Overplot the Gaussian distribution using a fine x-axis. How close are the two functions? Do they peak at the same value? Is it reasonable to assume a Gaussian parent distribution in this case?</p>
+</section>
+</section>
+<section id="how-old-is-this-volcano" class="level1">
+<h1>2. How Old is This Volcano?</h1>
+<p>The age of a volcanic eruption on Mars can be inferred from counting the surface density of craters of a given diameter or greater. It is established that the impact rate <span class="math inline">\(r=0.01\)</span> creaters <span class="math inline">\(\text{km}^{-2}\text{Myr}^{-1}\)</span>. You survey an area (<span class="math inline">\(A\)</span>) of 10 <span class="math inline">\(\text{km}^2\)</span> and find 3 craters (<span class="math inline">\(x\)</span>).</p>
+<section id="part-a-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-1">Part (a)</h2>
+<p>Start by making a simple estimate of the volcano’s age and a standard deviation.</p>
+</section>
+<section id="part-b-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-b-1">Part (b)</h2>
+<p>The simple estimation of the age and uncertainty is often adequate. One can explore this problem further by calculating the <em>posterior</em> probability, <span class="math inline">\(P(x;t)\)</span> over a range of times (say, <span class="math inline">\(t=0\)</span> to 150 in Myr intervals) assuming a Poisson parent distribution and knowing <span class="math inline">\(x=3\)</span>. Do this problem on your computer.</p>
+<p>Important point: the initial calculation yields a set of <em>relative</em> probabilities; under Bayes’ law: <span class="math display">\[P(t;x) = \frac{P(x;t)P(t)}{P(x)}\]</span></p>
+<p>Since we have no prior knowledge in this case, we treat <span class="math inline">\(P(t)/P(x)\)</span> as a constant; You must normalize <span class="math inline">\(P(t;x)\)</span> so that the total probability is 1. <span class="math inline">\(P(t;x)\)</span> will have units of “probability/Myr”. Plot your results. Mark the mean and mode (most likely age) and directly compute the standard deviation. Compare these values with your simple estimate.</p>
+</section>
+<section id="part-c-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-c-1">Part (c)</h2>
+<p>A low count rate creates two issues. One issue is, of course, that the standard deviation is large regardless of how it is calculated. The other issue is that the probability distributions are often not symmetric, which creates a bit of a conundrum. It is natural to choose the most likely value of <span class="math inline">\(P(t;x)\)</span> as the age of the volcano but one can see that there is a greater probability that the volcano is older than the likely age rather than younger (if your plot is correct at this point). So how does one determine the uncertainty?</p>
+<p>There are several methods that can assign the uncertainty, one of which (relatively easy) is to calculate the full width at half the maximum (<em>FWHM</em>) of <span class="math inline">\(P(t;x)\)</span> and apply the Gaussian formula that <span class="math inline">\(\text{FWHM} = \sigma \sqrt{8ln(2)}\)</span> to calculate <span class="math inline">\(\sigma\)</span>. What does the does this method yield <span class="math inline">\([t_{min},t_{max}]\)</span>? You now have calculated sigma three times. Is there a significant difference between them? (More to come on this!)</p>
+</section>
+<section id="part-d" class="level2">
+<h2 class="anchored" data-anchor-id="part-d">Part (d)</h2>
+<p>Now suppose that 34 impact craters are identified over a 100 <span class="math inline">\(\text{km}^2\)</span> area. Redo parts (a), (b), and (c). Plot your results and compare.</p>
+</section>
+</section>
+<section id="random-walk-and-the-central-limit-theorem" class="level1">
+<h1>3. Random Walk and the Central Limit Theorem</h1>
+<section id="part-a-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-2">Part (a)</h2>
+<p>The random walk is often used to eludicate the central limit theorem. Using a classical but perhaps no longer politically correct analogy, a drunk at a lamp post (<span class="math inline">\(x=0\)</span>) takes a step either to the left or to the right with equal probability. His/her position (<span class="math inline">\(x\)</span>) after <span class="math inline">\(n\)</span> steps, can be represented with the binomial distribution:</p>
+<p><span class="math display">\[P_B(x;n,p) = \frac{n!}{(n-x)!x!} p^{x+1}q^{n-x}\]</span></p>
+<p>Set <span class="math inline">\(p=1/2\)</span> for a step to the right (positive) of one unit, otherwise the step is to the left. The distance traveled is the <span class="math inline">\(d=2x-n\)</span>. We know from the central limit theorem that <span class="math inline">\(P_B(d;n,p)\)</span> approaches a Gaussian at large <span class="math inline">\(n\)</span>. Numerically calculate and plot <span class="math inline">\(P_B(d;n,p)\)</span> for <span class="math inline">\(n=100\)</span>.</p>
+<p>Overplot: <span class="math display">\[P_G(d) = \frac{C}{\sigma \sqrt{2\pi}} e^{-\frac{d^2}{2\sigma ^2}}\]</span></p>
+<p>Careful with normalization! <span class="math inline">\(P_B{d;n,p}\)</span> is normalized so that its total is 1. When using <span class="math inline">\(d=2x-n\)</span> with <span class="math inline">\(n\)</span> as an even number, <span class="math inline">\(d\)</span> must be an even number. There are only 101 possible positions. On the other hand, <span class="math inline">\(P_G(d)\)</span> does not require <span class="math inline">\(d\)</span> to be even (or an integer for that matter) and has twice as many possible positions.</p>
+<p>I recommend that the plot is log/linear with the vertical axis (probability) range of <span class="math inline">\(10^{-5}\)</span> to <span class="math inline">\(1\)</span>. Don’t print it out yet. See below.</p>
+</section>
+<section id="part-b-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-b-2">Part (b)</h2>
+<p>What if, however, the lamppost (<span class="math inline">\(x=0\)</span>) is at the bottom of a parabolic valley as pictured below. Let the altitude be <span class="math inline">\(z=0.005 d^2\)</span>, so that the <span class="math inline">\(\text{slope} = 0.01 d\)</span>. Now suppose the drunk tends to stagger downhill. Let the probability of a right step be <span class="math inline">\(0.5-\text{slope}\)</span>. With a brute force algorithm, calculate <span class="math inline">\(P(d)\)</span>. Overplot your results. What is <span class="math inline">\(\sigma\)</span>?</p>
+<p>Hint: Implement a random walk program with <span class="math inline">\(n=100\)</span> steps by calling a uniform random number then comparing to the right-step probability, which is a function of position. Record the end position. Loop ~100,000 times and make a histogram of the end positions.</p>
+</section>
+<section id="part-c-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-c-2">Part (c)</h2>
+<p>Now put the lamppost (<span class="math inline">\(x=0\)</span>) at the top of a parabolic hill so that the <span class="math inline">\(\text{slope}= -0.01 d\)</span>. Ovverplot your results. What is <span class="math inline">\(\sigma\)</span>?</p>
+<p>Note: You will notice that your results look Gaussian. However, the central limit theory does <strong>not</strong> necessarily apply for steps (b) and (c). Save your code for the next problem when we look at power-law tails.</p>
 </section>
 </section>
 
