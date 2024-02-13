@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.542">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>Lab 10: Random Walks</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Lab10_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Lab10_files/libs/quarto-html/quarto.js"></script>
+<script src="Lab10_files/libs/quarto-html/popper.min.js"></script>
+<script src="Lab10_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Lab10_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Lab10_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Lab10_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Lab10_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Lab10_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Lab10_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#exercise-1-1-d-random-walk" id="toc-exercise-1-1-d-random-walk" class="nav-link active" data-scroll-target="#exercise-1-1-d-random-walk">Exercise 1: 1-D random walk</a></li>
+  <li><a href="#exercise-2-2-d-diffusion" id="toc-exercise-2-2-d-diffusion" class="nav-link" data-scroll-target="#exercise-2-2-d-diffusion">Exercise 2: 2-D diffusion</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 10: Random Walks</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>Goal:</strong> Introduce concepts of probability and random processes in the context of model physical systems.</p>
+<ul>
+<li><p>Start with the simplest model: the intoxicated walk.<br>
+</p></li>
+<li><p>Each step is of equal length <span class="math inline">\(l\)</span> and independent of the preceding step.</p></li>
+<li><p>At each interval the walker has a probability <span class="math inline">\(p\)</span> of a step to the right and probability <span class="math inline">\(q=1-p\)</span> of a step to the left.</p></li>
+<li><p>Let <span class="math inline">\(n_r\)</span> be the number steps to the right and <span class="math inline">\(n_l\)</span> be the number of steps to the left.<br>
+</p></li>
+<li><p>The total number of steps is <span class="math inline">\(N = n_r + n_l\)</span> and the net displacement is <span class="math inline">\(x = (n_r - n_l)/l\)</span> where <span class="math inline">\(-Nl \le x \le Nl\)</span>.</p></li>
+<li><p>The main quantity of interest is the probability <span class="math inline">\(P_N(x)\)</span> that after <span class="math inline">\(N\)</span> steps, the walker has undergone a net displacement <span class="math inline">\(x\)</span>.</p></li>
+<li><p>The mean net displacement is (<span class="math inline">\(\sum P_N(x) = 1\)</span>)</p></li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\langle x_N \rangle = \sum_{x = -Nl}^{Nl} x P_N(x)
+\end{equation*}\]</span></p>
+<ul>
+<li>The variance is</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\langle \Delta x_N^2 \rangle = \langle x_N^2 \rangle - \langle x_N \rangle^2
+\end{equation*}\]</span></p>
+<p>where</p>
+<p><span class="math display">\[\begin{equation*}
+\langle x_N^2 \rangle = \sum_{x = -Nl}^{Nl} x^2 P_N(x)
+\end{equation*}\]</span></p>
+<ul>
+<li><p>The averages are over all possible walks of <span class="math inline">\(N\)</span> steps.</p></li>
+<li><p>For the symmetric case, <span class="math inline">\(p = q = 1\)</span>, <span class="math inline">\(\langle x_N \rangle = 0\)</span>.</p></li>
+</ul>
+<section id="exercise-1-1-d-random-walk" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1-1-d-random-walk">Exercise 1: 1-D random walk</h2>
+<ol type="1">
+<li><p>Comment the program below and plot <span class="math inline">\(P_N(x)\)</span> for <span class="math inline">\(ntrials = [10,100,1000,10000].\)</span></p></li>
+<li><p>Normalize <span class="math inline">\(P_N(x)\)</span> such that <span class="math inline">\(\sum P_N(x) = 1.0\)</span>.</p></li>
+<li><p>Determine <span class="math inline">\(\langle x_N \rangle\)</span> and <span class="math inline">\(\langle \Delta x_N^2 \rangle\)</span>. Compare with the analytical results (e.g., Reif, Fundamentals of Statistical and Thermal Physics),</p></li>
+</ol>
+<p><span class="math display">\[\begin{equation*}
+\langle x_N \rangle = (p - q)Nl
+\end{equation*}\]</span></p>
+<p>and</p>
+<p><span class="math display">\[\begin{equation*}
+\langle \Delta x_N^2 \rangle = 4pqNl^2
+\end{equation*}\]</span></p>
+<ol start="4" type="1">
+<li><p>Determine the number of trials necessary to obtain <span class="math inline">\(\langle \Delta x^2 \rangle\)</span> to 1% accuracy.</p></li>
+<li><p>Show that <span class="math inline">\(P_N(x)\)</span> can be approximated by a Gaussian distribution <span class="math display">\[\begin{equation*}
+P(x) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-(x- \langle x \rangle)^2/(2 \sigma^2)}
+\end{equation*}\]</span> where <span class="math inline">\(\sigma^2 = \langle \Delta x^2 \rangle\)</span>. Does the fit work equally well for all <span class="math inline">\(x\)</span>?</p></li>
+<li><p>Suppose that <span class="math inline">\(p= 0.7\)</span>. Compute <span class="math inline">\(\langle x_N \rangle\)</span>, <span class="math inline">\(\langle x_N^2 \rangle\)</span>, and <span class="math inline">\(\langle \Delta x_N^2 \rangle\)</span>.</p></li>
+</ol>
+<div id="cell-3" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random <span class="im">as</span> rnd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_x(x,pN):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#add code for &lt;xN&gt; and &lt;xN^2&gt; #(Exercise 1; Part 3)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    xN <span class="op">=</span> <span class="dv">0</span>                                  <span class="co">#(average of) xN</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    xN2 <span class="op">=</span> <span class="dv">0</span>                                 <span class="co">#(average of) xN^2</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> m <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(x)):                 <span class="co">#from -Nl to Nl</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        xN <span class="op">+=</span> x[m]<span class="op">*</span>pN[m]                        <span class="co">#x*PN(x)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        xN2 <span class="op">+=</span>(x[m]<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>pN[m]                   <span class="co">#x^2*PN(x)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    dxsn <span class="op">=</span> xN2 <span class="op">-</span> (xN<span class="op">**</span><span class="dv">2</span>)                    <span class="co">#(average of) dxsn = delta x(sub)n</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> xN, xN2, dxsn</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_pN(x,ntrial):       <span class="co">#I added "ntrial" to variables asked, so plotting different # of trials would be easier</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    pN <span class="op">=</span> np.zeros(<span class="bu">len</span>(x))                   <span class="co">#starts pN with array of zeros with size of length x</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    wh <span class="op">=</span> np.where(x <span class="op">==</span> <span class="fl">0.0</span>)                 <span class="co">#index where x = 0.0</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(ntrial):                 <span class="co">#for each trial</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        i <span class="op">=</span> wh[<span class="dv">0</span>]                           <span class="co">#i reset to (the first time) x = 0</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(N):                  <span class="co">#for total number of step (each trial)</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (rnd.random() <span class="op">&lt;=</span> p):             <span class="co">#if number generated is &lt;= to the probability of right step</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                i <span class="op">=</span> i<span class="op">+</span><span class="dv">1</span>                         <span class="co">#i = index of displacment x travelled (+1 = one direction)</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                i <span class="op">=</span> i<span class="op">-</span><span class="dv">1</span>                         <span class="co">#(-1 = the opposite direction)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        pN[i] <span class="op">+=</span> <span class="fl">1.0</span>                        <span class="co">#increase probability of traveling x[i]</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pN                               <span class="co">#pN[i]= probability that walker travelled x, after N steps</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fl">0.5</span>             <span class="co">#probability for right step</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="dv">1</span><span class="op">-</span>p             <span class="co">#probability for left step</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">64</span>              <span class="co">#Total Number of steps</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>l <span class="op">=</span> <span class="dv">1</span>               <span class="co">#length of each step</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>ntrial <span class="op">=</span> <span class="dv">200</span>        <span class="co">#number of trials</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="op">-</span>N,(N<span class="op">+</span><span class="dv">1</span>),<span class="dv">1</span>)                  <span class="co">#x-values (net displacement values) (-Nl to Nl)</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>pN <span class="op">=</span> get_pN(x,ntrial)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>plt.bar(x,pN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-2-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-4" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1; part 1: vary number of trials</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ntrials <span class="op">=</span> [<span class="dv">10</span>,<span class="dv">100</span>,<span class="dv">1000</span>,<span class="dv">10000</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(ntrials)):</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    PN <span class="op">=</span> get_pN(x,ntrials[j])</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    plt.figure(j)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="bu">str</span>(ntrials[j])<span class="op">+</span><span class="st">" trials"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    plt.bar(x,PN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-3-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-3-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-5" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1;Part 2: Normalize PN(x) such that sum = 1.0</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize(get_pN,x,ntrial):       <span class="co">#Function to normalize get_pN</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    pN <span class="op">=</span> get_pN(x,ntrial)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pN<span class="op">/</span>ntrial                  <span class="co">#dividing result of get_pN by the number of trials</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#printing results</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>example <span class="op">=</span> normalize(get_pN,x,ntrial)        <span class="co">#using values from given example in first coding cell</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sum of PN(x)="</span>,np.<span class="bu">sum</span>(example),<span class="st">"("</span><span class="op">+</span><span class="bu">str</span>(ntrial)<span class="op">+</span><span class="st">" trials)"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(ntrials)):</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    E1P1 <span class="op">=</span> normalize(get_pN,x,ntrials[k])   <span class="co">#using values used when plotting Exercise 1;Part 1</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Sum of PN(x)="</span>,np.<span class="bu">sum</span>(E1P1),<span class="st">"("</span><span class="op">+</span><span class="bu">str</span>(ntrials[k])<span class="op">+</span><span class="st">" trials)"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sum of PN(x)= 1.0 (200 trials)
+Sum of PN(x)= 1.0 (10 trials)
+Sum of PN(x)= 1.0 (100 trials)
+Sum of PN(x)= 1.0 (1000 trials)
+Sum of PN(x)= 1.0 (10000 trials)</code></pre>
+</div>
+</div>
+<div id="cell-6" class="cell" data-scrolled="false" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1; Part 3</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>nt3 <span class="op">=</span> <span class="dv">17000</span>                             <span class="co">#number of trials for this part3 of exercise 1</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>pn <span class="op">=</span> normalize(get_pN,x,nt3)            <span class="co">#normalized pN with nt3 number of trials</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>[xN,x2,dxsn] <span class="op">=</span> mean_x(x,pn)             <span class="co">#numerical averages</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>an_xN <span class="op">=</span> (p<span class="op">-</span>q)<span class="op">*</span>N<span class="op">*</span>l                       <span class="co">#analytical avg. xN</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>an_dxsn <span class="op">=</span> <span class="dv">4</span><span class="op">*</span>p<span class="op">*</span>q<span class="op">*</span>N<span class="op">*</span>(l<span class="op">**</span><span class="dv">2</span>)                <span class="co">#analytical avg. (delta x_n)^2</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"numerical &lt;xN&gt;="</span>,xN)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"analytical &lt;xN&gt;="</span>,an_xN)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">numerical &lt;(delta x_N)^2&gt;="</span>,dxsn)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"analytical &lt;(delta x_N)^2&gt;="</span>,an_dxsn)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1; Part 4: Determine the number of trials necessary to obtain (delta x_n)^2 to 1% accuracy</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> error(an_dxsn,dxsn):</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="bu">abs</span>(an_dxsn <span class="op">-</span> dxsn)<span class="op">/</span>an_dxsn)<span class="op">*</span><span class="dv">100</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(nt3)<span class="op">+</span><span class="st">" trials= "</span><span class="op">+</span><span class="bu">str</span>(<span class="bu">round</span>(error(an_dxsn,dxsn),<span class="dv">3</span>))<span class="op">+</span><span class="st">"% accurate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>numerical &lt;xN&gt;= 0.045764705882353054
+analytical &lt;xN&gt;= 0.0
+
+numerical &lt;(delta x_N)^2&gt;= 63.76284676816609
+analytical &lt;(delta x_N)^2&gt;= 64.0
+
+17000 trials= 0.371% accurate</code></pre>
+</div>
+</div>
+<div id="cell-7" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1;Part 5: Gaussian Distribution Approximation</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>pn5 <span class="op">=</span> normalize(get_pN,x,<span class="dv">10000</span>)              <span class="co">#PN for part 5</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>[xN5,x25,dxsn5] <span class="op">=</span> mean_x(x,pn5)              <span class="co">#numerical avg. for part 5</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> Gaussian(x,dxsn):</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    sigma2 <span class="op">=</span> dxsn                   <span class="co">#sigma^2 = &lt;(delta x_n)^2&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    avgx <span class="op">=</span> np.<span class="bu">sum</span>(x)<span class="op">/</span><span class="bu">len</span>(x)         <span class="co">#&lt;x&gt;; average x</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    power <span class="op">=</span> <span class="op">-</span>((x<span class="op">-</span>avgx)<span class="op">**</span><span class="dv">2</span>)<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>sigma2)       <span class="co">#-(x-&lt;x&gt;)^2/2(sigma^2)</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    denominator <span class="op">=</span> np.sqrt(sigma2<span class="op">*</span><span class="dv">2</span><span class="op">*</span>np.pi)   <span class="co">#squareroot((sigma^2)2*pi) = sigma*squareroot(2*pi)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="dv">1</span><span class="op">/</span>denominator)<span class="op">*</span>np.exp(power)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#graph</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>plt.bar(x,pn5)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>plt.plot(x,np.<span class="bu">max</span>(pn5)<span class="op">*</span>Gaussian(x,dxsn5)<span class="op">/</span>np.<span class="bu">max</span>(Gaussian(x,dxsn5)))     <span class="co">#plotted Gaussian curve like code in ex.2 </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-8" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1;Part 6: Changing p to p=0.7</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fl">0.7</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> p</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pN6 <span class="op">=</span> normalize(get_pN,x,<span class="dv">10000</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>[xN6,x2N6,dxsn6] <span class="op">=</span> mean_x(x,pN6)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>an_xN <span class="op">=</span> (p<span class="op">-</span>q)<span class="op">*</span>N<span class="op">*</span>l                       <span class="co">#analytical avg. xN</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>an_dxsn <span class="op">=</span> <span class="dv">4</span><span class="op">*</span>p<span class="op">*</span>q<span class="op">*</span>N<span class="op">*</span>(l<span class="op">**</span><span class="dv">2</span>)                <span class="co">#analytical avg. (delta x_n)^2</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;x_N&gt; ="</span>,xN6)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"analytical ="</span>,<span class="bu">round</span>(an_xN,<span class="dv">2</span>))</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;(x_N)^2&gt; = "</span>,x2N6)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;(delta x_N)^2&gt; ="</span>,dxsn6)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"analytical ="</span>,<span class="bu">round</span>(an_dxsn,<span class="dv">2</span>))</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>plt.bar(x,pN6)    <span class="co">#not asked to graph but I did anyway</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;x_N&gt; = 25.650799999999997
+analytical = 25.6
+
+&lt;(x_N)^2&gt; =  711.8984
+
+&lt;(delta x_N)^2&gt; = 53.934859360000246
+analytical = 53.76</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-7-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-2-2-d-diffusion" class="level1">
+<h1>Exercise 2: 2-D diffusion</h1>
+<p>Consider a collection of <span class="math inline">\(N\)</span> bees which are initially localized in a circle of unit radius centered on the origin. At each time step, each bee moves at random with equal probability to one of four possible directions.</p>
+<ol type="1">
+<li><p>Comment “class bees” which models the “diffusion” of a bee swarm.</p></li>
+<li><p>Plot the bees as points and describe the qualitative nature of the motion of the swarm as a function of time.</p></li>
+</ol>
+<p><strong>JK: I’m assuming I’m allowed to just observe from the graphs already made…</strong></p>
+<p><strong>I’m not sure what qualifies as an acceptable description of the “qualitive nature of motion … as a function of time” but it appears that the bees will always have a high probability of ending somewhere near the center/origin by the end of the total nsteps.</strong></p>
+<ol start="3" type="1">
+<li>Suppose that each bee is given a random initial velocity in one of the four directions. At each time interval, each bee takes a step of magnitude unity in the same direction as its original velocity. Is the motion of the swarm changed from part 2?</li>
+</ol>
+<p><strong>JK: If I’m understanding the question correctly… yes. If they are always going to travel in the same direction (as the random initial velocity) for each step than it should be very different from the original random movement.(?)</strong></p>
+<ol start="4" type="1">
+<li><p>Compute <span class="math inline">\(\langle x_N \rangle\)</span>, <span class="math inline">\(\langle y_N \rangle\)</span>, <span class="math inline">\(\langle \Delta x_N^2 \rangle\)</span>, and <span class="math inline">\(\langle \Delta y_N^2 \rangle\)</span> for both cases above. Also compute the net mean square displacement <span class="math display">\[\langle \Delta R_N^2 \rangle = \langle \Delta x_N^2 \rangle + \langle \Delta y_N^2 \rangle - \langle x_N \rangle \langle x_N \rangle - \langle y_N \rangle \langle y_N \rangle \]</span> What is the qualitative dependence of these quantities on the number of time steps?</p></li>
+<li><p>Plot the diffusion coefficient <span class="math inline">\(D(t) = \langle \Delta R_N^2(t) \rangle/(2 d t)\)</span> (where <span class="math inline">\(d\)</span> is the spatial dimension, i.e., 2) as a function of time and compare your results with the analytical solution to the diffusion equation of the form <span class="math display">\[\begin{equation*}
+P(x,t) = (2 \pi D t)^{-1/2} e^{-x^2/4 D t}
+\end{equation*}\]</span> Note that the measure of “time” in this context is arbitrary. The usual definition is that one unit of time corresponds to one Monte Carlo step per particle. During one Monte Carlo step per particle, each particle attempts one jump <em>on the average</em>.</p></li>
+</ol>
+<div id="cell-10" class="cell" data-scrolled="false" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.rcParams.update({<span class="st">'font.size'</span>: <span class="dv">18</span>})</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d <span class="im">import</span> Axes3D</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> bees:</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,N,nsteps):</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.N <span class="op">=</span> N                                   <span class="co">#N = number of bees</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> np.arange(<span class="op">-</span>nsteps,(nsteps<span class="op">+</span><span class="dv">1</span>),<span class="dv">1</span>)     <span class="co">#range of x values</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.y <span class="op">=</span> np.arange(<span class="op">-</span>nsteps,(nsteps<span class="op">+</span><span class="dv">1</span>),<span class="dv">1</span>)     <span class="co">#range of y values</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xpos <span class="op">=</span> <span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="dv">2</span><span class="op">*</span>np.random.rand(N)          <span class="co">#x displacement</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ypos <span class="op">=</span> <span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="dv">2</span><span class="op">*</span>np.random.rand(N)          <span class="co">#y displacement</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vx <span class="op">=</span> np.random.rand(N)                  <span class="co">#each bee has random initial x velocity (...direction?) (values = [0,1))</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vy <span class="op">=</span> np.random.rand(N)                  <span class="co">#each bee has random initial y velocity (...direction?)</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.p <span class="op">=</span> <span class="fl">0.5</span>                                 <span class="co">#probablity of certain direction</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.stepsize <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.nsteps <span class="op">=</span> nsteps                         <span class="co">#nsteps = the time interval in some sense?</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pN <span class="op">=</span> np.zeros([<span class="dv">2</span><span class="op">*</span>nsteps<span class="op">+</span><span class="dv">1</span>,<span class="dv">2</span><span class="op">*</span>nsteps<span class="op">+</span><span class="dv">1</span>])</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> move_bees(<span class="va">self</span>):                             <span class="co">#2D P_N(x) for bees</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.N):             <span class="co">#for each bee</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.nsteps):         <span class="co">#for each number of steps</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>                r <span class="op">=</span> rnd.random()                    <span class="co">#assign random direction </span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (r <span class="op">&lt;=</span> <span class="fl">0.5</span>):                      <span class="co">#travelled in x direction</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> (rnd.random() <span class="op">&lt;=</span> <span class="va">self</span>.p):        <span class="co">#positive x direction</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>                        <span class="va">self</span>.xpos[i] <span class="op">=</span> <span class="va">self</span>.xpos[i] <span class="op">+</span> <span class="va">self</span>.stepsize</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">else</span>:                               <span class="co">#negative x direction</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>                        <span class="va">self</span>.xpos[i] <span class="op">=</span> <span class="va">self</span>.xpos[i] <span class="op">-</span> <span class="va">self</span>.stepsize</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:                               <span class="co">#travelled in y direction</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> (rnd.random() <span class="op">&lt;=</span> <span class="va">self</span>.p):        <span class="co">#positive y direction</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>                        <span class="va">self</span>.ypos[i] <span class="op">=</span> <span class="va">self</span>.ypos[i] <span class="op">+</span> <span class="va">self</span>.stepsize</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">else</span>:                               <span class="co">#negative y direction </span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>                        <span class="va">self</span>.ypos[i] <span class="op">=</span> <span class="va">self</span>.ypos[i] <span class="op">-</span> <span class="va">self</span>.stepsize</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>            j <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(<span class="va">self</span>.xpos[i])) <span class="op">+</span> nsteps</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>            k <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(<span class="va">self</span>.ypos[i])) <span class="op">+</span> nsteps</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.pN[j,k] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pN <span class="op">=</span> <span class="va">self</span>.pN<span class="op">/</span><span class="va">self</span>.pN.<span class="bu">sum</span>()             <span class="co">#normalized pN?</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> move_bees_v_init(<span class="va">self</span>):</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>        <span class="co">#write your own code for part 3.</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.step <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>np.sqrt(<span class="dv">2</span>)          <span class="co">#made step smaller b/c I had issues when kept stepsize = 1</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> は <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.N):</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> 動 <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.nsteps):</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (<span class="va">self</span>.vx[は] <span class="op">&lt;=</span> <span class="fl">0.5</span>) <span class="kw">and</span> (<span class="va">self</span>.vy[は] <span class="op">&lt;=</span> <span class="fl">0.5</span>):                      </span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.xpos[は] <span class="op">=</span> <span class="va">self</span>.xpos[は] <span class="op">+</span> <span class="va">self</span>.step         <span class="co">#positive x direction</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.ypos[は] <span class="op">=</span> <span class="va">self</span>.ypos[は] <span class="op">+</span> <span class="va">self</span>.step         <span class="co">#positive y direction</span></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>                <span class="cf">elif</span> (<span class="va">self</span>.vx[は] <span class="op">&gt;</span> <span class="fl">0.5</span>) <span class="kw">and</span> (<span class="va">self</span>.vy[は] <span class="op">&lt;=</span> <span class="fl">0.5</span>):                               </span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.xpos[は] <span class="op">=</span> <span class="va">self</span>.xpos[は] <span class="op">-</span> <span class="va">self</span>.step         <span class="co">#negative x direction</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.ypos[は] <span class="op">=</span> <span class="va">self</span>.ypos[は] <span class="op">+</span> <span class="va">self</span>.step         <span class="co">#positive y direction</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>                <span class="cf">elif</span> (<span class="va">self</span>.vx[は] <span class="op">&lt;=</span> <span class="fl">0.5</span>) <span class="kw">and</span> (<span class="va">self</span>.vy[は] <span class="op">&gt;</span> <span class="fl">0.5</span>):</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.xpos[は] <span class="op">=</span> <span class="va">self</span>.xpos[は] <span class="op">+</span> <span class="va">self</span>.step         <span class="co">#positive x direction</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.ypos[は] <span class="op">=</span> <span class="va">self</span>.ypos[は] <span class="op">-</span> <span class="va">self</span>.step         <span class="co">#negative y direction</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>                <span class="cf">elif</span> (<span class="va">self</span>.vx[は] <span class="op">&gt;</span> <span class="fl">0.5</span>) <span class="kw">and</span> (<span class="va">self</span>.vy[は] <span class="op">&gt;</span> <span class="fl">0.5</span>):</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.xpos[は] <span class="op">=</span> <span class="va">self</span>.xpos[は] <span class="op">-</span> <span class="va">self</span>.step         <span class="co">#negative x direction</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.ypos[は] <span class="op">=</span> <span class="va">self</span>.ypos[は] <span class="op">-</span> <span class="va">self</span>.step         <span class="co">#negative y direction           </span></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>            J <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(<span class="va">self</span>.xpos[は])) <span class="op">+</span> <span class="va">self</span>.nsteps</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>            K <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(<span class="va">self</span>.ypos[は])) <span class="op">+</span> <span class="va">self</span>.nsteps</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.pN[J,K] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pN <span class="op">=</span> <span class="va">self</span>.pN<span class="op">/</span><span class="va">self</span>.pN.<span class="bu">sum</span>()             <span class="co">#normalized pN? </span></span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>                        </span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_bees(<span class="va">self</span>,xmin,xmax):</span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>        fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">8</span>))</span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>        ax.plot(<span class="va">self</span>.xpos,<span class="va">self</span>.ypos,<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">0.5</span>)     <span class="co">#plots the position of the bees (the blue &amp; white graph)</span></span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>        <span class="co">#plt.plot(self.xpos,self.ypos,'.',markersize=0.1)</span></span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>        ax.set_xlabel(<span class="st">'x'</span>)</span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>        ax.set_ylabel(<span class="st">'y'</span>)</span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>        ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>        ax.set_xlim((xmin,xmax))</span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim((xmin,xmax))</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>        fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">8</span>))</span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>        ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)</span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>        ax.hist2d(<span class="va">self</span>.xpos,<span class="va">self</span>.ypos,bins<span class="op">=</span>[<span class="dv">20</span>,<span class="dv">20</span>])         <span class="co">#plots the blue/green/yellow histogram</span></span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>        ax.set_xlabel(<span class="st">'x'</span>)</span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>        ax.set_ylabel(<span class="st">'y'</span>)</span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>        ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>        ax.set_xlim((xmin,xmax))</span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim((xmin,xmax))</span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_bees_1d(<span class="va">self</span>,xmin,xmax,D):      <span class="co">#1D situation = probability of being in x direction I assume</span></span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>        plt.figure()                       </span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>        wh <span class="op">=</span> np.where(<span class="bu">abs</span>(<span class="va">self</span>.ypos) <span class="op">&lt;=</span> <span class="fl">2.0</span>)</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>        plt.hist(<span class="va">self</span>.xpos[wh[<span class="dv">0</span>]],bins<span class="op">=</span><span class="dv">20</span>)                  <span class="co">#plots histogram of 1D situation (the orange bar graph)</span></span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a>        h <span class="op">=</span> plt.hist(<span class="va">self</span>.xpos[wh[<span class="dv">0</span>]],bins<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>        maxh <span class="op">=</span> np.<span class="bu">max</span>(h[<span class="dv">0</span>:<span class="bu">int</span>(<span class="bu">len</span>(h)<span class="op">/</span><span class="dv">2</span>)])                   <span class="co">#max in the histogram (max probability)?</span></span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'x'</span>)</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> np.linspace(xmin,xmax,<span class="dv">100</span>)</span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a>        fx <span class="op">=</span> (<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>D<span class="op">*</span><span class="va">self</span>.nsteps)<span class="op">**</span>(<span class="op">-</span><span class="fl">1.</span><span class="op">/</span><span class="fl">2.</span>)<span class="op">*</span>np.exp(<span class="op">-</span>x<span class="op">**</span><span class="dv">2</span><span class="op">/</span>(<span class="dv">4</span><span class="op">*</span>D<span class="op">*</span><span class="va">self</span>.nsteps))   <span class="co">#f(X) = like the Gaussian #D = sigma^2</span></span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>        plt.plot(x,maxh<span class="op">*</span>fx<span class="op">/</span>np.<span class="bu">max</span>(fx))                      <span class="co">#Curve = max height(PN)*Gausssian/max of Gaussian</span></span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> mean_x(<span class="va">self</span>):</span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>        xbar <span class="op">=</span> <span class="fl">0.0</span>                                          <span class="co">#avg. x position</span></span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>        xbar2 <span class="op">=</span> <span class="fl">0.0</span>                                         <span class="co">#avg. x position squared</span></span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>        ybar <span class="op">=</span> <span class="fl">0.0</span>                                          <span class="co">#avg. y position etc.</span></span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>        ybar2 <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(<span class="va">self</span>.y)):</span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>            xbar <span class="op">+=</span> np.<span class="bu">sum</span>(<span class="va">self</span>.x[:]<span class="op">*</span><span class="va">self</span>.pN[:,j])</span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a>            xbar2 <span class="op">+=</span> np.<span class="bu">sum</span>(<span class="va">self</span>.x[:]<span class="op">**</span><span class="dv">2</span><span class="op">*</span><span class="va">self</span>.pN[:,j])</span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(<span class="va">self</span>.x)):</span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>            ybar <span class="op">+=</span> np.<span class="bu">sum</span>(<span class="va">self</span>.y[:]<span class="op">*</span><span class="va">self</span>.pN[i,:])</span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a>            ybar2 <span class="op">+=</span> np.<span class="bu">sum</span>(<span class="va">self</span>.y[:]<span class="op">**</span><span class="dv">2</span><span class="op">*</span><span class="va">self</span>.pN[i,:])</span>
+<span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a>        DeltaR2 <span class="op">=</span> xbar2 <span class="op">+</span> ybar2 <span class="op">-</span> xbar<span class="op">*</span>xbar <span class="op">-</span> ybar<span class="op">*</span>ybar     <span class="co">#DeltaR2 = similar to &lt;(delta x_n)^2&gt; of ex.1 I assume</span></span>
+<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> xbar,xbar2,ybar,ybar2,DeltaR2</span>
+<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a><span class="co">#below was already given, but does it count as part 2 being done?    </span></span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">20000</span>                  <span class="co">#number of bees</span></span>
+<span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a>nsteps <span class="op">=</span> <span class="dv">100</span>               <span class="co">#number of steps</span></span>
+<span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a>maxx <span class="op">=</span> <span class="dv">30</span>                  <span class="co">#max x displacement (for 1D)</span></span>
+<span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a>minx <span class="op">=</span> <span class="op">-</span><span class="dv">30</span>                 <span class="co">#min x displacement (for 1D)</span></span>
+<span id="cb10-117"><a href="#cb10-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-118"><a href="#cb10-118" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> bees(N,nsteps)</span>
+<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a>b.move_bees()      </span>
+<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a>b.plot_bees(minx,maxx)</span>
+<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a>plt.imshow(b.pN)           <span class="co">#plt.imshow = display an image</span></span>
+<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a>[xbar,xbar2,ybar,ybar2,DR2] <span class="op">=</span> b.mean_x()</span>
+<span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> DR2<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span><span class="dv">2</span><span class="op">*</span>nsteps)       <span class="co">#Diffusion Coefficient (2nd "2" is because dimensions,d = 2)</span></span>
+<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a>b.plot_bees_1d(minx,maxx,D)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-8-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-8-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-11" class="cell" data-scrolled="false" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exericise 2; part 3: Bees moving in direction of initial velocity</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Nj <span class="op">=</span> <span class="dv">20000</span>                  <span class="co">#"j" for Jasmine, b/c it's some of the only coding that I've had to do for this exercise</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>nstepsj <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>jmax <span class="op">=</span> <span class="dv">100</span>                  <span class="co">#max x displacement</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>jmin <span class="op">=</span> <span class="op">-</span><span class="dv">100</span>                 <span class="co">#min x displacement</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>jk <span class="op">=</span> bees(Nj,nstepsj)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>jk.move_bees_v_init()</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>jk.plot_bees(jmin,jmax)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-12" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 2; part 4</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'for bee class "b"'</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;xN&gt; ="</span>,xbar)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;(Delta xN)^2&gt;="</span>,xbar2)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;yN&gt; ="</span>,ybar)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;(Delta yN)^2&gt; ="</span>,ybar2)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;(Delta RN)^2&gt; ="</span>,DR2)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>[jxbar,jxbar2,jybar,jybar2,jDR2] <span class="op">=</span> jk.mean_x()</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'for bee class with velocity ("jk")'</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;xN&gt; ="</span>,jxbar)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;(Delta xN)^2&gt;="</span>,jxbar2)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;yN&gt; ="</span>,jybar)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;(Delta yN)^2&gt; ="</span>,jybar2)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"&lt;(Delta RN)^2&gt; ="</span>,jDR2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>for bee class "b"
+&lt;xN&gt; = 0.006699999999999942
+&lt;(Delta xN)^2&gt;= 49.7354
+&lt;yN&gt; = -0.006899999999999972
+&lt;(Delta yN)^2&gt; = 50.72670000000001
+&lt;(Delta RN)^2&gt; = 100.46200750000001
+
+for bee class with velocity ("jk")
+&lt;xN&gt; = 0.19825000000000137
+&lt;(Delta xN)^2&gt;= 5000.218250000001
+&lt;yN&gt; = 0.10124999999999829
+&lt;(Delta yN)^2&gt; = 5001.70095
+&lt;(Delta RN)^2&gt; = 10001.869645375</code></pre>
+</div>
+</div>
+<div id="cell-13" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 2; Part 5</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>d<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>Dj <span class="op">=</span> jDR2<span class="op">/</span><span class="dv">2</span><span class="op">*</span>d<span class="op">*</span>nstepsj</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>jk.plot_bees_1d(jmin,jmax,Dj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab10_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I’m not even sure if I had to do the last cell for <em>part 5</em> with the bees with initial velocity, but I’m getting worried that I haven’t done enough coding for this exercise. According to Wednesday’s zoom video, it seems minimal coding is supposed to be the case for this entire last exercise, but it just feels weird. (But on the other hand, I guess to get it done within lab time/by Friday this seems like a reasonable amount to be expected to do.)</p>
+<p>Hopefully I am done, but let me know if there actually was more that I had to do. -Jasmine</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

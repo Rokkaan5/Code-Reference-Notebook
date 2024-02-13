@@ -199,14 +199,170 @@ u(x,t) &amp;=&amp; A \sin \frac{2 \pi}{\lambda}(x \pm vt)\\
 <li><p>Plot <span class="math inline">\(u = A \cos(x - vt)\)</span> at 5 different times. Set the parameter <span class="math inline">\(v=1\)</span> and determine the velocity of the wave by measuring the distance a peak moves in the time interval <span class="math inline">\(\Delta t\)</span> between plots. Which direction does the wave move for <span class="math inline">\(v&gt;0\)</span>? Set <span class="math inline">\(v=-1\)</span> and determine the direction of the wave.</p></li>
 <li><p>Replace <span class="math inline">\(\cos(x - vt)\)</span> with <span class="math inline">\(\exp[-(x - vt)^2]\)</span> and answer the same questions as in part 1.</p></li>
 </ol>
+<div id="cell-3" class="cell" data-execution_count="72">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#part 1</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="dv">1</span>                     <span class="co">#amplitude</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>v1 <span class="op">=</span> <span class="dv">1</span>                    <span class="co">#v&gt;0</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>v2 <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>                   <span class="co">#v&lt;0</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">3</span><span class="op">*</span>np.pi,<span class="dv">100</span>)        </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]   </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> u(A,x,v,t):</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A<span class="op">*</span>np.cos(x<span class="op">-</span>v<span class="op">*</span>t)                  <span class="co">#A*cos(x-vt)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#graph</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(t)):</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">1</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    plt.plot(x,u(A,x,v1,t[i]),label<span class="op">=</span><span class="st">"t = "</span><span class="op">+</span><span class="bu">str</span>(t[i]))   </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">"v = "</span><span class="op">+</span><span class="bu">str</span>(v1)<span class="op">+</span><span class="st">" (v&gt;0)"</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"u"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">2</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    plt.plot(x,u(A,x,v2,t[i]),label<span class="op">=</span><span class="st">"t = "</span><span class="op">+</span><span class="bu">str</span>(t[i]))</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">"v = "</span><span class="op">+</span><span class="bu">str</span>(v2)<span class="op">+</span><span class="st">" (v&lt;0)"</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"u"</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">#Finding direction of wave velocity</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>min1 <span class="op">=</span> np.<span class="bu">min</span>(u(A,x,v1,t[<span class="dv">1</span>]))               <span class="co">#finding minimum because there's not multiple minimum peaks for v=1</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>min2 <span class="op">=</span> np.<span class="bu">min</span>(u(A,x,v1,t[<span class="dv">2</span>]))</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>xp1 <span class="op">=</span> x[np.where(u(A,x,v1,t[<span class="dv">1</span>]) <span class="op">==</span> min1)]   <span class="co">#location of minimum peak (x-value)</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>xp2 <span class="op">=</span> x[np.where(u(A,x,v1,t[<span class="dv">2</span>]) <span class="op">==</span> min2)]</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>max1 <span class="op">=</span> np.<span class="bu">max</span>(u(A,x,v2,t[<span class="dv">1</span>]))               <span class="co">#finding maximum because there's not multiple max peaks for v=-1</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>max2 <span class="op">=</span> np.<span class="bu">max</span>(u(A,x,v2,t[<span class="dv">2</span>]))</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>xn1 <span class="op">=</span> x[np.where(u(A,x,v2,t[<span class="dv">1</span>]) <span class="op">==</span> max1)]   <span class="co">#location of maximum peak (x-value)</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>xn2 <span class="op">=</span> x[np.where(u(A,x,v2,t[<span class="dv">2</span>]) <span class="op">==</span> max2)]</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> t[<span class="dv">2</span>] <span class="op">-</span> t[<span class="dv">1</span>]                            <span class="co">#difference of time between two peaks</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>vp <span class="op">=</span> xp2 <span class="op">-</span> xp1<span class="op">/</span>dt                           <span class="co">#wave velocity for v&gt;0 (vp = v positive)</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>vn <span class="op">=</span> xn2 <span class="op">-</span> xn2<span class="op">/</span>dt                           <span class="co">#wave velocity for v&lt;0</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co">#direction of wave velocities</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co">#direction for v&gt;0</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> vp<span class="op">&gt;</span><span class="dv">0</span>:                                                        </span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    vpd<span class="op">=</span><span class="st">"positive"</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> vp<span class="op">&lt;</span><span class="dv">0</span>:</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    vpd<span class="op">=</span><span class="st">"negative"</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="co">#direction of v&lt;0</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> vn<span class="op">&gt;</span><span class="dv">0</span>:</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    vnd<span class="op">=</span><span class="st">"positive"</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> vn<span class="op">&lt;</span><span class="dv">0</span>:</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    vnd<span class="op">=</span><span class="st">"negative"</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Exercise 1; Part 1: A*cos(x-vt)"</span>)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"When v&gt;0, wave moves in"</span>,vpd,<span class="st">"direction"</span>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"When v&lt;0, wave moves in"</span>,vnd,<span class="st">"direction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Exercise 1; Part 1: A*cos(x-vt)
+When v&gt;0, wave moves in positive direction
+When v&lt;0, wave moves in negative direction</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-2-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-2-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-4" class="cell" data-execution_count="71">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1;part 2: exponential instead of cosine</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>x12 <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span><span class="op">*</span>np.pi,<span class="dv">3</span><span class="op">*</span>np.pi,<span class="dv">10000</span>)         <span class="co">#x-values for exercise 1,part 2</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> u2(A,x,v,t):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A<span class="op">*</span>np.exp(<span class="op">-</span>(x<span class="op">-</span>v<span class="op">*</span>t)<span class="op">**</span><span class="dv">2</span>)                  <span class="co">#e^(-(x-vt)^2)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#graph</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(t)):</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">1</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    plt.plot(x12,u2(A,x12,v1,t[i]),label<span class="op">=</span><span class="st">"t = "</span><span class="op">+</span><span class="bu">str</span>(t[i]))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">"v = "</span><span class="op">+</span><span class="bu">str</span>(v1)<span class="op">+</span><span class="st">" (v&gt;0)"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"u"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">2</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    plt.plot(x12,u2(A,x12,v2,t[i]),label<span class="op">=</span><span class="st">"t = "</span><span class="op">+</span><span class="bu">str</span>(t[i]))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    plt.title(<span class="st">"v = "</span><span class="op">+</span><span class="bu">str</span>(v2)<span class="op">+</span><span class="st">" (v&lt;0)"</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"u"</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#Finding direction of wave velocity</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>epm1 <span class="op">=</span> np.<span class="bu">max</span>(u2(A,x12,v1,t[<span class="dv">1</span>]))                  <span class="co">#finding maximum for v&gt;0</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>epm2 <span class="op">=</span> np.<span class="bu">max</span>(u2(A,x12,v1,t[<span class="dv">2</span>]))</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>xp21 <span class="op">=</span> x12[np.where(u2(A,x12,v1,t[<span class="dv">1</span>]) <span class="op">==</span> epm1)]   <span class="co">#location of maximum peak (x-value)</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>xp22 <span class="op">=</span> x12[np.where(u2(A,x12,v1,t[<span class="dv">2</span>]) <span class="op">==</span> epm2)]</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>enm1 <span class="op">=</span> np.<span class="bu">max</span>(u2(A,x12,v2,t[<span class="dv">1</span>]))                  <span class="co">#finding maximum for v&lt;0</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>enm2 <span class="op">=</span> np.<span class="bu">max</span>(u2(A,x12,v2,t[<span class="dv">2</span>]))</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>xn21 <span class="op">=</span> x12[np.where(u2(A,x12,v2,t[<span class="dv">1</span>]) <span class="op">==</span> enm1)]   <span class="co">#location of maximum peak (x-value)</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>xn22 <span class="op">=</span> x12[np.where(u2(A,x12,v2,t[<span class="dv">2</span>]) <span class="op">==</span> enm2)]</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> t[<span class="dv">2</span>] <span class="op">-</span> t[<span class="dv">1</span>]                                  <span class="co">#difference of time between two peaks</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>vp2 <span class="op">=</span> xp22 <span class="op">-</span> xp21<span class="op">/</span>dt                              <span class="co">#wave velocity for v&gt;0 (vp = v positive)</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>vn2 <span class="op">=</span> xn22 <span class="op">-</span> xn21<span class="op">/</span>dt                              <span class="co">#wave velocity for v&lt;0</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#direction of wave velocities</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#direction for v&gt;0</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> vp2<span class="op">&gt;</span><span class="dv">0</span>:                                                        </span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    vpd2<span class="op">=</span><span class="st">"positive"</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> vp2<span class="op">&lt;</span><span class="dv">0</span>:</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    vpd2<span class="op">=</span><span class="st">"negative"</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">#direction of v&lt;0</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> vn2<span class="op">&gt;</span><span class="dv">0</span>:</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    vnd2<span class="op">=</span><span class="st">"positive"</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> vn2<span class="op">&lt;</span><span class="dv">0</span>:</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    vnd2<span class="op">=</span><span class="st">"negative"</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Exercise 1; Part 2: e^(-(x-vt)^2)"</span>)</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"When v&gt;0, wave moves in"</span>,vpd2,<span class="st">"direction"</span>)</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"When v&lt;0, wave moves in"</span>,vnd2,<span class="st">"direction"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Exercise 1; Part 2: e^(-(x-vt)^2)
+When v&gt;0, wave moves in positive direction
+When v&lt;0, wave moves in negative direction</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-3-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="exercise-2-superposition-of-waves" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-2-superposition-of-waves">Exercise 2: Superposition of waves</h2>
 <p>Consider the form <span class="math inline">\(u(x,t) = A \cos(kx - \omega t)\)</span>, where <span class="math inline">\(\omega\)</span> and <span class="math inline">\(k\)</span> are parameters. (The parameter <span class="math inline">\(k\)</span> should not be confused with the spring constant!) This form satisfies the wave equation if <span class="math inline">\(\omega/k = v\)</span>. We define the quantity <span class="math inline">\(k = 2 \pi/\lambda\)</span> as the <em>wavenumber</em>, and <span class="math inline">\(\omega = 2 \pi/T\)</span> as the angular frequency where <span class="math inline">\(T\)</span> is the period and <span class="math inline">\(f= 1/T\)</span> is the frequency. We use <span class="math inline">\(k\)</span> and <span class="math inline">\(\omega\)</span> to characterize a <em>harmonic</em> wave.</p>
 <ol type="1">
-<li><p>Observe the propagation of the wave described by the function <span class="math display">\[\begin{equation*}
+<li>Observe the propagation of the wave described by the function <span class="math display">\[\begin{equation*}
 u(x,t) = \frac{4}{\pi} \left[ 1 + \sin(x-vt) + \frac{1}{3} \sin 3(x-vt) + \frac{1}{5} \sin 5(x-vt) \right].
-\end{equation*}\]</span> What are the values of the wavenumber <span class="math inline">\(k\)</span> represented by this wave form?</p></li>
+\end{equation*}\]</span> What are the values of the wavenumber <span class="math inline">\(k\)</span> represented by this wave form?</li>
+</ol>
+<p><strong>JK answer: k = 1,3,5 (?)</strong></p>
+<p><em>I know I could at least see that <span class="math inline">\((kx - \omega t) = k(x-vt)\)</span> but not entirely sure how that turns cosine to sine. (I assume some trig identity comes into play)</em></p>
+<ol start="2" type="1">
 <li><p>Observe the propagation of the wave described by the function <span class="math display">\[\begin{equation*}
 u(x,t) = \sin(x-vt) + \sin(x+vt)
 \end{equation*}\]</span> with <span class="math inline">\(v = 1\)</span> (choose your own units…this is NOT dimensionless) and <span class="math inline">\(k = 1\)</span>.</p></li>
@@ -214,6 +370,73 @@ u(x,t) = \sin(x-vt) + \sin(x+vt)
 u(x,t) = A \left [ \sin(k_1 x - \omega_1 t) + \sin(k_2 x - \omega_2 t) \right ].
 \end{equation*}\]</span> Choose <span class="math inline">\(k_1 = 1.0\)</span> and <span class="math inline">\(k_2 = 1.05\)</span> and follow <span class="math inline">\(u(x,t)\)</span> for different times. Estimate the <em>phase velocity</em>, the fine ripples of the amplitude. The envelope or clump formed by several groups of waves moves with the <em>group velocity</em>. Estimate the group velocity for this case. Compare the magnitudes of the phase and group velocities.</p></li>
 </ol>
+<div id="cell-6" class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 2; part 1</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>x2 <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">5</span><span class="op">*</span>np.pi,<span class="dv">1000</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> uxt(x,v,t):</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="dv">4</span><span class="op">/</span>np.pi)<span class="op">*</span>(<span class="dv">1</span> <span class="op">+</span> np.sin(x<span class="op">-</span>v<span class="op">*</span>t) <span class="op">+</span> ((<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)<span class="op">*</span>(np.sin(<span class="dv">3</span><span class="op">*</span>(x<span class="op">-</span>v<span class="op">*</span>t)))) <span class="op">+</span> ((<span class="dv">1</span><span class="op">/</span><span class="dv">5</span>)<span class="op">*</span>(np.sin(<span class="dv">5</span><span class="op">*</span>(x<span class="op">-</span>v<span class="op">*</span>t)))))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.plot(x2,uxt(x2,v,time))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Exercise 2; part 1"</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"u(x,t)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="67">
+<pre><code>Text(0, 0.5, 'u(x,t)')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-4-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-7" class="cell" data-execution_count="76">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Ex. 2; part 2</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> <span class="dv">1</span>              <span class="co">#choose units for v</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> uxt2(x,v,t):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.sin(x<span class="op">-</span>v<span class="op">*</span>t) <span class="op">+</span> np.sin(x<span class="op">+</span>v<span class="op">*</span>t)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.plot(x2,uxt2(x2,v,time))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Exercise 2; part 2"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"u(x,t)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="76">
+<pre><code>Text(0, 0.5, 'u(x,t)')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-5-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-8" class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>v23 <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>k1 <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>k2 <span class="op">=</span> <span class="fl">1.05</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>omega1 <span class="op">=</span> k1<span class="op">*</span>v23</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>omega2 <span class="op">=</span> k2<span class="op">*</span>v23</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> uxt23(A,x,t,k1,k2,omega1,omega2):</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> A<span class="op">*</span>(np.sin(k1<span class="op">*</span>x <span class="op">-</span> omega1<span class="op">*</span>t) <span class="op">+</span> np.sin(k2<span class="op">*</span>x <span class="op">-</span> omega2<span class="op">*</span>t))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(t)):</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    plt.figure(<span class="dv">1</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    plt.plot(x,uxt23(A,x,t[j],k1,k2,omega1,omega2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="exercise-3-dispersive-waves" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-3-dispersive-waves">Exercise 3: Dispersive waves</h2>
@@ -225,15 +448,41 @@ u(x,t) = \frac{4}{\pi} \left[ 1 + \sin(x-vt) + \frac{1}{3} \sin 3(x-vt) + \frac{
 v(k) = v_0(1.1 + 0.1 k)
 \end{equation*}\]</span> Here, <span class="math inline">\(\omega(k) = v(k) k\)</span>. Let <span class="math inline">\(v_0 = 1\)</span> for simplicity. Does the wave retain its shape?</li>
 </ol>
+<p><strong>JK answer: I believe it does retain its shape.</strong></p>
+<div id="cell-10" class="cell" data-execution_count="89">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x3 <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">5</span><span class="op">*</span>np.pi,<span class="dv">1000</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>]              <span class="co">#not sure if this is correct/what I'm supposed to do</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>v0 <span class="op">=</span> <span class="dv">1</span>                   <span class="co">#v_0</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> uxt3(x,v,t):         <span class="co">#I didnt realize till later that this is the same equation as ex.2,part1 but oh well</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    inside <span class="op">=</span> x <span class="op">-</span> (v<span class="op">*</span>t)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="dv">4</span><span class="op">/</span>np.pi)<span class="op">*</span>(<span class="dv">1</span> <span class="op">+</span> np.sin(inside)<span class="op">+</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)<span class="op">*</span>np.sin(<span class="dv">3</span><span class="op">*</span>inside)<span class="op">+</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">5</span>)<span class="op">*</span>np.sin(<span class="dv">5</span><span class="op">*</span>inside)) </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> l <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(k)):</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    vk <span class="op">=</span> v0<span class="op">*</span>(<span class="fl">1.1</span> <span class="op">+</span> <span class="fl">0.1</span><span class="op">*</span>k[l])    <span class="co">#v(k)</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    plt.plot(x3,uxt3(x3,vk,time),label<span class="op">=</span> <span class="st">"k="</span><span class="op">+</span><span class="bu">str</span>(k[l]))</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="exercise-4-numerical-solutions-of-the-wave-equation" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-4-numerical-solutions-of-the-wave-equation">Exercise 4: Numerical solutions of the wave equation</h2>
 <ul>
 <li>The wave equation is</li>
 </ul>
-<p><span class="math display">\[\begin{align*}
+<p><span class="math display">\[\begin{equation*}
 \frac{\partial^2 u}{\partial t^2} =v^2 \frac{\partial^2 u}{\partial x^2}
-\end{align*}\]</span> - Numerical solutions can be obtained by replacing the second derivative on the right-hand side with the a discrete difference,</p>
+\end{equation*}\]</span></p>
+<ul>
+<li>Numerical solutions can be obtained by replacing the second derivative on the right-hand side with the a discrete difference,</li>
+</ul>
 <p><span class="math display">\[\begin{equation*}
 \frac{\partial^2 u}{\partial x^2} = \frac{1}{\Delta x^2} \left [ u(x + \Delta x, t)
 - 2 u(x,t) + u(x - \Delta x, t) \right ]
@@ -249,8 +498,8 @@ v(k) = v_0(1.1 + 0.1 k)
 <li>Now change the second-order ordinary differential equation into two first-order equations by defining a new variable <span class="math inline">\(\psi\)</span>,</li>
 </ul>
 <p><span class="math display">\[\begin{align*}
-\frac{du}{dt} &amp;= \psi(x,t)\\
-\frac{d \psi}{dt} &amp;= \frac{v^2}{\Delta x^2} \left [ u(x + \Delta x, t)
+\frac{du}{dt} &amp;=&amp; \psi(x,t)\\
+\frac{d \psi}{dt} &amp; = &amp; \frac{v^2}{\Delta x^2} \left [ u(x + \Delta x, t)
 - 2 u(x,t) + u(x - \Delta x, t) \right ]
 \end{align*}\]</span></p>
 <ul>
@@ -270,85 +519,136 @@ v(k) = v_0(1.1 + 0.1 k)
 <li><p>Investigate the stability of the numerical solution be trying <span class="math inline">\(s = [0.1,0.2,0.5,1.0,1.01,1.1]\)</span>. You might run outside of Jupyter notebook to see the animation. Otherwise, make a series of line plots.</p></li>
 </ol>
 <p>The numerical solution is unstable if the distance the wave propagates is larger than <span class="math inline">\(v \Delta t\)</span>, that is, the wave cannot travel more than <span class="math inline">\(\Delta x\)</span> in the time interval <span class="math inline">\(\Delta t\)</span>.</p>
-<div id="cell-9" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.animation <span class="im">as</span> animation</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> initial_wave(x,x0,A,h):</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> A<span class="op">*</span>np.exp(<span class="op">-</span>(x<span class="op">-</span>x0)<span class="op">**</span><span class="dv">2</span><span class="op">/</span>h<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    psi <span class="op">=</span> np.zeros(<span class="bu">len</span>(x))</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> u,psi</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> solve_wave(u,psi,tfinal):</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    uarr <span class="op">=</span> []</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    tarr <span class="op">=</span> []</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    psip <span class="op">=</span> psi</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> t <span class="op">&lt;</span> tfinal:</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        psip[:] <span class="op">=</span> psi[:] <span class="op">+</span> s<span class="op">*</span>(np.roll(u[:],<span class="dv">1</span>) <span class="op">-</span> <span class="dv">2</span><span class="op">*</span>u[:] <span class="op">+</span> np.roll(u[:],<span class="op">-</span><span class="dv">1</span>))</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        u <span class="op">=</span> u <span class="op">+</span> dt<span class="op">*</span>psi</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        psi <span class="op">=</span> psip</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        uarr.append(u)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        tarr.append(t)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        t <span class="op">+=</span> dt</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> uarr,tarr</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> animate_func(x,uarr,tarr,A,nstep): </span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    line, <span class="op">=</span> ax.plot([],[],<span class="st">'r'</span>)</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="op">-</span>A<span class="op">/</span><span class="dv">2</span>,A)</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(x.<span class="bu">min</span>(),x.<span class="bu">max</span>())</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'x'</span>)</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'f(x)'</span>)</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> update_line(i):</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        line.set_ydata(data[i])</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        line.set_xdata(x)</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> line,</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> []    </span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(tarr),nstep):</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        data.append(uarr[i])</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    nfrm <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(data))</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    ani <span class="op">=</span> animation.FuncAnimation(fig, update_line, frames<span class="op">=</span>nfrm, interval<span class="op">=</span><span class="dv">1</span>, blit<span class="op">=</span><span class="va">True</span>, repeat<span class="op">=</span><span class="va">True</span>,cache_frame_data<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co">#-------------------------------------------------------------------------------------------------------------------------</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>nx <span class="op">=</span> <span class="fl">400.0</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>dx <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">0</span>,nx,dx)</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> <span class="fl">200.0</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">20.0</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>tfinal <span class="op">=</span> <span class="dv">550</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> s<span class="op">*</span>dx<span class="op">**</span><span class="dv">2</span><span class="op">/</span>v<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>[u,psi] <span class="op">=</span> initial_wave(x,x0,A,h)</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>[uarr,tarr] <span class="op">=</span> solve_wave(u,psi,tfinal)</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>cnt <span class="op">=</span> <span class="dv">20</span></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(tarr),cnt):</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    plt.plot(x,uarr[i])</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'x'</span>)</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'f(x)'</span>)</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>nstep<span class="op">=</span><span class="dv">2</span></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>animate_func(x,uarr,tarr,A,nstep)</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-12" class="cell" data-execution_count="103">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.animation <span class="im">as</span> animation</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> initial_wave(x,x0,A,h):</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> A<span class="op">*</span>np.exp(<span class="op">-</span>(x<span class="op">-</span>x0)<span class="op">**</span><span class="dv">2</span><span class="op">/</span>h<span class="op">**</span><span class="dv">2</span>)          <span class="co">#u = A*e^(-(x-x0)^2/h^2</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    psi <span class="op">=</span> np.zeros(<span class="bu">len</span>(x))                 <span class="co">#array of length x of zeros</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> u,psi</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> solve_wave(u,psi,tfinal):</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    uarr <span class="op">=</span> []</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    tarr <span class="op">=</span> []</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    psip <span class="op">=</span> psi</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> t <span class="op">&lt;</span> tfinal:                      <span class="co">#np.roll goes from the last position and "rolls" back to the first</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        psip[:] <span class="op">=</span> psi[:] <span class="op">+</span> s<span class="op">*</span>(np.roll(u[:],<span class="dv">1</span>) <span class="op">-</span> <span class="dv">2</span><span class="op">*</span>u[:] <span class="op">+</span> np.roll(u[:],<span class="op">-</span><span class="dv">1</span>))  <span class="co">#psi^n+1 = psi^n + s(u_(j-1) - 2u_j + u_(j+1))</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        u <span class="op">=</span> u <span class="op">+</span> dt<span class="op">*</span>psi                     <span class="co">#u = u + dt*psi</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        psi <span class="op">=</span> psip</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        uarr.append(u)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        tarr.append(t)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        t <span class="op">+=</span> dt</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> uarr,tarr</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> animate_func(x,uarr,tarr,A,nstep): </span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    line, <span class="op">=</span> ax.plot([],[],<span class="st">'r'</span>)</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="op">-</span>A<span class="op">/</span><span class="dv">2</span>,A)</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(x.<span class="bu">min</span>(),x.<span class="bu">max</span>())</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'x'</span>)</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'f(x)'</span>)</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> update_line(i):</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>        line.set_ydata(data[i])</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>        line.set_xdata(x)</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> line,</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> []    </span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(tarr),nstep):</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>        data.append(uarr[i])</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    nfrm <span class="op">=</span> <span class="bu">int</span>(<span class="bu">len</span>(data))</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    ani <span class="op">=</span> animation.FuncAnimation(fig, update_line, frames<span class="op">=</span>nfrm, interval<span class="op">=</span><span class="dv">1</span>, blit<span class="op">=</span><span class="va">True</span>, repeat<span class="op">=</span><span class="va">True</span>,cache_frame_data<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="co">#-------------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>nx <span class="op">=</span> <span class="fl">400.0</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>dx <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">0</span>,nx,dx)</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> <span class="fl">200.0</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">20.0</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>tfinal <span class="op">=</span> <span class="dv">550</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> s<span class="op">*</span>dx<span class="op">**</span><span class="dv">2</span><span class="op">/</span>v<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>[u,psi] <span class="op">=</span> initial_wave(x,x0,A,h)</span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>[uarr,tarr] <span class="op">=</span> solve_wave(u,psi,tfinal)</span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>cnt <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(tarr),cnt):</span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>    plt.plot(x,uarr[i])</span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'x'</span>)</span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'f(x)'</span>)</span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>nstep<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>animate_func(x,uarr,tarr,A,nstep)</span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Lab9_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="Lab9_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Lab9_files/figure-html/cell-5-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="Lab9_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-13" class="cell" data-execution_count="102">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> [<span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.5</span>,<span class="fl">1.0</span>,<span class="fl">1.01</span>,<span class="fl">1.1</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> []</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(sj)):</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    dt.append(sj[k]<span class="op">*</span>dx<span class="op">**</span><span class="dv">2</span><span class="op">/</span>v<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    [u,ta] <span class="op">=</span> solve_wave(u,psi,tfinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>ValueError: operands could not be broadcast together with shapes (6,) (400,) </code></pre>
+</div>
+</div>
+<p><strong>JK note: I ran out of time to try to figure out how efficiently to plot a series of graphs, but I’ll at least plot the one that supposedly “broke” the code for now (below) and try the rest again on my own time.</strong></p>
+<div id="cell-15" class="cell" data-execution_count="105">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>nx <span class="op">=</span> <span class="fl">400.0</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>dx <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">0</span>,nx,dx)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> <span class="fl">200.0</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">20.0</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>tfinal <span class="op">=</span> <span class="dv">550</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="fl">1.1</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> s<span class="op">*</span>dx<span class="op">**</span><span class="dv">2</span><span class="op">/</span>v<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>[u,psi] <span class="op">=</span> initial_wave(x,x0,A,h)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>[uarr,tarr] <span class="op">=</span> solve_wave(u,psi,tfinal)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>cnt <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(tarr),cnt):</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    plt.plot(x,uarr[i])</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'x'</span>)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'f(x)'</span>)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>nstep<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>animate_func(x,uarr,tarr,A,nstep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab9_files/figure-html/cell-10-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>

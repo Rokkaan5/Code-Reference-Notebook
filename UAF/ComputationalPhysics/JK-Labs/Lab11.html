@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.542">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>Lab 11: Quantum Systems</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Lab11_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Lab11_files/libs/quarto-html/quarto.js"></script>
+<script src="Lab11_files/libs/quarto-html/popper.min.js"></script>
+<script src="Lab11_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Lab11_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Lab11_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Lab11_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Lab11_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Lab11_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Lab11_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#quantum-systems" id="toc-quantum-systems" class="nav-link active" data-scroll-target="#quantum-systems">Quantum Systems</a>
+  <ul class="collapse">
+  <li><a href="#exercise-1" id="toc-exercise-1" class="nav-link" data-scroll-target="#exercise-1">Exercise 1:</a></li>
+  <li><a href="#random-walk-analysis-of-quantum-systems" id="toc-random-walk-analysis-of-quantum-systems" class="nav-link" data-scroll-target="#random-walk-analysis-of-quantum-systems">Random walk analysis of quantum systems</a></li>
+  <li><a href="#rules-of-the-random-walk-solution-for-phi_0-and-e_0" id="toc-rules-of-the-random-walk-solution-for-phi_0-and-e_0" class="nav-link" data-scroll-target="#rules-of-the-random-walk-solution-for-phi_0-and-e_0">Rules of the random walk solution for <span class="math inline">\(\phi_0\)</span> and <span class="math inline">\(E_0\)</span>:</a></li>
+  </ul></li>
+  <li><a href="#exercise-2" id="toc-exercise-2" class="nav-link" data-scroll-target="#exercise-2">Exercise 2:</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 11: Quantum Systems</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="quantum-systems" class="level1">
+<h1>Quantum Systems</h1>
+<ul>
+<li>Solve the time-independent Schrodinger equation (TISE) <span class="math display">\[\begin{equation*}
+-\frac{\hbar^2}{2m} \frac{d^2 \phi(x)}{dx^2} + V(x) \phi(x) = E \phi(x)
+\end{equation*}\]</span> by considering bound-state solutions.</li>
+<li>Acceptable solutions exist only if the eigenvalues are quantized, i.e., restricted to a discrete set of energies.</li>
+<li>To be acceptable, <span class="math inline">\(\phi_n(x)\)</span> must be finite for all <span class="math inline">\(x\)</span> and bounded for large <span class="math inline">\(|x|\)</span> so the <span class="math inline">\(\phi_n(x)\)</span> can be normalized.</li>
+<li>For finite <span class="math inline">\(V(x)\)</span>, <span class="math inline">\(\phi_n(x)\)</span> and <span class="math inline">\(d \phi_n(x)/dx\)</span> must be continuous, finite, and single-valued for all <span class="math inline">\(x\)</span>.</li>
+<li>As a 2nd-order differential equation, require two boundary conditions.</li>
+<li>Consider symmetric potentials, i.e., <span class="math inline">\(V(x) = V(-x)\)</span>, so that <span class="math inline">\(\phi(x)\)</span> can be chosen to have definite parity. For even parity, <span class="math inline">\(\phi(-x) = \phi(x)\)</span>; odd parity solutions have <span class="math inline">\(\phi(-x) =
+-\phi(x)\)</span>. The definite parity allows us to specify either <span class="math inline">\(\phi\)</span> or <span class="math inline">\(\phi^\prime\)</span> at <span class="math inline">\(x=0\)</span>.</li>
+</ul>
+<section id="exercise-1" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1">Exercise 1:</h2>
+<ol type="1">
+<li>Study and comment the code below. Note that <span class="math inline">\(\hbar = 1\)</span> and <span class="math inline">\(m=1\)</span>. The numerical scheme is a discretized form of the 2nd-order ODE. We could break it apart into two 1st-order ODEs. But the following method is adequate for our purposes, i.e., <span class="math display">\[ \phi_{j+1} = 2\phi_j - \phi_{j-1} - 2 dx^2 (E - V_j) \phi_j\]</span> Derive this discretized form of the TISE.</li>
+</ol>
+<p><strong>JK derivation:</strong></p>
+<p>TISE:</p>
+<p><span class="math display">\[\begin{equation*}
+-\frac{\hbar^2}{2m} \frac{d^2 \phi(x)}{dx^2} + V(x) \phi(x) = E \phi(x)
+\end{equation*}\]</span></p>
+<p>With <span class="math inline">\(\hbar = 1\)</span> and <span class="math inline">\(m = 1\)</span> can be rewritten as:</p>
+<p><span class="math display">\[\begin{equation*}
+-\frac{1}{2} \frac{d^2 \phi(x)}{dx^2} = E \phi(x) - V(x) \phi(x)
+\end{equation*}\]</span></p>
+<p>Multiply both sides by <span class="math inline">\(-2 dx^2\)</span>:</p>
+<p><span class="math display">\[\begin{equation*}
+d^2 \phi(x) = -2 dx^2 (E - V(x)) \phi(x)
+\end{equation*}\]</span></p>
+<p>Discretize: <span class="math display">\[ (\phi_{j+1} - \phi_{j}) - (\phi_{j} - \phi_{j-1}) = -2 dx^2 (E - V_j) \phi_j\]</span> Solve for <span class="math inline">\(\phi_{j+1}\)</span>:</p>
+<p><span class="math display">\[ \phi_{j+1} - 2\phi_{j} + \phi_{j-1} = -2 dx^2 (E - V_j) \phi_j\]</span></p>
+<p><span class="math display">\[ \phi_{j+1} = 2\phi_j - \phi_{j-1} - 2 dx^2 (E - V_j) \phi_j\]</span></p>
+<p><strong>End of JK derivation</strong></p>
+<ol start="2" type="1">
+<li><p>Choose an initial energy <span class="math inline">\(E_0\)</span> and parity. You might start with the ground state energy (hint: this will be of order unity). Will the ground state be even or odd parity? Solve the TISE and determine whether you have to increase or decrease the initial energy to approach a bound solution. An unbounded solution will diverge to <span class="math inline">\(\pm \infty\)</span> in the potential barrier. Try different initial energies until you locate (approximately) the bound-state solution. Plot the eigenfunction.</p></li>
+<li><p>Reverse the parity and find the lowest energy bound state.</p></li>
+<li><p>For both parities find the next energy level (approximately). (Hint: you might have found these by accident in part 2.)</p></li>
+<li><p>Optional. Write a function that automates the search for the bound-states.</p></li>
+</ol>
+<div id="cell-3" class="cell" data-scrolled="false" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_potential():                <span class="co">#Potential, V</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    V <span class="op">=</span> np.zeros(<span class="bu">len</span>(x))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    wh <span class="op">=</span> np.where(<span class="bu">abs</span>(x) <span class="op">&gt;=</span> a)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    V[wh[<span class="dv">0</span>]] <span class="op">=</span> V0</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    plt.plot(x,V)                   <span class="co">#Plots Potential Well (Blue Lines)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> V</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> solve_TISE(E,parity):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    phi <span class="op">=</span> np.zeros(<span class="bu">len</span>(x)) </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    dx <span class="op">=</span> x[<span class="dv">1</span>]<span class="op">-</span>x[<span class="dv">0</span>]</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> parity <span class="op">==</span> <span class="st">'odd'</span>:</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        phi[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        phi[<span class="dv">1</span>] <span class="op">=</span> dx</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> parity <span class="op">==</span> <span class="st">'even'</span>:</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        phi[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        phi[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="bu">len</span>(x)<span class="op">-</span><span class="dv">1</span>):     </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        phi[j<span class="op">+</span><span class="dv">1</span>] <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>phi[j] <span class="op">-</span> phi[j<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> <span class="dv">2</span><span class="op">*</span>dx<span class="op">**</span><span class="dv">2</span><span class="op">*</span>(E <span class="op">-</span> V[j])<span class="op">*</span>phi[j]    <span class="co">#full time step</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">abs</span>(phi[j<span class="op">+</span><span class="dv">1</span>]) <span class="op">&gt;</span> np.<span class="bu">max</span>(V):</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> phi, <span class="va">True</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> phi, <span class="va">False</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">#-----------------------------------------------------------------------------------------</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="fl">1.3</span>,<span class="dv">200</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>dx <span class="op">=</span> x[<span class="dv">1</span>]<span class="op">-</span>x[<span class="dv">0</span>]</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>V0 <span class="op">=</span> <span class="fl">100.0</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>epsilon<span class="op">=</span><span class="fl">1e-6</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>V <span class="op">=</span> get_potential()</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>E0 <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>parity <span class="op">=</span> <span class="st">'even'</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>[phi, error] <span class="op">=</span> solve_TISE(E0,parity)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>plt.plot(x,phi)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'x'</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'V'</span>)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"E = </span><span class="sc">{:.3}</span><span class="st">"</span>.<span class="bu">format</span>(E0))</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>(-1, 1)</code></pre>
+</div>
+</div>
+<div id="cell-4" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1 ("Shooting Method"); Part 2: Finding Ground State Energy </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#same graph set up</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ex1_graph(title):   <span class="co">#A function to make the same graph provided above w/ potential and limited axes</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    V <span class="op">=</span> get_potential()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">'x'</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">'V'</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    plt.ylim(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    plt.title(title)    <span class="co">#Graph title</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------------</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#JK Trial and error</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>E01 <span class="op">=</span> [<span class="fl">1.5</span>,<span class="fl">1.1</span>,<span class="fl">1.05</span>,<span class="fl">1.06</span>,<span class="fl">1.07</span>,<span class="fl">1.08</span>, <span class="fl">1.075</span>,<span class="fl">1.076</span>,<span class="fl">1.077</span>,<span class="fl">1.078</span>]    <span class="co">#JK trial and Error: Initial Energy ground state energy</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>parity1 <span class="op">=</span> <span class="st">'even'</span>                                <span class="co">#Ground state energy is supposed to be even parity</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------------</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Trial and Error Graph</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>ex1_graph(<span class="st">"(Ex.1,part 2)Trial and Error"</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.plot(x,phi,label <span class="op">=</span> <span class="st">"$E_0$="</span><span class="op">+</span><span class="bu">str</span>(E0))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(E01)):</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    [phi1, error1] <span class="op">=</span> solve_TISE(E01[i],parity1)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"test E0 #"</span><span class="op">+</span><span class="bu">str</span>(i<span class="op">+</span><span class="dv">1</span>)<span class="op">+</span><span class="st">":"</span><span class="op">+</span><span class="bu">str</span>(E01[i]))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    plt.plot(x,phi1,label <span class="op">=</span> <span class="st">"$E_0$ ="</span><span class="op">+</span><span class="bu">str</span>(E01[i]))</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#Decided E0 value for Ground state Energy</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">2</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>E0g <span class="op">=</span> <span class="fl">1.077</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>ex1_graph(<span class="st">"Settled $E_0$ for Ground state energy (E ="</span><span class="op">+</span><span class="bu">str</span>(E0g)<span class="op">+</span><span class="st">")"</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>[phi_g, error_g] <span class="op">=</span> solve_TISE(E0g,parity1)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>plt.plot(x,phi_g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>test E0 #1:1.5
+test E0 #2:1.1
+test E0 #3:1.05
+test E0 #4:1.06
+test E0 #5:1.07
+test E0 #6:1.08
+test E0 #7:1.075
+test E0 #8:1.076
+test E0 #9:1.077
+test E0 #10:1.078</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab11_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab11_files/figure-html/cell-3-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>JK Note:</strong> The first graph is kinda to show how my trial and error process went going in order of how I bounced back and forth between values to finally narrow down to a relatively acceptable value.</p>
+<p>(Essentially finding the rest of the bound energies for the later parts had a similar process, but I figured I didn’t have to show the values I tested for every single part…)</p>
+<div id="cell-6" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1; Part 3: Reverse parity</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>E03 <span class="op">=</span> <span class="fl">4.275</span>             <span class="co">#E0 for part 3; lowest odd parity energy bound state</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>parity3 <span class="op">=</span> <span class="st">'odd'</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>ex1_graph(<span class="st">"(Ex.1 part 3) Lowest Bound State Energy for odd parity"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>[phi3, error3] <span class="op">=</span> solve_TISE(E03, parity3)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.plot(x,phi3,label<span class="op">=</span> <span class="st">"$E_0$ = "</span><span class="op">+</span><span class="bu">str</span>(E03))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab11_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-7" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 1; Part 4: Next Energy level for both parities</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Next Even parity Energy Level</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>E04e <span class="op">=</span> <span class="fl">9.67</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>parity_e <span class="op">=</span> <span class="st">'even'</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>[phi_e,error_e] <span class="op">=</span> solve_TISE(E04e,parity_e)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">1</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>ex1_graph(<span class="st">"Next Even Parity Energy Level"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>plt.plot(x,phi_e,label <span class="op">=</span> <span class="st">"$E_0$ = "</span><span class="op">+</span><span class="bu">str</span>(E04e))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Next Odd parity Energy Level</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>E04o <span class="op">=</span> <span class="fl">17.05</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>parity_o <span class="op">=</span> <span class="st">'odd'</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>[phi_o,error_o] <span class="op">=</span> solve_TISE(E04o,parity_o)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>plt.figure(<span class="dv">2</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>ex1_graph(<span class="st">"Next Odd Parity Energy Level"</span>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>plt.plot(x,phi_o,label<span class="op">=</span><span class="st">"$E_0$ = "</span><span class="op">+</span><span class="bu">str</span>(E04o))</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab11_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab11_files/figure-html/cell-5-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-8" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#All found Energy levels</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>E <span class="op">=</span> [E0g,E03,E04e,E04o]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>parity_a <span class="op">=</span> [parity1, parity3, parity_e, parity_o]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>ex1_graph(<span class="st">"All energy levels"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(E)):</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    [phi_a,error_a] <span class="op">=</span> solve_TISE(E[k],parity_a[k])</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    plt.plot(x,phi_a,label <span class="op">=</span> <span class="st">"$E_0$ = "</span><span class="op">+</span><span class="bu">str</span>(E[k])<span class="op">+</span><span class="st">"; "</span><span class="op">+</span><span class="bu">str</span>(parity_a[k])<span class="op">+</span><span class="st">" parity"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab11_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="random-walk-analysis-of-quantum-systems" class="level2">
+<h2 class="anchored" data-anchor-id="random-walk-analysis-of-quantum-systems">Random walk analysis of quantum systems</h2>
+<ul>
+<li>Monte Carlo approach based on the relation of the Schrodinger equation to a diffusion process in <em>imaginary</em> time.</li>
+<li>Substitute <span class="math inline">\(\tau = i t/\hbar\)</span> into the TISE for a free particle,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\frac{\partial \psi(x,\tau)}{\partial \tau} = \frac{\hbar^2}{2m}
+\frac{\partial^2 \psi(x,\tau)}{\partial x^2}
+\end{equation*}\]</span></p>
+<p>where we interpret the wave function as a probability density in a diffusion process with a diffusion coefficient <span class="math inline">\(D = \hbar^2/2m\)</span>. - Instead of solving Schrodinger’s equation directly, we can replace it with an equivalent random walk problem. - Since Schrodinger’s equation is <em>linear</em> (i.e., superposition of solutions is also a solution) it is valid to solve by considering many non-interacting particles. - How do we interpret the potential <span class="math inline">\(V(x)\)</span>? Rewrite Schr"{o}dinger’s equation as</p>
+<p><span class="math display">\[\begin{equation*}
+\frac{\partial \psi(x,\tau)}{\partial \tau} = \frac{\hbar^2}{2m}
+\frac{\partial^2 \psi(x,\tau)}{\partial x^2} - V(x) \psi(x,\tau)
+\end{equation*}\]</span></p>
+<ul>
+<li>If <span class="math inline">\(V\psi\)</span> were the only term on the RHS, we would treat this as a source or loss term (<span class="math inline">\(V(x)\)</span> is a rate).</li>
+<li>The complete equation can be viewed as a diffusion equation with a source/loss term, where the number of particles increases or decreases depending on the sign of <span class="math inline">\(V(x)\)</span>.</li>
+<li>The general solution is</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\psi(x,\tau) = \sum_n c_n \phi_n(x) e^{-E_n t}
+\end{equation*}\]</span></p>
+<ul>
+<li>For <span class="math inline">\(\tau \rightarrow \infty\)</span> (consider long term evolution of the diffusion equation) the dominant term is the ground state energy,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\psi(x,\tau) \rightarrow c_0 \phi_0(x) e^{-E_0 \tau}
+\end{equation*}\]</span></p>
+<p>which means we can solve for <span class="math inline">\(\phi_0\)</span> and <span class="math inline">\(E_0\)</span> for arbitrary <span class="math inline">\(V(x)\)</span>. - There is a major problem with this method. For large <span class="math inline">\(\tau\)</span>, <span class="math inline">\(\psi(x,\tau)\)</span> will decay to zero unless <span class="math inline">\(E_0 = 0\)</span>. But this is not the correct solution! - The trick is to measure <span class="math inline">\(E_0\)</span> from an arbitrary reference potential <span class="math inline">\(V_{ref}\)</span>, which is adjusted to determine the steady state distribution (eigenvector) and associated <span class="math inline">\(E_0\)</span> (eigenvalue). - Instead solve</p>
+<p><span class="math display">\[\begin{equation*}
+\frac{\partial \psi(x,\tau)}{\partial \tau} = \frac{\hbar^2}{2m}
+\frac{\partial^2 \psi(x,\tau)}{\partial x^2} - [V(x) - V_{ref}] \psi(x,\tau)
+\end{equation*}\]</span></p>
+<p>so that</p>
+<p><span class="math display">\[\begin{equation*}
+\psi(x,\tau) \approx c_0 \phi_0(x) e^{-(E_0-V_{ref}) \tau}
+\end{equation*}\]</span></p>
+<ul>
+<li>Integrate w.r.t. <span class="math inline">\(x\)</span> and note that <span class="math inline">\(\partial \psi/\partial x
+\rightarrow 0\)</span> in the limit <span class="math inline">\(|x| \rightarrow \infty\)</span>,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\int \frac{\partial \psi(x,\tau)}{\partial \tau}dx = - \int V(x)
+\psi(x,\tau) dx+ \int V_{ref} \psi(x,\tau)dx
+\end{equation*}\]</span></p>
+<ul>
+<li>Differentiate the general (ground state) solution w.r.t. <span class="math inline">\(\tau\)</span>,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\frac{\partial \psi(x,\tau)}{\partial \tau} = (V_{ref} - E_0) \psi(x,\tau)
+\end{equation*}\]</span></p>
+<ul>
+<li>Thus</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\int (V_{ref} - E_0) \psi(x,\tau) dx = - \int V(x)
+\psi(x,\tau) dx+ \int V_{ref} \psi(x,\tau)dx.
+\end{equation*}\]</span></p>
+<ul>
+<li>Cancelling the <span class="math inline">\(V_{ref}\)</span> terms,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+E_0\int \psi(x,\tau) dx =  \int V(x)
+\psi(x,\tau) dx
+\end{equation*}\]</span></p>
+<ul>
+<li>Solving for <span class="math inline">\(E_0\)</span> yields</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+E_0 = \frac{ \int V(x)
+\psi(x,\tau) dx}{\int \psi(x,\tau) dx}
+\end{equation*}\]</span></p>
+<ul>
+<li>If <span class="math inline">\(\psi(x,\tau)\)</span> is related the number of particles <span class="math inline">\(n_i\)</span> at <span class="math inline">\(x_i\)</span> at time <span class="math inline">\(\tau\)</span>, then in terms of the random walk model,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+E_0 = \langle V \rangle = \frac{\sum n_i V(x_i)}{n_i}
+\end{equation*}\]</span></p>
+</section>
+<section id="rules-of-the-random-walk-solution-for-phi_0-and-e_0" class="level2">
+<h2 class="anchored" data-anchor-id="rules-of-the-random-walk-solution-for-phi_0-and-e_0">Rules of the random walk solution for <span class="math inline">\(\phi_0\)</span> and <span class="math inline">\(E_0\)</span>:</h2>
+<ol type="1">
+<li><p>Place <span class="math inline">\(N_0\)</span> particles at random initial locations <span class="math inline">\(-1 &lt; x_i &lt; 1\)</span>.</p></li>
+<li><p>Compute the initial reference potential, <span class="math inline">\(V_{ref} = \frac{1}{N_0} \sum_i V_i\)</span>.</p></li>
+<li><p>Randomly move a particle left or right with step length <span class="math inline">\(\Delta s\)</span> where <span class="math inline">\(\Delta s^2 = D \Delta \tau\)</span>. We will use “dimensionless” units <span class="math inline">\(\hbar = 1\)</span> and <span class="math inline">\(m = 1\)</span> such that <span class="math inline">\(D = \frac{1}{2}\)</span>.</p></li>
+<li><p>Compute <span class="math inline">\(\Delta V = [V(x) - V_{ref}] \Delta \tau\)</span> and a random number <span class="math inline">\(0 &lt; r &lt; 1\)</span>. If <span class="math inline">\(\Delta V &gt; 0\)</span> and <span class="math inline">\(r &lt; \Delta V\)</span>, then remove the particle (loss process). If <span class="math inline">\(\Delta V &lt; 0\)</span> and <span class="math inline">\(r &lt; -\Delta V\)</span>, then add a particle (source process).</p></li>
+<li><p>Repeat steps 3-4. Then change the reference potential to <span class="math display">\[ V_{ref} = \langle V \rangle - \frac{1}{N_0}(N- N_0) \Delta \tau\]</span> where <span class="math inline">\(N\)</span> is the new number of particles and <span class="math inline">\(\langle V \rangle\)</span> is the mean potential energy of the <span class="math inline">\(N\)</span> particles.</p></li>
+<li><p>Iterate until the estimate of the ground state energy has reached a steady state energy eigenvalue <span class="math inline">\(E_0\)</span>. The distribution of the particles approximates the eigenfunction <span class="math inline">\(\phi_0\)</span>.</p></li>
+</ol>
+</section>
+</section>
+<section id="exercise-2" class="level1">
+<h1>Exercise 2:</h1>
+<ol type="1">
+<li><p>Study the code below and comment.</p></li>
+<li><p>Determine the ground state energy for <span class="math inline">\(V(x) = \frac{1}{2} x^2\)</span>. Choose the number of particles <span class="math inline">\(N_0=1000\)</span>, step length <span class="math inline">\(ds = 0.1\)</span>, and <span class="math inline">\(nsteps = 100\)</span>.</p></li>
+<li><p>Increase <span class="math inline">\(N_0\)</span> and <span class="math inline">\(nsteps\)</span> until you are satisfied that the solution as converged. Estimate the error by running <span class="math inline">\(ntrials\)</span> and determine the standard deviation of the mean.</p></li>
+<li><p>Plot the distribution of particles and discuss whether this makes sense for the ground state wave function based on the results from the square potential well. You might find the following line of code to be useful for plotting,</p></li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plt.hist(x,density <span class="op">=</span> <span class="va">True</span>, bins<span class="op">=</span><span class="dv">40</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-12" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> initialize():</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="op">-</span><span class="fl">1.0</span> <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>np.random.rand(N)              <span class="co">#Random x? </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> potential(x):  <span class="co">#potential function</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">0.5</span><span class="op">*</span>x<span class="op">*</span>x                              <span class="co">#V(x)= (1/2)x^2</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_Vref():                                 <span class="co">#V_ref</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    Vref <span class="op">=</span> V.mean() <span class="op">-</span> (N<span class="op">-</span>N0)<span class="op">*</span>dtau<span class="op">/</span>N0</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Vref</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> move_particle(x):</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.random.rand(N)                       <span class="co">#randomly move particle right or left</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    left <span class="op">=</span> np.where(r <span class="op">&lt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    right <span class="op">=</span> np.where(r <span class="op">&gt;=</span> <span class="fl">0.5</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    x[left[<span class="dv">0</span>]] <span class="op">=</span> x[left[<span class="dv">0</span>]] <span class="op">-</span> ds</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    x[right[<span class="dv">0</span>]] <span class="op">=</span> x[right[<span class="dv">0</span>]] <span class="op">+</span> ds</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> source_loss(x,V):</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    dV <span class="op">=</span> (V <span class="op">-</span> Vref)<span class="op">*</span>dtau  <span class="co"># V is a rate, i.e., per unit tau</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    dVpos <span class="op">=</span> dV[dV <span class="op">&gt;</span> <span class="fl">0.0</span>]</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    xpos <span class="op">=</span> x[dV <span class="op">&gt;</span> <span class="fl">0.0</span>]</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.random.rand(<span class="bu">len</span>(dVpos))</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    xpos <span class="op">=</span> xpos[r <span class="op">&gt;</span> dVpos]  <span class="co">#remove particles   #If outside the barrier</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    dVneg <span class="op">=</span> dV[dV <span class="op">&lt;=</span> <span class="fl">0.0</span>]</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.random.rand(<span class="bu">len</span>(dVneg))</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    xneg <span class="op">=</span> x[dV <span class="op">&lt;=</span> <span class="fl">0.0</span>]</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    xnew <span class="op">=</span> xneg[r <span class="op">&lt;</span> <span class="op">-</span>dVneg] <span class="co">#add particles     #If inside the barrier</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>                                               <span class="co">#np.concatenate = "Join a sequence of arrays along an existing axis"</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.concatenate([xpos,xneg])            <span class="co">#x = positive and negative values?</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(xnew) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> np.concatenate([x,xnew])           <span class="co">#include added particles(?), if there are any</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    V <span class="op">=</span> potential(x)</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x,V</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------------------------------------------------------------</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>N0 <span class="op">=</span> N</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> <span class="fl">0.1</span>                <span class="co">#step length</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>nsteps <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>dtau <span class="op">=</span> ds<span class="op">**</span><span class="dv">2</span><span class="op">/</span>D          <span class="co">#from ds^2 = D*(dtau)</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> initialize()</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>V <span class="op">=</span> potential(x)</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>plt.plot(x,V,<span class="st">'.'</span>)</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'x'</span>)</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'V(x)'</span>)</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(nsteps):</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>    Vref <span class="op">=</span> get_Vref()</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> move_particle(x)</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>    x, V <span class="op">=</span> source_loss(x,V)</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(V)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab11_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-13" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 2; Part 2: Determine the ground state energy for V(x) = (1/2)x^2</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#N0 = 1000, step length ds = 0.1 &amp; nsteps = 100</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"(Ground state energy) E0 ="</span>,Vref,<span class="st">"(?)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Ground state energy) E0 = 0.3361040627910437 (?)</code></pre>
+</div>
+</div>
+<div id="cell-14" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 2; Part 3: Increase N0 and nsteps until satisfactory solution convergence and estimate error</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>N0 <span class="op">=</span> <span class="dv">6000</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>nsteps <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#Evaluating convergence</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>ntrials <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>E02 <span class="op">=</span> []</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(ntrials):</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(nsteps):</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        Vref <span class="op">=</span> get_Vref()</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> move_particle(x)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        x, V <span class="op">=</span> source_loss(x,V)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        N <span class="op">=</span> <span class="bu">len</span>(V)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    E02.append(Vref)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>plt.plot(np.linspace(<span class="dv">0</span>,ntrials,ntrials),E02,<span class="st">"x"</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Solution Convergence"</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Trial"</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$E_0$"</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="fl">0.3</span>,<span class="fl">0.4</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co">#Standard Deviation(?)</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>E0a <span class="op">=</span> np.array(E02)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Error:"</span>,<span class="dv">100</span><span class="op">*</span>np.std(E0a),<span class="st">"(%?)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Error: 0.6087438286182227 (%?)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab11_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-15" class="cell" data-scrolled="false" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 2; Part 4: Plot the distribution </span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.hist(x,density <span class="op">=</span> <span class="va">True</span>, bins<span class="op">=</span><span class="dv">40</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>(array([0.00109237, 0.        , 0.00109237, 0.00546187, 0.00546187,
+        0.00764662, 0.01201612, 0.01529325, 0.03386362, 0.04151024,
+        0.06117299, 0.12890022, 0.13545447, 0.18788846, 0.22175208,
+        0.33535906, 0.33535906, 0.38233117, 0.46862878, 0.37796167,
+        0.45333553, 0.4893839 , 0.45770503, 0.45879741, 0.34191331,
+        0.31023444, 0.23486058, 0.25015382, 0.16604097, 0.11032985,
+        0.09285186, 0.05571111, 0.05024924, 0.0218475 , 0.0131085 ,
+        0.01092375, 0.00655425, 0.00655425, 0.00109237, 0.00109237]),
+ array([-3.28610911, -3.12715153, -2.96819394, -2.80923636, -2.65027877,
+        -2.49132119, -2.3323636 , -2.17340602, -2.01444843, -1.85549085,
+        -1.69653326, -1.53757568, -1.37861809, -1.2196605 , -1.06070292,
+        -0.90174533, -0.74278775, -0.58383016, -0.42487258, -0.26591499,
+        -0.10695741,  0.05200018,  0.21095776,  0.36991535,  0.52887293,
+         0.68783052,  0.8467881 ,  1.00574569,  1.16470327,  1.32366086,
+         1.48261844,  1.64157603,  1.80053361,  1.9594912 ,  2.11844878,
+         2.27740637,  2.43636395,  2.59532154,  2.75427912,  2.91323671,
+         3.07219429]),
+ &lt;a list of 40 Patch objects&gt;)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Lab11_files/figure-html/cell-10-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
