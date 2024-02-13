@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.542">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Dr.&nbsp;Peter Delamere">
+
+<title>Lab 7 [Solutions] - Planetary Motion</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Delamere_Lab7_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Delamere_Lab7_files/libs/quarto-html/quarto.js"></script>
+<script src="Delamere_Lab7_files/libs/quarto-html/popper.min.js"></script>
+<script src="Delamere_Lab7_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Delamere_Lab7_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Delamere_Lab7_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Delamere_Lab7_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Delamere_Lab7_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Delamere_Lab7_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Delamere_Lab7_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#equations-of-motion" id="toc-equations-of-motion" class="nav-link active" data-scroll-target="#equations-of-motion">Equations of motion</a></li>
+  <li><a href="#circular-orbits" id="toc-circular-orbits" class="nav-link" data-scroll-target="#circular-orbits">Circular orbits</a></li>
+  <li><a href="#elliptical-orbits" id="toc-elliptical-orbits" class="nav-link" data-scroll-target="#elliptical-orbits">Elliptical orbits</a></li>
+  <li><a href="#astronomical-units" id="toc-astronomical-units" class="nav-link" data-scroll-target="#astronomical-units">Astronomical Units</a></li>
+  <li><a href="#mini-solar-system" id="toc-mini-solar-system" class="nav-link" data-scroll-target="#mini-solar-system">Mini solar system</a></li>
+  <li><a href="#introduction-to-python-classes." id="toc-introduction-to-python-classes." class="nav-link" data-scroll-target="#introduction-to-python-classes.">Introduction to Python “classes”.</a></li>
+  <li><a href="#exercise-1-planet-earth" id="toc-exercise-1-planet-earth" class="nav-link" data-scroll-target="#exercise-1-planet-earth">Exercise 1: Planet Earth</a></li>
+  <li><a href="#exercise-2-perturbations" id="toc-exercise-2-perturbations" class="nav-link" data-scroll-target="#exercise-2-perturbations">Exercise 2: Perturbations</a></li>
+  <li><a href="#exercise-3-a-mini-solar-system" id="toc-exercise-3-a-mini-solar-system" class="nav-link" data-scroll-target="#exercise-3-a-mini-solar-system">Exercise 3: A mini solar system</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 7 [Solutions] - Planetary Motion</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dr.&nbsp;Peter Delamere </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<ul>
+<li>The motion of the Sun and Earth is a <em>two-body problem</em>.<br>
+</li>
+<li>Problem reduced to a one-body problem by: 1) noting the mass of the Sun is much greater than the mass of Earth, 2) assume the Sun is stationary and fix origin at Sun’s center.
+One-body problem is more general. Introduce reduced mass,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\mu = \frac{mM}{m+M}
+\end{equation*}\]</span></p>
+where m = <span class="math inline">\(6 \times 10^{24}\)</span> kg (Earth) and M = <span class="math inline">\(2 \times 10^{30}\)</span> kg (Sun). Thus <span class="math inline">\(\mu \approx m\)</span>. - In the following, consider a single particle of mass <span class="math inline">\(m\)</span> moving about a fixed center of force, which we take as the origin of the coordinate system.
+<p>Newton’s universal law of gravitation is</p>
+<p><span class="math display">\[\begin{equation*}
+{\rm \bf F} = -\frac{GmM}{r^3} {\rm \bf r}
+\end{equation*}\]</span></p>
+<p>where <span class="math inline">\({\rm \bf r}\)</span> is the vector from <span class="math inline">\(m\)</span> to <span class="math inline">\(M\)</span> and <span class="math inline">\(G=6.67 \times
+10^{-11}\)</span> m<span class="math inline">\(^3\)</span>/(kg s<span class="math inline">\(^2\)</span>). - The force law applies to objects of negligible spatial extent, but also applies to any uniform sphere or spherical shell if the distance <span class="math inline">\(r\)</span> is measured from the center of each mass. - Gravitational force has two general properties: 1) its magnitude depends only on the separation of the objects and 2) its direction is along the line joining the objects. Such a force is called a . - The assumption of central force implies that the orbit (Earth) is restricted to a plane (e.g., <span class="math inline">\(xy\)</span>) and the {} is conserved and lies in the third direction (<span class="math inline">\(z\)</span>), i.e.,</p>
+<p><span class="math display">\[\begin{equation*}
+L_z = ({\rm \bf r} \times m {\rm \bf v})_z = m (x v_y -y v_x)
+\end{equation*}\]</span></p>
+Note that in general $ {} = {} $ with <span class="math inline">\({\rm \bf p} = m {\rm \bf v}\)</span>.
+<p>Energy conservation applies too, i.e.,</p>
+<p><span class="math display">\[\begin{equation*}
+E = \frac{1}{2} m v^2 - \frac{GmM}{r}
+\end{equation*}\]</span></p>
+<section id="equations-of-motion" class="level2">
+<h2 class="anchored" data-anchor-id="equations-of-motion">Equations of motion</h2>
+<ul>
+<li>The equation of motion is</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+m \frac{d^2 {\rm \bf r}}{dt^2} = - \frac{GmM}{r^3}{\rm \bf r}
+\end{equation*}\]</span></p>
+<ul>
+<li>In force in Cartesian coordinates is</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+F_x &amp;= - \frac{GmM}{r^2} \cos \theta = -\frac{GmM}{r^3} x\\
+F_y &amp;=  -\frac{GmM}{r^2} \sin \theta = -\frac{GmM}{r^3} y\\
+\end{align*}\]</span> - Thus the Cartisian equations of motion are <span class="math display">\[\begin{align*}
+\frac{d^2 x}{dt^2} &amp;= - \frac{GM}{r^3}x\\
+\frac{d^2 y}{dt^2} &amp;= - \frac{GM}{r^3}y
+\end{align*}\]</span></p>
+</section>
+<section id="circular-orbits" class="level2">
+<h2 class="anchored" data-anchor-id="circular-orbits">Circular orbits</h2>
+<ul>
+<li>Planetary motion is nearly circular, so</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+a = \frac{v^2}{r}
+\end{equation*}\]</span></p>
+<p>where <span class="math inline">\(v\)</span> is the speed of the object and <span class="math inline">\(a\)</span> is directed towards the center and is due to the gravitational force, i.e.,</p>
+<p><span class="math display">\[\begin{equation*}
+\frac{mv^2}{r} = \frac{GmM}{r^2}
+\end{equation*}\]</span></p>
+<p>or <span class="math display">\[\begin{equation*}
+v = \left( \frac{GM}{r} \right)^{1/2}
+\end{equation*}\]</span></p>
+<ul>
+<li>The period of the orbit is</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+T = \frac{2 \pi r}{v}
+\end{equation*}\]</span></p>
+<p>and</p>
+<p><span class="math display">\[\begin{equation*}
+T^2 = \frac{4 \pi^2 r^3}{GM}
+\end{equation*}\]</span></p>
+<ul>
+<li>This is a special case of Kepler’s third law where <span class="math inline">\(r\)</span> corresponds to the semi-major axis of an ellipse.</li>
+</ul>
+</section>
+<section id="elliptical-orbits" class="level2">
+<h2 class="anchored" data-anchor-id="elliptical-orbits">Elliptical orbits</h2>
+<ul>
+<li>The most general orbit is an ellipse.</li>
+<li>The two foci of an ellipse, <span class="math inline">\(F_1\)</span> and <span class="math inline">\(F_2\)</span>, have the property that for any point <span class="math inline">\(P\)</span> the distance <span class="math inline">\(F_1P + F_2 P = const\)</span>.</li>
+<li>The longer axis is the major axis and half this length is the <em>semi-major axis</em> <span class="math inline">\(a\)</span>.</li>
+<li>The shorter axis is the minor axis and half this length is the <em>semi-minor axis</em> <span class="math inline">\(b\)</span>. Specify elliptical orbit by <span class="math inline">\(a\)</span> and the <em>eccentricity</em> <span class="math inline">\(e\)</span> where <span class="math inline">\(e\)</span> is the ratio of the distance between the foci to the length of the major axis.</li>
+<li>Since <span class="math inline">\(F_1P + F_2P = 2a\)</span>,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+e = \sqrt{1 - \frac{b^2}{a^2}}
+\end{equation*}\]</span></p>
+<p>with <span class="math inline">\(0 &lt; e &lt; 1\)</span>. For a circle <span class="math inline">\(e=0\)</span>. For Earth’s orbit, <span class="math inline">\(e = 0.0167\)</span>.</p>
+</section>
+<section id="astronomical-units" class="level2">
+<h2 class="anchored" data-anchor-id="astronomical-units">Astronomical Units</h2>
+<ul>
+<li>Since large numbers (once upon a time) are awkward, it is convenient to choose a system of units in which the magnitude of the produce <span class="math inline">\(GM\)</span> is the order of unity.</li>
+<li>Convenient unit of length is the <em>astronomical unit</em> with</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+1 {~\rm AU} = 1.496 \times 10^{11} {~{\rm m}}
+\end{equation*}\]</span></p>
+<ul>
+<li>The unit of time is one year = <span class="math inline">\(3.15 \times 10^7\)</span> s.<br>
+</li>
+<li>In these units, <span class="math inline">\(T\)</span> = one year, <span class="math inline">\(a\)</span> = 1 AU,</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+GM = \frac{4 \pi^2 a^3}{T^2} = 4 \pi^2 {\rm AU^3/yr^2}
+\end{equation*}\]</span></p>
+</section>
+<section id="mini-solar-system" class="level2">
+<h2 class="anchored" data-anchor-id="mini-solar-system">Mini solar system</h2>
+<ul>
+<li>The presence of other planets implies that the total force on a planet is no longer a central force.</li>
+<li>Furthermore, the orbits of the planets are not exactly in the same plane, so the analysis must be extended to three dimensions.</li>
+<li>For simplicity, consider two planets of mass <span class="math inline">\(m_1\)</span> and <span class="math inline">\(m_2\)</span>. The equations of motion are</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+m_1 \frac{d^2 {\rm \bf r}_1}{dt^2} &amp;=&amp; - \frac{m_1G  M}{r_1^3} {\rm \bf r}_1 +
+  \frac{m_1Gm_2}{r_{21}^3} {\rm \bf r}_{21} \\
+m_2 \frac{d^2 {\rm \bf r}_2}{dt^2} &amp;=&amp; - \frac{m_2G  M}{r_2^3} {\rm \bf r}_2 -
+  \frac{m_2Gm_1}{r_{21}^3} {\rm \bf r}_{21} \\
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\({\rm \bf r}_1\)</span> and <span class="math inline">\({\rm \bf r}_2\)</span> are directed from the Sun to the planets and <span class="math inline">\({\rm \bf r}_{21} = {\rm \bf r}_2 - {\rm \bf r}_1\)</span>. - No analytical solution exists! Requires a numerical solution.</p>
+</section>
+<section id="introduction-to-python-classes." class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-python-classes.">Introduction to Python “classes”.</h2>
+<p>Classes provide a means of bundling data and functionality together. Creating a new class creates a new type of object, allowing new instances of that type to be made. Each class instance can have attributes attached to it for maintaining its state. Class instances can also have methods (defined by its class) for modifying its state.</p>
+<p>Planetary motion is the perfect application for Python classes. Here we want to bundle the properties of a given planet into a single object that contains data and methods.</p>
+<ol type="1">
+<li>Examine the code in the box below and add the necessary comments. The following example shows how to initialize a planet,</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pE <span class="op">=</span> planet(x0,y0,vx0,vy0,mE,<span class="st">'blue'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here, <code>pE</code> is the “handle” for the object and will be used to specify variables and methods within the class. (Think of the <code>class</code> as a pot filled with things. The only way to pick up the pot is with a handle. One pot might be filled with <em>beef stew</em> and another with <em>minestrone</em>. A method might be to pour the contents into a bowl!) Try to keep the name of the handle short (just like we use <code>np</code> for <code>numpy</code>). Here I used <code>pE</code> for planet Earth. To access information about each planet, e.g., color, you would type</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pE.clr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Five methods are defined for <code>class planet</code>: <code>F</code>, <code>rk4_step</code>, <code>rk4_planet</code>, <code>plot_planet</code>, and <code>animate</code>. To run the rk4 solution for orbital motion and to plot the result, type</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pE.rk4_planet(tfinal,dt)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pE.plot_planet(nstep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that the <code>self</code> argument does not appear in the argument list when calling a given method. So what is <code>self</code>? This is the generic “handle” that will be carried through the class to access variables and functions/methods. Remember, calling a method in a class can be done for many different instances of these objects. For this lab, the instances are different planets. For planet Earth, the <code>pE</code> handle would be substituted for <code>self</code>. Note that you could pass another handle to any of the methods, referring to another planet. This might be useful in Exercise 3 when coupling terms are involved.</p>
+<div id="cell-3" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#import necessary modules</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.animation <span class="im">as</span> animation</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> planet:</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    define a class planet that contains initial position and velocity as well as mass</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">    The class is called with arguments (x0,y0,vx0,vy0,m)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    GM <span class="op">=</span> <span class="dv">4</span><span class="op">*</span>np.pi<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,x0,y0,vx0,vy0,m,clr):</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x0 <span class="op">=</span> x0</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.y0 <span class="op">=</span> y0</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vx0 <span class="op">=</span> vx0</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vy0 <span class="op">=</span> vy0</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.m <span class="op">=</span> m</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.clr <span class="op">=</span> clr</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> []</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.y <span class="op">=</span> []</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vx <span class="op">=</span> []</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.vy <span class="op">=</span> []</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.time <span class="op">=</span> []</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> F(<span class="va">self</span>,r,x,v):</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.array([v,<span class="op">-</span>GM<span class="op">*</span>x<span class="op">/</span>r<span class="op">**</span><span class="dv">3</span>])</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> rk4_step(<span class="va">self</span>,r,x,v):</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        k1 <span class="op">=</span> dt<span class="op">*</span><span class="va">self</span>.F(r,x,v)         </span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        k2 <span class="op">=</span> dt<span class="op">*</span><span class="va">self</span>.F(r,x <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">0</span>], v <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">1</span>])</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        k3 <span class="op">=</span> dt<span class="op">*</span><span class="va">self</span>.F(r,x <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">0</span>], v <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">1</span>])</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        k4 <span class="op">=</span> dt<span class="op">*</span><span class="va">self</span>.F(r,x <span class="op">+</span> k3[<span class="dv">0</span>], v <span class="op">+</span> k3[<span class="dv">1</span>])</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> (k1[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">0</span>] <span class="op">+</span> k4[<span class="dv">0</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        v <span class="op">=</span> v <span class="op">+</span> (k1[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">1</span>] <span class="op">+</span> k4[<span class="dv">1</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x,v</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> rk4_planet(<span class="va">self</span>,tfinal,dt):  <span class="co">#dimensionless solve</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        xn <span class="op">=</span> <span class="va">self</span>.x0</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        yn <span class="op">=</span> <span class="va">self</span>.y0</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        vxn <span class="op">=</span> <span class="va">self</span>.vx0</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        vyn <span class="op">=</span> <span class="va">self</span>.vy0</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> t <span class="op">&lt;</span> tfinal<span class="op">+</span>dt:</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.time.append(t)</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.x.append(xn)</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.y.append(yn)</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.vx.append(vxn)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.vy.append(vyn)</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>            rn <span class="op">=</span> np.sqrt(xn<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> yn<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>            xn,vxn <span class="op">=</span> <span class="va">self</span>.rk4_step(rn,xn,vxn)</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>            yn,vyn <span class="op">=</span> <span class="va">self</span>.rk4_step(rn,yn,vyn)            </span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>            t <span class="op">=</span> t <span class="op">+</span> dt</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_planet(<span class="va">self</span>,nstep):</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.x[::nstep],<span class="va">self</span>.y[::nstep],<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">0.5</span>,color<span class="op">=</span><span class="va">self</span>.clr)</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'x (AU)'</span>)</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'y (AU)'</span>)</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>        plt.axes().set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>        plt.plot([<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">0</span>,<span class="dv">0</span>],<span class="st">'o'</span>,markersize<span class="op">=</span><span class="fl">10.0</span>,color<span class="op">=</span><span class="st">'gold'</span>)</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_two_planets(<span class="va">self</span>,p,nstep):</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.x[::nstep],<span class="va">self</span>.y[::nstep],<span class="st">'.'</span>,markersize <span class="op">=</span> <span class="fl">1.0</span>,color<span class="op">=</span><span class="va">self</span>.clr)</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>        plt.plot(p.x[::nstep],p.y[::nstep],<span class="st">'.'</span>,markersize <span class="op">=</span> <span class="fl">1.0</span>,color<span class="op">=</span>p.clr)</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'x (AU)'</span>)</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'y (AU)'</span>)</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>        plt.axes().set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>        plt.plot([<span class="dv">0</span>,<span class="dv">0</span>],[<span class="dv">0</span>,<span class="dv">0</span>],<span class="st">'o'</span>,markersize<span class="op">=</span><span class="fl">10.0</span>,color<span class="op">=</span><span class="st">'gold'</span>)</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_radial_pos(<span class="va">self</span>,nstep):</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>        r <span class="op">=</span> np.sqrt(np.asarray(<span class="va">self</span>.x)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> np.asarray(<span class="va">self</span>.y)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.time[::nstep],r[::nstep],<span class="st">'.'</span>,markersize<span class="op">=</span><span class="fl">1.0</span>)</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'time (yrs)'</span>)</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'r (AU)'</span>)</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> energy_conserve(<span class="va">self</span>):</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>        E0 <span class="op">=</span> <span class="fl">0.5</span><span class="op">*</span>(<span class="va">self</span>.vx0<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="va">self</span>.vy0<span class="op">**</span><span class="dv">2</span>) <span class="op">-</span> GM<span class="op">/</span>np.sqrt(<span class="va">self</span>.x0<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="va">self</span>.y0<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>        r <span class="op">=</span> np.sqrt(np.asarray(<span class="va">self</span>.x)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> np.asarray(<span class="va">self</span>.y)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>        v <span class="op">=</span> np.sqrt(np.asarray(<span class="va">self</span>.vx)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> np.asarray(<span class="va">self</span>.vy)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>        E <span class="op">=</span> <span class="fl">0.5</span><span class="op">*</span>v<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> GM<span class="op">/</span>r</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>        delta_n <span class="op">=</span> <span class="dv">100</span><span class="op">*</span>(E <span class="op">-</span> E0)<span class="op">/</span>E0</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.time,delta_n)</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'time (yrs)'</span>)</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'$\Delta^n$ (%)'</span>)</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> Kepler_2(<span class="va">self</span>,dt,Dt):</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> np.asarray(<span class="va">self</span>.x)</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> np.asarray(<span class="va">self</span>.y)</span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>        x0 <span class="op">=</span> (x.<span class="bu">max</span>()<span class="op">+</span>x.<span class="bu">min</span>())<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>        y0 <span class="op">=</span> (y.<span class="bu">max</span>()<span class="op">+</span>y.<span class="bu">min</span>())<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> (np.sqrt((x<span class="op">-</span>x0)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> (y<span class="op">-</span>y0)<span class="op">**</span><span class="dv">2</span>)).<span class="bu">max</span>()</span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>        b <span class="op">=</span> (np.sqrt((x<span class="op">-</span>x0)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> (y<span class="op">-</span>y0)<span class="op">**</span><span class="dv">2</span>)).<span class="bu">min</span>()</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(a,b,x0,y0)        </span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>        ii <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>        area <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>        t0 <span class="op">=</span> <span class="va">self</span>.time[ii]</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>        plt.figure()</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.x,<span class="va">self</span>.y,<span class="st">'.'</span>)</span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(<span class="va">self</span>.time)):</span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>            theta1<span class="op">=</span>np.arctan2(<span class="va">self</span>.y[i<span class="op">-</span><span class="dv">1</span>],<span class="va">self</span>.x[i<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>            theta2<span class="op">=</span>np.arctan2(<span class="va">self</span>.y[i],<span class="va">self</span>.x[i])</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>            <span class="co">#print(theta1,theta2)</span></span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>            area <span class="op">=</span> area <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>(<span class="va">self</span>.x[i]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="va">self</span>.y[i]<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>(theta2<span class="op">-</span>theta1)</span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (t <span class="op">&gt;</span> Dt):</span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>                plt.plot(<span class="va">self</span>.x[i],<span class="va">self</span>.y[i],<span class="st">'o'</span>)</span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>                t0 <span class="op">=</span> <span class="va">self</span>.time[i]</span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>                t <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(area)</span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>                area <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>            t <span class="op">=</span> <span class="va">self</span>.time[i]<span class="op">-</span>t0</span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>                                  </span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> animate(<span class="va">self</span>,p,nstep):</span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>        lines<span class="op">=</span>[]</span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>        fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(<span class="va">self</span>.time),nstep):</span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a>            p1 <span class="op">=</span> ax.plot(<span class="va">self</span>.x[i], <span class="va">self</span>.y[i], <span class="st">'bo'</span>, p.x[i], p.y[i], <span class="st">'ro'</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="st">'yo'</span>, markersize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>            ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a><span class="co">#            p1 = ax.plot(p.x[i], p.y[i],'o',markersize=10, color=p.clr)</span></span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>            lines.append(p1)</span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a><span class="co">#            lines.append(p2)</span></span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>        ani <span class="op">=</span> animation.ArtistAnimation(fig, lines, interval<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-1-planet-earth" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1-planet-earth">Exercise 1: Planet Earth</h2>
+<ol type="1">
+<li><p>Initialize planet Earth. Specify the initial conditions, mass, and color.</p></li>
+<li><p>Run the solution for Earth using <span class="math inline">\(x_0=1\)</span>, <span class="math inline">\(y_0=0\)</span>, <span class="math inline">\(v_{x0} = 0\)</span>, and the numerical value of <span class="math inline">\(v_{y0}\)</span> that yields a circular orbit. Choose <span class="math inline">\(\Delta t\)</span> to give a circular orbit that is reproducible over many periods.</p></li>
+<li><p>Write a method for <code>class planet</code> to calculate the energy conservation quantity, <span class="math inline">\(\Delta^n\)</span>, and examine the energy conservation as a function of <span class="math inline">\(\Delta t\)</span>. Plot <span class="math inline">\(\Delta^n\)</span> vs.&nbsp;<span class="math inline">\(t\)</span>. The plotting should be contained in the method (avoid extra code outside of <code>class planet</code>).</p></li>
+<li><p>Repeat part 3 for angular momentum conservation.</p></li>
+<li><p>Write a method for <code>class planet</code> to verify Kepler’s third law, i.e., construct a simple condition which allows you to find the numerical value of the period.</p></li>
+<li><p>Choose initial conditions to obtain an elliptical orbit, e.g., set <span class="math inline">\(y_0 = 0\)</span>, <span class="math inline">\(v_{x0} = 0\)</span> and by trial and error find <span class="math inline">\(x_0\)</span> and <span class="math inline">\(v_{y0}\)</span>. Verify Kepler’s second law (equal areas in equal times). You could plot the orbit on a fine grid and count squares inside each region. This doesn’t need to be too fancy! Choose an area near one end of the major axis and other near the minor axis.</p></li>
+</ol>
+<div id="cell-5" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>GM <span class="op">=</span> <span class="dv">4</span><span class="op">*</span>np.pi<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="fl">2e30</span> <span class="co">#kg</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize Earth</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>mE <span class="op">=</span> <span class="fl">6e24</span> <span class="co">#kg</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.sqrt(GM<span class="op">/</span>r)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> r <span class="op">+</span><span class="fl">1.0</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>vx0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>vy0 <span class="op">=</span> v <span class="op">-</span> <span class="fl">0.1</span><span class="op">*</span>v</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>pE <span class="op">=</span> planet(x0,y0,vx0,vy0,mE,<span class="st">'blue'</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pE.clr)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>tfinal <span class="op">=</span> <span class="fl">12.0</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="fl">0.001</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>pE.rk4_planet(tfinal,dt)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>pE.plot_planet(<span class="dv">1</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#pE.animate(10)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>blue</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Delamere_Lab7_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exercise-2-perturbations" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2-perturbations">Exercise 2: Perturbations</h2>
+<ol type="1">
+<li><p>Suppose a small radial “kick” or impulse is applied to the planet. How will the orbit change?</p></li>
+<li><p>Determine if the angular momentum and total energy are changed by the radial perturbation.</p></li>
+<li><p>Suppose a small tangential “kick” or impulse is applied to the planet in a circular orbit. How will the orbit change? Is the orbit stable? Determine if the angular momentum and total energy are changed.</p></li>
+</ol>
+</section>
+<section id="exercise-3-a-mini-solar-system" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-3-a-mini-solar-system">Exercise 3: A mini solar system</h2>
+<ol type="1">
+<li><p>Initialize a second planet (e.g., Jupiter). Write a program to simulate the mutual interaction between these two planets. You are strongly encouraged to uses <code>classes</code>.</p></li>
+<li><p>Are the angular momentum and total energy Earth still conserved?</p></li>
+<li><p>Increase the mass of the second planet and observe the effects on Earth’s orbit.</p></li>
+</ol>
+<div id="cell-9" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> F(m,r,r12,x12,x,v):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([v,<span class="op">-</span>GM<span class="op">*</span>x<span class="op">/</span>r<span class="op">**</span><span class="dv">3</span> <span class="op">-</span> GM<span class="op">*</span>(m<span class="op">/</span>M)<span class="op">*</span>x12<span class="op">/</span>r12<span class="op">**</span><span class="dv">3</span>])</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rk4_two_planets(p1,p2): </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    x1 <span class="op">=</span> p1.x0</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    y1 <span class="op">=</span> p1.y0</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    vx1 <span class="op">=</span> p1.vx0</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    vy1 <span class="op">=</span> p1.vy0</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    x2 <span class="op">=</span> p2.x0</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    y2 <span class="op">=</span> p2.y0</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    vx2 <span class="op">=</span> p2.vx0</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    vy2 <span class="op">=</span> p2.vy0</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> t <span class="op">&lt;</span> tfinal<span class="op">+</span>dt:</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        p1.time.append(t)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        p1.x.append(x1)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        p1.y.append(y1)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        p1.vx.append(vx1)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        p1.vy.append(vy1)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        p2.time.append(t)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        p2.x.append(x2)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        p2.y.append(y2)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        p2.vx.append(vx2)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        p2.vy.append(vy2)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="co">#planet 1</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        x12 <span class="op">=</span> x1 <span class="op">-</span> x2</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        y12 <span class="op">=</span> y1 <span class="op">-</span> y2</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        r12 <span class="op">=</span> np.sqrt(x12<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y12<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        r1 <span class="op">=</span> np.sqrt(x1<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y1<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        k1 <span class="op">=</span> dt<span class="op">*</span>F(p2.m,r1,r12,x12,x1,vx1)          <span class="co">#x-component planet 1</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        k2 <span class="op">=</span> dt<span class="op">*</span>F(p2.m,r1,r12,x12,x1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">0</span>], vx1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">1</span>])</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        k3 <span class="op">=</span> dt<span class="op">*</span>F(p2.m,r1,r12,x12,x1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">0</span>], vx1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">1</span>])</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        k4 <span class="op">=</span> dt<span class="op">*</span>F(p2.m,r1,r12,x12,x1 <span class="op">+</span> k3[<span class="dv">0</span>], vx1 <span class="op">+</span> k3[<span class="dv">1</span>])</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        x1 <span class="op">=</span> x1 <span class="op">+</span> (k1[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">0</span>] <span class="op">+</span> k4[<span class="dv">0</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        vx1 <span class="op">=</span> vx1 <span class="op">+</span> (k1[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">1</span>] <span class="op">+</span> k4[<span class="dv">1</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>        k1 <span class="op">=</span> dt<span class="op">*</span>F(p2.m,r1,r12,y12,y1,vy1)        <span class="co">#y-component planet 1</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>        k2 <span class="op">=</span> dt<span class="op">*</span>F(p2.m,r1,r12,y12,y1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">0</span>], vy1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">1</span>])</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>        k3 <span class="op">=</span> dt<span class="op">*</span>F(p2.m,r1,r12,y12,y1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">0</span>], vy1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">1</span>])</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>        k4 <span class="op">=</span> dt<span class="op">*</span>F(p2.m,r1,r12,y12,y1 <span class="op">+</span> k3[<span class="dv">0</span>], vy1 <span class="op">+</span> k3[<span class="dv">1</span>])</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>        y1 <span class="op">=</span> y1 <span class="op">+</span> (k1[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">0</span>] <span class="op">+</span> k4[<span class="dv">0</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>        vy1 <span class="op">=</span> vy1 <span class="op">+</span> (k1[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">1</span>] <span class="op">+</span> k4[<span class="dv">1</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>        <span class="co">#planet 2</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>        x21 <span class="op">=</span> <span class="op">-</span>x12 <span class="co">#x2 - x1</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>        y21 <span class="op">=</span> <span class="op">-</span>y12 <span class="co">#y2 - y1</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>        r21 <span class="op">=</span> np.sqrt(x21<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y21<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>        r2 <span class="op">=</span> np.sqrt(x2<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y2<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>        k1 <span class="op">=</span> dt<span class="op">*</span>F(p1.m,r2,r21,x21,x2,vx2)          <span class="co">#x-component planet 1</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>        k2 <span class="op">=</span> dt<span class="op">*</span>F(p1.m,r2,r21,x21,x2 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">0</span>], vx2 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">1</span>])</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>        k3 <span class="op">=</span> dt<span class="op">*</span>F(p1.m,r2,r21,x21,x2 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">0</span>], vx2 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">1</span>])</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>        k4 <span class="op">=</span> dt<span class="op">*</span>F(p1.m,r2,r21,x21,x2 <span class="op">+</span> k3[<span class="dv">0</span>], vx2 <span class="op">+</span> k3[<span class="dv">1</span>])</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>        x2 <span class="op">=</span> x2 <span class="op">+</span> (k1[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">0</span>] <span class="op">+</span> k4[<span class="dv">0</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>        vx2 <span class="op">=</span> vx2 <span class="op">+</span> (k1[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">1</span>] <span class="op">+</span> k4[<span class="dv">1</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>        k1 <span class="op">=</span> dt<span class="op">*</span>F(p1.m,r2,r21,y21,y2,vy2)        <span class="co">#y-component planet 1</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>        k2 <span class="op">=</span> dt<span class="op">*</span>F(p1.m,r2,r21,y21,y2 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">0</span>], vy2 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">1</span>])</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>        k3 <span class="op">=</span> dt<span class="op">*</span>F(p1.m,r2,r21,y21,y2 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">0</span>], vy2 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">1</span>])</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>        k4 <span class="op">=</span> dt<span class="op">*</span>F(p1.m,r2,r21,y21,y2 <span class="op">+</span> k3[<span class="dv">0</span>], vy2 <span class="op">+</span> k3[<span class="dv">1</span>])</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>        y2 <span class="op">=</span> y2 <span class="op">+</span> (k1[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">0</span>] <span class="op">+</span> k4[<span class="dv">0</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>        vy2 <span class="op">=</span> vy2 <span class="op">+</span> (k1[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">1</span>] <span class="op">+</span> k4[<span class="dv">1</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> t <span class="op">+</span> dt</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> rk4_step:</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="co">    define a class planet that contains initial position and velocity as well as mass</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="co">    The class is called with arguments (x0,y0,vx0,vy0,m)</span></span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,m,r1,r12,x12,x,v):</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.m <span class="op">=</span> m</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.r1 <span class="op">=</span> r1</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.r12 <span class="op">=</span> r12</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x12 <span class="op">=</span> x12</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> x</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.v <span class="op">=</span> v</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> F2(<span class="va">self</span>,x,v):</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.array([v,<span class="op">-</span>GM<span class="op">*</span>x<span class="op">/</span><span class="va">self</span>.r1<span class="op">**</span><span class="dv">3</span> <span class="op">-</span> GM<span class="op">*</span>(<span class="va">self</span>.m<span class="op">/</span>M)<span class="op">*</span><span class="va">self</span>.x12<span class="op">/</span><span class="va">self</span>.r12<span class="op">**</span><span class="dv">3</span>])</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> rk4(<span class="va">self</span>):</span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>        k1 <span class="op">=</span> dt<span class="op">*</span><span class="va">self</span>.F2(<span class="va">self</span>.x,<span class="va">self</span>.v)          <span class="co">#x-component planet 1</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>        k2 <span class="op">=</span> dt<span class="op">*</span><span class="va">self</span>.F2(<span class="va">self</span>.x <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">0</span>], <span class="va">self</span>.v <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">1</span>])</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>        k3 <span class="op">=</span> dt<span class="op">*</span><span class="va">self</span>.F2(<span class="va">self</span>.x <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">0</span>], <span class="va">self</span>.v <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">1</span>])</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>        k4 <span class="op">=</span> dt<span class="op">*</span><span class="va">self</span>.F2(<span class="va">self</span>.x <span class="op">+</span> k3[<span class="dv">0</span>], <span class="va">self</span>.v <span class="op">+</span> k3[<span class="dv">1</span>])</span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> <span class="va">self</span>.x <span class="op">+</span> (k1[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">0</span>] <span class="op">+</span> k4[<span class="dv">0</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.v <span class="op">=</span> <span class="va">self</span>.v <span class="op">+</span> (k1[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">1</span>] <span class="op">+</span> k4[<span class="dv">1</span>])<span class="op">/</span><span class="fl">6.</span></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.x,<span class="va">self</span>.v        </span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> move_planets(p1,p2): </span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> t <span class="op">&lt;</span> tfinal<span class="op">+</span>dt:</span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>        p1.time.append(t)</span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>        p1.x.append(p1.x0)</span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>        p1.y.append(p1.y0)</span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>        p1.vx.append(p1.vx0)</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>        p1.vy.append(p1.vy0)</span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>        p2.time.append(t)</span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>        p2.x.append(p2.x0)</span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>        p2.y.append(p2.y0)</span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>        p2.vx.append(p2.vx0)</span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>        p2.vy.append(p2.vy0)</span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>        <span class="co">#planet 1</span></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>        x12 <span class="op">=</span> p1.x0 <span class="op">-</span> p2.x0</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>        y12 <span class="op">=</span> p1.y0 <span class="op">-</span> p2.y0</span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>        r12 <span class="op">=</span> np.sqrt(x12<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y12<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>        r1 <span class="op">=</span> np.sqrt(p1.x0<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> p1.y0<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>        rk <span class="op">=</span> rk4_step(p2.m,r1,r12,x12,p1.x0,p1.vx0)  <span class="co">#x-component</span></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>        p1.x0, p1.vx0 <span class="op">=</span> rk.rk4()</span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>        rk <span class="op">=</span> rk4_step(p2.m,r1,r12,y12,p1.y0,p1.vy0)  <span class="co">#x-component</span></span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>        p1.y0, p1.vy0 <span class="op">=</span> rk.rk4()</span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a>        <span class="co">#planet 2</span></span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>        x21 <span class="op">=</span> <span class="op">-</span>x12 <span class="co">#x2 - x1</span></span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>        y21 <span class="op">=</span> <span class="op">-</span>y12 <span class="co">#y2 - y1</span></span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>        r21 <span class="op">=</span> np.sqrt(x21<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y21<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>        r2 <span class="op">=</span> np.sqrt(p2.x0<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> p2.y0<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>        rk <span class="op">=</span> rk4_step(p1.m,r2,r21,x21,p2.x0,p2.vx0)  <span class="co">#x-component</span></span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>        p2.x0, p2.vx0 <span class="op">=</span> rk.rk4()</span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>        rk <span class="op">=</span> rk4_step(p1.m,r2,r21,y21,p2.y0,p2.vy0)  <span class="co">#y-component</span></span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>        p2.y0, p2.vy0 <span class="op">=</span> rk.rk4()</span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> t <span class="op">+</span> dt</span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------------------------------------------------------------------</span></span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a><span class="co">#AU = 1.496e11 #m</span></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a><span class="co">#yr = 3.15e7 #s</span></span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>GM <span class="op">=</span> <span class="dv">4</span><span class="op">*</span>np.pi<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> <span class="fl">2e30</span> <span class="co">#kg</span></span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a><span class="co">#G = 6.67e-11 #m^3/(kg s^2)</span></span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="co">#G = G*</span></span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize Earth</span></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>mE <span class="op">=</span> <span class="fl">6e24</span> <span class="co">#kg</span></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.sqrt(GM<span class="op">/</span>r)</span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> r <span class="op">+</span><span class="fl">1.0</span></span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>vx0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>vy0 <span class="op">=</span> v <span class="op">-</span> <span class="fl">0.1</span><span class="op">*</span>v</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>pE <span class="op">=</span> planet(x0,y0,vx0,vy0,mE,<span class="st">'blue'</span>)</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize Jupiter</span></span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>mJ <span class="op">=</span> <span class="fl">5e29</span> <span class="co">#kg</span></span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> <span class="fl">5.0</span></span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.sqrt(GM<span class="op">/</span>r)</span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> r </span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>vx0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>vy0 <span class="op">=</span> v <span class="co">#+ 0.1*v</span></span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>pJ <span class="op">=</span> planet(x0,y0,vx0,vy0,mJ,<span class="st">'orange'</span>)</span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pE.m<span class="op">/</span>M,pJ.m<span class="op">/</span>M)</span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>tfinal <span class="op">=</span> <span class="fl">12.0</span></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="fl">0.001</span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>pE.rk4_planet(tfinal,dt)</span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>pE.plot_planet(<span class="dv">1</span>)</span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a><span class="co">#pE.energy_conserve()</span></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>pE.Kepler_2(dt,<span class="dv">400</span><span class="op">*</span>dt)</span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a><span class="co">#pJ.rk4_planet(tfinal,dt)</span></span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a><span class="co">#pJ.plot_two_planets(pE)</span></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a><span class="co">##rk4_two_planets(pE,pJ)</span></span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a><span class="co">#test_argv(pE,pJ)</span></span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a><span class="co">move_planets(pE,pJ)</span></span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a><span class="co">#pJ.plot_two_planets(pE,10)</span></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a><span class="co">#pE.plot_planet(10)</span></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a><span class="co">#pE.plot_radial_pos(10)</span></span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a><span class="co">pE.animate(pJ,50)</span></span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3e-06 0.25
+5.2476301693044025 4.1229623180606705 -3.244295752495864 -0.0025090452374989525
+2.3667027192213537
+2.2692629499201646
+2.2745700572876077
+2.2742354735563284
+2.274000710641138
+2.27383551183753
+2.2737144240333214
+2.273621766107231
+2.273548006387743
+2.2734871517532715
+2.2677800116078237
+2.267734594498202
+2.267693442826197
+2.267655064881227
+-224.24017691125354
+2.267581891615205
+2.2675449849439775
+2.2675064358785044
+2.2674650082240215
+2.2674191831020374
+2.273021180002296
+2.272959488589941
+2.2728845245454967
+2.272790097382022
+2.2726663406788212
+2.2724970279162653
+2.2722560965736074
+2.2719152937047515
+2.271585884958003</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Delamere_Lab7_files/figure-html/cell-5-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Delamere_Lab7_files/figure-html/cell-5-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>'\n#pJ.rk4_planet(tfinal,dt)\n#pJ.plot_two_planets(pE)\n\n##rk4_two_planets(pE,pJ)\n#test_argv(pE,pJ)\n\nmove_planets(pE,pJ)\n\n#pJ.plot_two_planets(pE,10)\n#pE.plot_planet(10)\n#pE.plot_radial_pos(10)\npE.animate(pJ,50)\n'</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
