@@ -110,8 +110,7 @@ The following are all *my* submissions to the lab assignments when I was taking 
         - (the one with the confusing wording (so better refer to Prof's solution hahaha))
 
 ## **Lab 11:** Quantum Systems 
-### ([JK Submission](JK-Labs/Lab11.html); [Prof Delamere Solutions](Lab-Solutions/Delamere_Lab11.html)
-)
+### ([JK Submission](JK-Labs/Lab11.html); [Prof Delamere Solutions](Lab-Solutions/Delamere_Lab11.html))
 - Time-Independent Schrodinger Equation (TISE)
     - Derive discretized TISE
     - Ground state energy, even/odd parity
