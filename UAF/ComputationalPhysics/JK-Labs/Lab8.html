@@ -173,7 +173,7 @@ m \frac{ d^2u_N}{dt^2}  = -k_c(u_N - u_{N-1} - ku_{N}) \nonumber
 <section id="exercise-1" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-1">Exercise 1:</h2>
 <p>Study the code below and comment as necessary. The animation methods do not work in Notebook (but do from the command line).</p>
-<div id="cell-3" class="cell" data-execution_count="4">
+<div id="cell-3" class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.animation <span class="im">as</span> animation</span>
@@ -191,28 +191,28 @@ m \frac{ d^2u_N}{dt^2}  = -k_c(u_N - u_{N-1} - ku_{N}) \nonumber
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xarr <span class="op">=</span> []</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.varr <span class="op">=</span> []</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.time <span class="op">=</span> []</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> F0(<span class="va">self</span>,x,v,t):</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.array([v,<span class="op">-</span><span class="va">self</span>.kc<span class="op">*</span>(x[<span class="dv">1</span>] <span class="op">-</span> x[<span class="dv">2</span>]) <span class="op">-</span> <span class="va">self</span>.k<span class="op">*</span>x[<span class="dv">1</span>] <span class="op">+</span> (<span class="fl">0.5</span><span class="op">*</span><span class="va">self</span>.kc)<span class="op">*</span>np.cos(<span class="va">self</span>.omega_0<span class="op">*</span>t)])   </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> F0(<span class="va">self</span>,x,v,t): <span class="co">#</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.array([v,<span class="op">-</span><span class="va">self</span>.kc<span class="op">*</span>(x[<span class="dv">1</span>] <span class="op">-</span> x[<span class="dv">2</span>]) <span class="op">-</span> <span class="va">self</span>.k<span class="op">*</span>x[<span class="dv">1</span>] <span class="op">+</span> (<span class="fl">0.5</span><span class="op">*</span><span class="va">self</span>.kc)<span class="op">*</span>np.cos(<span class="va">self</span>.omega_0<span class="op">*</span>t)])</span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                        <span class="co">#v; -kc(u_i - u_(i+1)) - k*u_(i) + 0.5kc(cos(omega*t))</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                            <span class="co">#x(t) = A*cos(omega*t (+ phase))</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> FN(<span class="va">self</span>,x,v,t):</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> FN(<span class="va">self</span>,x,v,t): <span class="co">#</span></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.array([v,<span class="op">-</span><span class="va">self</span>.kc<span class="op">*</span>(x[<span class="dv">1</span>] <span class="op">-</span> x[<span class="dv">0</span>]) <span class="op">-</span> <span class="va">self</span>.k<span class="op">*</span>x[<span class="dv">1</span>]]) <span class="co">#v, -kc(u_i -u_(i-1)) - k(u_i)</span></span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> Fi(<span class="va">self</span>,x,v,t):</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> Fi(<span class="va">self</span>,x,v,t): <span class="co">#i-th particle</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.array([v,<span class="op">-</span><span class="va">self</span>.kc<span class="op">*</span>(<span class="dv">2</span><span class="op">*</span>x[<span class="dv">1</span>] <span class="op">-</span> x[<span class="dv">2</span>] <span class="op">-</span> x[<span class="dv">0</span>])])     <span class="co">#v, -kc(2u_i - u_(i+1) - u_(i-1))</span></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> rk4_step(<span class="va">self</span>,F,x,v,t):</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        k1 <span class="op">=</span> dt<span class="op">*</span>F(x,v,t)         </span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        k1 <span class="op">=</span> dt<span class="op">*</span>F(x,v,t)</span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        k2 <span class="op">=</span> dt<span class="op">*</span>F(x <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">0</span>], v <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k1[<span class="dv">1</span>],t)</span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        k3 <span class="op">=</span> dt<span class="op">*</span>F(x <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">0</span>], v <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>k2[<span class="dv">1</span>],t)</span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        k4 <span class="op">=</span> dt<span class="op">*</span>F(x <span class="op">+</span> k3[<span class="dv">0</span>], v <span class="op">+</span> k3[<span class="dv">1</span>],t)</span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        x[<span class="dv">1</span>] <span class="op">=</span> x[<span class="dv">1</span>] <span class="op">+</span> (k1[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">0</span>] <span class="op">+</span> k4[<span class="dv">0</span>])<span class="op">/</span><span class="fl">6.</span></span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        v <span class="op">=</span> v <span class="op">+</span> (k1[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3[<span class="dv">1</span>] <span class="op">+</span> k4[<span class="dv">1</span>])<span class="op">/</span><span class="fl">6.</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x[<span class="dv">1</span>],np.array(v)</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> rk4_chain(<span class="va">self</span>,tfinal,dt):  </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> rk4_chain(<span class="va">self</span>,tfinal,dt):</span>
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>        t <span class="op">=</span> <span class="fl">0.0</span></span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> t <span class="op">&lt;</span> tfinal<span class="op">+</span>dt:</span>
 <span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>            xn <span class="op">=</span> <span class="va">self</span>.x</span>
@@ -225,10 +225,10 @@ m \frac{ d^2u_N}{dt^2}  = -k_c(u_N - u_{N-1} - ku_{N}) \nonumber
 <span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.x[<span class="va">self</span>.N<span class="op">-</span><span class="dv">1</span>],<span class="va">self</span>.v[<span class="va">self</span>.N<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="va">self</span>.rk4_step(<span class="va">self</span>.FN,np.array([xn[<span class="va">self</span>.N<span class="op">-</span><span class="dv">2</span>],xn[<span class="va">self</span>.N<span class="op">-</span><span class="dv">1</span>],<span class="dv">0</span>]),vn[<span class="va">self</span>.N<span class="op">-</span><span class="dv">1</span>],t)</span>
 <span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (<span class="va">self</span>.N <span class="op">&gt;</span> <span class="dv">2</span>):</span>
 <span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="va">self</span>.N<span class="op">-</span><span class="dv">1</span>):</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.x[i],<span class="va">self</span>.v[i] <span class="op">=</span> <span class="va">self</span>.rk4_step(<span class="va">self</span>.Fi,np.array([xn[i<span class="op">-</span><span class="dv">1</span>],xn[i],xn[i<span class="op">+</span><span class="dv">1</span>]]),vn[i],t)            </span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>            t <span class="op">=</span> t <span class="op">+</span> dt           </span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> animate(<span class="va">self</span>,nstep): <span class="co">#only plots for two or three masses        </span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>                    <span class="va">self</span>.x[i],<span class="va">self</span>.v[i] <span class="op">=</span> <span class="va">self</span>.rk4_step(<span class="va">self</span>.Fi,np.array([xn[i<span class="op">-</span><span class="dv">1</span>],xn[i],xn[i<span class="op">+</span><span class="dv">1</span>]]),vn[i],t)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>            t <span class="op">=</span> t <span class="op">+</span> dt</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> animate(<span class="va">self</span>,nstep): <span class="co">#only plots for two or three masses</span></span>
 <span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        lines<span class="op">=</span>[]</span>
 <span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">int</span>(<span class="bu">len</span>(<span class="va">self</span>.xarr)<span class="op">/</span><span class="va">self</span>.N),N<span class="op">*</span>nstep):</span>
@@ -242,7 +242,7 @@ m \frac{ d^2u_N}{dt^2}  = -k_c(u_N - u_{N-1} - ku_{N}) \nonumber
 <span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>        ani <span class="op">=</span> animation.ArtistAnimation(fig, lines, interval<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
 <span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> animate10(<span class="va">self</span>,nstep): <span class="co">#only plots for 10 masses        </span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> animate10(<span class="va">self</span>,nstep): <span class="co">#only plots for 10 masses</span></span>
 <span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>        lines<span class="op">=</span>[]</span>
 <span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>        fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">int</span>(<span class="bu">len</span>(<span class="va">self</span>.xarr)<span class="op">/</span><span class="va">self</span>.N),N<span class="op">*</span>nstep):</span>
@@ -270,8 +270,7 @@ m \frac{ d^2u_N}{dt^2}  = -k_c(u_N - u_{N-1} - ku_{N}) \nonumber
 <span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>            axs[i].<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'time'</span>, ylabel<span class="op">=</span><span class="st">'u'</span><span class="op">+</span><span class="bu">str</span>(i))</span>
 <span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ax <span class="kw">in</span> axs.flat:</span>
 <span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>            ax.label_outer()</span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>        plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="exercise-2-motion-of-two-coupled-oscillators" class="level2">
@@ -284,7 +283,7 @@ m \frac{ d^2u_N}{dt^2}  = -k_c(u_N - u_{N-1} - ku_{N}) \nonumber
 <li><p>Consider initial conditions <span class="math inline">\(u_1(0) = 0.5\)</span>, <span class="math inline">\(u_2(0) = -0.5\)</span> so that both particles have equal but <em>opposite</em> displacements. Determine the dependence of <span class="math inline">\(\omega^2\)</span> on <span class="math inline">\(k\)</span> and <span class="math inline">\(k_c\)</span>.</p></li>
 <li><p>Discuss your results in terms of <em>normal modes</em>.</p></li>
 </ol>
-<div id="cell-5" class="cell" data-execution_count="3">
+<div id="cell-5" class="cell" data-outputid="a7315a87-e9df-4245-ff86-232c463b67ad">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#u1(0) = 0.5</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#u2(0) = 0</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#m = all same</span></span>
@@ -294,7 +293,7 @@ m \frac{ d^2u_N}{dt^2}  = -k_c(u_N - u_{N-1} - ku_{N}) \nonumber
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">1</span>             <span class="co">#mass (all particles have same)</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">1</span>             <span class="co">#spring constant for non-coupled springs</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>kca <span class="op">=</span> <span class="fl">0.8</span>         <span class="co">#coupled spring constant (for case a of part 1 of exercise 2)</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>omega_0 <span class="op">=</span> <span class="dv">0</span>       </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>omega_0 <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>u1i <span class="op">=</span> <span class="fl">0.5</span>         <span class="co">#initial position for particle 1</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>u2i <span class="op">=</span> <span class="dv">0</span>           <span class="co">#initial position for particle 2</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>tfinal <span class="op">=</span> <span class="dv">100</span></span>
@@ -318,8 +317,7 @@ m \frac{ d^2u_N}{dt^2}  = -k_c(u_N - u_{N-1} - ku_{N}) \nonumber
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>b1.rk4_chain(tfinal,dt)</span>
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Exercise 2;Part 1;case b (kc = 1)"</span>)</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>b1.plot_N_masses()</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>b1.animate(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>b1.plot_N_masses()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Exercise 2;Part 1;case a (kc = 0.8)
 Exercise 2;Part 1;case b (kc = 1)</code></pre>
@@ -338,18 +336,11 @@ Exercise 2;Part 1;case b (kc = 1)</code></pre>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Lab8_files/figure-html/cell-3-output-4.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
 </div>
 <ol start="2" type="1">
 <li>Set <span class="math inline">\(k= 1\)</span> and <span class="math inline">\(k_c = 0.2\)</span>. This is a case of <em>weak coupling</em>. Can you identify two kinds of oscillations superimposed upon each other?</li>
 </ol>
-<div id="cell-7" class="cell" data-execution_count="3">
+<div id="cell-7" class="cell" data-outputid="36e34dd5-24d7-499d-a3ac-0e95ae7a6a2c">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 2; part 2</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">1</span>                     <span class="co">#(I didn't have to repeat this here but it's just easier to see what was used for k)</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>kc2 <span class="op">=</span> <span class="fl">0.2</span>                 <span class="co">#coupled spring constant for part 2 of exercise 2</span></span>
@@ -370,13 +361,13 @@ Exercise 2;Part 1;case b (kc = 1)</code></pre>
 <ol start="3" type="1">
 <li>Choose initial conditions <span class="math inline">\(u_1(0) = 0.5\)</span>, <span class="math inline">\(u_2(0) = 0.5\)</span> so that both particles have equal displacements. Set <span class="math inline">\(k= 1\)</span> and <span class="math inline">\(k_c = 0.1\)</span>. Describe the observed motion. Compute the energy (kinetic plus potential) of each particle. Does the period of motion depend on <span class="math inline">\(k_c\)</span>? What is the dependence of motion on <span class="math inline">\(k\)</span>?</li>
 </ol>
-<div id="cell-9" class="cell" data-execution_count="5">
+<div id="cell-9" class="cell" data-outputid="88041560-32c2-4768-be3f-fc9df832e321">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 2; part 3</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>u1i <span class="op">=</span> <span class="fl">0.5</span>                   <span class="co">#initial position for particle 1</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>u2i_3 <span class="op">=</span> <span class="fl">0.5</span>                 <span class="co">#initial position for particle 2 (for part 3)</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">1</span>                       <span class="co">#(I didn't have to repeat this here but it's just easier to see what was used for k)</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>kc3 <span class="op">=</span> <span class="fl">0.1</span>                   <span class="co">#coupled spring constant kc for part 3 of exercise 2</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>omega0_3 <span class="op">=</span> np.sqrt((k<span class="op">/</span>m))   <span class="co">#omega (since both particles start at same position, omega is not affected by kc) </span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>omega0_3 <span class="op">=</span> np.sqrt((k<span class="op">/</span>m))   <span class="co">#omega (since both particles start at same position, omega is not affected by kc)</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                            <span class="co">#or are we still supposed to use omega=0? b/c that produces something pretty cool too</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>P3 <span class="op">=</span> N_chain(N,m,kc3,k,omega0_3)</span>
@@ -402,7 +393,7 @@ Exercise 2;Part 1;case b (kc = 1)</code></pre>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>Text(0, 0.5, 'Energy')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -416,12 +407,12 @@ Exercise 2;Part 1;case b (kc = 1)</code></pre>
 <ol start="4" type="1">
 <li>Consider initial conditions <span class="math inline">\(u_1(0) = 0.5\)</span>, <span class="math inline">\(u_2(0) = -0.5\)</span> so that both particles have equal but <em>opposite</em> displacements. Determine the dependence of <span class="math inline">\(\omega^2\)</span> on <span class="math inline">\(k\)</span> and <span class="math inline">\(k_c\)</span>.</li>
 </ol>
-<div id="cell-11" class="cell" data-scrolled="false" data-execution_count="5">
+<div id="cell-11" class="cell" data-outputid="6154afb8-395f-4845-92c0-b6551605c96f" data-scrolled="false">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>u1i <span class="op">=</span> <span class="fl">0.5</span>                          <span class="co">#initial position of particle 1 (this is doesn't have to be repeated either)</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>u2i_4 <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>                       <span class="co">#initial position of particle 2 for part 4 of exercise 2</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>kc4 <span class="op">=</span> np.arange(<span class="fl">0.1</span>,<span class="fl">1.1</span>,<span class="fl">0.2</span>)       <span class="co">#varying values for kc (for part 4)</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>omega4 <span class="op">=</span> []                        <span class="co">#different omega values      </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>omega4 <span class="op">=</span> []                        <span class="co">#different omega values</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(kc4)):</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    omega4.append(np.sqrt((k<span class="op">+</span><span class="dv">2</span><span class="op">*</span>kc4[j])<span class="op">/</span>m))     <span class="co">#omega^2 = (k+2*kc)/m (for particles w/ displacement in opp. directions)</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    P4 <span class="op">=</span> N_chain(N,m,kc4[j],k,omega4[j])</span>
@@ -481,12 +472,6 @@ kc = 0.9</code></pre>
 <li><p>Now consider the following three cases and discuss the results in the context of <em>normal modes</em>:</p></li>
 </ol>
 <table class="table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 27%">
-<col style="width: 25%">
-<col style="width: 21%">
-</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;"></th>
@@ -498,9 +483,9 @@ kc = 0.9</code></pre>
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">case 1</td>
-<td style="text-align: right;">&nbsp; &nbsp;&nbsp; &nbsp;0.5</td>
-<td style="text-align: right;">&nbsp; &nbsp;&nbsp; &nbsp;0.5</td>
-<td style="text-align: right;">&nbsp; &nbsp;&nbsp; &nbsp;0.5</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.5</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">case 2</td>
@@ -527,9 +512,9 @@ kc = 0.9</code></pre>
 <ol start="5" type="1">
 <li>Perturb the chain at one end (e.g., <span class="math inline">\(u_1(0) = 1\)</span>) and determine the time it takes to for a disturbance to travel a given distance. This illustrates the propagation of energy. Estimate <span class="math inline">\(v\)</span>. Consider larger values of <span class="math inline">\(N\)</span> to ensure that your estimate is independent of <span class="math inline">\(N\)</span>.</li>
 </ol>
-<div id="cell-13" class="cell" data-execution_count="6">
+<div id="cell-13" class="cell" data-outputid="f513341b-9ed5-4d5d-ae3a-bcccc023570e">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>N3 <span class="op">=</span> <span class="dv">3</span>                      <span class="co">#number of particles for exercise 3</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">1</span>                      </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>kc_3 <span class="op">=</span> <span class="fl">0.2</span>                  <span class="co">#coupled spring constant for exercise 3 part 1</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>omega3 <span class="op">=</span> <span class="dv">0</span>                  <span class="co">#np.sqrt(k/m)</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>u1 <span class="op">=</span> <span class="fl">0.1</span></span>
@@ -592,7 +577,7 @@ kc = 0.9</code></pre>
 </tbody>
 </table>
 <p>What are the normal mode frequencies?</p>
-<div id="cell-15" class="cell" data-execution_count="7">
+<div id="cell-15" class="cell" data-outputid="fe353ef3-f165-4b25-a0b7-29a86f494042">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Exercise 3; part 2</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>u_1i <span class="op">=</span> [<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>]</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>u_2i <span class="op">=</span> [<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span>]</span>
@@ -604,7 +589,7 @@ kc = 0.9</code></pre>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        omega_3.append(np.sqrt(k<span class="op">/</span>m))</span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        omega_3.append(<span class="fl">0.</span>)</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    E3_2 <span class="op">=</span> N_chain(N3,m,kc_3,k,omega_3[l])</span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    E3_2.x[<span class="dv">0</span>] <span class="op">=</span> u_1i[l]</span>
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    E3_2.x[<span class="dv">1</span>] <span class="op">=</span> u_2i[l]</span>
