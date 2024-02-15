@@ -32,7 +32,6 @@ def get_fwhm(pdf:np.array, return_max_idx = False):
     -------
     fwhm : float
         fwhm value calculated from pdf
-
     """
     pdf_max = max(pdf)
     where_max = np.argmax(pdf)
@@ -263,7 +262,22 @@ class gaussian(helper):
         self.sigma = sigma
 
     def P_gaussian(self,x,mu,sigma:float):
+        """Function to calculate Poisson probability P(x;mu)
         
+        Parameters
+        ----------
+        x : int 
+            x value we want to get probability of
+        mu : float
+            mean occurence of value x
+        sigma : float
+            standard deviation of x
+
+        Returns
+        -------
+        Pg : float
+            Gaussian probability of x
+        """
         # formula components
         pow_num = -((x-mu)**2)                  # numerator of exponential power
         pow_den = 2*(sigma**2)                  # denominator of exponential power
