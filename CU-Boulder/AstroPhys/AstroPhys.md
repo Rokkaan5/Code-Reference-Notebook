@@ -17,7 +17,26 @@ Any parts of any of the hw that contained coding portions
 
 ## HW1
 - [HW1 - Question 3: Binomial and Poisson Distributions](HW/hw1/hw1.html)
+    - Mainly just comparing Binomial vs. Poisson Distribution 
+        -(like their difference when *p* is not small enough)
 
 ## HW2
 - [HW2](HW/hw2/hw2.html)
-
+    1. Binomial and Gaussian Distributions
+        - Compare Binomial vs. Poisson vs. Gaussian
+    2. How Old is This Volcano?
+        - Age estimation based on count rate example
+        - Posterior probability (Bayes law)
+            - using Poisson as parent distribution
+        - various versions of sigma calculations
+            - simple
+            - distribution
+            - FWHM
+    3. Random Wak and Central Limit Theorem
+        - Drunk walk example
+            - Compare Binomial and Gaussian
+            - Drunk walk with slopes
+                - bottom of valley
+                - top hill
+    4. Not So Random Walk: Power Law
+        - Step size changes based on location
