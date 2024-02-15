@@ -14,6 +14,35 @@ import matplotlib.pyplot as plt
 import random as rnd
 from scipy.special import factorial
 from scipy.signal import peak_widths
+# %% Full-Width Half-Max
+def get_fwhm(pdf:np.array, return_max_idx = False):
+    """Simple function to get Full-Width Half-Max (FWHM)
+    
+    Relevant to one way to calculate standard deviation (sigma) 
+    FWHM = sigma [8 ln(2)]^(1/2)
+
+    Parameters
+    ----------
+    pdf : np.array
+        probability distribution "function" to find FWHM from
+    return_max_idx : boolean
+        indicate whether or not to return the max value and index of max value in addition to FWHM value
+
+    Returns
+    -------
+    fwhm : float
+        fwhm value calculated from pdf
+
+    """
+    pdf_max = max(pdf)
+    where_max = np.argmax(pdf)
+    fwhm = peak_widths(pdf,where_max,rel_height=0.5)[0]
+    
+    if return_max_idx:
+        return fwhm, pdf_max, where_max
+
+    return fwhm
+
 
 
 # %%
@@ -261,6 +290,17 @@ class gaussian(helper):
 # P(t;x) = \frac{P(x;t)P(t)}{P(x)}
 # \end{align*}
 
+# ## Volcano age example
+# **The following code is more specific to the problem from HW2, which was as follows:**
+#
+# The age of a volcanic eruption on Mars can be inferred from counting the surface density of craters of a given diameter or greater. It is established that the impact rate $r=0.01$ craters $\text{km}^{-2}\text{Myr}^{-1}$. You survey an area ($A$) of 10 $\text{km}^2$ and find 3 craters ($x$).
+
+# One can explore this problem further by calculating the *posterior* probability, $P(x;t)$ over a range of times (say, $t=0$ to 150 in Myr intervals) assuming a Poisson parent distribution and knowing $x=3$. Do this problem on your computer. 
+
+# Important point: the initial calculation yields a set of *relative* probabilities; under Bayes' law: 
+# $$P(t;x) = \frac{P(x;t)P(t)}{P(x)}$$
+
+# Since we have no prior knowledge in this case, we treat $P(t)/P(x)$ as a constant; You must normalize $P(t;x)$ so that the total probability is $1$. $P(t;x)$ will have units of "probability/Myr". Plot your results. Mark the mean and mode (most likely age) and directly compute the standard deviation. Compare these values with your simple estimate.
 # %%
 class Posterior_Probability(poisson):
     def __init__(self,t0=0,tf=150,dt=1,obs_area=10):
@@ -277,35 +317,6 @@ class Posterior_Probability(poisson):
         #posterior probability
         self.posterior = self.Pp*self.Pt_Px
         return self.posterior
-
-
-def get_fwhm(pdf:np.array, return_max_idx = False):
-    """Simple function to get Full-Width Half-Max (FWHM)
-    
-    Relevant to one way to calculate standard deviation (sigma) 
-    FWHM = sigma [8 ln(2)]^(1/2)
-
-    Parameters
-    ----------
-    pdf : np.array
-        probability distribution "function" to find FWHM from
-    return_max_idx : boolean
-        indicate whether or not to return the max value and index of max value in addition to FWHM value
-
-    Returns
-    -------
-    fwhm : float
-        fwhm value calculated from pdf
-
-    """
-    pdf_max = max(pdf)
-    where_max = np.argmax(pdf)
-    fwhm = peak_widths(pdf,where_max,rel_height=0.5)[0]
-    
-    if return_max_idx:
-        return fwhm, pdf_max, where_max
-
-    return fwhm
 
 
 # %% [markdown]
