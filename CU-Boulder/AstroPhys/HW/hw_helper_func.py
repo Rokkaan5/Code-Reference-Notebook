@@ -46,6 +46,7 @@ def get_fwhm(pdf:np.array, return_max_idx = False):
 
 # %%
 class helper:
+    # TODO: add documentation to these functions
     def __init__(self,x_min=0,x_max=15,step=1):
         self.step = step
         self.x = np.arange(x_min,x_max+self.step,self.step)
@@ -140,6 +141,7 @@ class helper:
 
 # %% Binomial Probability
 class binomial(helper):
+    # TODO: add documentation to the rest of these functions
     def __init__(self, x_min=0, x_max=15, step=1,n=100,p=0.5):
         """Functions related to using Binomial probability
 
@@ -201,6 +203,7 @@ class binomial(helper):
 
 # %% Poisson
 class poisson(helper):
+    # TODO: add documentation to the rest of these functions
     def __init__(self, x_min=0, x_max=15, step=1,mu=3.5):
         super().__init__(x_min, x_max, step)              
         self.mu = mu                          # the term "lambda" has its own purpose in python so I named the variable "lmd" instead
@@ -259,6 +262,7 @@ class poisson(helper):
 
 # %%
 class gaussian(helper):
+    # TODO: add documentation to the rest of these functions
     def __init__(self, mu, sigma, x_min=0, x_max=15, step=1):
         super().__init__(x_min, x_max, step)
         
@@ -321,6 +325,7 @@ class gaussian(helper):
 # Since we have no prior knowledge in this case, we treat $P(t)/P(x)$ as a constant; You must normalize $P(t;x)$ so that the total probability is $1$. $P(t;x)$ will have units of "probability/Myr". Plot your results. Mark the mean and mode (most likely age) and directly compute the standard deviation. Compare these values with your simple estimate.
 # %%
 class Posterior_Probability(poisson):
+    # TODO: add documentation to this class and its functions
     def __init__(self,t0=0,tf=150,step=1,obs_area=10):
         super().__init__(step)
         self.t = np.arange(t0,tf+step,step)
@@ -342,6 +347,7 @@ class Posterior_Probability(poisson):
 # # Random Walk
 # %%
 class rand_walk(binomial,gaussian):
+    # TODO: add documentation to these functions
     def __init__(self, step=1, n=100, p=0.5):
         super().__init__(step, n, p)
         self.x = np.arange(0,self.n+step,step)
@@ -404,6 +410,7 @@ class rand_walk(binomial,gaussian):
 
 # %%
 class rand_slope_walk(rand_walk):
+    # TODO: add documentation to these functions
     def __init__(self, slope_const=0.01, n=100, step=1, p=0.5):
         super().__init__(step, n, p)
 
@@ -457,6 +464,7 @@ class rand_slope_walk(rand_walk):
 
 # %%
 class rand_power_law(rand_walk):
+    # TODO: add documentation to these functions
     def __init__(self, n=100, p=0.5, step0_size=0.5):
         super().__init__(n, p)
         self.P_right = p
@@ -486,6 +494,3 @@ class rand_power_law(rand_walk):
             self.xn = self.xn/ntrial
         
         return self.xn
-    
-
-
