@@ -130,7 +130,10 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#jasmines-written-answer" id="toc-jasmines-written-answer" class="nav-link" data-scroll-target="#jasmines-written-answer">Jasmine’s written answer</a></li>
   </ul></li>
-  <li><a href="#part-b-1" id="toc-part-b-1" class="nav-link" data-scroll-target="#part-b-1">Part (b)</a></li>
+  <li><a href="#part-b-1" id="toc-part-b-1" class="nav-link" data-scroll-target="#part-b-1">Part (b)</a>
+  <ul class="collapse">
+  <li><a href="#jk-written-answer" id="toc-jk-written-answer" class="nav-link" data-scroll-target="#jk-written-answer">JK written answer</a></li>
+  </ul></li>
   <li><a href="#part-c-1" id="toc-part-c-1" class="nav-link" data-scroll-target="#part-c-1">Part (c)</a></li>
   <li><a href="#part-d" id="toc-part-d" class="nav-link" data-scroll-target="#part-d">Part (d)</a></li>
   </ul></li>
@@ -293,7 +296,7 @@ P_B(x;n,p) &amp;= \frac{n!}{(n-x)!x!}p^x q^{n-x}
 <h3 class="anchored" data-anchor-id="jasmines-reminder-to-self-1">Jasmine’s reminder to self</h3>
 <p><strong>Poisson probability:</strong></p>
 <p><span class="math display">\[\begin{align*}
-P_B(x;\lambda) &amp;= \frac{\lambda^x}{x!}e^{-\lambda}
+P_P(x;\lambda) &amp;= \frac{\lambda^x}{x!}e^{-\lambda}
 \end{align*}\]</span></p>
 <div id="cell-9" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> b_poisson(a_binomial):</span>
@@ -467,7 +470,50 @@ y &amp;= \frac{x}{A * r} \\
 <h2 class="anchored" data-anchor-id="part-b-1">Part (b)</h2>
 <p>The simple estimation of the age and uncertainty is often adequate. One can explore this problem further by calculating the <em>posterior</em> probability, <span class="math inline">\(P(x;t)\)</span> over a range of times (say, <span class="math inline">\(t=0\)</span> to 150 in Myr intervals) assuming a Poisson parent distribution and knowing <span class="math inline">\(x=3\)</span>. Do this problem on your computer.</p>
 <p>Important point: the initial calculation yields a set of <em>relative</em> probabilities; under Bayes’ law: <span class="math display">\[P(t;x) = \frac{P(x;t)P(t)}{P(x)}\]</span></p>
-<p>Since we have no prior knowledge in this case, we treat <span class="math inline">\(P(t)/P(x)\)</span> as a constant; You must normalize <span class="math inline">\(P(t;x)\)</span> so that the total probability is 1. <span class="math inline">\(P(t;x)\)</span> will have units of “probability/Myr”. Plot your results. Mark the mean and mode (most likely age) and directly compute the standard deviation. Compare these values with your simple estimate.</p>
+<p>Since we have no prior knowledge in this case, we treat <span class="math inline">\(P(t)/P(x)\)</span> as a constant; You must normalize <span class="math inline">\(P(t;x)\)</span> so that the total probability is <span class="math inline">\(1\)</span>. <span class="math inline">\(P(t;x)\)</span> will have units of “probability/Myr”. Plot your results. Mark the mean and mode (most likely age) and directly compute the standard deviation. Compare these values with your simple estimate.</p>
+<section id="jk-written-answer" class="level3">
+<h3 class="anchored" data-anchor-id="jk-written-answer">JK written answer</h3>
+<p>Poisson probability is often used for counting statistics</p>
+<p><span class="math display">\[\begin{align*}
+P_P(x;\lambda) &amp;= \frac{\lambda^x}{x!}e^{-\lambda}
+\end{align*}\]</span></p>
+<p>Thus, <span class="math inline">\(P(x;t) = P_P(x,\lambda)\)</span></p>
+<p>And, we’re treating <span class="math inline">\(P(t)/P(x)\)</span> as a constant, such that <span class="math inline">\(\displaystyle \sum_{i=0}^{t_f}P(t_i;x) = 1\)</span></p>
+<div id="cell-23" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Posterior_Probability():</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,t0<span class="op">=</span><span class="dv">0</span>,tf<span class="op">=</span><span class="dv">150</span>,dt<span class="op">=</span><span class="dv">1</span>,obs_area<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.t <span class="op">=</span> np.arange(t0,tf,dt)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.obs_area <span class="op">=</span> obs_area</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># function to calculate poisson probability P(x;lambda)</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> P_poisson(<span class="va">self</span>,x,lmd):                             </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        numerator <span class="op">=</span> lmd<span class="op">**</span>x                          <span class="co"># fraction numerator: lambda^x</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        denominator <span class="op">=</span> math.factorial(x)             <span class="co"># fraction denominator: x!</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        fraction <span class="op">=</span> numerator<span class="op">/</span>denominator</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        e_lmd <span class="op">=</span> math.exp(<span class="op">-</span>lmd)                      <span class="co"># e^(-lambda)</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fraction<span class="op">*</span>e_lmd</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> post_prob(<span class="va">self</span>,x):</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># P(x;t)/A =&gt; probability/km^2</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        Pp <span class="op">=</span> np.array([<span class="va">self</span>.P_poisson(x<span class="op">=</span>x,lmd<span class="op">=</span>ti) <span class="cf">for</span> ti <span class="kw">in</span> <span class="va">self</span>.t])<span class="op">/</span><span class="va">self</span>.obs_area</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">#constant P(t)/P(x) = 1/sum(P(x;t))</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        Pt_Px <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>np.<span class="bu">sum</span>(Pp)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> Pp<span class="op">*</span>Pt_Px</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-24" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ppb <span class="op">=</span> Posterior_Probability(tf<span class="op">=</span><span class="dv">150</span>,rate<span class="op">=</span><span class="fl">0.01</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.plot(ppb.t,ppb.post_prob(x<span class="op">=</span><span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw2_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="part-c-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-c-1">Part (c)</h2>
@@ -489,65 +535,65 @@ y &amp;= \frac{x}{A * r} \\
 <p>Overplot: <span class="math display">\[P_G(d) = \frac{C}{\sigma \sqrt{2\pi}} e^{-\frac{d^2}{2\sigma ^2}}\]</span></p>
 <p>Careful with normalization! <span class="math inline">\(P_B(d;n,p)\)</span> is normalized so that its total is 1. When using <span class="math inline">\(d=2x-n\)</span> with <span class="math inline">\(n\)</span> as an even number, <span class="math inline">\(d\)</span> must be an even number. There are only 101 possible positions. On the other hand, <span class="math inline">\(P_G(d)\)</span> does not require <span class="math inline">\(d\)</span> to be even (or an integer for that matter) and has twice as many possible positions.</p>
 <p>I recommend that the plot is log/linear with the vertical axis (probability) range of <span class="math inline">\(10^{-5}\)</span> to <span class="math inline">\(1\)</span>. Don’t print it out yet. See below.</p>
-<div id="cell-31" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> rand_walk():</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,n<span class="op">=</span><span class="dv">100</span>,p<span class="op">=</span><span class="fl">0.5</span>,step_size<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.n <span class="op">=</span> n          <span class="co">#number of steps</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.p <span class="op">=</span> p          <span class="co">#probability of right (positive) step</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.q <span class="op">=</span> <span class="dv">1</span><span class="op">-</span>p        <span class="co">#probability of left step</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.step_size <span class="op">=</span> step_size</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="va">self</span>.n<span class="op">+</span><span class="va">self</span>.step_size,<span class="va">self</span>.step_size)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d <span class="op">=</span> <span class="va">self</span>.distance(x<span class="op">=</span><span class="va">self</span>.x,n<span class="op">=</span><span class="va">self</span>.n)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> distance(<span class="va">self</span>,x,n):     <span class="co"># d</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>x <span class="op">-</span>n</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> d</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># function to calculate binomial probability P(x;n,p) (probability of final position x)</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> P_Binomial(<span class="va">self</span>,x,n,p,q):                             </span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        numerator <span class="op">=</span> math.factorial(n)                           <span class="co"># fraction numerator: n!</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        denominator <span class="op">=</span> math.factorial(n<span class="op">-</span>x)<span class="op">*</span>math.factorial(x)     <span class="co"># fraction denominator: (n-x)!x!</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        fraction <span class="op">=</span> numerator<span class="op">/</span>denominator</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        px <span class="op">=</span> p<span class="op">**</span>x                                               <span class="co"># p^x</span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        qnx <span class="op">=</span> q<span class="op">**</span>(n<span class="op">-</span>x)                                          <span class="co"># q^(n-x) = (1-p)^(n-x)</span></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fraction<span class="op">*</span>px<span class="op">*</span>qnx                                  <span class="co"># [n!/((n-x)!x!)]*(p^x)*(q*(n-x))</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_mu_sig(<span class="va">self</span>):</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu <span class="op">=</span> np.<span class="bu">sum</span>(<span class="va">self</span>.x)<span class="op">/</span><span class="va">self</span>.n</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sigma <span class="op">=</span> np.sqrt(<span class="va">self</span>.n)</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> P_Gaussian(<span class="va">self</span>,x):</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_mu_sig()</span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>        power <span class="op">=</span> <span class="op">-</span>(x<span class="op">-</span><span class="va">self</span>.mu)<span class="op">**</span><span class="dv">2</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>(<span class="va">self</span>.sigma<span class="op">**</span><span class="dv">2</span>))         </span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>        denominator <span class="op">=</span> <span class="va">self</span>.sigma<span class="op">*</span>np.sqrt(<span class="dv">2</span><span class="op">*</span>np.pi)               </span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (<span class="dv">1</span><span class="op">/</span>denominator)<span class="op">*</span>np.exp(power)    </span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> Q3_plot(<span class="va">self</span>):</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Pb <span class="op">=</span> [<span class="va">self</span>.P_Binomial(x<span class="op">=</span>i,n<span class="op">=</span><span class="va">self</span>.n,p<span class="op">=</span><span class="va">self</span>.p,q<span class="op">=</span><span class="va">self</span>.q) <span class="cf">for</span> i <span class="kw">in</span> <span class="va">self</span>.x]</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Pg <span class="op">=</span> [<span class="va">self</span>.P_Gaussian(x<span class="op">=</span>i) <span class="cf">for</span> i <span class="kw">in</span> <span class="va">self</span>.x]</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>        plt.figure()</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.d,<span class="va">self</span>.Pb,label <span class="op">=</span> <span class="st">'Binomial'</span>)</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.d,<span class="va">self</span>.Pg,<span class="st">'--'</span>, label <span class="op">=</span> <span class="st">'Gaussian'</span>)</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'P(d)'</span>)</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="st">'Q3.a: Binomial and Gaussian'</span>)</span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>        plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-33" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> rand_walk():</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,n<span class="op">=</span><span class="dv">100</span>,p<span class="op">=</span><span class="fl">0.5</span>,step_size<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.n <span class="op">=</span> n          <span class="co">#number of steps</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.p <span class="op">=</span> p          <span class="co">#probability of right (positive) step</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.q <span class="op">=</span> <span class="dv">1</span><span class="op">-</span>p        <span class="co">#probability of left step</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.step_size <span class="op">=</span> step_size</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="va">self</span>.n<span class="op">+</span><span class="va">self</span>.step_size,<span class="va">self</span>.step_size)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d <span class="op">=</span> <span class="va">self</span>.distance(x<span class="op">=</span><span class="va">self</span>.x,n<span class="op">=</span><span class="va">self</span>.n)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> distance(<span class="va">self</span>,x,n):     <span class="co"># d</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>x <span class="op">-</span>n</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> d</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># function to calculate binomial probability P(x;n,p) (probability of final position x)</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> P_Binomial(<span class="va">self</span>,x,n,p,q):                             </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        numerator <span class="op">=</span> math.factorial(n)                           <span class="co"># fraction numerator: n!</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        denominator <span class="op">=</span> math.factorial(n<span class="op">-</span>x)<span class="op">*</span>math.factorial(x)     <span class="co"># fraction denominator: (n-x)!x!</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        fraction <span class="op">=</span> numerator<span class="op">/</span>denominator</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        px <span class="op">=</span> p<span class="op">**</span>x                                               <span class="co"># p^x</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>        qnx <span class="op">=</span> q<span class="op">**</span>(n<span class="op">-</span>x)                                          <span class="co"># q^(n-x) = (1-p)^(n-x)</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fraction<span class="op">*</span>px<span class="op">*</span>qnx                                  <span class="co"># [n!/((n-x)!x!)]*(p^x)*(q*(n-x))</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_mu_sig(<span class="va">self</span>):</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu <span class="op">=</span> np.<span class="bu">sum</span>(<span class="va">self</span>.x)<span class="op">/</span><span class="va">self</span>.n</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sigma <span class="op">=</span> np.sqrt(<span class="va">self</span>.n)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> P_Gaussian(<span class="va">self</span>,x):</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_mu_sig()</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>        power <span class="op">=</span> <span class="op">-</span>(x<span class="op">-</span><span class="va">self</span>.mu)<span class="op">**</span><span class="dv">2</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>(<span class="va">self</span>.sigma<span class="op">**</span><span class="dv">2</span>))         </span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>        denominator <span class="op">=</span> <span class="va">self</span>.sigma<span class="op">*</span>np.sqrt(<span class="dv">2</span><span class="op">*</span>np.pi)               </span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (<span class="dv">1</span><span class="op">/</span>denominator)<span class="op">*</span>np.exp(power)    </span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> Q3_plot(<span class="va">self</span>):</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Pb <span class="op">=</span> [<span class="va">self</span>.P_Binomial(x<span class="op">=</span>i,n<span class="op">=</span><span class="va">self</span>.n,p<span class="op">=</span><span class="va">self</span>.p,q<span class="op">=</span><span class="va">self</span>.q) <span class="cf">for</span> i <span class="kw">in</span> <span class="va">self</span>.x]</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Pg <span class="op">=</span> [<span class="va">self</span>.P_Gaussian(x<span class="op">=</span>i) <span class="cf">for</span> i <span class="kw">in</span> <span class="va">self</span>.x]</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>        plt.figure()</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.d,<span class="va">self</span>.Pb,label <span class="op">=</span> <span class="st">'Binomial'</span>)</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.d,<span class="va">self</span>.Pg,<span class="st">'--'</span>, label <span class="op">=</span> <span class="st">'Gaussian'</span>)</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'P(d)'</span>)</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="st">'Q3.a: Binomial and Gaussian'</span>)</span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>        plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-32" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fl">0.5</span> </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>rw <span class="op">=</span> rand_walk(n<span class="op">=</span>n,p<span class="op">=</span>p)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>rw.Q3_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-34" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="fl">0.5</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>rw <span class="op">=</span> rand_walk(n<span class="op">=</span>n,p<span class="op">=</span>p)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>rw.Q3_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="hw2_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="hw2_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -563,55 +609,55 @@ y &amp;= \frac{x}{A * r} \\
 </figure>
 </div>
 <p>Hint: Implement a random walk program with <span class="math inline">\(n=100\)</span> steps by calling a uniform random number then comparing to the right-step probability, which is a function of position. Record the end position. Loop ~100,000 times and make a histogram of the end positions.</p>
-<div id="cell-34" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> rand_slope_walk(rand_walk):</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,slope_const<span class="op">=</span><span class="fl">0.01</span>,n<span class="op">=</span><span class="dv">100</span>,step_size<span class="op">=</span><span class="dv">1</span>,p<span class="op">=</span><span class="fl">0.5</span>):</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(n<span class="op">=</span><span class="dv">100</span>,step_size<span class="op">=</span><span class="dv">1</span>,p<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.slope <span class="op">=</span> slope_const<span class="op">*</span><span class="va">self</span>.d             <span class="co"># defaults to slope = 0.01d</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.P_right <span class="op">=</span> p <span class="op">-</span> <span class="va">self</span>.slope</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_xn(<span class="va">self</span>,ntrial,normalize <span class="op">=</span> <span class="va">True</span>):</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xn <span class="op">=</span> np.zeros(<span class="bu">len</span>(<span class="va">self</span>.d))</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.wh <span class="op">=</span> np.where(<span class="va">self</span>.d <span class="op">==</span> <span class="fl">0.0</span>)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(ntrial):</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>            i <span class="op">=</span> <span class="va">self</span>.wh[<span class="dv">0</span>]</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">int</span>(<span class="va">self</span>.n<span class="op">/</span><span class="dv">2</span>)):</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (rnd.random() <span class="op">&lt;=</span> <span class="va">self</span>.P_right[i]):</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>                    i <span class="op">=</span> i<span class="op">+</span><span class="va">self</span>.step_size</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>                    i <span class="op">=</span> i<span class="op">-</span><span class="va">self</span>.step_size</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.xn[<span class="bu">int</span>(np.<span class="bu">round</span>(i))] <span class="op">+=</span> <span class="fl">1.0</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> normalize:</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.xn <span class="op">=</span> <span class="va">self</span>.xn<span class="op">/</span>ntrial</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.xn</span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_walk_count(<span class="va">self</span>,title<span class="op">=</span><span class="st">'Random Walk Distribution'</span>,ntrial<span class="op">=</span><span class="dv">1000</span>,normalize_xn<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_xn(ntrial,normalize<span class="op">=</span>normalize_xn)</span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>        plt.bar(<span class="va">self</span>.d,<span class="va">self</span>.xn)</span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
-<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'count'</span>)</span>
-<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-36" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> rand_slope_walk(rand_walk):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,slope_const<span class="op">=</span><span class="fl">0.01</span>,n<span class="op">=</span><span class="dv">100</span>,step_size<span class="op">=</span><span class="dv">1</span>,p<span class="op">=</span><span class="fl">0.5</span>):</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(n<span class="op">=</span><span class="dv">100</span>,step_size<span class="op">=</span><span class="dv">1</span>,p<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.slope <span class="op">=</span> slope_const<span class="op">*</span><span class="va">self</span>.d             <span class="co"># defaults to slope = 0.01d</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.P_right <span class="op">=</span> p <span class="op">-</span> <span class="va">self</span>.slope</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_xn(<span class="va">self</span>,ntrial,normalize <span class="op">=</span> <span class="va">True</span>):</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xn <span class="op">=</span> np.zeros(<span class="bu">len</span>(<span class="va">self</span>.d))</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.wh <span class="op">=</span> np.where(<span class="va">self</span>.d <span class="op">==</span> <span class="fl">0.0</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(ntrial):</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>            i <span class="op">=</span> <span class="va">self</span>.wh[<span class="dv">0</span>]</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">int</span>(<span class="va">self</span>.n<span class="op">/</span><span class="dv">2</span>)):</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (rnd.random() <span class="op">&lt;=</span> <span class="va">self</span>.P_right[i]):</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>                    i <span class="op">=</span> i<span class="op">+</span><span class="va">self</span>.step_size</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                    i <span class="op">=</span> i<span class="op">-</span><span class="va">self</span>.step_size</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.xn[<span class="bu">int</span>(np.<span class="bu">round</span>(i))] <span class="op">+=</span> <span class="fl">1.0</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> normalize:</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.xn <span class="op">=</span> <span class="va">self</span>.xn<span class="op">/</span>ntrial</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.xn</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_walk_count(<span class="va">self</span>,title<span class="op">=</span><span class="st">'Random Walk Distribution'</span>,ntrial<span class="op">=</span><span class="dv">1000</span>,normalize_xn<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_xn(ntrial,normalize<span class="op">=</span>normalize_xn)</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>        plt.bar(<span class="va">self</span>.d,<span class="va">self</span>.xn)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'count'</span>)</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-35" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ntrials <span class="op">=</span> <span class="dv">100000</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rwb <span class="op">=</span> rand_slope_walk(step_size<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>rwb.plot_walk_count(title<span class="op">=</span><span class="st">'Q3.b: Random Walk (Valley) Distribution; n-trials=</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(ntrials),</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>ntrial<span class="op">=</span>ntrials)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-37" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ntrials <span class="op">=</span> <span class="dv">100000</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>rwb <span class="op">=</span> rand_slope_walk(step_size<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>rwb.plot_walk_count(title<span class="op">=</span><span class="st">'Q3.b: Random Walk (Valley) Distribution; n-trials=</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(ntrials),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>ntrial<span class="op">=</span>ntrials)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: total: 17.4 s
-Wall time: 17.5 s</code></pre>
+<pre><code>CPU times: total: 15.6 s
+Wall time: 15.7 s</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="hw2_files/figure-html/cell-18-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="hw2_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -621,21 +667,21 @@ Wall time: 17.5 s</code></pre>
 <h2 class="anchored" data-anchor-id="part-c-2">Part (c)</h2>
 <p>Now put the lamppost (<span class="math inline">\(x=0\)</span>) at the top of a parabolic hill so that the <span class="math inline">\(\text{slope}= -0.01 d\)</span>. Overplot your results. What is <span class="math inline">\(\sigma\)</span>?</p>
 <p>Note: You will notice that your results look Gaussian. However, the central limit theory does <strong>not</strong> necessarily apply for steps (b) and (c). Save your code for the next problem when we look at power-law tails.</p>
-<div id="cell-37" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ntrials<span class="op">=</span><span class="dv">100000</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>rwc <span class="op">=</span> rand_slope_walk(slope_const<span class="op">=-</span><span class="fl">0.01</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>rwc.plot_walk_count(title<span class="op">=</span><span class="st">'Q3.c: Random Walk (Hill) Distribution; n-trials=</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(ntrials),</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>ntrial<span class="op">=</span>ntrials)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-39" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ntrials<span class="op">=</span><span class="dv">100000</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>rwc <span class="op">=</span> rand_slope_walk(slope_const<span class="op">=-</span><span class="fl">0.01</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>rwc.plot_walk_count(title<span class="op">=</span><span class="st">'Q3.c: Random Walk (Hill) Distribution; n-trials=</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(ntrials),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ntrial<span class="op">=</span>ntrials)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: total: 16.4 s
-Wall time: 16.4 s</code></pre>
+<pre><code>CPU times: total: 15.1 s
+Wall time: 15.2 s</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="hw2_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="hw2_files/figure-html/cell-20-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -647,62 +693,62 @@ Wall time: 16.4 s</code></pre>
 <p>In this problem, we repeat problem 3 with a new caveat. His/her step size is 0.50 (whatever units) but increases with absolute value of his/her current position: <span class="math display">\[\text{Step} = 0.5 + |x| * 0.025\]</span></p>
 <p>Let the number of steps be <span class="math inline">\(n=400\)</span> (half the original step size, so four times the number of steps). Implement a random walk program with <span class="math inline">\(n=400\)</span> steps by calling a uniform random number then comparing to the right-step probability, in this case 1/2. Record the end position. Loop ~100,000 times and make a histogram of the end positions.</p>
 <p>Calculate <span class="math inline">\(\sigma\)</span>. The mean should be zero. Overplot a Gaussian with the calculated <span class="math inline">\(\sigma\)</span>. Is the resulting distribution a Gaussian?</p>
-<div id="cell-39" class="cell" data-execution_count="42">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> rand_power_law(rand_walk):</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, n<span class="op">=</span><span class="dv">100</span>, p<span class="op">=</span><span class="fl">0.5</span>,step0_size<span class="op">=</span><span class="fl">0.5</span>):</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(n, p)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.P_right <span class="op">=</span> p</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.step0_size <span class="op">=</span> step0_size</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d <span class="op">=</span> <span class="va">self</span>.step_size<span class="op">*</span><span class="va">self</span>.x <span class="op">-</span> n</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> nearest_value_idx(<span class="va">self</span>,x,value):</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        idx <span class="op">=</span> np.<span class="bu">abs</span>(np.asarray(x) <span class="op">-</span> value).argmin()</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> idx</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_xn(<span class="va">self</span>,ntrial,normalize <span class="op">=</span> <span class="va">True</span>):</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xn <span class="op">=</span> np.zeros(<span class="bu">len</span>(<span class="va">self</span>.d))</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.wh <span class="op">=</span> np.where(<span class="va">self</span>.d <span class="op">==</span> <span class="fl">0.0</span>)</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(ntrial):</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>            i <span class="op">=</span> <span class="va">self</span>.wh[<span class="dv">0</span>]</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>            step <span class="op">=</span> <span class="va">self</span>.step0_size</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">int</span>(<span class="va">self</span>.n<span class="op">/</span><span class="dv">2</span>)):</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (rnd.random() <span class="op">&lt;=</span> <span class="va">self</span>.P_right):</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>                    i <span class="op">=</span> i<span class="op">+</span>step</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>                    i <span class="op">=</span> i<span class="op">-</span>step</span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>                nearest_x <span class="op">=</span> <span class="va">self</span>.nearest_value_idx(<span class="va">self</span>.x,i)</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>                step <span class="op">=</span> <span class="fl">0.5</span> <span class="op">+</span> np.<span class="bu">abs</span>(<span class="va">self</span>.x[nearest_x])<span class="op">*</span><span class="fl">0.025</span></span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.xn[nearest_x] <span class="op">+=</span> <span class="fl">1.0</span></span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> normalize:</span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.xn <span class="op">=</span> <span class="va">self</span>.xn<span class="op">/</span>ntrial</span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.xn</span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_walk_count(<span class="va">self</span>,title<span class="op">=</span><span class="st">'Random Walk Distribution'</span>,ntrial<span class="op">=</span><span class="dv">1000</span>,normalize_xn<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_xn(ntrial,normalize<span class="op">=</span>normalize_xn)</span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>        plt.bar(<span class="va">self</span>.d,<span class="va">self</span>.xn)</span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
-<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'count'</span>)</span>
-<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-41" class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> rand_power_law(rand_walk):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, n<span class="op">=</span><span class="dv">100</span>, p<span class="op">=</span><span class="fl">0.5</span>,step0_size<span class="op">=</span><span class="fl">0.5</span>):</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(n, p)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.P_right <span class="op">=</span> p</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.step0_size <span class="op">=</span> step0_size</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.d <span class="op">=</span> <span class="va">self</span>.step_size<span class="op">*</span><span class="va">self</span>.x <span class="op">-</span> n</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> nearest_value_idx(<span class="va">self</span>,x,value):</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        idx <span class="op">=</span> np.<span class="bu">abs</span>(np.asarray(x) <span class="op">-</span> value).argmin()</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> idx</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_xn(<span class="va">self</span>,ntrial,normalize <span class="op">=</span> <span class="va">True</span>):</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xn <span class="op">=</span> np.zeros(<span class="bu">len</span>(<span class="va">self</span>.d))</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.wh <span class="op">=</span> np.where(<span class="va">self</span>.d <span class="op">==</span> <span class="fl">0.0</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(ntrial):</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>            i <span class="op">=</span> <span class="va">self</span>.wh[<span class="dv">0</span>]</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>            step <span class="op">=</span> <span class="va">self</span>.step0_size</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">int</span>(<span class="va">self</span>.n<span class="op">/</span><span class="dv">2</span>)):</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (rnd.random() <span class="op">&lt;=</span> <span class="va">self</span>.P_right):</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>                    i <span class="op">=</span> i<span class="op">+</span>step</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>                    i <span class="op">=</span> i<span class="op">-</span>step</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>                nearest_x <span class="op">=</span> <span class="va">self</span>.nearest_value_idx(<span class="va">self</span>.x,i)</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>                step <span class="op">=</span> <span class="fl">0.5</span> <span class="op">+</span> np.<span class="bu">abs</span>(<span class="va">self</span>.x[nearest_x])<span class="op">*</span><span class="fl">0.025</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.xn[nearest_x] <span class="op">+=</span> <span class="fl">1.0</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> normalize:</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.xn <span class="op">=</span> <span class="va">self</span>.xn<span class="op">/</span>ntrial</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.xn</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_walk_count(<span class="va">self</span>,title<span class="op">=</span><span class="st">'Random Walk Distribution'</span>,ntrial<span class="op">=</span><span class="dv">1000</span>,normalize_xn<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_xn(ntrial,normalize<span class="op">=</span>normalize_xn)</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>        plt.bar(<span class="va">self</span>.d,<span class="va">self</span>.xn)</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'count'</span>)</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-40" class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">abs</span>(rwpl.x <span class="op">-</span> <span class="fl">0.5</span>).argmin()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-42" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">abs</span>(rwpl.x <span class="op">-</span> <span class="fl">0.5</span>).argmin()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="43">
 <pre><code>0</code></pre>
 </div>
 </div>
-<div id="cell-41" class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>ntrials<span class="op">=</span><span class="dv">100000</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>rwpl <span class="op">=</span> rand_power_law(n<span class="op">=</span><span class="dv">400</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>rwpl.plot_walk_count(title<span class="op">=</span><span class="st">'Q3.c: Random Walk (Hill) Distribution; n-trials=</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(ntrials),</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>ntrial<span class="op">=</span>ntrials)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-43" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>ntrials<span class="op">=</span><span class="dv">100000</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>rwpl <span class="op">=</span> rand_power_law(n<span class="op">=</span><span class="dv">400</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>rwpl.plot_walk_count(title<span class="op">=</span><span class="st">'Q3.c: Random Walk (Hill) Distribution; n-trials=</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(ntrials),</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>ntrial<span class="op">=</span>ntrials)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>CPU times: total: 7min 58s
 Wall time: 9min 4s</code></pre>
@@ -710,7 +756,7 @@ Wall time: 9min 4s</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="hw2_files/figure-html/cell-22-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="hw2_files/figure-html/cell-23-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
