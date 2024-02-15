@@ -394,6 +394,19 @@ class rand_walk(binomial,gaussian):
         plt.title(title)
         plt.legend()
         plt.show()
+    
+    def plot_walk_count(self,title='Random Walk Distribution',
+                        ntrial=1000,
+                        bar_width=15.0,
+                        bar_edge_color = 'black',
+                        normalize_xn=True):
+        self.get_xn(ntrial,normalize=normalize_xn)
+
+        plt.bar(self.d,self.xn,width=bar_width,edgecolor=bar_edge_color)
+        plt.xlabel('d')
+        plt.ylabel('count')
+        plt.title(title)
+        plt.show()
 
 # %% [markdown]
 # # Random walk with Slope
@@ -438,19 +451,8 @@ class rand_slope_walk(rand_walk):
         self.mu = np.sum(self.d*self.xn)
         self.xbar2 = np.sum((self.d.astype('float')**2)*self.xn)
         self.sigma = np.sqrt(self.xbar2 - self.mu)
-        return 
+        return
     
-    def plot_walk_count(self,title='Random Walk Distribution',
-                        ntrial=1000,
-                        bar_width=15.0,
-                        normalize_xn=True):
-        self.get_xn(ntrial,normalize=normalize_xn)
-
-        plt.bar(self.d,self.xn,width=bar_width)
-        plt.xlabel('d')
-        plt.ylabel('count')
-        plt.title(title)
-        plt.show()
 
 # %% [markdown]
 # # Not so Random Walk: Power Law
@@ -465,8 +467,10 @@ class rand_slope_walk(rand_walk):
 # %%
 class rand_power_law(rand_walk):
     # TODO: add documentation to these functions
-    def __init__(self, n=100, p=0.5, step0_size=0.5):
-        super().__init__(n, p)
+    def __init__(self, n=100, p=0.5, step0_size=0.5, step=1.0):
+        super().__init__(n, p, step)
+        self.x = np.arange(0,self.n+step,step)
+        self.d = self.distance(x=self.x,n=self.n)
         self.P_right = p
         self.step0_size = step0_size
 
@@ -486,7 +490,7 @@ class rand_power_law(rand_walk):
                     i = i+step
                 else:
                     i = i-step
-                nearest_x = self.nearest_value_idx(self.x,i)
+                nearest_x = self.nearest_value_idx(self.x,i.astype('float'))
                 step = 0.5 + np.abs(self.x[nearest_x])*0.025
             self.xn[nearest_x] += 1.0
         
