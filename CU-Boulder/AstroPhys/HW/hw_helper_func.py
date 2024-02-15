@@ -216,6 +216,10 @@ class poisson(helper):
         mu : float
             mean occurence of value x
 
+            This one especially HAS to be a float for this probability function,
+            otherwise the `np.power(mu,x)` (to calculate mu^x portion) doesn't work properly and 
+            will end up with weird (like negative) probabilities
+
         Returns
         -------
         Pp : float
