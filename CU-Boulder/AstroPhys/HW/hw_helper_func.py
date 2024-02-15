@@ -238,7 +238,7 @@ class poisson(helper):
         Pp = fraction*e_mu                          # P(x;mu) = [(mu^x)/x!] * e^(-mu)
         return Pp
     
-    def plot_poisson(self,title="Poisson Distribution",label="Poisson",color='tab:orang'):
+    def plot_poisson(self,title="Poisson Distribution",label="Poisson",color='tab:orange'):
         self.Px = self.P_poisson(x=self.x,mu=self.mu)
         
         plt.plot(self.x,self.Px, label=label,c=color)
