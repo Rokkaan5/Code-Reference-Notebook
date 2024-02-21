@@ -820,36 +820,40 @@ sigma = 5.843112653548922</code></pre>
 <span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.xn</span>
 <span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_mu_sig(<span class="va">self</span>):</span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu <span class="op">=</span> np.<span class="bu">sum</span>(<span class="va">self</span>.x)<span class="op">/</span><span class="va">self</span>.n</span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sigma <span class="op">=</span> np.sqrt(<span class="va">self</span>.n)</span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_rand_walk_BG(<span class="va">self</span>,title<span class="op">=</span><span class="st">'Random Walk (Binomial &amp; Gaussian)'</span>):</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_mu_sig()</span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Pb <span class="op">=</span> <span class="va">self</span>.P_binomial(x<span class="op">=</span><span class="va">self</span>.x,n<span class="op">=</span><span class="va">self</span>.n,p<span class="op">=</span><span class="va">self</span>.p,q<span class="op">=</span><span class="va">self</span>.q) </span>
-<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Pg <span class="op">=</span> <span class="va">self</span>.P_gaussian(x<span class="op">=</span><span class="va">self</span>.x,mu<span class="op">=</span><span class="va">self</span>.mu,sigma<span class="op">=</span><span class="va">self</span>.sigma)</span>
-<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>        plt.figure()</span>
-<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.d,<span class="va">self</span>.Pb,label <span class="op">=</span> <span class="st">'Binomial'</span>)</span>
-<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.d,<span class="va">self</span>.Pg,<span class="st">'--'</span>, label <span class="op">=</span> <span class="st">'Gaussian'</span>)</span>
-<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
-<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'P(d)'</span>)</span>
-<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
-<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span>
-<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
-<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_walk_count(<span class="va">self</span>,title<span class="op">=</span><span class="st">'Random Walk Distribution'</span>,</span>
-<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>                        ntrial<span class="op">=</span><span class="dv">1000</span>,</span>
-<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>                        bar_width<span class="op">=</span><span class="fl">15.0</span>,</span>
-<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>                        bar_edge_color <span class="op">=</span> <span class="st">'black'</span>,</span>
-<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>                        normalize_xn<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_xn(ntrial,normalize<span class="op">=</span>normalize_xn)</span>
-<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>        plt.bar(<span class="va">self</span>.d,<span class="va">self</span>.xn,width<span class="op">=</span>bar_width,edgecolor<span class="op">=</span>bar_edge_color)</span>
-<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
-<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'count'</span>)</span>
-<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
-<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a>        plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self.mu = np.sum(self.x)/self.n</span></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self.sigma = np.sqrt(self.n)</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu <span class="op">=</span> np.<span class="bu">sum</span>(<span class="va">self</span>.x)<span class="op">/</span><span class="va">self</span>.n</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sigma <span class="op">=</span> np.sqrt(np.<span class="bu">sum</span>((<span class="va">self</span>.mu <span class="op">-</span> <span class="va">self</span>.x))<span class="op">**</span><span class="dv">2</span><span class="op">/</span><span class="va">self</span>.n)  <span class="co">#sigma from 2/5/2024 notes</span></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># self.sigma = np.sqrt(4*self.p*self.q*self.n)              #"exact" sigma from PHYS220</span></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_rand_walk_BG(<span class="va">self</span>,title<span class="op">=</span><span class="st">'Random Walk (Binomial &amp; Gaussian)'</span>):</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_mu_sig()</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Pb <span class="op">=</span> <span class="va">self</span>.P_binomial(x<span class="op">=</span><span class="va">self</span>.x,n<span class="op">=</span><span class="va">self</span>.n,p<span class="op">=</span><span class="va">self</span>.p,q<span class="op">=</span><span class="va">self</span>.q) </span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.Pg <span class="op">=</span> <span class="va">self</span>.P_gaussian(x<span class="op">=</span><span class="va">self</span>.x,mu<span class="op">=</span><span class="va">self</span>.mu,sigma<span class="op">=</span><span class="va">self</span>.sigma)</span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>        plt.figure()</span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.d,<span class="va">self</span>.Pb,label <span class="op">=</span> <span class="st">'Binomial'</span>)</span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.d,<span class="va">self</span>.Pg,<span class="st">'--'</span>, label <span class="op">=</span> <span class="st">'Gaussian'</span>)</span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'P(d)'</span>)</span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>        plt.show()</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_walk_count(<span class="va">self</span>,title<span class="op">=</span><span class="st">'Random Walk Distribution'</span>,</span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>                        ntrial<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>                        bar_width<span class="op">=</span><span class="fl">15.0</span>,</span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>                        bar_edge_color <span class="op">=</span> <span class="st">'black'</span>,</span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>                        normalize_xn<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.get_xn(ntrial,normalize<span class="op">=</span>normalize_xn)</span>
+<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a>        plt.bar(<span class="va">self</span>.d,<span class="va">self</span>.xn,width<span class="op">=</span>bar_width,edgecolor<span class="op">=</span>bar_edge_color)</span>
+<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'d'</span>)</span>
+<span id="cb25-63"><a href="#cb25-63" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'count'</span>)</span>
+<span id="cb25-64"><a href="#cb25-64" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
+<span id="cb25-65"><a href="#cb25-65" aria-hidden="true" tabindex="-1"></a>        plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-43" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
@@ -924,15 +928,15 @@ sigma = 5.843112653548922</code></pre>
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: total: 17.5 s
-Wall time: 17.8 s</code></pre>
+<pre><code>CPU times: total: 19.5 s
+Wall time: 19.9 s</code></pre>
 </div>
 </div>
 <div id="cell-47" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rwb.get_mu_sig()</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"sigma ="</span>,rwb.sigma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>sigma = 7.036348484832172</code></pre>
+<pre><code>sigma = 7.039670446832011</code></pre>
 </div>
 </div>
 </section>
@@ -956,15 +960,15 @@ Wall time: 17.8 s</code></pre>
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: total: 17.8 s
-Wall time: 18 s</code></pre>
+<pre><code>CPU times: total: 25.1 s
+Wall time: 25.5 s</code></pre>
 </div>
 </div>
 <div id="cell-50" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>rwc.get_mu_sig()</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"sigma ="</span>,rwc.sigma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>sigma = 45.27248524214239</code></pre>
+<pre><code>sigma = 45.164606053855934</code></pre>
 </div>
 </div>
 </section>
@@ -1025,8 +1029,8 @@ Wall time: 18 s</code></pre>
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>CPU times: total: 35.2 s
-Wall time: 35.8 s</code></pre>
+<pre><code>CPU times: total: 34.1 s
+Wall time: 34.5 s</code></pre>
 </div>
 </div>
 </section>
