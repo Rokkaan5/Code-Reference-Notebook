@@ -378,7 +378,7 @@ class rand_walk(binomial,gaussian):
  
     def get_mu_sig(self):
         self.mu = np.sum(self.x)/self.n
-        self.sigma = np.sqrt(self.n)
+        self.sigma = np.sqrt(np.sum((self.mu - self.x))**2/self.n)  #sigma from 2/5/2024 notes
         return
 
     def plot_rand_walk_BG(self,title='Random Walk (Binomial & Gaussian)'):
