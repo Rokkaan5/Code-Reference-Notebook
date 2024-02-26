@@ -159,53 +159,60 @@ window.Quarto = {
 </header>
 
 
+<div id="cell-1" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <section id="joint-probability-and-find-the-gap" class="level1">
 <h1>1. Joint Probability and Find the Gap</h1>
 <p>Suppose the goal is to take a series of images of galaxies which necessitates very long exposures in a narrow field-of-view (FOV). The expected (mean) number of galaxies in this FOV is <span class="math inline">\(19.3\)</span>.</p>
 <section id="part-a" class="level2">
 <h2 class="anchored" data-anchor-id="part-a">Part (a)</h2>
 <p>How many exposures in separate FOVs are needed so that the probability of seeing at least 100 galaxies is greater than 50%? (Think simple!)</p>
-<div id="cell-3" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""Asked Github CoPilot: if mean number of galaxies per image is 19.3, </span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">how many images are needed so that the probability of 100 total galaxies is greater 50%"""</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>mean_galaxies_per_image <span class="op">=</span> <span class="fl">19.3</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>target_galaxies <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the probability of observing less than or equal to 99 galaxies in a single image</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>prob_less_than_100 <span class="op">=</span> stats.poisson.cdf(target_galaxies, mean_galaxies_per_image)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of images needed</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>num_images_needed <span class="op">=</span> stats.poisson.ppf(<span class="dv">1</span><span class="op">-</span> prob_less_than_100, mean_galaxies_per_image)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>num_images_needed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>-1.0</code></pre>
+<div id="cell-4" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> n_FOV(x, expected_x_per_FOV<span class="op">=</span><span class="fl">19.3</span>,min_probability<span class="op">=</span><span class="fl">0.5</span>):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> min_probability<span class="op">*</span>(x<span class="op">/</span>expected_x_per_FOV)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div id="cell-5" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>expected_n_galaxies <span class="op">=</span><span class="fl">19.3</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>min_prob <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x_galaxies <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> n_FOV(x<span class="op">=</span>x_galaxies,expected_x_per_FOV<span class="op">=</span>expected_n_galaxies,min_probability<span class="op">=</span>min_prob)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Need at least </span><span class="sc">{}</span><span class="st"> FOV exposures"</span>.<span class="bu">format</span>(<span class="bu">round</span>(n)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Need at least 3 FOV exposures</code></pre>
 </div>
-<div id="cell-4" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># clearly above is wrong since you can't have "negative" number of images</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="part-b" class="level2">
 <h2 class="anchored" data-anchor-id="part-b">Part (b)</h2>
 <p>Your proposal review insists that you need at least 100 galaxies and requires a 99% chance that you will succeed. How many exposures do you need now?</p>
-<div id="cell-6" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Once part (a) is figured out, just change 50% to 99% and solve accordingly</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-7" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>expected_n_galaxies <span class="op">=</span><span class="fl">19.3</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>min_prob <span class="op">=</span> <span class="fl">0.99</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>x_galaxies <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> n_FOV(x<span class="op">=</span>x_galaxies,expected_x_per_FOV<span class="op">=</span>expected_n_galaxies,min_probability<span class="op">=</span>min_prob)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Need at least </span><span class="sc">{}</span><span class="st"> FOV exposures"</span>.<span class="bu">format</span>(<span class="bu">round</span>(n)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Need at least 5 FOV exposures</code></pre>
+</div>
 </div>
 </section>
 <section id="part-c" class="level2">
 <h2 class="anchored" data-anchor-id="part-c">Part (c)</h2>
-<p>There is a problem, however. A “contaminating” star is one that is bright enough to saturate the image to the point that one cannot determine the properties of galaxies. The expected (mean) number of “contaminating” stars one FOV is <span class="math inline">\(5.1\)</span>. Your assignment is to find enough FOVs in the sky without contaminating stars to get the needed long-term exposures. Your advisor (who did not take statistics) comes up with a simple plan. Divide the sky in sectors, each with an area of the FOV with no overlap and take a short images; a contaminating star will emerge quickly. How many sectors do you do you expect to examine to find enough uncontaminated FOVs?</p>
+<p>There is a problem, however. A “contaminating” star is one that is bright enough to saturate the image to the point that one cannot determine the properties of galaxies. The expected (mean) number of “contaminating” stars one FOV is <span class="math inline">\(5.1\)</span>. Your assignment is to find enough FOVs in the sky without contaminating stars to get the needed long-term exposures. Your advisor (who did not take statistics) comes up with a simple plan. Divide the sky in sectors, each with an area of the FOV with no overlap and take a short images; a contaminating star will emerge quickly. How many sectors do you expect to examine to find enough uncontaminated FOVs?</p>
 </section>
 <section id="part-d" class="level2">
 <h2 class="anchored" data-anchor-id="part-d">Part (d)</h2>
 <p>What an effort! But another problem comes up. Due to the long exposure time and scheduling limitations of the telescope, there is a limited region of the sky that can be used. It is <span class="math inline">\(1000 \text{ as}\)</span> by <span class="math inline">\(1000 \text{ as}\)</span> whereas your FOV is a <span class="math inline">\(100 \text{ as}\)</span> diameter circle. At best there are only a little over 100 such sectors. You now remember the “Find the Gap” lecture and you realize that there are many more possible exposures. You take a star map of the entire usable region. Demonstrate you can find enough open regions. Your choice as to how.</p>
 <p><strong>Hint:</strong> One way is to create a random star map using positions as <span class="math inline">\(x= \text{uniform random}\)</span> between <span class="math inline">\(0\)</span> and <span class="math inline">\(1000 \text{ as}\)</span> and <span class="math inline">\(y= \text{uniform random}\)</span> between <span class="math inline">\(0\)</span> and <span class="math inline">\(1000 \text{ as}\)</span>. Find values on a <span class="math inline">\(1000 \times 1000\)</span> grid <span class="math inline">\([x,y]\)</span> in which no stars are within <span class="math inline">\(50 \text{ as}\)</span>.</p>
-<div id="cell-10" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check "random number" lecture material from PHYS 220</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check "random number" lecture material from PHYS 220</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -247,6 +254,9 @@ P(x) = \frac{1}{\Delta x \sqrt{2 \pi}} e^{-\frac{(x-x_0)^2}{2\Delta x^2}}
 <h2 class="anchored" data-anchor-id="part-c-2">Part (c)</h2>
 <p>The idea that GRBs are extra-galactic was difficult to accept. However, after 9 years 2512 GRBs were detected of which close to <span class="math inline">\(50\%\)</span> came from the galactic plane, which ruled out all but the most die-hard galactic-origin theories. The next test was to determine if there was any bias in GRB direction. The sky was parsed into 300 equally-sized sectors. Suppose the histogram is: <span class="math display">\[H = [0,1,2,8,9,25,37,37,40,36,41,23,23,8,3,3,2,1,1]\]</span> Does the GRB histogram match a Poisson distribution?</p>
 <p><strong>Hint:</strong> Cut and paste <span class="math inline">\(H\)</span> into your code and plot. Overplot the expected distribution of the 300 sectors. What is the most likely number of GRBs per sector (<span class="math inline">\(\mu'\)</span>)? What is <span class="math inline">\(\chi_\nu^2\)</span>? How does <span class="math inline">\(\chi_\nu^2\)</span> compare with the expected distribution? What do you conclude?</p>
+<div id="cell-25" class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">25</span>,<span class="dv">37</span>,<span class="dv">37</span>,<span class="dv">40</span>,<span class="dv">36</span>,<span class="dv">41</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="part-d-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-d-1">Part (d)</h2>
