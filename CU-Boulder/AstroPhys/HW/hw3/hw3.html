@@ -165,29 +165,36 @@ window.Quarto = {
 <section id="part-a" class="level2">
 <h2 class="anchored" data-anchor-id="part-a">Part (a)</h2>
 <p>How many exposures in separate FOVs are needed so that the probability of seeing at least 100 galaxies is greater than 50%? (Think simple!)</p>
-<div id="cell-3" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""Asked Github CoPilot: if mean number of galaxies per image is 19.3, how many images are needed so that the probability of 100 total galaxies is greater 50%"""</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>mean_galaxies_per_image <span class="op">=</span> <span class="fl">19.3</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>target_galaxies <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the probability of observing less than or equal to 99 galaxies in a single image</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>prob_less_than_100 <span class="op">=</span> stats.poisson.cdf(target_galaxies <span class="op">-</span> <span class="dv">1</span>, mean_galaxies_per_image)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of images needed</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>num_images_needed <span class="op">=</span> stats.poisson.ppf(<span class="dv">1</span> <span class="op">-</span> prob_less_than_100, mean_galaxies_per_image)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>num_images_needed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div id="cell-3" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""Asked Github CoPilot: if mean number of galaxies per image is 19.3, </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">how many images are needed so that the probability of 100 total galaxies is greater 50%"""</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> stats</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>mean_galaxies_per_image <span class="op">=</span> <span class="fl">19.3</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>target_galaxies <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the probability of observing less than or equal to 99 galaxies in a single image</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>prob_less_than_100 <span class="op">=</span> stats.poisson.cdf(target_galaxies, mean_galaxies_per_image)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of images needed</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>num_images_needed <span class="op">=</span> stats.poisson.ppf(<span class="dv">1</span><span class="op">-</span> prob_less_than_100, mean_galaxies_per_image)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>num_images_needed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>-1.0</code></pre>
 </div>
+</div>
+<div id="cell-4" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># clearly above is wrong since you can't have "negative" number of images</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="part-b" class="level2">
 <h2 class="anchored" data-anchor-id="part-b">Part (b)</h2>
 <p>Your proposal review insists that you need at least 100 galaxies and requires a 99% chance that you will succeed. How many exposures do you need now?</p>
+<div id="cell-6" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Once part (a) is figured out, just change 50% to 99% and solve accordingly</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="part-c" class="level2">
 <h2 class="anchored" data-anchor-id="part-c">Part (c)</h2>
@@ -195,8 +202,11 @@ window.Quarto = {
 </section>
 <section id="part-d" class="level2">
 <h2 class="anchored" data-anchor-id="part-d">Part (d)</h2>
-<p>What an effort! But another problem comes up. Due to the long exposure time and scheduling limitations of the telescope, there is a limited region of the sky that can be used. It is <span class="math inline">\(1000 \text{ as}\)</span> by <span class="math inline">\(1000 \text{ as}\)</span> whereas your FOV is a <span class="math inline">\(100 \text{ as}\)</span> diameter circle. At best there are only a little over 100 such sectors. You now remember the “Find the Gap” lecture and you realize that there are many more possible exposures. You take a star map of the entire usable region. Demonstarte you can find enough open regions. Your choice as to how.</p>
+<p>What an effort! But another problem comes up. Due to the long exposure time and scheduling limitations of the telescope, there is a limited region of the sky that can be used. It is <span class="math inline">\(1000 \text{ as}\)</span> by <span class="math inline">\(1000 \text{ as}\)</span> whereas your FOV is a <span class="math inline">\(100 \text{ as}\)</span> diameter circle. At best there are only a little over 100 such sectors. You now remember the “Find the Gap” lecture and you realize that there are many more possible exposures. You take a star map of the entire usable region. Demonstrate you can find enough open regions. Your choice as to how.</p>
 <p><strong>Hint:</strong> One way is to create a random star map using positions as <span class="math inline">\(x= \text{uniform random}\)</span> between <span class="math inline">\(0\)</span> and <span class="math inline">\(1000 \text{ as}\)</span> and <span class="math inline">\(y= \text{uniform random}\)</span> between <span class="math inline">\(0\)</span> and <span class="math inline">\(1000 \text{ as}\)</span>. Find values on a <span class="math inline">\(1000 \times 1000\)</span> grid <span class="math inline">\([x,y]\)</span> in which no stars are within <span class="math inline">\(50 \text{ as}\)</span>.</p>
+<div id="cell-10" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check "random number" lecture material from PHYS 220</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 <section id="multi-variant-uncertainties" class="level1">
