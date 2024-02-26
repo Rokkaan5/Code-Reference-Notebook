@@ -40,3 +40,7 @@ Any parts of any of the hw that contained coding portions
                 - top hill
     4. Not So Random Walk: Power Law
         - Step size changes based on location
+
+
+## HW3
+- [HW3](HW/hw3/hw3.html)
