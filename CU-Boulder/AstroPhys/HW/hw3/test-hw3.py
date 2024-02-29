@@ -54,8 +54,7 @@ print("Need at least {} FOV exposures".format(round(n)))
 # 
 # **Hint:** One way is to create a random star map using positions as $x= \text{uniform random}$ between $0$ and $1000 \text{ as}$ and $y= \text{uniform random}$ between $0$ and $1000 \text{ as}$. Find values on a $1000 \times 1000$ grid $[x,y]$ in which no stars are within $50 \text{ as}$.
 
-# %%
-# check "random number" lecture material from PHYS 220
+# %% Q1 Part (d)
 
 # Let's make our random x and y arrays for the random star field:
 import random
@@ -64,18 +63,17 @@ x_FOV = 1000
 y_FOV = 1000
 x_array=[]
 y_array=[]
+star_array = []    # list of tuples of star-center coordinates (xi,yi)
 for _ in range(N+1):
     xi = random.uniform(0,x_FOV)
     yi = random.uniform(0,y_FOV)
     x_array.append(xi)
     y_array.append(yi)
+    star_array.append((xi,yi))
 
-# now lets make a star array for our loop below to check against
-# star_array = []
-# for i,j in zip (x_array,y_array):
-#     element = [i,j]
-#     star_array.append(element)
-# star_array= np.array(star_array)  # np.array is a little easier to play with
+x_array = np.array(x_array)
+y_array = np.array(y_array)
+star_array = np.array(star_array)
 
 # # This is our code that checks against the random star field for circular gaps of at least 50 arcseconds
 # circ_centers = []
@@ -87,8 +85,8 @@ for _ in range(N+1):
 #         s=np.array(t[((t[::,1]>(y-R)) & ((t[::,1]<(y+R))))])
 #         if s.shape[0] == 0:
 #             circ_centers.append([x,y])
-        # circle test (see if any stars exist within 50 as radius of center)
-        # I started with box test because I think its faster, but maybe not, might just be extra uneeded step.
+#         # circle test (see if any stars exist within 50 as radius of center)
+#         # I started with box test because I think its faster, but maybe not, might just be extra uneeded step.
 #         else:
 #             s=s[((((s[::,0]-x)**2+(s[::,1]-y)**2)**(1/2))<R)]
 #             if s.shape[0] == 0:
