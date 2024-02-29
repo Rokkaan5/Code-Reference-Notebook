@@ -58,6 +58,7 @@ print("Need at least {} FOV exposures".format(round(n)))
 
 # Let's make our random x and y arrays for the random star field:
 import random
+random.seed(100)
 N = 510 # number of stars in the 1000 as by 1000 as field of view:
 x_FOV = 1000
 y_FOV = 1000
@@ -76,21 +77,14 @@ y_array = np.array(y_array)
 star_array = np.array(star_array)
 
 # # This is our code that checks against the random star field for circular gaps of at least 50 arcseconds
-# circ_centers = []
-# R = 50 # radius of FOV
-# for y in np.arange(50,951):
-#     for x in np.arange(50,951):
-#         # box test (see if any stars exist in 50 as box)
-#         t=star_array[((star_array[::,0]>(x-R)) & ((star_array[::,0]<(x+R))))]
-#         s=np.array(t[((t[::,1]>(y-R)) & ((t[::,1]<(y+R))))])
-#         if s.shape[0] == 0:
-#             circ_centers.append([x,y])
-#         # circle test (see if any stars exist within 50 as radius of center)
-#         # I started with box test because I think its faster, but maybe not, might just be extra uneeded step.
-#         else:
-#             s=s[((((s[::,0]-x)**2+(s[::,1]-y)**2)**(1/2))<R)]
-#             if s.shape[0] == 0:
-#                 circ_centers.append([x,y])
+circ_centers = []
+R = 50 # radius of FOV
+for cx in range(R,x_FOV-R+1):
+    for cy in range(R,y_FOV-R+1):
+        criteria = (x_array-cx)**2 + (y_array - cy)**2
+        if all(criteria > R**2):
+            circ_centers.append((cx,cy))
+
                                             
 # circ_centers=np.array(circ_centers)
 
