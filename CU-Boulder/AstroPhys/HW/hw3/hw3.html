@@ -185,9 +185,6 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="part-d">Part (d)</h2>
 <p>What an effort! But another problem comes up. Due to the long exposure time and scheduling limitations of the telescope, there is a limited region of the sky that can be used. It is <span class="math inline">\(1000 \text{ as}\)</span> by <span class="math inline">\(1000 \text{ as}\)</span> whereas your FOV is a <span class="math inline">\(100 \text{ as}\)</span> diameter circle. At best there are only a little over 100 such sectors. You now remember the “Find the Gap” lecture and you realize that there are many more possible exposures. You take a star map of the entire usable region. Demonstrate you can find enough open regions. Your choice as to how.</p>
 <p><strong>Hint:</strong> One way is to create a random star map using positions as <span class="math inline">\(x= \text{uniform random}\)</span> between <span class="math inline">\(0\)</span> and <span class="math inline">\(1000 \text{ as}\)</span> and <span class="math inline">\(y= \text{uniform random}\)</span> between <span class="math inline">\(0\)</span> and <span class="math inline">\(1000 \text{ as}\)</span>. Find values on a <span class="math inline">\(1000 \times 1000\)</span> grid <span class="math inline">\([x,y]\)</span> in which no stars are within <span class="math inline">\(50 \text{ as}\)</span>.</p>
-<div id="cell-10" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check "random number" lecture material from PHYS 220</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 </section>
 <section id="multi-variant-uncertainties" class="level1">
@@ -213,11 +210,11 @@ P(x) = \frac{1}{\Delta x \sqrt{2 \pi}} e^{-\frac{(x-x_0)^2}{2\Delta x^2}}
 <img src="stellar.PNG" width="300">
 </center>
 <div id="cell-17" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>delta_x <span class="op">=</span> <span class="dv">250</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> delta_x<span class="op">*</span>c</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"d = </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(d), <span class="st">"mas"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>delta_x <span class="op">=</span> <span class="dv">250</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> delta_x<span class="op">*</span>c</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"d = </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(d), <span class="st">"mas"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>d = 2500 mas</code></pre>
 </div>
@@ -232,66 +229,55 @@ P(x) = \frac{1}{\Delta x \sqrt{2 \pi}} e^{-\frac{(x-x_0)^2}{2\Delta x^2}}
 <section id="part-a-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-a-2">Part (a)</h2>
 <p>Start by dividing the sky into two equal parts; one part contains the galactic plane and the other part is the rest of the sky (which has two sub-parts, but not a concern here). Most models predicted that a majority (at least <span class="math inline">\(60 \%\)</span>) of GRBs should be detected in a <span class="math inline">\(2\pi \text{ sr}\)</span> region containing the galactic plane. To test this hypothesis, assume that <span class="math inline">\(60\)</span> of GRBs are coming from the galactic plane. Estimate (no computer) how long was it expected to take the observations to show that the fraction of events in the galactic plane is <span class="math inline">\(2\sigma\)</span> higher than <span class="math inline">\(50\%\)</span>, proving a galactic origin model.</p>
-<div id="cell-21" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>galactic_plane <span class="op">=</span> <span class="dv">60</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># FOV = 0.04 sr =&gt; rate = 1 per day</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># FOV = 2 pi sr &lt;= at least 60% of GRBs per day </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 <section id="part-b-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-b-2">Part (b)</h2>
 <p>After roughly one year, say that 166 GRBs are detected in the galactic plane out of 320 events. Let’s examine the expected value of <span class="math inline">\(r_{GP}\)</span>, the ratio of the number of events from galactic plane to the number of total events. By computer, compute and plot the Gaussian probability distribution as a function of <span class="math inline">\(r_{GP}\)</span> using the mean and <span class="math inline">\(\sigma\)</span> from the above statistics. Why Gaussian? The number of events may be a bit too high to compute Poisson statistics directly. Mark the <span class="math inline">\(\pm 2\sigma\)</span> area. Compute the CDF. What is the probability that <span class="math inline">\(r_{GP}\)</span> is <span class="math inline">\(60\%\)</span> or higher?</p>
-<div id="cell-23" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>yr1 <span class="op">=</span> <span class="dv">166</span><span class="op">/</span><span class="dv">320</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>mu <span class="op">=</span> <span class="dv">60</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi)   <span class="co"># 1 GRB per day</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 <section id="part-c-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-c-2">Part (c)</h2>
 <p>The idea that GRBs are extra-galactic was difficult to accept. However, after 9 years 2512 GRBs were detected of which close to <span class="math inline">\(50\%\)</span> came from the galactic plane, which ruled out all but the most die-hard galactic-origin theories. The next test was to determine if there was any bias in GRB direction. The sky was parsed into 300 equally-sized sectors. Suppose the histogram is: <span class="math display">\[H = [0,1,2,8,9,25,37,37,40,36,41,23,23,8,3,3,2,1,1]\]</span> Does the GRB histogram match a Poisson distribution?</p>
 <p><strong>Hint:</strong> Cut and paste <span class="math inline">\(H\)</span> into your code and plot. Overplot the expected distribution of the 300 sectors. What is the most likely number of GRBs per sector (<span class="math inline">\(\mu'\)</span>)? What is <span class="math inline">\(\chi_\nu^2\)</span>? How does <span class="math inline">\(\chi_\nu^2\)</span> compare with the expected distribution? What do you conclude?</p>
-<div id="cell-25" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os,sys</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>parent_dir <span class="op">=</span> os.path.abspath(<span class="st">".."</span>)  <span class="co"># string path to parent directory of file</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>os.chdir(parent_dir)                <span class="co"># changes cwd to specified directory path</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hw_helper_func <span class="im">import</span> poisson  </span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># I'm importing code I made separately in a different python script file</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># feel free to ask me for it if needed!</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># But it's actually the same code that I've written out in HW1 &amp; HW2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-25" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os,sys</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>parent_dir <span class="op">=</span> os.path.abspath(<span class="st">".."</span>)  <span class="co"># string path to parent directory of file</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>os.chdir(parent_dir)                <span class="co"># changes cwd to specified directory path</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hw_helper_func <span class="im">import</span> poisson  </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># I'm importing code I made separately in a different python script file</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># feel free to ask me for it if needed!</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># But it's actually the same code that I've written out in HW1 &amp; HW2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-26" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">25</span>,<span class="dv">37</span>,<span class="dv">37</span>,<span class="dv">40</span>,<span class="dv">36</span>,<span class="dv">41</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>]</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># getting the mean value based on the values of "H"</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ind <span class="op">=</span> []</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(H)):</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    ind.append(i<span class="op">*</span>H[i])</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="bu">sum</span>(ind)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> s<span class="op">/</span>(<span class="bu">sum</span>(H))</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mean (based on histogram results):"</span>,mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-26" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">25</span>,<span class="dv">37</span>,<span class="dv">37</span>,<span class="dv">40</span>,<span class="dv">36</span>,<span class="dv">41</span>,<span class="dv">23</span>,<span class="dv">23</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># getting the mean value based on the values of "H"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ind <span class="op">=</span> []</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(H)):</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    ind.append(i<span class="op">*</span>H[i])</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> <span class="bu">sum</span>(ind)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> s<span class="op">/</span>(<span class="bu">sum</span>(H))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mean (based on histogram results):"</span>,mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>mean (based on histogram results): 8.373333333333333</code></pre>
 </div>
 </div>
-<div id="cell-27" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>q3c <span class="op">=</span> poisson(x_min<span class="op">=</span><span class="dv">0</span>,x_max<span class="op">=</span><span class="bu">len</span>(H)<span class="op">-</span><span class="dv">1</span>,mu<span class="op">=</span>mean)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># print("x:",q3c.x)</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>plt.bar(q3c.x,np.array(H)<span class="op">/</span><span class="bu">sum</span>(H), label<span class="op">=</span><span class="st">'(normalized) histogram'</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>q3c.plot_poisson(title<span class="op">=</span><span class="st">"Question 3; part C"</span>,label<span class="op">=</span><span class="st">'Poisson'</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.xticks(q3c.x)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>q3c.calculate_mean_mode_sigma(x<span class="op">=</span>q3c.x,Px<span class="op">=</span>q3c.Px)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>q3c.plot_mark_mean(Px<span class="op">=</span>q3c.Px,colors<span class="op">=</span><span class="st">'red'</span>,linestyles<span class="op">=</span><span class="st">'solid'</span>)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-27" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>q3c <span class="op">=</span> poisson(x_min<span class="op">=</span><span class="dv">0</span>,x_max<span class="op">=</span><span class="bu">len</span>(H)<span class="op">-</span><span class="dv">1</span>,mu<span class="op">=</span>mean)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># print("x:",q3c.x)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.bar(q3c.x,np.array(H)<span class="op">/</span><span class="bu">sum</span>(H), label<span class="op">=</span><span class="st">'(normalized) histogram'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>q3c.plot_poisson(title<span class="op">=</span><span class="st">"Question 3; part C"</span>,label<span class="op">=</span><span class="st">'Poisson'</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.xticks(q3c.x)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>q3c.calculate_mean_mode_sigma(x<span class="op">=</span>q3c.x,Px<span class="op">=</span>q3c.Px)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>q3c.plot_mark_mean(Px<span class="op">=</span>q3c.Px,colors<span class="op">=</span><span class="st">'red'</span>,linestyles<span class="op">=</span><span class="st">'solid'</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -300,12 +286,12 @@ P(x) = \frac{1}{\Delta x \sqrt{2 \pi}} e^{-\frac{(x-x_0)^2}{2\Delta x^2}}
 </div>
 </div>
 </div>
-<div id="cell-28" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>P_Hx <span class="op">=</span> np.array(H)<span class="op">/</span><span class="bu">sum</span>(H)  <span class="co"># "probabilities" based on histograms</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sigma2_prime <span class="op">=</span> q3c.Expectation(fx<span class="op">=</span>(q3c.x<span class="op">-</span>mean)<span class="op">**</span><span class="dv">2</span>,Px<span class="op">=</span>P_Hx)   <span class="co"># sigma^2 from histogram results</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>chi2 <span class="op">=</span> sigma2_prime<span class="op">/</span>(q3c.sigma<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"chi-squared:"</span>,chi2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-28" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>P_Hx <span class="op">=</span> np.array(H)<span class="op">/</span><span class="bu">sum</span>(H)  <span class="co"># "probabilities" based on histograms</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sigma2_prime <span class="op">=</span> q3c.Expectation(fx<span class="op">=</span>(q3c.x<span class="op">-</span>mean)<span class="op">**</span><span class="dv">2</span>,Px<span class="op">=</span>P_Hx)   <span class="co"># sigma^2 from histogram results</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>chi2 <span class="op">=</span> sigma2_prime<span class="op">/</span>(q3c.sigma<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"chi-squared:"</span>,chi2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>chi-squared: 0.9604764044774297</code></pre>
 </div>
@@ -315,31 +301,31 @@ P(x) = \frac{1}{\Delta x \sqrt{2 \pi}} e^{-\frac{(x-x_0)^2}{2\Delta x^2}}
 <h2 class="anchored" data-anchor-id="part-d-1">Part (d)</h2>
 <p>To perform another <span class="math inline">\(\chi_\nu^2\)</span> test, all of the 300 sectors are expected to have, within error, the same number of GRBs. That is, <span class="math inline">\(f(x)=\mu'\)</span>, which is now well determined. We also know <span class="math inline">\(\sigma ^2 = \mu'\)</span> well. What is <span class="math inline">\(\chi_\nu^2\)</span>? What do you conclude?</p>
 <p><strong>Hint:</strong> Explode <span class="math inline">\(H\)</span> into a 300-point array (<span class="math inline">\(X\)</span>): <span class="math inline">\(X = [0,1,2,3,3,3,3,3,3,3,3,(9 \text{   } 4 \text{s}),(25 \text{   } 5 \text{s}), \text{etc.}]\)</span></p>
-<div id="cell-30" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> []</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,hi <span class="kw">in</span> <span class="bu">enumerate</span>(H):</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    X <span class="op">+=</span> [i]<span class="op">*</span>hi</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Check that X is what I want it to be"</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Preview of X (first 10 elements):"</span>,X[:<span class="dv">10</span>])</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of elements in X (should be 300):"</span>,<span class="bu">len</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-30" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> []</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,hi <span class="kw">in</span> <span class="bu">enumerate</span>(H):</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    X <span class="op">+=</span> [i]<span class="op">*</span>hi</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Check that X is what I want it to be"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Preview of X (first 10 elements):"</span>,X[:<span class="dv">10</span>])</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of elements in X (should be 300):"</span>,<span class="bu">len</span>(X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Check that X is what I want it to be
 Preview of X (first 10 elements): [1, 2, 2, 3, 3, 3, 3, 3, 3, 3]
 Number of elements in X (should be 300): 300</code></pre>
 </div>
 </div>
-<div id="cell-31" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>chi_i <span class="op">=</span> []</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,xi <span class="kw">in</span> <span class="bu">enumerate</span>(X):</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    numerator <span class="op">=</span> (xi <span class="op">-</span> mean)<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    denominator <span class="op">=</span> mean</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    chi_i.append(numerator<span class="op">/</span>denominator)</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>(chi_i)<span class="op">/</span><span class="bu">len</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div id="cell-31" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>chi_i <span class="op">=</span> []</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,xi <span class="kw">in</span> <span class="bu">enumerate</span>(X):</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    numerator <span class="op">=</span> (xi <span class="op">-</span> mean)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    denominator <span class="op">=</span> mean</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    chi_i.append(numerator<span class="op">/</span>denominator)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>(chi_i)<span class="op">/</span><span class="bu">len</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>0.944341825902335</code></pre>
 </div>
 </div>
