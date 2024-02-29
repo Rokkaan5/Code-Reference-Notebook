@@ -126,8 +126,14 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#part-a-2" id="toc-part-a-2" class="nav-link" data-scroll-target="#part-a-2">Part (a)</a></li>
   <li><a href="#part-b-2" id="toc-part-b-2" class="nav-link" data-scroll-target="#part-b-2">Part (b)</a></li>
-  <li><a href="#part-c-2" id="toc-part-c-2" class="nav-link" data-scroll-target="#part-c-2">Part (c)</a></li>
-  <li><a href="#part-d-1" id="toc-part-d-1" class="nav-link" data-scroll-target="#part-d-1">Part (d)</a></li>
+  <li><a href="#part-c-2" id="toc-part-c-2" class="nav-link" data-scroll-target="#part-c-2">Part (c)</a>
+  <ul class="collapse">
+  <li><a href="#jasmines-note-to-self" id="toc-jasmines-note-to-self" class="nav-link" data-scroll-target="#jasmines-note-to-self">Jasmine’s note to self</a></li>
+  </ul></li>
+  <li><a href="#part-d-1" id="toc-part-d-1" class="nav-link" data-scroll-target="#part-d-1">Part (d)</a>
+  <ul class="collapse">
+  <li><a href="#jasmines-note-to-self-1" id="toc-jasmines-note-to-self-1" class="nav-link" data-scroll-target="#jasmines-note-to-self-1">Jasmine’s note to self</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="..\..\..\..\hw3.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -295,7 +301,13 @@ P(x) = \frac{1}{\Delta x \sqrt{2 \pi}} e^{-\frac{(x-x_0)^2}{2\Delta x^2}}
 </div>
 </div>
 </div>
-<div id="cell-28" class="cell" data-execution_count="7">
+<section id="jasmines-note-to-self" class="level3">
+<h3 class="anchored" data-anchor-id="jasmines-note-to-self">Jasmine’s note to self</h3>
+<p><span class="math display">\[\begin{align*}
+\chi_N^2 &amp;= \displaystyle \sum_{i=1}^N \frac{(x_i - \mu')^2}{\sigma^2} \\
+&amp;\approx \frac{\text{expected variance}}{\text{actual variance}} = \frac{\sigma'^2}{\sigma^2}
+\end{align*}\]</span></p>
+<div id="cell-29" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>P_Hx <span class="op">=</span> np.array(H)<span class="op">/</span><span class="bu">sum</span>(H)  <span class="co"># "probabilities" based on histograms</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sigma2_prime <span class="op">=</span> q3c.Expectation(fx<span class="op">=</span>(q3c.x<span class="op">-</span>mean)<span class="op">**</span><span class="dv">2</span>,Px<span class="op">=</span>P_Hx)   <span class="co"># sigma^2 from histogram results</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -306,11 +318,18 @@ P(x) = \frac{1}{\Delta x \sqrt{2 \pi}} e^{-\frac{(x-x_0)^2}{2\Delta x^2}}
 </div>
 </div>
 </section>
+</section>
 <section id="part-d-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-d-1">Part (d)</h2>
 <p>To perform another <span class="math inline">\(\chi_\nu^2\)</span> test, all of the 300 sectors are expected to have, within error, the same number of GRBs. That is, <span class="math inline">\(f(x)=\mu'\)</span>, which is now well determined. We also know <span class="math inline">\(\sigma ^2 = \mu'\)</span> well. What is <span class="math inline">\(\chi_\nu^2\)</span>? What do you conclude?</p>
 <p><strong>Hint:</strong> Explode <span class="math inline">\(H\)</span> into a 300-point array (<span class="math inline">\(X\)</span>): <span class="math inline">\(X = [0,1,2,3,3,3,3,3,3,3,3,(9 \text{   } 4 \text{s}),(25 \text{   } 5 \text{s}), \text{etc.}]\)</span></p>
-<div id="cell-30" class="cell" data-execution_count="8">
+<section id="jasmines-note-to-self-1" class="level3">
+<h3 class="anchored" data-anchor-id="jasmines-note-to-self-1">Jasmine’s note to self</h3>
+<p><span class="math display">\[\begin{align*}
+\chi_N^2 &amp;= \displaystyle \sum_{i=1}^N \frac{(x_i - \mu')^2}{\sigma^2} \\
+&amp;\approx \displaystyle \sum_{i=1}^N \frac{(x_i - \mu')^2}{\mu'}
+\end{align*}\]</span></p>
+<div id="cell-32" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> []</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,hi <span class="kw">in</span> <span class="bu">enumerate</span>(H):</span>
@@ -325,7 +344,7 @@ Preview of X (first 10 elements): [1, 2, 2, 3, 3, 3, 3, 3, 3, 3]
 Number of elements in X (should be 300): 300</code></pre>
 </div>
 </div>
-<div id="cell-31" class="cell" data-execution_count="9">
+<div id="cell-33" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>chi_i <span class="op">=</span> []</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,xi <span class="kw">in</span> <span class="bu">enumerate</span>(X):</span>
@@ -338,6 +357,7 @@ Number of elements in X (should be 300): 300</code></pre>
 <pre><code>0.944341825902335</code></pre>
 </div>
 </div>
+</section>
 </section>
 </section>
 
