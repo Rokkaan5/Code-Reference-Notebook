@@ -60,40 +60,41 @@ print("Need at least {} FOV exposures".format(round(n)))
 # Let's make our random x and y arrays for the random star field:
 import random
 N = 510 # number of stars in the 1000 as by 1000 as field of view:
-x_array=np.array([])
-y_array=np.array([])
-for x in np.arange(0,N+1):
-    element = 1000*random.random()
-    x_array = np.append(x_array,element)
-for y in np.arange(0,N+1):
-    element = 1000*random.random()
-    y_array = np.append(y_array,element)
+x_FOV = 1000
+y_FOV = 1000
+x_array=[]
+y_array=[]
+for _ in range(N+1):
+    xi = random.uniform(0,x_FOV)
+    yi = random.uniform(0,y_FOV)
+    x_array.append(xi)
+    y_array.append(yi)
 
 # now lets make a star array for our loop below to check against
-star_array = []
-for i,j in zip (x_array,y_array):
-    element = [i,j]
-    star_array.append(element)
-star_array= np.array(star_array)  # np.array is a little easier to play with
+# star_array = []
+# for i,j in zip (x_array,y_array):
+#     element = [i,j]
+#     star_array.append(element)
+# star_array= np.array(star_array)  # np.array is a little easier to play with
 
-# This is our code that checks against the random star field for circular gaps of at least 50 arcseconds
-circ_centers = []
-R = 50 # radius of FOV
-for y in np.arange(50,951):
-    for x in np.arange(50,951):
-        # box test (see if any stars exist in 50 as box)
-        t=star_array[((star_array[::,0]>(x-R)) & ((star_array[::,0]<(x+R))))]
-        s=np.array(t[((t[::,1]>(y-R)) & ((t[::,1]<(y+R))))])
-        if s.shape[0] == 0:
-            circ_centers.append([x,y])
+# # This is our code that checks against the random star field for circular gaps of at least 50 arcseconds
+# circ_centers = []
+# R = 50 # radius of FOV
+# for y in np.arange(50,951):
+#     for x in np.arange(50,951):
+#         # box test (see if any stars exist in 50 as box)
+#         t=star_array[((star_array[::,0]>(x-R)) & ((star_array[::,0]<(x+R))))]
+#         s=np.array(t[((t[::,1]>(y-R)) & ((t[::,1]<(y+R))))])
+#         if s.shape[0] == 0:
+#             circ_centers.append([x,y])
         # circle test (see if any stars exist within 50 as radius of center)
         # I started with box test because I think its faster, but maybe not, might just be extra uneeded step.
-        else:
-            s=s[((((s[::,0]-x)**2+(s[::,1]-y)**2)**(1/2))<R)]
-            if s.shape[0] == 0:
-                circ_centers.append([x,y])
+#         else:
+#             s=s[((((s[::,0]-x)**2+(s[::,1]-y)**2)**(1/2))<R)]
+#             if s.shape[0] == 0:
+#                 circ_centers.append([x,y])
                                             
-circ_centers=np.array(circ_centers)
+# circ_centers=np.array(circ_centers)
 
 # %% [markdown]
 # # 2. Multi-variant Uncertainties
