@@ -55,13 +55,15 @@ class helper:
         E = np.sum(fx*Px)              # E(x) = sum(f(x)*P(x))
         return E
     
-    def calculate_mean_mode_sigma(self,x,Px):
+    def expected_mean(self,x,Px):
         # calculate mean: mu = E(x)
         self.mu = self.Expectation(fx=x,Px=Px)   
 
+    def expected_sigma(self,mu, Px):
         # calculate stand. dev: sigma = sqrt(sigma^2); sigma^2 = E(x-mu)^2
-        self.sigma = np.sqrt(self.Expectation(fx=(x-self.mu)**2,Px=Px)) 
+        self.sigma = np.sqrt(self.Expectation(fx=(x-mu)**2,Px=Px)) 
 
+    def calculate_mode(self,x,Px):
         # calculate mode: x value where P(x) is highest
         self.mode = x[np.argmax(Px)]
 
