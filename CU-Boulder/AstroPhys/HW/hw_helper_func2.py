@@ -1,4 +1,3 @@
-# %%
 """
 title: ASTR 5550: HW helper functions
 author: Jasmine Kobayashi
@@ -6,7 +5,7 @@ author: Jasmine Kobayashi
 Functions that would (likely) be helpful to save and be able to 
 reuse throughout all assignments, etc. for ASTR 5550
 """
-# %%
+# %% libraries
 # libraries
 import math
 import numpy as np
@@ -44,7 +43,7 @@ def get_fwhm(pdf:np.array, return_max_idx = False):
 
 
 
-# %%
+# %% General Helper Functions
 class helper:
     # TODO: add documentation to these functions
     def __init__(self,x_min=0,x_max=15,step=1):
@@ -395,7 +394,7 @@ class gaussian_distribution(helper):
 # $$P(t;x) = \frac{P(x;t)P(t)}{P(x)}$$
 
 # Since we have no prior knowledge in this case, we treat $P(t)/P(x)$ as a constant; You must normalize $P(t;x)$ so that the total probability is $1$. $P(t;x)$ will have units of "probability/Myr". Plot your results. Mark the mean and mode (most likely age) and directly compute the standard deviation. Compare these values with your simple estimate.
-# %%
+# %% Posterior Probability
 class Posterior_Probability(poisson_distribution):
     # TODO: add documentation to this class and its functions
     def __init__(self,t0=0,tf=150,step=1,obs_area=10):
@@ -417,7 +416,7 @@ class Posterior_Probability(poisson_distribution):
 
 # %% [markdown]
 # # Random Walk
-# %%
+# %% Random Walk
 class rand_walk(binomial_distribution,gaussian_distribution):
     # TODO: add documentation to these functions
     def __init__(self, step=1, n=100, p=0.5):
@@ -493,7 +492,7 @@ class rand_walk(binomial_distribution,gaussian_distribution):
 # then comparing to the right-step probability, which is a function of position. 
 # Record the end position. Loop ~100,000 times and make a histogram of the end positions.
 
-# %%
+# %% Random walk with slope
 class rand_slope_walk(rand_walk):
     # TODO: add documentation to these functions
     def __init__(self, slope_const=0.01, n=100, step=1, p=0.5):
@@ -536,7 +535,7 @@ class rand_slope_walk(rand_walk):
 # 
 # Calculate $\sigma$. The mean should be zero. Overplot a Gaussian with the calculated $\sigma$. Is the resulting distribution a Gaussian?
 
-# %%
+# %% Random Walk Power Law
 class rand_power_law(rand_walk):
     # TODO: add documentation to these functions
     def __init__(self, n=100, p=0.5, step0_size=0.5, step=1.0):
