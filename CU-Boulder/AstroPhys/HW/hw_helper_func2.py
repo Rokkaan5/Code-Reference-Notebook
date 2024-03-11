@@ -396,13 +396,14 @@ class gaussian_distribution(helper):
 # Since we have no prior knowledge in this case, we treat $P(t)/P(x)$ as a constant; You must normalize $P(t;x)$ so that the total probability is $1$. $P(t;x)$ will have units of "probability/Myr". Plot your results. Mark the mean and mode (most likely age) and directly compute the standard deviation. Compare these values with your simple estimate.
 # %% Posterior Probability
 class Posterior_Probability(poisson_distribution):
+    # TODO: Fix this class and its functions (got the problem slightly off in hw)
     # TODO: add documentation to this class and its functions
     def __init__(self,t0=0,tf=150,step=1,obs_area=10):
         super().__init__(step)
         self.t = np.arange(t0,tf+step,step)
         self.obs_area = obs_area
 
-    def post_prob(self,x):
+    def post_prob(self,x,):
         # P(x;t)/A => probability/km^2
         self.Pp = P_poisson(x=x,mu=self.t.astype('float'))/self.obs_area
 
