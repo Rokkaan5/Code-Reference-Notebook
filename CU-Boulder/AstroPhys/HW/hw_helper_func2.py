@@ -455,7 +455,7 @@ class rand_walk(binomial_distribution,gaussian_distribution):
 
     def plot_rand_walk_BG(self,title='Random Walk (Binomial & Gaussian)'):
         self.get_mu_sig()
-        self.Pb = P_binomial(x=self.x,n=self.n,p=self.p,q=self.q) 
+        self.Pb = P_binomial(x=self.x,n=self.n,p=self.p) 
         self.Pg = P_gaussian(x=self.x,mu=self.mu,sigma=self.sigma)
 
         plt.figure()
