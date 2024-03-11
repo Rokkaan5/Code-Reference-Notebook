@@ -73,6 +73,21 @@ class helper:
         # calculate mode: x value where P(x) is highest
         mode = x[np.argmax(Px)]
         return mode
+    
+    def calculate_expected_mean_mode_sigma(self,x,Px,set_to_object=False):
+        mu = self.expected_mean(x=x,Px=Px)
+        sigma = self.expected_mean(x=x,Px=Px)
+        mode = self.calculate_mode(x=x,Px=Px)
+
+        if set_to_object:
+            self.mu = mu
+            self.sigma = sigma
+            self.mode = mode
+            
+            return self.mu,self.mode,self.sigma
+        else:
+            return mu,mode,sigma
+        
 
     def plot_mark_mean(self,
                        mu,
