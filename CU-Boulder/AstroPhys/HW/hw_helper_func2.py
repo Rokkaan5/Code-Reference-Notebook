@@ -50,6 +50,10 @@ class helper:
     def __init__(self,x_min=0,x_max=15,step=1):
         self.step = step
         self.x = np.arange(x_min,x_max+self.step,self.step)
+        self.Px = None
+        self.mu = None
+        self.sigma = None
+        self.mode = None
 
     def Expectation(self,fx,Px):
         E = np.sum(fx*Px)              # E(x) = sum(f(x)*P(x))
@@ -57,71 +61,86 @@ class helper:
     
     def expected_mean(self,x,Px):
         # calculate mean: mu = E(x)
-        self.mu = self.Expectation(fx=x,Px=Px)   
+        mu = self.Expectation(fx=x,Px=Px) 
+        return mu  
 
     def expected_sigma(self,mu, Px):
         # calculate stand. dev: sigma = sqrt(sigma^2); sigma^2 = E(x-mu)^2
-        self.sigma = np.sqrt(self.Expectation(fx=(x-mu)**2,Px=Px)) 
+        sigma = np.sqrt(self.Expectation(fx=(x-mu)**2,Px=Px)) 
+        return sigma
 
     def calculate_mode(self,x,Px):
         # calculate mode: x value where P(x) is highest
-        self.mode = x[np.argmax(Px)]
+        mode = x[np.argmax(Px)]
+        return mode
 
     def plot_mark_mean(self,
-                       Px : np.array,
+                       mu,
                        ymin=0,
                        ymax=None,
                        colors= 'purple',
                        linestyles='dashdot',
                        label = "Mean: "):
         if ymax is None:
-            ymax = max(Px)
+            ymax = max(self.Px)
         
         # mark mean in plot
-        plt.vlines(self.mu, ymin=ymin, ymax=ymax,
+        plt.vlines(mu, ymin=ymin, ymax=ymax,
                    linestyles=linestyles,
                    colors=colors,
-                   label=label + "$\mu$ = {0:.3f}".format(self.mu))
+                   label=label + "$\mu$ = {0:.3f}".format(mu))
         plt.legend()
 
     def plot_mark_mode(self,
-                       Px : np.array,
+                       mode,
                        ymin=0,
                        ymax=None,
                        colors='black',
                        linestyles='solid',
                        label='Most Likely Value: '):
         if ymax is None:
-            ymax = max(Px)
+            ymax = max(self.Px)
 
         # mark mode in plot
-        plt.vlines(self.mode,ymin=ymin,ymax=ymax,
+        plt.vlines(mode,ymin=ymin,ymax=ymax,
                    linestyles=linestyles,
                    colors=colors,
-                   label=label+ "mode = {0:.3f}".format(self.mode))
+                   label=label+ "mode = {0:.3f}".format(mode))
         plt.legend()
 
     def plot_mark_std(self,
-                      Px : np.array,
+                      sigma,
+                      mu=None,
                        ymin=0,
                        ymax=None,
                       colors='orange',
                       linestyles='dotted',
                       label="Standard deviation: "):
         if ymax is None:
-            ymax = max(Px)
+            ymax = max(self.Px)
+
+        if mu is None:
+            mu = 0
+            print("mu was not passed so mu = 0 was used (i.e. +/- sigma is centered at x=0)")
 
         # mark standard deviation (wrt mean) in plot
-        plt.vlines(self.mu+self.sigma,
+        plt.vlines(mu+sigma,
                    ymin=ymin,ymax=ymax,
                    colors=colors,
                    linestyles=linestyles,
-                   label=label + "$\sigma$ = {0:.3f}".format(self.sigma))
-        plt.vlines(self.mu-self.sigma,
+                   label=label + "$\sigma$ = {0:.3f}".format(sigma))
+        plt.vlines(mu-sigma,
                    ymin=ymin,ymax=ymax,
                    colors=colors,
                    linestyles=linestyles)
         plt.legend()
+
+    def comprehensive_plot(self,mark_mode = False):
+        self.plot_mark_mean(mu=self.mu)
+        self.plot_mark_std(sigma=self.sigma,mu=self.mu)
+        if mark_mode:
+            self.mode = self.calculate_mode(x=self.x,Px=self.Px)
+
 
 # %% [markdown]
 # # Binomial probability:
@@ -142,7 +161,29 @@ class helper:
 # where, $E(f(x)) = \sum f(x)P(x)$
 
 # %% Binomial Probability
-class binomial(helper):
+        
+def P_binomial(x, n, p):                             
+        """Function to calculate Binomial Probability P(x;n,p)
+
+        Pb(x;n,p) = {(n!)/[(n-x)!(x!)]} * p^x * q^(n-x)
+        """
+        q = 1-p
+        # formula components
+        numerator = factorial(n)                                # fraction numerator: n!
+        denominator = factorial(n-x)*factorial(x)               # fraction denominator: (n-x)!x!
+        fraction = numerator/denominator
+        px = p**x                                               # p^x
+        qnx = q**(n-x)                                          # q^(n-x) = (1-p)^(n-x)
+        
+        # Binomial probability
+        Pb = fraction*px*qnx                                    # [n!/((n-x)!x!)]*(p^x)*(q*(n-x))
+        return Pb
+
+def binomial_mean_sigma(n, p):
+        mean = n*p
+        sigma = np.sqrt(n*p*(1-p))
+        return mean, sigma
+class binomial_distribution(helper):
     # TODO: add documentation to the rest of these functions
     def __init__(self, x_min=0, x_max=15, step=1,n=100,p=0.5):
         """Functions related to using Binomial probability
@@ -163,38 +204,24 @@ class binomial(helper):
         super().__init__(x_min, x_max, step)
         self.n = n
         self.p = p
-        self.q = 1-self.p
 
-    def P_binomial(self, x, n, p, q):                             
-        """Function to calculate Binomial Probability P(x;n,p)
-
-        Pb(x;n,p) = {(n!)/[(n-x)!(x!)]} * p^x * q^(n-x)
-        """
-        # formula components
-        numerator = factorial(n)                                # fraction numerator: n!
-        denominator = factorial(n-x)*factorial(x)               # fraction denominator: (n-x)!x!
-        fraction = numerator/denominator
-        px = p**x                                               # p^x
-        qnx = q**(n-x)                                          # q^(n-x) = (1-p)^(n-x)
-        
-        # Binomial probability
-        Pb = fraction*px*qnx                                    # [n!/((n-x)!x!)]*(p^x)*(q*(n-x))
-        return Pb
+        self.Px = P_binomial(x=self.x,n=self.n,p=self.p)
     
-    def plot_binomial(self,title="Binomial Distribution",label="Binomial",color='tab:blue'):
-        self.Px = self.P_binomial(x= self.x,n=self.n,p=self.p,q=self.q)
-        
+    def calculate_mean_mode_sigma(self):
+        self.mu, self.sigma = binomial_mean_sigma(n=self.n,p=self.p)
+        self.mode = self.calculate_mode(x=self.x,Px=self.Px)
+
+    def plot_binomial(self,title="Binomial Distribution",
+                      label="Binomial",color='tab:blue',
+                      comprehensive=True,mark_mode=False):
         plt.plot(self.x,self.Px, label=label,c=color)
         plt.title(title)
         plt.xlabel("x")
         plt.ylabel("P(x)")
+        if comprehensive:
+            self.calculate_mean_mode_sigma()
+            self.comprehensive_plot(mark_mode=mark_mode)
 
-    def complete_ind_binomial_plot(self,title="Binomial Distribution"):
-        self.plot_binomial(title=title,label=None)
-        self.calculate_mean_mode_sigma(x=self.x,Px=self.Px)
-        self.plot_mark_mean(Px=self.Px)
-        self.plot_mark_mode(Px=self.Px)
-        self.plot_mark_std(Px=self.Px)
 
 # %% [markdown]
 # # Poisson probability
@@ -204,56 +231,67 @@ class binomial(helper):
 # \end{align*}
 
 # %% Poisson
-class poisson(helper):
+# function to calculate poisson probability P(x;lambda)
+def P_poisson(x : int, mu : float): 
+    """Function to calculate Poisson probability P(x;mu)
+    
+    Parameters
+    ----------
+    x : int 
+        x value we want to get probability of
+    mu : float
+        mean occurence of value x
+
+        This one especially HAS to be a float for this probability function,
+        otherwise the `np.power(mu,x)` (to calculate mu^x portion) doesn't work properly and 
+        will end up with weird (like negative) probabilities
+
+    Returns
+    -------
+    Pp : float
+        Poisson probability of x
+    """
+    # formula components                            
+    numerator = np.power(mu,x)                  # fraction numerator: mu^x (this one can weird if mu are not floats)
+    denominator = factorial(x)                  # fraction denominator: x!
+    fraction = numerator/denominator
+    e_mu = np.exp(-mu)                          # e^(-mu)
+    
+    # Poisson probability
+    Pp = fraction*e_mu                          # P(x;mu) = [(mu^x)/x!] * e^(-mu)
+    return Pp
+
+def poisson_sigma(mu):
+    sigma = np.sqrt(mu)
+    return sigma
+
+class poisson_distribution(helper):
     # TODO: add documentation to the rest of these functions
     def __init__(self, x_min=0, x_max=15, step=1,mu=3.5):
         super().__init__(x_min, x_max, step)              
-        self.mu = mu                          # the term "lambda" has its own purpose in python so I named the variable "lmd" instead
+        self.mu = mu    
 
-    # function to calculate poisson probability P(x;lambda)
-    def P_poisson(self,x : int, mu : float): 
-        """Function to calculate Poisson probability P(x;mu)
-        
-        Parameters
-        ----------
-        x : int 
-            x value we want to get probability of
-        mu : float
-            mean occurence of value x
+        self.Px = P_poisson(x=self.x,mu=self.mu)     
 
-            This one especially HAS to be a float for this probability function,
-            otherwise the `np.power(mu,x)` (to calculate mu^x portion) doesn't work properly and 
-            will end up with weird (like negative) probabilities
-
-        Returns
-        -------
-        Pp : float
-            Poisson probability of x
-        """
-        # formula components                            
-        numerator = np.power(mu,x)                  # fraction numerator: mu^x (this one can weird if mu are not floats)
-        denominator = factorial(x)                  # fraction denominator: x!
-        fraction = numerator/denominator
-        e_mu = np.exp(-mu)                          # e^(-mu)
-        
-        # Poisson probability
-        Pp = fraction*e_mu                          # P(x;mu) = [(mu^x)/x!] * e^(-mu)
-        return Pp
+    def calculate_mean_mode_sigma(self):
+        self.sigma = poisson_sigma(mu=self.mu)
+        self.mode = self.calculate_mode(x=self.x,Px=self.Px)
     
-    def plot_poisson(self,title="Poisson Distribution",label="Poisson",color='tab:orange'):
-        self.Px = self.P_poisson(x=self.x,mu=self.mu)
+    def plot_poisson(self,title="Poisson Distribution",
+                     label="Poisson",color='tab:orange',
+                     comprehensive=True,mark_mode=False):
+        self.Px = P_poisson(x=self.x,mu=self.mu)
         
         plt.plot(self.x,self.Px, label=label,c=color)
         plt.title(title)
         plt.xlabel("x")
         plt.ylabel("P(x)")
 
-    def complete_ind_poisson_plot(self,title="Poisson Distribution"):
-        self.plot_poisson(title=title,label=None)
-        self.calculate_mean_mode_sigma(x=self.x,Px=self.Px)
-        self.plot_mark_mean(Px=self.Px)
-        self.plot_mark_mode(Px=self.Px)
-        self.plot_mark_std(Px=self.Px)
+        if comprehensive:
+            self.calculate_mean_mode_sigma()
+            self.comprehensive_plot(mark_mode=mark_mode)
+
+    
 
 # %% [markdown]
 # # Gaussian probability
@@ -262,16 +300,8 @@ class poisson(helper):
 # P_G(x;\mu, \sigma) &= \frac{1}{\sigma \sqrt{2 \pi}}\exp\left({\frac{-(x-\mu)^2}{2\sigma^2}}\right)
 # \end{align*}
 
-# %%
-class gaussian(helper):
-    # TODO: add documentation to the rest of these functions
-    def __init__(self, mu, sigma, x_min=0, x_max=15, step=1):
-        super().__init__(x_min, x_max, step)
-        
-        self.mu = mu
-        self.sigma = sigma
-
-    def P_gaussian(self,x,mu,sigma:float):
+# %% Gaussian
+def P_gaussian(x,mu,sigma:float):
         """Function to calculate Poisson probability P(x;mu)
         
         Parameters
@@ -298,14 +328,29 @@ class gaussian(helper):
         # Gaussian probability
         Pg = (1/denominator)*np.exp(power)      # P(x;mu,sigma) 
         return Pg
+class gaussian_distribution(helper):
+    # TODO: add documentation to the rest of these functions
+    def __init__(self, mu, sigma, x_min=0, x_max=15, step=1):
+        super().__init__(x_min, x_max, step)
+        
+        self.mu = mu
+        self.sigma = sigma
+
+        self.Px = P_gaussian(x=self.x,mu=self.mu,sigma=self.sigma)
     
-    def plot_gaussian(self,title = 'Gaussian Distribution',label='Gaussian',color = "tab:green"):
-        self.Px = self.P_gaussian(x=self.x,mu=self.mu,sigma=self.sigma)
+    def plot_gaussian(self,title = 'Gaussian Distribution',
+                      label='Gaussian',color = "tab:green",
+                      comprehensive=True,mark_mode=False):
+        self.Px = P_gaussian(x=self.x,mu=self.mu,sigma=self.sigma)
 
         plt.plot(self.x,self.Px, label=label,c=color)
         plt.title(title)
         plt.xlabel("x")
         plt.ylabel("P(x)")
+
+        if comprehensive:
+            self.mode = self.calculate_mode(x=self.x,Px=self.Px)
+            self.comprehensive_plot(mark_mode=mark_mode)
 
 # %% [markdown]
 # # Posterior probability (Bayesian theory)
@@ -326,7 +371,7 @@ class gaussian(helper):
 
 # Since we have no prior knowledge in this case, we treat $P(t)/P(x)$ as a constant; You must normalize $P(t;x)$ so that the total probability is $1$. $P(t;x)$ will have units of "probability/Myr". Plot your results. Mark the mean and mode (most likely age) and directly compute the standard deviation. Compare these values with your simple estimate.
 # %%
-class Posterior_Probability(poisson):
+class Posterior_Probability(poisson_distribution):
     # TODO: add documentation to this class and its functions
     def __init__(self,t0=0,tf=150,step=1,obs_area=10):
         super().__init__(step)
@@ -335,7 +380,7 @@ class Posterior_Probability(poisson):
 
     def post_prob(self,x):
         # P(x;t)/A => probability/km^2
-        self.Pp = self.P_poisson(x=x,mu=self.t.astype('float'))/self.obs_area
+        self.Pp = P_poisson(x=x,mu=self.t.astype('float'))/self.obs_area
 
         #constant P(t)/P(x) = 1/sum(P(x;t))
         self.Pt_Px = 1/np.sum(self.Pp)
@@ -348,7 +393,7 @@ class Posterior_Probability(poisson):
 # %% [markdown]
 # # Random Walk
 # %%
-class rand_walk(binomial,gaussian):
+class rand_walk(binomial_distribution,gaussian_distribution):
     # TODO: add documentation to these functions
     def __init__(self, step=1, n=100, p=0.5):
         super().__init__(step, n, p)
