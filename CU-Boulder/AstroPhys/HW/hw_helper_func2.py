@@ -154,11 +154,13 @@ class helper:
 # And other useful:
 # 
 # \begin{align*}
-# &E(x) = \mu \\
-# &E(x-\mu)^2 = \sigma^2
+# \mu &= \displaystyle \sum_{x=0}^n x \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
+# &= np \\
+# \sigma^2 &= \displaystyle \sum_{x=0}^n (x- \mu )^2 \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
+# &= np(1-p)
 # \end{align*}
 # 
-# where, $E(f(x)) = \sum f(x)P(x)$
+
 
 # %% Binomial Probability
         
@@ -229,6 +231,14 @@ class binomial_distribution(helper):
 # \begin{align*}
 # P_P(x;\mu) &= \frac{\mu^x}{x!}e^{-\mu}
 # \end{align*}
+#   
+# And other useful:
+# 
+# \begin{align*}
+# \sigma^2 &=  \displaystyle \sum_{x=0}^n \frac{\mu^x}{x!}e^{-\mu} \\
+# &= \mu
+# \end{align*}
+# 
 
 # %% Poisson
 # function to calculate poisson probability P(x;lambda)
