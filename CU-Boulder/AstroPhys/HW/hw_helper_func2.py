@@ -64,7 +64,7 @@ class helper:
         mu = self.Expectation(fx=x,Px=Px) 
         return mu  
 
-    def expected_sigma(self,mu, Px):
+    def expected_sigma(self,mu, x,Px):
         # calculate stand. dev: sigma = sqrt(sigma^2); sigma^2 = E(x-mu)^2
         sigma = np.sqrt(self.Expectation(fx=(x-mu)**2,Px=Px)) 
         return sigma
@@ -76,7 +76,7 @@ class helper:
     
     def calculate_expected_mean_mode_sigma(self,x,Px,set_to_object=False):
         mu = self.expected_mean(x=x,Px=Px)
-        sigma = self.expected_mean(x=x,Px=Px)
+        sigma = self.expected_sigma(mu=mu,x=x,Px=Px)
         mode = self.calculate_mode(x=x,Px=Px)
 
         if set_to_object:
