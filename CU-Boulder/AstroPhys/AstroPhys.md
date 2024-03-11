@@ -21,7 +21,7 @@ Any parts of any of the hw that contained coding portions
         -(like their difference when *p* is not small enough)
 
 ## HW2
-- [HW2](HW/hw2/hw2-clean.html)
+- [HW2 (clean)](HW/hw2/hw2-clean.html); [HW2 (clean & "fixed")](HW/hw2/hw2-clean-fixed.html)
     1. Binomial and Gaussian Distributions
         - Compare Binomial vs. Poisson vs. Gaussian
     2. How Old is This Volcano?
