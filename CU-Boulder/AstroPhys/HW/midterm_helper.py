@@ -378,38 +378,3 @@ class gaussian_distribution(helper):
             self.comprehensive_plot(mark_mode=mark_mode)
 
 
-
-
-class rand_power_law(rand_walk):
-    # TODO: add documentation to these functions
-    def __init__(self, n=100, p=0.5, step0_size=0.5, step=1.0):
-        super().__init__(n, p, step)
-        self.x = np.arange(0,self.n+step,step)
-        self.d = self.distance(x=self.x,n=self.n)
-        self.P_right = p
-        self.step0_size = step0_size
-
-    def nearest_value_idx(self,x,value):
-        idx = np.abs(np.asarray(x) - value).argmin()
-        return idx
-
-    def get_xn(self,ntrial,normalize = True):
-        self.xn = np.zeros(len(self.d))
-        self.wh = np.where(self.d == 0.0)
-        for _ in range(ntrial):
-            i = self.wh[0]
-            step = self.step0_size
-            for _ in range(int(self.n/2)):
-                
-                if (rnd.random() <= self.P_right):
-                    i = i+step
-                else:
-                    i = i-step
-                nearest_x = self.nearest_value_idx(self.x,i.astype('float'))
-                step = 0.5 + np.abs(self.x[nearest_x])*0.025
-            self.xn[nearest_x] += 1.0
-        
-        if normalize:
-            self.xn = self.xn/ntrial
-        
-        return self.xn
