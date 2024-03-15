@@ -15,6 +15,9 @@ My last elective course for my Master's Data Science degree within in the Astrop
 
 Any parts of any of the hw that contained coding portions
 
+## Helper Functions
+- [Notebook version of hw-helper functions](HW/hw_helper_func2.html)
+
 ## HW1
 - [HW1 - Question 3: Binomial and Poisson Distributions](HW/hw1/hw1.html)
     - Mainly just comparing Binomial vs. Poisson Distribution 
