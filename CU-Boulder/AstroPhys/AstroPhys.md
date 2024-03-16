@@ -47,3 +47,23 @@ Any parts of any of the hw that contained coding portions
 
 ## HW3
 - [HW3](HW/hw3/hw3.html)
+    1. Joint Probability and Find the Gap
+        - How many FOV for greater than 50% probability of seeing 100 galaxies 
+        - How many for greater than 99%
+        - Contaminating stars: how many sectors to find enough uncontaminated FOVs?
+        - "Mind the Gap" lecture application
+    2. Multi-variant Uncertainties
+        - What is the 1-sigma variance?
+        - What is the uncertainty?
+        - Which uncertainty makes the largest contribution to the overall uncertainty?
+    3. Gamma Ray Bursts
+        - Estimate (no computer) how long was it expected to take the observations to show that the fraction of events in teh galactic plane is 2-sigma higher than 50% proving a galactic origin model?
+            - (Solutions = good example how using Binomial is easier solution, but can get same solution with Poisson )
+        - Compute CDF, what is the probability that ___ is 60% or higher?
+        - Does given histogram (H = [...]) match a Poisson distribution?
+            - What is the (binned) chi-squared?
+            - How does the chi-squared compare with the expected distribution?
+        - Explode H into a 300-point array, and perform another chi-squared test.
+
+## HW4
+- [HW4](HW/hw4/hw4.html)
