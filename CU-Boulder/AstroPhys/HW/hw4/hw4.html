@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="hw4_files/libs/clipboard/clipboard.min.js"></script>
+<script src="hw4_files/libs/clipboard/clipboard.min.js"></script>
 <script src="hw4_files/libs/quarto-html/quarto.js"></script>
 <script src="hw4_files/libs/quarto-html/popper.min.js"></script>
 <script src="hw4_files/libs/quarto-html/tippy.umd.min.js"></script>
@@ -68,9 +68,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="hw4_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="hw4_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="hw4_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -115,18 +112,18 @@ window.Quarto = {
   <li><a href="#combining-poisson-distributions" id="toc-combining-poisson-distributions" class="nav-link active" data-scroll-target="#combining-poisson-distributions">1. Combining Poisson Distributions</a></li>
   <li><a href="#supernova-light-curve" id="toc-supernova-light-curve" class="nav-link" data-scroll-target="#supernova-light-curve">2. Supernova Light Curve</a>
   <ul class="collapse">
-  <li><a href="#parta" id="toc-parta" class="nav-link" data-scroll-target="#parta">Part(a)</a></li>
+  <li><a href="#part-a" id="toc-part-a" class="nav-link" data-scroll-target="#part-a">Part (a)</a></li>
   <li><a href="#part-b" id="toc-part-b" class="nav-link" data-scroll-target="#part-b">Part (b)</a></li>
   </ul></li>
   <li><a href="#extra-solar-planet" id="toc-extra-solar-planet" class="nav-link" data-scroll-target="#extra-solar-planet">3. Extra-Solar Planet</a>
   <ul class="collapse">
-  <li><a href="#part-a" id="toc-part-a" class="nav-link" data-scroll-target="#part-a">Part (a)</a></li>
+  <li><a href="#part-a-1" id="toc-part-a-1" class="nav-link" data-scroll-target="#part-a-1">Part (a)</a></li>
   <li><a href="#part-b-1" id="toc-part-b-1" class="nav-link" data-scroll-target="#part-b-1">Part (b)</a></li>
   <li><a href="#part-c" id="toc-part-c" class="nav-link" data-scroll-target="#part-c">Part (c)</a></li>
   </ul></li>
   <li><a href="#kolmogorov-smirnov-test" id="toc-kolmogorov-smirnov-test" class="nav-link" data-scroll-target="#kolmogorov-smirnov-test">4. Kolmogorov-Smirnov Test</a>
   <ul class="collapse">
-  <li><a href="#part-a-1" id="toc-part-a-1" class="nav-link" data-scroll-target="#part-a-1">Part (a)</a></li>
+  <li><a href="#part-a-2" id="toc-part-a-2" class="nav-link" data-scroll-target="#part-a-2">Part (a)</a></li>
   <li><a href="#part-b-2" id="toc-part-b-2" class="nav-link" data-scroll-target="#part-b-2">Part (b)</a></li>
   <li><a href="#part-c-1" id="toc-part-c-1" class="nav-link" data-scroll-target="#part-c-1">Part (c)</a></li>
   </ul></li>
@@ -169,13 +166,11 @@ window.Quarto = {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os,sys</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># import helper script file</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#(change working directory to two folders up)</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>src_dir <span class="op">=</span> os.path.abspath(<span class="st">""</span>)       </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>hw_dir <span class="op">=</span> os.path.dirname(src_dir)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>os.chdir(hw_dir)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># import my own code</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hw_helper_func2 <span class="im">as</span> hf   <span class="co"># this is my own code I made (for probability/distribution fucntions, etc.)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">## change working directory</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>os.chdir(<span class="st">"C:/Users/rokka/GH-repos/GitHubPages/Code-Reference-Notebook/CU-Boulder/AstroPhys/HW"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">## import my own code</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hw_helper_func2 <span class="im">as</span> hf   <span class="co"># this is my own code I made (for probability/distribution fucntions, etc.)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>(<strong>JK note:</strong> To view the code with the functions I made myself to (hopefully) help with all assignments <a href="https://rokkaan5.github.io/Code-Reference-Notebook/CU-Boulder/AstroPhys/HW/hw_helper_func2.html">click here</a>)</p>
 <section id="combining-poisson-distributions" class="level1">
@@ -187,15 +182,17 @@ window.Quarto = {
 <h1>2. Supernova Light Curve</h1>
 <p>After a supernova reaches its maximum brightness, the light curve exponentially decays as do the radioactive materials. The decay time can tell us its type. Examine the light curve below.</p>
 <p><span class="math display">\[I = [0.921, 0.704, 0.623, 0.550, 0.426, 0.332, 0.258, 0.208, 0.143, 0.130, 0.137, 0.103, 0.058, 0.070, 0.042, 0.060, 0.022, 0.022, 0.011, 0.015]\]</span> <span class="math display">\[ \sigma =  [0.026, 0.048, 0.026, 0.027, 0.068, 0.046, 0.034, 0.017, 0.020, 0.014, 0.015, 0.009, 0.019, 0.010, 0.012, 0.018, 0.007, 0.008, 0.005, 0.005]\]</span></p>
-<p><img src="light_curve.PNG" class="img-fluid"></p>
+<center>
+<img src="light_curve.PNG" width="700">
+</center>
 <div id="cell-6" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>I <span class="op">=</span> [<span class="fl">0.921</span>, <span class="fl">0.704</span>, <span class="fl">0.623</span>, <span class="fl">0.550</span>, <span class="fl">0.426</span>, <span class="fl">0.332</span>, <span class="fl">0.258</span>, <span class="fl">0.208</span>, <span class="fl">0.143</span>, <span class="fl">0.130</span>, </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>     <span class="fl">0.137</span>, <span class="fl">0.103</span>, <span class="fl">0.058</span>, <span class="fl">0.070</span>, <span class="fl">0.042</span>, <span class="fl">0.060</span>, <span class="fl">0.022</span>, <span class="fl">0.022</span>, <span class="fl">0.011</span>, <span class="fl">0.015</span>]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sigma <span class="op">=</span>  [<span class="fl">0.026</span>, <span class="fl">0.048</span>, <span class="fl">0.026</span>, <span class="fl">0.027</span>, <span class="fl">0.068</span>, <span class="fl">0.046</span>, <span class="fl">0.034</span>, <span class="fl">0.017</span>, <span class="fl">0.020</span>, <span class="fl">0.014</span>, </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.015</span>, <span class="fl">0.009</span>, <span class="fl">0.019</span>, <span class="fl">0.010</span>, <span class="fl">0.012</span>, <span class="fl">0.018</span>, <span class="fl">0.007</span>, <span class="fl">0.008</span>, <span class="fl">0.005</span>, <span class="fl">0.005</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="parta" class="level2">
-<h2 class="anchored" data-anchor-id="parta">Part(a)</h2>
+<section id="part-a" class="level2">
+<h2 class="anchored" data-anchor-id="part-a">Part (a)</h2>
 <p>Assuming that <span class="math inline">\(\sigma\)</span> represents a 1-sigma Gaussian uncertainty, find the most likely parameters under the hypothesis that the intensity undergoes an exponential decay: <span class="math display">\[I = I_0 e^{-t/\tau}\]</span></p>
 <p>Here, <span class="math inline">\(\tau\)</span> is the decay time. As one can see, <span class="math inline">\(I_0\)</span> should be nearly unity but, for this problem, do not fix <span class="math inline">\(I_0 = 1\)</span>. Calculate the uncertainty in <span class="math inline">\(\tau\)</span>. Plot the observations and the fit.</p>
 <p><strong>Hint:</strong> One way is to perform a linear fit to <span class="math inline">\(ln(I)\)</span>. Be careful how you treat the uncertainty <span class="math inline">\(\sigma\)</span>; Taylor expand <span class="math inline">\(ln(I\pm \sigma)\)</span> to calculate the uncertainties of <span class="math inline">\(ln(I)\)</span>.</p>
@@ -211,49 +208,61 @@ window.Quarto = {
 <p>Finding a transit often involves several steps. The first step is to identify intervals that may have a transiting planet. One way is to examine one hour (120-point) stretches (sliding every half an hour, 60 points) for a non-constant distribution.</p>
 <p>Read in the text file, <code>HW4_data_A</code>, from Canvas. It contains 120 points of intensity in units of <span class="math inline">\(I_0\)</span>, one every 30 seconds. Create a corresponding time array going from 0 to 3570 seconds. Assume the uncertainty in time is negligible.</p>
 <p><img src="exoplanet.PNG" class="img-fluid"></p>
-<div id="cell-12" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_fwf(<span class="st">"hw4/HW4_data.txt"</span>, sep<span class="op">=</span><span class="st">" "</span>,header<span class="op">=</span><span class="va">None</span>,)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-12" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_array <span class="op">=</span> np.loadtxt(<span class="st">'hw4/HW4_data.txt'</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_array</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>array([0.998088, 1.00058 , 1.00007 , 1.00085 , 0.999086, 1.00013 ,
+       1.00114 , 0.999925, 1.00042 , 1.00063 , 1.00064 , 0.999636,
+       1.00013 , 0.999742, 1.00007 , 1.00132 , 0.999664, 0.999608,
+       0.999392, 0.999136, 1.00104 , 1.00014 , 0.99976 , 1.0011  ,
+       0.999397, 0.99961 , 0.998294, 0.998431, 0.998846, 0.99919 ,
+       0.998581, 1.00151 , 0.999167, 1.00092 , 1.00044 , 0.999879,
+       1.00071 , 0.998279, 1.00031 , 0.999818, 0.998973, 1.00086 ,
+       0.994858, 0.997352, 0.99644 , 0.994283, 0.994575, 0.995698,
+       0.994824, 0.994713, 0.995482, 0.994736, 0.996792, 0.995706,
+       0.994752, 0.993211, 0.994558, 0.993956, 0.995004, 0.993613,
+       0.993948, 0.995872, 0.996478, 0.994574, 0.995362, 0.99529 ,
+       0.996243, 0.993112, 1.00004 , 0.99792 , 0.999602, 1.00021 ,
+       1.00079 , 0.999311, 1.00047 , 0.999404, 0.999304, 1.00148 ,
+       1.00072 , 1.00014 , 1.00301 , 1.00228 , 0.998727, 1.00173 ,
+       0.998629, 1.00067 , 1.00009 , 0.999671, 1.00097 , 1.0004  ,
+       1.00117 , 1.00081 , 0.999229, 0.998998, 0.999459, 1.00084 ,
+       0.999723, 1.00293 , 1.00184 , 0.998846, 1.00044 , 1.00008 ,
+       0.999624, 0.999991, 1.00027 , 0.99914 , 1.00034 , 1.00097 ,
+       1.00092 , 0.998008, 1.00049 , 0.999557, 0.998361, 0.997969,
+       0.999991, 1.00061 , 0.998795, 1.00178 , 0.999991, 1.00003 ])</code></pre>
+</div>
+</div>
+<div id="cell-13" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>t_start <span class="op">=</span> <span class="dv">0</span>         <span class="co"># start of time array</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>t_end <span class="op">=</span> <span class="dv">3570</span>        <span class="co"># end of time array</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="dv">30</span>             <span class="co"># timestep (30 seconds)</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>time_array <span class="op">=</span> np.arange(t_start,t_end<span class="op">+</span>dt,dt)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(time_array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>120</code></pre>
+</div>
+</div>
+<div id="cell-14" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.plot(time_array,data_array)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.plot(time_array,data_array,<span class="st">'o'</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'time_array'</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'data_array'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>Text(0, 0.5, 'data_array')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
 <div>
-
-
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">0</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>0.998088</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>1.000580</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>1.000070</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>1.000850</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>0.999086</td>
-</tr>
-</tbody>
-</table>
-
+<figure class="figure">
+<p><img src="hw4_files/figure-html/cell-8-output-2.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
 </div>
-<section id="part-a" class="level2">
-<h2 class="anchored" data-anchor-id="part-a">Part (a)</h2>
+<section id="part-a-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-1">Part (a)</h2>
 <p>Start by eliminating the possibility that the negative excursion is a random fluctuation. Plot the PDF of the expected <span class="math inline">\(\chi_\nu^2\)</span> under the hypothesis that the intensity is constant. Calculate <span class="math inline">\(\chi_\nu^2\)</span> and compare to show that this event is <strong>not</strong> consistent with a constant intensity. What is the mean of the intensity (<span class="math inline">\(I_\mu\)</span>) and the uncertainty of the mean (<span class="math inline">\(\sigma_{I\mu}\)</span>)? Is <span class="math inline">\(I_\mu\)</span> less than 1 by more than the <span class="math inline">\(\sigma_{I\mu}\)</span>?</p>
 <p><strong>Hint:</strong> <span class="math inline">\(\sigma\)</span> of the parent distribution is known (<span class="math inline">\(0.001 I_0\)</span>)</p>
 </section>
@@ -278,8 +287,8 @@ I_0 &amp; \text{otherwise}
 <section id="kolmogorov-smirnov-test" class="level1">
 <h1>4. Kolmogorov-Smirnov Test</h1>
 <p>Using a random number generator, create two distributions: <span class="math display">\[f_1(x) = P(x,\mu_1,n); \mu_1 = 8, n = 100\]</span> <span class="math display">\[f_2(x) = P(x,\mu_2,n); \mu_2 = 5, n = 100\]</span></p>
-<section id="part-a-1" class="level2">
-<h2 class="anchored" data-anchor-id="part-a-1">Part (a)</h2>
+<section id="part-a-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-2">Part (a)</h2>
 <p>Calculated and plot the two CDFs for <span class="math inline">\(n=100\)</span>. Compare the two distributions using the Kolmogorov-Smirnov Test with <span class="math inline">\(\alpha=0.1\)</span>. The more exact formula for the threshold is: <span class="math display">\[D &gt; \sqrt{-\frac{1}{2} \ln \left( \frac{\alpha}{2}\right)} \sqrt{\frac{n+m}{nm}}; n,m \text{ are number of points}\]</span></p>
 </section>
 <section id="part-b-2" class="level2">
