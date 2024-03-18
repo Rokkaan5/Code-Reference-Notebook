@@ -253,7 +253,7 @@ class binomial_distribution(helper):
 # 
 
 # %% Poisson
-# function to calculate poisson probability P(x;lambda)
+# function to calculate poisson probability P(x;mu)
 def P_poisson(x : int, mu : float): 
     """Function to calculate Poisson probability P(x;mu)
     

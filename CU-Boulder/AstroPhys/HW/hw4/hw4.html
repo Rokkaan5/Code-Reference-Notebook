@@ -157,7 +157,7 @@ window.Quarto = {
 </header>
 
 
-<div id="cell-1" class="cell" data-execution_count="1">
+<div id="cell-1" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -185,17 +185,39 @@ window.Quarto = {
 <center>
 <img src="light_curve.PNG" width="700">
 </center>
-<div id="cell-6" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>I <span class="op">=</span> [<span class="fl">0.921</span>, <span class="fl">0.704</span>, <span class="fl">0.623</span>, <span class="fl">0.550</span>, <span class="fl">0.426</span>, <span class="fl">0.332</span>, <span class="fl">0.258</span>, <span class="fl">0.208</span>, <span class="fl">0.143</span>, <span class="fl">0.130</span>, </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>     <span class="fl">0.137</span>, <span class="fl">0.103</span>, <span class="fl">0.058</span>, <span class="fl">0.070</span>, <span class="fl">0.042</span>, <span class="fl">0.060</span>, <span class="fl">0.022</span>, <span class="fl">0.022</span>, <span class="fl">0.011</span>, <span class="fl">0.015</span>]</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sigma <span class="op">=</span>  [<span class="fl">0.026</span>, <span class="fl">0.048</span>, <span class="fl">0.026</span>, <span class="fl">0.027</span>, <span class="fl">0.068</span>, <span class="fl">0.046</span>, <span class="fl">0.034</span>, <span class="fl">0.017</span>, <span class="fl">0.020</span>, <span class="fl">0.014</span>, </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.015</span>, <span class="fl">0.009</span>, <span class="fl">0.019</span>, <span class="fl">0.010</span>, <span class="fl">0.012</span>, <span class="fl">0.018</span>, <span class="fl">0.007</span>, <span class="fl">0.008</span>, <span class="fl">0.005</span>, <span class="fl">0.005</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-6" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>I <span class="op">=</span> np.array([<span class="fl">0.921</span>, <span class="fl">0.704</span>, <span class="fl">0.623</span>, <span class="fl">0.550</span>, <span class="fl">0.426</span>, <span class="fl">0.332</span>, <span class="fl">0.258</span>, <span class="fl">0.208</span>, <span class="fl">0.143</span>, <span class="fl">0.130</span>, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>     <span class="fl">0.137</span>, <span class="fl">0.103</span>, <span class="fl">0.058</span>, <span class="fl">0.070</span>, <span class="fl">0.042</span>, <span class="fl">0.060</span>, <span class="fl">0.022</span>, <span class="fl">0.022</span>, <span class="fl">0.011</span>, <span class="fl">0.015</span>])</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sigma <span class="op">=</span>  np.array([<span class="fl">0.026</span>, <span class="fl">0.048</span>, <span class="fl">0.026</span>, <span class="fl">0.027</span>, <span class="fl">0.068</span>, <span class="fl">0.046</span>, <span class="fl">0.034</span>, <span class="fl">0.017</span>, <span class="fl">0.020</span>, <span class="fl">0.014</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>          <span class="fl">0.015</span>, <span class="fl">0.009</span>, <span class="fl">0.019</span>, <span class="fl">0.010</span>, <span class="fl">0.012</span>, <span class="fl">0.018</span>, <span class="fl">0.007</span>, <span class="fl">0.008</span>, <span class="fl">0.005</span>, <span class="fl">0.005</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="part-a" class="level2">
 <h2 class="anchored" data-anchor-id="part-a">Part (a)</h2>
 <p>Assuming that <span class="math inline">\(\sigma\)</span> represents a 1-sigma Gaussian uncertainty, find the most likely parameters under the hypothesis that the intensity undergoes an exponential decay: <span class="math display">\[I = I_0 e^{-t/\tau}\]</span></p>
 <p>Here, <span class="math inline">\(\tau\)</span> is the decay time. As one can see, <span class="math inline">\(I_0\)</span> should be nearly unity but, for this problem, do not fix <span class="math inline">\(I_0 = 1\)</span>. Calculate the uncertainty in <span class="math inline">\(\tau\)</span>. Plot the observations and the fit.</p>
 <p><strong>Hint:</strong> One way is to perform a linear fit to <span class="math inline">\(ln(I)\)</span>. Be careful how you treat the uncertainty <span class="math inline">\(\sigma\)</span>; Taylor expand <span class="math inline">\(ln(I\pm \sigma)\)</span> to calculate the uncertainties of <span class="math inline">\(ln(I)\)</span>.</p>
+<div id="cell-8" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear fit of ln(I)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">## x-axis (time)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">100</span>,<span class="bu">len</span>(I))           <span class="co"># the x-axis (time) appears to go from 0 to 100 sec in the example figure, so I matched that structure</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">## linear fit</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>coef <span class="op">=</span> np.polyfit(t,np.log(I),deg<span class="op">=</span><span class="dv">1</span>)    <span class="co"># obtain coefficients for a linear fit ("polyfit" of order=1) of ln(I)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>lin_fit <span class="op">=</span> np.poly1d(coef)               <span class="co"># linear fit function</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># plot linear fit</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>plt.plot(t,np.log(I),<span class="st">'o'</span>,label <span class="op">=</span> <span class="st">'log(I)'</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>plt.plot(t,lin_fit(t),<span class="st">'--'</span>,label<span class="op">=</span><span class="st">'linear fit: y = </span><span class="sc">{0:.3f}</span><span class="st">x + </span><span class="sc">{1:.3f}</span><span class="st">'</span>.<span class="bu">format</span>(coef[<span class="dv">0</span>],coef[<span class="dv">1</span>]))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (sec)'</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'ln(I)'</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw4_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="part-b" class="level2">
 <h2 class="anchored" data-anchor-id="part-b">Part (b)</h2>
@@ -209,9 +231,9 @@ window.Quarto = {
 <p>Read in the text file, <code>HW4_data_A</code>, from Canvas. It contains 120 points of intensity in units of <span class="math inline">\(I_0\)</span>, one every 30 seconds. Create a corresponding time array going from 0 to 3570 seconds. Assume the uncertainty in time is negligible.</p>
 <p><img src="exoplanet.PNG" class="img-fluid"></p>
 <div id="cell-12" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_array <span class="op">=</span> np.loadtxt(<span class="st">'hw4/HW4_data.txt'</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>data_array</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data_array <span class="op">=</span> np.loadtxt(<span class="st">'hw4/HW4_data.txt'</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>data_array</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>array([0.998088, 1.00058 , 1.00007 , 1.00085 , 0.999086, 1.00013 ,
        1.00114 , 0.999925, 1.00042 , 1.00063 , 1.00064 , 0.999636,
@@ -236,23 +258,23 @@ window.Quarto = {
 </div>
 </div>
 <div id="cell-13" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create time-array</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>t_start <span class="op">=</span> <span class="dv">0</span>         <span class="co"># start of time array</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>t_end <span class="op">=</span> <span class="dv">3570</span>        <span class="co"># end of time array</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="dv">30</span>             <span class="co"># timestep (30 seconds)</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>time_array <span class="op">=</span> np.arange(t_start,t_end<span class="op">+</span>dt,dt)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length of time_array:"</span>,<span class="bu">len</span>(time_array))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create time-array</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>t_start <span class="op">=</span> <span class="dv">0</span>         <span class="co"># start of time array</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>t_end <span class="op">=</span> <span class="dv">3570</span>        <span class="co"># end of time array</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="dv">30</span>             <span class="co"># timestep (30 seconds)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>time_array <span class="op">=</span> np.arange(t_start,t_end<span class="op">+</span>dt,dt)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length of time_array:"</span>,<span class="bu">len</span>(time_array))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>length of time_array: 120</code></pre>
 </div>
 </div>
 <div id="cell-14" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot (with error bars)</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.errorbar(time_array,data_array,yerr<span class="op">=</span><span class="fl">0.0005</span><span class="op">*</span>data_array[<span class="dv">0</span>],fmt<span class="op">=</span><span class="st">'.'</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'time_array'</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'data_array'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot (with error bars)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.errorbar(time_array,data_array,yerr<span class="op">=</span><span class="fl">0.0005</span><span class="op">*</span>data_array[<span class="dv">0</span>],fmt<span class="op">=</span><span class="st">'.'</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'time_array'</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'data_array'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>Text(0, 0.5, 'data_array')</code></pre>
 </div>
@@ -291,18 +313,21 @@ I_0 &amp; \text{otherwise}
 <h1>4. Kolmogorov-Smirnov Test</h1>
 <p>Using a random number generator, create two distributions: <span class="math display">\[f_1(x) = P(x,\mu_1,n); \mu_1 = 8, n = 100\]</span> <span class="math display">\[f_2(x) = P(x,\mu_2,n); \mu_2 = 5, n = 100\]</span></p>
 <div id="cell-22" class="cell" data-execution_count="37">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n_points <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>mu1 <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>fx1 <span class="op">=</span> np.random.normal(mu1, size<span class="op">=</span>n_points)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>mu2 <span class="op">=</span> <span class="dv">5</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>fx2 <span class="op">=</span> np.random.normal(mu2,size<span class="op">=</span>n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>n_points <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 1</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>mu1 <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>fx1 <span class="op">=</span> np.random.normal(mu1, size<span class="op">=</span>n_points)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 2</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>mu2 <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>fx2 <span class="op">=</span> np.random.normal(mu2,size<span class="op">=</span>n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="cell-23" class="cell" data-execution_count="38">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.hist(fx1)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.hist(fx2)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of two distributions</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.hist(fx1)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.hist(fx2)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
