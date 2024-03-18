@@ -41,8 +41,6 @@ def get_fwhm(pdf:np.array, return_max_idx = False):
 
     return fwhm
 
-
-
 # %% General Helper Functions
 class helper:
     # TODO: add documentation to these functions
@@ -315,7 +313,6 @@ class poisson_distribution(helper):
             self.calculate_mean_mode_sigma()
             self.comprehensive_plot(mark_mode=mark_mode)
 
-    
 
 # %% [markdown]
 # # Gaussian probability
