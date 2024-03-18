@@ -290,6 +290,27 @@ I_0 &amp; \text{otherwise}
 <section id="kolmogorov-smirnov-test" class="level1">
 <h1>4. Kolmogorov-Smirnov Test</h1>
 <p>Using a random number generator, create two distributions: <span class="math display">\[f_1(x) = P(x,\mu_1,n); \mu_1 = 8, n = 100\]</span> <span class="math display">\[f_2(x) = P(x,\mu_2,n); \mu_2 = 5, n = 100\]</span></p>
+<div id="cell-22" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n_points <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>mu1 <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>fx1 <span class="op">=</span> np.random.normal(mu1, size<span class="op">=</span>n_points)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>mu2 <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>fx2 <span class="op">=</span> np.random.normal(mu2,size<span class="op">=</span>n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-23" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.hist(fx1)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.hist(fx2)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw4_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 <section id="part-a-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-a-2">Part (a)</h2>
 <p>Calculated and plot the two CDFs for <span class="math inline">\(n=100\)</span>. Compare the two distributions using the Kolmogorov-Smirnov Test with <span class="math inline">\(\alpha=0.1\)</span>. The more exact formula for the threshold is: <span class="math display">\[D &gt; \sqrt{-\frac{1}{2} \ln \left( \frac{\alpha}{2}\right)} \sqrt{\frac{n+m}{nm}}; n,m \text{ are number of points}\]</span></p>
