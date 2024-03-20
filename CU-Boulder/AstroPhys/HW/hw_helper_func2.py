@@ -74,7 +74,7 @@ def get_fwhm(pdf:np.array, return_max_idx = False):
 
     return fwhm
 
-# %%
+# %% Helper Class
 class helper:
     # TODO: add documentation to these functions
     def __init__(self,x_min=0,x_max=15,step=1):
@@ -187,7 +187,7 @@ class helper:
 #  \end{align*}
 # 
 
-# %%
+# %% Binomial
 def P_binomial(x, n, p):                             
         """Function to calculate Binomial Probability P(x;n,p)
 
@@ -265,7 +265,7 @@ class binomial_distribution(helper):
 #  \end{align*}
 # 
 
-# %%
+# %% Poisson
 # function to calculate poisson probability P(x;lambda)
 def P_poisson(x : int, mu : float): 
     """Function to calculate Poisson probability P(x;mu)
@@ -335,7 +335,7 @@ class poisson_distribution(helper):
 #  }
 #  \end{align*}
 
-# %%
+# %% Gaussian
 def P_gaussian(x,mu,sigma:float):
         """Function to calculate Poisson probability P(x;mu)
         
@@ -456,8 +456,6 @@ class gaussian_distribution(helper):
 # \end{align*}
 # 
 # 
-
-# %%
 # %% Chi-squared
 
 def nonreduced_chi2(x,mu_prime,sigma_2):
@@ -467,6 +465,4 @@ def nonreduced_chi2(x,mu_prime,sigma_2):
 class chi_squared(helper):
     def __init__(self, x_min=0, x_max=15, step=1):
         super().__init__(x_min, x_max, step)
-
-
 
