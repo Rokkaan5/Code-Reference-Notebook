@@ -389,8 +389,7 @@ class gaussian_distribution(helper):
 
 # %% [markdown]
 # # Chi-Squared Test
-
-# %% [markdown]
+#
 # ## $\chi_N^2$ ("traditional"; unbinned, non-reduced)
 # 
 # \begin{align*}
@@ -403,8 +402,7 @@ class gaussian_distribution(helper):
 # - $\sigma^2 \equiv$ parent variance
 # - $\mu' \equiv$ expected variance
 # - $\sigma_i^2 \equiv$ variance of an individual measurement
-
-# %% [markdown]
+# 
 # ## $\chi_R^2$ (reduced chi-squared)
 # 
 # \begin{align*}
@@ -415,8 +413,7 @@ class gaussian_distribution(helper):
 # - $\nu \equiv$ degrees of freedom
 # - $N \equiv$ number of observations
 # - $m \equiv$ number of parameters
-
-# %% [markdown]
+# 
 # ## $\chi^2$ (binned)
 # 
 # \begin{align*}
@@ -431,16 +428,14 @@ class gaussian_distribution(helper):
 # \begin{align*}
 # \chi^2 &= \displaystyle \sum_{j=1}^N \frac{(H(x_j) - NP(x_j))^2}{NP(x_j,\mu')}
 # \end{align*}
-
-# %% [markdown]
+# 
 # ## Generalizing, we can write:
 # 
 # \begin{align*}
 # \chi_\nu^2 &= \displaystyle \sum_{i=1}^N \frac{(y_i - y(x_i))^2}{\sigma_i^2} &&\to \nu = N-m \\
 # \chi_R^2 &= \frac{1}{\nu} \chi_\nu^2 &&\to 1 \\
 # \end{align*}
-
-# %% [markdown]
+#
 # ## PDF of $\chi^2$
 # 
 # \begin{align*}
@@ -461,6 +456,12 @@ class gaussian_distribution(helper):
 def nonreduced_chi2(x,mu_prime,sigma_2):
         cs = np.sum(((x - mu_prime)**2)/sigma_2)
         return cs
+
+def reduced_chi2(x,mu_prime,sigma_2,parameters=1):
+    dof = len(x) - parameters
+    print("degrees of freedom (nu):",dof)
+    cs = nonreduced_chi2(x=x,mu_prime=mu_prime,sigma_2=sigma_2)
+    return cs/dof
 
 class chi_squared(helper):
     def __init__(self, x_min=0, x_max=15, step=1):
