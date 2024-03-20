@@ -1,10 +1,18 @@
+# %%
 """
-title: ASTR 5550: HW helper functions
+title: ASTR 5550 - HW helper functions
 author: Jasmine Kobayashi
-
-Functions that would (likely) be helpful to save and be able to 
-reuse throughout all assignments, etc. for ASTR 5550
+format:
+    html:
+        code-fold: false
+        toc: true
+execute:
+    output: true
+    warning: false
+jupyter: python3
 """
+
+# %%
 # %% libraries
 # libraries
 import math
@@ -13,7 +21,32 @@ import matplotlib.pyplot as plt
 import random as rnd
 from scipy.special import factorial
 from scipy.signal import peak_widths
-# %% Full-Width Half-Max
+
+# %% General Helper Functions
+# all helper functions
+
+## stats using "expectation"
+def Expectation(fx,Px):
+    E = np.sum(fx*Px)              # E(x) = sum(f(x)*P(x))
+    return E
+
+def expected_mean(x,Px):
+    # calculate mean: mu = E(x)
+    mu = Expectation(fx=x,Px=Px) 
+    return mu  
+
+def expected_sigma(mu, x,Px):
+    # calculate stand. dev: sigma = sqrt(sigma^2); sigma^2 = E(x-mu)^2
+    sigma = np.sqrt(Expectation(fx=(x-mu)**2,Px=Px)) 
+    return sigma
+
+##  Calculate Mode
+def calculate_mode(self,x,Px):
+        # calculate mode: x value where P(x) is highest
+        mode = x[np.argmax(Px)]
+        return mode
+
+## FWHM sigma calculation
 def get_fwhm(pdf:np.array, return_max_idx = False):
     """Simple function to get Full-Width Half-Max (FWHM)
     
@@ -41,7 +74,7 @@ def get_fwhm(pdf:np.array, return_max_idx = False):
 
     return fwhm
 
-# %% General Helper Functions
+# %%
 class helper:
     # TODO: add documentation to these functions
     def __init__(self,x_min=0,x_max=15,step=1):
@@ -51,25 +84,6 @@ class helper:
         self.mu = None
         self.sigma = None
         self.mode = None
-
-    def Expectation(self,fx,Px):
-        E = np.sum(fx*Px)              # E(x) = sum(f(x)*P(x))
-        return E
-    
-    def expected_mean(self,x,Px):
-        # calculate mean: mu = E(x)
-        mu = self.Expectation(fx=x,Px=Px) 
-        return mu  
-
-    def expected_sigma(self,mu, x,Px):
-        # calculate stand. dev: sigma = sqrt(sigma^2); sigma^2 = E(x-mu)^2
-        sigma = np.sqrt(self.Expectation(fx=(x-mu)**2,Px=Px)) 
-        return sigma
-
-    def calculate_mode(self,x,Px):
-        # calculate mode: x value where P(x) is highest
-        mode = x[np.argmax(Px)]
-        return mode
     
     def calculate_expected_mean_mode_sigma(self,x,Px,set_to_object=False):
         mu = self.expected_mean(x=x,Px=Px)
@@ -85,7 +99,6 @@ class helper:
         else:
             return mu,mode,sigma
         
-
     def plot_mark_mean(self,
                        mu,
                        ymin=0,
@@ -153,29 +166,28 @@ class helper:
         if mark_mode:
             self.mode = self.calculate_mode(x=self.x,Px=self.Px)
 
-
 # %% [markdown]
 # # Binomial probability:
 # 
-# \begin{align*}
-# P_B(x;n,p) &= \frac{n!}{(n-x)!x!}p^x q^{n-x}
-# \end{align*}
+#  \begin{align*}
+#  \boxed{
+#  P_B(x;n,p) = \frac{n!}{(n-x)!x!}p^x q^{n-x}
+#  }
+#  \end{align*}
 # 
-# where, $q=1-p$
+#  where, $q=1-p$
 # 
-# And other useful:
+#  And other useful:
 # 
-# \begin{align*}
-# \mu &= \displaystyle \sum_{x=0}^n x \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
-# &= np \\
-# \sigma^2 &= \displaystyle \sum_{x=0}^n (x- \mu )^2 \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
-# &= np(1-p)
-# \end{align*}
+#  \begin{align*}
+#  \mu &= \displaystyle \sum_{x=0}^n x \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
+#  &= np \\
+#  \sigma^2 &= \displaystyle \sum_{x=0}^n (x- \mu )^2 \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
+#  &= np(1-p)
+#  \end{align*}
 # 
 
-
-# %% Binomial Probability
-        
+# %%
 def P_binomial(x, n, p):                             
         """Function to calculate Binomial Probability P(x;n,p)
 
@@ -236,24 +248,25 @@ class binomial_distribution(helper):
             self.calculate_mean_mode_sigma()
             self.comprehensive_plot(mark_mode=mark_mode)
 
-
 # %% [markdown]
 # # Poisson probability
 # 
-# \begin{align*}
-# P_P(x;\mu) &= \frac{\mu^x}{x!}e^{-\mu}
-# \end{align*}
-#   
-# And other useful:
+#  \begin{align*}
+#  \boxed{
+#  P_P(x;\mu) = \frac{\mu^x}{x!}e^{-\mu}
+#  }
+#  \end{align*}
 # 
-# \begin{align*}
-# \sigma^2 &=  \displaystyle \sum_{x=0}^n \frac{\mu^x}{x!}e^{-\mu} \\
-# &= \mu
-# \end{align*}
+#  And other useful:
+# 
+#  \begin{align*}
+#  \sigma^2 &=  \displaystyle \sum_{x=0}^n \frac{\mu^x}{x!}e^{-\mu} \\
+#  &= \mu
+#  \end{align*}
 # 
 
-# %% Poisson
-# function to calculate poisson probability P(x;mu)
+# %%
+# function to calculate poisson probability P(x;lambda)
 def P_poisson(x : int, mu : float): 
     """Function to calculate Poisson probability P(x;mu)
     
@@ -313,15 +326,16 @@ class poisson_distribution(helper):
             self.calculate_mean_mode_sigma()
             self.comprehensive_plot(mark_mode=mark_mode)
 
-
 # %% [markdown]
 # # Gaussian probability
 # 
-# \begin{align*}
-# P_G(x;\mu, \sigma) &= \frac{1}{\sigma \sqrt{2 \pi}}\exp\left({\frac{-(x-\mu)^2}{2\sigma^2}}\right)
-# \end{align*}
+#  \begin{align*}
+#  \boxed{
+#  P_G(x;\mu, \sigma) = \frac{1}{\sigma \sqrt{2 \pi}}\exp\left({\frac{-(x-\mu)^2}{2\sigma^2}}\right)
+#  }
+#  \end{align*}
 
-# %% Gaussian
+# %%
 def P_gaussian(x,mu,sigma:float):
         """Function to calculate Poisson probability P(x;mu)
         
@@ -372,4 +386,87 @@ class gaussian_distribution(helper):
         if comprehensive:
             self.mode = self.calculate_mode(x=self.x,Px=self.Px)
             self.comprehensive_plot(mark_mode=mark_mode)
+
+# %% [markdown]
+# # Chi-Squared Test
+
+# %% [markdown]
+# ## $\chi_N^2$ ("traditional"; unbinned, non-reduced)
+# 
+# \begin{align*}
+# \chi_N^2 &= \displaystyle \sum_{i=1}^N \frac{(x_i - \mu')^2}{\sigma^2} \\
+# & \approx \displaystyle \sum_{i=1}^N \frac{(x_i - \mu')^2}{\mu'} \\
+# & \approx \displaystyle \sum_{i=1}^N \frac{(x_i - \mu')^2}{\sigma_i ^2}
+# \end{align*}
+# 
+# Where:
+# - $\sigma^2 \equiv$ parent variance
+# - $\mu' \equiv$ expected variance
+# - $\sigma_i^2 \equiv$ variance of an individual measurement
+
+# %% [markdown]
+# ## $\chi_R^2$ (reduced chi-squared)
+# 
+# \begin{align*}
+# \chi_R^2 = \frac{\chi_N^2}{\nu}
+# \end{align*}
+# 
+# Where, $\nu = N - m$ 
+# - $\nu \equiv$ degrees of freedom
+# - $N \equiv$ number of observations
+# - $m \equiv$ number of parameters
+
+# %% [markdown]
+# ## $\chi^2$ (binned)
+# 
+# \begin{align*}
+# \chi^2 &= \displaystyle \sum_{j=1}^N \frac{(H(x_j) - NP(x_j,\mu'))^2}{\sigma_j^2}
+# \end{align*}
+# 
+# Where, ...
+# 
+# ### Also...
+# In an example (specifically lecture 13 slides/page 5), the following formula is also used:
+# 
+# \begin{align*}
+# \chi^2 &= \displaystyle \sum_{j=1}^N \frac{(H(x_j) - NP(x_j))^2}{NP(x_j,\mu')}
+# \end{align*}
+
+# %% [markdown]
+# ## Generalizing, we can write:
+# 
+# \begin{align*}
+# \chi_\nu^2 &= \displaystyle \sum_{i=1}^N \frac{(y_i - y(x_i))^2}{\sigma_i^2} &&\to \nu = N-m \\
+# \chi_R^2 &= \frac{1}{\nu} \chi_\nu^2 &&\to 1 \\
+# \end{align*}
+
+# %% [markdown]
+# ## PDF of $\chi^2$
+# 
+# \begin{align*}
+# P(\chi_\nu^2) = \frac{\left( \frac{\chi_\nu^2}{2}\right)^{\frac{\nu}{2}-1} }{2 \Gamma \left(\frac{\nu}{2} \right)}\exp\left(-\frac{\chi_\nu^2}{2}\right)
+# \end{align*}
+# 
+# ### Special cases
+# 
+# #### $\sigma^2 = 2\nu$
+# 
+# \begin{align*}
+# P(\chi_\nu^2) \approx \frac{1}{\sqrt{4\pi \nu}} \exp\frac{-(\chi^2 - \nu)}{4\nu}
+# \end{align*}
+# 
+# 
+
+# %%
+# %% Chi-squared
+
+def nonreduced_chi2(x,mu_prime,sigma_2):
+        cs = np.sum(((x - mu_prime)**2)/sigma_2)
+        return cs
+
+class chi_squared(helper):
+    def __init__(self, x_min=0, x_max=15, step=1):
+        super().__init__(x_min, x_max, step)
+
+
 
