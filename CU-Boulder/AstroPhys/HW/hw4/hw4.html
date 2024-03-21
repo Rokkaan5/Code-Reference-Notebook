@@ -187,7 +187,7 @@ window.Quarto = {
 <h1>2. Supernova Light Curve</h1>
 <p>After a supernova reaches its maximum brightness, the light curve exponentially decays as do the radioactive materials. The decay time can tell us its type. Examine the light curve below.</p>
 <p><span class="math display">\[I = [0.921, 0.704, 0.623, 0.550, 0.426, 0.332, 0.258, 0.208, 0.143, 0.130, 0.137, 0.103, 0.058, 0.070, 0.042, 0.060, 0.022, 0.022, 0.011, 0.015]\]</span> <span class="math display">\[ \sigma =  [0.026, 0.048, 0.026, 0.027, 0.068, 0.046, 0.034, 0.017, 0.020, 0.014, 0.015, 0.009, 0.019, 0.010, 0.012, 0.018, 0.007, 0.008, 0.005, 0.005]\]</span></p>
-<p><img src="light_curve.PNG" class="img-fluid"></p>
+<p><img src="light_curve.PNG" class="img-fluid" width="700"></p>
 <div id="cell-6" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>I <span class="op">=</span> np.array([<span class="fl">0.921</span>, <span class="fl">0.704</span>, <span class="fl">0.623</span>, <span class="fl">0.550</span>, <span class="fl">0.426</span>, <span class="fl">0.332</span>, <span class="fl">0.258</span>, <span class="fl">0.208</span>, <span class="fl">0.143</span>, <span class="fl">0.130</span>, </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>              <span class="fl">0.137</span>, <span class="fl">0.103</span>, <span class="fl">0.058</span>, <span class="fl">0.070</span>, <span class="fl">0.042</span>, <span class="fl">0.060</span>, <span class="fl">0.022</span>, <span class="fl">0.022</span>, <span class="fl">0.011</span>, <span class="fl">0.015</span>])</span>
@@ -290,11 +290,11 @@ I0: 1.002122196915861</code></pre>
 <div id="cell-19" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> <span class="dv">20</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>confidence <span class="op">=</span> q2b.calculate_chi2_confidence(cs<span class="op">=</span>q2b.cs,df<span class="op">=</span>df,set_to_object<span class="op">=</span><span class="va">True</span> )</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"For chi-squared=</span><span class="sc">{0:.3f}</span><span class="st"> with </span><span class="sc">{1:.3f}</span><span class="st"> deg. of freedom:"</span>.<span class="bu">format</span>(q2b.cs,df))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"For chi-squared=</span><span class="sc">{0:.3f}</span><span class="st"> with </span><span class="sc">{1:.0f}</span><span class="st"> deg. of freedom:"</span>.<span class="bu">format</span>(q2b.cs,df))</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Probability:"</span>, chi2.pdf(x<span class="op">=</span>q2b.cs,df<span class="op">=</span>df))</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Confidence:"</span>, confidence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>For chi-squared=32.903 with 20.000 deg. of freedom:
+<pre><code>For chi-squared=32.903 with 20 deg. of freedom:
 Probability: 0.00871534107424103
 Confidence: 0.03457894779339932</code></pre>
 </div>
@@ -348,11 +348,11 @@ Confidence: 0.03457894779339932</code></pre>
 </div>
 <div id="cell-23" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create time-array</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>t_start <span class="op">=</span> <span class="dv">0</span>         <span class="co"># start of time array</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>t_end <span class="op">=</span> <span class="dv">3570</span>        <span class="co"># end of time array</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="dv">30</span>             <span class="co"># timestep (30 seconds)</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> <span class="dv">0</span>          <span class="co"># start of time array</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>tf <span class="op">=</span> <span class="dv">3570</span>       <span class="co"># end of time array</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> <span class="dv">30</span>         <span class="co"># timestep (30 seconds)</span></span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>time_array <span class="op">=</span> np.arange(t_start,t_end<span class="op">+</span>dt,dt)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>time_array <span class="op">=</span> np.arange(t0,tf<span class="op">+</span>dt,dt)</span>
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"length of time_array:"</span>,<span class="bu">len</span>(time_array))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>length of time_array: 120</code></pre>
@@ -380,24 +380,24 @@ Confidence: 0.03457894779339932</code></pre>
 <h2 class="anchored" data-anchor-id="part-a-1">Part (a)</h2>
 <p>Start by eliminating the possibility that the negative excursion is a random fluctuation. Plot the PDF of the expected <span class="math inline">\(\chi_\nu^2\)</span> under the hypothesis that the intensity is constant. Calculate <span class="math inline">\(\chi_\nu^2\)</span> and compare to show that this event is <strong>not</strong> consistent with a constant intensity. What is the mean of the intensity (<span class="math inline">\(I_\mu\)</span>) and the uncertainty of the mean (<span class="math inline">\(\sigma_{I\mu}\)</span>)? Is <span class="math inline">\(I_\mu\)</span> less than 1 by more than the <span class="math inline">\(\sigma_{I\mu}\)</span>?</p>
 <p><strong>Hint:</strong> <span class="math inline">\(\sigma\)</span> of the parent distribution is known (<span class="math inline">\(0.001 I_0\)</span>)</p>
-<div id="cell-26" class="cell" data-execution_count="18">
+<div id="cell-26" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mean of intensity:"</span>,np.mean(data_array))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>mean of intensity: 0.9989476166666668</code></pre>
 </div>
 </div>
-<div id="cell-27" class="cell">
+<div id="cell-27" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># uncertainty of mean</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (come back to this later)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-28" class="cell" data-execution_count="14">
+<div id="cell-28" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>cs_constant <span class="op">=</span> hf.chi_squared(x<span class="op">=</span>data_array,sigma<span class="op">=</span><span class="fl">0.001</span><span class="op">*</span>data_array)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>cs_constant.calculate_chi2(x<span class="op">=</span>data_array,mu_prime<span class="op">=</span><span class="fl">1.0</span>,sigma_2<span class="op">=</span>(<span class="fl">0.001</span><span class="op">*</span>data_array)<span class="op">**</span><span class="dv">2</span>,set_to_object<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
-<pre><code>773.7524310078929</code></pre>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>cs_constant.calculate_chi2(x<span class="op">=</span>data_array,mu_prime<span class="op">=</span>np.mean(data_array),sigma_2<span class="op">=</span>(<span class="fl">0.001</span><span class="op">*</span>data_array)<span class="op">**</span><span class="dv">2</span>,set_to_object<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>637.8838224539259</code></pre>
 </div>
 </div>
-<div id="cell-29" class="cell" data-execution_count="15">
+<div id="cell-29" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>cs_constant.plot_chi2_pdf(cs<span class="op">=</span>cs_constant.cs,df<span class="op">=</span><span class="bu">len</span>(data_array))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -411,46 +411,53 @@ Confidence: 0.03457894779339932</code></pre>
 <section id="part-b-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-b-1">Part (b)</h2>
 <p>Now that the interval is identified as significant and negative, let’s examine and fit the negative excursion. Keeping it simple, use a three-parameter (<span class="math inline">\(I_0, t_{start},t_{end}\)</span>) fit:</p>
-<p><span class="math display">\[\begin{equation}
+<p><span class="math display">\[\begin{equation*}
 I =
 \begin{cases}
 I_0 - \Delta I &amp; t_{start} \le t \le t_{end}\\
 I_0 &amp; \text{otherwise}
 \end{cases}
-\end{equation}\]</span></p>
+\end{equation*}\]</span></p>
 <p>Do a least-squares fit with a method of choose. My method is to guess <span class="math inline">\(t_{start}\)</span> and <span class="math inline">\(t_{end}\)</span> then calculate <span class="math inline">\(\chi_\nu^2\)</span> along with <span class="math inline">\(\Delta I\)</span>. Increment <span class="math inline">\(t_{start}\)</span> and <span class="math inline">\(t_{end}\)</span> and recalculate <span class="math inline">\(\Delta I\)</span> until <span class="math inline">\(\chi_\nu^2\)</span> is minimum. Plot the data (with error bars if you can) and overplot your fit. What are <span class="math inline">\(I_0, t_{start},\)</span> and <span class="math inline">\(t_{end}\)</span>?</p>
 <div id="cell-31" class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_udu(t_start, t_end, I0<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Fit 'up-down-up'</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    delta_I <span class="op">=</span> I0 <span class="op">-</span> np.mean(data_array[(time_array<span class="op">&gt;=</span>t_start) <span class="op">&amp;</span> (time_array<span class="op">&lt;=</span>t_end)])</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    fit <span class="op">=</span> []</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> t <span class="kw">in</span> time_array:</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> t <span class="op">&gt;=</span> t_start <span class="kw">and</span> t <span class="op">&lt;=</span> t_end:</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>            fit.append(I0 <span class="op">-</span> delta_I)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>            fit.append(I0)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    fit <span class="op">=</span> np.array(fit)</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="part-c" class="level2">
-<h2 class="anchored" data-anchor-id="part-c">Part (c)</h2>
-<p>Estimate the uncertainties of <span class="math inline">\(I_0, t_{start},\)</span> and <span class="math inline">\(t_{end}\)</span>. Explain how you arrive at your values.</p>
-<p><strong>Hint:</strong> The uncertainty of <span class="math inline">\(\Delta I\)</span> is straight-forward. Recall that you can calculate <span class="math inline">\(\sigma_I\)</span>, but <span class="math inline">\(\partial t/ \partial I\)</span> can only be estimated. Can one have an uncertainty in time that is less than <span class="math inline">\(\delta t\)</span> (30 seconds)?</p>
-<div id="cell-33" class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-32" class="cell" data-execution_count="70">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> fit_udu(t_start<span class="op">=</span><span class="dv">1250</span>,t_end<span class="op">=</span><span class="dv">2010</span>,I0<span class="op">=</span>np.mean(data_array[time_array<span class="op">&lt;</span><span class="dv">1250</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-</section>
-<section id="kolmogorov-smirnov-test" class="level1">
-<h1>4. Kolmogorov-Smirnov Test</h1>
-<p>Using a random number generator, create two distributions: <span class="math display">\[f_1(x) = P(x,\mu_1,n); \mu_1 = 8, n = 100\]</span> <span class="math display">\[f_2(x) = P(x,\mu_2,n); \mu_2 = 5, n = 100\]</span></p>
-<div id="cell-35" class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>n_points <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 1</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>mu1 <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>fx1 <span class="op">=</span> np.random.normal(mu1, size<span class="op">=</span>n_points)</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 2</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>mu2 <span class="op">=</span> <span class="dv">5</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>fx2 <span class="op">=</span> np.random.normal(mu2,size<span class="op">=</span>n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-33" class="cell" data-execution_count="77">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>q3b_cs <span class="op">=</span> hf.nonreduced_chi2(x<span class="op">=</span>data_array,mu_prime<span class="op">=</span>fit,sigma_2<span class="op">=</span>(<span class="fl">0.001</span><span class="op">*</span>data_array)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"chi-squared:"</span>,q3b_cs)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>q3b_rcs <span class="op">=</span> hf.reduced_chi2(x<span class="op">=</span>data_array,mu_prime<span class="op">=</span>fit,sigma_2<span class="op">=</span>(<span class="fl">0.001</span><span class="op">*</span>data_array)<span class="op">**</span><span class="dv">2</span>,parameters<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"reduced chi-squared:"</span>,q3b_rcs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>chi-squared: 530.3784927040583
+degrees of freedom (nu): 117
+reduced chi-squared: 4.533149510291096</code></pre>
 </div>
-<div id="cell-36" class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of two distributions</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>plt.hist(fx1)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>plt.hist(fx2)</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-34" class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot (with error bars)</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>plt.errorbar(time_array,data_array,yerr<span class="op">=</span><span class="fl">0.0005</span><span class="op">*</span>data_array,fmt<span class="op">=</span><span class="st">'.'</span>,label<span class="op">=</span><span class="st">'data (with error bars)'</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>plt.plot(time_array,fit,label<span class="op">=</span><span class="st">'Arbitrary Fit'</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'time_array (seconds)'</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'data_array ($I_0$)'</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Plot Fit with Data"</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -459,25 +466,62 @@ I_0 &amp; \text{otherwise}
 </div>
 </div>
 </div>
+</section>
+<section id="part-c" class="level2">
+<h2 class="anchored" data-anchor-id="part-c">Part (c)</h2>
+<p>Estimate the uncertainties of <span class="math inline">\(I_0, t_{start},\)</span> and <span class="math inline">\(t_{end}\)</span>. Explain how you arrive at your values.</p>
+<p><strong>Hint:</strong> The uncertainty of <span class="math inline">\(\Delta I\)</span> is straight-forward. Recall that you can calculate <span class="math inline">\(\sigma_I\)</span>, but <span class="math inline">\(\partial t/ \partial I\)</span> can only be estimated. Can one have an uncertainty in time that is less than <span class="math inline">\(\delta t\)</span> (30 seconds)?</p>
+<div id="cell-36" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="kolmogorov-smirnov-test" class="level1">
+<h1>4. Kolmogorov-Smirnov Test</h1>
+<p>Using a random number generator, create two distributions: <span class="math display">\[f_1(x) = P(x,\mu_1,n); \mu_1 = 8, n = 100\]</span> <span class="math display">\[f_2(x) = P(x,\mu_2,n); \mu_2 = 5, n = 100\]</span></p>
+<div id="cell-38" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>n_points <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 1</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>mu1 <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>fx1 <span class="op">=</span> np.random.normal(mu1, size<span class="op">=</span>n_points)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 2</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>mu2 <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>fx2 <span class="op">=</span> np.random.normal(mu2,size<span class="op">=</span>n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-39" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of two distributions</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>plt.hist(fx1)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>plt.hist(fx2)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw4_files/figure-html/cell-25-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 <section id="part-a-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-a-2">Part (a)</h2>
 <p>Calculated and plot the two CDFs for <span class="math inline">\(n=100\)</span>. Compare the two distributions using the Kolmogorov-Smirnov Test with <span class="math inline">\(\alpha=0.1\)</span>. The more exact formula for the threshold is: <span class="math display">\[D &gt; \sqrt{-\frac{1}{2} \ln \left( \frac{\alpha}{2}\right)} \sqrt{\frac{n+m}{nm}}; n,m \text{ are number of points}\]</span></p>
-<div id="cell-38" class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-41" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="part-b-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-b-2">Part (b)</h2>
 <p>Repeat the test several (5 to 10) times recreating the distributions. Do <span class="math inline">\(f_1\)</span> and <span class="math inline">\(f_2\)</span> consistently pass or fail the test?</p>
-<div id="cell-40" class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-43" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="part-c-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-c-1">Part (c)</h2>
 <p>Repeat the test for higher <span class="math inline">\(n\)</span>, say 1000 (for both <span class="math inline">\(f_1\)</span> and <span class="math inline">\(f_2\)</span>) several times. Does the test at <span class="math inline">\(n=1000\)</span> reveal that the two distributions are not from the same parent? What does this exercise tell us about the Kolmogorov-Smirnov Test?</p>
-<div id="cell-42" class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-45" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
