@@ -463,10 +463,14 @@ def reduced_chi2(x,mu_prime,sigma_2,parameters=1):
     print("degrees of freedom (nu):",dof)
     cs = nonreduced_chi2(x=x,mu_prime=mu_prime,sigma_2=sigma_2)
     return cs/dof
-class chi_squared(helper):
-    def __init__(self, x_min=0, x_max=15, step=1):
-        super().__init__(x_min, x_max, step)
+class chi_squared:
+    def __init__(self, x,parameters=1,mu=None,sigma=None):
+        self.x = x                              # observations
+        self.df = len(self.x)-parameters        # degrees of freedom (nu = N-m)
         self.cs = None
+        # TODO: change the defaults of these parameters
+        self.mu = mu
+        self.sigma = sigma
 
     def calculate_chi2(self,x=None,mu_prime=None,sigma_2=None, set_to_object=False):
         if x is None:
@@ -496,7 +500,7 @@ class chi_squared(helper):
         if cs is None:
             cs = self.cs
         if df is None:
-            df = len(self.x)-1
+            df = self.df
 
         confidence = self.calculate_chi2_confidence(cs=cs,df=df)
 
