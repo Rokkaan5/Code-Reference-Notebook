@@ -504,7 +504,13 @@ class chi_squared:
 
         confidence = self.calculate_chi2_confidence(cs=cs,df=df)
 
-        x2 = np.arange(0,100)
+        if df >= 100:
+            if cs >= df:
+                x2 = np.arange(0,round(cs+100))
+            else:
+                x2 = np.arange(0,round(df+100))
+        else:
+            x2 = np.arange(0,100)
         
         plt.plot(x2,chi2.pdf(x2,df))
         plt.vlines(cs, ymin=0, ymax=max(chi2.pdf(x2,df)),colors='black',linestyles='dashed',label="$\chi^2$ = {0:.3f}; $P(\chi^2)=${1:.3f}".format(cs,chi2.pdf(x=cs,df=df)))
