@@ -458,9 +458,10 @@ def nonreduced_chi2(x,mu_prime,sigma_2):
         cs = np.sum(((x - mu_prime)**2)/sigma_2)
         return cs
 
-def reduced_chi2(x,mu_prime,sigma_2,parameters=1):
+def reduced_chi2(x,mu_prime,sigma_2,parameters=1,verbose=False):
     dof = len(x) - parameters
-    print("degrees of freedom (nu):",dof)
+    if verbose:
+        print("degrees of freedom (nu):",dof)
     cs = nonreduced_chi2(x=x,mu_prime=mu_prime,sigma_2=sigma_2)
     return cs/dof
 class chi_squared:
