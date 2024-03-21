@@ -105,7 +105,29 @@ window.Quarto = {
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#binomial-probability" id="toc-binomial-probability" class="nav-link active" data-scroll-target="#binomial-probability">Binomial probability:</a></li>
+  <li><a href="#poisson-probability" id="toc-poisson-probability" class="nav-link" data-scroll-target="#poisson-probability">Poisson probability</a></li>
+  <li><a href="#gaussian-probability" id="toc-gaussian-probability" class="nav-link" data-scroll-target="#gaussian-probability">Gaussian probability</a></li>
+  <li><a href="#chi-squared-test" id="toc-chi-squared-test" class="nav-link" data-scroll-target="#chi-squared-test">Chi-Squared Test</a>
+  <ul class="collapse">
+  <li><a href="#chi_n2-traditional-unbinned-non-reduced" id="toc-chi_n2-traditional-unbinned-non-reduced" class="nav-link" data-scroll-target="#chi_n2-traditional-unbinned-non-reduced"><span class="math inline">\(\chi_N^2\)</span> (“traditional”; unbinned, non-reduced)</a></li>
+  <li><a href="#chi_r2-reduced-chi-squared" id="toc-chi_r2-reduced-chi-squared" class="nav-link" data-scroll-target="#chi_r2-reduced-chi-squared"><span class="math inline">\(\chi_R^2\)</span> (reduced chi-squared)</a></li>
+  <li><a href="#chi2-binned" id="toc-chi2-binned" class="nav-link" data-scroll-target="#chi2-binned"><span class="math inline">\(\chi^2\)</span> (binned)</a>
+  <ul class="collapse">
+  <li><a href="#also" id="toc-also" class="nav-link" data-scroll-target="#also">Also…</a></li>
+  </ul></li>
+  <li><a href="#generalizing-we-can-write" id="toc-generalizing-we-can-write" class="nav-link" data-scroll-target="#generalizing-we-can-write">Generalizing, we can write:</a></li>
+  <li><a href="#pdf-of-chi2" id="toc-pdf-of-chi2" class="nav-link" data-scroll-target="#pdf-of-chi2">PDF of <span class="math inline">\(\chi^2\)</span></a>
+  <ul class="collapse">
+  <li><a href="#special-cases" id="toc-special-cases" class="nav-link" data-scroll-target="#special-cases">Special cases</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -288,20 +310,21 @@ window.Quarto = {
 <span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> mark_mode:</span>
 <span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.mode <span class="op">=</span> calculate_mode(x<span class="op">=</span><span class="va">self</span>.x,Px<span class="op">=</span><span class="va">self</span>.Px)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p># Binomial probability:</p>
+<section id="binomial-probability" class="level1">
+<h1>Binomial probability:</h1>
 <p><span class="math display">\[\begin{align*}
-  \boxed{
-  P_B(x;n,p) = \frac{n!}{(n-x)!x!}p^x q^{n-x}
-  }
-  \end{align*}\]</span></p>
+\boxed{
+P_B(x;n,p) = \frac{n!}{(n-x)!x!}p^x q^{n-x}
+}
+\end{align*}\]</span></p>
 <p>where, <span class="math inline">\(q=1-p\)</span></p>
 <p>And other useful:</p>
 <p><span class="math display">\[\begin{align*}
-  \mu &amp;= \displaystyle \sum_{x=0}^n x \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
-  &amp;= np \\
-  \sigma^2 &amp;= \displaystyle \sum_{x=0}^n (x- \mu )^2 \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
-  &amp;= np(1-p)
-  \end{align*}\]</span></p>
+\mu &amp;= \displaystyle \sum_{x=0}^n x \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
+&amp;= np \\
+\sigma^2 &amp;= \displaystyle \sum_{x=0}^n (x- \mu )^2 \frac{n!}{(n-x)!x!}p^x q^{n-x} \\
+&amp;= np(1-p)
+\end{align*}\]</span></p>
 <div id="cell-5" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> P_binomial(x, n, p):                             </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Function to calculate Binomial Probability P(x;n,p)</span></span>
@@ -363,17 +386,19 @@ window.Quarto = {
 <span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.calculate_mean_mode_sigma()</span>
 <span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.comprehensive_plot(mark_mode<span class="op">=</span>mark_mode)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p># Poisson probability</p>
+</section>
+<section id="poisson-probability" class="level1">
+<h1>Poisson probability</h1>
 <p><span class="math display">\[\begin{align*}
-  \boxed{
-  P_P(x;\mu) = \frac{\mu^x}{x!}e^{-\mu}
-  }
-  \end{align*}\]</span></p>
+\boxed{
+P_P(x;\mu) = \frac{\mu^x}{x!}e^{-\mu}
+}
+\end{align*}\]</span></p>
 <p>And other useful:</p>
 <p><span class="math display">\[\begin{align*}
-  \sigma^2 &amp;=  \displaystyle \sum_{x=0}^n \frac{\mu^x}{x!}e^{-\mu} \\
-  &amp;= \mu
-  \end{align*}\]</span></p>
+\sigma^2 &amp;=  \displaystyle \sum_{x=0}^n \frac{\mu^x}{x!}e^{-\mu} \\
+&amp;= \mu
+\end{align*}\]</span></p>
 <div id="cell-7" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to calculate poisson probability P(x;lambda)</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> P_poisson(x : <span class="bu">int</span>, mu : <span class="bu">float</span>): </span>
@@ -435,12 +460,14 @@ window.Quarto = {
 <span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.calculate_mean_mode_sigma()</span>
 <span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.comprehensive_plot(mark_mode<span class="op">=</span>mark_mode)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p># Gaussian probability</p>
+</section>
+<section id="gaussian-probability" class="level1">
+<h1>Gaussian probability</h1>
 <p><span class="math display">\[\begin{align*}
-  \boxed{
-  P_G(x;\mu, \sigma) = \frac{1}{\sigma \sqrt{2 \pi}}\exp\left({\frac{-(x-\mu)^2}{2\sigma^2}}\right)
-  }
-  \end{align*}\]</span></p>
+\boxed{
+P_G(x;\mu, \sigma) = \frac{1}{\sigma \sqrt{2 \pi}}\exp\left({\frac{-(x-\mu)^2}{2\sigma^2}}\right)
+}
+\end{align*}\]</span></p>
 <div id="cell-9" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> P_gaussian(x,mu,sigma:<span class="bu">float</span>):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Function to calculate Poisson probability P(x;mu)</span></span>
@@ -493,39 +520,55 @@ window.Quarto = {
 <span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.mode <span class="op">=</span> calculate_mode(x<span class="op">=</span><span class="va">self</span>.x,Px<span class="op">=</span><span class="va">self</span>.Px)</span>
 <span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.comprehensive_plot(mark_mode<span class="op">=</span>mark_mode)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p># Chi-Squared Test</p>
-<p>## <span class="math inline">\(\chi_N^2\)</span> (“traditional”; unbinned, non-reduced)</p>
+</section>
+<section id="chi-squared-test" class="level1">
+<h1>Chi-Squared Test</h1>
+<section id="chi_n2-traditional-unbinned-non-reduced" class="level2">
+<h2 class="anchored" data-anchor-id="chi_n2-traditional-unbinned-non-reduced"><span class="math inline">\(\chi_N^2\)</span> (“traditional”; unbinned, non-reduced)</h2>
 <p><span class="math display">\[\begin{align*}
 \chi_N^2 &amp;= \displaystyle \sum_{i=1}^N \frac{(x_i - \mu')^2}{\sigma^2} \\
 &amp; \approx \displaystyle \sum_{i=1}^N \frac{(x_i - \mu')^2}{\mu'} \\
 &amp; \approx \displaystyle \sum_{i=1}^N \frac{(x_i - \mu')^2}{\sigma_i ^2}
 \end{align*}\]</span></p>
 <p>Where: - <span class="math inline">\(\sigma^2 \equiv\)</span> parent variance - <span class="math inline">\(\mu' \equiv\)</span> expected variance - <span class="math inline">\(\sigma_i^2 \equiv\)</span> variance of an individual measurement</p>
-<p>## <span class="math inline">\(\chi_R^2\)</span> (reduced chi-squared)</p>
+</section>
+<section id="chi_r2-reduced-chi-squared" class="level2">
+<h2 class="anchored" data-anchor-id="chi_r2-reduced-chi-squared"><span class="math inline">\(\chi_R^2\)</span> (reduced chi-squared)</h2>
 <p><span class="math display">\[\begin{align*}
 \chi_R^2 = \frac{\chi_N^2}{\nu}
 \end{align*}\]</span></p>
 <p>Where, <span class="math inline">\(\nu = N - m\)</span> - <span class="math inline">\(\nu \equiv\)</span> degrees of freedom - <span class="math inline">\(N \equiv\)</span> number of observations - <span class="math inline">\(m \equiv\)</span> number of parameters</p>
-<p>## <span class="math inline">\(\chi^2\)</span> (binned)</p>
+</section>
+<section id="chi2-binned" class="level2">
+<h2 class="anchored" data-anchor-id="chi2-binned"><span class="math inline">\(\chi^2\)</span> (binned)</h2>
 <p><span class="math display">\[\begin{align*}
 \chi^2 &amp;= \displaystyle \sum_{j=1}^N \frac{(H(x_j) - NP(x_j,\mu'))^2}{\sigma_j^2}
 \end{align*}\]</span></p>
 <p>Where, …</p>
-<p>### Also… In an example (specifically lecture 13 slides/page 5), the following formula is also used:</p>
+<section id="also" class="level3">
+<h3 class="anchored" data-anchor-id="also">Also…</h3>
+<p>In an example (specifically lecture 13 slides/page 5), the following formula is also used:</p>
 <p><span class="math display">\[\begin{align*}
 \chi^2 &amp;= \displaystyle \sum_{j=1}^N \frac{(H(x_j) - NP(x_j))^2}{NP(x_j,\mu')}
 \end{align*}\]</span></p>
-<p>## Generalizing, we can write:</p>
+</section>
+</section>
+<section id="generalizing-we-can-write" class="level2">
+<h2 class="anchored" data-anchor-id="generalizing-we-can-write">Generalizing, we can write:</h2>
 <p><span class="math display">\[\begin{align*}
 \chi_\nu^2 &amp;= \displaystyle \sum_{i=1}^N \frac{(y_i - y(x_i))^2}{\sigma_i^2} &amp;&amp;\to \nu = N-m \\
 \chi_R^2 &amp;= \frac{1}{\nu} \chi_\nu^2 &amp;&amp;\to 1 \\
 \end{align*}\]</span></p>
-<p>## PDF of <span class="math inline">\(\chi^2\)</span></p>
+</section>
+<section id="pdf-of-chi2" class="level2">
+<h2 class="anchored" data-anchor-id="pdf-of-chi2">PDF of <span class="math inline">\(\chi^2\)</span></h2>
 <p><span class="math display">\[\begin{align*}
 P(\chi_\nu^2) = \frac{\left( \frac{\chi_\nu^2}{2}\right)^{\frac{\nu}{2}-1} }{2 \Gamma \left(\frac{\nu}{2} \right)}\exp\left(-\frac{\chi_\nu^2}{2}\right)
 \end{align*}\]</span></p>
-<p>### Special cases</p>
-<p>#### <span class="math inline">\(\sigma^2 = 2\nu\)</span></p>
+<section id="special-cases" class="level3">
+<h3 class="anchored" data-anchor-id="special-cases">Special cases</h3>
+<section id="sigma2-2nu" class="level4">
+<h4 class="anchored" data-anchor-id="sigma2-2nu"><span class="math inline">\(\sigma^2 = 2\nu\)</span></h4>
 <p><span class="math display">\[\begin{align*}
 P(\chi_\nu^2) \approx \frac{1}{\sqrt{4\pi \nu}} \exp\frac{-(\chi^2 - \nu)}{4\nu}
 \end{align*}\]</span></p>
@@ -596,6 +639,10 @@ P(\chi_\nu^2) \approx \frac{1}{\sqrt{4\pi \nu}} \exp\frac{-(\chi^2 - \nu)}{4\nu}
 <span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="st">"$\chi^2$ PDF for </span><span class="sc">{}</span><span class="st"> degrees of freedom"</span>.<span class="bu">format</span>(df))</span>
 <span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+</section>
+</section>
+</section>
 
 </main>
 <!-- /main column -->
