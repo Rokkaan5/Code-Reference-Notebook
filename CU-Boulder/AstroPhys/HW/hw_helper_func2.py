@@ -42,7 +42,7 @@ def expected_sigma(mu, x,Px):
     return sigma
 
 ##  Calculate Mode
-def calculate_mode(self,x,Px):
+def calculate_mode(x,Px):
         # calculate mode: x value where P(x) is highest
         mode = x[np.argmax(Px)]
         return mode
@@ -87,9 +87,9 @@ class helper:
         self.mode = None
     
     def calculate_expected_mean_mode_sigma(self,x,Px,set_to_object=False):
-        mu = self.expected_mean(x=x,Px=Px)
-        sigma = self.expected_sigma(mu=mu,x=x,Px=Px)
-        mode = self.calculate_mode(x=x,Px=Px)
+        mu = expected_mean(x=x,Px=Px)
+        sigma = expected_sigma(mu=mu,x=x,Px=Px)
+        mode = calculate_mode(x=x,Px=Px)
 
         if set_to_object:
             self.mu = mu
@@ -165,7 +165,7 @@ class helper:
         self.plot_mark_mean(mu=self.mu)
         self.plot_mark_std(sigma=self.sigma,mu=self.mu)
         if mark_mode:
-            self.mode = self.calculate_mode(x=self.x,Px=self.Px)
+            self.mode = calculate_mode(x=self.x,Px=self.Px)
 
 # %% [markdown]
 # # Binomial probability:
@@ -236,7 +236,7 @@ class binomial_distribution(helper):
     
     def calculate_mean_mode_sigma(self):
         self.mu, self.sigma = binomial_mean_sigma(n=self.n,p=self.p)
-        self.mode = self.calculate_mode(x=self.x,Px=self.Px)
+        self.mode = calculate_mode(x=self.x,Px=self.Px)
 
     def plot_binomial(self,title="Binomial Distribution",
                       label="Binomial",color='tab:blue',
@@ -311,7 +311,7 @@ class poisson_distribution(helper):
 
     def calculate_mean_mode_sigma(self):
         self.sigma = poisson_sigma(mu=self.mu)
-        self.mode = self.calculate_mode(x=self.x,Px=self.Px)
+        self.mode = calculate_mode(x=self.x,Px=self.Px)
     
     def plot_poisson(self,title="Poisson Distribution",
                      label="Poisson",color='tab:orange',
@@ -385,7 +385,7 @@ class gaussian_distribution(helper):
         plt.ylabel("P(x)")
 
         if comprehensive:
-            self.mode = self.calculate_mode(x=self.x,Px=self.Px)
+            self.mode = calculate_mode(x=self.x,Px=self.Px)
             self.comprehensive_plot(mark_mode=mark_mode)
 
 # %% [markdown]
