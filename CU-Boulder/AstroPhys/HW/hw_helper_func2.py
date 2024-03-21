@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 import random as rnd
 from scipy.special import factorial
 from scipy.signal import peak_widths
+from scipy.stats import chi2
 
 # %% General Helper Functions
 # all helper functions
@@ -462,8 +463,49 @@ def reduced_chi2(x,mu_prime,sigma_2,parameters=1):
     print("degrees of freedom (nu):",dof)
     cs = nonreduced_chi2(x=x,mu_prime=mu_prime,sigma_2=sigma_2)
     return cs/dof
-
 class chi_squared(helper):
     def __init__(self, x_min=0, x_max=15, step=1):
         super().__init__(x_min, x_max, step)
+        self.cs = None
 
+    def calculate_chi2(self,x=None,mu_prime=None,sigma_2=None, set_to_object=False):
+        if x is None:
+            x = self.x
+        if mu_prime is None:
+            mu_prime = self.mu
+        if sigma_2 is None:
+            sigma_2 = self.sigma**2
+
+        cs = nonreduced_chi2(x=x,mu_prime=mu_prime,sigma_2=sigma_2)
+        if set_to_object:
+            self.cs = cs
+        return cs
+    
+    def calculate_chi2_confidence(self,cs=None,df=None,set_to_object=False):
+        if cs is None:
+            cs = self.calculate_chi2(set_to_object=True)
+        if df is None:
+            df = len(self.x)-1
+
+        chi2_confidence = 1- chi2.cdf(cs,df)
+        if set_to_object:
+            self.chi2_confidence = chi2_confidence
+        return chi2_confidence
+
+    def plot_chi2_pdf(self,cs=None,df=None):
+        if cs is None:
+            cs = self.cs
+        if df is None:
+            df = len(self.x)-1
+
+        confidence = self.calculate_chi2_confidence(cs=cs,df=df)
+
+        x2 = np.arange(0,100)
+        
+        plt.plot(x2,chi2.pdf(x2,df))
+        plt.vlines(cs, ymin=0, ymax=max(chi2.pdf(x2,df)),colors='black',linestyles='dashed',label="$\chi^2$ = {0:.3f}; $P(\chi^2)=${1:.3f}".format(cs,chi2.pdf(x=cs,df=df)))
+        plt.fill_between(x2[x2>=cs],chi2.pdf(x2,df)[x2>=cs],color='orange',label="{0:.1f}% confidence".format(confidence*100))
+        plt.xlabel('$\chi^2$')
+        plt.ylabel('Probability')
+        plt.title("$\chi^2$ PDF for {} degrees of freedom".format(df))
+        plt.legend()
