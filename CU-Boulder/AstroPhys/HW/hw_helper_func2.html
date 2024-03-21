@@ -577,67 +577,68 @@ P(\chi_\nu^2) \approx \frac{1}{\sqrt{4\pi \nu}} \exp\frac{-(\chi^2 - \nu)}{4\nu}
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        cs <span class="op">=</span> np.<span class="bu">sum</span>(((x <span class="op">-</span> mu_prime)<span class="op">**</span><span class="dv">2</span>)<span class="op">/</span>sigma_2)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> cs</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> reduced_chi2(x,mu_prime,sigma_2,parameters<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> reduced_chi2(x,mu_prime,sigma_2,parameters<span class="op">=</span><span class="dv">1</span>,verbose<span class="op">=</span><span class="va">False</span>):</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    dof <span class="op">=</span> <span class="bu">len</span>(x) <span class="op">-</span> parameters</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"degrees of freedom (nu):"</span>,dof)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    cs <span class="op">=</span> nonreduced_chi2(x<span class="op">=</span>x,mu_prime<span class="op">=</span>mu_prime,sigma_2<span class="op">=</span>sigma_2)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cs<span class="op">/</span>dof</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> chi_squared:</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, x,parameters<span class="op">=</span><span class="dv">1</span>,mu<span class="op">=</span><span class="va">None</span>,sigma<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> x                              <span class="co"># observations</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df <span class="op">=</span> <span class="bu">len</span>(<span class="va">self</span>.x)<span class="op">-</span>parameters        <span class="co"># degrees of freedom (nu = N-m)</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.cs <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># </span><span class="al">TODO</span><span class="co">: change the defaults of these parameters</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu <span class="op">=</span> mu</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sigma <span class="op">=</span> sigma</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_chi2(<span class="va">self</span>,x<span class="op">=</span><span class="va">None</span>,mu_prime<span class="op">=</span><span class="va">None</span>,sigma_2<span class="op">=</span><span class="va">None</span>, set_to_object<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> x <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> <span class="va">self</span>.x</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> mu_prime <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>            mu_prime <span class="op">=</span> <span class="va">self</span>.mu</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> sigma_2 <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>            sigma_2 <span class="op">=</span> <span class="va">self</span>.sigma<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        cs <span class="op">=</span> nonreduced_chi2(x<span class="op">=</span>x,mu_prime<span class="op">=</span>mu_prime,sigma_2<span class="op">=</span>sigma_2)</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> set_to_object:</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.cs <span class="op">=</span> cs</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> cs</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_chi2_confidence(<span class="va">self</span>,cs<span class="op">=</span><span class="va">None</span>,df<span class="op">=</span><span class="va">None</span>,set_to_object<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cs <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>            cs <span class="op">=</span> <span class="va">self</span>.calculate_chi2(set_to_object<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> df <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>            df <span class="op">=</span> <span class="bu">len</span>(<span class="va">self</span>.x)<span class="op">-</span><span class="dv">1</span></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>        chi2_confidence <span class="op">=</span> <span class="dv">1</span><span class="op">-</span> chi2.cdf(cs,df)</span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> set_to_object:</span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.chi2_confidence <span class="op">=</span> chi2_confidence</span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> chi2_confidence</span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_chi2_pdf(<span class="va">self</span>,cs<span class="op">=</span><span class="va">None</span>,df<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cs <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>            cs <span class="op">=</span> <span class="va">self</span>.cs</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> df <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>            df <span class="op">=</span> <span class="va">self</span>.df</span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>        confidence <span class="op">=</span> <span class="va">self</span>.calculate_chi2_confidence(cs<span class="op">=</span>cs,df<span class="op">=</span>df)</span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> df <span class="op">&gt;=</span> <span class="dv">100</span>:</span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> cs <span class="op">&gt;=</span> df:</span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>                x2 <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="bu">round</span>(cs<span class="op">+</span><span class="dv">100</span>))</span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>                x2 <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="bu">round</span>(df<span class="op">+</span><span class="dv">100</span>))</span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>            x2 <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="dv">100</span>)</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>        plt.plot(x2,chi2.pdf(x2,df))</span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>        plt.vlines(cs, ymin<span class="op">=</span><span class="dv">0</span>, ymax<span class="op">=</span><span class="bu">max</span>(chi2.pdf(x2,df)),colors<span class="op">=</span><span class="st">'black'</span>,linestyles<span class="op">=</span><span class="st">'dashed'</span>,label<span class="op">=</span><span class="st">"$\chi^2$ = </span><span class="sc">{0:.3f}</span><span class="st">; $P(\chi^2)=$</span><span class="sc">{1:.3f}</span><span class="st">"</span>.<span class="bu">format</span>(cs,chi2.pdf(x<span class="op">=</span>cs,df<span class="op">=</span>df)))</span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>        plt.fill_between(x2[x2<span class="op">&gt;=</span>cs],chi2.pdf(x2,df)[x2<span class="op">&gt;=</span>cs],color<span class="op">=</span><span class="st">'orange'</span>,label<span class="op">=</span><span class="st">"</span><span class="sc">{0:.1f}% c</span><span class="st">onfidence"</span>.<span class="bu">format</span>(confidence<span class="op">*</span><span class="dv">100</span>))</span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'$\chi^2$'</span>)</span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'Probability'</span>)</span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="st">"$\chi^2$ PDF for </span><span class="sc">{}</span><span class="st"> degrees of freedom"</span>.<span class="bu">format</span>(df))</span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> verbose:</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"degrees of freedom (nu):"</span>,dof)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    cs <span class="op">=</span> nonreduced_chi2(x<span class="op">=</span>x,mu_prime<span class="op">=</span>mu_prime,sigma_2<span class="op">=</span>sigma_2)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cs<span class="op">/</span>dof</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> chi_squared:</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, x,parameters<span class="op">=</span><span class="dv">1</span>,mu<span class="op">=</span><span class="va">None</span>,sigma<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.x <span class="op">=</span> x                              <span class="co"># observations</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.df <span class="op">=</span> <span class="bu">len</span>(<span class="va">self</span>.x)<span class="op">-</span>parameters        <span class="co"># degrees of freedom (nu = N-m)</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.cs <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># </span><span class="al">TODO</span><span class="co">: change the defaults of these parameters</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.mu <span class="op">=</span> mu</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sigma <span class="op">=</span> sigma</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_chi2(<span class="va">self</span>,x<span class="op">=</span><span class="va">None</span>,mu_prime<span class="op">=</span><span class="va">None</span>,sigma_2<span class="op">=</span><span class="va">None</span>, set_to_object<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> x <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> <span class="va">self</span>.x</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> mu_prime <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>            mu_prime <span class="op">=</span> <span class="va">self</span>.mu</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> sigma_2 <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>            sigma_2 <span class="op">=</span> <span class="va">self</span>.sigma<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        cs <span class="op">=</span> nonreduced_chi2(x<span class="op">=</span>x,mu_prime<span class="op">=</span>mu_prime,sigma_2<span class="op">=</span>sigma_2)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> set_to_object:</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.cs <span class="op">=</span> cs</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> cs</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> calculate_chi2_confidence(<span class="va">self</span>,cs<span class="op">=</span><span class="va">None</span>,df<span class="op">=</span><span class="va">None</span>,set_to_object<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cs <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>            cs <span class="op">=</span> <span class="va">self</span>.calculate_chi2(set_to_object<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> df <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>            df <span class="op">=</span> <span class="bu">len</span>(<span class="va">self</span>.x)<span class="op">-</span><span class="dv">1</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>        chi2_confidence <span class="op">=</span> <span class="dv">1</span><span class="op">-</span> chi2.cdf(cs,df)</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> set_to_object:</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.chi2_confidence <span class="op">=</span> chi2_confidence</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> chi2_confidence</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_chi2_pdf(<span class="va">self</span>,cs<span class="op">=</span><span class="va">None</span>,df<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cs <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>            cs <span class="op">=</span> <span class="va">self</span>.cs</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> df <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>            df <span class="op">=</span> <span class="va">self</span>.df</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>        confidence <span class="op">=</span> <span class="va">self</span>.calculate_chi2_confidence(cs<span class="op">=</span>cs,df<span class="op">=</span>df)</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> df <span class="op">&gt;=</span> <span class="dv">100</span>:</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> cs <span class="op">&gt;=</span> df:</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>                x2 <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="bu">round</span>(cs<span class="op">+</span><span class="dv">100</span>))</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>                x2 <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="bu">round</span>(df<span class="op">+</span><span class="dv">100</span>))</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>            x2 <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="dv">100</span>)</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>        plt.plot(x2,chi2.pdf(x2,df))</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>        plt.vlines(cs, ymin<span class="op">=</span><span class="dv">0</span>, ymax<span class="op">=</span><span class="bu">max</span>(chi2.pdf(x2,df)),colors<span class="op">=</span><span class="st">'black'</span>,linestyles<span class="op">=</span><span class="st">'dashed'</span>,label<span class="op">=</span><span class="st">"$\chi^2$ = </span><span class="sc">{0:.3f}</span><span class="st">; $P(\chi^2)=$</span><span class="sc">{1:.3f}</span><span class="st">"</span>.<span class="bu">format</span>(cs,chi2.pdf(x<span class="op">=</span>cs,df<span class="op">=</span>df)))</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>        plt.fill_between(x2[x2<span class="op">&gt;=</span>cs],chi2.pdf(x2,df)[x2<span class="op">&gt;=</span>cs],color<span class="op">=</span><span class="st">'orange'</span>,label<span class="op">=</span><span class="st">"</span><span class="sc">{0:.1f}% c</span><span class="st">onfidence"</span>.<span class="bu">format</span>(confidence<span class="op">*</span><span class="dv">100</span>))</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'$\chi^2$'</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'Probability'</span>)</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>        plt.title(<span class="st">"$\chi^2$ PDF for </span><span class="sc">{}</span><span class="st"> degrees of freedom"</span>.<span class="bu">format</span>(df))</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>        plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
