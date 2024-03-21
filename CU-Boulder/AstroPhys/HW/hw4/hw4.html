@@ -390,14 +390,14 @@ Confidence: 0.03457894779339932</code></pre>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># uncertainty of mean</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (come back to this later)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-28" class="cell" data-execution_count="31">
+<div id="cell-28" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>cs_constant <span class="op">=</span> hf.chi_squared(x<span class="op">=</span>data_array,sigma<span class="op">=</span><span class="fl">0.001</span><span class="op">*</span>data_array)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>cs_constant.calculate_chi2(x<span class="op">=</span>data_array,mu_prime<span class="op">=</span>np.mean(data_array),sigma_2<span class="op">=</span>(<span class="fl">0.001</span><span class="op">*</span>data_array)<span class="op">**</span><span class="dv">2</span>,set_to_object<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>637.8838224539259</code></pre>
 </div>
 </div>
-<div id="cell-29" class="cell" data-execution_count="29">
+<div id="cell-29" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>cs_constant.plot_chi2_pdf(cs<span class="op">=</span>cs_constant.cs,df<span class="op">=</span><span class="bu">len</span>(data_array))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -419,49 +419,94 @@ I_0 &amp; \text{otherwise}
 \end{cases}
 \end{equation*}\]</span></p>
 <p>Do a least-squares fit with a method of choose. My method is to guess <span class="math inline">\(t_{start}\)</span> and <span class="math inline">\(t_{end}\)</span> then calculate <span class="math inline">\(\chi_\nu^2\)</span> along with <span class="math inline">\(\Delta I\)</span>. Increment <span class="math inline">\(t_{start}\)</span> and <span class="math inline">\(t_{end}\)</span> and recalculate <span class="math inline">\(\Delta I\)</span> until <span class="math inline">\(\chi_\nu^2\)</span> is minimum. Plot the data (with error bars if you can) and overplot your fit. What are <span class="math inline">\(I_0, t_{start},\)</span> and <span class="math inline">\(t_{end}\)</span>?</p>
-<div id="cell-31" class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_udu(t_start, t_end, I0<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Fit 'up-down-up'</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    delta_I <span class="op">=</span> I0 <span class="op">-</span> np.mean(data_array[(time_array<span class="op">&gt;=</span>t_start) <span class="op">&amp;</span> (time_array<span class="op">&lt;=</span>t_end)])</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    fit <span class="op">=</span> []</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> t <span class="kw">in</span> time_array:</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> t <span class="op">&gt;=</span> t_start <span class="kw">and</span> t <span class="op">&lt;=</span> t_end:</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>            fit.append(I0 <span class="op">-</span> delta_I)</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>            fit.append(I0)</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    fit <span class="op">=</span> np.array(fit)</span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-31" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Have a way to "automate" finding lowest chi-squared for given time-intervals to try</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> exo_partb:</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>,t_start,t_end,I0<span class="op">=</span><span class="dv">1</span>,data<span class="op">=</span>data_array,time<span class="op">=</span>time_array,sigma<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.data_array <span class="op">=</span> data</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.time_array <span class="op">=</span> time</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.t_start <span class="op">=</span> t_start</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.t_end <span class="op">=</span> t_end</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.I0 <span class="op">=</span> I0</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> sigma <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.sigma <span class="op">=</span> <span class="fl">0.001</span><span class="op">*</span><span class="va">self</span>.data_array</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.sigma <span class="op">=</span> sigma</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit_udu(<span class="va">self</span>,t_start<span class="op">=</span><span class="va">None</span>, t_end<span class="op">=</span><span class="va">None</span>, I0<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>                set_to_object<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>                calculate_chi_squared <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>                sigma<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Fit 'up-down-up'</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> t_start <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>            t_start <span class="op">=</span> <span class="va">self</span>.t_start</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> t_end <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>            t_end <span class="op">=</span> <span class="va">self</span>.t_end</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> I0 <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>            I0 <span class="op">=</span> <span class="va">self</span>.I0</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>        delta_I <span class="op">=</span> I0 <span class="op">-</span> np.mean(<span class="va">self</span>.data_array[(<span class="va">self</span>.time_array<span class="op">&gt;=</span>t_start) <span class="op">&amp;</span> (<span class="va">self</span>.time_array<span class="op">&lt;=</span>t_end)])</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>        fit <span class="op">=</span> []</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> t <span class="kw">in</span> time_array:</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> t <span class="op">&gt;=</span> t_start <span class="kw">and</span> t <span class="op">&lt;=</span> t_end:</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>                fit.append(I0 <span class="op">-</span> delta_I)</span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>                fit.append(I0)</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>        fit <span class="op">=</span> np.array(fit)</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> set_to_object:</span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.fit <span class="op">=</span> fit</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> calculate_chi_squared:</span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> sigma <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>                sigma <span class="op">=</span> <span class="va">self</span>.sigma</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.chi2 <span class="op">=</span> hf.nonreduced_chi2(x<span class="op">=</span><span class="va">self</span>.data_array,mu_prime<span class="op">=</span>fit,sigma_2<span class="op">=</span>sigma<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.reduced_chi2 <span class="op">=</span> hf.reduced_chi2(x<span class="op">=</span><span class="va">self</span>.data_array,mu_prime<span class="op">=</span>fit,sigma_2<span class="op">=</span>sigma<span class="op">**</span><span class="dv">2</span>,</span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>                                                parameters<span class="op">=</span><span class="dv">3</span>,verbose<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb29-46"><a href="#cb29-46" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"For fit with parameters, t_start=</span><span class="sc">{0:.0f}</span><span class="st">, t_end=</span><span class="sc">{1:.0f}</span><span class="st">, &amp; I0=</span><span class="sc">{2:.3f}</span><span class="st">:"</span>.<span class="bu">format</span>(t_start,t_end,I0))</span>
+<span id="cb29-47"><a href="#cb29-47" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"(non-reduced) chi-squared:"</span>,<span class="va">self</span>.chi2)</span>
+<span id="cb29-48"><a href="#cb29-48" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"reduced chi-squared:"</span>,<span class="va">self</span>.reduced_chi2)</span>
+<span id="cb29-49"><a href="#cb29-49" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> fit</span>
+<span id="cb29-50"><a href="#cb29-50" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb29-51"><a href="#cb29-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fit</span>
+<span id="cb29-52"><a href="#cb29-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-53"><a href="#cb29-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_data_eb(<span class="va">self</span>,title<span class="op">=</span><span class="st">"Plot Data with Error bars"</span>):</span>
+<span id="cb29-54"><a href="#cb29-54" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Plot data with error bars"""</span></span>
+<span id="cb29-55"><a href="#cb29-55" aria-hidden="true" tabindex="-1"></a>        plt.errorbar(<span class="va">self</span>.time_array,<span class="va">self</span>.data_array,yerr<span class="op">=</span><span class="va">self</span>.sigma<span class="op">/</span><span class="dv">2</span>,fmt<span class="op">=</span><span class="st">'.'</span>,label<span class="op">=</span><span class="st">'data (with error bars)'</span>)</span>
+<span id="cb29-56"><a href="#cb29-56" aria-hidden="true" tabindex="-1"></a>        plt.xlabel(<span class="st">'time_array (seconds)'</span>)</span>
+<span id="cb29-57"><a href="#cb29-57" aria-hidden="true" tabindex="-1"></a>        plt.ylabel(<span class="st">'data_array ($I_0$)'</span>)</span>
+<span id="cb29-58"><a href="#cb29-58" aria-hidden="true" tabindex="-1"></a>        plt.title(title)</span>
+<span id="cb29-59"><a href="#cb29-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-60"><a href="#cb29-60" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> overplot_fit_to_data(<span class="va">self</span>,fit<span class="op">=</span><span class="va">None</span>,title<span class="op">=</span><span class="st">"Overplot fit with data &amp; error bars"</span>):</span>
+<span id="cb29-61"><a href="#cb29-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> fit <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb29-62"><a href="#cb29-62" aria-hidden="true" tabindex="-1"></a>            fit <span class="op">=</span> <span class="va">self</span>.fit_udu(t_start<span class="op">=</span><span class="va">self</span>.t_start,t_end<span class="op">=</span><span class="va">self</span>.t_end,I0<span class="op">=</span><span class="va">self</span>.I0)</span>
+<span id="cb29-63"><a href="#cb29-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-64"><a href="#cb29-64" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.plot_data_eb(title<span class="op">=</span>title)</span>
+<span id="cb29-65"><a href="#cb29-65" aria-hidden="true" tabindex="-1"></a>        plt.plot(<span class="va">self</span>.time_array,fit,label<span class="op">=</span><span class="st">'Fit function; $\chi^2 =$</span><span class="sc">{0:.2f}</span><span class="st">'</span>.<span class="bu">format</span>(<span class="va">self</span>.chi2))</span>
+<span id="cb29-66"><a href="#cb29-66" aria-hidden="true" tabindex="-1"></a>        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-32" class="cell" data-execution_count="70">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> fit_udu(t_start<span class="op">=</span><span class="dv">1250</span>,t_end<span class="op">=</span><span class="dv">2010</span>,I0<span class="op">=</span>np.mean(data_array[time_array<span class="op">&lt;</span><span class="dv">1250</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-32" class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>t_start <span class="op">=</span> <span class="dv">1250</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>t_end <span class="op">=</span> <span class="dv">2010</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>q3b <span class="op">=</span> exo_partb(t_start<span class="op">=</span>t_start,t_end<span class="op">=</span>t_end,I0<span class="op">=</span>np.mean(data_array[time_array<span class="op">&lt;</span>t_start]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-33" class="cell" data-execution_count="77">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>q3b_cs <span class="op">=</span> hf.nonreduced_chi2(x<span class="op">=</span>data_array,mu_prime<span class="op">=</span>fit,sigma_2<span class="op">=</span>(<span class="fl">0.001</span><span class="op">*</span>data_array)<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"chi-squared:"</span>,q3b_cs)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>q3b_rcs <span class="op">=</span> hf.reduced_chi2(x<span class="op">=</span>data_array,mu_prime<span class="op">=</span>fit,sigma_2<span class="op">=</span>(<span class="fl">0.001</span><span class="op">*</span>data_array)<span class="op">**</span><span class="dv">2</span>,parameters<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"reduced chi-squared:"</span>,q3b_rcs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-33" class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot (with error bars)</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>q3b.overplot_fit_to_data()</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>chi-squared: 530.3784927040583
-degrees of freedom (nu): 117
-reduced chi-squared: 4.533149510291096</code></pre>
+<pre><code>For fit with parameters, t_start=1250, t_end=2010, &amp; I0=1.000:
+(non-reduced) chi-squared: 132.59462317601458
+reduced chi-squared: 1.133287377572774</code></pre>
 </div>
-</div>
-<div id="cell-34" class="cell" data-execution_count="75">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot (with error bars)</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">4</span>))</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>plt.errorbar(time_array,data_array,yerr<span class="op">=</span><span class="fl">0.0005</span><span class="op">*</span>data_array,fmt<span class="op">=</span><span class="st">'.'</span>,label<span class="op">=</span><span class="st">'data (with error bars)'</span>)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>plt.plot(time_array,fit,label<span class="op">=</span><span class="st">'Arbitrary Fit'</span>)</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'time_array (seconds)'</span>)</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'data_array ($I_0$)'</span>)</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Plot Fit with Data"</span>)</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="hw4_files/figure-html/cell-22-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="hw4_files/figure-html/cell-21-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -471,34 +516,34 @@ reduced chi-squared: 4.533149510291096</code></pre>
 <h2 class="anchored" data-anchor-id="part-c">Part (c)</h2>
 <p>Estimate the uncertainties of <span class="math inline">\(I_0, t_{start},\)</span> and <span class="math inline">\(t_{end}\)</span>. Explain how you arrive at your values.</p>
 <p><strong>Hint:</strong> The uncertainty of <span class="math inline">\(\Delta I\)</span> is straight-forward. Recall that you can calculate <span class="math inline">\(\sigma_I\)</span>, but <span class="math inline">\(\partial t/ \partial I\)</span> can only be estimated. Can one have an uncertainty in time that is less than <span class="math inline">\(\delta t\)</span> (30 seconds)?</p>
-<div id="cell-36" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-35" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="kolmogorov-smirnov-test" class="level1">
 <h1>4. Kolmogorov-Smirnov Test</h1>
 <p>Using a random number generator, create two distributions: <span class="math display">\[f_1(x) = P(x,\mu_1,n); \mu_1 = 8, n = 100\]</span> <span class="math display">\[f_2(x) = P(x,\mu_2,n); \mu_2 = 5, n = 100\]</span></p>
-<div id="cell-38" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>n_points <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 1</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>mu1 <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>fx1 <span class="op">=</span> np.random.normal(mu1, size<span class="op">=</span>n_points)</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 2</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>mu2 <span class="op">=</span> <span class="dv">5</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>fx2 <span class="op">=</span> np.random.normal(mu2,size<span class="op">=</span>n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-37" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>n_points <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 1</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>mu1 <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>fx1 <span class="op">=</span> np.random.normal(mu1, size<span class="op">=</span>n_points)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution 2</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>mu2 <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>fx2 <span class="op">=</span> np.random.normal(mu2,size<span class="op">=</span>n_points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-39" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of two distributions</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>plt.hist(fx1)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>plt.hist(fx2)</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-38" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of two distributions</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>plt.hist(fx1)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>plt.hist(fx2)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="hw4_files/figure-html/cell-25-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="hw4_files/figure-html/cell-24-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -506,22 +551,22 @@ reduced chi-squared: 4.533149510291096</code></pre>
 <section id="part-a-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-a-2">Part (a)</h2>
 <p>Calculated and plot the two CDFs for <span class="math inline">\(n=100\)</span>. Compare the two distributions using the Kolmogorov-Smirnov Test with <span class="math inline">\(\alpha=0.1\)</span>. The more exact formula for the threshold is: <span class="math display">\[D &gt; \sqrt{-\frac{1}{2} \ln \left( \frac{\alpha}{2}\right)} \sqrt{\frac{n+m}{nm}}; n,m \text{ are number of points}\]</span></p>
-<div id="cell-41" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-40" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="part-b-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-b-2">Part (b)</h2>
 <p>Repeat the test several (5 to 10) times recreating the distributions. Do <span class="math inline">\(f_1\)</span> and <span class="math inline">\(f_2\)</span> consistently pass or fail the test?</p>
-<div id="cell-43" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-42" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="part-c-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-c-1">Part (c)</h2>
 <p>Repeat the test for higher <span class="math inline">\(n\)</span>, say 1000 (for both <span class="math inline">\(f_1\)</span> and <span class="math inline">\(f_2\)</span>) several times. Does the test at <span class="math inline">\(n=1000\)</span> reveal that the two distributions are not from the same parent? What does this exercise tell us about the Kolmogorov-Smirnov Test?</p>
-<div id="cell-45" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-44" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># not finished yet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
