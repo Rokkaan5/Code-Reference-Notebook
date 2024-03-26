@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.4.542">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,11 +17,12 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -46,47 +47,17 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
-<script src="19_training_and_deploying_at_scale_files/libs/clipboard/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="19_training_and_deploying_at_scale_files/libs/clipboard/clipboard.min.js"></script>
 <script src="19_training_and_deploying_at_scale_files/libs/quarto-html/quarto.js"></script>
 <script src="19_training_and_deploying_at_scale_files/libs/quarto-html/popper.min.js"></script>
 <script src="19_training_and_deploying_at_scale_files/libs/quarto-html/tippy.umd.min.js"></script>
@@ -97,7 +68,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="19_training_and_deploying_at_scale_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="19_training_and_deploying_at_scale_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
@@ -154,13 +125,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
+
 </header>
+
 
 <p><em>This notebook contains all the sample code in chapter 19.</em></p>
 <section id="setup" class="level1">
 <h1>Setup</h1>
 <p>First, let’s import a few common modules, ensure MatplotLib plots figures inline and prepare a function to save the figures. We also check that Python 3.5 or later is installed (although Python 2.x may work, it is deprecated so we strongly recommend you use Python 3 instead), as well as Scikit-Learn ≥0.20 and TensorFlow ≥2.0.</p>
-<div class="cell" data-execution_count="1">
+<div id="cell-3" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Python ≥3.5 is required</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sys.version_info <span class="op">&gt;=</span> (<span class="dv">3</span>, <span class="dv">5</span>)</span>
@@ -226,7 +199,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We will use the REST API or the gRPC API.</p>
 <section id="saveload-a-savedmodel" class="level2">
 <h2 class="anchored" data-anchor-id="saveload-a-savedmodel">Save/Load a <code>SavedModel</code></h2>
-<div class="cell" data-execution_count="2">
+<div id="cell-6" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(X_train_full, y_train_full), (X_test, y_test) <span class="op">=</span> keras.datasets.mnist.load_data()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X_train_full <span class="op">=</span> X_train_full[..., np.newaxis].astype(np.float32) <span class="op">/</span> <span class="fl">255.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> X_test[..., np.newaxis].astype(np.float32) <span class="op">/</span> <span class="fl">255.</span></span>
@@ -234,7 +207,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>y_valid, y_train <span class="op">=</span> y_train_full[:<span class="dv">5000</span>], y_train_full[<span class="dv">5000</span>:]</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> X_test[:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="3">
+<div id="cell-7" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>tf.random.set_seed(<span class="dv">42</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -273,7 +246,7 @@ Epoch 10/10
 <pre><code>&lt;tensorflow.python.keras.callbacks.History at 0x7fe3b8718590&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="4">
+<div id="cell-8" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">round</span>(model.predict(X_new), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>array([[0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 1.  , 0.  , 0.  ],
@@ -282,7 +255,7 @@ Epoch 10/10
       dtype=float32)</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="5">
+<div id="cell-9" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model_version <span class="op">=</span> <span class="st">"0001"</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="st">"my_mnist_model"</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>model_path <span class="op">=</span> os.path.join(model_name, model_version)</span>
@@ -291,18 +264,18 @@ Epoch 10/10
 <pre><code>'my_mnist_model/0001'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="6">
+<div id="cell-10" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>shutil.rmtree(model_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="7">
+<div id="cell-11" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tf.saved_model.save(model, model_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>INFO:tensorflow:Assets written to: my_mnist_model/0001/assets</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="8">
+<div id="cell-12" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> root, dirs, files <span class="kw">in</span> os.walk(model_name):</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    indent <span class="op">=</span> <span class="st">'    '</span> <span class="op">*</span> root.count(os.sep)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'</span><span class="sc">{}{}</span><span class="st">/'</span>.<span class="bu">format</span>(indent, os.path.basename(root)))</span>
@@ -318,14 +291,14 @@ Epoch 10/10
         assets/</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="9">
+<div id="cell-13" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>saved_model_cli show <span class="op">--</span><span class="bu">dir</span> {model_path}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The given SavedModel contains the following tag-sets:
 'serve'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="10">
+<div id="cell-14" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>saved_model_cli show <span class="op">--</span><span class="bu">dir</span> {model_path} <span class="op">--</span>tag_set serve</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The given SavedModel MetaGraphDef contains SignatureDefs with the following keys:
@@ -333,7 +306,7 @@ SignatureDef key: "__saved_model_init_op"
 SignatureDef key: "serving_default"</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="11">
+<div id="cell-15" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>saved_model_cli show <span class="op">--</span><span class="bu">dir</span> {model_path} <span class="op">--</span>tag_set serve <span class="op">\</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                      <span class="op">--</span>signature_def serving_default</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -350,7 +323,7 @@ The given SavedModel SignatureDef contains the following output(s):
 Method name is: tensorflow/serving/predict</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="12">
+<div id="cell-16" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>saved_model_cli show <span class="op">--</span><span class="bu">dir</span> {model_path} <span class="op">--</span><span class="bu">all</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -427,10 +400,10 @@ Defined Functions:
 </div>
 </div>
 <p>Let’s write the new instances to a <code>npy</code> file so we can pass them easily to our model:</p>
-<div class="cell" data-execution_count="13">
+<div id="cell-18" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>np.save(<span class="st">"my_mnist_tests.npy"</span>, X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="14">
+<div id="cell-19" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>input_name <span class="op">=</span> model.input_names[<span class="dv">0</span>]</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>input_name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
@@ -438,7 +411,7 @@ Defined Functions:
 </div>
 </div>
 <p>And now let’s use <code>saved_model_cli</code> to make predictions for the instances we just saved:</p>
-<div class="cell" data-execution_count="15">
+<div id="cell-21" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>saved_model_cli run <span class="op">--</span><span class="bu">dir</span> {model_path} <span class="op">--</span>tag_set serve <span class="op">\</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                     <span class="op">--</span>signature_def serving_default    <span class="op">\</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                     <span class="op">--</span>inputs {input_name}<span class="op">=</span>my_mnist_tests.npy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -460,7 +433,7 @@ Result for output key dense_1:
   2.8800720e-03 2.2714981e-03 8.3753867e-03 4.0439744e-03 2.9759688e-04]]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="16">
+<div id="cell-22" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">round</span>([[<span class="fl">1.1347984e-04</span>, <span class="fl">1.5187356e-07</span>, <span class="fl">9.7032893e-04</span>, <span class="fl">2.7640699e-03</span>, <span class="fl">3.7826971e-06</span>,</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>           <span class="fl">7.6876910e-05</span>, <span class="fl">3.9140293e-08</span>, <span class="fl">9.9559116e-01</span>, <span class="fl">5.3502394e-05</span>, <span class="fl">4.2665208e-04</span>],</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>          [<span class="fl">8.2443521e-04</span>, <span class="fl">3.5493889e-05</span>, <span class="fl">9.8826385e-01</span>, <span class="fl">7.0466995e-03</span>, <span class="fl">1.2957400e-07</span>,</span>
@@ -486,17 +459,17 @@ Result for output key dense_1:
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>   tensorflow/serving</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once you are finished using it, press Ctrl-C to shut down the server.</p>
 <p>Alternatively, if <code>tensorflow_model_server</code> is installed (e.g., if you are running this notebook in Colab), then the following 3 cells will start the server:</p>
-<div class="cell" data-execution_count="17">
+<div id="cell-26" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"MODEL_DIR"</span>] <span class="op">=</span> os.path.split(os.path.abspath(model_path))[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="18">
+<div id="cell-27" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash <span class="op">--</span>bg</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>nohup tensorflow_model_server <span class="op">\</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>     <span class="op">--</span>rest_api_port<span class="op">=</span><span class="dv">8501</span> <span class="op">\</span></span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>     <span class="op">--</span>model_name<span class="op">=</span>my_mnist_model <span class="op">\</span></span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>     <span class="op">--</span>model_base_path<span class="op">=</span><span class="st">"$</span><span class="sc">{MODEL_DIR}</span><span class="st">"</span> <span class="op">&gt;</span>server.log <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="19">
+<div id="cell-28" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>tail server.log</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>2021-02-16 22:33:09.323538: I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:93] Reading SavedModel debug info (if present) from: /models/my_mnist_model/0001
@@ -514,7 +487,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 [evhttp_server.cc : 238] NET_LOG: Entering the event loop ...</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="20">
+<div id="cell-29" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>input_data_json <span class="op">=</span> json.dumps({</span>
@@ -522,14 +495,14 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"instances"</span>: X_new.tolist(),</span>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="21">
+<div id="cell-30" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">repr</span>(input_data_json)[:<span class="dv">1500</span>] <span class="op">+</span> <span class="st">"..."</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>'\'{"signature_name": "serving_default", "instances": [[[[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]], [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.32941177487373...'</code></pre>
 </div>
 </div>
 <p>Now let’s use TensorFlow Serving’s REST API to make predictions:</p>
-<div class="cell" data-execution_count="22">
+<div id="cell-32" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>SERVER_URL <span class="op">=</span> <span class="st">'http://localhost:8501/v1/models/my_mnist_model:predict'</span></span>
@@ -537,13 +510,13 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>response.raise_for_status() <span class="co"># raise an exception in case of error</span></span>
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> response.json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="23">
+<div id="cell-33" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>response.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>dict_keys(['predictions'])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="24">
+<div id="cell-34" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> np.array(response[<span class="st">"predictions"</span>])</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>y_proba.<span class="bu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
@@ -554,7 +527,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 </div>
 <section id="using-the-grpc-api" class="level3">
 <h3 class="anchored" data-anchor-id="using-the-grpc-api">Using the gRPC API</h3>
-<div class="cell" data-execution_count="25">
+<div id="cell-36" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow_serving.apis.predict_pb2 <span class="im">import</span> PredictRequest</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>request <span class="op">=</span> PredictRequest()</span>
@@ -563,7 +536,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>input_name <span class="op">=</span> model.input_names[<span class="dv">0</span>]</span>
 <span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>request.inputs[input_name].CopyFrom(tf.make_tensor_proto(X_new))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="26">
+<div id="cell-37" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> grpc</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow_serving.apis <span class="im">import</span> prediction_service_pb2_grpc</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -571,7 +544,7 @@ To enable them in other operations, rebuild TensorFlow with the appropriate comp
 <span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>predict_service <span class="op">=</span> prediction_service_pb2_grpc.PredictionServiceStub(channel)</span>
 <span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> predict_service.Predict(request, timeout<span class="op">=</span><span class="fl">10.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="27">
+<div id="cell-38" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>response</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="27">
 <pre><code>outputs {
@@ -628,7 +601,7 @@ model_spec {
 </div>
 </div>
 <p>Convert the response to a tensor:</p>
-<div class="cell" data-scrolled="true" data-execution_count="28">
+<div id="cell-40" class="cell" data-scrolled="true" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>output_name <span class="op">=</span> model.output_names[<span class="dv">0</span>]</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>outputs_proto <span class="op">=</span> response.outputs[output_name]</span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> tf.make_ndarray(outputs_proto)</span>
@@ -641,7 +614,7 @@ model_spec {
 </div>
 </div>
 <p>Or to a NumPy array if your client does not include the TensorFlow library:</p>
-<div class="cell" data-execution_count="29">
+<div id="cell-42" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>output_name <span class="op">=</span> model.output_names[<span class="dv">0</span>]</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>outputs_proto <span class="op">=</span> response.outputs[output_name]</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>shape <span class="op">=</span> [dim.size <span class="cf">for</span> dim <span class="kw">in</span> outputs_proto.tensor_shape.dim]</span>
@@ -657,7 +630,7 @@ model_spec {
 </section>
 <section id="deploying-a-new-model-version" class="level2">
 <h2 class="anchored" data-anchor-id="deploying-a-new-model-version">Deploying a new model version</h2>
-<div class="cell" data-scrolled="true" data-execution_count="30">
+<div id="cell-44" class="cell" data-scrolled="true" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>tf.random.set_seed(<span class="dv">42</span>)</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -694,7 +667,7 @@ Epoch 10/10
 1719/1719 [==============================] - 1s 672us/step - loss: 0.1420 - accuracy: 0.9583 - val_loss: 0.1359 - val_accuracy: 0.9616</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="31">
+<div id="cell-45" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>model_version <span class="op">=</span> <span class="st">"0002"</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="st">"my_mnist_model"</span></span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>model_path <span class="op">=</span> os.path.join(model_name, model_version)</span>
@@ -703,13 +676,13 @@ Epoch 10/10
 <pre><code>'my_mnist_model/0002'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="32">
+<div id="cell-46" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>tf.saved_model.save(model, model_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>INFO:tensorflow:Assets written to: my_mnist_model/0002/assets</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="33">
+<div id="cell-47" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> root, dirs, files <span class="kw">in</span> os.walk(model_name):</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    indent <span class="op">=</span> <span class="st">'    '</span> <span class="op">*</span> root.count(os.sep)</span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'</span><span class="sc">{}{}</span><span class="st">/'</span>.<span class="bu">format</span>(indent, os.path.basename(root)))</span>
@@ -732,7 +705,7 @@ Epoch 10/10
 </div>
 </div>
 <p><strong>Warning</strong>: You may need to wait a minute before the new model is loaded by TensorFlow Serving.</p>
-<div class="cell" data-execution_count="34">
+<div id="cell-49" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>SERVER_URL <span class="op">=</span> <span class="st">'http://localhost:8501/v1/models/my_mnist_model:predict'</span></span>
@@ -741,13 +714,13 @@ Epoch 10/10
 <span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>response.raise_for_status()</span>
 <span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> response.json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="35">
+<div id="cell-50" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>response.keys()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="35">
 <pre><code>dict_keys(['predictions'])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="36">
+<div id="cell-51" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>y_proba <span class="op">=</span> np.array(response[<span class="st">"predictions"</span>])</span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>y_proba.<span class="bu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="36">
@@ -761,10 +734,10 @@ Epoch 10/10
 <section id="deploy-the-model-to-google-cloud-ai-platform" class="level1">
 <h1>Deploy the model to Google Cloud AI Platform</h1>
 <p>Follow the instructions in the book to deploy the model to Google Cloud AI Platform, download the service account’s private key and save it to the <code>my_service_account_private_key.json</code> in the project directory. Also, update the <code>project_id</code>:</p>
-<div class="cell" data-execution_count="37">
+<div id="cell-54" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>project_id <span class="op">=</span> <span class="st">"onyx-smoke-242003"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="38">
+<div id="cell-55" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> googleapiclient.discovery</span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"GOOGLE_APPLICATION_CREDENTIALS"</span>] <span class="op">=</span> <span class="st">"my_service_account_private_key.json"</span></span>
@@ -773,7 +746,7 @@ Epoch 10/10
 <span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>model_path <span class="op">+=</span> <span class="st">"/versions/v0001/"</span> <span class="co"># if you want to run a specific version</span></span>
 <span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>ml_resource <span class="op">=</span> googleapiclient.discovery.build(<span class="st">"ml"</span>, <span class="st">"v1"</span>).projects()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="39">
+<div id="cell-56" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict(X):</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>    input_data_json <span class="op">=</span> {<span class="st">"signature_name"</span>: <span class="st">"serving_default"</span>,</span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"instances"</span>: X.tolist()}</span>
@@ -783,7 +756,7 @@ Epoch 10/10
 <span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(response[<span class="st">"error"</span>])</span>
 <span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([pred[output_name] <span class="cf">for</span> pred <span class="kw">in</span> response[<span class="st">"predictions"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="40">
+<div id="cell-57" class="cell" data-execution_count="40">
 <div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>Y_probas <span class="op">=</span> predict(X_new)</span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">round</span>(Y_probas, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="40">
@@ -796,7 +769,7 @@ Epoch 10/10
 <section id="using-gpus" class="level1">
 <h1>Using GPUs</h1>
 <p><strong>Note</strong>: <code>tf.test.is_gpu_available()</code> is deprecated. Instead, please use <code>tf.config.list_physical_devices('GPU')</code>.</p>
-<div class="cell" data-execution_count="41">
+<div id="cell-60" class="cell" data-execution_count="41">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">#tf.test.is_gpu_available() # deprecated</span></span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>tf.config.list_physical_devices(<span class="st">'GPU'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="41">
@@ -804,19 +777,19 @@ Epoch 10/10
  PhysicalDevice(name='/physical_device:GPU:1', device_type='GPU')]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="42">
+<div id="cell-61" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>tf.test.gpu_device_name()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="42">
 <pre><code>'/device:GPU:0'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="43">
+<div id="cell-62" class="cell" data-execution_count="43">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>tf.test.is_built_with_cuda()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="43">
 <pre><code>True</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="44">
+<div id="cell-63" class="cell" data-execution_count="44">
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow.python.client.device_lib <span class="im">import</span> list_local_devices</span>
 <span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>devices <span class="op">=</span> list_local_devices()</span>
@@ -862,12 +835,12 @@ Epoch 10/10
 </section>
 <section id="distributed-training" class="level1">
 <h1>Distributed Training</h1>
-<div class="cell" data-execution_count="45">
+<div id="cell-65" class="cell" data-execution_count="45">
 <div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>keras.backend.clear_session()</span>
 <span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>tf.random.set_seed(<span class="dv">42</span>)</span>
 <span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="46">
+<div id="cell-66" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_model():</span>
 <span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> keras.models.Sequential([</span>
 <span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>        keras.layers.Conv2D(filters<span class="op">=</span><span class="dv">64</span>, kernel_size<span class="op">=</span><span class="dv">7</span>, activation<span class="op">=</span><span class="st">"relu"</span>,</span>
@@ -884,7 +857,7 @@ Epoch 10/10
 <span id="cb78-14"><a href="#cb78-14" aria-hidden="true" tabindex="-1"></a>        keras.layers.Dense(units<span class="op">=</span><span class="dv">10</span>, activation<span class="op">=</span><span class="st">'softmax'</span>),</span>
 <span id="cb78-15"><a href="#cb78-15" aria-hidden="true" tabindex="-1"></a>    ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="47">
+<div id="cell-67" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>batch_size <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> create_model()</span>
 <span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">compile</span>(loss<span class="op">=</span><span class="st">"sparse_categorical_crossentropy"</span>,</span>
@@ -918,7 +891,7 @@ Epoch 10/10
 <pre><code>&lt;tensorflow.python.keras.callbacks.History at 0x7f014831c110&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="48">
+<div id="cell-68" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>keras.backend.clear_session()</span>
 <span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>tf.random.set_seed(<span class="dv">42</span>)</span>
 <span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
@@ -957,7 +930,7 @@ INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broa
 INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="49">
+<div id="cell-69" class="cell" data-execution_count="49">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>batch_size <span class="op">=</span> <span class="dv">100</span> <span class="co"># must be divisible by the number of workers</span></span>
 <span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train, epochs<span class="op">=</span><span class="dv">10</span>,</span>
 <span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>          validation_data<span class="op">=</span>(X_valid, y_valid), batch_size<span class="op">=</span>batch_size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -995,7 +968,7 @@ Epoch 10/10
 <pre><code>&lt;tensorflow.python.keras.callbacks.History at 0x7f259bf1a6d0&gt;</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="50">
+<div id="cell-70" class="cell" data-execution_count="50">
 <div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>model.predict(X_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="50">
 <pre><code>array([[2.53707055e-10, 7.94509292e-10, 1.02021443e-06, 3.37102080e-08,
@@ -1010,7 +983,7 @@ Epoch 10/10
 </div>
 </div>
 <p>Custom training loop:</p>
-<div class="cell" data-execution_count="51">
+<div id="cell-72" class="cell" data-execution_count="51">
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>keras.backend.clear_session()</span>
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>tf.random.set_seed(<span class="dv">42</span>)</span>
 <span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
@@ -1086,7 +1059,7 @@ Loss: 0.298</code></pre>
 <p>A TensorFlow cluster is a group of TensorFlow processes running in parallel, usually on different machines, and talking to each other to complete some work, for example training or executing a neural network. Each TF process in the cluster is called a “task” (or a “TF server”). It has an IP address, a port, and a type (also called its role or its job). The type can be <code>"worker"</code>, <code>"chief"</code>, <code>"ps"</code> (parameter server) or <code>"evaluator"</code>: * Each <strong>worker</strong> performs computations, usually on a machine with one or more GPUs. * The <strong>chief</strong> performs computations as well, but it also handles extra work such as writing TensorBoard logs or saving checkpoints. There is a single chief in a cluster, typically the first worker (i.e., worker #0). * A <strong>parameter server</strong> (ps) only keeps track of variable values, it is usually on a CPU-only machine. * The <strong>evaluator</strong> obviously takes care of evaluation. There is usually a single evaluator in a cluster.</p>
 <p>The set of tasks that share the same type is often called a “job”. For example, the “worker” job is the set of all workers.</p>
 <p>To start a TensorFlow cluster, you must first define it. This means specifying all the tasks (IP address, TCP port, and type). For example, the following cluster specification defines a cluster with 3 tasks (2 workers and 1 parameter server). It’s a dictionary with one key per job, and the values are lists of task addresses:</p>
-<div class="cell" data-execution_count="52">
+<div id="cell-75" class="cell" data-execution_count="52">
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>cluster_spec <span class="op">=</span> {</span>
 <span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"worker"</span>: [</span>
 <span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"machine-a.example.com:2222"</span>,  <span class="co"># /job:worker/task:0</span></span>
@@ -1097,7 +1070,7 @@ Loss: 0.298</code></pre>
 </div>
 <p>Every task in the cluster may communicate with every other task in the server, so make sure to configure your firewall to authorize all communications between these machines on these ports (it’s usually simpler if you use the same port on every machine).</p>
 <p>When a task is started, it needs to be told which one it is: its type and index (the task index is also called the task id). A common way to specify everything at once (both the cluster spec and the current task’s type and id) is to set the <code>TF_CONFIG</code> environment variable before starting the program. It must be a JSON-encoded dictionary containing a cluster specification (under the <code>"cluster"</code> key), and the type and index of the task to start (under the <code>"task"</code> key). For example, the following <code>TF_CONFIG</code> environment variable defines the same cluster as above, with 2 workers and 1 parameter server, and specifies that the task to start is worker #1:</p>
-<div class="cell" data-execution_count="53">
+<div id="cell-77" class="cell" data-execution_count="53">
 <div class="sourceCode cell-code" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1112,7 +1085,7 @@ Loss: 0.298</code></pre>
 </div>
 <p>Some platforms (e.g., Google Cloud ML Engine) automatically set this environment variable for you.</p>
 <p>TensorFlow’s <code>TFConfigClusterResolver</code> class reads the cluster configuration from this environment variable:</p>
-<div class="cell" data-execution_count="54">
+<div id="cell-80" class="cell" data-execution_count="54">
 <div class="sourceCode cell-code" id="cb94"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
 <span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a>resolver <span class="op">=</span> tf.distribute.cluster_resolver.TFConfigClusterResolver()</span>
@@ -1121,13 +1094,13 @@ Loss: 0.298</code></pre>
 <pre><code>ClusterSpec({'ps': ['machine-c.example.com:2222'], 'worker': ['machine-a.example.com:2222', 'machine-b.example.com:2222']})</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="55">
+<div id="cell-81" class="cell" data-execution_count="55">
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>resolver.task_type</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="55">
 <pre><code>'worker'</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="56">
+<div id="cell-82" class="cell" data-execution_count="56">
 <div class="sourceCode cell-code" id="cb98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>resolver.task_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="56">
 <pre><code>1</code></pre>
@@ -1135,7 +1108,7 @@ Loss: 0.298</code></pre>
 </div>
 <p>Now let’s run a simpler cluster with just two worker tasks, both running on the local machine. We will use the <code>MultiWorkerMirroredStrategy</code> to train a model across these two tasks.</p>
 <p>The first step is to write the training code. As this code will be used to run both workers, each in its own process, we write this code to a separate Python file, <code>my_mnist_multiworker_task.py</code>. The code is relatively straightforward, but there are a couple important things to note: * We create the <code>MultiWorkerMirroredStrategy</code> before doing anything else with TensorFlow. * Only one of the workers will take care of logging to TensorBoard and saving checkpoints. As mentioned earlier, this worker is called the <em>chief</em>, and by convention it is usually worker #0.</p>
-<div class="cell" data-execution_count="57">
+<div id="cell-84" class="cell" data-execution_count="57">
 <div class="sourceCode cell-code" id="cb100"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile my_mnist_multiworker_task.py</span>
 <span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -1195,11 +1168,11 @@ Loss: 0.298</code></pre>
 </div>
 </div>
 <p>In a real world application, there would typically be a single worker per machine, but in this example we’re running both workers on the same machine, so they will both try to use all the available GPU RAM (if this machine has a GPU), and this will likely lead to an Out-Of-Memory (OOM) error. To avoid this, we could use the <code>CUDA_VISIBLE_DEVICES</code> environment variable to assign a different GPU to each worker. Alternatively, we can simply disable GPU support, like this:</p>
-<div class="cell" data-execution_count="58">
+<div id="cell-86" class="cell" data-execution_count="58">
 <div class="sourceCode cell-code" id="cb102"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">"CUDA_VISIBLE_DEVICES"</span>] <span class="op">=</span> <span class="st">"-1"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We are now ready to start both workers, each in its own process, using Python’s <code>subprocess</code> module. Before we start each process, we need to set the <code>TF_CONFIG</code> environment variable appropriately, changing only the task index:</p>
-<div class="cell" data-execution_count="59">
+<div id="cell-88" class="cell" data-execution_count="59">
 <div class="sourceCode cell-code" id="cb103"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
 <span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a>cluster_spec <span class="op">=</span> {<span class="st">"worker"</span>: [<span class="st">"127.0.0.1:9901"</span>, <span class="st">"127.0.0.1:9902"</span>]}</span>
@@ -1213,7 +1186,7 @@ Loss: 0.298</code></pre>
 </div>
 <p>That’s it! Our TensorFlow cluster is now running, but we can’t see it in this notebook because it’s running in separate processes (but if you are running this notebook in Jupyter, you can see the worker logs in Jupyter’s server logs).</p>
 <p>Since the chief (worker #0) is writing to TensorBoard, we use TensorBoard to view the training progress. Run the following cell, then click on the settings button (i.e., the gear icon) in the TensorBoard interface and check the “Reload data” box to make TensorBoard automatically refresh every 30s. Once the first epoch of training is finished (which may take a few minutes), and once TensorBoard refreshes, the SCALARS tab will appear. Click on this tab to view the progress of the model’s training and validation accuracy.</p>
-<div class="cell" data-execution_count="60">
+<div id="cell-90" class="cell" data-execution_count="60">
 <div class="sourceCode cell-code" id="cb104"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext tensorboard</span>
 <span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>tensorboard <span class="op">--</span>logdir<span class="op">=</span>.<span class="op">/</span>my_mnist_multiworker_logs <span class="op">--</span>port<span class="op">=</span><span class="dv">6006</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1239,7 +1212,7 @@ Loss: 0.298</code></pre>
 </div>
 </div>
 <p>That’s it! Once training is over, the best checkpoint of the model will be available in the <code>my_mnist_multiworker_model.h5</code> file. You can load it using <code>keras.models.load_model()</code> and use it for predictions, as usual:</p>
-<div class="cell" data-execution_count="61">
+<div id="cell-92" class="cell" data-execution_count="61">
 <div class="sourceCode cell-code" id="cb106"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span>
 <span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> keras.models.load_model(<span class="st">"my_mnist_multiworker_model.h5"</span>)</span>
@@ -1304,9 +1277,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1342,10 +1329,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1355,8 +1341,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1371,6 +1366,233 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -1411,6 +1633,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 
