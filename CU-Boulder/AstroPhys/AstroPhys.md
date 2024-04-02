@@ -67,3 +67,6 @@ Any parts of any of the hw that contained coding portions
 
 ## HW4
 - [HW4](HW/hw4/hw4.html)
+
+## HW5
+- [HW5](HW/hw5/hw5.html)
