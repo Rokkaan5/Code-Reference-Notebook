@@ -20,3 +20,4 @@ The following are all *my* submissions to the HW assignments when I was taking t
 - [**HW5:** 4th-Order Runge-Kutta (rk4)](HW/HW5.html)
 - [**HW6:** Lagrange Interpolation](HW/HW6.html)
 - [**HW7:** Numerical Integration](HW/HW7.html)
+- [**HW8:** Fourier Analysis](HW/HW8.html)
