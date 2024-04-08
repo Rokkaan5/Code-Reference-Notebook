@@ -105,7 +105,16 @@ window.Quarto = {
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#problem-1" id="toc-problem-1" class="nav-link active" data-scroll-target="#problem-1">Problem 1</a></li>
+  <li><a href="#problem-2" id="toc-problem-2" class="nav-link" data-scroll-target="#problem-2">Problem 2</a></li>
+  <li><a href="#problem-3" id="toc-problem-3" class="nav-link" data-scroll-target="#problem-3">Problem 3</a></li>
+  <li><a href="#problem-4" id="toc-problem-4" class="nav-link" data-scroll-target="#problem-4">Problem 4</a></li>
+  </ul>
+</nav>
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -149,9 +158,9 @@ a_n &amp;= \frac{2}{T} \int_{-T/2}^{T/2} f(t) \cos n \omega_0 t dt\\
 b_n &amp;= \frac{2}{T} \int_{-T/2}^{T/2} f(t) \sin n \omega_0 t dt
 \end{align*}\]</span></p>
 <p>where <span class="math inline">\(\frac{1}{2} a_0\)</span> is the average value of <span class="math inline">\(f(t)\)</span>.</p>
-<ol type="1">
-<li>The method for evaluating the coefficients is known as “Fourier’s trick”. Start with the Fourier <span class="math inline">\(\sin\)</span> series. Multiply both sides of the equation by <span class="math inline">\(\sin(m \omega_o t)\)</span> and integrate the periodic function over one full period. i.e.,</li>
-</ol>
+<section id="problem-1" class="level1">
+<h1>Problem 1</h1>
+<p>The method for evaluating the coefficients is known as “Fourier’s trick”. Start with the Fourier <span class="math inline">\(\sin\)</span> series. Multiply both sides of the equation by <span class="math inline">\(\sin(m \omega_o t)\)</span> and integrate the periodic function over one full period. i.e.,</p>
 <p><span class="math display">\[\begin{equation*}
 \int_{-T/2}^{T/2} f(t) \sin( m \omega_o t) dt = \int_{-T/2}^{T/2}\sum_{n=1}^\infty
 b_n \sin( n \omega_o t) \sin( m \omega_o t) dt
@@ -169,18 +178,17 @@ f(t) =
 0.5 &amp;~~ 0 &lt; t &lt; \pi\\
 \end{cases}
 \end{equation*}\]</span></p>
+<p><strong>JK’s Solution:</strong></p>
 <p><img src="fourier_trick.jpg" class="img-fluid"></p>
-<ol start="2" type="1">
-<li>Show that <span class="math inline">\(f(t)\)</span> can be represented as</li>
-</ol>
+</section>
+<section id="problem-2" class="level1">
+<h1>Problem 2</h1>
+<p>Show that <span class="math inline">\(f(t)\)</span> can be represented as</p>
 <p><span class="math display">\[\begin{equation*}
 f(t) = \frac{2}{\pi} \left[\sin (t) + \frac{1}{3} \sin (3t) + \frac{1}{5} \sin (5t) + \cdot \cdot \cdot \right]
 \end{equation*}\]</span></p>
 <p>by evaluating the <span class="math inline">\(b_n\)</span> integral for the first five terms (<span class="math inline">\(n\)</span> = 1, 2, 3, 4, 5). Again, feel free to use numerical integration! Why does the <span class="math inline">\(\cos\)</span> series not apply in this case?</p>
-<ol start="3" type="1">
-<li>Plot the first 3 terms. Increase the number of terms until you are satisfied that the Fourier series representation of <span class="math inline">\(f(t)\)</span> is sufficiently accurate. Increase the domain (e.g., <span class="math inline">\(-2 \pi &lt; t &lt; 2 \pi\)</span>).</li>
-</ol>
-<div id="cell-2" class="cell" data-execution_count="4">
+<div id="cell-5" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.integrate <span class="im">as</span> integrate</span>
@@ -219,8 +227,12 @@ n=5;bn= 0.12732395447351624
 </code></pre>
 </div>
 </div>
+</section>
+<section id="problem-3" class="level1">
+<h1>Problem 3</h1>
+<p>Plot the first 3 terms. Increase the number of terms until you are satisfied that the Fourier series representation of <span class="math inline">\(f(t)\)</span> is sufficiently accurate. Increase the domain (e.g., <span class="math inline">\(-2 \pi &lt; t &lt; 2 \pi\)</span>).</p>
 <p>JK: Not really sure if I did part 2 (above) correctly because I’m not sure if/how the terms that match make any sense…</p>
-<div id="cell-4" class="cell" data-execution_count="5">
+<div id="cell-8" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Part 3</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">2</span><span class="op">*</span>np.pi,<span class="dv">2</span><span class="op">*</span>np.pi,<span class="dv">1000</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">1000</span>                             <span class="co">#number of terms</span></span>
@@ -248,12 +260,13 @@ n=5;bn= 0.12732395447351624
 </div>
 </div>
 </div>
-<ol start="4" type="1">
-<li>The Fourier coefficients of a “sawtooth” function are given by <span class="math inline">\(a_n = 0\)</span>, <span class="math inline">\(b_n = (2/n \pi)(-1)^{n-1}\)</span>, i.e., <span class="math display">\[\begin{equation*}
+</section>
+<section id="problem-4" class="level1">
+<h1>Problem 4</h1>
+<p>The Fourier coefficients of a “sawtooth” function are given by <span class="math inline">\(a_n = 0\)</span>, <span class="math inline">\(b_n = (2/n \pi)(-1)^{n-1}\)</span>, i.e., <span class="math display">\[\begin{equation*}
 f(t) = \frac{t}{\pi}, ~~ -\pi &lt; t &lt; \pi
-\end{equation*}\]</span> Plot the Fourier series and confirm the result.</li>
-</ol>
-<div id="cell-6" class="cell" data-execution_count="6">
+\end{equation*}\]</span> Plot the Fourier series and confirm the result.</p>
+<div id="cell-10" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#part 4</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>t4 <span class="op">=</span> np.linspace(<span class="op">-</span>np.pi,np.pi,<span class="dv">1000</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>an4 <span class="op">=</span> <span class="dv">0</span></span>
@@ -287,6 +300,7 @@ f(t) = \frac{t}{\pi}, ~~ -\pi &lt; t &lt; \pi
 </div>
 </div>
 </div>
+</section>
 
 </main>
 <!-- /main column -->
