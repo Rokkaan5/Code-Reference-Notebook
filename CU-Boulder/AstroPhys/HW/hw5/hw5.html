@@ -492,31 +492,30 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <h2 class="anchored" data-anchor-id="part-d-1">Part (d)</h2>
 <p>Perform a DFT on the blurred image line by line in <span class="math inline">\(y\)</span>. Be careful here. One must perform 256 DFTs; one for each position in <span class="math inline">\(y\)</span>. I recommend finding a <span class="math inline">\(y\)</span> value a star and testing your code.</p>
 <p><span class="math display">\[\tilde{I}_{\text{Blur}}(n,y)=\displaystyle \sum_{j=0}^{N-1}I_{\text{Blur}}(j,y)e^{-i2\pi n j/N}\]</span></p>
-<div id="cell-37" class="cell" data-execution_count="125">
+<div id="cell-37" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform DFT on Blurred Image</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>bi_fft <span class="op">=</span> []</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> I_blur:</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    bi_fft.append(dft(i))</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>bi_fft <span class="op">=</span> np.array(bi_fft)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>bi_fft <span class="op">=</span> []</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> I_blur:</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    bi_fft.append(dft(i))</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>bi_fft <span class="op">=</span> np.array(bi_fft)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-38" class="cell" data-execution_count="126">
+<div id="cell-38" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>bi_fft.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="126">
+<div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>(256, 256)</code></pre>
 </div>
 </div>
-<div id="cell-39" class="cell" data-execution_count="127">
+<div id="cell-39" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if inverse DFT matches original I_blur</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>bi_ifft <span class="op">=</span> []</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> bi_fft:</span>
 <span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    bi_ifft.append(dft(i,inverse<span class="op">=</span><span class="va">True</span>))</span>
 <span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>bi_ifft <span class="op">=</span> np.array(bi_ifft)</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>np.allclose(bi_ifft.real,I_blur)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="127">
-<pre><code>True</code></pre>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"reverse DFT matches original blurred image:"</span>,np.allclose(bi_ifft.real,I_blur))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>reverse DFT matches original blurred image: True</code></pre>
 </div>
 </div>
 </section>
@@ -529,16 +528,16 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <section id="jk-note-to-self" class="level3">
 <h3 class="anchored" data-anchor-id="jk-note-to-self">JK Note to self</h3>
 <p><span class="math inline">\(\tilde{h}^*(n)\)</span> is the complex conjugate <span class="math inline">\(\tilde{h}(n)\)</span>. (Which can simply be calculated with <code>np.conjugate()</code> in Python)</p>
-<div id="cell-42" class="cell" data-execution_count="164">
+<div id="cell-42" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>I_source_FT <span class="op">=</span> []</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> bi_fft:</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    I_source_FT.append(i<span class="op">*</span>np.conjugate(TransFunc_dft)<span class="op">/</span>(<span class="bu">abs</span>(TransFunc_dft)<span class="op">**</span><span class="dv">2</span>))</span>
 <span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>I_source_FT <span class="op">=</span> np.array(I_source_FT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-43" class="cell" data-execution_count="165">
+<div id="cell-43" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>I_source_FT.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="165">
+<div class="cell-output cell-output-display" data-execution_count="26">
 <pre><code>(256, 256)</code></pre>
 </div>
 </div>
@@ -548,7 +547,7 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <h2 class="anchored" data-anchor-id="part-f">Part (f)</h2>
 <p>Perform a reverse DFT on <span class="math inline">\(\tilde{I}_{Source}\)</span>. Plot your results. The image should be close but not exactly equal to the source image plotted above.</p>
 <p><strong>Hint:</strong> The most common error is in reconstructing <span class="math inline">\(\tilde{I}_{\text{Source}}\)</span>. Check your reverse DFT by deriving <span class="math inline">\(h\)</span> from <span class="math inline">\(\tilde{h}\)</span>.</p>
-<div id="cell-45" class="cell" data-execution_count="166">
+<div id="cell-45" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check reverse DFT</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> dft(TransFunc_dft,inverse<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -557,7 +556,7 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <pre><code>Inverse DFT of h matches original Tranfer Function: True</code></pre>
 </div>
 </div>
-<div id="cell-46" class="cell" data-execution_count="167">
+<div id="cell-46" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reverse DFT</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>I_source <span class="op">=</span> []</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> I_source_FT:</span>
@@ -565,16 +564,20 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>                    </span>
 <span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>I_source <span class="op">=</span> np.array(I_source)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-47" class="cell" data-execution_count="168">
+<div id="cell-47" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>I_source.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="168">
+<div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>(256, 256)</code></pre>
 </div>
 </div>
-<div id="cell-48" class="cell" data-execution_count="169">
+<div id="cell-48" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot results</span></span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>plt.imshow(<span class="bu">abs</span>(I_source),origin<span class="op">=</span><span class="st">'lower'</span>)</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">5</span>))</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>plt.imshow(<span class="bu">abs</span>(I_source),origin<span class="op">=</span><span class="st">'lower'</span>)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Derived Source Image"</span>)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"X"</span>)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Y"</span>)</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
