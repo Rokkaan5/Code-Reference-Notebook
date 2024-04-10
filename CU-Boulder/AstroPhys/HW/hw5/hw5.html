@@ -171,7 +171,7 @@ window.Quarto = {
 <p>Show that if: <span class="math display">\[f(t) = \int_{-\infty}^{\infty} g(t')h(t-t')dt'\]</span></p>
 <p>Then: <span class="math display">\[\tilde{f}(\omega) = \tilde{g}(\omega)\tilde{h}(\omega)\]</span></p>
 <p><img src="JK_Q2.PNG" class="img-fluid"></p>
-<div id="cell-5" class="cell" data-execution_count="1">
+<div id="cell-5" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -198,7 +198,7 @@ window.Quarto = {
 <section id="part-a" class="level2">
 <h2 class="anchored" data-anchor-id="part-a">Part (a)</h2>
 <p>Read in and verify signals. The cadence is 0.1 sec; generate time array for plotting. Let’s start with the easiest method: cross-correlate the expected signal (400 points) with the data (1000 points). You will necessarily need to restrict your correlation to start at 20 sec and end at 980 sec to avoid edge effects. Plot the cross correlation as a function of time. Do you see a peak?</p>
-<div id="cell-8" class="cell" data-execution_count="2">
+<div id="cell-8" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.loadtxt(<span class="st">"hw5/HW5_Data.txt"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"data shape:"</span>, data.shape)</span>
@@ -206,7 +206,7 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <pre><code>data shape: (2000, 5)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>array([[-1.4489671 , -0.05639172,  0.10236344,  0.03012188, -0.31627342],
        [-0.62731206,  1.5052398 ,  1.8104919 ,  0.41340446, -0.79464376],
        [ 0.88138539,  2.349612  , -0.44794255, -1.0353943 ,  0.92682785],
@@ -214,7 +214,7 @@ window.Quarto = {
        [-1.2074399 ,  0.32280344, -0.80500466,  1.4214896 ,  0.63947892]])</code></pre>
 </div>
 </div>
-<div id="cell-9" class="cell" data-execution_count="3">
+<div id="cell-9" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Flatten 5d data to 1d</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data_1d <span class="op">=</span> data.flatten()</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(data_1d))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -222,7 +222,7 @@ window.Quarto = {
 <pre><code>10000</code></pre>
 </div>
 </div>
-<div id="cell-10" class="cell" data-execution_count="4">
+<div id="cell-10" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>t_data <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="bu">len</span>(data_1d))</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t_data)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(t_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -232,13 +232,13 @@ window.Quarto = {
 10000</code></pre>
 </div>
 </div>
-<div id="cell-11" class="cell" data-execution_count="6">
+<div id="cell-11" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">5</span>))</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.plot(t_data,data_1d)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Read Data: Data"</span>)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time (s)"</span>)</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Amplitude"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>Text(0, 0.5, 'Amplitude')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -249,7 +249,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="cell-12" class="cell" data-execution_count="7">
+<div id="cell-12" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in signal data</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> np.loadtxt(<span class="st">"hw5/HW5_Signal.txt"</span>)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"signal data shape:"</span>, signal.shape)</span>
@@ -257,7 +257,7 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <pre><code>signal data shape: (80, 5)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="29">
 <pre><code>array([[-6.2465821e-06, -1.3047378e-05, -2.0128356e-05, -2.6956645e-05,
         -3.2930560e-05],
        [-3.7414051e-05, -3.9777609e-05, -3.9443527e-05, -3.5932957e-05,
@@ -270,7 +270,7 @@ window.Quarto = {
          7.3788494e-05]])</code></pre>
 </div>
 </div>
-<div id="cell-13" class="cell" data-execution_count="8">
+<div id="cell-13" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Flatten to 1d</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>signal_1d <span class="op">=</span> signal.flatten()</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(signal_1d))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -278,14 +278,14 @@ window.Quarto = {
 <pre><code>400</code></pre>
 </div>
 </div>
-<div id="cell-14" class="cell" data-execution_count="9">
+<div id="cell-14" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>t_signal <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">40</span>,<span class="bu">len</span>(signal_1d))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">5</span>))</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plt.plot(t_signal,signal_1d)</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Read data: Expected Signal"</span>)</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time (s)"</span>)</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Amplitude"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="31">
 <pre><code>Text(0, 0.5, 'Amplitude')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -296,7 +296,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="cell-15" class="cell" data-execution_count="10">
+<div id="cell-15" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cross correlate data + signal</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>cross_correlation <span class="op">=</span> np.correlate(signal_1d, data_1d, mode<span class="op">=</span><span class="st">'valid'</span>) <span class="co"># mode = 'valid' incorporates the part of "edge effects"</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -305,17 +305,17 @@ window.Quarto = {
 <pre><code>length of cross-correlation: 9601</code></pre>
 </div>
 </div>
-<div id="cell-16" class="cell" data-execution_count="11">
+<div id="cell-16" class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># time array for cross correlation</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>corr_t <span class="op">=</span> np.linspace(<span class="dv">20</span>,<span class="dv">980</span>,<span class="bu">len</span>(cross_correlation))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-17" class="cell" data-execution_count="12">
+<div id="cell-17" class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">5</span>))</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>plt.plot(corr_t,cross_correlation)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Cross Correlation as function of time"</span>)</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Time (s)"</span>)</span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Amplitude"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="34">
 <pre><code>Text(0, 0.5, 'Amplitude')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -334,7 +334,7 @@ window.Quarto = {
 <p><span class="math display">\[\begin{equation*}
 P = \frac{1}{2}\left[1 - \text{erf}\left(\frac{C_{\text{max}}}{\sqrt{2}\sigma_C} \right) \right]; \text{ use double precision}
 \end{equation*}\]</span></p>
-<div id="cell-19" class="cell" data-execution_count="13">
+<div id="cell-19" class="cell" data-execution_count="35">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>C_max <span class="op">=</span> <span class="bu">max</span>(cross_correlation)          <span class="co"># maximum correlation value</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Maximum correlation value (C_max):"</span>,C_max)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -345,13 +345,13 @@ P = \frac{1}{2}\left[1 - \text{erf}\left(\frac{C_{\text{max}}}{\sqrt{2}\sigma_C}
 Standard Deviation of correlations (sigma_C): 4.792952440424132</code></pre>
 </div>
 </div>
-<div id="cell-20" class="cell" data-execution_count="14">
+<div id="cell-20" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"C_max/sigma_C = "</span>, C_max<span class="op">/</span>sigma_C)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>C_max/sigma_C =  6.2527182830387735</code></pre>
 </div>
 </div>
-<div id="cell-21" class="cell" data-execution_count="17">
+<div id="cell-21" class="cell" data-execution_count="37">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr_prob(c_max,std_c):</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    inner <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> math.erf(c_max<span class="op">/</span>(np.sqrt(<span class="dv">2</span>)<span class="op">*</span>std_c))</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> inner<span class="op">/</span><span class="dv">2</span></span>
@@ -372,7 +372,7 @@ Standard Deviation of correlations (sigma_C): 4.792952440424132</code></pre>
 10*\text{period} = 1\text{ s} \\
 \end{align*}\]</span></p>
 <p>There are <span class="math inline">\(3.154 \times 10^7\)</span> seconds in a year, meaning there are ~<span class="math inline">\(10^8\)</span> periods of 0.1 seconds in a year.</p>
-<div id="cell-24" class="cell">
+<div id="cell-24" class="cell" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Calculate number of random events in year</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -380,7 +380,7 @@ Standard Deviation of correlations (sigma_C): 4.792952440424132</code></pre>
 <section id="part-d" class="level2">
 <h2 class="anchored" data-anchor-id="part-d">Part (d)</h2>
 <p>However, suppose that one made two such measurements (as did LIGO) and that the second data set had a correlation of 4.6 <span class="math inline">\(\sigma_C\)</span> within the expected speed-of-light delay. Given the <span class="math inline">\(2^{\text{nd}}\)</span> detection, what is the probability that these two measurements are from a random fluctuation?</p>
-<div id="cell-26" class="cell" data-execution_count="22">
+<div id="cell-26" class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>sigma2_C <span class="op">=</span> <span class="fl">4.6</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Probability of correlation (or greater) with second data:"</span>, corr_prob(c_max<span class="op">=</span>C_max,std_c<span class="op">=</span>sigma2_C))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -397,21 +397,28 @@ Standard Deviation of correlations (sigma_C): 4.792952440424132</code></pre>
 <section id="part-a-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-a-1">Part (a)</h2>
 <p>The blurred image is in a text file “<code>HW5_BlurredImage.txt</code>”, which contains <span class="math inline">\(256 \times 256\)</span>-point array (<span class="math inline">\(I_{\text{Blur}}\)</span>). Read in this image and plot to verify</p>
-<div id="cell-29" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read BlurredImage text file (using numpy file version from Caroline (I also had issues with original txt file))</span></span>
+<div id="cell-29" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read BlurredImage text file (using numpy file version from Caroline)</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>I_blur <span class="op">=</span> np.load(<span class="st">"hw5/HW5_BlurredImage.npy"</span>)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>I_blur.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="40">
 <pre><code>(256, 256)</code></pre>
 </div>
 </div>
-<div id="cell-30" class="cell" data-execution_count="11">
+<div id="cell-30" class="cell" data-execution_count="46">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot BlurredImage data</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>plt.imshow(I_blur,origin<span class="op">=</span><span class="st">'lower'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">5</span>))</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>plt.imshow(I_blur,origin<span class="op">=</span><span class="st">'lower'</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Blurred Image"</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"X"</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="46">
+<pre><code>Text(0, 0.5, 'Y')</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="hw5_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="hw5_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -425,16 +432,79 @@ Standard Deviation of correlations (sigma_C): 4.792952440424132</code></pre>
 <section id="part-c-1" class="level2">
 <h2 class="anchored" data-anchor-id="part-c-1">Part (c)</h2>
 <p>Read in and perform a DFT on the transfer function, <span class="math inline">\(h(j)\)</span>. Plot your results and compare to above (and/or perform a reverse DFT to check). Pixel numbers are positive integers sot that one can calculate: <span class="math display">\[\tilde{h}(n) = \displaystyle \sum_{j=0}^{N-1} h(j) e^{-i2\pi n j/N}\]</span></p>
+<p><strong>IDL code:</strong></p>
 <pre class="idl"><code>jarr = [0,1,...255], npts=256
 for n = 0, npts-1 do h_rl(n) = total(h*cos(jarr*n*2*!dpi/npts)) ; h is 256-point transfer function; total performs a sum
 for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <p><strong>Note:</strong> One can use an FFT (with no window) if you prefer, but take care to understand how it works. I recommend doing a reverse FFT to check.</p>
-<div id="cell-33" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in transfer function (using numpy file version from Caroline (I also had issues with original txt file))</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>transfer <span class="op">=</span> np.load(<span class="st">"hw5/HW5_TransferFunc.npy"</span>)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>transfer.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div id="cell-33" class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in transfer function (using numpy file version from Caroline)</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>transfer_function <span class="op">=</span> np.load(<span class="st">"hw5/HW5_TransferFunc.npy"</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>transfer_function.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="49">
 <pre><code>(256,)</code></pre>
+</div>
+</div>
+<div id="cell-34" class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Tranfer Function data</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>j_arr <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">255</span>,<span class="bu">len</span>(transfer_function))</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>plt.plot(j_arr,transfer_function)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Read in 'Transfer Function' data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="66">
+<pre><code>Text(0.5, 1.0, "Read in 'Transfer Function' data")</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw5_files/figure-html/cell-21-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-35" class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate real and imaginary components of DFT</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>h_real <span class="op">=</span> []</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>h_img <span class="op">=</span> []</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> j_arr:</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    h_real.append(<span class="bu">sum</span>(transfer_function<span class="op">*</span>np.cos(j_arr<span class="op">*</span>n<span class="op">*</span>np.pi<span class="op">*</span><span class="dv">2</span><span class="op">/</span><span class="bu">len</span>(transfer_function))))</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    h_img.append(<span class="op">-</span><span class="bu">sum</span>(transfer_function<span class="op">*</span>np.sin(j_arr<span class="op">*</span>n<span class="op">*</span>np.pi<span class="op">*</span><span class="dv">2</span><span class="op">/</span><span class="bu">len</span>(transfer_function))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-36" class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>plt.plot(j_arr,h_real,label<span class="op">=</span><span class="st">"real"</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>plt.plot(j_arr,h_img,label<span class="op">=</span><span class="st">"imaginary"</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Q4.c plot: DFT on 'Transfer Function' Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="68">
+<pre><code>Text(0.5, 1.0, "Q4.c plot: DFT on 'Transfer Function' Data")</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw5_files/figure-html/cell-23-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-37" class="cell" data-execution_count="70">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GitHub CoPilot code (slightly modified by me)</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dft(x,inverse<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(x)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> np.arange(N)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> n.reshape((N, <span class="dv">1</span>))</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    e_pow<span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> k <span class="op">*</span> n <span class="op">/</span> N</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> inverse:</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.dot(np.exp(e_pow),x)<span class="op">/</span>N</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.dot(np.exp(<span class="op">-</span>e_pow),x)</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>])</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> dft(x)</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>X_inv <span class="op">=</span> dft(X,inverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_inv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[10.          1.58133407  1.09235296  1.01821158]
+[3.42297465e+00 3.90574568e+01 3.31221459e+03 3.54563510e+05]</code></pre>
 </div>
 </div>
 </section>
@@ -442,9 +512,9 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <h2 class="anchored" data-anchor-id="part-d-1">Part (d)</h2>
 <p>Perform a DFT on the blurred image line by line in <span class="math inline">\(y\)</span>. Be careful here. One must perform 256 DFTs; one for each position in <span class="math inline">\(y\)</span>. I recommend finding a <span class="math inline">\(y\)</span> value a star and testing your code.</p>
 <p><span class="math display">\[\tilde{I}_{\text{Blur}}(n,y)=\displaystyle \sum_{j=0}^{N-1}I_{\text{Blur}}(j,y)e^{-i2\pi n j/N}\]</span></p>
-<div id="cell-36" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Perform DFT on Blurred Image</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (writing own DFT should only take like two lines of code, supposedly)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-39" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Perform DFT on Blurred Image</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (writing own DFT should only take like two lines of code, supposedly)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="part-e" class="level2">
@@ -458,11 +528,11 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <h2 class="anchored" data-anchor-id="part-f">Part (f)</h2>
 <p>Perform a reverse DFT on <span class="math inline">\(\tilde{I}_{Source}\)</span>. Plot your results. The image should be close but not exactly equal to the source image plotted above.</p>
 <p><strong>Hint:</strong> The most common error is in reconstructing <span class="math inline">\(\tilde{I}_{\text{Source}}\)</span>. Check your reverse DFT by deriving <span class="math inline">\(h\)</span> from <span class="math inline">\(\tilde{h}\)</span>.</p>
-<div id="cell-40" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Reverse DFT</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-43" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Reverse DFT</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-41" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Plot results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-44" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Plot results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
