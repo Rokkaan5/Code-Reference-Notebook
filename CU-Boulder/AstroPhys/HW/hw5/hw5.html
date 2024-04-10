@@ -171,14 +171,14 @@ window.Quarto = {
 <p>Show that if: <span class="math display">\[f(t) = \int_{-\infty}^{\infty} g(t')h(t-t')dt'\]</span></p>
 <p>Then: <span class="math display">\[\tilde{f}(\omega) = \tilde{g}(\omega)\tilde{h}(\omega)\]</span></p>
 <p><img src="JK_Q2.PNG" class="img-fluid"></p>
-<div id="cell-5" class="cell" data-execution_count="24">
+<div id="cell-5" class="cell" data-execution_count="71">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> chi2</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os,sys</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">'whitegrid'</span>)</span>
@@ -485,26 +485,47 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 </div>
 </div>
 </div>
-<div id="cell-37" class="cell" data-execution_count="70">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GitHub CoPilot code (slightly modified by me)</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dft(x,inverse<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(x)</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> np.arange(N)</span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> n.reshape((N, <span class="dv">1</span>))</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    e_pow<span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> k <span class="op">*</span> n <span class="op">/</span> N</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> inverse:</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.dot(np.exp(e_pow),x)<span class="op">/</span>N</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.dot(np.exp(<span class="op">-</span>e_pow),x)</span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>])</span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> dft(x)</span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>X_inv <span class="op">=</span> dft(X,inverse<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_inv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-37" class="cell" data-execution_count="89">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dft(x,inverse<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(x)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> np.arange(N)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> n.reshape((N, <span class="dv">1</span>))</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    e_pow <span class="op">=</span> <span class="op">-</span><span class="ot">2j</span> <span class="op">*</span> np.pi <span class="op">*</span> k <span class="op">*</span> n <span class="op">/</span> N</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> inverse:</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.dot(np.exp(<span class="op">-</span>e_pow),x)<span class="op">/</span>N</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.dot(np.exp(e_pow), x)</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>])</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> dft(x)</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>X_inv <span class="op">=</span> dft(X,inverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X_inv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[10.          1.58133407  1.09235296  1.01821158]
-[3.42297465e+00 3.90574568e+01 3.31221459e+03 3.54563510e+05]</code></pre>
+<pre><code>[10.+0.00000000e+00j -2.+2.00000000e+00j -2.-9.79717439e-16j
+ -2.-2.00000000e+00j]
+[1.-5.77996267e-16j 2.-2.60392190e-16j 3.-6.69535287e-17j
+ 4.+2.27765794e-16j]</code></pre>
+</div>
+</div>
+<div id="cell-38" class="cell" data-execution_count="84">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>I_blur</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="84">
+<pre><code>array([[4.3303071e+00, 4.0679471e+00, 3.8214826e+00, ..., 5.2233474e+00,
+        4.9068808e+00, 4.6095879e+00],
+       [2.4346232e+01, 2.2871169e+01, 2.1485475e+01, ..., 2.9367162e+01,
+        2.7587896e+01, 2.5916430e+01],
+       [8.3419708e+01, 7.8365564e+01, 7.3617634e+01, ..., 1.0062338e+02,
+        9.4526914e+01, 8.8799817e+01],
+       ...,
+       [2.3808649e-16, 2.2366156e-16, 2.1011059e-16, ..., 2.8718712e-16,
+        2.6978733e-16, 2.5344175e-16],
+       [3.7566471e-19, 3.5290434e-19, 3.3152294e-19, ..., 4.5313814e-19,
+        4.2568389e-19, 3.9989300e-19],
+       [0.0000000e+00, 0.0000000e+00, 0.0000000e+00, ..., 0.0000000e+00,
+        0.0000000e+00, 0.0000000e+00]])</code></pre>
 </div>
 </div>
 </section>
@@ -512,9 +533,368 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <h2 class="anchored" data-anchor-id="part-d-1">Part (d)</h2>
 <p>Perform a DFT on the blurred image line by line in <span class="math inline">\(y\)</span>. Be careful here. One must perform 256 DFTs; one for each position in <span class="math inline">\(y\)</span>. I recommend finding a <span class="math inline">\(y\)</span> value a star and testing your code.</p>
 <p><span class="math display">\[\tilde{I}_{\text{Blur}}(n,y)=\displaystyle \sum_{j=0}^{N-1}I_{\text{Blur}}(j,y)e^{-i2\pi n j/N}\]</span></p>
-<div id="cell-39" class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Perform DFT on Blurred Image</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (writing own DFT should only take like two lines of code, supposedly)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-40" class="cell" data-execution_count="115">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>cnt <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> I_blur:</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="bu">len</span>(i))</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    cnt <span class="op">+=</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256
+256</code></pre>
+</div>
+</div>
+<div id="cell-41" class="cell" data-execution_count="116">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>cnt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="116">
+<pre><code>256</code></pre>
+</div>
+</div>
+<div id="cell-42" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Perform DFT on Blurred Image</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (writing own DFT should only take like two lines of code, supposedly)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-43" class="cell" data-execution_count="90">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DFT using scipy</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>bi_fft <span class="op">=</span> np.fft.rfft2(I_blur)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>bi_fft</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="90">
+<pre><code>array([[ 6.86942762e+05+0.00000000e+00j, -3.18333759e+04+8.28437283e+04j,
+        -9.08783496e+04+2.48929786e+04j, ...,
+         8.31991046e+01-4.89622549e+00j,  8.26230421e+01-2.65030048e+00j,
+         8.28029657e+01+0.00000000e+00j],
+       [ 2.65009434e+04-2.58621884e+05j,  7.34812945e+04+1.42624552e+05j,
+        -2.09239918e+04+9.66140669e+04j, ...,
+         9.28511617e+00-8.26591150e+01j,  1.16847810e+01-8.15848490e+01j,
+         1.45882393e+01-8.15777954e+01j],
+       [ 1.02042383e+04-2.14384200e+04j,  1.68452575e+05-1.02903199e+05j,
+         2.38241278e+04+7.50324914e+04j, ...,
+        -7.91777867e+01-2.29869470e+01j, -7.84330896e+01-2.59113380e+01j,
+        -7.77865886e+01-2.80957094e+01j],
+       ...,
+       [-1.59312172e+05+1.76230939e+04j,  9.34893036e+04-2.20118019e+04j,
+        -6.46289744e+03-1.67760129e+05j, ...,
+        -4.52632218e+01-6.90957709e+01j, -4.28212633e+01-7.02563246e+01j,
+        -4.07922886e+01-7.11551093e+01j],
+       [ 1.02042383e+04+2.14384200e+04j, -3.26547893e+04-2.08000166e+04j,
+        -1.38723370e+05+1.55334067e+05j, ...,
+        -7.59058811e+01+3.27326150e+01j, -7.64983144e+01+3.02890809e+01j,
+        -7.77865886e+01+2.80957094e+01j],
+       [ 2.65009434e+04+2.58621884e+05j, -1.75208878e+02+2.26770637e+05j,
+         7.49787321e+04-7.74987310e+04j, ...,
+         1.90865340e+01+8.04520931e+01j,  1.67813716e+01+8.11626117e+01j,
+         1.45882393e+01+8.15777954e+01j]])</code></pre>
+</div>
+</div>
+<div id="cell-44" class="cell" data-execution_count="91">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> bi_fft.real</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> bi_fft.imag</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-45" class="cell" data-execution_count="94">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>x.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="94">
+<pre><code>(256, 129)</code></pre>
+</div>
+</div>
+<div id="cell-46" class="cell" data-execution_count="93">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="93">
+<pre><code>(256, 129)</code></pre>
+</div>
+</div>
+<div id="cell-47" class="cell" data-execution_count="107">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DFT using scipy</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>bi_fft <span class="op">=</span> scipy.fft.dctn(I_blur,norm<span class="op">=</span><span class="st">'forward'</span>,<span class="bu">type</span><span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bi_fft.shape)</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>plt.imshow(bi_fft,origin<span class="op">=</span><span class="st">'lower'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(256, 256)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw5_files/figure-html/cell-33-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-48" class="cell" data-execution_count="121">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>bi_fft <span class="op">=</span> []</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> I_blur:</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>    bi_fft.append(scipy.fft.fft(i))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-49" class="cell" data-execution_count="125">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(np.array(bi_fft).real)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw5_files/figure-html/cell-35-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-50" class="cell" data-execution_count="119">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>plt.imshow(bi_fft)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="hw5_files/figure-html/cell-36-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
 <section id="part-e" class="level2">
@@ -528,11 +908,11 @@ for n = 0, npts-1 do h_im(n) = -total(h*sin(jarr*n*2*!dpi/npts))</code></pre>
 <h2 class="anchored" data-anchor-id="part-f">Part (f)</h2>
 <p>Perform a reverse DFT on <span class="math inline">\(\tilde{I}_{Source}\)</span>. Plot your results. The image should be close but not exactly equal to the source image plotted above.</p>
 <p><strong>Hint:</strong> The most common error is in reconstructing <span class="math inline">\(\tilde{I}_{\text{Source}}\)</span>. Check your reverse DFT by deriving <span class="math inline">\(h\)</span> from <span class="math inline">\(\tilde{h}\)</span>.</p>
-<div id="cell-43" class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Reverse DFT</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-54" class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Reverse DFT</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-44" class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Plot results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-55" class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Plot results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
