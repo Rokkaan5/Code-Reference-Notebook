@@ -70,3 +70,6 @@ Any parts of any of the hw that contained coding portions
 
 ## HW5
 - [HW5](HW/hw5/hw5.html)
+
+## HW6
+- [HW6](HW/hw6/hw6.html)
