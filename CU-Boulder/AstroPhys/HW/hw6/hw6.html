@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jasmine Kobayashi">
+
+<title>ASTR 5550: HW6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="hw6_files/libs/clipboard/clipboard.min.js"></script>
+<script src="hw6_files/libs/quarto-html/quarto.js"></script>
+<script src="hw6_files/libs/quarto-html/popper.min.js"></script>
+<script src="hw6_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="hw6_files/libs/quarto-html/anchor.min.js"></script>
+<link href="hw6_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="hw6_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="hw6_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="hw6_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="hw6_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#convolution-of-two-gaussians" id="toc-convolution-of-two-gaussians" class="nav-link active" data-scroll-target="#convolution-of-two-gaussians">1. Convolution of Two Gaussians</a>
+  <ul class="collapse">
+  <li><a href="#part-a" id="toc-part-a" class="nav-link" data-scroll-target="#part-a">Part (a)</a></li>
+  <li><a href="#part-b" id="toc-part-b" class="nav-link" data-scroll-target="#part-b">Part (b)</a></li>
+  <li><a href="#part-c" id="toc-part-c" class="nav-link" data-scroll-target="#part-c">Part (c)</a></li>
+  </ul></li>
+  <li><a href="#convolution-of-exponentials" id="toc-convolution-of-exponentials" class="nav-link" data-scroll-target="#convolution-of-exponentials">2. Convolution of Exponentials</a>
+  <ul class="collapse">
+  <li><a href="#part-a-1" id="toc-part-a-1" class="nav-link" data-scroll-target="#part-a-1">Part (a)</a></li>
+  <li><a href="#part-b-1" id="toc-part-b-1" class="nav-link" data-scroll-target="#part-b-1">Part (b)</a></li>
+  <li><a href="#partc" id="toc-partc" class="nav-link" data-scroll-target="#partc">Part(c)</a></li>
+  </ul></li>
+  <li><a href="#intensified-ccds" id="toc-intensified-ccds" class="nav-link" data-scroll-target="#intensified-ccds">3. Intensified CCDs</a>
+  <ul class="collapse">
+  <li><a href="#part-a-2" id="toc-part-a-2" class="nav-link" data-scroll-target="#part-a-2">Part (a)</a></li>
+  <li><a href="#part-b-2" id="toc-part-b-2" class="nav-link" data-scroll-target="#part-b-2">Part (b)</a></li>
+  <li><a href="#part-c-1" id="toc-part-c-1" class="nav-link" data-scroll-target="#part-c-1">Part (c)</a></li>
+  <li><a href="#part-d" id="toc-part-d" class="nav-link" data-scroll-target="#part-d">Part (d)</a></li>
+  </ul></li>
+  <li><a href="#threshold-and-dead-time" id="toc-threshold-and-dead-time" class="nav-link" data-scroll-target="#threshold-and-dead-time">4. Threshold and Dead Time</a>
+  <ul class="collapse">
+  <li><a href="#part-a-3" id="toc-part-a-3" class="nav-link" data-scroll-target="#part-a-3">Part (a)</a></li>
+  <li><a href="#part-b-3" id="toc-part-b-3" class="nav-link" data-scroll-target="#part-b-3">Part (b)</a></li>
+  <li><a href="#part-c-2" id="toc-part-c-2" class="nav-link" data-scroll-target="#part-c-2">Part (c)</a></li>
+  <li><a href="#part-d-1" id="toc-part-d-1" class="nav-link" data-scroll-target="#part-d-1">Part (d)</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="../../../../hw6.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ASTR 5550: HW6</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jasmine Kobayashi </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="convolution-of-two-gaussians" class="level1">
+<h1>1. Convolution of Two Gaussians</h1>
+<p>There are two methods to show that the convolution of two Gaussians is a Gaussian.</p>
+<p>Let: <span class="math display">\[g(t) = \sqrt{\frac{a}{\pi}}e^{-at^2}; h(t) = \sqrt{\frac{b}{\pi}}e^{-bt^{2}}; f(t) = \int_{-\infty}^\infty g(\tau)h(t-\tau)d\tau\]</span></p>
+<section id="part-a" class="level2">
+<h2 class="anchored" data-anchor-id="part-a">Part (a)</h2>
+<p>First, do the brute-force method and carry out the integral: <span class="math display">\[f(t) = \frac{\sqrt{ab}}{\pi}\int_{-\infty}^\infty e^{-a\tau^2}e^{-b(t-\tau)^2}d\tau = \sqrt{\frac{c}{\pi}}e^{-ct^2}; c = \frac{ab}{a+b}\]</span></p>
+<p><strong>Hint:</strong> Show that the (negative of the) exponent can be rewritten as:</p>
+<p><span class="math display">\[a\tau^2 + b(t-\tau)^2 = (a+b)\left(\tau - \frac{bt}{a+b} \right)^2 + \frac{ab}{a+b}t^2; \text{ Also use:} \int_{-\infty}^\infty e^{-z\tau^2}d\tau = \sqrt{\frac{\pi}{z}}\]</span></p>
+</section>
+<section id="part-b" class="level2">
+<h2 class="anchored" data-anchor-id="part-b">Part (b)</h2>
+<p>Use the convolution theorem (should be short) to arrive at the same result.</p>
+<p><strong>Hint:</strong> <span class="math display">\[\tilde{g}(\omega) = e^{-\frac{\omega ^2}{4a}}; \tilde{h}(\omega) = e^{-\frac{\omega ^2}{4b}}\]</span></p>
+</section>
+<section id="part-c" class="level2">
+<h2 class="anchored" data-anchor-id="part-c">Part (c)</h2>
+<p>Show that if <span class="math inline">\(a= 1/2\sigma_a^2\)</span> and <span class="math inline">\(b= 1/2 \sigma_b^2\)</span> then it follows that: <span class="math display">\[\sigma_c^2 = \sigma_a^2 + \sigma_b^2\]</span></p>
+</section>
+</section>
+<section id="convolution-of-exponentials" class="level1">
+<h1>2. Convolution of Exponentials</h1>
+<p>A microchannel plate amplifies a photon to <span class="math inline">\(n_0\)</span> electrons on average. It’s response, however, is not Gaussian. The response for a single photon can be (very roughly) described as: <span class="math display">\[P(n|1) = \frac{4n}{n_0^2}e^{-\frac{2n}{n_0}}\]</span></p>
+<p><img src="microchannel_plate_Q2.PNG" class="img-fluid" width="500"></p>
+<hr>
+<p><strong><em>Special Note:</em></strong></p>
+<p>The actual response is far more messy; it depends also on the photon energy!</p>
+<hr>
+<p>To calculate the expected count rate from two photons, one must convolve: <span class="math display">\[P(n|2) = \int_0^n P(\nu|1)P(n-\nu|1) d\nu\]</span></p>
+<section id="part-a-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-1">Part (a)</h2>
+<p>Show that the convolution results in: <span class="math display">\[P(n|2) = \frac{2^4 n^3}{6n_0^4}e^{-\frac{2n}{n_0}}\]</span></p>
+</section>
+<section id="part-b-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-b-1">Part (b)</h2>
+<p>To calculate the expected count rate from three photons, one must convolve: <span class="math display">\[P(n|3) = \int_0^n P(\nu|2)P(n-\nu|1)d\nu ; \text{ show that } P(n|3) = \frac{2^6n^5}{120n_0^6} e^{-\frac{2n}{n_0}}\]</span></p>
+</section>
+<section id="partc" class="level2">
+<h2 class="anchored" data-anchor-id="partc">Part(c)</h2>
+<p>Show by induction, that: <span class="math display">\[P(n|N) = \frac{2^{2N}n^{2N-1}}{(2N-1)!n_0^{2N}}e^{-\frac{2n}{n_0}}\]</span></p>
+</section>
+</section>
+<section id="intensified-ccds" class="level1">
+<h1>3. Intensified CCDs</h1>
+<p>The vast majority of astronomical images are now from CCDs, which are ever evolving and changing. Intensified CCDs have been a popular choice for imaging far-away or faint objects particularly in the UV as they can count individual photons. No longer do readout noise, dark currents, biases, and pixel gain dominate the uncertainty. But there is a price to pay: the point spread is increased and another uncertainty is added.</p>
+<p>Let’s examine a simple (incorrect) version of a CCD with a Gaussian-response intensifier. Imagine that every photon striking the image intensifier creates <span class="math inline">\(n_0 = 10^3\)</span> electrons on average. However, the number of electrons striking the CCD varies. Let <span class="math inline">\(n_e\)</span> represent the number of electrons and <span class="math inline">\(\sigma = 250\)</span> represent the standard deviation; the probability of <span class="math inline">\(n_e\)</span> electrons from a single photon is <span class="math display">\[P(n_e|N_{ph} = 1) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(n_e - n_0)^2}{2\sigma^2}}\]</span></p>
+<section id="part-a-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-2">Part (a)</h2>
+<p>Let <span class="math inline">\(N_{ph}\)</span> represent the number of photons striking an individual pixel. Using the convolution of Gaussians, one can show that:</p>
+<p><span class="math display">\[P(n_e|N_{ph}) = \frac{1}{\sqrt{2\pi N_{ph}}\sigma}e^{-\frac{(n_e - N_{ph}n_0)^2}{2N_{ph}\sigma^2}}\]</span></p>
+<p>Suppose that one measures <span class="math inline">\(n_e = 1.243 \times 10^3\)</span>. What is the probability that it is one photon? 2 photons?</p>
+<p>Use a Bayesian-like approach: Calculate all <span class="math inline">\(P(n_e|N_{ph})\)</span> for <span class="math inline">\(N_{ph} = 0,1,2,...\)</span> (reasonable cutoff) then normalize to 1 (something must have happened). The deduce <span class="math inline">\(P(N_{ph}|n_e)\)</span> for each value of <span class="math inline">\(N_{ph}\)</span>. For now, assume that <span class="math inline">\(P(n_e|0) = 0\)</span></p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Q3(a)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="part-b-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-b-2">Part (b)</h2>
+<p>Now suppose one measures <span class="math inline">\(n_e = 6.845 \times 10^3\)</span> electrons. What is the most likely photon count? Calculate and plot the probability distribution of 1 to 12 photons. What is the most likely count? Argue that a Gaussian microchannel plate gains add only a small amount to the <span class="math inline">\(\sqrt{N_{ph}}\)</span> uncertainty.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Q3(b)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="part-c-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-c-1">Part (c)</h2>
+<p>If only microchannel plates did have a Gaussian response! A bit closer to reality,</p>
+<p><span class="math display">\[P(n_e|N_{ph}) = \frac{2^{2N_{ph}}n_e^{2N_{ph} - 1}}{(2N_{ph} - 1)!n_0^{2N_{ph}}}e^{-\frac{2n_e}{n_0}}\]</span></p>
+<p>Here, on average, one suspects <span class="math inline">\(n_0 = 10^3\)</span> electrons per photon strike. Suppose <span class="math inline">\(n_e=1.243\times 10^3\)</span>. What is the probability of 1,2,3, or counts? As before, set <span class="math inline">\(P(n_e|0) = 0\)</span>. Remember that all possibilities of <span class="math inline">\(P\)</span> must sum to one, so renormalize.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Q3(c)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="part-d" class="level2">
+<h2 class="anchored" data-anchor-id="part-d">Part (d)</h2>
+<p>Now suppose one measures <span class="math inline">\(n_e = 6.845 \times 10^3\)</span> electrons. What is the most likely photon count? Calculate and plot the probability distribution of 1 to 12 photons. What is the most likely count? Argue that the “real” microchannel plate gain significantly add to the <span class="math inline">\(\sqrt{N_{ph}}\)</span> uncertainty.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: Q3(d)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="threshold-and-dead-time" class="level1">
+<h1>4. Threshold and Dead Time</h1>
+<p>A microchannel plate has the advantage of being able to detect a single photon or particle but, in reality, has a highly complex response. To get around this issue, experimentally try to read out the microchannel plate (or the imaging CCD) rapidly; so rapidly that there is little chance of a <span class="math inline">\(2^{nd}\)</span> photon (or particle) from striking from read-out to read-out. Let’s examine this method.</p>
+<section id="part-a-3" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-3">Part (a)</h2>
+<p>Suppose a stacked, two-microchannel plate response is (<span class="math inline">\(n_0 = 10^6\)</span>) for UV photons:</p>
+<p><span class="math display">\[P(n|1) = \alpha \frac{4n}{n_0^2} e^{\frac{2n}{n_0}} + (1-\alpha)\delta(n)\]</span></p>
+<p>The efficiency <span class="math inline">\(\alpha = 0.75 \pm 0.03\)</span> (25% of photons strike between the channels). In addition, a background noise level on a detector is equivalent to <span class="math inline">\(10^4\)</span> electrons, so we require at least <span class="math inline">\(n_{thresh}=5\times 10^4\)</span> electrons (<span class="math inline">\(5\sigma\)</span>) to declare a detection. Show that the probability that a photon strikes a channel (ignore <span class="math inline">\(\alpha\)</span>) and is <strong>not</strong> counted is <span class="math inline">\(\sim 5 \times 10^{-3}\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Q4 (a)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="part-b-3" class="level2">
+<h2 class="anchored" data-anchor-id="part-b-3">Part (b)</h2>
+<p>With the exception of the efficiency loss, a microchannel plate is the best way to actually “count” photons or particles. But what if the count rate is high? A detection takes time. Suppose that a detection takes <span class="math inline">\(2\times 10^{-7}\)</span> secs during which other photons cannot be counted. If once receives a count of <span class="math inline">\(10^6\)</span> in 1 s, how much 1s intervals is unavailable (<span class="math inline">\(t_{dead}\)</span>)? (Hint: Very simple!)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Q4 (b)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="part-c-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-c-2">Part (c)</h2>
+<p>Given a count rate of <span class="math inline">\(10^4\)</span> in 10 ms (called the integration time), what is the most likely number of photons that struck a channel? (Ignore <span class="math inline">\(\alpha\)</span> for now.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Q4 (c)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="part-d-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-d-1">Part (d)</h2>
+<p>Argue that the uncertainty in the efficiency leads to the largest uncertainty when count rates exceed <span class="math inline">\(\sim 10^3\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Q4 (d)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
