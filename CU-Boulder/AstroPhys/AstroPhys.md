@@ -90,7 +90,8 @@ HW1 - Question 3: Binomial and Poisson Distributions
 ## [HW5](HW/hw5/hw5.html)
 
 1. Fast Fourier Transform (FFT) Derivatives
-2. COnvolution Theorem
+2. Convolution Theorem
+    - (theorem) Show that if ... then ...
 3. Find the Signal
     - Read in signals and cross correlate expected signal
         - Plot cross correlation as function of time
