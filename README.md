@@ -22,13 +22,5 @@ Jasmine's "notebook" of code examples, reference, etc.
 - [Machine Learning](CU-Boulder/MachineLearning/CUB-ML.md)
 - [Neural Networks & Deep Learning](CU-Boulder/NeuralNetworks/NeuralNets.md)
 
-# Supplementary Material for Textbooks:
-- [Introduction to Data Mining by Kumar, et. al](Textbooks/IntroDataMining-Kumar.md)
-
-## Supplementary example code to Oreilly textbooks
-- [Introduction to Machine Learning with Python](Textbooks/IntroMLPython.md)
-- [Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow](Textbooks/HandsOnML.md)
-- [Practical statistics for Data Scientists](Textbooks/PracticalStats.md)
-
 
     
