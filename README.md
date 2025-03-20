@@ -1,11 +1,5 @@
 Jasmine's "notebook" of code examples, reference, etc.
 
-
-# This semseter's pages (Spring 2024)
-Quick access links (can delete this section after semester is over)
-- [AstroPhys](CU-Boulder/AstroPhys/AstroPhys.md)
-- Big Data
-
 # College Courses
 
 ## [UAF classes](UAF.md)
